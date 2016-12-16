@@ -1,0 +1,28 @@
+<tr class='<%= notification.unread ? 'active' : '' %>'>
+  <td>
+    <input type="checkbox" name="" title='Archive' class='archive' value="<%= notification.id %>">
+  </td>
+  <td>
+    <%= fa_icon(notification_icon(notification.subject_type))%>
+  </td>
+  <td>
+    <%= link_to notification.subject_title, notification.web_url, target: 'blank' %>
+  </td>
+  <% unless params[:repo].present? %>
+  <td>
+    <small>
+      <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted' %>
+    </small>
+  </td>
+  <% end %>
+  <td>
+    <span class='label label-<%= reason_label(notification.reason) %>'>
+      <%= notification.reason.humanize %>
+    </span>
+  </td>
+  <td>
+    <small class='text-muted'>
+      <%= notification.updated_at.to_s(:short) %>
+    </small>
+  </td>
+</tr>

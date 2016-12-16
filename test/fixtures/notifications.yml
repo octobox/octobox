@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  github_id: 1
+  repository_id: 1
+  repository_full_name: MyString
+  subject_title: MyString
+  subject_url: MyString
+  subject_type: MyString
+  reason: MyString
+  unread: false
+  updated_at: MyString
+  last_read_at: MyString
+  url: MyString
+  archived: false
+
+two:
+  user_id: 1
+  github_id: 1
+  repository_id: 1
+  repository_full_name: MyString
+  subject_title: MyString
+  subject_url: MyString
+  subject_type: MyString
+  reason: MyString
+  unread: false
+  updated_at: MyString
+  last_read_at: MyString
+  url: MyString
+  archived: false
