@@ -1,4 +1,4 @@
-# Github Inbox 💌
+# Github Inbox &#128238;
 
 Take back control of your GitHub Notifications
 
