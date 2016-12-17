@@ -67,7 +67,7 @@ bundle exec rake db:create:all
 bundle exec rake db:migrate
 ```
 
-Go create a Personal access token on GitHub and add it to `.env`:
+Go create a [Personal access token](https://github.com/settings/tokens) on GitHub with `notifications` scope enabled and add it to `.env`:
 
 ```
 GITHUB_TOKEN=yourpersonalaccesstoken
