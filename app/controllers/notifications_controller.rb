@@ -1,18 +1,19 @@
 class NotificationsController < ApplicationController
   def index
-    @types = Notification.inbox.distinct.group(:subject_type).count
-    @statuses = Notification.inbox.distinct.group(:unread).count
-    @unread_repositories = Notification.inbox.distinct.group(:repository_full_name).count
-    @read_repositories = Notification.distinct.pluck(:repository_full_name)
     if params[:archive].present?
-      scope = Notification.archived.newest
+      scope = Notification.archived
     else
-      scope = Notification.inbox.newest
+      scope = Notification.inbox
     end
+    @types = scope.distinct.group(:subject_type).count
+    @statuses = scope.distinct.group(:unread).count
+    @reasons = scope.distinct.group(:reason).count
+    @unread_repositories = scope.distinct.group(:repository_full_name).count
     scope = scope.repo(params[:repo]) if params[:repo].present?
+    scope = scope.reason(params[:reason]) if params[:reason].present?
     scope = scope.type(params[:type]) if params[:type].present?
     scope = scope.status(params[:status]) if params[:status].present?
-    @notifications = scope
+    @notifications = scope.newest
   end
 
   def archive

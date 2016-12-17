@@ -4,6 +4,7 @@ class Notification < ApplicationRecord
   scope :newest, -> { order('updated_at DESC') }
   scope :repo, lambda { |repo_name| where(repository_full_name: repo_name) }
   scope :type, lambda { |subject_type| where(subject_type: subject_type) }
+  scope :reason, lambda { |reason| where(reason: reason) }
   scope :status, lambda { |status| where(unread: status) }
 
   def web_url
