@@ -1,0 +1,17 @@
+{
+  "name": "GitHub Inbox",
+  "description": "Take back control of your GitHub Notifications",
+  "repository": "https://github.com/andrew/github-inbox",
+  "scripts": {
+    "postdeploy": "bundle exec rake db:migrate"
+  },
+  "env": {
+    "GITHUB_TOKEN": {
+      "Your personal GitHub Access Token",
+      "required": true
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ]
+}
