@@ -9,6 +9,8 @@ gem 'uglifier'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'octokit'
+gem 'omniauth'
+gem 'omniauth-github'
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
 
