@@ -1,4 +1,4 @@
-# Github Inbox &#128238;
+# GitHub Inbox &#128238;
 
 Take back control of your GitHub Notifications
 
@@ -90,6 +90,12 @@ rails s
 ### Code of Conduct
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+## Deployment
+
+You can host your own instance of GitHub Inbox using Heroku.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Copyright
 
