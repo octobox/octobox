@@ -7,7 +7,7 @@
   },
   "env": {
     "GITHUB_TOKEN": {
-      "Your personal GitHub Access Token",
+      "description": "Your personal GitHub Access Token",
       "required": true
     }
   },
