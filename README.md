@@ -6,31 +6,34 @@ Take back control of your GitHub Notifications
 
 ## Why is this a thing?
 
-If you manage more than one active project on GitHub, you might probably find [GitHub Notifications](https://github.com/notifications) pretty lacking.
+If you manage more than one active project on GitHub, you probably find [GitHub Notifications](https://github.com/notifications) pretty lacking.
 
-Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification, this makes it very hard to keep on top which notifications you still need to follow up on.
+Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on.
 
-Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox, if like me you try to avoid email then you might want something else.
+Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
 
-GitHub Inbox adds an extra "archived" state to each notification so you can mark it as "done", if new activity happens on the thread/issue/pr then the next time you sync then it will be unarchived and moved back into your inbox.
+GitHub Inbox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
 
 ## What state is the project in right now?
 
-GitHub Inbox is like a little baby, you have to host it yourself and only works for one user at a time, check out the open issues for a glimpse of the future: https://github.com/andrew/github-inbox/issues
+GitHub Inbox is like a little baby. You have to host it yourself and it only works for one user at a time.
+
+Check out the open issues for a glimpse of the future: https://github.com/andrew/github-inbox/issues.
 
 ## Development
 
-Source hosted at [GitHub](https://github.com/andrew/github-inbox).
-Report issues/feature requests on [GitHub Issues](https://github.com/andrew/github-inbox/issues). Follow me on Twitter [@teabass](https://twitter.com/teabass).
+The source code is hosted at [GitHub](https://github.com/andrew/github-inbox).
+You can report issues/feature requests on [GitHub Issues](https://github.com/andrew/github-inbox/issues).
+For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
 
 ### Getting Started
 
-New to Ruby? No worries! You can follow these instructions to install a local server, or you can use the included Vagrant setup.
+New to Ruby? No worries! You can follow these instructions to install a local server, or you can use the included [Vagrant](https://www.vagrantup.com/docs/why-vagrant/) setup.
 
 #### Installing a Local Server
 
 First things first, you'll need to install Ruby 2.3.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
-and [ruby-build](https://github.com/rbenv/ruby-build)
+and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
@@ -52,7 +55,7 @@ sudo apt-get install postgresql postgresql-contrib libpq-dev
 ```
 
 Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other
-languages).
+languages):
 
 ```bash
 gem install bundler && rbenv rehash
@@ -60,14 +63,14 @@ bundle install
 ```
 
 Once all the gems are installed, we'll need to create the databases and
-tables. Rails makes this easy through the use of "Rake" tasks.
+tables. Rails makes this easy through the use of "Rake" tasks:
 
 ```bash
 bundle exec rake db:create:all
 bundle exec rake db:migrate
 ```
 
-Go create a [Personal access token](https://github.com/settings/tokens) on GitHub with `notifications` scope enabled and add it to `.env`:
+Now go and create a [personal access token](https://github.com/settings/tokens) on GitHub with the `notifications` scope enabled and add it to `.env`:
 
 ```
 GITHUB_TOKEN=yourpersonalaccesstoken
