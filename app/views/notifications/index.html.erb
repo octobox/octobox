@@ -15,7 +15,7 @@
 </nav>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2 table-responsive">
+    <div class="col-xs-12 col-md-2 table-responsive">
       <table class='table table-condensed'>
         <% @statuses.each do |status, count| %>
           <tr>
@@ -100,7 +100,7 @@
         </tr>
       </table>
     </div>
-    <div class="col-md-10 table-responsive">
+    <div class="col-xs-12 col-md-10 table-responsive">
       <table class='table table-condensed table-hover'>
         <% if @notifications.any? %>
           <%= render @notifications %>
