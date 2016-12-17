@@ -102,4 +102,4 @@ You can host your own instance of GitHub Inbox using Heroku. Heroku will ask you
 
 ## Copyright
 
-Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/andrew/github-inbox/blob/master/LICENSE) for details.
+Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/andrew/github-inbox/blob/master/LICENSE.txt) for details.
