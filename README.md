@@ -96,7 +96,7 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Deployment
 
-You can host your own instance of GitHub Inbox using Heroku.
+You can host your own instance of GitHub Inbox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
