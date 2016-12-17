@@ -4,6 +4,16 @@ Take back control of your GitHub Notifications
 
 ![screen shot 2016-12-16 at 10 45 19 pm](https://cloud.githubusercontent.com/assets/1060/21281668/8d99355c-c3e6-11e6-83d6-d9253784178d.png)
 
+If you manage more than one active project on GitHub, you might probably find [GitHub Notifications](https://github.com/notifications) pretty lacking.
+
+Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification, this makes it very hard to keep on top which notifications you still need to follow up on.
+
+Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox, if like me you try to avoid email then you might want something else.
+
+GitHub Inbox adds an extra "archived" state to each notification so you can mark it as "done", if new activity happens on the thread/issue/pr then the next time you sync then it will be unarchived and moved back into your inbox.
+
+Notifications can be filtered by state (open/closed), type (issue/pr/comment) and repository.
+
 ## Development
 
 Source hosted at [GitHub](https://github.com/andrew/github-inbox).
