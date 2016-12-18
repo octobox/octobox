@@ -29,6 +29,10 @@ html {
   cursor: pointer;
 }
 
-.star{
+.star {
   color: #f0ad4e;
+}
+
+td.current {
+  border-left: 2px solid #64beff !important;
 }

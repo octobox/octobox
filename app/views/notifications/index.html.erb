@@ -10,6 +10,10 @@
       <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right'>
         <%= fa_icon 'refresh' %>
       </a>
+  
+      <a href="#" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right toggle-shortcuts'>
+        <%= fa_icon 'keyboard-o' %>
+      </a>
     </div>
   </div>
 </nav>
@@ -114,7 +118,7 @@
         </tr>
       </table>
     </div>
-    <div class="col-xs-12 col-md-10 table-responsive">
+    <div class="col-xs-12 col-md-10 table-responsive table-notifications">
       <table class='table table-condensed table-hover'>
         <% if @notifications.any? %>
           <%= render @notifications %>
