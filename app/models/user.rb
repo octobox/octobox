@@ -17,4 +17,9 @@ class User < ApplicationRecord
 
     update_attributes(github_attributes)
   end
+
+  def github_client
+    return @github_client if defined?(@github_client)
+    @github_client = Octokit::Client.new(access_token: access_token, auto_paginate: true)
+  end
 end

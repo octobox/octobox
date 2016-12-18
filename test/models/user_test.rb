@@ -41,4 +41,10 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 1, user.github_id
     assert_equal 'abcdefg', user.access_token
   end
+
+  test '#github_client returns an Octokit::Client with the correct access_token' do
+    user = users(:andrew)
+    assert_equal user.github_client.class, Octokit::Client
+    assert_equal user.github_client.access_token, user.access_token
+  end
 end
