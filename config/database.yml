@@ -23,13 +23,13 @@ default: &default
 
 development:
   <<: *default
-  database: github-inbox_development
+  database: octobox_development
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
   # the same name as the operating system user that initialized the database.
-  #username: github-inbox
+  #username: octobox
 
   # The password associated with the postgres role (username).
   #password:
@@ -57,7 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: github-inbox_test
+  database: octobox_test
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: github-inbox_production
-  username: github-inbox
-  password: <%= ENV['GITHUB-INBOX_DATABASE_PASSWORD'] %>
+  database: octobox_production
+  username: octobox
+  password: <%= ENV['OCTOBOX_DATABASE_PASSWORD'] %>
