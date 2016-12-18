@@ -14,12 +14,12 @@ services:
     ports:
       - 3000:3000
     links:
-      - database:database.service.github-inbox.internal
+      - database:database.service.octobox.internal
     environment:
       - RAILS_ENV=development
       - GITHUB_TOKEN=${GITHUB_TOKEN}
-      - GITHUB-INBOX_DATABASE_NAME=postgres
-      - GITHUB-INBOX_DATABASE_USER=postgres
-      - GITHUB-INBOX_DATABASE_PASSWORD=development
-      - GITHUB-INBOX_DATABASE_HOST=database.service.github-inbox.internal
+      - OCTOBOX_DATABASE_NAME=postgres
+      - OCTOBOX_DATABASE_USER=postgres
+      - OCTOBOX_DATABASE_PASSWORD=development
+      - OCTOBOX_DATABASE_HOST=database.service.octobox.internal
     command: sh -c 'bundle exec rake db:migrate && rm -rf tmp/pids && rails s -b 0.0.0.0'
