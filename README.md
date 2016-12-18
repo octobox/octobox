@@ -89,7 +89,7 @@ rails s
 ```
 #### Docker Compose
 
-If you're familiar with Docker and Docker Compose, the included `docker-compose.yml` configuration allows you to spin up the application locally.
+If you're familiar with [Docker](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/), the included `docker-compose.yml` configuration allows you to spin up the application locally.
 
 First, launch an instance of PostgreSQL and wait for it to fully initialize:
 
