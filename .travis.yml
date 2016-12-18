@@ -3,6 +3,9 @@ sudo: false
 rvm:
   - 2.3.3
 
+env:
+  - DB=postgresql
+
 before_script:
   - psql -c 'create database "github-inbox_test";' -U postgres
 
