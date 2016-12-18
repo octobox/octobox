@@ -76,10 +76,11 @@ bundle exec rake db:create:all
 bundle exec rake db:migrate
 ```
 
-Now go and create a [personal access token](https://github.com/settings/tokens) on GitHub with the `notifications` scope enabled and add it to `.env`:
+Now go and register a new [GitHub OAuth Application](https://github.com/settings/applications/new) then add the following to your `.env`:
 
 ```
-GITHUB_TOKEN=yourpersonalaccesstoken
+GITHUB_CLIENT_ID=yourclientidhere
+GITHUB_CLIENT_SECRET=yourclientsecrethere
 ```
 
 Finally you can boot the rails app:
