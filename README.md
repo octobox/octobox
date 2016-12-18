@@ -1,8 +1,8 @@
-# GitHub Inbox &#128238;
+# Octobox &#128238;
 
 Take back control of your GitHub Notifications
 
-![screen shot 2016-12-17 at 12 39 02 am](https://cloud.githubusercontent.com/assets/1060/21282805/45bad122-c3f1-11e6-8043-2f8c75d3529f.png)
+![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21294563/62e8291a-c537-11e6-85dd-300f43141b6d.png)
 
 ## Why is this a thing?
 
@@ -12,24 +12,24 @@ Notifications are marked as read and disappear from the list as soon as you load
 
 Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
 
-GitHub Inbox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
+Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
 
 ## What state is the project in right now?
 
-GitHub Inbox is like a little baby. You have to host it yourself and it only works for one user at a time.
+Octobox is like a little baby. You have to host it yourself and it only works for one user at a time.
 
-Check out the open issues for a glimpse of the future: https://github.com/andrew/github-inbox/issues.
+Check out the open issues for a glimpse of the future: https://github.com/andrew/octobox/issues.
 
 ## Deployment to Heroku
 
-You can host your own instance of GitHub Inbox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
+You can host your own instance of Octobox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Development
 
-The source code is hosted at [GitHub](https://github.com/andrew/github-inbox).
-You can report issues/feature requests on [GitHub Issues](https://github.com/andrew/github-inbox/issues).
+The source code is hosted at [GitHub](https://github.com/andrew/octobox).
+You can report issues/feature requests on [GitHub Issues](https://github.com/andrew/octobox/issues).
 For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
 
 ### Getting Started
@@ -72,7 +72,7 @@ Once all the gems are installed, we'll need to create the databases and
 tables. Rails makes this easy through the use of "Rake" tasks:
 
 ```bash
-bundle exec rake db:create:all
+bundle exec rake db:create
 bundle exec rake db:migrate
 ```
 
@@ -103,4 +103,4 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Copyright
 
-Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/andrew/github-inbox/blob/master/LICENSE.txt) for details.
+Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/andrew/octobox/blob/master/LICENSE.txt) for details.
