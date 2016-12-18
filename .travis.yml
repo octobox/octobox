@@ -1,0 +1,14 @@
+language: ruby
+sudo: false
+rvm:
+  - 2.3.3
+
+before_script:
+  - psql -c 'create database github-inbox_test;' -U postgres
+
+bundler_args: --without development production --deployment --jobs=3 --retry=3
+
+cache: bundler
+
+notifications:
+  email: false
