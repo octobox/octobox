@@ -23,8 +23,7 @@ class Notification < ApplicationRecord
   end
 
   def self.download(user)
-    client = Octokit::Client.new(access_token: user.access_token, auto_paginate: true)
-    client.notifications(all: true).each do |notification|
+    user.github_client.notifications(all: true).each do |notification|
       n = Notification.find_or_create_by({github_id: notification.id})
       n.archived = false if n.archived && n.updated_at < notification.updated_at
       n.update_attributes({
