@@ -17,6 +17,10 @@ group :development, :test do
   gem 'dotenv-rails'
 end
 
+group :test do
+  gem 'rake', '~> 12.0'
+end
+
 group :development do
   gem 'web-console'
   gem 'listen', '~> 3.0.5'
