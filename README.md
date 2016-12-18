@@ -72,7 +72,7 @@ Once all the gems are installed, we'll need to create the databases and
 tables. Rails makes this easy through the use of "Rake" tasks:
 
 ```bash
-bundle exec rake db:create:all
+bundle exec rake db:create
 bundle exec rake db:migrate
 ```
 
