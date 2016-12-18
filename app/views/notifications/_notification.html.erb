@@ -1,6 +1,6 @@
 <tr class='<%= notification.unread ? 'active' : '' %>'>
   <td>
-    <input type="checkbox" name="" title='Archive' class='archive' value="<%= notification.id %>">
+    <input type="checkbox" name="" title='<%= notification.archived ? 'Unarchive' : 'Archive' %>' class='<%= notification.archived ? 'unarchive' : 'archive' %>' value="<%= notification.id %>">
   </td>
   <td>
     <%= fa_icon(notification_icon(notification.subject_type))%>
