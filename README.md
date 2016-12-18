@@ -103,6 +103,8 @@ Once the PostgreSQL initialization process is complete, launch the application u
 GITHUB_TOKEN=yourpersonalaccesstoken docker-compose up app
 ```
 
+**Note**: You can add `GITHUB_TOKEN` to `.env` instead of supplying it directly on the command-line.
+
 ### Note on Patches/Pull Requests
 
  * Fork the project.
