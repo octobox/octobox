@@ -1,0 +1,5 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+andrew:
+  github_id: 1060
+  access_token: <%= SecureRandom.hex(20) %>
