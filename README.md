@@ -87,7 +87,23 @@ Finally you can boot the rails app:
 ```bash
 rails s
 ```
+#### Docker Compose
 
+If you're familiar with [Docker](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/), the included `docker-compose.yml` configuration allows you to spin up the application locally.
+
+First, launch an instance of PostgreSQL and wait for it to fully initialize:
+
+```bash
+docker-compose up database 
+```
+
+Once the PostgreSQL initialization process is complete, launch the application using another terminal session:
+
+```bash
+GITHUB_TOKEN=yourpersonalaccesstoken docker-compose up app
+```
+
+**Note**: You can add `GITHUB_TOKEN` to `.env` instead of supplying it directly on the command-line.
 
 ### Note on Patches/Pull Requests
 
