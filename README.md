@@ -20,6 +20,12 @@ GitHub Inbox is like a little baby. You have to host it yourself and it only wor
 
 Check out the open issues for a glimpse of the future: https://github.com/andrew/github-inbox/issues.
 
+## Deployment to Heroku
+
+You can host your own instance of GitHub Inbox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Development
 
 The source code is hosted at [GitHub](https://github.com/andrew/github-inbox).
@@ -93,12 +99,6 @@ rails s
 ### Code of Conduct
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
-
-## Deployment
-
-You can host your own instance of GitHub Inbox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Copyright
 
