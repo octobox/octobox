@@ -15,8 +15,4 @@ class SessionsController < ApplicationController
     session[:user_id] = user.id
     redirect_to root_path
   end
-
-  def failure
-    redirect_to root_path, alert: 'There was a problem authenticating with GitHub, please try again.'
-  end
 end
