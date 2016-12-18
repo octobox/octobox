@@ -2,7 +2,7 @@
 
 Take back control of your GitHub Notifications
 
-![screen shot 2016-12-17 at 12 39 02 am](https://cloud.githubusercontent.com/assets/1060/21282805/45bad122-c3f1-11e6-8043-2f8c75d3529f.png)
+![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21294563/62e8291a-c537-11e6-85dd-300f43141b6d.png)
 
 ## Why is this a thing?
 
