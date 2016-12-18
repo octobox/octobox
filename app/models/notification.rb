@@ -6,7 +6,8 @@ class Notification < ApplicationRecord
   scope :type, lambda { |subject_type| where(subject_type: subject_type) }
   scope :reason, lambda { |reason| where(reason: reason) }
   scope :status, lambda { |status| where(unread: status) }
-
+  scope :starred, -> { where(starred: true) }
+  
   def web_url
     subject_url.gsub('https://api.github.com/repos', 'https://github.com')
                .gsub('/pulls/', '/pull/')
