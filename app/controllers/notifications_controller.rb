@@ -24,8 +24,8 @@ class NotificationsController < ApplicationController
   end
 
   def archive
-    notification = Notification.find_by(id: params[:id], user: current_user)
-    notification.update_attributes(archived: true) if notification.present?
+    notification = current_user.notifications.find(params[:id])
+    notification.update_attributes(archived: true)
 
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
