@@ -1,7 +1,7 @@
 {
-  "name": "GitHub Inbox",
+  "name": "Octobox",
   "description": "Take back control of your GitHub Notifications",
-  "repository": "https://github.com/andrew/github-inbox",
+  "repository": "https://github.com/andrew/octobox",
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"
   },
