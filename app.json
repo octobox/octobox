@@ -6,8 +6,12 @@
     "postdeploy": "bundle exec rake db:migrate"
   },
   "env": {
-    "GITHUB_TOKEN": {
-      "description": "Your personal GitHub Access Token. It must have access to the 'notification' scope.",
+    "GITHUB_CLIENT_ID": {
+      "description": "The GitHub Application Client ID",
+      "required": true
+    }
+    "GITHUB_CLIENT_SECRET": {
+      "description": "The GitHub Application Client Secret",
       "required": true
     }
   },
