@@ -98,6 +98,20 @@
 
           </td>
         </tr>
+	<tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <tr>
+          <td>
+            <%= fa_icon 'star' %>
+          </td>
+          <td>
+            <% if params[:starred].present? %><strong><% end %>
+            <%= link_to 'Starred', root_path(starred: true, archive: params[:archive]) %>
+            <% if  params[:starred].present? %><strong><% end %>
+          </td>
+          <td class='text-center'>
+	    <span class="label label-muted"><%= @starred %></span>
+          </td>
+        </tr>
       </table>
     </div>
     <div class="col-xs-12 col-md-10 table-responsive">
