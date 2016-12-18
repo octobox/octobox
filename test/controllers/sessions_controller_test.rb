@@ -8,31 +8,16 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'POST #create finds the GitHub user from the hash and redirects to the root_path' do
-    post '/auth/github/callback', env: { 'omniauth' => session_user_hash(users(:andrew)) }
+    OmniAuth.config.mock_auth[:github].uid = users(:andrew).github_id
+    post '/auth/github/callback'
+
     assert_redirected_to root_path
   end
 
   test 'POST #create creates a GitHub user from the hash and redirects to the root_path' do
-    user = users(:andrew)
+    post '/auth/github/callback'
 
-    User.destroy_all
-    assert_equal 0, User.count
-
-    post '/auth/github/callback', env: { 'omniauth' => session_user_hash(user) }
-
-    assert_equal User.count, 1
-    assert User.find_by(github_id: user.github_id)
+    assert User.find_by(github_id: OmniAuth.config.mock_auth[:github].uid)
     assert_redirected_to root_path
-  end
-
-  private
-
-  def session_user_hash(user)
-    hash = OmniAuth.config.mock_auth[:github].to_h
-    hash.tap do |h|
-      h['uid'] = user.github_id
-      h['credentials'] = OmniAuth.config.mock_auth[:github].credientials.to_h
-      h['credentials']['token'] = user.access_token
-    end
   end
 end
