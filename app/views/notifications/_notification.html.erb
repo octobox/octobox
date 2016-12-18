@@ -3,6 +3,9 @@
     <input type="checkbox" name="" title='<%= notification.archived ? 'Unarchive' : 'Archive' %>' class='<%= notification.archived ? 'unarchive' : 'archive' %>' value="<%= notification.id %>">
   </td>
   <td>
+    <%= fa_icon( notification.starred ? "star" : "star-o", class: "toggle-star", data: { id: notification.id }) %>
+  </td>
+  <td>
     <%= fa_icon(notification_icon(notification.subject_type))%>
   </td>
   <td>
