@@ -13,17 +13,19 @@ class NotificationsController < ApplicationController
     scope = scope.reason(params[:reason]) if params[:reason].present?
     scope = scope.type(params[:type]) if params[:type].present?
     scope = scope.status(params[:status]) if params[:status].present?
+    scope = scope.owned_by(current_user)
     @notifications = scope.newest
   end
 
   def archive
-    notification = Notification.find(params[:id])
-    notification.update_attributes(archived: true)
+    notification = Notification.find_by(id: params[:id], user: current_user)
+    notification.update_attributes(archived: true) if notification.present?
+
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
 
   def sync
-    Notification.download
+    Notification.download(current_user)
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
 end
