@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :user do
-    github_id 1234
-    access_token '54c543ffd45343fg5434fgg556ff553232gg57890v'
+    github_id { rand(0..5000) }
+    access_token { SecureRandom.hex(15) }
     github_login 'andrew'
   end
 end
