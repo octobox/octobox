@@ -106,7 +106,7 @@ docker-compose up database
 Once the PostgreSQL initialization process is complete, launch the application using another terminal session:
 
 ```bash
-GITHUB_TOKEN=yourpersonalaccesstoken docker-compose up app
+GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up app
 ```
 
 **Note**: You can add `GITHUB_TOKEN` to `.env` instead of supplying it directly on the command-line.
