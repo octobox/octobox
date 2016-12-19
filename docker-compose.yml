@@ -17,7 +17,8 @@ services:
       - database:database.service.octobox.internal
     environment:
       - RAILS_ENV=development
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
       - OCTOBOX_DATABASE_NAME=postgres
       - OCTOBOX_DATABASE_USER=postgres
       - OCTOBOX_DATABASE_PASSWORD=development
