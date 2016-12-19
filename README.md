@@ -95,7 +95,7 @@ You can use keyboard shortcuts to naviagate and perform certian actions:
  - `j` - move down the list
  - `k` - move up the list
  - `s` - star current notification
- - `a` - archive current notification
+ - `y` - archive current notification
 
 Press `?` for the help menu.
 
