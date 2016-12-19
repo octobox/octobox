@@ -4,18 +4,20 @@
       <a class="navbar-brand" href="/">
         <%= fa_icon 'envelope' %> Octobox
       </a>
-      <div class="dropdown navbar-btn">
+      <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right sync'>
+        <%= fa_icon 'refresh' %>
+      </a>
+      <div class="dropdown navbar-btn navbar-right">
         <button class="btn btn-default dropdown-toggle" type="button" id="moreMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          More
+          Menu
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="moreMenu">
           <li><a href="/notifications/all/archive">Archive All</a></li>
+          <li><%= link_to 'Support', "https://github.com/andrew/octobox/issues" %></li>
+          <li><%= link_to 'Logout', logout_path %></li>
         </ul>
       </div>
-      <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right sync'>
-        <%= fa_icon 'refresh' %>
-      </a>
     </div>
   </div>
 </nav>
