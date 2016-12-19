@@ -29,10 +29,44 @@ html {
   cursor: pointer;
 }
 
-.star{
+.star {
   color: #f0ad4e;
 }
 
+td.current {
+  border-left: 2px solid #64beff !important;
+}
+
+table.keyboard-mappings {
+  font-size: 12px;
+  color: #555;
+}
+
+table.keyboard-mappings tr > td {
+    padding-bottom: 6px;
+}
+
+td.keys {
+  padding-right: 10px;
+  color: #767676;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.key {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+  
 .sync{
   margin-right: 0px;
 }
@@ -43,4 +77,5 @@ html {
 
 .dropdown {
   display: inline-block;
+
 }

@@ -111,6 +111,17 @@ GITHUB_TOKEN=yourpersonalaccesstoken docker-compose up app
 
 **Note**: You can add `GITHUB_TOKEN` to `.env` instead of supplying it directly on the command-line.
 
+### Keyboard shortcuts
+
+You can use keyboard shortcuts to naviagate and perform certian actions:
+
+ - `j` - move down the list
+ - `k` - move up the list
+ - `s` - star current notification
+ - `y` - archive current notification
+
+Press `?` for the help menu.
+
 ### Note on Patches/Pull Requests
 
  * Fork the project.
