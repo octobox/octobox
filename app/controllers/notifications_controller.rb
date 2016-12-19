@@ -29,6 +29,11 @@ class NotificationsController < ApplicationController
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
 
+  def archive_all
+    current_user.archive_all
+    redirect_to root_path
+  end
+
   def unarchive
     notification = Notification.find(params[:id])
     notification.update_attributes(archived: false)

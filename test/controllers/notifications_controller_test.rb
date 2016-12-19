@@ -15,4 +15,18 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_template 'notifications/index'
   end
+
+  test 'archives all notifications' do
+    user = users(:andrew)
+    5.times.each { create(:notification, user: user, archived: false) }
+
+    sign_in_as(user)
+
+    get '/notifications/all/archive'
+    assert_response :redirect
+
+    user.notifications.each do |n|
+      assert_equal n.archived, true
+    end
+  end
 end
