@@ -80,9 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: github-inbox_production
-  # username: github-inbox
-  # password: <%= ENV['GITHUB-INBOX_DATABASE_PASSWORD'] %>
-  # database: octobox_production
-  # username: octobox
-  # password: <%= ENV['OCTOBOX_DATABASE_PASSWORD'] %>
+  database: octobox_production
+  username: octobox
+  password: <%= ENV['OCTOBOX_DATABASE_PASSWORD'] %>
