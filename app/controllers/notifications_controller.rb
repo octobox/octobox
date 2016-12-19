@@ -19,7 +19,7 @@ class NotificationsController < ApplicationController
     scope = scope.status(params[:status]) if params[:status].present?
     scope = scope.starred                 if params[:starred].present?
 
-    @notifications = scope.newest
+    @notifications = scope.newest.page(params[:page])
   end
 
   def archive

@@ -12,6 +12,8 @@ class Notification < ApplicationRecord
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :status,   ->(status)       { where(unread: status) }
 
+  paginates_per 20
+  
   def web_url
     subject_url.gsub('https://api.github.com/repos', 'https://github.com')
                .gsub('/pulls/', '/pull/')

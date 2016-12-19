@@ -12,6 +12,7 @@ gem 'octokit'
 gem 'omniauth-github'
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
+gem 'kaminari'
 
 group :development, :test do
   gem 'byebug', platform: :mri
