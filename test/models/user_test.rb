@@ -53,4 +53,14 @@ class UserTest < ActiveSupport::TestCase
     assert_equal user.github_client.class, Octokit::Client
     assert_equal user.github_client.access_token, user.access_token
   end
+
+  test '#archive_all archives all notifications' do
+    user = users(:andrew)
+    5.times.each { create(:notification, user: user, archived: false) }
+    user.archive_all
+
+    user.notifications.each do |n|
+      assert_equal n.archived, true
+    end
+  end
 end

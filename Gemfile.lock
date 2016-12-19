@@ -56,6 +56,8 @@ GEM
       railties (>= 4.0, < 5.1)
     erubis (2.7.0)
     execjs (2.7.0)
+    factory_girl (4.8.0)
+      activesupport (>= 3.0.0)
     faraday (0.10.0)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.14)
@@ -193,6 +195,7 @@ DEPENDENCIES
   bootstrap-sass
   byebug
   dotenv-rails
+  factory_girl
   font-awesome-rails
   jquery-rails
   listen (~> 3.0.5)

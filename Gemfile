@@ -21,6 +21,7 @@ end
 
 group :test do
   gem 'rake', '~> 12.0'
+  gem 'factory_girl'
 end
 
 group :development do
