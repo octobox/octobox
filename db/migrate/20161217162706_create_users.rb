@@ -4,6 +4,7 @@ class CreateUsers < ActiveRecord::Migration[5.0]
     create_table :users do |t|
       t.integer :github_id,    null: false
       t.string  :access_token, null: false
+      t.string  :github_login, null: false
 
       t.timestamps
     end

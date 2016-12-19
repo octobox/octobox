@@ -24,6 +24,12 @@ class UserTest < ActiveSupport::TestCase
     refute user.valid?
   end
 
+  test 'must have a github_login' do
+    user = users(:andrew)
+    user.github_login = nil
+    refute user.valid?
+  end
+
   test '.find_by_auth_hash finds a User by their github_id' do
     omniauth_config     = OmniAuth.config.mock_auth[:github]
     omniauth_config.uid = users(:andrew).github_id
