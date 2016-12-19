@@ -76,7 +76,13 @@ bundle exec rake db:create
 bundle exec rake db:migrate
 ```
 
-Now go and register a new [GitHub OAuth Application](https://github.com/settings/applications/new) then add the following to your `.env`:
+Now go and register a new [GitHub OAuth Application](https://github.com/settings/applications/new), your development configuration should look something like this:
+
+<img width="561" alt="screen shot 2016-12-18 at 21 54 35" src="https://cloud.githubusercontent.com/assets/564113/21299762/a7bfaace-c56c-11e6-834c-ff893f79cec3.png">
+
+If you're deploying this to production, just replace `http://localhost:3000` with your applications URL.
+
+Once you've created your application you can then then add the following to your `.env`:
 
 ```
 GITHUB_CLIENT_ID=yourclientidhere
