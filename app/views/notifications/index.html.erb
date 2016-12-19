@@ -69,7 +69,7 @@
         <% @unread_repositories.sort.each do |repo_name, count| %>
           <tr>
             <td>
-              <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20 %>
+              <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded' %>
             </td>
             <td>
               <% if params[:repo] == repo_name %><strong><% end %>
