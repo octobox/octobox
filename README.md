@@ -2,7 +2,7 @@
 
 Take back control of your GitHub Notifications
 
-![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21294563/62e8291a-c537-11e6-85dd-300f43141b6d.png)
+![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21315365/b698d160-c5f3-11e6-93bd-e46726ccd347.png)
 
 ## Why is this a thing?
 
@@ -100,7 +100,7 @@ If you're familiar with [Docker](https://docs.docker.com/engine/) and [Docker Co
 First, launch an instance of PostgreSQL and wait for it to fully initialize:
 
 ```bash
-docker-compose up database 
+docker-compose up database
 ```
 
 Once the PostgreSQL initialization process is complete, launch the application using another terminal session:
