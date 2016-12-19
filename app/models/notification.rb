@@ -1,11 +1,16 @@
+# frozen_string_literal: true
 class Notification < ApplicationRecord
-  scope :inbox, -> { where(archived: false) }
+  belongs_to :user
+
+  scope :inbox,    -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
-  scope :newest, -> { order('updated_at DESC') }
-  scope :repo, lambda { |repo_name| where(repository_full_name: repo_name) }
-  scope :type, lambda { |subject_type| where(subject_type: subject_type) }
-  scope :reason, lambda { |reason| where(reason: reason) }
-  scope :status, lambda { |status| where(unread: status) }
+  scope :newest,   -> { order('updated_at DESC') }
+  scope :starred,  -> { where(starred: true) }
+
+  scope :repo,     ->(repo_name)    { where(repository_full_name: repo_name) }
+  scope :type,     ->(subject_type) { where(subject_type: subject_type) }
+  scope :reason,   ->(reason)       { where(reason: reason) }
+  scope :status,   ->(status)       { where(unread: status) }
 
   def web_url
     subject_url.gsub('https://api.github.com/repos', 'https://github.com')
@@ -17,13 +22,12 @@ class Notification < ApplicationRecord
     "https://github.com/#{repository_full_name}"
   end
 
-  def self.download
-    client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'], auto_paginate: true)
-    client.notifications(all: true).each do |notification|
+  def self.download(user)
+    user.github_client.notifications(all: true).each do |notification|
       n = Notification.find_or_create_by({github_id: notification.id})
       n.archived = false if n.archived && n.updated_at < notification.updated_at
       n.update_attributes({
-        user_id: 1,
+        user_id: user.id,
         repository_id: notification.repository.id,
         repository_full_name: notification.repository.full_name,
         subject_title: notification.subject.title,

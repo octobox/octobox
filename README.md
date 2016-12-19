@@ -1,8 +1,8 @@
-# GitHub Inbox &#128238;
+# Octobox &#128238;
 
 Take back control of your GitHub Notifications
 
-![screen shot 2016-12-17 at 12 39 02 am](https://cloud.githubusercontent.com/assets/1060/21282805/45bad122-c3f1-11e6-8043-2f8c75d3529f.png)
+![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21315365/b698d160-c5f3-11e6-93bd-e46726ccd347.png)
 
 ## Why is this a thing?
 
@@ -12,18 +12,24 @@ Notifications are marked as read and disappear from the list as soon as you load
 
 Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
 
-GitHub Inbox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
+Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
 
 ## What state is the project in right now?
 
-GitHub Inbox is like a little baby. You have to host it yourself and it only works for one user at a time.
+Octobox is like a little baby. You have to host it yourself and it only works for one user at a time.
 
-Check out the open issues for a glimpse of the future: https://github.com/andrew/github-inbox/issues.
+Check out the open issues for a glimpse of the future: https://github.com/andrew/octobox/issues.
+
+## Deployment to Heroku
+
+You can host your own instance of Octobox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Development
 
-The source code is hosted at [GitHub](https://github.com/andrew/github-inbox).
-You can report issues/feature requests on [GitHub Issues](https://github.com/andrew/github-inbox/issues).
+The source code is hosted at [GitHub](https://github.com/andrew/octobox).
+You can report issues/feature requests on [GitHub Issues](https://github.com/andrew/octobox/issues).
 For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
 
 ### Getting Started
@@ -66,14 +72,20 @@ Once all the gems are installed, we'll need to create the databases and
 tables. Rails makes this easy through the use of "Rake" tasks:
 
 ```bash
-bundle exec rake db:create:all
-bundle exec rake db:migrate
+bundle exec rake db:create db:migrate
 ```
 
-Now go and create a [personal access token](https://github.com/settings/tokens) on GitHub with the `notifications` scope enabled and add it to `.env`:
+Now go and register a new [GitHub OAuth Application](https://github.com/settings/applications/new), your development configuration should look something like this:
+
+<img width="561" alt="screen shot 2016-12-18 at 21 54 35" src="https://cloud.githubusercontent.com/assets/564113/21299762/a7bfaace-c56c-11e6-834c-ff893f79cec3.png">
+
+If you're deploying this to production, just replace `http://localhost:3000` with your applications URL.
+
+Once you've created your application you can then then add the following to your `.env`:
 
 ```
-GITHUB_TOKEN=yourpersonalaccesstoken
+GITHUB_CLIENT_ID=yourclientidhere
+GITHUB_CLIENT_SECRET=yourclientsecrethere
 ```
 
 Finally you can boot the rails app:
@@ -81,7 +93,23 @@ Finally you can boot the rails app:
 ```bash
 rails s
 ```
+#### Docker Compose
 
+If you're familiar with [Docker](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/), the included `docker-compose.yml` configuration allows you to spin up the application locally.
+
+First, launch an instance of PostgreSQL and wait for it to fully initialize:
+
+```bash
+docker-compose up database
+```
+
+Once the PostgreSQL initialization process is complete, launch the application using another terminal session:
+
+```bash
+GITHUB_TOKEN=yourpersonalaccesstoken docker-compose up app
+```
+
+**Note**: You can add `GITHUB_TOKEN` to `.env` instead of supplying it directly on the command-line.
 
 ### Note on Patches/Pull Requests
 
@@ -94,12 +122,6 @@ rails s
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-## Deployment
-
-You can host your own instance of GitHub Inbox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
 ## Copyright
 
-Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/andrew/github-inbox/blob/master/LICENSE) for details.
+Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/andrew/octobox/blob/master/LICENSE.txt) for details.
