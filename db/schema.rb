@@ -35,4 +35,14 @@ ActiveRecord::Schema.define(version: 20161218132847) do
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at", using: :btree
   end
 
+  create_table "users", force: :cascade do |t|
+    t.integer  "github_id",    null: false
+    t.string   "access_token", null: false
+    t.string   "github_login", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
+    t.index ["github_id"], name: "index_users_on_github_id", unique: true, using: :btree
+  end
+
 end

@@ -9,12 +9,14 @@ gem 'uglifier'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'octokit'
+gem 'omniauth-github'
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
 
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
+  gem 'rails-controller-testing'
 end
 
 group :test do

@@ -26,7 +26,7 @@
   </td>
   <td>
     <small class='text-muted'>
-      <%= notification.updated_at.to_s(:short) %>
+      <%= notification.updated_at.localtime.to_s(:short) %>
     </small>
   </td>
 </tr>
