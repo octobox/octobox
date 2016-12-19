@@ -20,4 +20,9 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert User.find_by(github_id: OmniAuth.config.mock_auth[:github].uid)
     assert_redirected_to root_path
   end
+
+  test 'GET #destroy redirects to /' do
+    get '/logout'
+    assert_redirected_to '/'
+  end
 end
