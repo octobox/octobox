@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: github-inbox_production
-  username: github-inbox
-  password: <%= ENV['GITHUB-INBOX_DATABASE_PASSWORD'] %>
+  # username: github-inbox
+  # password: <%= ENV['GITHUB-INBOX_DATABASE_PASSWORD'] %>
