@@ -25,6 +25,7 @@ group :test do
   gem 'factory_girl'
   gem 'simplecov'
   gem 'codeclimate-test-reporter'
+  gem 'webmock'
 end
 
 group :development do
