@@ -1,13 +1,19 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
-    <div class="navbar-header">
+    <div class="navbar-default">
       <a class="navbar-brand" href="/">
-        <%= fa_icon 'github' %>
+        <%= fa_icon 'envelope' %> Octobox
       </a>
-    </div>
-
-    <div class="collapse navbar-collapse">
-      <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right'>
+      <div class="dropdown navbar-btn">
+        <button class="btn btn-default dropdown-toggle" type="button" id="moreMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          More
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="moreMenu">
+          <li><a href="/notifications/all/archive">Archive All</a></li>
+        </ul>
+      </div>
+      <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right sync'>
         <%= fa_icon 'refresh' %>
       </a>
     </div>
@@ -72,7 +78,7 @@
         <% @unread_repositories.sort.each do |repo_name, count| %>
           <tr>
             <td>
-              <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20 %>
+              <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded' %>
             </td>
             <td>
               <% if params[:repo] == repo_name %><strong><% end %>

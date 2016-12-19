@@ -1,0 +1,19 @@
+<div class="jumbotron" style="background-color: white;">
+  <div class="container">
+    <h1 class="text-center"><%= fa_icon 'envelope' %>  Octobox</h1>
+    <p class="text-center">Take back control of your GitHub notifications</p>
+    <div class="text-center">
+      <p>
+      <%= link_to login_path, class: 'btn btn-default btn-lg' do %>
+        <%= fa_icon 'github' %>
+        Sign in with GitHub
+      <% end %>
+      </p>
+      <p>
+        <a class="github-button" href="https://github.com/andrew/octobox" data-icon="octicon-star" data-style="mega" data-count-href="/andrew/octobox/stargazers" data-count-api="/repos/andrew/octobox#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star andrew/octobox on GitHub">Star</a>
+        <a class="github-button" href="https://github.com/andrew/octobox/fork" data-icon="octicon-repo-forked" data-style="mega" data-count-href="/andrew/octobox/network" data-count-api="/repos/andrew/octobox#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork andrew/octobox on GitHub">Fork</a>
+      </p>
+    </div>
+  </div>
+</div>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
