@@ -37,21 +37,32 @@ td.current {
   border-left: 2px solid #64beff !important;
 }
 
-#help-box {
-  top: 50%;
-  left: 50%;
-  width: 30em;
-  height: 18em;
-  margin-top: -9em; /*set to a negative number 1/2 of your height*/
-  margin-left: -15em; /*set to a negative number 1/2 of your width*/
-  border: 1px solid #ccc;
-  background-color: #f3f3f3;
-  position:fixed;
+table.keyboard-mappings {
+  font-size: 12px;
+  color: #555;
 }
 
-.close-window {
-  cursor: pointer;
-  position: absolute;
-  right: 5px;
-  top: 3px;
+table.keyboard-mappings tr > td {
+    padding-bottom: 6px;
+}
+
+td.keys {
+  padding-right: 10px;
+  color: #767676;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.key {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
 }

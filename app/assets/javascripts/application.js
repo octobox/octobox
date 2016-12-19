@@ -1,6 +1,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require bootstrap
 //= require_tree .
 
 document.addEventListener("turbolinks:load", function() {
@@ -17,10 +18,6 @@ document.addEventListener("turbolinks:load", function() {
 
   // Set current notification for navigation
   $('.table-notifications tbody tr').first().find("td").first().addClass("current");
-
-  $('.close-window').click(function() {
-    $("#help-box").hide();
-  });
 });
 
 // Add key events only once
@@ -50,7 +47,7 @@ $( document ).ready(function() {
       $('td.current').parent().find('.archive').click();
     }
     if ( e.which == 191 ) { // ?
-      $("#help-box").toggle();
+      $("#help-box").modal();
     }
   });
 });

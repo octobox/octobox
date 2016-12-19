@@ -137,6 +137,52 @@
     </div>
   </div>
 </div>
-<div id="help-box" style="display:none;">
-  <%= fa_icon 'window-close', class: 'close-window' %>
+
+<div id="help-box" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Keyboard shortcuts</h4>
+      </div>
+      <div class="modal-body">
+        <table class="keyboard-mappings">
+          <tbody>
+            <tr>
+              <td class="keys">
+                <div class="key">j</div>
+              </td>
+              <td>
+                Move down the list
+              </td>
+            </tr>
+            <tr>
+              <td class="keys">
+                <div class="key">k</div>
+              </td>
+              <td>
+                Move up the list
+              </td>
+            </tr>
+            <tr>
+              <td class="keys">
+                <div class="key">s</div>
+              </td>
+              <td>
+                Star current notification
+              </td>
+            </tr>
+            <tr>
+              <td class="keys">
+                <div class="key">y</div>
+              </td>
+              <td>
+                Archive current notification
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
