@@ -88,6 +88,16 @@ Finally you can boot the rails app:
 rails s
 ```
 
+### Keyboard shortcuts
+
+You can use keyboard shortcuts to naviagate and perform certian actions:
+
+ - `j` - move down the list
+ - `k` - move up the list
+ - `s` - star current notification
+ - `a` - archive current notification
+
+Press `?` for the help menu.
 
 ### Note on Patches/Pull Requests
 
