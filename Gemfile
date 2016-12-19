@@ -23,6 +23,8 @@ end
 group :test do
   gem 'rake', '~> 12.0'
   gem 'factory_girl'
+  gem 'simplecov'
+  gem 'codeclimate-test-reporter'
 end
 
 group :development do
