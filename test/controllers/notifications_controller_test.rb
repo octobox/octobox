@@ -2,15 +2,17 @@
 require 'test_helper'
 
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
-  test 'will be redirected to sign in if not authenticated' do
+  test 'will render the home page if not authenticated' do
     get '/'
-    assert_redirected_to '/login'
+    assert_response :success
+    assert_template 'pages/home'
   end
 
-  test 'does not redirect if authenticated' do
+  test 'renders the index page if authenticated' do
     sign_in_as(users(:andrew))
 
     get '/'
     assert_response :success
+    assert_template 'notifications/index'
   end
 end

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class NotificationsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:index]
+  before_action :render_home_page_unless_authenticated, only: [:index]
+
   def index
     scope = current_user.notifications
     scope = params[:archive].present? ? scope.archived : scope.inbox
@@ -42,5 +45,11 @@ class NotificationsController < ApplicationController
   def sync
     Notification.download(current_user)
     redirect_to root_path(type: params[:type], repo: params[:repo])
+  end
+
+  private
+
+  def render_home_page_unless_authenticated
+    return render 'pages/home' unless logged_in?
   end
 end
