@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 class NotificationsController < ApplicationController
   def index
-    if params[:archive].present?
-      scope = Notification.archived
-    else
-      scope = Notification.inbox
-    end
+    scope = current_user.notifications
+    scope = params[:archive].present? ? scope.archived : scope.inbox
 
     @types               = scope.distinct.group(:subject_type).count
     @statuses            = scope.distinct.group(:unread).count
@@ -19,7 +16,6 @@ class NotificationsController < ApplicationController
     scope = scope.status(params[:status]) if params[:status].present?
     scope = scope.starred                 if params[:starred].present?
 
-    scope = scope.owned_by(current_user)
     @notifications = scope.newest
   end
 

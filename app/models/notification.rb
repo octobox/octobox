@@ -11,7 +11,6 @@ class Notification < ApplicationRecord
   scope :type,     ->(subject_type) { where(subject_type: subject_type) }
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :status,   ->(status)       { where(unread: status) }
-  scope :owned_by, ->(user)         { where(user: user) }
 
   def web_url
     subject_url.gsub('https://api.github.com/repos', 'https://github.com')
