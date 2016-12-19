@@ -51,6 +51,8 @@ GEM
     codeclimate-test-reporter (1.0.3)
       simplecov
     concurrent-ruby (1.0.3)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
     debug_inspector (0.0.2)
     docile (1.1.5)
     dotenv (2.1.1)
@@ -68,6 +70,7 @@ GEM
       railties (>= 3.2, < 5.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
+    hashdiff (0.3.1)
     hashie (3.4.6)
     i18n (0.7.0)
     jquery-rails (4.2.1)
@@ -158,6 +161,7 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
+    safe_yaml (1.0.4)
     sass (3.4.22)
     sassc (1.11.0)
       bundler
@@ -205,6 +209,10 @@ GEM
       activemodel (>= 5.0)
       debug_inspector
       railties (>= 5.0)
+    webmock (2.3.1)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -239,6 +247,7 @@ DEPENDENCIES
   turbolinks
   uglifier
   web-console
+  webmock
 
 RUBY VERSION
    ruby 2.3.3p222
