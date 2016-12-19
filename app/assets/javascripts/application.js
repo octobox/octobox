@@ -17,6 +17,10 @@ document.addEventListener("turbolinks:load", function() {
 
   // Set current notification for navigation
   $('.table-notifications tbody tr').first().find("td").first().addClass("current");
+
+  $('.close-window').click(function() {
+    $("#help-box").hide();
+  });
 });
 
 // Add key events only once
@@ -44,6 +48,9 @@ $( document ).ready(function() {
     }
     if ( e.which == 89 ) { // y
       $('td.current').parent().find('.archive').click();
+    }
+    if ( e.which == 191 ) { // ?
+      $("#help-box").toggle();
     }
   });
 });
