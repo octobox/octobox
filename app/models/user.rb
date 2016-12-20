@@ -23,7 +23,7 @@ class User < ApplicationRecord
   end
 
   def archive_all
-    notifications.each { |n| n.update_attributes(archived: true) }
+    notifications.update_all(archived: true)
   end
 
   def sync_notifications
