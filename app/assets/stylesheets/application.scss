@@ -64,10 +64,13 @@ html {
   .table-notifications tr td:first-child {
     border-left: 2px solid #fff;
   }
+  .table-notifications tr:hover td:first-child {
+    border-left: 2px solid $table-bg-hover;
+  }
   .table-notifications tr.active td:first-child {
     border-left: 2px solid $table-bg-active;
   }
-  .table-notifications tr.active:hover td:first-child {
+  .table-notifications tr:hover td:first-child {
     border-left: 2px solid #ededed;
   }
 
