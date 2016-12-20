@@ -117,12 +117,13 @@ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compo
 
 ### Keyboard shortcuts
 
-You can use keyboard shortcuts to naviagate and perform certian actions:
+You can use keyboard shortcuts to navigate and perform certain actions:
 
  - `j` - move down the list
  - `k` - move up the list
  - `s` - star current notification
  - `y` - archive current notification
+ - `Enter` - open current notification in a new window
 
 Press `?` for the help menu.
 
