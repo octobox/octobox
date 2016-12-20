@@ -83,3 +83,11 @@ td.keys {
   display: inline-block;
 
 }
+
+.header-flash-messages {
+  .alert {
+    margin-bottom: 0;
+    border: 0px;
+    border-radius: 0px;
+  }
+}
