@@ -56,6 +56,9 @@ $( document ).ready(function() {
     if ( e.which == 190 ) { // .
       window.location.href = '/sync';
     }
+    if ( e.which == 82 ) { // r
+      window.location.href = '/sync';
+    }
 
   });
 });
