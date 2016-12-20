@@ -143,8 +143,8 @@
             <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
               <%= fa_icon 'filter' %>
             </button>
-            <a href="/sync" data-turbolinks="false" class='btn btn-default sync'>
-              <%= fa_icon 'refresh' %>
+            <a href="/sync" data-turbolinks="false" class='btn btn-default sync' data-toggle="tooltip" data-animation="false" title="Refresh List">
+              <%= octicon 'sync', :height => 16 %>
             </a>
             <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>
           </p>

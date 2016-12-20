@@ -1,5 +1,6 @@
 $navbar-default-bg: #312312;
 $table-bg-active: #fafafa;
+$tooltip-opacity: 1;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -61,7 +62,13 @@ html {
 
 @media (min-width: $screen-sm-min ) {
   .table-notifications tr td:first-child {
-    border-left: 2px solid transparent;
+    border-left: 2px solid #fff;
+  }
+  .table-notifications tr.active td:first-child {
+    border-left: 2px solid $table-bg-active;
+  }
+  .table-notifications tr.active:hover td:first-child {
+    border-left: 2px solid #ededed;
   }
 
   td.current {
