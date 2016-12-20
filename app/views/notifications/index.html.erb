@@ -18,7 +18,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <%= image_tag "https://github.com/#{current_user.github_login.split('/').first}.png?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
+            <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
             <%= current_user.github_login %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu dropdown-menu-right">
