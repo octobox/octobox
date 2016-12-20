@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get '/logout', to: 'sessions#destroy', as: 'logout'
 
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
+  match '/auth/failure',            to: 'sessions#failure', via: [:get, :post]
 
   get '/notifications/all/archive', to: 'notifications#archive_all'
   get '/notifications/:id/archive', to: 'notifications#archive'

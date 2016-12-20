@@ -222,3 +222,11 @@ td.keys {
     width: 50%; /* 6 columns */
   }
 }
+
+.header-flash-messages {
+  .alert {
+    margin-bottom: 0;
+    border: 0px;
+    border-radius: 0px;
+  }
+}

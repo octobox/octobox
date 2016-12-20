@@ -17,7 +17,12 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session.delete(:user_id)
+    reset_session
+    redirect_to root_path
+  end
+
+  def failure
+    flash[:error] = 'There was a problem authenticating with GitHub, please try again.'
     redirect_to root_path
   end
 end

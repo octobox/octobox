@@ -27,16 +27,17 @@ class Notification < ApplicationRecord
           end
 
           attrs = {}.tap do |attr|
-            attr[:user_id]              = user.id
-            attr[:repository_id]        = notification.repository.id
-            attr[:repository_full_name] = notification.repository.full_name
-            attr[:subject_title]        = notification.subject.title
-            attr[:subject_type]         = notification.subject.type
-            attr[:reason]               = notification.reason
-            attr[:unread]               = notification.unread
-            attr[:updated_at]           = notification.updated_at
-            attr[:last_read_at]         = notification.last_read_at
-            attr[:url]                  = notification.url
+            attr[:user_id]               = user.id
+            attr[:repository_id]         = notification.repository.id
+            attr[:repository_full_name]  = notification.repository.full_name
+            attr[:repository_owner_name] = notification.repository.owner.login
+            attr[:subject_title]         = notification.subject.title
+            attr[:subject_type]          = notification.subject.type
+            attr[:reason]                = notification.reason
+            attr[:unread]                = notification.unread
+            attr[:updated_at]            = notification.updated_at
+            attr[:last_read_at]          = notification.last_read_at
+            attr[:url]                   = notification.url
 
             attr[:subject_url] = if notification.subject.type == "RepositoryInvitation"
                                    "#{notification.repository.html_url}/invitations"

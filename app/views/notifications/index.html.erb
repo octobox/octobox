@@ -47,7 +47,7 @@
             </td>
           </tr>
         <% end %>
-        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <%= menu_separator unless @statuses.empty? %>
         <% @types.each do |type, count| %>
           <tr>
             <td>
@@ -63,7 +63,7 @@
             </td>
           </tr>
         <% end %>
-        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <%= menu_separator unless @types.empty? %>
         <% @reasons.each do |reason, count| %>
           <tr>
             <td class='text-<%= reason_label(reason) %>'>
@@ -79,7 +79,7 @@
             </td>
           </tr>
         <% end %>
-        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <%= menu_separator unless @reasons.empty? %>
         <% @unread_repositories.sort.each do |repo_name, count| %>
           <tr>
             <td>
@@ -95,7 +95,7 @@
             </td>
           </tr>
         <% end %>
-        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <%= menu_separator unless @unread_repositories.empty? %>
         <tr>
           <td>
             <%= fa_icon 'archive' %>
@@ -126,39 +126,29 @@
       </table>
     </div>
     <div class="col-12 col-md-10">
-      <div class="table-notifications">
-        <p>
-          <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
-            <%= fa_icon 'filter' %>
-          </button>
-          <a href="/sync" data-turbolinks="false" class='btn btn-default sync'>
-            <%= fa_icon 'refresh' %>
-          </a>
-          <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>
-        </p>
-        <table class='table table-hover'>
-          <% if @notifications.any? %>
+      <% if @notifications.any? %>
+        <div class="table-notifications">
+          <p>
+            <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
+              <%= fa_icon 'filter' %>
+            </button>
+            <a href="/sync" data-turbolinks="false" class='btn btn-default sync'>
+              <%= fa_icon 'refresh' %>
+            </a>
+            <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>
+          </p>
+          <table class='table table-hover'>
             <%= render @notifications %>
-          <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
-            <tr>
-              <td class='text-center'>
-                You're in the clear!
-              </td>
-            </tr>
-          <% else %>
-          <tr>
-            <td class='text-center'>
-              <p>
-                <%= link_to 'Nothing to see here', root_path %>
-              </p>
-            </td>
-          </tr>
-          <% end %>
-        </table>
-        <div class="pagination">
-          <%= paginate @notifications %>
+          </table>
+          <div class="pagination">
+            <%= paginate @notifications %>
+          </div>
         </div>
-      </div>
+      <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
+        <p class='text-center'>You're in the clear!</p>
+      <% else %>
+        <p class='text-center'><%= link_to 'Nothing to see here', root_path %></p>
+      <% end %>
     </div>
   </div>
 </div>
