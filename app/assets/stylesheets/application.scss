@@ -5,6 +5,11 @@ $table-bg-active: #fafafa;
 @import "bootstrap";
 @import "font-awesome";
 
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+  min-height: 100%;
+}
 body {
   background-color: #f7f7f7;
   font-size: 14px;
@@ -16,7 +21,12 @@ html {
   position: relative;
   min-height: 100%;
 }
-
+.navbar-brand {
+  .octicon {
+    fill: #fff;
+    margin-right: 3px;
+  }
+}
 .table > tbody > tr:first-child > td {
   border-top: none;
 }
@@ -105,11 +115,15 @@ td.keys {
     font-weight: bold;
   }
 }
+.octicon {
+  vertical-align: text-bottom;
+}
 @media (min-width: $screen-sm-min) {
   .notification-checkbox,
   .notification-star,
   .notification-icon {
     width: 1%;
+    text-align: center;
   }
 }
 @media (max-width: $screen-xs-max) {
@@ -160,5 +174,51 @@ td.keys {
       top: 10px;
       right: 10px;
     }
+  }
+}
+
+
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+@media screen and (max-width: $screen-sm-max) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
   }
 }

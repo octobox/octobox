@@ -1,37 +1,40 @@
 <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
-    <div class="navbar-default">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#octobox-menu" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <a class="navbar-brand" href="/">
-        <%= fa_icon 'envelope' %> Octobox
+        <%= octicon 'octoface', height: 22 %> Octobox
       </a>
-      <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right sync'>
-        <%= fa_icon 'refresh' %>
-      </a>
-      <div class="dropdown navbar-btn navbar-right">
-        <button class="btn btn-default dropdown-toggle" type="button" id="moreMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Menu
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="moreMenu">
-          <li><a href="/notifications/all/archive">Archive All</a></li>
-          <li><%= link_to 'Support', "https://github.com/andrew/octobox/issues" %></li>
-          <li><%= link_to 'Logout', logout_path %></li>
-        </ul>
-      </div>
     </div>
-  </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="octobox-menu">
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to 'Support', "https://github.com/andrew/octobox/issues" %></li>
+        <li><%= link_to 'Logout', logout_path %></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
 </nav>
+
+
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-2 table-responsive">
+  <div class="row row-offcanvas row-offcanvas-left">
+    <div class="col-6 col-md-2 sidebar-offcanvas" id="sidebar">
       <table class='table table-condensed'>
         <% @statuses.each do |status, count| %>
           <tr>
             <td>
               <% if status %>
-                <%= fa_icon 'envelope' %>
+                <%= octicon 'mail', :height => 16 %>
               <% else %>
-                <%= fa_icon 'envelope-open' %>
+                <%= octicon 'mail-read', :height => 16 %>
               <% end %>
             </td>
             <td>
@@ -48,7 +51,7 @@
         <% @types.each do |type, count| %>
           <tr>
             <td>
-              <%= fa_icon(notification_icon(type))%>
+              <%= octicon notification_icon(type), :height => 16 %>
             </td>
             <td>
               <% if params[:type] == type %><strong><% end %>
@@ -122,86 +125,42 @@
         </tr>
       </table>
     </div>
-    <div class="col-md-10 table-notifications">
-      <table class='table table-hover'>
-        <% if @notifications.any? %>
-          <%= render @notifications %>
-        <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
+    <div class="col-12 col-md-10">
+      <div class="table-notifications">
+        <p>
+          <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
+            <%= fa_icon 'filter' %>
+          </button>
+          <a href="/sync" data-turbolinks="false" class='btn btn-default sync'>
+            <%= fa_icon 'refresh' %>
+          </a>
+          <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>
+        </p>
+        <table class='table table-hover'>
+          <% if @notifications.any? %>
+            <%= render @notifications %>
+          <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
+            <tr>
+              <td class='text-center'>
+                You're in the clear!
+              </td>
+            </tr>
+          <% else %>
           <tr>
             <td class='text-center'>
-              You're in the clear!
+              <p>
+                <%= link_to 'Nothing to see here', root_path %>
+              </p>
             </td>
           </tr>
-        <% else %>
-        <tr>
-          <td class='text-center'>
-            <p>
-              <%= link_to 'Nothing to see here', root_path %>
-            </p>
-          </td>
-        </tr>
-        <% end %>
-      </table>
-      <div class="pagination">
-        <%= paginate @notifications %>
+          <% end %>
+        </table>
+        <div class="pagination">
+          <%= paginate @notifications %>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<div id="help-box" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Keyboard shortcuts</h4>
-      </div>
-      <div class="modal-body">
-        <table class="keyboard-mappings">
-          <tbody>
-            <tr>
-              <td class="keys">
-                <div class="key">j</div>
-              </td>
-              <td>
-                Move down the list
-              </td>
-            </tr>
-            <tr>
-              <td class="keys">
-                <div class="key">k</div>
-              </td>
-              <td>
-                Move up the list
-              </td>
-            </tr>
-            <tr>
-              <td class="keys">
-                <div class="key">s</div>
-              </td>
-              <td>
-                Star current notification
-              </td>
-            </tr>
-            <tr>
-              <td class="keys">
-                <div class="key">y</div>
-              </td>
-              <td>
-                Archive current notification
-              </td>
-            </tr>
-            <tr>
-              <td class="keys">
-                <div class="key">Enter</div>
-              </td>
-              <td>
-                Open current notification in a new window
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render 'help-box' %>

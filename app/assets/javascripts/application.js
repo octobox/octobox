@@ -53,5 +53,13 @@ $( document ).ready(function() {
     if ( e.which == 191 ) { // ?
       $("#help-box").modal();
     }
+    if ( e.which == 190 ) { // .
+      window.location.href = '/sync';
+    }
+
   });
+});
+
+$(document).on('click', '[data-toggle="offcanvas"]', function () {
+  $('.row-offcanvas').toggleClass('active')
 });

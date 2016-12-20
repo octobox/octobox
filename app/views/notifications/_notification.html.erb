@@ -7,7 +7,7 @@
     <%= fa_icon( notification.starred ? "star" : "star-o", class: "toggle-star star", data: { id: notification.id }) %>
   </td>
   <td class='notification-icon'>
-    <%= fa_icon(notification_icon(notification.subject_type))%>
+    <%= octicon notification_icon(notification.subject_type), :height => 16 %>
   </td>
   <td class='notification-subject'>
     <%= link_to notification.subject_title, notification.web_url, target: 'blank', class: 'link' %>
