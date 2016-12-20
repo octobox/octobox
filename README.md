@@ -36,8 +36,7 @@ In order to setup Octobox for your GitHub Enterprise instance all you need you d
 Example:
 
 ```
-# Enterprise domain is https://github.foobar.com
-DOMAIN=foobar.com
+GITHUB_DOMAIN=https://github.foobar.com
 ```
 
 And that's it :sparkles:

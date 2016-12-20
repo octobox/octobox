@@ -4,10 +4,10 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   authorize_url = 'https://github.com/login/oauth/authorize'
   token_url     = 'https://github.com/login/oauth/access_token'
 
-  if (domain = ENV.fetch('DOMAIN', nil))
-    site          = "https://github.#{domain}/api/v3"
-    authorize_url = "https://github.#{domain}/login/oauth/authorize"
-    token_url     = "https://github.#{domain}/login/oauth/access_token"
+  if (github_domain = ENV.fetch('GITHUB_DOMAIN', nil))
+    site          = "#{github_domain}/api/v3"
+    authorize_url = "#{github_domain}/login/oauth/authorize"
+    token_url     = "#{github_domain}/login/oauth/access_token"
   end
 
   provider :github,
