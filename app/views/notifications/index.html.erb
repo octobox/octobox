@@ -44,7 +44,7 @@
             </td>
           </tr>
         <% end %>
-        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <%= menu_separator unless @statuses.empty? %>
         <% @types.each do |type, count| %>
           <tr>
             <td>
@@ -60,7 +60,7 @@
             </td>
           </tr>
         <% end %>
-        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <%= menu_separator unless @types.empty? %>
         <% @reasons.each do |reason, count| %>
           <tr>
             <td class='text-<%= reason_label(reason) %>'>
@@ -76,7 +76,7 @@
             </td>
           </tr>
         <% end %>
-        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <%= menu_separator unless @reasons.empty? %>
         <% @unread_repositories.sort.each do |repo_name, count| %>
           <tr>
             <td>
@@ -92,7 +92,7 @@
             </td>
           </tr>
         <% end %>
-        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <%= menu_separator unless @unread_repositories.empty? %>
         <tr>
           <td>
             <%= fa_icon 'archive' %>
