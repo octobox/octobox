@@ -16,6 +16,5 @@
 # Ignore Byebug command history file.
 .byebug_history
 
-.env  
-
-config/local_env.yml
+.env
+coverage

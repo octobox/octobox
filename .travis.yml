@@ -9,6 +9,9 @@ services:
 before_script:
   - psql -c 'create database "octobox_test";' -U postgres
 
+script:
+  - RAILS_ENV=test bundle exec rake --trace db:migrate test && bundle exec codeclimate-test-reporter
+
 bundler_args: --without development production --deployment --jobs=3 --retry=3
 
 cache: bundler

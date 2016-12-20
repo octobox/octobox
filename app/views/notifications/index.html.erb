@@ -7,6 +7,17 @@
       <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right sync'>
         <%= fa_icon 'refresh' %>
       </a>
+      <div class="dropdown navbar-btn navbar-right">
+        <button class="btn btn-default dropdown-toggle" type="button" id="moreMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Menu
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="moreMenu">
+          <li><a href="/notifications/all/archive">Archive All</a></li>
+          <li><%= link_to 'Support', "https://github.com/andrew/octobox/issues" %></li>
+          <li><%= link_to 'Logout', logout_path %></li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
@@ -69,7 +80,7 @@
         <% @unread_repositories.sort.each do |repo_name, count| %>
           <tr>
             <td>
-              <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20 %>
+              <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded' %>
             </td>
             <td>
               <% if params[:repo] == repo_name %><strong><% end %>
@@ -111,7 +122,7 @@
         </tr>
       </table>
     </div>
-    <div class="col-xs-12 col-md-10 table-responsive">
+    <div class="col-xs-12 col-md-10 table-responsive table-notifications">
       <table class='table table-condensed table-hover'>
         <% if @notifications.any? %>
           <%= render @notifications %>
@@ -131,6 +142,66 @@
         </tr>
         <% end %>
       </table>
+      <div class="pagination">
+        <%= paginate @notifications %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="help-box" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Keyboard shortcuts</h4>
+      </div>
+      <div class="modal-body">
+        <table class="keyboard-mappings">
+          <tbody>
+            <tr>
+              <td class="keys">
+                <div class="key">j</div>
+              </td>
+              <td>
+                Move down the list
+              </td>
+            </tr>
+            <tr>
+              <td class="keys">
+                <div class="key">k</div>
+              </td>
+              <td>
+                Move up the list
+              </td>
+            </tr>
+            <tr>
+              <td class="keys">
+                <div class="key">s</div>
+              </td>
+              <td>
+                Star current notification
+              </td>
+            </tr>
+            <tr>
+              <td class="keys">
+                <div class="key">y</div>
+              </td>
+              <td>
+                Archive current notification
+              </td>
+            </tr>
+            <tr>
+              <td class="keys">
+                <div class="key">Enter</div>
+              </td>
+              <td>
+                Open current notification in a new window
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

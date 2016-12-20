@@ -12,6 +12,63 @@ class Notification < ApplicationRecord
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :status,   ->(status)       { where(unread: status) }
 
+  paginates_per 20
+
+  class << self
+    def download(user)
+      timestamp = Time.current
+
+      fetch_notifications(user) do |notification|
+        begin
+          n = find_or_create_by(github_id: notification.id)
+
+          if n.archived && n.updated_at < notification.updated_at
+            n.archived = false
+          end
+
+          attrs = {}.tap do |attr|
+            attr[:user_id]              = user.id
+            attr[:repository_id]        = notification.repository.id
+            attr[:repository_full_name] = notification.repository.full_name
+            attr[:subject_title]        = notification.subject.title
+            attr[:subject_type]         = notification.subject.type
+            attr[:reason]               = notification.reason
+            attr[:unread]               = notification.unread
+            attr[:updated_at]           = notification.updated_at
+            attr[:last_read_at]         = notification.last_read_at
+            attr[:url]                  = notification.url
+
+            attr[:subject_url] = if notification.subject.type == "RepositoryInvitation"
+                                   "#{notification.repository.html_url}/invitations"
+                                 else
+                                   notification.subject.url
+                                 end
+          end
+
+          n.update(attrs)
+        rescue ActiveRecord::RecordNotUnique
+          retry
+        end
+      end
+
+      user.touch(:last_synced_at, time: timestamp)
+    end
+
+    private
+
+    def fetch_notifications(user)
+      user.github_client.notifications(fetch_params(user)).each { |n| yield n }
+    end
+
+    def fetch_params(user)
+      if user.last_synced_at?
+        { all: true, since: user.last_synced_at.iso8601 }
+      else
+        { all: true, since: 1.month.ago.iso8601 }
+      end
+    end
+  end
+
   def web_url
     subject_url.gsub('https://api.github.com/repos', 'https://github.com')
                .gsub('/pulls/', '/pull/')
@@ -20,24 +77,5 @@ class Notification < ApplicationRecord
 
   def repo_url
     "https://github.com/#{repository_full_name}"
-  end
-
-  def self.download(user)
-    user.github_client.notifications(all: true).each do |notification|
-      n = Notification.find_or_create_by({github_id: notification.id})
-      n.archived = false if n.archived && n.updated_at < notification.updated_at
-      n.update_attributes({
-        user_id: user.id,
-        repository_id: notification.repository.id,
-        repository_full_name: notification.repository.full_name,
-        subject_title: notification.subject.title,
-        subject_url: notification.subject.url,
-        subject_type: notification.subject.type,
-        reason: notification.reason,
-        unread: notification.unread,
-        updated_at: notification.updated_at,
-        last_read_at: notification.last_read_at,
-        url: notification.url})
-    end
   end
 end

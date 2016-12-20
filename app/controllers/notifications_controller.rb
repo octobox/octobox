@@ -19,7 +19,7 @@ class NotificationsController < ApplicationController
     scope = scope.status(params[:status]) if params[:status].present?
     scope = scope.starred                 if params[:starred].present?
 
-    @notifications = scope.newest
+    @notifications = scope.newest.page(params[:page])
   end
 
   def archive
@@ -27,6 +27,11 @@ class NotificationsController < ApplicationController
     notification.update_attributes(archived: true)
 
     redirect_to root_path(type: params[:type], repo: params[:repo])
+  end
+
+  def archive_all
+    current_user.archive_all
+    redirect_to root_path
   end
 
   def unarchive
@@ -43,7 +48,7 @@ class NotificationsController < ApplicationController
   end
 
   def sync
-    Notification.download(current_user)
+    current_user.sync_notifications
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
 

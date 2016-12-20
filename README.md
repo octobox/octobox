@@ -4,6 +4,10 @@ Take back control of your GitHub Notifications
 
 ![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21315365/b698d160-c5f3-11e6-93bd-e46726ccd347.png)
 
+[![Build Status](https://travis-ci.org/andrew/octobox.svg?branch=master)](https://travis-ci.org/andrew/octobox)
+[![Code Climate](https://img.shields.io/codeclimate/github/andrew/octobox.svg?style=flat)](https://codeclimate.com/github/andrew/octobox)
+[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/andrew/octobox.svg?style=flat)](https://codeclimate.com/github/andrew/octobox)
+
 ## Why is this a thing?
 
 If you manage more than one active project on GitHub, you probably find [GitHub Notifications](https://github.com/notifications) pretty lacking.
@@ -106,10 +110,22 @@ docker-compose up database
 Once the PostgreSQL initialization process is complete, launch the application using another terminal session:
 
 ```bash
-GITHUB_TOKEN=yourpersonalaccesstoken docker-compose up app
+GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up app
 ```
 
 **Note**: You can add `GITHUB_TOKEN` to `.env` instead of supplying it directly on the command-line.
+
+### Keyboard shortcuts
+
+You can use keyboard shortcuts to navigate and perform certain actions:
+
+ - `j` - move down the list
+ - `k` - move up the list
+ - `s` - star current notification
+ - `y` - archive current notification
+ - `Enter` - open current notification in a new window
+
+Press `?` for the help menu.
 
 ### Note on Patches/Pull Requests
 

@@ -10,7 +10,7 @@
     <%= fa_icon(notification_icon(notification.subject_type))%>
   </td>
   <td>
-    <%= link_to notification.subject_title, notification.web_url, target: 'blank' %>
+    <%= link_to notification.subject_title, notification.web_url, target: 'blank', class: 'link' %>
   </td>
   <% unless params[:repo].present? %>
   <td>

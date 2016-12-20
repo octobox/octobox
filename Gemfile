@@ -12,6 +12,7 @@ gem 'octokit'
 gem 'omniauth-github'
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
+gem 'kaminari'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -21,6 +22,10 @@ end
 
 group :test do
   gem 'rake', '~> 12.0'
+  gem 'factory_girl'
+  gem 'simplecov'
+  gem 'codeclimate-test-reporter'
+  gem 'webmock'
 end
 
 group :development do
@@ -28,4 +33,10 @@ group :development do
   gem 'listen', '~> 3.0.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+end
+
+group :production do
+  gem 'newrelic_rpm'
+  gem 'lograge'
+  gem 'rails_safe_tasks'
 end
