@@ -1,11 +1,15 @@
+$navbar-default-bg: #312312;
+$table-bg-active: #fafafa;
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "font-awesome";
 
 body {
-  background-color: #fff;
+  background-color: #f7f7f7;
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-top: 70px;
 }
 
 html {
@@ -17,7 +21,7 @@ html {
   border-top: none;
 }
 
-.label-muted{
+.label-muted {
   background-color: #ccc;
 }
 
@@ -32,13 +36,23 @@ html {
 .star {
   color: #f0ad4e;
 }
+@media (max-width: $screen-xs-max) {
+  .table-notifications tr {
+    border-left: 2px solid transparent;
+  }
 
-.table-notifications tr td:first-child{
-  border-left: 2px solid white;
+  // td.current {
+  //   border-left: 2px solid #64beff !important;
+  // }
 }
+@media (min-width: $screen-sm-min ) {
+  .table-notifications tr td:first-child {
+    border-left: 2px solid transparent;
+  }
 
-td.current {
-  border-left: 2px solid #64beff !important;
+  td.current {
+    border-left: 2px solid #64beff !important;
+  }
 }
 
 table.keyboard-mappings {
@@ -81,5 +95,70 @@ td.keys {
 
 .dropdown {
   display: inline-block;
+}
+.table-notifications {
+  table {
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+  }
+  .active {
+    font-weight: bold;
+  }
+}
+@media (min-width: $screen-sm-min) {
+  .notification-checkbox,
+  .notification-star,
+  .notification-icon {
+    width: 1%;
+  }
+}
+@media (max-width: $screen-xs-max) {
+  .table-notifications {
+    table,
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    th,
+    td {
+      display: block;
+    }
+    .table > tbody > tr.active {
+      background: #fafafa;
+      &:hover {
+        background: #ededed;
+      }
 
+    }
+    .table > tbody > tr > td {
+      border: none;
+      padding: 0;
+    }
+    .notification {
+      border-top: 1px solid #ddd;
+      position: relative;
+      padding: 10px 10px 10px 40px;
+    }
+    .notification-checkbox,
+    .notification-star,
+    .notification-date {
+      position: absolute;
+    }
+    .notification-checkbox {
+      top: 10px;
+      left: 10px;
+    }
+    .notification-star {
+      top: 32px;
+      left: 10px;
+    }
+    .notification-icon,
+    .notification-subject {
+      display: inline-block;
+    }
+    .notification-date {
+      top: 10px;
+      right: 10px;
+    }
+  }
 }

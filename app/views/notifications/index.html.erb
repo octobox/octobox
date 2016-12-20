@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-default">
       <a class="navbar-brand" href="/">
@@ -23,7 +23,7 @@
 </nav>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-12 col-md-2 table-responsive">
+    <div class="col-md-2 table-responsive">
       <table class='table table-condensed'>
         <% @statuses.each do |status, count| %>
           <tr>
@@ -122,8 +122,8 @@
         </tr>
       </table>
     </div>
-    <div class="col-xs-12 col-md-10 table-responsive table-notifications">
-      <table class='table table-condensed table-hover'>
+    <div class="col-md-10 table-notifications">
+      <table class='table table-hover'>
         <% if @notifications.any? %>
           <%= render @notifications %>
         <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>

@@ -1,30 +1,30 @@
-<tr class='<%= notification.unread ? 'active' : '' %>'>
-  <td>
+<tr class='notification <%= notification.unread ? 'active' : '' %>'>
+  <td class='notification-checkbox'>
     <input type="checkbox" name="" title='<%= notification.archived ? 'Unarchive' : 'Archive' %>' class='<%= notification.archived ? 'unarchive' : 'archive' %>' value="<%= notification.id %>"
            <% if notification.archived %> checked <% end %>>
   </td>
-  <td>
+  <td class='notification-star'>
     <%= fa_icon( notification.starred ? "star" : "star-o", class: "toggle-star star", data: { id: notification.id }) %>
   </td>
-  <td>
+  <td class='notification-icon'>
     <%= fa_icon(notification_icon(notification.subject_type))%>
   </td>
-  <td>
+  <td class='notification-subject'>
     <%= link_to notification.subject_title, notification.web_url, target: 'blank', class: 'link' %>
   </td>
   <% unless params[:repo].present? %>
-  <td>
+  <td class='notification-repo'>
     <small>
       <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted' %>
     </small>
   </td>
   <% end %>
-  <td>
+  <td class='notification-reason'>
     <span class='label label-<%= reason_label(notification.reason) %>'>
       <%= notification.reason.humanize %>
     </span>
   </td>
-  <td>
+  <td class='notification-date'>
     <small class='text-muted'>
       <%= notification.updated_at.localtime.to_s(:short) %>
     </small>
