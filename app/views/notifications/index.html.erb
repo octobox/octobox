@@ -122,30 +122,20 @@
         </tr>
       </table>
     </div>
-    <div class="col-xs-12 col-md-10 table-responsive table-notifications">
-      <table class='table table-condensed table-hover'>
-        <% if @notifications.any? %>
+    <% if @notifications.any? %>
+      <div class="col-xs-12 col-md-10 table-responsive table-notifications">
+        <table class='table table-condensed table-hover'>
           <%= render @notifications %>
-        <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
-          <tr>
-            <td class='text-center'>
-              You're in the clear!
-            </td>
-          </tr>
-        <% else %>
-        <tr>
-          <td class='text-center'>
-            <p>
-              <%= link_to 'Nothing to see here', root_path %>
-            </p>
-          </td>
-        </tr>
-        <% end %>
-      </table>
-      <div class="pagination">
-        <%= paginate @notifications %>
+        </table>
+        <div class="pagination">
+          <%= paginate @notifications %>
+        </div>
       </div>
-    </div>
+    <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
+      <p class='text-center'>You're in the clear!</p>
+    <% else %>
+      <p class='text-center'><%= link_to 'Nothing to see here', root_path %></p>
+    <% end %>
   </div>
 </div>
 
