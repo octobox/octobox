@@ -1,7 +1,13 @@
 <tr class='<%= notification.unread ? 'active' : '' %>'>
   <td>
-    <input type="checkbox" name="" title='<%= notification.archived ? 'Unarchive' : 'Archive' %>' class='<%= notification.archived ? 'unarchive' : 'archive' %>' value="<%= notification.id %>"
-           <% if notification.archived %> checked <% end %>>
+    <%= check_box_tag(
+      '',
+      notification.id,
+      notification.archived,
+      title: (notification.archived ? 'Unarchive' : 'Archive'),
+      class: (notification.archived ? 'unarchive' : 'archive')
+    )
+  %>
   </td>
   <td>
     <%= fa_icon( notification.starred ? "star" : "star-o", class: "toggle-star star", data: { id: notification.id }) %>
