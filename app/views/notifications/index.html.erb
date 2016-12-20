@@ -41,17 +41,20 @@
       <%= render "sidebar" %>
     </div>
     <div class="col-12 col-md-10">
+      <p>
+        <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
+          <%= octicon 'list-unordered', :height => 16 %>
+        </button>
+        <a href="/sync" data-turbolinks="false" class='btn btn-default sync' data-toggle="tooltip" data-animation="false" data-position="bottom" title="Refresh List">
+          <%= octicon 'sync', :height => 16 %>
+        </a>
+        <% if @notifications.any? %>
+          <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>
+        <% end %>
+      </p>
+
       <% if @notifications.any? %>
         <div class="table-notifications">
-          <p>
-            <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
-              <%= octicon 'list-unordered', :height => 16 %>
-            </button>
-            <a href="/sync" data-turbolinks="false" class='btn btn-default sync' data-toggle="tooltip" data-animation="false" data-position="bottom" title="Refresh List">
-              <%= octicon 'sync', :height => 16 %>
-            </a>
-            <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>
-          </p>
           <table class='table table-hover'>
             <%= render @notifications %>
           </table>
@@ -62,7 +65,9 @@
       <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
         <p class='text-center'>You're in the clear!</p>
       <% else %>
-        <p class='text-center'><%= link_to 'Nothing to see here', root_path %></p>
+        <p class='text-center'>
+          <%= link_to 'Nothing to see here', root_path %>
+        </p>
       <% end %>
     </div>
   </div>
