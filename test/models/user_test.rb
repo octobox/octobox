@@ -63,4 +63,13 @@ class UserTest < ActiveSupport::TestCase
       assert_equal n.archived, true
     end
   end
+
+  test "triggers sync_notifications on save" do
+    notifications_url = %r{https://api.github.com/notifications}
+    stub_request(:get, notifications_url)
+
+    User.create(github_id: users(:andrew), access_token: 'abcdefg')
+
+    assert_requested :get, notifications_url
+  end
 end
