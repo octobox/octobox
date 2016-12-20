@@ -48,7 +48,7 @@ class NotificationsController < ApplicationController
   end
 
   def sync
-    Notification.download(current_user)
+    current_user.sync_notifications
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
 

@@ -6,6 +6,8 @@ class User < ApplicationRecord
   validates :access_token, presence: true, uniqueness: true
   validates :github_login, presence: true
 
+  after_create :sync_notifications
+
   def self.find_by_auth_hash(auth_hash)
     User.find_by(github_id: auth_hash['uid'])
   end
@@ -22,6 +24,10 @@ class User < ApplicationRecord
 
   def archive_all
     notifications.each { |n| n.update_attributes(archived: true) }
+  end
+
+  def sync_notifications
+    Notification.download(self)
   end
 
   def github_client
