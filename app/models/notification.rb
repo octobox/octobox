@@ -30,6 +30,7 @@ class Notification < ApplicationRecord
             attr[:user_id]              = user.id
             attr[:repository_id]        = notification.repository.id
             attr[:repository_full_name] = notification.repository.full_name
+            attr[:repository_owner_name]= notification.repository.owner.login
             attr[:subject_title]        = notification.subject.title
             attr[:subject_type]         = notification.subject.type
             attr[:reason]               = notification.reason
