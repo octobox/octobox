@@ -21,12 +21,14 @@ html {
   position: relative;
   min-height: 100%;
 }
+
 .navbar-brand {
   .octicon {
     fill: #fff;
     margin-right: 3px;
   }
 }
+
 .table > tbody > tr:first-child > td {
   border-top: none;
 }
@@ -46,15 +48,13 @@ html {
 .star {
   color: #f0ad4e;
 }
+
 @media (max-width: $screen-xs-max) {
   .table-notifications tr {
     border-left: 2px solid transparent;
   }
-
-  // td.current {
-  //   border-left: 2px solid #64beff !important;
-  // }
 }
+
 @media (min-width: $screen-sm-min ) {
   .table-notifications tr td:first-child {
     border-left: 2px solid transparent;
@@ -177,11 +177,8 @@ td.keys {
   }
 }
 
+// Bootstrap Off Canvas
 
-/*
- * Off Canvas
- * --------------------------------------------------
- */
 @media screen and (max-width: $screen-sm-max) {
   .row-offcanvas {
     position: relative;
