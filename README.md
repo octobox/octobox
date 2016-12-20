@@ -130,6 +130,7 @@ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compo
 
 You can use keyboard shortcuts to navigate and perform certain actions:
 
+ - `r` or `.` - refresh list
  - `j` - move down the list
  - `k` - move up the list
  - `s` - star current notification

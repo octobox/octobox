@@ -1,11 +1,20 @@
+$navbar-default-bg: #312312;
+$table-bg-active: #fafafa;
+$tooltip-opacity: 1;
+
 @import "bootstrap-sprockets";
 @import "bootstrap";
-@import "font-awesome";
 
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+  min-height: 100%;
+}
 body {
-  background-color: #fff;
+  background-color: #f7f7f7;
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-top: 70px;
 }
 
 html {
@@ -13,11 +22,22 @@ html {
   min-height: 100%;
 }
 
+.navbar-brand {
+  .octicon {
+    fill: #fff;
+    margin-right: 3px;
+  }
+}
+
+.navbar-avatar {
+  margin-top: -3px;
+}
+
 .table > tbody > tr:first-child > td {
   border-top: none;
 }
 
-.label-muted{
+.label-muted {
   background-color: #ccc;
 }
 
@@ -33,12 +53,29 @@ html {
   color: #f0ad4e;
 }
 
-.table-notifications tr td:first-child{
-  border-left: 2px solid white;
+@media (max-width: $screen-xs-max) {
+  .table-notifications tr {
+    border-left: 2px solid transparent;
+  }
 }
 
-td.current {
-  border-left: 2px solid #64beff !important;
+@media (min-width: $screen-sm-min ) {
+  .table-notifications tr td:first-child {
+    border-left: 2px solid #fff;
+  }
+  .table-notifications tr:hover td:first-child {
+    border-left: 2px solid $table-bg-hover;
+  }
+  .table-notifications tr.active td:first-child {
+    border-left: 2px solid $table-bg-active;
+  }
+  .table-notifications tr:hover td:first-child {
+    border-left: 2px solid #ededed;
+  }
+
+  td.current {
+    border-left: 2px solid #64beff !important;
+  }
 }
 
 table.keyboard-mappings {
@@ -81,7 +118,126 @@ td.keys {
 
 .dropdown {
   display: inline-block;
+}
+.table-notifications {
+  table {
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+  }
+  .active {
+    font-weight: bold;
+  }
+}
+.octicon {
+  vertical-align: text-bottom;
+}
+.sidebar-icon {
+  width: 1%;
+  text-align: center;
+}
+.notification-date {
+  white-space: nowrap;
+}
+@media (min-width: $screen-sm-min) {
+  .notification-checkbox,
+  .notification-star,
+  .notification-icon {
+    width: 1%;
+    text-align: center;
+  }
+}
+@media (max-width: $screen-xs-max) {
+  .table-notifications {
+    table,
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    th,
+    td {
+      display: block;
+    }
+    .table > tbody > tr.active {
+      background: #fafafa;
+      &:hover {
+        background: #ededed;
+      }
 
+    }
+    .table > tbody > tr > td {
+      border: none;
+      padding: 0;
+    }
+    .notification {
+      border-top: 1px solid #ddd;
+      position: relative;
+      padding: 10px 10px 10px 40px;
+    }
+    .notification-checkbox,
+    .notification-star,
+    .notification-date {
+      position: absolute;
+    }
+    .notification-checkbox {
+      top: 10px;
+      left: 10px;
+    }
+    .notification-star {
+      top: 32px;
+      left: 10px;
+    }
+    .notification-icon,
+    .notification-subject {
+      display: inline-block;
+    }
+    .notification-date {
+      top: 10px;
+      right: 10px;
+    }
+  }
+}
+
+// Bootstrap Off Canvas
+
+@media screen and (max-width: $screen-sm-max) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
 }
 
 .header-flash-messages {
@@ -89,5 +245,48 @@ td.keys {
     margin-bottom: 0;
     border: 0px;
     border-radius: 0px;
+  }
+}
+
+// SVG text classes
+
+.text-muted {
+  fill: $text-muted;
+}
+
+.text-primary {
+  fill: $brand-primary;
+}
+
+.text-success {
+  fill: $state-success-text;
+}
+
+.text-info {
+  fill: $state-info-text;
+}
+
+.text-warning {
+  fill: $state-warning-text;
+}
+
+.text-danger {
+  fill: $state-danger-text;
+}
+
+.text-default {
+  fill: $text-color;
+}
+
+.octicon-star {
+  fill: none;
+  stroke: #aaa;
+  cursor: pointer;
+  &:hover {
+    fill: #aaa;
+  }
+  &.star-active {
+      fill: #f0ad4e;
+      stroke: #f0ad4e;
   }
 }

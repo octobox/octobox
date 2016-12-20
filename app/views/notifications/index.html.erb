@@ -1,197 +1,76 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
-    <div class="navbar-default">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#octobox-menu" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <a class="navbar-brand" href="/">
-        <%= fa_icon 'envelope' %> Octobox
+        <%= octicon 'octoface', height: 22 %> Octobox
       </a>
-      <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right sync'>
-        <%= fa_icon 'refresh' %>
-      </a>
-      <div class="dropdown navbar-btn navbar-right">
-        <button class="btn btn-default dropdown-toggle" type="button" id="moreMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Menu
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="moreMenu">
-          <li><a href="/notifications/all/archive">Archive All</a></li>
-          <li><%= link_to 'Support', "https://github.com/andrew/octobox/issues" %></li>
-          <li><%= link_to 'Logout', logout_path %></li>
-        </ul>
-      </div>
     </div>
-  </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="octobox-menu">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
+            <%= current_user.github_login %> <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><%= link_to 'GitHub Dashboard', "https://github.com/" %></li>
+            <li><%= link_to 'Octobox Support', "https://github.com/andrew/octobox/issues" %></li>
+            <li role="separator" class="divider"></li>
+            <li><%= link_to 'Logout', logout_path %></li>
+          </ul>
+
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
 </nav>
+
+
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-xs-12 col-md-2 table-responsive">
-      <table class='table table-condensed'>
-        <% @statuses.each do |status, count| %>
-          <tr>
-            <td>
-              <% if status %>
-                <%= fa_icon 'envelope' %>
-              <% else %>
-                <%= fa_icon 'envelope-open' %>
-              <% end %>
-            </td>
-            <td>
-              <% if params[:status] == status.to_s %><strong><% end %>
-              <%= link_to (status ? 'Unread' : 'Read'), root_path(status: status, type: params[:type], repo: params[:repo], archive: params[:archive]) %>
-              <% if params[:status] == status.to_s %></strong><% end %>
-            </td>
-            <td class='text-center'>
-              <span class="label label-muted"><%= count %></span>
-            </td>
-          </tr>
-        <% end %>
-        <%= menu_separator unless @statuses.empty? %>
-        <% @types.each do |type, count| %>
-          <tr>
-            <td>
-              <%= fa_icon(notification_icon(type))%>
-            </td>
-            <td>
-              <% if params[:type] == type %><strong><% end %>
-              <%= link_to type.underscore.humanize, root_path(status: params[:status], type: type, repo: params[:repo], archive: params[:archive]) %>
-              <% if params[:type] == type %></strong><% end %>
-            </td>
-            <td class='text-center'>
-              <span class="label label-muted"><%= count %></span>
-            </td>
-          </tr>
-        <% end %>
-        <%= menu_separator unless @types.empty? %>
-        <% @reasons.each do |reason, count| %>
-          <tr>
-            <td class='text-<%= reason_label(reason) %>'>
-              <%= fa_icon('circle')%>
-            </td>
-            <td>
-              <% if params[:reason] == reason %><strong><% end %>
-              <%= link_to reason.underscore.humanize, root_path(reason: reason, type: params[:type], repo: params[:repo], archive: params[:archive]) %>
-              <% if params[:reason] == reason %></strong><% end %>
-            </td>
-            <td class='text-center'>
-              <span class="label label-muted"><%= count %></span>
-            </td>
-          </tr>
-        <% end %>
-        <%= menu_separator unless @reasons.empty? %>
-        <% @unread_repositories.sort.each do |repo_name, count| %>
-          <tr>
-            <td>
-              <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded' %>
-            </td>
-            <td>
-              <% if params[:repo] == repo_name %><strong><% end %>
-              <%= link_to repo_name.split('/').last, root_path(repo: repo_name, archive: params[:archive]) %>
-              <% if params[:repo] == repo_name %></strong><% end %>
-            </td>
-            <td class='text-center'>
-              <span class="label label-muted"><%= count %></span>
-            </td>
-          </tr>
-        <% end %>
-        <%= menu_separator unless @unread_repositories.empty? %>
-        <tr>
-          <td>
-            <%= fa_icon 'archive' %>
-          </td>
-          <td>
-            <% if params[:archive].present? %><strong><% end %>
-            <%= link_to 'Archive', root_path(archive: true) %>
-            <% if  params[:archive].present? %><strong><% end %>
-          </td>
-          <td class='text-center'>
-
-          </td>
-        </tr>
-	<tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
-        <tr>
-          <td>
-            <%= fa_icon 'star', class: 'star' %>
-          </td>
-          <td>
-            <% if params[:starred].present? %><strong><% end %>
-            <%= link_to 'Starred', root_path(starred: true, archive: params[:archive]) %>
-            <% if  params[:starred].present? %><strong><% end %>
-          </td>
-          <td class='text-center'>
-	    <span class="label label-muted"><%= @starred %></span>
-          </td>
-        </tr>
-      </table>
+  <div class="row row-offcanvas row-offcanvas-left">
+    <div class="col-6 col-md-2 sidebar-offcanvas" id="sidebar">
+      <%= render "sidebar" %>
     </div>
-    <% if @notifications.any? %>
-      <div class="col-xs-12 col-md-10 table-responsive table-notifications">
-        <table class='table table-condensed table-hover'>
-          <%= render @notifications %>
-        </table>
-        <div class="pagination">
-          <%= paginate @notifications %>
+    <div class="col-12 col-md-10">
+      <p>
+        <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
+          <%= octicon 'list-unordered', :height => 16 %>
+        </button>
+        <a href="/sync" data-turbolinks="false" class='btn btn-default sync' data-toggle="tooltip" data-animation="false" data-position="bottom" title="Refresh List">
+          <%= octicon 'sync', :height => 16 %>
+        </a>
+        <% if @notifications.any? %>
+          <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>
+        <% end %>
+      </p>
+
+      <% if @notifications.any? %>
+        <div class="table-notifications">
+          <table class='table table-hover'>
+            <%= render @notifications %>
+          </table>
+          <div class="pagination">
+            <%= paginate @notifications %>
+          </div>
         </div>
-      </div>
-    <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
-      <p class='text-center'>You're in the clear!</p>
-    <% else %>
-      <p class='text-center'><%= link_to 'Nothing to see here', root_path %></p>
-    <% end %>
-  </div>
-</div>
-
-<div id="help-box" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Keyboard shortcuts</h4>
-      </div>
-      <div class="modal-body">
-        <table class="keyboard-mappings">
-          <tbody>
-            <tr>
-              <td class="keys">
-                <div class="key">j</div>
-              </td>
-              <td>
-                Move down the list
-              </td>
-            </tr>
-            <tr>
-              <td class="keys">
-                <div class="key">k</div>
-              </td>
-              <td>
-                Move up the list
-              </td>
-            </tr>
-            <tr>
-              <td class="keys">
-                <div class="key">s</div>
-              </td>
-              <td>
-                Star current notification
-              </td>
-            </tr>
-            <tr>
-              <td class="keys">
-                <div class="key">y</div>
-              </td>
-              <td>
-                Archive current notification
-              </td>
-            </tr>
-            <tr>
-              <td class="keys">
-                <div class="key">Enter</div>
-              </td>
-              <td>
-                Open current notification in a new window
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
+        <p class='text-center'>You're in the clear!</p>
+      <% else %>
+        <p class='text-center'>
+          <%= link_to 'Nothing to see here', root_path %>
+        </p>
+      <% end %>
     </div>
   </div>
 </div>
+
+<%= render 'help-box' %>
