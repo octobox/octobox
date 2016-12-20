@@ -136,6 +136,9 @@ td.keys {
   width: 1%;
   text-align: center;
 }
+.notification-date {
+  white-space: nowrap;
+}
 @media (min-width: $screen-sm-min) {
   .notification-checkbox,
   .notification-star,
