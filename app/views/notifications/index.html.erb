@@ -1,19 +1,19 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" data-turbolinks="false">
   <div class="container-fluid">
     <div class="navbar-default">
       <a class="navbar-brand" href="/">
         <%= fa_icon 'envelope' %> Octobox
       </a>
-      <a href="/sync" data-turbolinks="false" class='btn btn-default navbar-btn navbar-right sync'>
+      <%= link_to sync_notifications_path, class: 'btn btn-default navbar-btn navbar-right sync', method: :post do %>
         <%= fa_icon 'refresh' %>
-      </a>
+      <% end %>
       <div class="dropdown navbar-btn navbar-right">
         <button class="btn btn-default dropdown-toggle" type="button" id="moreMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           Menu
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="moreMenu">
-          <li><a href="/notifications/all/archive">Archive All</a></li>
+          <li><%= link_to 'Archive all', archive_notifications_path, method: :post %></li>
           <li><%= link_to 'Support', "https://github.com/andrew/octobox/issues" %></li>
           <li><%= link_to 'Logout', logout_path %></li>
         </ul>
