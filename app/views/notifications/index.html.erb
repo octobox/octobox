@@ -16,8 +16,19 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="octobox-menu">
       <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to 'Support', "https://github.com/andrew/octobox/issues" %></li>
-        <li><%= link_to 'Logout', logout_path %></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <%= image_tag "https://github.com/#{current_user.github_login.split('/').first}.png?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
+            <%= current_user.github_login %> <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><%= link_to 'Github Dashboard', "https://github.com/" %></li>
+            <li><%= link_to 'Octobox Support', "https://github.com/andrew/octobox/issues" %></li>
+            <li role="separator" class="divider"></li>
+            <li><%= link_to 'Logout', logout_path %></li>
+          </ul>
+
+
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
