@@ -46,6 +46,10 @@ $( document ).ready(function() {
     if ( e.which == 89 ) { // y
       $('td.current').parent().find('.archive').click();
     }
+    if ( e.which == 13 ) { // Enter
+      e.preventDefault();
+      $('td.current').parent().find('.link')[0].click();
+    }
     if ( e.which == 191 ) { // ?
       $("#help-box").modal();
     }
