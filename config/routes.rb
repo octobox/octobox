@@ -11,4 +11,7 @@ Rails.application.routes.draw do
   get '/notifications/:id/star', to: 'notifications#star'
   get '/sync', to: 'notifications#sync'
   root to: 'notifications#index'
+
+  get '/edit', to: 'users#edit'
+  resources :users, only: [:update]
 end

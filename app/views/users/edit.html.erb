@@ -1,0 +1,18 @@
+<% placeholder = "#{('*' * 32)}#{current_user.access_token[-9..-1]}" %>
+
+<div class="container">
+  <h1>Edit your account</h1>
+
+  <hr>
+
+  <%= form_for current_user do |f| %>
+    <%= flash_messages %>
+    <div class="form-group">
+      <%= f.label :access_token %>
+      <%= f.text_field :access_token, value: nil, placeholder: placeholder, class: 'form-control' %>
+    </div>
+
+    <%= submit_tag 'Save', class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
+  <% end %>
+</div>
