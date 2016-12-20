@@ -66,9 +66,14 @@ class UserTest < ActiveSupport::TestCase
 
   test "triggers sync_notifications on save" do
     notifications_url = %r{https://api.github.com/notifications}
-    stub_request(:get, notifications_url)
 
-    User.create(github_id: users(:andrew), access_token: 'abcdefg')
+    body     = '[]'
+    headers  = { 'Content-Type' => 'application/json' }
+    response = { status: 200, body: body, headers: headers }
+
+    stub_request(:get, notifications_url).to_return(response)
+
+    User.create(github_id: 42, github_login: 'douglas_adams', access_token: 'abcdefg')
 
     assert_requested :get, notifications_url
   end
