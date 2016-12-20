@@ -33,4 +33,11 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     get '/logout'
     assert_redirected_to '/'
   end
+
+  test 'GET #failure redirects to / and sets a flash message' do
+    get '/auth/failure'
+
+    assert_redirected_to '/'
+    assert_equal 'There was a problem authenticating with GitHub, please try again.', flash[:error]
+  end
 end
