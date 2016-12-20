@@ -132,6 +132,10 @@ td.keys {
 .octicon {
   vertical-align: text-bottom;
 }
+.sidebar-icon {
+  width: 1%;
+  text-align: center;
+}
 @media (min-width: $screen-sm-min) {
   .notification-checkbox,
   .notification-star,
@@ -239,5 +243,46 @@ td.keys {
     margin-bottom: 0;
     border: 0px;
     border-radius: 0px;
+  }
+}
+
+// SVG text classes
+
+.text-muted {
+  fill: $text-muted;
+}
+
+.text-primary {
+  fill: $brand-primary;
+}
+
+.text-success {
+  fill: $state-success-text;
+}
+
+.text-info {
+  fill: $state-info-text;
+}
+
+.text-warning {
+  fill: $state-warning-text;
+}
+
+.text-danger {
+  fill: $state-danger-text;
+}
+
+.text-default {
+  fill: $text-color;
+}
+
+.octicon-star {
+  fill: #ccc;
+  cursor: pointer;
+  &:hover {
+    fill: #aaa;
+  }
+  &.star-active {
+      fill: #f0ad4e;
   }
 }

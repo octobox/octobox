@@ -12,7 +12,7 @@ document.addEventListener("turbolinks:load", function() {
     Turbolinks.visit('/notifications/'+$(this).val()+'/unarchive'+location.search)
   });
   $('.toggle-star').click(function() {
-    $(this).toggleClass("fa-star fa-star-o")
+    $(this).toggleClass("star-active star-inactive")
     $.get('/notifications/'+$(this).data('id')+'/star')
   });
 

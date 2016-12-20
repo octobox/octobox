@@ -4,7 +4,7 @@
            <% if notification.archived %> checked <% end %>>
   </td>
   <td class='notification-star'>
-    <%= fa_icon( notification.starred ? "star" : "star-o", class: "toggle-star star", data: { id: notification.id }) %>
+    <%= octicon 'star', height: 16, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id }%>
   </td>
   <td class='notification-icon'>
     <%= octicon notification_icon(notification.subject_type), :height => 16 %>

@@ -41,7 +41,7 @@
       <table class='table table-condensed'>
         <% @statuses.each do |status, count| %>
           <tr>
-            <td>
+            <td class='sidebar-icon'>
               <% if status %>
                 <%= octicon 'mail', :height => 16 %>
               <% else %>
@@ -61,7 +61,7 @@
         <%= menu_separator unless @statuses.empty? %>
         <% @types.each do |type, count| %>
           <tr>
-            <td>
+            <td class='sidebar-icon'>
               <%= octicon notification_icon(type), :height => 16 %>
             </td>
             <td>
@@ -77,8 +77,8 @@
         <%= menu_separator unless @types.empty? %>
         <% @reasons.each do |reason, count| %>
           <tr>
-            <td class='text-<%= reason_label(reason) %>'>
-              <%= fa_icon('circle')%>
+            <td class='text-<%= reason_label(reason) %> sidebar-icon'>
+              <%= octicon 'primitive-dot', height: 16 %>
             </td>
             <td>
               <% if params[:reason] == reason %><strong><% end %>
@@ -93,7 +93,7 @@
         <%= menu_separator unless @reasons.empty? %>
         <% @unread_repositories.sort.each do |repo_name, count| %>
           <tr>
-            <td>
+            <td class='sidebar-icon'>
               <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded' %>
             </td>
             <td>
@@ -108,8 +108,8 @@
         <% end %>
         <%= menu_separator unless @unread_repositories.empty? %>
         <tr>
-          <td>
-            <%= fa_icon 'archive' %>
+          <td class='sidebar-icon'>
+            <%= octicon 'check', height: 16, class: 'text-success' %>
           </td>
           <td>
             <% if params[:archive].present? %><strong><% end %>
@@ -120,10 +120,10 @@
 
           </td>
         </tr>
-	<tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
+        <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
         <tr>
-          <td>
-            <%= fa_icon 'star', class: 'star' %>
+          <td class='sidebar-icon'>
+            <%= octicon 'star', :height => 16, :class => 'star-active' %>
           </td>
           <td>
             <% if params[:starred].present? %><strong><% end %>
@@ -131,7 +131,7 @@
             <% if  params[:starred].present? %><strong><% end %>
           </td>
           <td class='text-center'>
-	    <span class="label label-muted"><%= @starred %></span>
+            <span class="label label-muted"><%= @starred %></span>
           </td>
         </tr>
       </table>
@@ -141,9 +141,9 @@
         <div class="table-notifications">
           <p>
             <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
-              <%= fa_icon 'filter' %>
+              <%= octicon 'list-unordered', :height => 16 %>
             </button>
-            <a href="/sync" data-turbolinks="false" class='btn btn-default sync' data-toggle="tooltip" data-animation="false" title="Refresh List">
+            <a href="/sync" data-turbolinks="false" class='btn btn-default sync' data-toggle="tooltip" data-animation="false" data-position="bottom" title="Refresh List">
               <%= octicon 'sync', :height => 16 %>
             </a>
             <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>

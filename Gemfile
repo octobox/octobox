@@ -11,7 +11,6 @@ gem 'turbolinks'
 gem 'octokit'
 gem 'omniauth-github'
 gem 'bootstrap-sass'
-gem 'font-awesome-rails'
 gem 'kaminari'
 gem 'octicons_helper'
 
