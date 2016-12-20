@@ -279,12 +279,14 @@ td.keys {
 }
 
 .octicon-star {
-  fill: #ccc;
+  fill: none;
+  stroke: #aaa;
   cursor: pointer;
   &:hover {
     fill: #aaa;
   }
   &.star-active {
       fill: #f0ad4e;
+      stroke: #f0ad4e;
   }
 }
