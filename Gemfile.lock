@@ -237,7 +237,6 @@ DEPENDENCIES
   listen (~> 3.0.5)
   lograge
   newrelic_rpm
-  octicons
   octicons_helper
   octokit
   omniauth-github
