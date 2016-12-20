@@ -1,6 +1,8 @@
 module ApplicationHelper
   def notification_icon(subject_type)
     case subject_type
+    when 'RepositoryInvitation'
+      'envelope'
     when 'Issue'
       'exclamation-circle'
     when 'PullRequest'
