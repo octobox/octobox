@@ -14,7 +14,7 @@ html {
 }
 
 .table > tbody > tr:first-child > td {
-  border: none;
+  border-top: none;
 }
 
 .label-muted{
@@ -31,6 +31,10 @@ html {
 
 .star {
   color: #f0ad4e;
+}
+
+.table-notifications tr td:first-child{
+  border-left: 2px solid white;
 }
 
 td.current {
