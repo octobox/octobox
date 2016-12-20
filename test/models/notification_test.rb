@@ -24,7 +24,7 @@ class NotificationTest < ActiveSupport::TestCase
     assert_requested :get, "https://api.github.com/notifications?all=true&per_page=100&since=2016-12-19T19:00:00Z"
   end
 
-  test "#download will" do
+  test "#download will set the url for a Repository invitation correctly" do
     stub_notifications_request(body: file_fixture('repository_invitation_notification.json'))
     user = users(:andrew)
 
