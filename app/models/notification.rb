@@ -26,19 +26,24 @@ class Notification < ApplicationRecord
             n.archived = false
           end
 
-          attrs = {
-            user_id: user.id,
-            repository_id: notification.repository.id,
-            repository_full_name: notification.repository.full_name,
-            subject_title: notification.subject.title,
-            subject_url: notification.subject.url,
-            subject_type: notification.subject.type,
-            reason: notification.reason,
-            unread: notification.unread,
-            updated_at: notification.updated_at,
-            last_read_at: notification.last_read_at,
-            url: notification.url
-          }
+          attrs = {}.tap do |attr|
+            attr[:user_id]              = user.id
+            attr[:repository_id]        = notification.repository.id
+            attr[:repository_full_name] = notification.repository.full_name
+            attr[:subject_title]        = notification.subject.title
+            attr[:subject_type]         = notification.subject.type
+            attr[:reason]               = notification.reason
+            attr[:unread]               = notification.unread
+            attr[:updated_at]           = notification.updated_at
+            attr[:last_read_at]         = notification.last_read_at
+            attr[:url]                  = notification.url
+
+            attr[:subject_url] = if notification.subject.type == "RepositoryInvitation"
+                                   "#{notification.repository.html_url}/invitations"
+                                 else
+                                   notification.subject.url
+                                 end
+          end
 
           n.update(attrs)
         rescue ActiveRecord::RecordNotUnique
