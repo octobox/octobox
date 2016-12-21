@@ -56,8 +56,20 @@
           <%= octicon 'sync', :height => 16 %>
         <% end %>
 
-        <% if @notifications.any? %>
-          <%= link_to 'Archive all', archive_notifications_path, class: 'btn btn-default', method: :post %>
+        <% if @notifications.any? && !params[:archive].present? %>
+          <%= link_to(
+                'Archive all',
+                archive_notifications_path(
+                  repo:    params[:repo],
+                  reason:  params[:reason],
+                  type:    params[:type],
+                  status:  params[:status],
+                  starred: params[:starred]
+                ),
+                class: 'btn btn-default',
+                method: :post
+              )
+          %>
         <% end %>
       </p>
 
