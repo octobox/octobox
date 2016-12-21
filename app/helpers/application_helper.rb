@@ -1,4 +1,19 @@
 module ApplicationHelper
+  REASON_LABELS = {
+    'comment'      => 'primary',
+    'author'       => 'success',
+    'state_change' => 'info',
+    'mention'      => 'warning',
+    'assign'       => 'danger'
+  }.freeze
+
+  SUBJECT_TYPES = {
+    'RepositoryInvitation' => 'mail-read',
+    'Issue'                => 'issue-opened',
+    'PullRequest'          => 'git-pull-request',
+    'Commit'               => 'git-commit'
+  }.freeze
+
   def bootstrap_class_for(flash_type)
     { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info' }[flash_type.to_sym] || flash_type.to_s
   end
@@ -14,34 +29,10 @@ module ApplicationHelper
   end
 
   def notification_icon(subject_type)
-    case subject_type
-    when 'RepositoryInvitation'
-      'mail-read'
-    when 'Issue'
-      'issue-opened'
-    when 'PullRequest'
-      'git-pull-request'
-    when 'Commit'
-      'git-commit'
-    end
+    SUBJECT_TYPES[subject_type]
   end
 
   def reason_label(reason)
-    case reason
-    when 'comment'
-      'primary'
-    when 'author'
-      'success'
-    when 'state_change'
-      'info'
-    when 'mention'
-      'warning'
-    when 'assign'
-      'danger'
-    when 'subscribed'
-      'default'
-    else
-      'default'
-    end
+    REASON_LABELS.fetch(reason, 'default')
   end
 end

@@ -22,7 +22,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in_as(user)
 
-    get '/notifications/all/archive'
+    post '/notifications/archive'
     assert_response :redirect
 
     user.notifications.each do |n|
@@ -36,7 +36,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     25.times.each { create(:notification, user: user, archived: false) }
 
     get '/'
-    
     assert_equal assigns(:notifications).length, 20
   end
 end

@@ -4,7 +4,7 @@
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#octobox-menu" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
-        <%= image_tag current_user.github_avatar_url + "?size=40", width: 32, class: 'img-rounded navbar-avatar' %>
+        <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, class: 'img-rounded navbar-avatar' %>
       </button>
       <a class="navbar-brand" href="/">
         <%= octicon 'octoface', height: 22 %> Octobox
@@ -41,7 +41,6 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-
 <div class="container-fluid">
   <div class="row row-offcanvas row-offcanvas-left">
     <div class="col-6 col-md-2 sidebar-offcanvas" id="sidebar">
@@ -52,11 +51,13 @@
         <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
           <%= octicon 'list-unordered', :height => 16 %>
         </button>
-        <a href="/sync" data-turbolinks="false" class='btn btn-default sync' data-toggle="tooltip" data-animation="false" data-position="bottom" title="Refresh List">
+
+        <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
           <%= octicon 'sync', :height => 16 %>
-        </a>
+        <% end %>
+
         <% if @notifications.any? %>
-          <a href="/notifications/all/archive" class='btn btn-default'>Archive All</a>
+          <%= link_to 'Archive all', archive_notifications_path, class: 'btn btn-default', method: :post %>
         <% end %>
       </p>
 
