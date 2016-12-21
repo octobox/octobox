@@ -30,7 +30,15 @@ class NotificationsController < ApplicationController
   end
 
   def archive_all
-    current_user.archive_all
+    scope = current_user.notifications.inbox
+
+    scope = scope.repo(archive_params[:repo])     if archive_params[:repo].present?
+    scope = scope.reason(archive_params[:reason]) if archive_params[:reason].present?
+    scope = scope.type(archive_params[:type])     if archive_params[:type].present?
+    scope = scope.status(archive_params[:status]) if archive_params[:status].present?
+    scope = scope.starred                         if archive_params[:starred].present?
+
+    scope.update_all(archived: true)
     redirect_to root_path
   end
 
@@ -56,5 +64,9 @@ class NotificationsController < ApplicationController
 
   def render_home_page_unless_authenticated
     return render 'pages/home' unless logged_in?
+  end
+
+  def archive_params
+    params.permit(:repo, :reason, :type, :status, :starred)
   end
 end
