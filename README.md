@@ -2,7 +2,7 @@
 
 Take back control of your GitHub Notifications
 
-![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21315365/b698d160-c5f3-11e6-93bd-e46726ccd347.png)
+![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21385758/bd8ebcee-c767-11e6-9017-c93c5921594b.png)
 
 [![Build Status](https://travis-ci.org/andrew/octobox.svg?branch=master)](https://travis-ci.org/andrew/octobox)
 [![Code Climate](https://img.shields.io/codeclimate/github/andrew/octobox.svg?style=flat)](https://codeclimate.com/github/andrew/octobox)
