@@ -243,6 +243,8 @@ td.keys {
 // Bootstrap Off Canvas
 
 @media screen and (max-width: $screen-sm-max) {
+  $sidebar-width: 250px;
+
   .row-offcanvas {
     position: relative;
     -webkit-transition: all .25s ease-out;
@@ -260,26 +262,26 @@ td.keys {
 
   .row-offcanvas-right
   .sidebar-offcanvas {
-    right: -50%; /* 6 columns */
+    right: -$sidebar-width;
   }
 
   .row-offcanvas-left
   .sidebar-offcanvas {
-    left: -50%; /* 6 columns */
+    left: -$sidebar-width;
   }
 
   .row-offcanvas-right.active {
-    right: 50%; /* 6 columns */
+    right: $sidebar-width;
   }
 
   .row-offcanvas-left.active {
-    left: 50%; /* 6 columns */
+    left: $sidebar-width;
   }
 
   .sidebar-offcanvas {
     position: absolute;
     top: 0;
-    width: 50%; /* 6 columns */
+    width: $sidebar-width;
   }
 }
 
