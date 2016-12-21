@@ -319,6 +319,9 @@ td.keys {
 
 .text-default {
   fill: $text-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
 }
 
 .octicon-star {
