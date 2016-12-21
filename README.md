@@ -1,6 +1,6 @@
 # Octobox &#128238;
 
-Take back control of your GitHub Notifications
+Take back control of your GitHub Notifications with [Octobox]( https://octobox.io).
 
 ![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21385758/bd8ebcee-c767-11e6-9017-c93c5921594b.png)
 
