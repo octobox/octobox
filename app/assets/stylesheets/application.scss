@@ -29,8 +29,44 @@ html {
   }
 }
 
+.navbar-toggle {
+  border: none;
+  padding: 0;
+  margin-top: 12px;
+}
+
 .navbar-avatar {
   margin-top: -3px;
+}
+
+@media (max-width: $screen-xs-max) {
+  .navbar-nav .dropdown .dropdown-menu {
+    display: block;
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+    > li > a {
+      color: lighten($gray-light, 15%);
+      line-height: 20px;
+      padding: 5px 15px 5px 25px;
+      &:hover,
+      &:focus {
+        color: #fff;
+        background-color: transparent;
+      }
+    }
+    > li > a,
+    .dropdown-header {
+      padding: 5px 15px 5px 25px;
+    }
+    .divider {
+      background-color: #090909;
+    }
+  }
 }
 
 .table > tbody > tr:first-child > td {
