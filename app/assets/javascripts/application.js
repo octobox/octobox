@@ -53,13 +53,9 @@ $( document ).ready(function() {
     if ( e.which == 191 ) { // ?
       $("#help-box").modal();
     }
-    if ( e.which == 190 ) { // .
-      window.location.href = '/sync';
+    if ( e.which == 190 || e.which == 82) { // . | r
+      $("a.sync").click();
     }
-    if ( e.which == 82 ) { // r
-      window.location.href = '/sync';
-    }
-
   });
 });
 
