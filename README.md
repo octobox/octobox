@@ -30,6 +30,17 @@ You can host your own instance of Octobox using Heroku. Heroku will ask you to p
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+## Running Octobox for [GitHub Enterprise](https://enterprise.github.com/home)
+In order to setup Octobox for your GitHub Enterprise instance all you need you do is add your enterprise domain to the `.env` file / deployed environment.
+
+Example:
+
+```
+GITHUB_DOMAIN=https://github.foobar.com
+```
+
+And that's it :sparkles:
+
 ## Development
 
 The source code is hosted at [GitHub](https://github.com/andrew/octobox).
@@ -119,6 +130,7 @@ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compo
 
 You can use keyboard shortcuts to navigate and perform certain actions:
 
+ - `r` or `.` - refresh list
  - `j` - move down the list
  - `k` - move up the list
  - `s` - star current notification

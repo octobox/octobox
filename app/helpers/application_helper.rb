@@ -16,13 +16,13 @@ module ApplicationHelper
   def notification_icon(subject_type)
     case subject_type
     when 'RepositoryInvitation'
-      'envelope'
+      'mail-read'
     when 'Issue'
-      'exclamation-circle'
+      'issue-opened'
     when 'PullRequest'
-      'code-fork'
+      'git-pull-request'
     when 'Commit'
-      'hashtag'
+      'git-commit'
     end
   end
 

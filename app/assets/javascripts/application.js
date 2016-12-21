@@ -12,7 +12,7 @@ document.addEventListener("turbolinks:load", function() {
     Turbolinks.visit('/notifications/'+$(this).val()+'/unarchive'+location.search)
   });
   $('.toggle-star').click(function() {
-    $(this).toggleClass("fa-star fa-star-o")
+    $(this).toggleClass("star-active star-inactive")
     $.get('/notifications/'+$(this).data('id')+'/star')
   });
 
@@ -53,5 +53,23 @@ $( document ).ready(function() {
     if ( e.which == 191 ) { // ?
       $("#help-box").modal();
     }
+    if ( e.which == 190 ) { // .
+      window.location.href = '/sync';
+    }
+    if ( e.which == 82 ) { // r
+      window.location.href = '/sync';
+    }
+
   });
 });
+
+$(document).on('click', '[data-toggle="offcanvas"]', function () {
+  $('.row-offcanvas').toggleClass('active')
+});
+
+if(!('ontouchstart' in window))
+{
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+}
