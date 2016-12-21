@@ -38,7 +38,7 @@
   <% @reasons.each do |reason, count| %>
     <tr>
       <td class='text-<%= reason_label(reason) %> sidebar-icon'>
-        <%= octicon 'primitive-dot', height: 16 %>
+        <%= octicon 'primitive-dot', height: 24 %>
       </td>
       <td>
         <% if params[:reason] == reason %><strong><% end %>

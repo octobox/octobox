@@ -100,10 +100,6 @@ html.turbolinks-progress-bar::before {
   cursor: pointer;
 }
 
-.star {
-  color: #f0ad4e;
-}
-
 @media (max-width: $screen-xs-max) {
   .table-notifications tr {
     border-left: 2px solid transparent;
@@ -188,6 +184,10 @@ td.keys {
 .sidebar-icon {
   width: 1%;
   text-align: center;
+  .octicon-primitive-dot {
+    margin-top: -3px;
+    margin-bottom: -3px;
+  }
 }
 
 .notification-date {
@@ -257,6 +257,8 @@ td.keys {
 // Bootstrap Off Canvas
 
 @media screen and (max-width: $screen-sm-max) {
+  $sidebar-width: 250px;
+
   .row-offcanvas {
     position: relative;
     -webkit-transition: all .25s ease-out;
@@ -274,26 +276,26 @@ td.keys {
 
   .row-offcanvas-right
   .sidebar-offcanvas {
-    right: -50%; /* 6 columns */
+    right: -$sidebar-width;
   }
 
   .row-offcanvas-left
   .sidebar-offcanvas {
-    left: -50%; /* 6 columns */
+    left: -$sidebar-width;
   }
 
   .row-offcanvas-right.active {
-    right: 50%; /* 6 columns */
+    right: $sidebar-width;
   }
 
   .row-offcanvas-left.active {
-    left: 50%; /* 6 columns */
+    left: $sidebar-width;
   }
 
   .sidebar-offcanvas {
     position: absolute;
     top: 0;
-    width: 50%; /* 6 columns */
+    width: $sidebar-width;
   }
 }
 
@@ -316,23 +318,26 @@ td.keys {
 }
 
 .text-success {
-  fill: $state-success-text;
+  fill: $brand-success;
 }
 
 .text-info {
-  fill: $state-info-text;
+  fill: $brand-info;
 }
 
 .text-warning {
-  fill: $state-warning-text;
+  fill: $brand-warning;
 }
 
 .text-danger {
-  fill: $state-danger-text;
+  fill: $brand-danger;
 }
 
 .text-default {
   fill: $text-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
 }
 
 .octicon-star {
