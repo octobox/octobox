@@ -60,9 +60,7 @@
           <%= link_to 'Archive all', archive_notifications_path, class: 'btn btn-default', method: :post %>
         <% end %>
 
-        <% if !params[:starred].nil? || !params[:reason].nil? || !params[:status].nil? || !params[:repo].nil? || !params[:type].nil? || !params[:archive].nil? %>
-           <%= render 'filter-list' %>
-        <% end %>
+        <%= render 'filter-list' %>
       </p>
 
       <% if @notifications.any? %>

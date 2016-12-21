@@ -1,48 +1,37 @@
-<span class="filter-options">
-  <span class="btn-group">
-    <a href="#" class="btn btn-default filter-label" role="button" aria-disabled="true">Filter:</a>
+<% filters = { reason: params[:reason], status: params[:status], repo: params[:repo], type: params[:type] } %>
 
-<% if !params[:reason].nil? %>
-  <%= link_to root_path(status: params[:status],repo: params[:repo],type: params[:type],archive: params[:archive], starred:params[:starred]), class: 'btn btn-default' do %>
-    <%= octicon 'x', :height => 16 %>
-    <%= params[:reason].underscore.humanize %>
-  <% end %>
-<% end %>
+<% if filters[:reason].present? || filters[:status].present? || filters[:repo].present? || filters[:type].present? %>
+  <span class="filter-options">
+    <span class="btn-group">
+      <a href="#" class="btn btn-default filter-label" role="button" aria-disabled="true">Filter:</a>
 
-<% if !params[:status].nil? %>
-  <%= link_to root_path(reason: params[:reason],repo: params[:repo],type: params[:type],archive: params[:archive], starred:params[:starred]), class: 'btn btn-default' do %>
-    <%= octicon 'x', :height => 16 %>
-    <%= (params[:status] === 'true'? 'Unread' : 'Read') %>
-  <% end %>
-<% end %>
+      <% if filters[:reason].present? %>
+        <%= link_to root_path(filters.except(:reason)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= params[:reason].underscore.humanize %>
+        <% end %>
+      <% end %>
 
-<% if !params[:repo].nil? %>
-  <%= link_to root_path(reason: params[:reason],status: params[:status],type: params[:type],archive: params[:archive], starred:params[:starred]), class: 'btn btn-default' do %>
-    <%= octicon 'x', :height => 16 %>
-    <%= params[:repo].split('/').last %>
-  <% end %>
-<% end %>
+      <% if filters[:status].present? %>
+        <%= link_to root_path(filters.except(:reason)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= (params[:status] === 'true'? 'Unread' : 'Read') %>
+        <% end %>
+      <% end %>
 
-<% if !params[:type].nil? %>
-  <%= link_to root_path(reason: params[:reason],status: params[:status],repo: params[:repo],archive: params[:archive], starred:params[:starred]), class: 'btn btn-default' do %>
-    <%= octicon 'x', :height => 16 %>
-    <%= params[:type].underscore.humanize %>
-  <% end %>
-<% end %>
+      <% if filters[:repo].present? %>
+        <%= link_to root_path(filters.except(:repo)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= params[:repo].split('/').last %>
+        <% end %>
+      <% end %>
 
-<% if !params[:archive].nil? %>
-  <%= link_to root_path(reason: params[:reason],status: params[:status],repo: params[:repo],type: params[:type], starred:params[:starred]), class: 'btn btn-default' do %>
-    <%= octicon 'x', :height => 16 %>
-    <%= (params[:archive] === 'true'? 'Archive' : 'Inbox') %>
-  <% end %>
-<% end %>
-
-<% if !params[:starred].nil? %>
-  <%= link_to root_path(reason: params[:reason],status: params[:status],repo: params[:repo],type: params[:type]), class: 'btn btn-default' do %>
-    <%= octicon 'x', :height => 16 %>
-    <%= (params[:starred]==='true'? 'Starred' : 'Unstarred') %>
-  <% end %>
-<% end %>
-
+      <% if filters[:type].present? %>
+        <%= link_to root_path(filters.except(:type)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= params[:type].underscore.humanize %>
+        <% end %>
+      <% end %>
+    </span>
   </span>
-</span>
+<% end %>
