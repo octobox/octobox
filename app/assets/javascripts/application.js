@@ -67,6 +67,9 @@ $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.row-offcanvas').toggleClass('active')
 });
 
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
+if(!('ontouchstart' in window))
+{
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+}
