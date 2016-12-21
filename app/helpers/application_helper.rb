@@ -14,8 +14,15 @@ module ApplicationHelper
     'Commit'               => 'git-commit'
   }.freeze
 
+  ALERT_TYPES = {
+    success: 'alert-success',
+    error: 'alert-danger',
+    alert: 'alert-warning',
+    notice: 'alert-info'
+  }.freeze
+
   def bootstrap_class_for(flash_type)
-    { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info' }[flash_type.to_sym] || flash_type.to_s
+    ALERT_TYPES[flash_type.to_sym] || flash_type.to_s
   end
 
   def flash_messages
