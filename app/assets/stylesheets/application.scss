@@ -92,10 +92,6 @@ html.turbolinks-progress-bar::before {
   cursor: pointer;
 }
 
-.star {
-  color: #f0ad4e;
-}
-
 @media (max-width: $screen-xs-max) {
   .table-notifications tr {
     border-left: 2px solid transparent;
@@ -177,6 +173,10 @@ td.keys {
 .sidebar-icon {
   width: 1%;
   text-align: center;
+  .octicon-primitive-dot {
+    margin-top: -3px;
+    margin-bottom: -3px;
+  }
 }
 .notification-date {
   white-space: nowrap;
@@ -302,19 +302,19 @@ td.keys {
 }
 
 .text-success {
-  fill: $state-success-text;
+  fill: $brand-success;
 }
 
 .text-info {
-  fill: $state-info-text;
+  fill: $brand-info;
 }
 
 .text-warning {
-  fill: $state-warning-text;
+  fill: $brand-warning;
 }
 
 .text-danger {
-  fill: $state-danger-text;
+  fill: $brand-danger;
 }
 
 .text-default {
