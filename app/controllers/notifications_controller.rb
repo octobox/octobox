@@ -4,20 +4,24 @@ class NotificationsController < ApplicationController
   before_action :render_home_page_unless_authenticated, only: [:index]
 
   def index
-    scope = current_user.notifications
-    scope = params[:archive].present? ? scope.archived : scope.inbox
+    scope    = current_user.notifications
+    @starred = scope.starred.count
+
+    scope = if params[:starred].present?
+              scope.starred
+            else
+              params[:archive].present? ? scope.archived : scope.inbox
+            end
 
     @types               = scope.distinct.group(:subject_type).count
     @statuses            = scope.distinct.group(:unread).count
     @reasons             = scope.distinct.group(:reason).count
     @unread_repositories = scope.distinct.group(:repository_full_name).count
-    @starred             = scope.starred.count
 
     scope = scope.repo(params[:repo])     if params[:repo].present?
     scope = scope.reason(params[:reason]) if params[:reason].present?
     scope = scope.type(params[:type])     if params[:type].present?
     scope = scope.status(params[:status]) if params[:status].present?
-    scope = scope.starred                 if params[:starred].present?
 
     @notifications = scope.newest.page(params[:page])
   end

@@ -99,8 +99,8 @@
     </td>
     <td>
       <% if params[:starred].present? %><strong><% end %>
-      <%= link_to 'Starred', root_path(starred: true, archive: params[:archive]) %>
-      <% if  params[:starred].present? %><strong><% end %>
+        <%= link_to 'Starred', root_path(starred: true) %>
+      <% if params[:starred].present? %></strong><% end %>
     </td>
     <td class='text-center'>
       <span class="label label-muted"><%= @starred %></span>
