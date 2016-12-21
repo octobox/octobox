@@ -69,6 +69,19 @@
   <%= menu_separator unless @unread_repositories.empty? %>
   <tr>
     <td class='sidebar-icon'>
+      <%= octicon 'inbox', height: 16 %>
+    </td>
+    <td>
+      <% if !params[:archive].present? %><strong><% end %>
+      <%= link_to 'Inbox', root_path() %>
+      <% if  !params[:archive].present? %><strong><% end %>
+    </td>
+    <td class='text-center'>
+
+    </td>
+  </tr>
+  <tr>
+    <td class='sidebar-icon'>
       <%= octicon 'check', height: 16, class: 'text-success' %>
     </td>
     <td>
