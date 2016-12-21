@@ -1,11 +1,13 @@
 $navbar-default-bg: #312312;
 $table-bg-active: #fafafa;
 $tooltip-opacity: 1;
+$font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 $body-bg: #f7f7f7;
 $jumbotron-bg: #f7f7f7;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "patterns/blankslate";
 
 html, body {
   overflow-x: hidden;
@@ -14,7 +16,6 @@ html, body {
 }
 body {
   font-size: 14px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding-top: 70px;
 }
 
@@ -44,6 +45,13 @@ html.turbolinks-progress-bar::before {
 
 .navbar-avatar {
   margin-top: -3px;
+}
+
+.navbar-nav {
+  .octicon {
+    margin-right: 5px;
+    margin-left: -5px;
+  }
 }
 
 @media (max-width: $screen-xs-max) {
@@ -162,6 +170,7 @@ td.keys {
 .dropdown {
   display: inline-block;
 }
+
 .table-notifications {
   table {
     background: #fff;
@@ -171,16 +180,20 @@ td.keys {
     font-weight: bold;
   }
 }
+
 .octicon {
   vertical-align: text-bottom;
 }
+
 .sidebar-icon {
   width: 1%;
   text-align: center;
 }
+
 .notification-date {
   white-space: nowrap;
 }
+
 @media (min-width: $screen-sm-min) {
   .notification-checkbox,
   .notification-star,
@@ -189,6 +202,7 @@ td.keys {
     text-align: center;
   }
 }
+
 @media (max-width: $screen-xs-max) {
   .table-notifications {
     table,
