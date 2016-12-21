@@ -2,6 +2,8 @@
 require 'test_helper'
 
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
+  setup { @user = users(:andrew) }
+
   test 'will render the home page if not authenticated' do
     get '/'
     assert_response :success
@@ -9,7 +11,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders the index page if authenticated' do
-    sign_in_as(users(:andrew))
+    sign_in_as(@user)
 
     get '/'
     assert_response :success
@@ -17,23 +19,19 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'archives all notifications' do
-    user = users(:andrew)
-    5.times.each { create(:notification, user: user, archived: false) }
+    5.times.each { create(:notification, user: @user, archived: false) }
 
-    sign_in_as(user)
+    sign_in_as(@user)
 
     post '/notifications/archive'
     assert_response :redirect
 
-    user.notifications.each do |n|
-      assert_equal n.archived, true
-    end
+    @user.notifications.each { |n| assert n.archived? }
   end
 
   test 'shows only 20 notifications per page' do
-    user = users(:andrew)
-    sign_in_as(user)
-    25.times.each { create(:notification, user: user, archived: false) }
+    sign_in_as(@user)
+    25.times.each { create(:notification, user: @user, archived: false) }
 
     get '/'
     assert_equal assigns(:notifications).length, 20
