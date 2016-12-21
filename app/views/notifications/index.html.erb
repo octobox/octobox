@@ -20,8 +20,18 @@
             <%= current_user.github_login %> <span class="caret hidden-xs"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><%= link_to 'GitHub Dashboard', "https://github.com/", target: "_blank" %></li>
-            <li><%= link_to 'Octobox Support', "https://github.com/andrew/octobox/issues", target: "_blank" %></li>
+            <li>
+              <%= link_to "https://github.com/", target: "_blank" do %>
+                <%= octicon 'mark-github', height: 16, class: 'text-muted' %>
+                GitHub Dashboard
+              <% end %>
+            </li>
+            <li>
+              <%= link_to "https://github.com/andrew/octobox/issues", target: "_blank" do %>
+                <%= octicon 'octoface', height: 16, class: 'text-muted' %>
+                Octobox Support
+              <% end %>
+            </li>
             <li role="separator" class="divider"></li>
             <li><%= link_to 'Logout', logout_path %></li>
           </ul>
@@ -60,11 +70,19 @@
           </div>
         </div>
       <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
-        <p class='text-center'>You're in the clear!</p>
+        <div class="blankslate blankslate-spacious blankslate-clean-background">
+          <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
+          <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
+          <h3>You're in the clear!</h3>
+          <p>There are no notifications that need your attention.</p>
+        </div>
       <% else %>
-        <p class='text-center'>
-          <%= link_to 'Nothing to see here', root_path %>
-        </p>
+        <div class="blankslate blankslate-spacious blankslate-clean-background">
+          <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
+          <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
+          <h3>Nothing to see here.</h3>
+          <p>You can always try <%= link_to 'refreshing', root_path %>.</p>
+        </div>
       <% end %>
     </div>
   </div>

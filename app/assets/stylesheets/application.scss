@@ -1,9 +1,11 @@
 $navbar-default-bg: #312312;
 $table-bg-active: #fafafa;
 $tooltip-opacity: 1;
+$font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "patterns/blankslate";
 
 html, body {
   overflow-x: hidden;
@@ -13,7 +15,6 @@ html, body {
 body {
   background-color: #f7f7f7;
   font-size: 14px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding-top: 70px;
 }
 
@@ -37,6 +38,13 @@ html {
 
 .navbar-avatar {
   margin-top: -3px;
+}
+
+.navbar-nav {
+  .octicon {
+    margin-right: 5px;
+    margin-left: -5px;
+  }
 }
 
 @media (max-width: $screen-xs-max) {
