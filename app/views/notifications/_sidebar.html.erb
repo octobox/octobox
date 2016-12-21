@@ -72,9 +72,9 @@
       <%= octicon 'inbox', height: 16 %>
     </td>
     <td>
-      <% if !params[:archive].present? %><strong><% end %>
+      <% if !params[:archive].present? && !params[:starred].present? %><strong><% end %>
         <%= link_to 'Inbox', root_path() %>
-      <% if !params[:archive].present? %></strong><% end %>
+      <% if !params[:archive].present? && !params[:starred].present? %></strong><% end %>
     </td>
     <td class='text-center'>
 
