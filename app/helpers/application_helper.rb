@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   REASON_LABELS = {
     'comment'      => 'primary',
     'author'       => 'success',
