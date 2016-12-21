@@ -181,9 +181,17 @@ td.keys {
   vertical-align: text-bottom;
 }
 
+.nav-filters {
+  .divider {
+    border-top: 1px solid #ddd;
+    height: 1px;
+    margin: 10px 0;
+  }
+}
+
 .sidebar-icon {
-  width: 1%;
-  text-align: center;
+  margin-right: 5px;
+  width: 18px;
   .octicon-primitive-dot {
     margin-top: -3px;
     margin-bottom: -3px;
