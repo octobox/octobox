@@ -60,7 +60,7 @@
 
         <% if @notifications.any? && !params[:archive].present? %>
           <%= link_to(
-                (no_url_filter_parameters_present ? 'Archive all' : 'Archive list'),
+                (no_url_filter_parameters_present ? 'Archive all' : 'Archive this list'),
                 archive_notifications_path(
                   repo:    params[:repo],
                   reason:  params[:reason],
