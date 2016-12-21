@@ -13,13 +13,17 @@ class NotificationsController < ApplicationController
     @unread_repositories = scope.distinct.group(:repository_full_name).count
     @starred             = scope.starred.count
 
-    scopes = {params[:repo] => scope.repo(params[:repo]), params[:reason] => scope.reason(params[:reason]),
-       params[:type] => scope.type(params[:type]), params[:status] => scope.status(params[:status]),
-       params[:starred] => scope.starred}
+    scopes = {
+      params[:repo]    => scope.repo(params[:repo]),
+      params[:reason]  => scope.reason(params[:reason]),
+      params[:type]    => scope.type(params[:type]),
+      params[:status]  => scope.status(params[:status]),
+      params[:starred] => scope.starred
+    }
 
-    scopes.each do |k, v|
-      if k.present?
-        scope = v
+    scopes.each do |param_value, sub_scope|
+      if param_value.present?
+        scope = sub_scope
       end
     end
 
