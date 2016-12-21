@@ -1,6 +1,8 @@
 $navbar-default-bg: #312312;
 $table-bg-active: #fafafa;
 $tooltip-opacity: 1;
+$body-bg: #f7f7f7;
+$jumbotron-bg: #f7f7f7;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -11,7 +13,6 @@ html, body {
   min-height: 100%;
 }
 body {
-  background-color: #f7f7f7;
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding-top: 70px;
