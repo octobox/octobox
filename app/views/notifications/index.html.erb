@@ -103,7 +103,11 @@
         <% end %>
       </div>
 
-      <div class="container text-center">
+      <div class="text-center visible-xs-block">
+        <%= paginate @notifications, left: 1, right: 1, window: 0 %>
+      </div>
+
+      <div class="text-center visible-sm-block visible-md-block visible-lg-block visible-xl-block">
         <%= paginate @notifications %>
       </div>
     </div>
