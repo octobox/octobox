@@ -86,9 +86,6 @@
           <table class='table table-hover table-notifications'>
             <%= render @notifications %>
           </table>
-          <div class="panel-footer">
-            <%= paginate @notifications %>
-          </div>
         <% elsif no_url_filter_parameters_present %>
           <div class="blankslate blankslate-spacious blankslate-clean-background">
             <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
@@ -104,6 +101,10 @@
             <p>You can always try <%= link_to 'refreshing', root_path %>.</p>
           </div>
         <% end %>
+      </div>
+
+      <div class="container text-center">
+        <%= paginate @notifications %>
       </div>
     </div>
   </div>
