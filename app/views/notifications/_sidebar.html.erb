@@ -1,110 +1,81 @@
-<table class='table table-condensed'>
+<ul class="nav nav-pills nav-stacked nav-filters">
+  <li role="presentation" class="<%= 'active' if !params[:archive].present? %>">
+    <%= link_to root_path() do %>
+      <%= octicon 'inbox', height: 16, class: 'sidebar-icon text-primary' %>
+      Inbox
+    <% end %>
+  </li>
+  <li role="presentation" class="<%= 'active' if params[:archive].present? %>">
+    <%= link_to root_path(archive: true) do %>
+      <%= octicon 'check', height: 16, class: 'sidebar-icon text-success' %>
+      Archive
+    <% end %>
+  </li>
+
+  <%= menu_separator() %>
+
+  <li role="presentation" class="<%= 'active' if params[:starred].present? %>">
+    <%= link_to root_path(starred: true, archive: params[:archive]), class: 'filter' do %>
+      <%= octicon 'star', height: 16, class: 'sidebar-icon star-active' %>
+      Starred
+      <span class="label label-muted"><%= @starred %></span>
+    <% end %>
+  </li>
+
+  <%= menu_separator() %>
+
   <% @statuses.each do |status, count| %>
-    <tr>
-      <td class='sidebar-icon'>
+    <li class="<%= 'active' if params[:status] == status.to_s %>">
+      <%= link_to root_path(status: status, type: params[:type], repo: params[:repo], archive: params[:archive]), class: 'filter' do %>
         <% if status %>
-          <%= octicon 'mail', :height => 16 %>
+          <%= octicon 'mail', height: 16, class: 'sidebar-icon star-active' %>
+          Unread
         <% else %>
-          <%= octicon 'mail-read', :height => 16 %>
+          <%= octicon 'mail-read', height: 16, class: 'sidebar-icon star-active' %>
+          Read
         <% end %>
-      </td>
-      <td>
-        <% if params[:status] == status.to_s %><strong><% end %>
-        <%= link_to (status ? 'Unread' : 'Read'), root_path(status: status, type: params[:type], repo: params[:repo], archive: params[:archive]) %>
-        <% if params[:status] == status.to_s %></strong><% end %>
-      </td>
-      <td class='text-center'>
         <span class="label label-muted"><%= count %></span>
-      </td>
-    </tr>
+      <% end %>
+    </li>
   <% end %>
   <%= menu_separator unless @statuses.empty? %>
+
   <% @types.each do |type, count| %>
-    <tr>
-      <td class='sidebar-icon'>
-        <%= octicon notification_icon(type), :height => 16 %>
-      </td>
-      <td>
-        <% if params[:type] == type %><strong><% end %>
-        <%= link_to type.underscore.humanize, root_path(status: params[:status], type: type, repo: params[:repo], archive: params[:archive]) %>
-        <% if params[:type] == type %></strong><% end %>
-      </td>
-      <td class='text-center'>
+    <li class="<%= 'active' if params[:type] == type %>">
+      <%= link_to root_path(status: params[:status], type: type, repo: params[:repo], archive: params[:archive]), class: 'filter' do %>
+        <% if notification_icon(type).nil? %>
+            <span class='sidebar-icon'></span>
+        <% else %>
+            <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
+        <% end %>
+        <%= type.underscore.humanize %>
         <span class="label label-muted"><%= count %></span>
-      </td>
-    </tr>
+      <% end %>
+    </li>
   <% end %>
   <%= menu_separator unless @types.empty? %>
+
   <% @reasons.each do |reason, count| %>
-    <tr>
-      <td class='text-<%= reason_label(reason) %> sidebar-icon'>
-        <%= octicon 'primitive-dot', height: 24 %>
-      </td>
-      <td>
-        <% if params[:reason] == reason %><strong><% end %>
-        <%= link_to reason.underscore.humanize, root_path(reason: reason, type: params[:type], repo: params[:repo], archive: params[:archive]) %>
-        <% if params[:reason] == reason %></strong><% end %>
-      </td>
-      <td class='text-center'>
+    <li class="<%= 'active' if params[:reason] == reason %>">
+      <%= link_to root_path(reason: reason, type: params[:type], repo: params[:repo], archive: params[:archive]), class: 'filter' do %>
+        <span class='text-<%= reason_label(reason) %>'>
+          <%= octicon 'primitive-dot', height: 24, class: 'sidebar-icon' %>
+        </span>
+        <%= reason.underscore.humanize %>
         <span class="label label-muted"><%= count %></span>
-      </td>
-    </tr>
+      <% end %>
+    </li>
   <% end %>
   <%= menu_separator unless @reasons.empty? %>
+
   <% @unread_repositories.sort.each do |repo_name, count| %>
-    <tr>
-      <td class='sidebar-icon'>
-        <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded' %>
-      </td>
-      <td>
-        <% if params[:repo] == repo_name %><strong><% end %>
-        <%= link_to repo_name.split('/').last, root_path(repo: repo_name, archive: params[:archive]) %>
-        <% if params[:repo] == repo_name %></strong><% end %>
-      </td>
-      <td class='text-center'>
+    <li class="<%= 'active' if params[:repo] == repo_name %>">
+      <%= link_to root_path(repo: repo_name, archive: params[:archive]), class: 'filter' do %>
+        <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
+        <%= repo_name.split('/').last %>
         <span class="label label-muted"><%= count %></span>
-      </td>
-    </tr>
+      <% end %>
+    </li>
   <% end %>
-  <%= menu_separator unless @unread_repositories.empty? %>
-  <tr>
-    <td class='sidebar-icon'>
-      <%= octicon 'inbox', height: 16 %>
-    </td>
-    <td>
-      <% if !params[:archive].present? %><strong><% end %>
-      <%= link_to 'Inbox', root_path() %>
-      <% if  !params[:archive].present? %><strong><% end %>
-    </td>
-    <td class='text-center'>
 
-    </td>
-  </tr>
-  <tr>
-    <td class='sidebar-icon'>
-      <%= octicon 'check', height: 16, class: 'text-success' %>
-    </td>
-    <td>
-      <% if params[:archive].present? %><strong><% end %>
-      <%= link_to 'Archive', root_path(archive: true) %>
-      <% if  params[:archive].present? %><strong><% end %>
-    </td>
-    <td class='text-center'>
-
-    </td>
-  </tr>
-  <tr style='border:none;'><td colspan='3' style='border:none;'>&nbsp;</td></tr>
-  <tr>
-    <td class='sidebar-icon'>
-      <%= octicon 'star', :height => 16, :class => 'star-active' %>
-    </td>
-    <td>
-      <% if params[:starred].present? %><strong><% end %>
-      <%= link_to 'Starred', root_path(starred: true, archive: params[:archive]) %>
-      <% if  params[:starred].present? %><strong><% end %>
-    </td>
-    <td class='text-center'>
-      <span class="label label-muted"><%= @starred %></span>
-    </td>
-  </tr>
-</table>
+</ul>

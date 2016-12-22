@@ -20,14 +20,13 @@ class Notification < ApplicationRecord
 
       fetch_notifications(user) do |notification|
         begin
-          n = find_or_create_by(github_id: notification.id)
+          n = user.notifications.find_or_create_by(github_id: notification.id)
 
           if n.archived && n.updated_at < notification.updated_at
             n.archived = false
           end
 
           attrs = {}.tap do |attr|
-            attr[:user_id]               = user.id
             attr[:repository_id]         = notification.repository.id
             attr[:repository_full_name]  = notification.repository.full_name
             attr[:repository_owner_name] = notification.repository.owner.login
@@ -48,7 +47,7 @@ class Notification < ApplicationRecord
 
           n.update(attrs)
         rescue ActiveRecord::RecordNotUnique
-          retry
+          nil
         end
       end
 
@@ -63,7 +62,7 @@ class Notification < ApplicationRecord
 
     def fetch_params(user)
       if user.last_synced_at?
-        { all: true, since: user.last_synced_at.iso8601 }
+        { all: true, since: 1.week.ago.iso8601 }
       else
         { all: true, since: 1.month.ago.iso8601 }
       end

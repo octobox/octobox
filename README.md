@@ -135,7 +135,7 @@ You can use keyboard shortcuts to navigate and perform certain actions:
  - `k` - move up the list
  - `s` - star current notification
  - `y` - archive current notification
- - `Enter` - open current notification in a new window
+ - `o` or `Enter` - open current notification in a new window
 
 Press `?` for the help menu.
 
