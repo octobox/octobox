@@ -13,7 +13,7 @@
       <% end %>
 
       <% if filters[:status].present? %>
-        <%= link_to root_path(filters.except(:reason)), class: 'btn btn-default' do %>
+        <%= link_to root_path(filters.except(:status)), class: 'btn btn-default' do %>
           <%= octicon 'x', :height => 16 %>
           <%= (params[:status] === 'true'? 'Unread' : 'Read') %>
         <% end %>
