@@ -31,7 +31,7 @@ html {
   min-height: 100%;
 }
 
-html.turbolinks-progress-bar::before {
+.turbolinks-progress-bar {
   height: 2px !important;
   background-color: #77b6ff !important;
   box-shadow: 0 0 10px rgba(#77b6ff, 0.7) !important;
