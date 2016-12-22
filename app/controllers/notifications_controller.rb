@@ -9,8 +9,10 @@ class NotificationsController < ApplicationController
 
     scope = if params[:starred].present?
               scope.starred
+            elsif params[:archive].present?
+              scope.archived
             else
-              params[:archive].present? ? scope.archived : scope.inbox
+              scope.inbox
             end
 
     @types               = scope.distinct.group(:subject_type).count
