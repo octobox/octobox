@@ -62,7 +62,7 @@ class Notification < ApplicationRecord
 
     def fetch_params(user)
       if user.last_synced_at?
-        { all: true, since: user.last_synced_at.iso8601 }
+        { all: true, since: 1.week.ago.iso8601 }
       else
         { all: true, since: 1.month.ago.iso8601 }
       end
