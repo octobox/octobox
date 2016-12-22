@@ -47,7 +47,7 @@ class Notification < ApplicationRecord
 
           n.update(attrs)
         rescue ActiveRecord::RecordNotUnique
-          retry
+          nil
         end
       end
 
