@@ -46,7 +46,7 @@ $( document ).ready(function() {
     if ( e.which == 89 ) { // y
       $('td.current').parent().find('.archive').click();
     }
-    if ( e.which == 13 ) { // Enter
+    if ( e.which == 13 || e.which == 79 ) { // Enter | o
       e.preventDefault();
       $('td.current').parent().find('.link')[0].click();
     }
