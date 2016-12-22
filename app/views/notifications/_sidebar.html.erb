@@ -1,5 +1,5 @@
 <ul class="nav nav-pills nav-stacked nav-filters">
-  <li role="presentation" class="<%= 'active' if !params[:archive].present? %>">
+  <li role="presentation" class="<%= 'active' if !params[:archive].present? && !params[:starred].present? %>">
     <%= link_to root_path() do %>
       <%= octicon 'inbox', height: 16, class: 'sidebar-icon text-primary' %>
       Inbox
