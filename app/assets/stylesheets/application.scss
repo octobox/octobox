@@ -1,9 +1,12 @@
 $navbar-default-bg: #312312;
+$border-radius-base: 3px;
 $table-bg-active: #fafafa;
 $tooltip-opacity: 1;
 $font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 $body-bg: #f7f7f7;
 $jumbotron-bg: #f7f7f7;
+$component-active-bg: #e7e7e7;
+$component-active-color: #444;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -185,14 +188,24 @@ td.keys {
   .divider {
     border-top: 1px solid #ddd;
     height: 1px;
-    margin: 10px 0;
+    margin: 5px 0;
+  }
+  > li > a {
+    padding: 8px 15px;
+    position: relative;
+  }
+  .label {
+    line-height: 12px;
+    position: absolute;
+    right: 10px;
+    top: 11px;
   }
 }
 
 .sidebar-icon {
   margin-right: 5px;
   width: 18px;
-  .octicon-primitive-dot {
+  &.octicon-primitive-dot {
     margin-top: -3px;
     margin-bottom: -3px;
   }
