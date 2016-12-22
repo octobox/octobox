@@ -2,6 +2,7 @@
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
   before_action :render_home_page_unless_authenticated, only: [:index]
+  before_action :find_notification, only: [:archive, :unarchive, :star]
 
   def index
     scope = current_user.notifications
@@ -23,8 +24,7 @@ class NotificationsController < ApplicationController
   end
 
   def archive
-    notification = current_user.notifications.find(params[:id])
-    notification.update_columns archived: true
+    @notification.update_columns archived: true
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
 
@@ -42,15 +42,12 @@ class NotificationsController < ApplicationController
   end
 
   def unarchive
-    notification = Notification.find(params[:id])
-    notification.update_columns archived: false
+    @notification.update_columns archived: false
     redirect_to root_path(type: params[:type], repo: params[:repo], archive: true)
   end
 
   def star
-    notification = current_user.notifications.find(params[:id])
-    starred = notification.starred?
-    notification.update_columns starred: !starred
+    @notification.update_columns starred: !@notification.starred?
     head :ok
   end
 
@@ -60,6 +57,10 @@ class NotificationsController < ApplicationController
   end
 
   private
+
+  def find_notification
+    @notification = current_user.notifications.find(params[:id])
+  end
 
   def render_home_page_unless_authenticated
     return render 'pages/home' unless logged_in?
