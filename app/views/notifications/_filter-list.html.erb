@@ -1,6 +1,6 @@
-<% filters = { reason: params[:reason], status: params[:status], repo: params[:repo], type: params[:type], starred: params[:starred] } %>
+<% filters = { reason: params[:reason], status: params[:status], repo: params[:repo], type: params[:type] %>
 
-<% if filters[:reason].present? || filters[:status].present? || filters[:repo].present? || filters[:type].present? || filters[:starred].present? %>
+<% if filters[:reason].present? || filters[:status].present? || filters[:repo].present? || filters[:type].present? %>
   <span class="filter-options">
     <span class="btn-group">
       <a href="#" class="btn btn-default filter-label" role="button" aria-disabled="true">Filter:</a>
