@@ -42,6 +42,13 @@ html.turbolinks-progress-bar::before {
   vertical-align: -.38em;
 }
 
+.jumbotron {
+  .octobox-icon {
+    margin-right: 8px;
+    vertical-align: -14px;
+  }
+}
+
 .navbar-brand {
   .octobox-icon {
     fill: #333;
