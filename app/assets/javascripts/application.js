@@ -59,7 +59,11 @@ $( document ).ready(function() {
       $("a.sync").click();
     }
   });
-
+  
+  document.addEventListener("turbolinks:before-cache", function() {
+    $('td.current').removeClass("current");
+  });
+  
   document.addEventListener("turbolinks:load", function() {
     row_index = Math.min(row_index, $(".table-notifications tr").length);
     row_index = Math.max(row_index, 1);
