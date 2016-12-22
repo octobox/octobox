@@ -1,9 +1,16 @@
-$navbar-default-bg: #312312;
+$navbar-default-bg: #f5f5f5;
+$navbar-inverse-bg: darken(#428bca, 6.5%);
+$navbar-height: 48px;
+$border-radius-base: 3px;
 $table-bg-active: #fafafa;
 $tooltip-opacity: 1;
 $font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-$body-bg: #f7f7f7;
-$jumbotron-bg: #f7f7f7;
+$body-bg: #fff;
+$jumbotron-bg: $body-bg;
+$component-active-bg: #eee;
+$component-active-color: #444;
+$panel-default-heading-bg: #f8f8f8;
+$panel-footer-bg: $panel-default-heading-bg;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -16,7 +23,7 @@ html, body {
 }
 body {
   font-size: 14px;
-  padding-top: 70px;
+  padding-top: 75px;
 }
 
 html {
@@ -30,10 +37,27 @@ html.turbolinks-progress-bar::before {
   box-shadow: 0 0 10px rgba(#77b6ff, 0.7) !important;
 }
 
+.octobox-icon {
+  margin-top: -.22em;
+  vertical-align: -.38em;
+}
+
+.jumbotron {
+  .octobox-icon {
+    margin-right: 8px;
+    vertical-align: -14px;
+  }
+}
+
 .navbar-brand {
-  .octicon {
-    fill: #fff;
+  .octobox-icon {
+    fill: #333;
     margin-right: 3px;
+  }
+  &:hover {
+    .octobox-icon {
+      fill: $link-color;
+    }
   }
 }
 
@@ -51,6 +75,7 @@ html.turbolinks-progress-bar::before {
   .octicon {
     margin-right: 5px;
     margin-left: -5px;
+    width: 16px;
   }
 }
 
@@ -65,12 +90,12 @@ html.turbolinks-progress-bar::before {
     border: 0;
     box-shadow: none;
     > li > a {
-      color: lighten($gray-light, 15%);
+      color: #777;
       line-height: 20px;
       padding: 5px 15px 5px 25px;
       &:hover,
       &:focus {
-        color: #fff;
+        color: $text-color;
         background-color: transparent;
       }
     }
@@ -79,7 +104,7 @@ html.turbolinks-progress-bar::before {
       padding: 5px 15px 5px 25px;
     }
     .divider {
-      background-color: #090909;
+      background-color: #e5e5e5;
     }
   }
 }
@@ -168,10 +193,6 @@ td.keys {
 }
 
 .table-notifications {
-  table {
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(0,0,0,.15);
-  }
   .active {
     font-weight: bold;
   }
@@ -181,13 +202,46 @@ td.keys {
   vertical-align: text-bottom;
 }
 
+.nav-filters {
+  .divider {
+    border-top: 1px solid #ddd;
+    height: 1px;
+    margin: 5px 0;
+    &.double {
+      border-top: 3px double #ddd;
+    }
+  }
+  > li > a {
+    position: relative;
+    .label {
+      top: 11px;
+    }
+    &.filter {
+      padding: 5px 15px;
+      .label {
+        top: 6px;
+      }
+    }
+  }
+  .label {
+    line-height: 12px;
+    position: absolute;
+    right: 10px;
+  }
+}
+
 .sidebar-icon {
-  width: 1%;
-  text-align: center;
-  .octicon-primitive-dot {
+  display: inline-block;
+  margin-right: 5px;
+  width: 18px;
+  &.octicon-primitive-dot {
     margin-top: -3px;
     margin-bottom: -3px;
   }
+}
+
+.sidebar-avatar {
+  margin-right: 3px;
 }
 
 .notification-date {
@@ -214,14 +268,14 @@ td.keys {
     td {
       display: block;
     }
-    .table > tbody > tr.active {
+    &.table > tbody > tr.active {
       background: #fafafa;
       &:hover {
         background: #ededed;
       }
 
     }
-    .table > tbody > tr > td {
+    &.table > tbody > tr > td {
       border: none;
       padding: 0;
     }
@@ -351,4 +405,26 @@ td.keys {
       fill: #f0ad4e;
       stroke: #f0ad4e;
   }
+}
+
+.filter-label {
+    pointer-events: none;
+}
+
+.panel-heading,
+.panel-footer {
+  padding: 6px 10px;
+}
+.panel-footer {
+  .pagination {
+    margin: 4px 0 0;
+  }
+}
+
+@keyframes spin {
+	to { transform: rotate(1turn); }
+}
+
+.spinning{
+  animation: spin 1s infinite steps(90);
 }

@@ -1,6 +1,6 @@
 <% no_url_filter_parameters_present = (params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? && params[:reason].nil? && params[:starred].nil?) %>
 
-<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -9,7 +9,8 @@
         <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, class: 'img-rounded navbar-avatar' %>
       </button>
       <a class="navbar-brand" href="/">
-        <%= octicon 'octoface', height: 22 %> Octobox
+        <%= octobox_icon(28) %>
+        Octobox
       </a>
     </div>
 
@@ -30,12 +31,17 @@
             </li>
             <li>
               <%= link_to "https://github.com/andrew/octobox/issues", target: "_blank" do %>
-                <%= octicon 'octoface', height: 16, class: 'text-muted' %>
+                <%= octicon 'question', height: 16, class: 'text-muted' %>
                 Octobox Support
               <% end %>
             </li>
             <li role="separator" class="divider"></li>
-            <li><%= link_to 'Logout', logout_path %></li>
+            <li>
+              <%= link_to logout_path do %>
+                <%= octicon 'sign-out', height: 16, class: 'text-muted' %>
+                Logout
+              <% end %>
+            </li>
           </ul>
         </li>
       </ul>
@@ -49,56 +55,56 @@
       <%= render "sidebar" %>
     </div>
     <div class="col-12 col-md-10">
-      <p>
-        <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
-          <%= octicon 'list-unordered', :height => 16 %>
-        </button>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
+            <%= octicon 'three-bars', :height => 16 %>
+          </button>
 
-        <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
-          <%= octicon 'sync', :height => 16 %>
-        <% end %>
+          <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
+            <%= octicon 'sync', :height => 16 %>
+          <% end %>
+          <% if @notifications.any? && !params[:archive].present? %>
+            <%= link_to(
+                  (no_url_filter_parameters_present ? 'Archive all' : 'Archive this list'),
+                  archive_notifications_path(
+                    repo:    params[:repo],
+                    reason:  params[:reason],
+                    type:    params[:type],
+                    status:  params[:status],
+                    starred: params[:starred]
+                  ),
+                  class: 'btn btn-default',
+                  method: :post
+                )
+            %>
+          <% end %>
+          <%= render 'filter-list' %>
+        </div>
 
-        <% if @notifications.any? && !params[:archive].present? %>
-          <%= link_to(
-                (no_url_filter_parameters_present ? 'Archive all' : 'Archive this list'),
-                archive_notifications_path(
-                  repo:    params[:repo],
-                  reason:  params[:reason],
-                  type:    params[:type],
-                  status:  params[:status],
-                  starred: params[:starred]
-                ),
-                class: 'btn btn-default',
-                method: :post
-              )
-          %>
-        <% end %>
-      </p>
-
-      <% if @notifications.any? %>
-        <div class="table-notifications">
-          <table class='table table-hover'>
+        <% if @notifications.any? %>
+          <table class='table table-hover table-notifications'>
             <%= render @notifications %>
           </table>
-          <div class="pagination">
+          <div class="panel-footer">
             <%= paginate @notifications %>
           </div>
-        </div>
-      <% elsif no_url_filter_parameters_present %>
-        <div class="blankslate blankslate-spacious blankslate-clean-background">
-          <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
-          <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
-          <h3>You're in the clear!</h3>
-          <p>There are no notifications that need your attention.</p>
-        </div>
-      <% else %>
-        <div class="blankslate blankslate-spacious blankslate-clean-background">
-          <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
-          <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
-          <h3>Nothing to see here.</h3>
-          <p>You can always try <%= link_to 'refreshing', root_path %>.</p>
-        </div>
-      <% end %>
+        <% elsif no_url_filter_parameters_present %>
+          <div class="blankslate blankslate-spacious blankslate-clean-background">
+            <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
+            <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
+            <h3>You're in the clear!</h3>
+            <p>There are no notifications that need your attention.</p>
+          </div>
+        <% else %>
+          <div class="blankslate blankslate-spacious blankslate-clean-background">
+            <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
+            <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
+            <h3>Nothing to see here.</h3>
+            <p>You can always try <%= link_to 'refreshing', root_path %>.</p>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

@@ -18,18 +18,10 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
   include FactoryGirl::Syntax::Methods
-end
-
-
-
-module SignInHelper
-  def sign_in_as(user)
-    OmniAuth.config.mock_auth[:github].uid = user.github_id
-    OmniAuth.config.mock_auth[:github].credentials.token = user.access_token
-    post '/auth/github/callback'
-  end
+  include NotificationDownloadHelper
 end
 
 class ActionDispatch::IntegrationTest
   include SignInHelper
+  include NotificationDownloadHelper
 end
