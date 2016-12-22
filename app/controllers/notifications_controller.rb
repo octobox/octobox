@@ -24,8 +24,7 @@ class NotificationsController < ApplicationController
 
   def archive
     notification = current_user.notifications.find(params[:id])
-    notification.update_attributes(archived: true)
-
+    notification.update_columns archived: true
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
 
@@ -44,14 +43,14 @@ class NotificationsController < ApplicationController
 
   def unarchive
     notification = Notification.find(params[:id])
-    notification.update_attributes(archived: false)
+    notification.update_columns archived: false
     redirect_to root_path(type: params[:type], repo: params[:repo], archive: true)
   end
 
   def star
     notification = current_user.notifications.find(params[:id])
     starred = notification.starred?
-    notification.update_attributes(starred: !starred)
+    notification.update_columns starred: !starred
     head :ok
   end
 
