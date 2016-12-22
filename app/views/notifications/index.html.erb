@@ -1,3 +1,5 @@
+<% no_url_filter_parameters_present = (params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? && params[:reason].nil?) %>
+
 <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -56,8 +58,20 @@
           <%= octicon 'sync', :height => 16 %>
         <% end %>
 
-        <% if @notifications.any? %>
-          <%= link_to 'Archive all', archive_notifications_path, class: 'btn btn-default', method: :post %>
+        <% if @notifications.any? && !params[:archive].present? %>
+          <%= link_to(
+                (no_url_filter_parameters_present ? 'Archive all' : 'Archive this list'),
+                archive_notifications_path(
+                  repo:    params[:repo],
+                  reason:  params[:reason],
+                  type:    params[:type],
+                  status:  params[:status],
+                  starred: params[:starred]
+                ),
+                class: 'btn btn-default',
+                method: :post
+              )
+          %>
         <% end %>
       </p>
 
@@ -70,7 +84,7 @@
             <%= paginate @notifications %>
           </div>
         </div>
-      <% elsif params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? %>
+      <% elsif no_url_filter_parameters_present %>
         <div class="blankslate blankslate-spacious blankslate-clean-background">
           <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
           <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
