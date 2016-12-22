@@ -20,7 +20,7 @@ class NotificationsController < ApplicationController
     scope = scope.status(params[:status]) if params[:status].present?
     scope = scope.starred                 if params[:starred].present?
 
-    @notifications = scope.newest.page(params[:page])
+    @notifications = scope.newest.page(page).per(per_page)
   end
 
   def archive
@@ -68,5 +68,16 @@ class NotificationsController < ApplicationController
 
   def archive_params
     params.permit(:repo, :reason, :type, :status, :starred)
+  end
+
+  def page
+    params[:page].to_i rescue 1
+  end
+
+  def per_page
+    per_page = params[:per_page].to_i rescue 20
+    per_page = 20 if per_page < 1
+    raise ActiveRecord::RecordNotFound if per_page > 100
+    per_page
   end
 end
