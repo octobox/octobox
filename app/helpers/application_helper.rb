@@ -11,7 +11,8 @@ module ApplicationHelper
     'RepositoryInvitation' => 'mail-read',
     'Issue'                => 'issue-opened',
     'PullRequest'          => 'git-pull-request',
-    'Commit'               => 'git-commit'
+    'Commit'               => 'git-commit',
+    'Release'              => 'tag'
   }.freeze
 
   ALERT_TYPES = {

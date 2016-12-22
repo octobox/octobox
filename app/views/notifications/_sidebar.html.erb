@@ -43,7 +43,11 @@
   <% @types.each do |type, count| %>
     <li class="<%= 'active' if params[:type] == type %>">
       <%= link_to root_path(status: params[:status], type: type, repo: params[:repo], archive: params[:archive]), class: 'filter' do %>
-        <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
+        <% if notification_icon(type).nil? %>
+            <span class='sidebar-icon'></span>
+        <% else %>
+            <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
+        <% end %>
         <%= type.underscore.humanize %>
         <span class="label label-muted"><%= count %></span>
       <% end %>
