@@ -2,7 +2,10 @@
 require 'test_helper'
 
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
-  setup { @user = users(:andrew) }
+  setup do
+    stub_notifications_request
+    @user = users(:andrew)
+  end
 
   test 'will render the home page if not authenticated' do
     get '/'
@@ -48,5 +51,45 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     get '/'
     assert_equal assigns(:notifications).length, 20
+  end
+
+  test 'archives a notification' do
+    notification = create(:notification, user: @user, archived: false)
+
+    sign_in_as(@user)
+
+    get "/notifications/#{notification.id}/archive"
+    assert_response :redirect
+
+    assert notification.reload.archived?
+  end
+
+  test 'unarchives a notification' do
+    notification = create(:notification, user: @user, archived: true)
+
+    sign_in_as(@user)
+
+    get "/notifications/#{notification.id}/unarchive"
+    assert_response :redirect
+
+    refute notification.reload.archived?
+  end
+
+  test 'toggles starred on a notification' do
+    notification = create(:notification, user: @user, starred: false)
+
+    sign_in_as(@user)
+
+    get "/notifications/#{notification.id}/star"
+    assert_response :ok
+
+    assert notification.reload.starred?
+  end
+
+  test 'syncs users notifications' do
+    sign_in_as(@user)
+
+    post "/notifications/sync"
+    assert_response :redirect
   end
 end
