@@ -156,7 +156,7 @@ table.keyboard-mappings {
 }
 
 table.keyboard-mappings tr > td {
-    padding-bottom: 6px;
+  padding-bottom: 6px;
 }
 
 td.keys {
@@ -402,13 +402,13 @@ td.keys {
     fill: #aaa;
   }
   &.star-active {
-      fill: #f0ad4e;
-      stroke: #f0ad4e;
+    fill: #f0ad4e;
+    stroke: #f0ad4e;
   }
 }
 
 .filter-label {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 .panel-heading,
@@ -422,7 +422,7 @@ td.keys {
 }
 
 @keyframes spin {
-	to { transform: rotate(1turn); }
+  to { transform: rotate(1turn); }
 }
 
 .spinning{
