@@ -9,7 +9,8 @@
         <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, class: 'img-rounded navbar-avatar' %>
       </button>
       <a class="navbar-brand" href="/">
-        <%= octicon 'octoface', height: 22 %> Octobox
+        <%= octobox_icon(28) %>
+        Octobox
       </a>
     </div>
 
@@ -30,12 +31,17 @@
             </li>
             <li>
               <%= link_to "https://github.com/andrew/octobox/issues", target: "_blank" do %>
-                <%= octicon 'octoface', height: 16, class: 'text-muted' %>
+                <%= octicon 'question', height: 16, class: 'text-muted' %>
                 Octobox Support
               <% end %>
             </li>
             <li role="separator" class="divider"></li>
-            <li><%= link_to 'Logout', logout_path %></li>
+            <li>
+              <%= link_to logout_path do %>
+                <%= octicon 'sign-out', height: 16, class: 'text-muted' %>
+                Logout
+              <% end %>
+            </li>
           </ul>
         </li>
       </ul>

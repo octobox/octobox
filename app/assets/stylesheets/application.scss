@@ -37,13 +37,25 @@ html.turbolinks-progress-bar::before {
   box-shadow: 0 0 10px rgba(#77b6ff, 0.7) !important;
 }
 
+.octobox-icon {
+  margin-top: -.22em;
+  vertical-align: -.38em;
+}
+
+.jumbotron {
+  .octobox-icon {
+    margin-right: 8px;
+    vertical-align: -14px;
+  }
+}
+
 .navbar-brand {
-  .octicon {
+  .octobox-icon {
     fill: #333;
     margin-right: 3px;
   }
   &:hover {
-    .octicon {
+    .octobox-icon {
       fill: $link-color;
     }
   }
@@ -63,6 +75,7 @@ html.turbolinks-progress-bar::before {
   .octicon {
     margin-right: 5px;
     margin-left: -5px;
+    width: 16px;
   }
 }
 
@@ -77,12 +90,12 @@ html.turbolinks-progress-bar::before {
     border: 0;
     box-shadow: none;
     > li > a {
-      color: lighten($gray-light, 15%);
+      color: #777;
       line-height: 20px;
       padding: 5px 15px 5px 25px;
       &:hover,
       &:focus {
-        color: #fff;
+        color: $text-color;
         background-color: transparent;
       }
     }
@@ -91,7 +104,7 @@ html.turbolinks-progress-bar::before {
       padding: 5px 15px 5px 25px;
     }
     .divider {
-      background-color: #090909;
+      background-color: #e5e5e5;
     }
   }
 }
