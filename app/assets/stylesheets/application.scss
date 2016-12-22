@@ -407,6 +407,10 @@ td.keys {
   }
 }
 
+.filter-label {
+    pointer-events: none;
+}
+
 .panel-heading,
 .panel-footer {
   padding: 6px 10px;

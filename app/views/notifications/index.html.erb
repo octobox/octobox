@@ -64,7 +64,6 @@
           <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', :height => 16 %>
           <% end %>
-
           <% if @notifications.any? && !params[:archive].present? %>
             <%= link_to(
                   (no_url_filter_parameters_present ? 'Archive all' : 'Archive this list'),
@@ -80,6 +79,7 @@
                 )
             %>
           <% end %>
+          <%= render 'filter-list' %>
         </div>
 
         <% if @notifications.any? %>
