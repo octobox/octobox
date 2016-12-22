@@ -1,13 +1,13 @@
 <ul class="nav nav-pills nav-stacked nav-filters">
   <li role="presentation" class="<%= 'active' if !params[:archive].present? %>">
     <%= link_to root_path() do %>
-      <%= octicon 'inbox', height: 16, class: 'sidebar-icon' %>
+      <%= octicon 'inbox', height: 16, class: 'sidebar-icon text-primary' %>
       Inbox
     <% end %>
   </li>
   <li role="presentation" class="<%= 'active' if params[:archive].present? %>">
     <%= link_to root_path(archive: true) do %>
-      <%= octicon 'check', height: 16, class: 'sidebar-icon' %>
+      <%= octicon 'check', height: 16, class: 'sidebar-icon text-success' %>
       Archive
     <% end %>
   </li>
