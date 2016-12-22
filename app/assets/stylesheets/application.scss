@@ -402,3 +402,11 @@ td.keys {
     margin: 4px 0 0;
   }
 }
+
+@keyframes spin {
+	to { transform: rotate(1turn); }
+}
+
+.spinning{
+  animation: spin 1s infinite steps(90);
+}

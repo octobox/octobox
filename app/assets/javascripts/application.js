@@ -63,6 +63,10 @@ $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.row-offcanvas').toggleClass('active')
 });
 
+$(document).on('click', '.sync', function () {
+  $('.sync .octicon').toggleClass('spinning')
+});
+
 if(!('ontouchstart' in window))
 {
   $(function () {
