@@ -189,16 +189,26 @@ td.keys {
     border-top: 1px solid #ddd;
     height: 1px;
     margin: 5px 0;
+    &.double {
+      border-top: 3px double #ddd;
+    }
   }
   > li > a {
-    padding: 8px 15px;
     position: relative;
+    .label {
+      top: 11px;
+    }
+    &.filter {
+      padding: 5px 15px;
+      .label {
+        top: 6px;
+      }
+    }
   }
   .label {
     line-height: 12px;
     position: absolute;
     right: 10px;
-    top: 9px;
   }
 }
 

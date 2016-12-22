@@ -19,11 +19,11 @@
     <% end %>
   </li>
 
-  <%= menu_separator %>
+  <%= menu_separator('double') %>
 
   <% @statuses.each do |status, count| %>
     <li class="<%= 'active' if params[:status] == status.to_s %>">
-      <%= link_to root_path(status: status, type: params[:type], repo: params[:repo], archive: params[:archive]) do %>
+      <%= link_to root_path(status: status, type: params[:type], repo: params[:repo], archive: params[:archive]), class: 'filter' do %>
         <% if status %>
           <%= octicon 'mail', height: 16, class: 'sidebar-icon star-active' %>
           Unread
@@ -39,7 +39,7 @@
 
   <% @types.each do |type, count| %>
     <li class="<%= 'active' if params[:type] == type %>">
-      <%= link_to root_path(status: params[:status], type: type, repo: params[:repo], archive: params[:archive]) do %>
+      <%= link_to root_path(status: params[:status], type: type, repo: params[:repo], archive: params[:archive]), class: 'filter' do %>
         <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
         <%= type.underscore.humanize %>
         <span class="label label-muted"><%= count %></span>
@@ -50,7 +50,7 @@
 
   <% @reasons.each do |reason, count| %>
     <li class="<%= 'active' if params[:reason] == reason %>">
-      <%= link_to root_path(reason: reason, type: params[:type], repo: params[:repo], archive: params[:archive]) do %>
+      <%= link_to root_path(reason: reason, type: params[:type], repo: params[:repo], archive: params[:archive]), class: 'filter' do %>
         <span class='text-<%= reason_label(reason) %>'>
           <%= octicon 'primitive-dot', height: 24, class: 'sidebar-icon' %>
         </span>
@@ -63,7 +63,7 @@
 
   <% @unread_repositories.sort.each do |repo_name, count| %>
     <li class="<%= 'active' if params[:repo] == repo_name %>">
-      <%= link_to root_path(repo: repo_name, archive: params[:archive]) do %>
+      <%= link_to root_path(repo: repo_name, archive: params[:archive]), class: 'filter' do %>
         <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
         <%= repo_name.split('/').last %>
         <span class="label label-muted"><%= count %></span>
