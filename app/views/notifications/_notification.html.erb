@@ -3,7 +3,7 @@
     <%= check_box_tag(
         '',
         notification.id,
-        notification.archived,
+        false,
         title: (notification.archived ? 'Unarchive' : 'Archive'),
         class: (notification.archived ? 'unarchive' : 'archive')
       )

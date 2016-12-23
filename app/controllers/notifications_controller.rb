@@ -49,7 +49,7 @@ class NotificationsController < ApplicationController
   end
 
   def archive_selected
-    current_user.notifications.where(id: params[:id]).update_all archived: true
+    current_user.notifications.where(id: params[:id]).update_all archived: params[:value]
     head :ok
   end
 

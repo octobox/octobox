@@ -5,17 +5,14 @@
 //= require_tree .
 
 document.addEventListener("turbolinks:load", function() {
-  $('button.archive_selected').click(function () { archive(); });
-  $('input.archive').change(function() {
+  $('button.archive_selected, button.unarchive_selected').click(function () { toggleArchive(); });
+  $('input.archive, input.unarchive').change(function() {
     marked = $(".table-notifications input:checked");
     if ( marked.length > 0 ) {
-      $('button.archive_selected').show();
+      $('button.archive_selected, button.unarchive_selected').show();
     } else {
-      $('button.archive_selected').hide();
+      $('button.archive_selected, button.unarchive_selected').hide();
     }
-  });
-  $('.unarchive').click(function() {
-    loadTurbolinksArchiveURL(this, 'unarchive')
   });
   $('.toggle-star').click(function() {
     $(this).toggleClass("star-active star-inactive")
@@ -60,7 +57,7 @@ var shortcuts = {
   75:  cursorUp,        // k
   83:  toggleStar,      // s
   88:  markCurrent,     // x
-  89:  archive,         // y
+  89:  toggleArchive,   // y
   13:  openCurrentLink, // Enter
   79:  openCurrentLink, // o
   191: openModal,       // ?
@@ -84,15 +81,26 @@ function markCurrent() {
   checkbox.change();
 }
 
-function archive() {
+function toggleArchive() {
   if ( $(".table-notifications tr").length == 0 ) return;
+
+  var cssClass, value;
+  
+  if ( $(".archive_toggle").hasClass("archive_selected") ) {
+    cssClass = '.archive'
+    value = true
+  } else {
+    cssClass = '.unarchive'
+    value = false
+  }
+
   marked = $(".table-notifications input:checked");
   if ( marked.length > 0 ) {
     ids = marked.map(function() { return this.value; }).get();
   } else {
-    ids = [ $('td.current input.archive').val() ];
+    ids = [ $('td.current input'+ cssClass).val() ];
   }
-  $.post( "/notifications/archive_selected", { 'id[]': ids } ).done(function () {
+  $.post( "/notifications/archive_selected", { 'id[]': ids, 'value': value } ).done(function () {
     // calculating new position of the cursor
     current = $('td.current').parent();
     while ( $.inArray(current.find('input').val(), ids) > -1 && current.next().length > 0) {
