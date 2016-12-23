@@ -47,9 +47,15 @@
                 )
             %>
             <% end %>
-            <button type="button" class="btn btn-default archive_selected" style="display:none;">
-              Archive selected
-            </button>
+            <% if params[:archive] %>
+              <button type="button" class="btn btn-default archive_toggle unarchive_selected" style="display:none;">
+                Unarchive selected
+              </button>
+            <% else %>
+              <button type="button" class="btn btn-default archive_toggle archive_selected" style="display:none;">
+                Archive selected
+              </button>
+            <% end %>
             <%= render 'filter-list' %>
         </div>
 
