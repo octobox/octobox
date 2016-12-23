@@ -101,13 +101,13 @@ function archive() {
     window.current_id = current.find('input').val();
     if ( $.inArray(window.current_id, ids ) > -1 ) {
       window.current_id = $(".table-notifications input:not(:checked)").last().val();
-    } 
+    }
     Turbolinks.visit("/"+location.search);
   });
 }
 
 function toggleStar() {
-  clickCurrentRow('.toggle-star')
+  $('td.current').parent().find('.toggle-star').click();
 }
 
 function openModal() {
@@ -121,10 +121,6 @@ function openCurrentLink(e) {
 
 function sync() {
   $("a.sync").click();
-}
-
-function clickCurrentRow(cssClass) {
-  $('td.current').parent().find(cssClass).click();
 }
 
 function moveCursor(upOrDown) {
