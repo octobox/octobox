@@ -60,8 +60,7 @@ Rails.application.configure do
 
     dalli_store_config = {
       namespace:  'OCTOBOX',
-      expires_in: (ENV['REQUEST_CACHE_TIMEOUT'] || 30).to_i.minutes,
-      pool_size:  5
+      expires_in: (ENV['REQUEST_CACHE_TIMEOUT'] || 30).to_i.minutes
     }
 
     config.cache_store = :dalli_store,
