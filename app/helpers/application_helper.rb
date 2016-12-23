@@ -51,6 +51,6 @@ module ApplicationHelper
   end
 
   def no_url_filter_parameters_present
-    params[:archive].nil? && params[:repo].nil? && params[:type].nil? && params[:status].nil? && params[:reason].nil? && params[:owner].nil?
+    [:archive, :repo, :type, :status, :reason, :owner, :starred].all?{|param| params[param].nil? }
   end
 end
