@@ -6,7 +6,6 @@ class NotificationsController < ApplicationController
 
   def index
     scope    = current_user.notifications
-    @starred = scope.starred.count
 
     scope = if params[:starred].present?
               scope.starred
