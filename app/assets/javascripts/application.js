@@ -21,10 +21,21 @@ document.addEventListener("turbolinks:load", function() {
 });
 
 // Add key events only once
+$(document).ready(enableKeyboardShortcuts);
 
-$( document ).ready(function() {
+$(document).on('click', '[data-toggle="offcanvas"]', function () {
+  $('.row-offcanvas').toggleClass('active')
+});
 
-  var row_index = 1
+if(!('ontouchstart' in window))
+{
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+}
+
+function enableKeyboardShortcuts() {
+  window.row_index = 1
 
   $(document).keydown(function(e) {
     if ( e.which === 74 ) {  // j
@@ -72,15 +83,4 @@ $( document ).ready(function() {
     row_index = Math.max(row_index, 1);
     $(".table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current");
   });
-});
-
-$(document).on('click', '[data-toggle="offcanvas"]', function () {
-  $('.row-offcanvas').toggleClass('active')
-});
-
-if(!('ontouchstart' in window))
-{
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
 }
