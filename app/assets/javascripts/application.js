@@ -99,7 +99,7 @@ function archive() {
       current = current.next();
     }
     window.current_id = current.find('input').val();
-    if ( $.inArray(current_id, ids ) > -1 ) {
+    if ( $.inArray(window.current_id, ids ) > -1 ) {
       window.row_index -= ids.length;
       window.current_id = undefined;
     } 
