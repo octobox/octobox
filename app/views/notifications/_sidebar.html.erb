@@ -70,7 +70,7 @@
      <% repo_owner, repo_label = repo_name.split('/') %>
      <% if current_owner != repo_owner %>
        <li class="<%= 'active' if params[:owner] == repo_owner %>">
-         <%= link_to root_path(filtered_params(owner: repo_owner).except(:repo)), class: 'filter' do %>
+         <%= link_to root_path(filtered_params(owner: repo_owner).except(:repo)), class: 'filter owner-label' do %>
            <%= image_tag "https://github.com/#{repo_owner}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
            <%= repo_owner %>
          <% end %>
