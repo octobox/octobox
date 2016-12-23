@@ -17,6 +17,7 @@ gem 'sassc-rails'
 gem 'turbolinks'
 gem 'typhoeus'
 gem 'uglifier'
+gem 'pg_search'
 
 group :development, :test do
   gem 'byebug', platform: :mri

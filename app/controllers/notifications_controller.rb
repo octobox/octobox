@@ -25,7 +25,9 @@ class NotificationsController < ApplicationController
       scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
     end
 
-    check_out_of_bounds(scope)
+    scope = scope.search_by_subject_title(params[:q])   if params[:q].present?
+    @query = params[:q] if params[:q].present?
+
     @notifications = scope.newest.page(page).per(per_page)
   end
 
