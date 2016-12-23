@@ -61,23 +61,11 @@ var shortcuts = {
 }
 
 function cursorDown() {
-  current = $('td.current');
-  next = $(current).parent().next();
-  if(next.length > 0) {
-    $(current).removeClass("current");
-    $(next).find('td').first().addClass("current");
-    row_index += 1;
-  }
+  moveCursor('up')
 }
 
 function cursorUp() {
-  current = $('td.current');
-  prev = $(current).parent().prev();
-  if(prev.length > 0) {
-    $(current).removeClass("current");
-    $(prev).find('td').first().addClass("current");
-    row_index -= 1;
-  }
+  moveCursor('down')
 }
 
 function archive() {
@@ -103,6 +91,17 @@ function sync() {
 
 function clickCurrentRow(cssClass) {
   $('td.current').parent().find(cssClass).click();
+}
+
+function moveCursor(upOrDown) {
+  var current = $('td.current');
+  var parent = $(current).parent()
+  var target = nextOrPrev === 'up' ? parent.next() : parent.prev()
+  if(target.length > 0) {
+    $(current).removeClass("current");
+    $(target).find('td').first().addClass("current");
+    row_index += nextOrPrev === 'up' ? 1 : -1;
+  }
 }
 
 function recoverPreviousCursorPosition() {
