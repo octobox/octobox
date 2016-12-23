@@ -52,7 +52,7 @@ class Notification < ApplicationRecord
         end
       end
 
-      user.touch(:last_synced_at, time: timestamp)
+      user.update_column(:last_synced_at, timestamp)
     end
 
     private
