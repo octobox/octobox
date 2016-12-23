@@ -80,6 +80,7 @@
 
      <li class="<%= 'active' if params[:repo] == repo_name || params[:owner] == repo_owner %>">
         <%= link_to root_path(filtered_params(repo: repo_name).except(:owner)), class: 'filter repo-label' do %>
+          <%= octicon('repo', size: 20) %>
           <%= repo_label %>
           <span class="label label-muted"><%= count %></span>
       <% end %>
