@@ -57,11 +57,30 @@
     <div class="col-12 col-md-10">
       <div class="panel panel-default">
         <div class="panel-heading">
+          <!-- Single button -->
+          <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <% if params[:per_page].present? %>
+                <%= params[:per_page] %>
+              <% else %>
+                20
+              <% end %>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><%= link_to '20', root_path(per_page: 20, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
+              <li><%= link_to '40', root_path(per_page: 40, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
+              <li><%= link_to '60', root_path(per_page: 60, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
+              <li><%= link_to '80', root_path(per_page: 80, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
+              <li><%= link_to '100', root_path(per_page: 100, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
+            </ul>
+          </div>
+
           <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
             <%= octicon 'three-bars', :height => 16 %>
           </button>
 
-          <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
+          <%= link_to sync_notifications_path(), class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', :height => 16 %>
           <% end %>
           <% if @notifications.any? && !params[:archive].present? %>
