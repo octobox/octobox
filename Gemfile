@@ -43,4 +43,5 @@ group :production do
   gem 'newrelic_rpm'
   gem 'lograge'
   gem 'rails_safe_tasks'
+  gem 'bugsnag'
 end
