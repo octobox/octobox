@@ -18,9 +18,14 @@ document.addEventListener("turbolinks:load", function() {
   $('a.sync').on('click', function() {
     $(this).find('.octicon').toggleClass('spinning')
   });
+  recoverPreviousCursorPosition()
 });
 
-// Add key events only once
+document.addEventListener("turbolinks:before-cache", function() {
+  $('td.current').removeClass("current");
+});
+
+// Add shortcut events only once
 $(document).ready(enableKeyboardShortcuts);
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
@@ -38,53 +43,70 @@ function enableKeyboardShortcuts() {
   window.row_index = 1
 
   $(document).keydown(function(e) {
-    if ( e.which === 74 ) {  // j
-      current = $('td.current');
-      next = $(current).parent().next();
-      if(next.length > 0) {
-        $(current).removeClass("current");
-        $(next).find('td').first().addClass("current");
-        row_index += 1;
-      }
-    }
-    if ( e.which === 75 ) { // k
-      current = $('td.current');
-      prev = $(current).parent().prev();
-      if(prev.length > 0) {
-        $(current).removeClass("current");
-        $(prev).find('td').first().addClass("current");
-        row_index -= 1;
-      }
-    }
-    if ( e.which === 83 ) { // s
-      clickCurrentRow('.toggle-star')
-    }
-    if ( e.which === 89 ) { // y
-      clickCurrentRow('.archive')
-    }
-    if ( e.which === 13 || e.which === 79 ) { // Enter | o
-      e.preventDefault();
-      $('td.current').parent().find('.link')[0].click();
-    }
-    if ( e.which === 191 ) { // ?
-      $("#help-box").modal();
-    }
-    if ( e.which === 190 || e.which === 82) { // . | r
-      $("a.sync").click();
-    }
+    var shortcutFunction = shortcuts[e.which]
+    if (shortcutFunction) { shortcutFunction(e) }
   });
+}
 
-  document.addEventListener("turbolinks:before-cache", function() {
-    $('td.current').removeClass("current");
-  });
+var shortcuts = {
+  74:  cursorDown,      // j
+  75:  cursorUp,        // k
+  83:  toggleStar,      // s
+  89:  archive,         // y
+  13:  openCurrentLink, // Enter
+  79:  openCurrentLink, // o
+  191: openModal,       // ?
+  190: sync,            // .
+  82:  sync             // r
+}
 
-  document.addEventListener("turbolinks:load", function() {
-    row_index = Math.min(row_index, $(".table-notifications tr").length);
-    row_index = Math.max(row_index, 1);
-    $(".table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current");
-  });
+function cursorDown() {
+  current = $('td.current');
+  next = $(current).parent().next();
+  if(next.length > 0) {
+    $(current).removeClass("current");
+    $(next).find('td').first().addClass("current");
+    row_index += 1;
+  }
+}
+
+function cursorUp() {
+  current = $('td.current');
+  prev = $(current).parent().prev();
+  if(prev.length > 0) {
+    $(current).removeClass("current");
+    $(prev).find('td').first().addClass("current");
+    row_index -= 1;
+  }
+}
+
+function archive() {
+  clickCurrentRow('.archive')
+}
+
+function toggleStar() {
+  clickCurrentRow('.toggle-star')
+}
+
+function openModal() {
+  $("#help-box").modal();
+}
+
+function openCurrentLink(e) {
+  e.preventDefault(e);
+  $('td.current').parent().find('.link')[0].click();
+}
+
+function sync() {
+  $("a.sync").click();
 }
 
 function clickCurrentRow(cssClass) {
   $('td.current').parent().find(cssClass).click();
+}
+
+function recoverPreviousCursorPosition() {
+  row_index = Math.min(row_index, $(".table-notifications tr").length);
+  row_index = Math.max(row_index, 1);
+  $(".table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current");
 }
