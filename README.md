@@ -124,7 +124,7 @@ Once the PostgreSQL initialization process is complete, launch the application u
 GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up app
 ```
 
-**Note**: You can add `GITHUB_TOKEN` to `.env` instead of supplying it directly on the command-line.
+**Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
 
 ### Keyboard shortcuts
 
