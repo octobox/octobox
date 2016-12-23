@@ -64,7 +64,6 @@
           <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', :height => 16 %>
           <% end %>
-
           <% if @notifications.any? && !params[:archive].present? %>
             <%= link_to(
                   (no_url_filter_parameters_present ? 'Archive all' : 'Archive this list'),
@@ -80,15 +79,13 @@
                 )
             %>
           <% end %>
+          <%= render 'filter-list' %>
         </div>
 
         <% if @notifications.any? %>
           <table class='table table-hover table-notifications'>
             <%= render @notifications %>
           </table>
-          <div class="panel-footer">
-            <%= paginate @notifications %>
-          </div>
         <% elsif no_url_filter_parameters_present %>
           <div class="blankslate blankslate-spacious blankslate-clean-background">
             <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
@@ -104,6 +101,14 @@
             <p>You can always try <%= link_to 'refreshing', root_path %>.</p>
           </div>
         <% end %>
+      </div>
+
+      <div class="text-center visible-xs-block">
+        <%= paginate @notifications, left: 1, right: 1, window: 0 %>
+      </div>
+
+      <div class="text-center visible-sm-block visible-md-block visible-lg-block visible-xl-block">
+        <%= paginate @notifications %>
       </div>
     </div>
   </div>

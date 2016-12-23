@@ -31,7 +31,7 @@ html {
   min-height: 100%;
 }
 
-html.turbolinks-progress-bar::before {
+.turbolinks-progress-bar {
   height: 2px !important;
   background-color: #77b6ff !important;
   box-shadow: 0 0 10px rgba(#77b6ff, 0.7) !important;
@@ -156,7 +156,7 @@ table.keyboard-mappings {
 }
 
 table.keyboard-mappings tr > td {
-    padding-bottom: 6px;
+  padding-bottom: 6px;
 }
 
 td.keys {
@@ -402,23 +402,22 @@ td.keys {
     fill: #aaa;
   }
   &.star-active {
-      fill: #f0ad4e;
-      stroke: #f0ad4e;
+    fill: #f0ad4e;
+    stroke: #f0ad4e;
   }
+}
+
+.filter-label {
+  pointer-events: none;
 }
 
 .panel-heading,
 .panel-footer {
   padding: 6px 10px;
 }
-.panel-footer {
-  .pagination {
-    margin: 4px 0 0;
-  }
-}
 
 @keyframes spin {
-	to { transform: rotate(1turn); }
+  to { transform: rotate(1turn); }
 }
 
 .spinning{

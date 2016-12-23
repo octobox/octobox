@@ -21,7 +21,7 @@
   <% unless params[:repo].present? %>
   <td class='notification-repo'>
     <small>
-      <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted' %>
+      <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
     </small>
   </td>
   <% end %>

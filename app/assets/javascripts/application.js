@@ -15,14 +15,17 @@ document.addEventListener("turbolinks:load", function() {
     $(this).toggleClass("star-active star-inactive")
     $.get('/notifications/'+$(this).data('id')+'/star')
   });
-
-  // Set current notification for navigation
-  $('.table-notifications tbody tr').first().find("td").first().addClass("current");
+  $('.sync .octicon').on('click', function() {
+    $(this).toggleClass('spinning')
+  });
 });
 
 // Add key events only once
 
 $( document ).ready(function() {
+
+  var row_index = 1
+
   $(document).keydown(function(e) {
     if ( e.which == 74 ) {  // j
       current = $('td.current');
@@ -30,6 +33,7 @@ $( document ).ready(function() {
       if(next.length > 0) {
         $(current).removeClass("current");
         $(next).find('td').first().addClass("current");
+        row_index += 1;
       }
     }
     if ( e.which == 75 ) { // k
@@ -38,6 +42,7 @@ $( document ).ready(function() {
       if(prev.length > 0) {
         $(current).removeClass("current");
         $(prev).find('td').first().addClass("current");
+        row_index -= 1;
       }
     }
     if ( e.which == 83 ) { // s
@@ -57,14 +62,20 @@ $( document ).ready(function() {
       $("a.sync").click();
     }
   });
+
+  document.addEventListener("turbolinks:before-cache", function() {
+    $('td.current').removeClass("current");
+  });
+
+  document.addEventListener("turbolinks:load", function() {
+    row_index = Math.min(row_index, $(".table-notifications tr").length);
+    row_index = Math.max(row_index, 1);
+    $(".table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current");
+  });
 });
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.row-offcanvas').toggleClass('active')
-});
-
-$(document).on('click', '.sync', function () {
-  $('.sync .octicon').toggleClass('spinning')
 });
 
 if(!('ontouchstart' in window))
