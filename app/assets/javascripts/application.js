@@ -138,9 +138,15 @@ function scrollToCursor() {
   cursor_height = $('td.current').height();
   menu_height = $("#octobox-menu").height();
   scroll_top = $(document).scrollTop();
+  window_height = $(window).height();
   if ( cursor_offset < menu_height + scroll_top ) {
     $("html, body").animate({
       scrollTop: table_offset + cursor_relative_offset - cursor_height
+    }, 0);
+  }
+  if ( cursor_offset > scroll_top + window_height - cursor_height ) {
+    $("html, body").animate({
+      scrollTop: cursor_offset - window_height + 2*cursor_height
     }, 0);
   }
 }
