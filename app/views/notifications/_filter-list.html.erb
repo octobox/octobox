@@ -20,7 +20,7 @@
       <% if filters[:repo].present? %>
         <%= link_to root_path(filters.except(:repo)), class: 'btn btn-default' do %>
           <%= octicon 'x', :height => 16 %>
-          <%= params[:repo].split('/').last %>
+          <%= params[:repo] %>
         <% end %>
       <% end %>
 

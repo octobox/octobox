@@ -36,6 +36,7 @@
             <%= link_to(
                   (no_url_filter_parameters_present ? 'Archive all' : 'Archive this list'),
                   archive_notifications_path(
+                    owner:   params[:owner],
                     repo:    params[:repo],
                     reason:  params[:reason],
                     type:    params[:type],
