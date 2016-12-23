@@ -6,10 +6,10 @@
 
 document.addEventListener("turbolinks:load", function() {
   $('.archive').click(function() {
-    Turbolinks.visit('/notifications/'+$(this).val()+'/archive'+location.search)
+    loadTurbolinksArchiveURL(this, 'archive')
   });
   $('.unarchive').click(function() {
-    Turbolinks.visit('/notifications/'+$(this).val()+'/unarchive'+location.search)
+    loadTurbolinksArchiveURL(this, 'unarchive')
   });
   $('.toggle-star').click(function() {
     $(this).toggleClass("star-active star-inactive")
@@ -109,4 +109,8 @@ function recoverPreviousCursorPosition() {
   row_index = Math.min(row_index, $(".table-notifications tr").length);
   row_index = Math.max(row_index, 1);
   $(".table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current");
+}
+
+function loadTurbolinksArchiveURL(link, route) {
+  Turbolinks.visit('/notifications/'+$(link).val()+'/'+route+location.search)
 }
