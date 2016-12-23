@@ -234,6 +234,11 @@ td.keys {
     right: 10px;
   }
 }
+.owner-label, .repo-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 .sidebar-icon {
   display: inline-block;
