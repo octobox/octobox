@@ -42,11 +42,28 @@ $( document ).ready(function() {
         row_index -= 1;
       }
     }
+    if ( e.which == 88 ) { // x
+      $('td.current').parent().find("input[type=checkbox]").prop('checked', function (i, value) {
+        return !value;
+      });
+    }
     if ( e.which == 83 ) { // s
       $('td.current').parent().find('.toggle-star').click();
     }
     if ( e.which == 89 ) { // y
-      $('td.current').parent().find('.archive').click();
+      if ( $(".table-notifications tr").length == 0 ) return;
+      
+      marked = $(".table-notifications input:checked");
+      if ( marked.length > 0 ) {
+        ids = marked.map(function() { return this.value; }).get();
+      } else {
+        current_id = $('td.current input.archive').val();
+        ids = [ current_id ];
+      }
+      $.post( "/notifications/archive_selected", { 'id[]': ids } ).done(function () {
+        row_index -= ids.length;
+        Turbolinks.visit("/"+location.search);
+      });
     }
     if ( e.which == 13 || e.which == 79 ) { // Enter | o
       e.preventDefault();

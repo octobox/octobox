@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :notifications, only: [] do
     collection do
       post :archive, to: 'notifications#archive_all'
+      post :archive_selected
       post :sync
     end
 

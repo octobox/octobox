@@ -41,6 +41,11 @@ class NotificationsController < ApplicationController
     redirect_to root_path
   end
 
+  def archive_selected
+    current_user.notifications.where(id: params[:id]).update_all archived: true
+    head :ok
+  end
+
   def unarchive
     @notification.update_columns archived: false
     redirect_to root_path(type: params[:type], repo: params[:repo], archive: true)
