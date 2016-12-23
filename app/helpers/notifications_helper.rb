@@ -5,13 +5,14 @@ module NotificationsHelper
 
   def filters
     {
-      reason:  params[:reason],
-      status:  params[:status],
-      repo:    params[:repo],
-      type:    params[:type],
-      archive: params[:archive],
-      starred: params[:starred],
-      owner: params[:owner]
+      reason:   params[:reason],
+      status:   params[:status],
+      repo:     params[:repo],
+      type:     params[:type],
+      archive:  params[:archive],
+      starred:  params[:starred],
+      owner:    params[:owner],
+      per_page: params[:per_page]
     }
   end
 
