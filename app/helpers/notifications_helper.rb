@@ -17,4 +17,8 @@ module NotificationsHelper
   def any_active_filters?
     [:status, :reason, :type, :repo].any?{|param| filters[param].present? }
   end
+
+  def filtered_params(override = {})
+    filters.merge(override)
+  end
 end
