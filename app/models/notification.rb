@@ -45,7 +45,8 @@ class Notification < ApplicationRecord
                                  end
           end
 
-          n.update(attrs)
+          n.attributes = attrs
+          n.save if n.changed?
         rescue ActiveRecord::RecordNotUnique
           nil
         end
