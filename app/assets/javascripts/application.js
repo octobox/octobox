@@ -96,11 +96,11 @@ function clickCurrentRow(cssClass) {
 function moveCursor(upOrDown) {
   var current = $('td.current');
   var parent = $(current).parent()
-  var target = nextOrPrev === 'up' ? parent.next() : parent.prev()
+  var target = upOrDown === 'up' ? parent.next() : parent.prev()
   if(target.length > 0) {
     $(current).removeClass("current");
     $(target).find('td').first().addClass("current");
-    row_index += nextOrPrev === 'up' ? 1 : -1;
+    row_index += upOrDown === 'up' ? 1 : -1;
   }
 }
 
