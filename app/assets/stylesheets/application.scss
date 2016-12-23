@@ -220,7 +220,11 @@ td.keys {
       padding: 5px 15px;
 
       &.repo-label {
-        padding-left:30px;
+        padding-left: 25px;
+
+        .octicon {
+          margin-right: 5px;
+        }
       }
 
       .label {
