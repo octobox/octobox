@@ -15,6 +15,9 @@ document.addEventListener("turbolinks:load", function() {
     $(this).toggleClass("star-active star-inactive")
     $.get('/notifications/'+$(this).data('id')+'/star')
   });
+  $('.sync .octicon').on('click', function() {
+    $(this).toggleClass('spinning')
+  });
 });
 
 // Add key events only once
@@ -22,7 +25,7 @@ document.addEventListener("turbolinks:load", function() {
 $( document ).ready(function() {
 
   var row_index = 1
-  
+
   $(document).keydown(function(e) {
     if ( e.which == 74 ) {  // j
       current = $('td.current');
@@ -59,11 +62,11 @@ $( document ).ready(function() {
       $("a.sync").click();
     }
   });
-  
+
   document.addEventListener("turbolinks:before-cache", function() {
     $('td.current').removeClass("current");
   });
-  
+
   document.addEventListener("turbolinks:load", function() {
     row_index = Math.min(row_index, $(".table-notifications tr").length);
     row_index = Math.max(row_index, 1);
@@ -73,10 +76,6 @@ $( document ).ready(function() {
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.row-offcanvas').toggleClass('active')
-});
-
-$(document).on('click', '.sync', function () {
-  $('.sync .octicon').toggleClass('spinning')
 });
 
 if(!('ontouchstart' in window))
