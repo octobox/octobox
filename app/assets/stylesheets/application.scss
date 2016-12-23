@@ -218,6 +218,11 @@ td.keys {
     }
     &.filter {
       padding: 5px 15px;
+
+      &.repo-label {
+        padding-left:30px;
+      }
+
       .label {
         top: 6px;
       }
