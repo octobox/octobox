@@ -18,11 +18,9 @@
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-              <li><%= link_to '20', root_path(per_page: 20, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
-              <li><%= link_to '40', root_path(per_page: 40, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
-              <li><%= link_to '60', root_path(per_page: 60, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
-              <li><%= link_to '80', root_path(per_page: 80, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
-              <li><%= link_to '100', root_path(per_page: 100, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
+              <% %w(20 40 60 80 100).map do |pagination_interval| %>
+                <li><%= link_to pagination_interval, root_path(per_page: pagination_interval.to_i, status: params[:status], type: params[:type], repo: params[:repo], archive: params[:archive]) %></li>
+              <% end %>
             </ul>
           </div>
           <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
