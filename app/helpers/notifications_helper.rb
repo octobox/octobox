@@ -15,6 +15,6 @@ module NotificationsHelper
   end
 
   def any_active_filters?
-    filters[:reason].present? || filters[:status].present? || filters[:repo].present? || filters[:type].present?
+    [:status, :reason, :type, :repo].any?{|param| filters[param].present? }
   end
 end
