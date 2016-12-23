@@ -218,6 +218,11 @@ td.keys {
     }
     &.filter {
       padding: 5px 15px;
+
+      &.repo-label {
+        padding-left: 42px;
+      }
+
       .label {
         top: 6px;
       }
@@ -228,6 +233,11 @@ td.keys {
     position: absolute;
     right: 10px;
   }
+}
+.owner-label, .repo-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .sidebar-icon {
