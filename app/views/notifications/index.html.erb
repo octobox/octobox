@@ -35,7 +35,7 @@
 
         <% if @notifications.any? %>
           <table class='table table-hover table-notifications'>
-            <%= render @notifications %>
+            <%= render partial: 'notification', collection: @notifications %>
           </table>
         <% elsif no_url_filter_parameters_present %>
           <div class="blankslate blankslate-spacious blankslate-clean-background">
