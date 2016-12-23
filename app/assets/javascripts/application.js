@@ -131,6 +131,20 @@ function sync() {
   $("a.sync").click();
 }
 
+function scrollToCursor() {
+  table_offset = $('.table-notifications').position().top;
+  cursor_offset = $('td.current').offset().top;
+  cursor_relative_offset = $('td.current').position().top;
+  cursor_height = $('td.current').height();
+  menu_height = $("#octobox-menu").height();
+  scroll_top = $(document).scrollTop();
+  if ( cursor_offset < menu_height + scroll_top ) {
+    $("html, body").animate({
+      scrollTop: table_offset + cursor_relative_offset - cursor_height
+    }, 0);
+  }
+}
+
 function moveCursor(upOrDown) {
   var current = $('td.current');
   var parent = $(current).parent()
@@ -139,6 +153,7 @@ function moveCursor(upOrDown) {
     $(current).removeClass("current");
     $(target).find('td').first().addClass("current");
     row_index += upOrDown === 'up' ? 1 : -1;
+    scrollToCursor();
   }
 }
 
