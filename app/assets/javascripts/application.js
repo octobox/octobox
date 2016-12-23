@@ -100,8 +100,7 @@ function archive() {
     }
     window.current_id = current.find('input').val();
     if ( $.inArray(window.current_id, ids ) > -1 ) {
-      window.row_index -= ids.length;
-      window.current_id = undefined;
+      window.current_id = $(".table-notifications input:not(:checked)").last().val();
     } 
     Turbolinks.visit("/"+location.search);
   });
