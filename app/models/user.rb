@@ -22,10 +22,6 @@ class User < ApplicationRecord
     update_attributes(github_attributes)
   end
 
-  def archive_all
-    notifications.update_all(archived: true)
-  end
-
   def sync_notifications
     Notification.download(self)
   end
