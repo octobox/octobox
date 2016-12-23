@@ -5,8 +5,14 @@
 //= require_tree .
 
 document.addEventListener("turbolinks:load", function() {
-  $('.archive').click(function() {
-    loadTurbolinksArchiveURL(this, 'archive')
+  $('button.archive_selected').click(function () { archive(); });
+  $('input.archive').change(function() {
+    marked = $(".table-notifications input:checked");
+    if ( marked.length > 0 ) {
+      $('button.archive_selected').show();
+    } else {
+      $('button.archive_selected').hide();
+    }
   });
   $('.unarchive').click(function() {
     loadTurbolinksArchiveURL(this, 'unarchive')
@@ -41,6 +47,7 @@ if(!('ontouchstart' in window))
 
 function enableKeyboardShortcuts() {
   window.row_index = 1
+  window.current_id = undefined
 
   $(document).keydown(function(e) {
     var shortcutFunction = shortcuts[e.which]
@@ -52,6 +59,7 @@ var shortcuts = {
   74:  cursorDown,      // j
   75:  cursorUp,        // k
   83:  toggleStar,      // s
+  88:  markCurrent,     // x
   89:  archive,         // y
   13:  openCurrentLink, // Enter
   79:  openCurrentLink, // o
@@ -68,8 +76,34 @@ function cursorUp() {
   moveCursor('down')
 }
 
+function markCurrent() {
+  checkbox = $('td.current').parent().find("input[type=checkbox]")
+  checkbox.prop('checked', function (i, value) {
+    return !value;
+  });
+  checkbox.change();
+}
+
 function archive() {
-  clickCurrentRow('.archive')
+  if ( $(".table-notifications tr").length == 0 ) return;
+  marked = $(".table-notifications input:checked");
+  if ( marked.length > 0 ) {
+    ids = marked.map(function() { return this.value; }).get();
+  } else {
+    ids = [ $('td.current input.archive').val() ];
+  }
+  $.post( "/notifications/archive_selected", { 'id[]': ids } ).done(function () {
+    // calculating new position of the cursor
+    current = $('td.current').parent();
+    while ( $.inArray(current.find('input').val(), ids) > -1 && current.next().length > 0) {
+      current = current.next();
+    }
+    window.current_id = current.find('input').val();
+    if ( $.inArray(window.current_id, ids ) > -1 ) {
+      window.current_id = $(".table-notifications input:not(:checked)").last().val();
+    } 
+    Turbolinks.visit("/"+location.search);
+  });
 }
 
 function toggleStar() {
@@ -105,8 +139,13 @@ function moveCursor(upOrDown) {
 }
 
 function recoverPreviousCursorPosition() {
-  row_index = Math.min(row_index, $(".table-notifications tr").length);
-  row_index = Math.max(row_index, 1);
+  if ( current_id == undefined ) {
+    row_index = Math.min(row_index, $(".table-notifications tr").length);
+    row_index = Math.max(row_index, 1);
+  } else {
+    row_index = $("input[value=" + current_id + "]").parents('tr').index() + 1;
+    current_id = undefined;
+  }
   $(".table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current");
 }
 

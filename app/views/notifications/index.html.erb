@@ -29,8 +29,11 @@
                   method: :post
                 )
             %>
-          <% end %>
-          <%= render 'filter-list' %>
+            <% end %>
+            <button type="button" class="btn btn-default archive_selected" style="display:none;">
+              Archive selected
+            </button>
+            <%= render 'filter-list' %>
         </div>
 
         <% if @notifications.any? %>
