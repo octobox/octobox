@@ -5,22 +5,27 @@ class NotificationsController < ApplicationController
   before_action :find_notification, only: [:archive, :unarchive, :star]
 
   def index
-    scope = current_user.notifications
-    scope = params[:archive].present? ? scope.archived : scope.inbox
+    scope    = current_user.notifications
+
+    scope = if params[:starred].present?
+              scope.starred
+            elsif params[:archive].present?
+              scope.archived
+            else
+              scope.inbox
+            end
 
     @types               = scope.distinct.group(:subject_type).count
     @statuses            = scope.distinct.group(:unread).count
     @reasons             = scope.distinct.group(:reason).count
     @unread_repositories = scope.distinct.group(:repository_full_name).count
-    @starred             = scope.starred.count
 
     scope = scope.repo(params[:repo])     if params[:repo].present?
     scope = scope.reason(params[:reason]) if params[:reason].present?
     scope = scope.type(params[:type])     if params[:type].present?
     scope = scope.status(params[:status]) if params[:status].present?
-    scope = scope.starred                 if params[:starred].present?
 
-    @notifications = scope.newest.page(params[:page])
+    @notifications = scope.newest.page(page).per(per_page)
   end
 
   def archive
@@ -73,5 +78,16 @@ class NotificationsController < ApplicationController
 
   def archive_params
     params.permit(:repo, :reason, :type, :status, :starred)
+  end
+
+  def page
+    params[:page].to_i rescue 1
+  end
+
+  def per_page
+    per_page = params[:per_page].to_i rescue 20
+    per_page = 20 if per_page < 1
+    raise ActiveRecord::RecordNotFound if per_page > 100
+    per_page
   end
 end

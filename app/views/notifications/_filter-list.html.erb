@@ -1,6 +1,4 @@
-<% filters = { reason: params[:reason], status: params[:status], repo: params[:repo], type: params[:type], starred: params[:starred] } %>
-
-<% if filters[:reason].present? || filters[:status].present? || filters[:repo].present? || filters[:type].present? || filters[:starred].present? %>
+<% if any_active_filters? %>
   <span class="filter-options">
     <span class="btn-group">
       <a href="#" class="btn btn-default filter-label" role="button" aria-disabled="true">Filter:</a>
@@ -13,7 +11,7 @@
       <% end %>
 
       <% if filters[:status].present? %>
-        <%= link_to root_path(filters.except(:reason)), class: 'btn btn-default' do %>
+        <%= link_to root_path(filters.except(:status)), class: 'btn btn-default' do %>
           <%= octicon 'x', :height => 16 %>
           <%= (params[:status] === 'true'? 'Unread' : 'Read') %>
         <% end %>
@@ -30,13 +28,6 @@
         <%= link_to root_path(filters.except(:type)), class: 'btn btn-default' do %>
           <%= octicon 'x', :height => 16 %>
           <%= params[:type].underscore.humanize %>
-        <% end %>
-      <% end %>
-
-      <% if filters[:starred].present? %>
-        <%= link_to root_path(filters.except(:starred)), class: 'btn btn-default' do %>
-          <%= octicon 'x', :height => 16 %>
-          <%= (params[:starred] === 'true'? 'Starred' : 'Unstarred') %>
         <% end %>
       <% end %>
 

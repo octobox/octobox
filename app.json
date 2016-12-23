@@ -1,7 +1,7 @@
 {
   "name": "Octobox",
   "description": "Take back control of your GitHub Notifications",
-  "repository": "https://github.com/andrew/octobox",
+  "repository": "https://github.com/octobox/octobox",
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"
   },
@@ -16,6 +16,7 @@
     }
   },
   "addons": [
-    "heroku-postgresql"
+    "heroku-postgresql",
+    "memcachedcloud"
   ]
 }

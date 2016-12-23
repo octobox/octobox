@@ -4,9 +4,9 @@ Take back control of your GitHub Notifications with [Octobox]( https://octobox.i
 
 ![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21385758/bd8ebcee-c767-11e6-9017-c93c5921594b.png)
 
-[![Build Status](https://travis-ci.org/andrew/octobox.svg?branch=master)](https://travis-ci.org/andrew/octobox)
-[![Code Climate](https://img.shields.io/codeclimate/github/andrew/octobox.svg?style=flat)](https://codeclimate.com/github/andrew/octobox)
-[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/andrew/octobox.svg?style=flat)](https://codeclimate.com/github/andrew/octobox)
+[![Build Status](https://travis-ci.org/octobox/octobox.svg?branch=master)](https://travis-ci.org/octobox/octobox)
+[![Code Climate](https://img.shields.io/codeclimate/github/octobox/octobox.svg?style=flat)](https://codeclimate.com/github/octobox/octobox)
+[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/octobox/octobox.svg?style=flat)](https://codeclimate.com/github/octobox/octobox)
 
 ## Why is this a thing?
 
@@ -22,7 +22,7 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 
 Octobox is like a little baby. You have to host it yourself and it only works for one user at a time.
 
-Check out the open issues for a glimpse of the future: https://github.com/andrew/octobox/issues.
+Check out the open issues for a glimpse of the future: https://github.com/octobox/octobox/issues.
 
 ## Deployment to Heroku
 
@@ -43,8 +43,8 @@ And that's it :sparkles:
 
 ## Development
 
-The source code is hosted at [GitHub](https://github.com/andrew/octobox).
-You can report issues/feature requests on [GitHub Issues](https://github.com/andrew/octobox/issues).
+The source code is hosted at [GitHub](https://github.com/octobox/octobox).
+You can report issues/feature requests on [GitHub Issues](https://github.com/octobox/octobox/issues).
 For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
 
 ### Getting Started
@@ -153,4 +153,4 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Copyright
 
-Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/andrew/octobox/blob/master/LICENSE.txt) for details.
+Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/octobox/octobox/blob/master/LICENSE.txt) for details.

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 class User < ApplicationRecord
-  has_many :notifications
+  has_many :notifications, dependent: :delete_all
 
   validates :github_id,    presence: true, uniqueness: true
   validates :access_token, presence: true, uniqueness: true
   validates :github_login, presence: true
 
-  after_create :sync_notifications
+  after_commit :sync_notifications, on: :create
 
   def self.find_by_auth_hash(auth_hash)
     User.find_by(github_id: auth_hash['uid'])

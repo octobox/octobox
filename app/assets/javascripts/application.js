@@ -48,7 +48,7 @@ if(!('ontouchstart' in window))
 function enableKeyboardShortcuts() {
   window.row_index = 1
   window.current_id = undefined
-  
+
   $(document).keydown(function(e) {
     var shortcutFunction = shortcuts[e.which]
     if (shortcutFunction) { shortcutFunction(e) }

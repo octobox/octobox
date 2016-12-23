@@ -1,3 +1,9 @@
-<li>
-  <%= link_to_unless current_page.last?, raw(t 'views.pagination.next'), url, :rel => 'next', :remote => remote %>
-</li>
+<% if current_page.last? %>
+  <li class="disabled">
+    <span><%= raw(t 'views.pagination.next') %></span>
+  </li>
+<% else %>
+  <li>
+    <%= link_to raw(t 'views.pagination.next'), url, :rel => 'next', :remote => remote %>
+  </li>
+<% end %>
