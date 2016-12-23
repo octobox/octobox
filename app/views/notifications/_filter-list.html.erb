@@ -31,6 +31,12 @@
         <% end %>
       <% end %>
 
+      <% if filters[:owner].present? %>
+        <%= link_to root_path(filters.except(:owner)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= params[:owner] %>
+        <% end %>
+      <% end %>
     </span>
   </span>
 <% end %>

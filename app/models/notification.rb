@@ -11,6 +11,7 @@ class Notification < ApplicationRecord
   scope :type,     ->(subject_type) { where(subject_type: subject_type) }
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :status,   ->(status)       { where(unread: status) }
+  scope :owner,    ->(owner_name)   { where(repository_owner_name: owner_name) }
 
   paginates_per 20
 

@@ -10,12 +10,13 @@ module NotificationsHelper
       repo:    params[:repo],
       type:    params[:type],
       archive: params[:archive],
-      starred: params[:starred]
+      starred: params[:starred],
+      owner: params[:owner]
     }
   end
 
   def any_active_filters?
-    [:status, :reason, :type, :repo].any?{|param| filters[param].present? }
+    [:status, :reason, :type, :repo, :owner].any?{|param| filters[param].present? }
   end
 
   def filtered_params(override = {})

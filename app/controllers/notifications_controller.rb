@@ -24,6 +24,7 @@ class NotificationsController < ApplicationController
     scope = scope.reason(params[:reason]) if params[:reason].present?
     scope = scope.type(params[:type])     if params[:type].present?
     scope = scope.status(params[:status]) if params[:status].present?
+    scope = scope.owner(params[:owner])   if params[:owner].present?
 
     @notifications = scope.newest.page(page).per(per_page)
   end
