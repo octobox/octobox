@@ -65,12 +65,23 @@
   <% end %>
   <%= menu_separator unless @reasons.empty? %>
 
-  <% @unread_repositories.sort.each do |repo_name, count| %>
-    <li class="<%= 'active' if params[:repo] == repo_name %>">
-      <%= link_to root_path(filtered_params(repo: repo_name)), class: 'filter' do %>
-        <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
-        <%= repo_name.split('/').last %>
-        <span class="label label-muted"><%= count %></span>
+  <% current_owner = ''
+     @unread_repositories.sort.each do |repo_name, count| %>
+     <% repo_owner, repo_label = repo_name.split('/') %>
+     <% if current_owner != repo_owner %>
+       <li class="<%= 'active' if params[:owner] == repo_owner %>">
+         <%= link_to root_path(filtered_params(owner: repo_owner).except(:repo)), class: 'filter' do %>
+           <%= image_tag "https://github.com/#{repo_owner}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
+           <%= repo_owner %>
+         <% end %>
+       </li>
+       <% current_owner = repo_owner %>
+     <% end %>
+
+     <li class="<%= 'active' if params[:repo] == repo_name || params[:owner] == repo_owner %>">
+        <%= link_to root_path(filtered_params(repo: repo_name).except(:owner)), class: 'filter repo-label' do %>
+          <%= repo_label %>
+          <span class="label label-muted"><%= count %></span>
       <% end %>
     </li>
   <% end %>
