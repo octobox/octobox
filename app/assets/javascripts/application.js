@@ -15,8 +15,8 @@ document.addEventListener("turbolinks:load", function() {
     $(this).toggleClass("star-active star-inactive")
     $.get('/notifications/'+$(this).data('id')+'/star')
   });
-  $('.sync .octicon').on('click', function() {
-    $(this).toggleClass('spinning')
+  $('a.sync').on('click', function() {
+    $(this).find('.octicon').toggleClass('spinning')
   });
 });
 
