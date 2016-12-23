@@ -21,6 +21,22 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/index'
   end
 
+  test 'renders the starred page' do
+    sign_in_as(@user)
+
+    get '/?starred=true'
+    assert_response :success
+    assert_template 'notifications/index'
+  end
+
+  test 'renders the archive page' do
+    sign_in_as(@user)
+
+    get '/?archive=true'
+    assert_response :success
+    assert_template 'notifications/index'
+  end
+
   test 'archives all notifications' do
     5.times.each { create(:notification, user: @user, archived: false) }
 
