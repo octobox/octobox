@@ -57,10 +57,10 @@ function enableKeyboardShortcuts() {
       }
     }
     if ( e.which === 83 ) { // s
-      $('td.current').parent().find('.toggle-star').click();
+      clickCurrentRow('.toggle-star')
     }
     if ( e.which === 89 ) { // y
-      $('td.current').parent().find('.archive').click();
+      clickCurrentRow('.archive')
     }
     if ( e.which === 13 || e.which === 79 ) { // Enter | o
       e.preventDefault();
@@ -83,4 +83,8 @@ function enableKeyboardShortcuts() {
     row_index = Math.max(row_index, 1);
     $(".table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current");
   });
+}
+
+function clickCurrentRow(cssClass) {
+  $('td.current').parent().find(cssClass).click();
 }
