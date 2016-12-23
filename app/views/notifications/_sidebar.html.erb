@@ -67,7 +67,7 @@
 
   <% @unread_repositories.sort.each do |repo_name, count| %>
     <li class="<%= 'active' if params[:repo] == repo_name %>">
-      <%= link_to root_path(repo: repo_name, archive: params[:archive]), class: 'filter' do %>
+      <%= link_to root_path(reason: params[:reason], type: params[:type], repo: repo_name, archive: params[:archive]), class: 'filter' do %>
         <%= image_tag "https://github.com/#{repo_name.split('/').first}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
         <%= repo_name.split('/').last %>
         <span class="label label-muted"><%= count %></span>
