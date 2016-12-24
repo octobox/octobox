@@ -23,4 +23,12 @@ module NotificationsHelper
   def filtered_params(override = {})
     filters.merge(override)
   end
+
+  def archive_selected_button(custom_class=nil)
+    action = params[:archive] ? 'unarchive' : 'archive'
+    button_tag(type: "button",
+               class: "archive_toggle #{action}_selected #{custom_class}") do
+      "#{action} selected".capitalize
+    end
+  end
 end

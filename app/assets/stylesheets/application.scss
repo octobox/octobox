@@ -437,3 +437,7 @@ td.keys {
 .spinning{
   animation: spin 1s infinite steps(90);
 }
+
+.archive_selected, .unarchive_selected {
+  display: none;
+}
