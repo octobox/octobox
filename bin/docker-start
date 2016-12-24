@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+while ! nc -z database.service.octobox.internal 5432; do
+  echo "Waiting for database to be available..."
+  sleep 1
+done
+
+bundle exec rake db:migrate
+rm -rf tmp/pids
+
+exec rails s -b 0.0.0.0
