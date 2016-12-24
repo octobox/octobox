@@ -61,7 +61,7 @@
         </div>
 
         <% if @notifications.any? %>
-          <table class='table table-hover table-notifications'>
+          <table class='table table-hover table-notifications js-table-notifications'>
             <%= render partial: 'notification', collection: @notifications %>
           </table>
         <% elsif no_url_filter_parameters_present %>

@@ -7,7 +7,7 @@
 document.addEventListener("turbolinks:load", function() {
   $('button.archive_selected, button.unarchive_selected').click(function () { toggleArchive(); });
   $('input.archive, input.unarchive').change(function() {
-    marked = $(".table-notifications input:checked");
+    marked = $(".js-table-notifications input:checked");
     if ( marked.length > 0 ) {
       $('button.archive_selected, button.unarchive_selected').show();
     } else {
@@ -25,7 +25,7 @@ document.addEventListener("turbolinks:load", function() {
 });
 
 document.addEventListener("turbolinks:before-cache", function() {
-  $('td.current').removeClass("current");
+  $('td.js-current').removeClass("current js-current");
 });
 
 // Add shortcut events only once
@@ -74,7 +74,7 @@ function cursorUp() {
 }
 
 function markCurrent() {
-  checkbox = $('td.current').parent().find("input[type=checkbox]")
+  checkbox = $('td.js-current').parent().find("input[type=checkbox]")
   checkbox.prop('checked', function (i, value) {
     return !value;
   });
@@ -82,7 +82,7 @@ function markCurrent() {
 }
 
 function toggleArchive() {
-  if ( $(".table-notifications tr").length == 0 ) return;
+  if ( $(".js-table-notifications tr").length == 0 ) return;
 
   var cssClass, value;
   
@@ -94,28 +94,28 @@ function toggleArchive() {
     value = false
   }
 
-  marked = $(".table-notifications input:checked");
+  marked = $(".js-table-notifications input:checked");
   if ( marked.length > 0 ) {
     ids = marked.map(function() { return this.value; }).get();
   } else {
-    ids = [ $('td.current input'+ cssClass).val() ];
+    ids = [ $('td.js-current input'+ cssClass).val() ];
   }
   $.post( "/notifications/archive_selected", { 'id[]': ids, 'value': value } ).done(function () {
     // calculating new position of the cursor
-    current = $('td.current').parent();
+    current = $('td.js-current').parent();
     while ( $.inArray(current.find('input').val(), ids) > -1 && current.next().length > 0) {
       current = current.next();
     }
     window.current_id = current.find('input').val();
     if ( $.inArray(window.current_id, ids ) > -1 ) {
-      window.current_id = $(".table-notifications input:not(:checked)").last().val();
+      window.current_id = $(".js-table-notifications input:not(:checked)").last().val();
     }
     Turbolinks.visit("/"+location.search);
   });
 }
 
 function toggleStar() {
-  $('td.current').parent().find('.toggle-star').click();
+  $('td.js-current').parent().find('.toggle-star').click();
 }
 
 function openModal() {
@@ -124,7 +124,7 @@ function openModal() {
 
 function openCurrentLink(e) {
   e.preventDefault(e);
-  $('td.current').parent().find('.link')[0].click();
+  $('td.js-current').parent().find('.link')[0].click();
 }
 
 function sync() {
@@ -132,13 +132,14 @@ function sync() {
 }
 
 function scrollToCursor() {
-  table_offset = $('.table-notifications').position().top;
-  cursor_offset = $('td.current').offset().top;
-  cursor_relative_offset = $('td.current').position().top;
-  cursor_height = $('td.current').height();
-  menu_height = $("#octobox-menu").height();
-  scroll_top = $(document).scrollTop();
-  window_height = $(window).height();
+  var current = $('td.js-current');
+  var table_offset = $('.js-table-notifications').position().top;
+  var cursor_offset = current.offset().top;
+  var cursor_relative_offset = current.position().top;
+  var cursor_height = current.height();
+  var menu_height = $(".js-octobox-menu").height();
+  var scroll_top = $(document).scrollTop();
+  var window_height = $(window).height();
   if ( cursor_offset < menu_height + scroll_top ) {
     $("html, body").animate({
       scrollTop: table_offset + cursor_relative_offset - cursor_height
@@ -152,12 +153,12 @@ function scrollToCursor() {
 }
 
 function moveCursor(upOrDown) {
-  var current = $('td.current');
+  var current = $('td.js-current');
   var parent = $(current).parent()
   var target = upOrDown === 'up' ? parent.next() : parent.prev()
   if(target.length > 0) {
-    $(current).removeClass("current");
-    $(target).find('td').first().addClass("current");
+    $(current).removeClass("current js-current");
+    $(target).find('td').first().addClass("current js-current");
     row_index += upOrDown === 'up' ? 1 : -1;
     scrollToCursor();
   }
@@ -165,13 +166,13 @@ function moveCursor(upOrDown) {
 
 function recoverPreviousCursorPosition() {
   if ( current_id == undefined ) {
-    row_index = Math.min(row_index, $(".table-notifications tr").length);
+    row_index = Math.min(row_index, $(".js-table-notifications tr").length);
     row_index = Math.max(row_index, 1);
   } else {
     row_index = $("input[value=" + current_id + "]").parents('tr').index() + 1;
     current_id = undefined;
   }
-  $(".table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current");
+  $(".js-table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current js-current");
 }
 
 function loadTurbolinksArchiveURL(link, route) {
