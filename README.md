@@ -108,21 +108,19 @@ Finally you can boot the rails app:
 ```bash
 rails s
 ```
-#### Docker Compose
+#### Docker
 
-If you're familiar with [Docker](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/), the included `docker-compose.yml` configuration allows you to spin up the application locally.
+You can use Docker to run Octobox in development.
 
-First, launch an instance of PostgreSQL and wait for it to fully initialize:
+First, [install Docker](https://docs.docker.com/engine/installation/). If you've got run macOS or Windows, Docker for Mac/Windows makes this really easy.
 
-```bash
-docker-compose up database
-```
-
-Once the PostgreSQL initialization process is complete, launch the application using another terminal session:
+Then, run:
 
 ```bash
-GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up app
+GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up --build
 ```
+
+Octobox will be running on [http://localhost:3000](http://localhost:3000).
 
 **Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
 
