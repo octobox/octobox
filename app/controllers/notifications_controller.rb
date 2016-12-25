@@ -26,7 +26,9 @@ class NotificationsController < ApplicationController
     scope = scope.status(params[:status]) if params[:status].present?
     scope = scope.owner(params[:owner])   if params[:owner].present?
 
-    @notifications = scope.newest.page(page).per(per_page)
+    total_pages = (scope.count / per_page.to_f).ceil
+    page_num = [page, total_pages].min
+    @notifications = scope.newest.page(page_num).per(per_page)
   end
 
   def archive
