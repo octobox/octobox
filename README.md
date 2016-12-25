@@ -24,12 +24,6 @@ Octobox is like a little baby. You have to host it yourself and it only works fo
 
 Check out the open issues for a glimpse of the future: https://github.com/octobox/octobox/issues.
 
-## Deployment to Heroku
-
-You can host your own instance of Octobox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
 ## Running Octobox for [GitHub Enterprise](https://enterprise.github.com/home)
 In order to setup Octobox for your GitHub Enterprise instance all you need you do is add your enterprise domain to the `.env` file / deployed environment.
 
