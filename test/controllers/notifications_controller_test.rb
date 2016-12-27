@@ -45,6 +45,14 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 20
   end
 
+  test 'redirect back to last page of results if page is out of bounds' do
+    sign_in_as(@user)
+    25.times.each { create(:notification, user: @user, archived: false) }
+
+    get '/?page=3'
+    assert_redirected_to '/?page=2'
+  end
+
   test 'toggles starred on a notification' do
     notification = create(:notification, user: @user, starred: false)
 
