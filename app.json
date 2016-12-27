@@ -17,6 +17,7 @@
   },
   "addons": [
     "heroku-postgresql",
-    "memcachedcloud"
+    "memcachedcloud",
+    "scheduler"
   ]
 }

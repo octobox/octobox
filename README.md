@@ -124,6 +124,38 @@ Octobox will be running on [http://localhost:3000](http://localhost:3000).
 
 **Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
 
+### Sync notifications automatically
+
+Now that you've set all to go you can configure the app to sync the notifications automatically, there is a rake task that will do this for every user
+
+```
+rake tasks:sync_notifications
+```
+
+You will need to configure this to run automatically
+
+#### Heroku
+
+Create a Heroku Scheduler
+
+```
+heroku addons:create scheduler:standard
+```
+
+Visit the Heroku Scheduler resource and add a new job to run `rake tasks:sync_notifications` daily
+
+#### Cronjob
+
+Run `crontab -e`
+
+Add the following
+
+```
+@daily cd octobox_path && /usr/local/bin/rake RAILS_ENV=production tasks:sync_notifications
+```
+
+To find the full path for your rake executable, run `which rake`
+
 ### Keyboard shortcuts
 
 You can use keyboard shortcuts to navigate and perform certain actions:
