@@ -18,8 +18,6 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :archive
-      get :unarchive
       get :star
     end
   end

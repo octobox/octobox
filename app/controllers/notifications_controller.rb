@@ -29,11 +29,6 @@ class NotificationsController < ApplicationController
     @notifications = scope.newest.page(page).per(per_page)
   end
 
-  def archive
-    @notification.update_columns archived: true
-    redirect_to root_path(type: params[:type], repo: params[:repo])
-  end
-
   def archive_all
     scope = current_user.notifications.inbox
 
@@ -51,11 +46,6 @@ class NotificationsController < ApplicationController
   def archive_selected
     current_user.notifications.where(id: params[:id]).update_all archived: params[:value]
     head :ok
-  end
-
-  def unarchive
-    @notification.update_columns archived: false
-    redirect_to root_path(type: params[:type], repo: params[:repo], archive: true)
   end
 
   def star

@@ -69,28 +69,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 20
   end
 
-  test 'archives a notification' do
-    notification = create(:notification, user: @user, archived: false)
-
-    sign_in_as(@user)
-
-    get "/notifications/#{notification.id}/archive"
-    assert_response :redirect
-
-    assert notification.reload.archived?
-  end
-
-  test 'unarchives a notification' do
-    notification = create(:notification, user: @user, archived: true)
-
-    sign_in_as(@user)
-
-    get "/notifications/#{notification.id}/unarchive"
-    assert_response :redirect
-
-    refute notification.reload.archived?
-  end
-
   test 'toggles starred on a notification' do
     notification = create(:notification, user: @user, starred: false)
 
