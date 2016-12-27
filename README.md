@@ -162,6 +162,7 @@ To find the full path for your rake executable, run `which rake`
 
 You can use keyboard shortcuts to navigate and perform certain actions:
 
+ - `a` - Select/deselect all
  - `r` or `.` - refresh list
  - `j` - move down the list
  - `k` - move up the list
