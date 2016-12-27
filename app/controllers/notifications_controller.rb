@@ -62,10 +62,6 @@ class NotificationsController < ApplicationController
     return render 'pages/home' unless logged_in?
   end
 
-  def archive_params
-    params.permit(:owner, :repo, :reason, :type, :status, :starred)
-  end
-
   def page
     params[:page].to_i rescue 1
   end
