@@ -7,10 +7,16 @@
 document.addEventListener("turbolinks:load", function() {
   $('button.archive_selected, button.unarchive_selected').click(function () { toggleArchive(); });
   $('input.archive, input.unarchive').change(function() {
-    marked = $(".js-table-notifications input:checked");
+    var marked = $(".js-table-notifications input:checked");
     if ( marked.length > 0 ) {
+      if ($(".js-table-notifications input").length === marked.length){
+        $(".js-select_all").prop('checked', true)
+      } else {
+        $(".js-select_all").prop("indeterminate", true);
+      }
       $('button.archive_selected, button.unarchive_selected').show();
     } else {
+      $(".js-select_all").prop('checked', false)
       $('button.archive_selected, button.unarchive_selected').hide();
     }
   });
@@ -22,6 +28,10 @@ document.addEventListener("turbolinks:load", function() {
     $(this).toggleClass('spinning')
   });
   recoverPreviousCursorPosition()
+
+  $('.js-select_all').change(function() {
+    checkAll($(".js-select_all").prop('checked'))
+  })
 });
 
 document.addEventListener("turbolinks:before-cache", function() {
@@ -53,6 +63,7 @@ function enableKeyboardShortcuts() {
 }
 
 var shortcuts = {
+  65:  checkSelectAll, // a
   74:  cursorDown,      // j
   75:  cursorUp,        // k
   83:  toggleStar,      // s
@@ -81,11 +92,20 @@ function markCurrent() {
   checkbox.change();
 }
 
+function checkAll(checked) {
+  $(".js-table-notifications input").prop("checked", checked).trigger('change');
+}
+
+function checkSelectAll() {
+  var allSelected = $(".js-select_all").prop('checked')
+  $(".js-select_all").prop('checked', !allSelected).trigger('change')
+}
+
 function toggleArchive() {
   if ( $(".js-table-notifications tr").length == 0 ) return;
 
   var cssClass, value;
-  
+
   if ( $(".archive_toggle").hasClass("archive_selected") ) {
     cssClass = '.archive'
     value = true

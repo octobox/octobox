@@ -29,20 +29,6 @@ class NotificationsController < ApplicationController
     @notifications = scope.newest.page(page).per(per_page)
   end
 
-  def archive_all
-    scope = current_user.notifications.inbox
-
-    scope = scope.repo(archive_params[:repo])     if archive_params[:repo].present?
-    scope = scope.reason(archive_params[:reason]) if archive_params[:reason].present?
-    scope = scope.type(archive_params[:type])     if archive_params[:type].present?
-    scope = scope.status(archive_params[:status]) if archive_params[:status].present?
-    scope = scope.owner(archive_params[:owner])   if archive_params[:owner].present?
-    scope = scope.starred                         if archive_params[:starred].present?
-
-    scope.update_all(archived: true)
-    redirect_to root_path
-  end
-
   def archive_selected
     current_user.notifications.where(id: params[:id]).update_all archived: params[:value]
     head :ok
