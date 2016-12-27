@@ -26,6 +26,7 @@ class NotificationsController < ApplicationController
     scope = scope.status(params[:status]) if params[:status].present?
     scope = scope.owner(params[:owner])   if params[:owner].present?
 
+    check_out_of_bounds(scope)
     @notifications = scope.newest.page(page).per(per_page)
   end
 
@@ -59,6 +60,13 @@ class NotificationsController < ApplicationController
   end
 
   private
+
+  def check_out_of_bounds(scope)
+    return unless page > 1
+    total_pages = (scope.count / per_page.to_f).ceil
+    page_num = [page, total_pages].min
+    redirect_to url_for(page: page_num) if page_num != page
+  end
 
   def find_notification
     @notification = current_user.notifications.find(params[:id])
