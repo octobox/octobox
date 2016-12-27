@@ -26,6 +26,13 @@ You could also host it yourself, in Heroku or otherwise.
 
 Check out the open issues for a glimpse of the future: https://github.com/octobox/octobox/issues.
 
+## Requirements
+
+Web notifications must be enabled in your GitHub settings for Octobox to work: https://github.com/settings/notifications
+
+<img width="757" alt="Notifications settings screen" src="https://cloud.githubusercontent.com/assets/1060/21509954/3a01794c-cc86-11e6-9bbc-9b33b55f85d1.png">
+
+
 ## Deployment to Heroku
 
 You can host your own instance of Octobox using Heroku. Heroku will ask you to provide a 'personal access token' which you can create on GitHub. When creating it, make sure you enable the notifications scope on it.
