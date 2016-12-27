@@ -20,7 +20,9 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 
 ## What state is the project in right now?
 
-Octobox is like a little baby. You have to host it yourself and it only works for one user at a time.
+You can use [a hosted version](https://octobox.io) right now.
+
+You could also host it yourself, in Heroku or otherwise.
 
 Check out the open issues for a glimpse of the future: https://github.com/octobox/octobox/issues.
 
