@@ -53,6 +53,21 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to '/?page=2'
   end
 
+  test 'archives multiple notifications' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, archived: false)
+    notification2 = create(:notification, user: @user, archived: false)
+    notification3 = create(:notification, user: @user, archived: false)
+
+    post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }
+
+    assert_response :ok
+
+    assert notification1.reload.archived?
+    assert notification2.reload.archived?
+    refute notification3.reload.archived?
+  end
+
   test 'toggles starred on a notification' do
     notification = create(:notification, user: @user, starred: false)
 
