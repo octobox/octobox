@@ -1,0 +1,48 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#octobox-menu" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, class: 'img-rounded navbar-avatar' %>
+      </button>
+      <a class="navbar-brand" href="/">
+        <%= octobox_icon(28) %>
+        Octobox
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse js-octobox-menu" id="octobox-menu">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
+            <%= current_user.github_login %> <span class="caret hidden-xs"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <%= link_to "https://github.com/", target: "_blank" do %>
+                <%= octicon 'mark-github', height: 16, class: 'text-muted' %>
+                GitHub Dashboard
+              <% end %>
+            </li>
+            <li>
+              <%= link_to "https://github.com/octobox/octobox/issues", target: "_blank" do %>
+                <%= octicon 'question', height: 16, class: 'text-muted' %>
+                Octobox Support
+              <% end %>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li>
+              <%= link_to logout_path do %>
+                <%= octicon 'sign-out', height: 16, class: 'text-muted' %>
+                Logout
+              <% end %>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

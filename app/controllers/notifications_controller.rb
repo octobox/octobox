@@ -2,59 +2,84 @@
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
   before_action :render_home_page_unless_authenticated, only: [:index]
+  before_action :find_notification, only: [:archive, :unarchive, :star]
 
   def index
-    scope = current_user.notifications
-    scope = params[:archive].present? ? scope.archived : scope.inbox
+    scope    = current_user.notifications
+
+    scope = if params[:starred].present?
+              scope.starred
+            elsif params[:archive].present?
+              scope.archived
+            else
+              scope.inbox
+            end
 
     @types               = scope.distinct.group(:subject_type).count
     @statuses            = scope.distinct.group(:unread).count
     @reasons             = scope.distinct.group(:reason).count
     @unread_repositories = scope.distinct.group(:repository_full_name).count
-    @starred             = scope.starred.count
 
     scope = scope.repo(params[:repo])     if params[:repo].present?
     scope = scope.reason(params[:reason]) if params[:reason].present?
     scope = scope.type(params[:type])     if params[:type].present?
     scope = scope.status(params[:status]) if params[:status].present?
-    scope = scope.starred                 if params[:starred].present?
+    scope = scope.owner(params[:owner])   if params[:owner].present?
 
-    @notifications = scope.newest.page(params[:page])
-  end
-
-  def archive
-    notification = current_user.notifications.find(params[:id])
-    notification.update_attributes(archived: true)
-
-    redirect_to root_path(type: params[:type], repo: params[:repo])
+    @notifications = scope.newest.page(page).per(per_page)
   end
 
   def archive_all
-    current_user.archive_all
+    scope = current_user.notifications.inbox
+
+    scope = scope.repo(archive_params[:repo])     if archive_params[:repo].present?
+    scope = scope.reason(archive_params[:reason]) if archive_params[:reason].present?
+    scope = scope.type(archive_params[:type])     if archive_params[:type].present?
+    scope = scope.status(archive_params[:status]) if archive_params[:status].present?
+    scope = scope.owner(archive_params[:owner])   if archive_params[:owner].present?
+    scope = scope.starred                         if archive_params[:starred].present?
+
+    scope.update_all(archived: true)
     redirect_to root_path
   end
 
-  def unarchive
-    notification = Notification.find(params[:id])
-    notification.update_attributes(archived: false)
-    redirect_to root_path(type: params[:type], repo: params[:repo], archive: true)
+  def archive_selected
+    current_user.notifications.where(id: params[:id]).update_all archived: params[:value]
+    head :ok
   end
 
   def star
-    notification = current_user.notifications.find(params[:id])
-    starred = notification.starred?
-    notification.update_attributes(starred: !starred)
+    @notification.update_columns starred: !@notification.starred?
     head :ok
   end
 
   def sync
-    Notification.download(current_user)
+    current_user.sync_notifications
     redirect_to root_path(type: params[:type], repo: params[:repo])
   end
 
   private
 
+  def find_notification
+    @notification = current_user.notifications.find(params[:id])
+  end
+
   def render_home_page_unless_authenticated
     return render 'pages/home' unless logged_in?
+  end
+
+  def archive_params
+    params.permit(:owner, :repo, :reason, :type, :status, :starred)
+  end
+
+  def page
+    params[:page].to_i rescue 1
+  end
+
+  def per_page
+    per_page = params[:per_page].to_i rescue 20
+    per_page = 20 if per_page < 1
+    raise ActiveRecord::RecordNotFound if per_page > 100
+    per_page
   end
 end

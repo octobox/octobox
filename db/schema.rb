@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161219205118) do
+ActiveRecord::Schema.define(version: 20161227173809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,14 +25,15 @@ ActiveRecord::Schema.define(version: 20161219205118) do
     t.string   "subject_type"
     t.string   "reason"
     t.boolean  "unread"
-    t.datetime "updated_at",                           null: false
+    t.datetime "updated_at",                            null: false
     t.string   "last_read_at"
     t.string   "url"
-    t.boolean  "archived",             default: false
-    t.datetime "created_at",                           null: false
-    t.boolean  "starred",              default: false
-    t.index ["github_id"], name: "index_notifications_on_github_id", unique: true, using: :btree
+    t.boolean  "archived",              default: false
+    t.datetime "created_at",                            null: false
+    t.boolean  "starred",               default: false
+    t.string   "repository_owner_name", default: ""
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at", using: :btree
+    t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true, using: :btree
   end
 
   create_table "users", force: :cascade do |t|

@@ -5,49 +5,176 @@
 //= require_tree .
 
 document.addEventListener("turbolinks:load", function() {
-  $('.archive').click(function() {
-    Turbolinks.visit('/notifications/'+$(this).val()+'/archive'+location.search)
-  });
-  $('.unarchive').click(function() {
-    Turbolinks.visit('/notifications/'+$(this).val()+'/unarchive'+location.search)
+  $('button.archive_selected, button.unarchive_selected').click(function () { toggleArchive(); });
+  $('input.archive, input.unarchive').change(function() {
+    marked = $(".js-table-notifications input:checked");
+    if ( marked.length > 0 ) {
+      $('button.archive_selected, button.unarchive_selected').show();
+    } else {
+      $('button.archive_selected, button.unarchive_selected').hide();
+    }
   });
   $('.toggle-star').click(function() {
-    $(this).toggleClass("fa-star fa-star-o")
+    $(this).toggleClass("star-active star-inactive")
     $.get('/notifications/'+$(this).data('id')+'/star')
   });
-
-  // Set current notification for navigation
-  $('.table-notifications tbody tr').first().find("td").first().addClass("current");
-});
-
-// Add key events only once
-
-$( document ).ready(function() {
-  $(document).keydown(function(e) {
-    if ( e.which == 74 ) {  // j
-      current = $('td.current');
-      next = $(current).parent().next();
-      if(next.length > 0) {
-        $(current).removeClass("current");
-        $(next).find('td').first().addClass("current");
-      }
-    }
-    if ( e.which == 75 ) { // k
-      current = $('td.current');
-      prev = $(current).parent().prev();
-      if(prev.length > 0) {
-        $(current).removeClass("current");
-        $(prev).find('td').first().addClass("current");
-      }
-    }
-    if ( e.which == 83 ) { // s
-      $('td.current').parent().find('.toggle-star').click();
-    }
-    if ( e.which == 89 ) { // y
-      $('td.current').parent().find('.archive').click();
-    }
-    if ( e.which == 191 ) { // ?
-      $("#help-box").modal();
-    }
+  $('.sync .octicon').on('click', function() {
+    $(this).toggleClass('spinning')
   });
+  recoverPreviousCursorPosition()
 });
+
+document.addEventListener("turbolinks:before-cache", function() {
+  $('td.js-current').removeClass("current js-current");
+});
+
+// Add shortcut events only once
+$(document).ready(enableKeyboardShortcuts);
+
+$(document).on('click', '[data-toggle="offcanvas"]', function () {
+  $('.row-offcanvas').toggleClass('active')
+});
+
+if(!('ontouchstart' in window))
+{
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+}
+
+function enableKeyboardShortcuts() {
+  window.row_index = 1
+  window.current_id = undefined
+
+  $(document).keydown(function(e) {
+    var shortcutFunction = shortcuts[e.which]
+    if (shortcutFunction) { shortcutFunction(e) }
+  });
+}
+
+var shortcuts = {
+  74:  cursorDown,      // j
+  75:  cursorUp,        // k
+  83:  toggleStar,      // s
+  88:  markCurrent,     // x
+  89:  toggleArchive,   // y
+  13:  openCurrentLink, // Enter
+  79:  openCurrentLink, // o
+  191: openModal,       // ?
+  190: sync,            // .
+  82:  sync             // r
+}
+
+function cursorDown() {
+  moveCursor('up')
+}
+
+function cursorUp() {
+  moveCursor('down')
+}
+
+function markCurrent() {
+  checkbox = $('td.js-current').parent().find("input[type=checkbox]")
+  checkbox.prop('checked', function (i, value) {
+    return !value;
+  });
+  checkbox.change();
+}
+
+function toggleArchive() {
+  if ( $(".js-table-notifications tr").length == 0 ) return;
+
+  var cssClass, value;
+  
+  if ( $(".archive_toggle").hasClass("archive_selected") ) {
+    cssClass = '.archive'
+    value = true
+  } else {
+    cssClass = '.unarchive'
+    value = false
+  }
+
+  marked = $(".js-table-notifications input:checked");
+  if ( marked.length > 0 ) {
+    ids = marked.map(function() { return this.value; }).get();
+  } else {
+    ids = [ $('td.js-current input'+ cssClass).val() ];
+  }
+  $.post( "/notifications/archive_selected", { 'id[]': ids, 'value': value } ).done(function () {
+    // calculating new position of the cursor
+    current = $('td.js-current').parent();
+    while ( $.inArray(current.find('input').val(), ids) > -1 && current.next().length > 0) {
+      current = current.next();
+    }
+    window.current_id = current.find('input').val();
+    if ( $.inArray(window.current_id, ids ) > -1 ) {
+      window.current_id = $(".js-table-notifications input:not(:checked)").last().val();
+    }
+    Turbolinks.visit("/"+location.search);
+  });
+}
+
+function toggleStar() {
+  $('td.js-current').parent().find('.toggle-star').click();
+}
+
+function openModal() {
+  $("#help-box").modal();
+}
+
+function openCurrentLink(e) {
+  e.preventDefault(e);
+  $('td.js-current').parent().find('.link')[0].click();
+}
+
+function sync() {
+  $("a.sync").click();
+}
+
+function scrollToCursor() {
+  var current = $('td.js-current');
+  var table_offset = $('.js-table-notifications').position().top;
+  var cursor_offset = current.offset().top;
+  var cursor_relative_offset = current.position().top;
+  var cursor_height = current.height();
+  var menu_height = $(".js-octobox-menu").height();
+  var scroll_top = $(document).scrollTop();
+  var window_height = $(window).height();
+  if ( cursor_offset < menu_height + scroll_top ) {
+    $("html, body").animate({
+      scrollTop: table_offset + cursor_relative_offset - cursor_height
+    }, 0);
+  }
+  if ( cursor_offset > scroll_top + window_height - cursor_height ) {
+    $("html, body").animate({
+      scrollTop: cursor_offset - window_height + 2*cursor_height
+    }, 0);
+  }
+}
+
+function moveCursor(upOrDown) {
+  var current = $('td.js-current');
+  var parent = $(current).parent()
+  var target = upOrDown === 'up' ? parent.next() : parent.prev()
+  if(target.length > 0) {
+    $(current).removeClass("current js-current");
+    $(target).find('td').first().addClass("current js-current");
+    row_index += upOrDown === 'up' ? 1 : -1;
+    scrollToCursor();
+  }
+}
+
+function recoverPreviousCursorPosition() {
+  if ( current_id == undefined ) {
+    row_index = Math.min(row_index, $(".js-table-notifications tr").length);
+    row_index = Math.max(row_index, 1);
+  } else {
+    row_index = $("input[value=" + current_id + "]").parents('tr').index() + 1;
+    current_id = undefined;
+  }
+  $(".js-table-notifications tbody tr:nth-child(" + row_index + ")").first().find("td").first().addClass("current js-current");
+}
+
+function loadTurbolinksArchiveURL(link, route) {
+  Turbolinks.visit('/notifications/'+$(link).val()+'/'+route+location.search)
+}

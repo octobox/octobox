@@ -50,7 +50,23 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  memcachedcloud_servers = ENV.fetch('MEMCACHEDCLOUD_SERVERS', '').split(',')
+  if memcachedcloud_servers.any?
+
+    dalli_store_name_and_password = {
+      username: ENV['MEMCACHEDCLOUD_USERNAME'],
+      password: ENV['MEMCACHEDCLOUD_PASSWORD']
+    }
+
+    dalli_store_config = {
+      namespace:  'OCTOBOX',
+      expires_in: (ENV['REQUEST_CACHE_TIMEOUT'] || 30).to_i.minutes
+    }
+
+    config.cache_store = :dalli_store,
+                         memcachedcloud_servers,
+                         dalli_store_name_and_password.merge(dalli_store_config)
+  end
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque

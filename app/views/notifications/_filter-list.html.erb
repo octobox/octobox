@@ -1,0 +1,42 @@
+<% if any_active_filters? %>
+  <span class="filter-options">
+    <span class="btn-group">
+      <a href="#" class="btn btn-default filter-label" role="button" aria-disabled="true">Filter:</a>
+
+      <% if filters[:reason].present? %>
+        <%= link_to root_path(filters.except(:reason)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= params[:reason].underscore.humanize %>
+        <% end %>
+      <% end %>
+
+      <% if filters[:status].present? %>
+        <%= link_to root_path(filters.except(:status)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= (params[:status] === 'true'? 'Unread' : 'Read') %>
+        <% end %>
+      <% end %>
+
+      <% if filters[:repo].present? %>
+        <%= link_to root_path(filters.except(:repo)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= params[:repo] %>
+        <% end %>
+      <% end %>
+
+      <% if filters[:type].present? %>
+        <%= link_to root_path(filters.except(:type)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= params[:type].underscore.humanize %>
+        <% end %>
+      <% end %>
+
+      <% if filters[:owner].present? %>
+        <%= link_to root_path(filters.except(:owner)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          <%= params[:owner] %>
+        <% end %>
+      <% end %>
+    </span>
+  </span>
+<% end %>

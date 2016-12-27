@@ -1,12 +1,12 @@
 # Octobox &#128238;
 
-Take back control of your GitHub Notifications
+Take back control of your GitHub Notifications with [Octobox]( https://octobox.io).
 
-![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21315365/b698d160-c5f3-11e6-93bd-e46726ccd347.png)
+![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21385758/bd8ebcee-c767-11e6-9017-c93c5921594b.png)
 
-[![Build Status](https://travis-ci.org/andrew/octobox.svg?branch=master)](https://travis-ci.org/andrew/octobox)
-[![Code Climate](https://img.shields.io/codeclimate/github/andrew/octobox.svg?style=flat)](https://codeclimate.com/github/andrew/octobox)
-[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/andrew/octobox.svg?style=flat)](https://codeclimate.com/github/andrew/octobox)
+[![Build Status](https://travis-ci.org/octobox/octobox.svg?branch=master)](https://travis-ci.org/octobox/octobox)
+[![Code Climate](https://img.shields.io/codeclimate/github/octobox/octobox.svg?style=flat)](https://codeclimate.com/github/octobox/octobox)
+[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/octobox/octobox.svg?style=flat)](https://codeclimate.com/github/octobox/octobox)
 
 ## Why is this a thing?
 
@@ -22,7 +22,7 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 
 Octobox is like a little baby. You have to host it yourself and it only works for one user at a time.
 
-Check out the open issues for a glimpse of the future: https://github.com/andrew/octobox/issues.
+Check out the open issues for a glimpse of the future: https://github.com/octobox/octobox/issues.
 
 ## Deployment to Heroku
 
@@ -30,10 +30,21 @@ You can host your own instance of Octobox using Heroku. Heroku will ask you to p
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+## Running Octobox for [GitHub Enterprise](https://enterprise.github.com/home)
+In order to setup Octobox for your GitHub Enterprise instance all you need you do is add your enterprise domain to the `.env` file / deployed environment.
+
+Example:
+
+```
+GITHUB_DOMAIN=https://github.foobar.com
+```
+
+And that's it :sparkles:
+
 ## Development
 
-The source code is hosted at [GitHub](https://github.com/andrew/octobox).
-You can report issues/feature requests on [GitHub Issues](https://github.com/andrew/octobox/issues).
+The source code is hosted at [GitHub](https://github.com/octobox/octobox).
+You can report issues/feature requests on [GitHub Issues](https://github.com/octobox/octobox/issues).
 For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
 
 ### Getting Started
@@ -97,32 +108,65 @@ Finally you can boot the rails app:
 ```bash
 rails s
 ```
-#### Docker Compose
+#### Docker
 
-If you're familiar with [Docker](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/), the included `docker-compose.yml` configuration allows you to spin up the application locally.
+You can use Docker to run Octobox in development.
 
-First, launch an instance of PostgreSQL and wait for it to fully initialize:
+First, [install Docker](https://docs.docker.com/engine/installation/). If you've got run macOS or Windows, Docker for Mac/Windows makes this really easy.
 
-```bash
-docker-compose up database
-```
-
-Once the PostgreSQL initialization process is complete, launch the application using another terminal session:
+Then, run:
 
 ```bash
-GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up app
+GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up --build
 ```
 
-**Note**: You can add `GITHUB_TOKEN` to `.env` instead of supplying it directly on the command-line.
+Octobox will be running on [http://localhost:3000](http://localhost:3000).
+
+**Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
+
+### Sync notifications automatically
+
+Now that you've set all to go you can configure the app to sync the notifications automatically, there is a rake task that will do this for every user
+
+```
+rake tasks:sync_notifications
+```
+
+You will need to configure this to run automatically
+
+#### Heroku
+
+Create a Heroku Scheduler
+
+```
+heroku addons:create scheduler:standard
+```
+
+Visit the Heroku Scheduler resource and add a new job to run `rake tasks:sync_notifications` daily
+
+#### Cronjob
+
+Run `crontab -e`
+
+Add the following
+
+```
+@daily cd octobox_path && /usr/local/bin/rake RAILS_ENV=production tasks:sync_notifications
+```
+
+To find the full path for your rake executable, run `which rake`
 
 ### Keyboard shortcuts
 
-You can use keyboard shortcuts to naviagate and perform certian actions:
+You can use keyboard shortcuts to navigate and perform certain actions:
 
+ - `r` or `.` - refresh list
  - `j` - move down the list
  - `k` - move up the list
  - `s` - star current notification
- - `y` - archive current notification
+ - `x` - mark/unmark current notification
+ - `y` - archive current/marked notification(s)
+ - `o` or `Enter` - open current notification in a new window
 
 Press `?` for the help menu.
 
@@ -139,4 +183,4 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Copyright
 
-Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/andrew/octobox/blob/master/LICENSE.txt) for details.
+Copyright (c) 2016 Andrew Nesbitt. See [LICENSE](https://github.com/octobox/octobox/blob/master/LICENSE.txt) for details.
