@@ -21,6 +21,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/edit', to: 'users#edit'
+  get '/user_preferences', to: 'users#edit'
   resources :users, only: [:update]
 end

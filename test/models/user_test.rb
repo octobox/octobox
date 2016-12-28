@@ -30,6 +30,16 @@ class UserTest < ActiveSupport::TestCase
     refute user.valid?
   end
 
+  test '#effective_access_token returns personal_access_token if it is defined' do
+    user = User.create(github_id: 'foo', access_token: '12345', personal_access_token: '67890')
+    assert_equal user.effective_access_token, '67890'
+  end
+
+  test '#effective_access_token returns access_token if no personal_access_token is defined' do
+    user = User.create(github_id: 'foo', access_token: '12345')
+    assert_equal user.effective_access_token, '12345'
+  end
+
   test '.find_by_auth_hash finds a User by their github_id' do
     omniauth_config     = OmniAuth.config.mock_auth[:github]
     omniauth_config.uid = users(:andrew).github_id
@@ -52,6 +62,14 @@ class UserTest < ActiveSupport::TestCase
     user = users(:andrew)
     assert_equal user.github_client.class, Octokit::Client
     assert_equal user.github_client.access_token, user.access_token
+  end
+
+  test '#github_client returns an Octokit::Client with the correct access_token after adding personal_access_token' do
+    user = User.create(github_id: 'foo', access_token: '12345')
+    assert_equal user.github_client.class, Octokit::Client
+    assert_equal '12345', user.github_client.access_token
+    user.personal_access_token = '67890'
+    assert_equal '67890', user.github_client.access_token
   end
 
   test "triggers sync_notifications on save" do

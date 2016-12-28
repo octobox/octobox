@@ -7,13 +7,13 @@ class UsersController < ApplicationController
       redirect_to root_path
     else
       flash[:error] = 'Could not update your account'
-      redirect_to :edit
+      redirect_to :user_preferences
     end
   end
 
   private
 
   def update_user_params
-    params.require(:user).permit(:access_token)
+    params.require(:user).permit(:personal_access_token)
   end
 end

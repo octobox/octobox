@@ -27,13 +27,19 @@ class User < ApplicationRecord
   end
 
   def github_client
-    return @github_client if defined?(@github_client)
-    @github_client = Octokit::Client.new(access_token: access_token, auto_paginate: true)
+    unless defined?(@github_client) && effective_access_token == @github_client.access_token
+      @github_client = Octokit::Client.new(access_token: effective_access_token, auto_paginate: true)
+    end
+    @github_client
   end
 
   def github_avatar_url
     domain = ENV.fetch('GITHUB_DOMAIN', 'https://github.com')
     "#{domain}/#{github_login}.png"
+  end
+
+  def effective_access_token
+    personal_access_token || access_token
   end
 
 end
