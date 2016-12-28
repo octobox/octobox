@@ -37,36 +37,35 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/index'
   end
 
-  test 'archives all notifications' do
-    5.times.each { create(:notification, user: @user, archived: false) }
-
-    sign_in_as(@user)
-
-    post '/notifications/archive'
-    assert_response :redirect
-
-    @user.notifications.each { |n| assert n.archived? }
-  end
-
-  test 'archives all scoped notifications' do
-    pull_request_notification = create(:notification, user: @user, subject_type: 'PullRequest')
-    issue_notification        = create(:notification, user: @user, subject_type: 'Issue')
-
-    sign_in_as(@user)
-
-    post '/notifications/archive', params: { type: 'PullRequest' }
-    assert_response :redirect
-
-    assert pull_request_notification.reload.archived?
-    refute issue_notification.reload.archived?
-  end
-
   test 'shows only 20 notifications per page' do
     sign_in_as(@user)
     25.times.each { create(:notification, user: @user, archived: false) }
 
     get '/'
     assert_equal assigns(:notifications).length, 20
+  end
+
+  test 'redirect back to last page of results if page is out of bounds' do
+    sign_in_as(@user)
+    25.times.each { create(:notification, user: @user, archived: false) }
+
+    get '/?page=3'
+    assert_redirected_to '/?page=2'
+  end
+
+  test 'archives multiple notifications' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, archived: false)
+    notification2 = create(:notification, user: @user, archived: false)
+    notification3 = create(:notification, user: @user, archived: false)
+
+    post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }
+
+    assert_response :ok
+
+    assert notification1.reload.archived?
+    assert notification2.reload.archived?
+    refute notification3.reload.archived?
   end
 
   test 'toggles starred on a notification' do

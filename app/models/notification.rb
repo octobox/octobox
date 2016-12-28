@@ -21,7 +21,7 @@ class Notification < ApplicationRecord
 
       fetch_notifications(user) do |notification|
         begin
-          n = user.notifications.find_or_create_by(github_id: notification.id)
+          n = user.notifications.find_or_initialize_by(github_id: notification.id)
 
           if n.archived && n.updated_at < notification.updated_at
             n.archived = false

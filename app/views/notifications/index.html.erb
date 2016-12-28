@@ -8,7 +8,7 @@
     <div class="col-12 col-md-10">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <div class="btn-group pull-right">
+          <div class="btn-group pull-right hidden-xs">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <% if params[:per_page].present? %>
                 <%= params[:per_page] %>
@@ -23,31 +23,20 @@
               <% end %>
             </ul>
           </div>
+          <div class="btn help pull-right hidden-xs" data-toggle="modal" data-target="#help-box">
+            <%= octicon 'question', :height => 16 %>
+          </div>
           <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
             <%= octicon 'three-bars', :height => 16 %>
           </button>
-
+          <label class="btn btn-default select-all" for="select_all">
+            <input id="select_all" type="checkbox" class='js-select_all'>
+        </label>
           <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', :height => 16 %>
           <% end %>
-          <% if @notifications.any? && !params[:archive].present? %>
-            <%= link_to(
-                  (no_url_filter_parameters_present ? 'Archive all' : 'Archive this list'),
-                  archive_notifications_path(
-                    owner:   params[:owner],
-                    repo:    params[:repo],
-                    reason:  params[:reason],
-                    type:    params[:type],
-                    status:  params[:status],
-                    starred: params[:starred]
-                  ),
-                  class: 'btn btn-default',
-                  method: :post
-                )
-            %>
-            <% end %>
-            <%= archive_selected_button("btn btn-default") %>
-            <%= render 'filter-list' %>
+          <%= archive_selected_button("btn btn-default") %>
+          <%= render 'filter-list' %>
         </div>
 
         <% if @notifications.any? %>

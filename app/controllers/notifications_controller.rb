@@ -20,27 +20,13 @@ class NotificationsController < ApplicationController
     @reasons             = scope.distinct.group(:reason).count
     @unread_repositories = scope.distinct.group(:repository_full_name).count
 
-    scope = scope.repo(params[:repo])     if params[:repo].present?
-    scope = scope.reason(params[:reason]) if params[:reason].present?
-    scope = scope.type(params[:type])     if params[:type].present?
-    scope = scope.status(params[:status]) if params[:status].present?
-    scope = scope.owner(params[:owner])   if params[:owner].present?
+    sub_scopes = [:repo, :reason, :type, :status, :owner]
+    sub_scopes.each do |sub_scope|
+      scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
+    end
 
+    check_out_of_bounds(scope)
     @notifications = scope.newest.page(page).per(per_page)
-  end
-
-  def archive_all
-    scope = current_user.notifications.inbox
-
-    scope = scope.repo(archive_params[:repo])     if archive_params[:repo].present?
-    scope = scope.reason(archive_params[:reason]) if archive_params[:reason].present?
-    scope = scope.type(archive_params[:type])     if archive_params[:type].present?
-    scope = scope.status(archive_params[:status]) if archive_params[:status].present?
-    scope = scope.owner(archive_params[:owner])   if archive_params[:owner].present?
-    scope = scope.starred                         if archive_params[:starred].present?
-
-    scope.update_all(archived: true)
-    redirect_to root_path
   end
 
   def archive_selected
@@ -60,16 +46,19 @@ class NotificationsController < ApplicationController
 
   private
 
+  def check_out_of_bounds(scope)
+    return unless page > 1
+    total_pages = (scope.count / per_page.to_f).ceil
+    page_num = [page, total_pages].min
+    redirect_to url_for(page: page_num) if page_num != page
+  end
+
   def find_notification
     @notification = current_user.notifications.find(params[:id])
   end
 
   def render_home_page_unless_authenticated
     return render 'pages/home' unless logged_in?
-  end
-
-  def archive_params
-    params.permit(:owner, :repo, :reason, :type, :status, :starred)
   end
 
   def page
