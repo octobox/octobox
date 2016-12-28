@@ -1,6 +1,3 @@
-<% placeholder = "#{
-current_user.personal_access_token.present? ? current_user.personal_access_token : ''
-  }" %>
 
 <div class="container">
   <h1>User Preferences</h1>
@@ -8,10 +5,9 @@ current_user.personal_access_token.present? ? current_user.personal_access_token
   <hr>
 
   <%= form_for current_user do |f| %>
-    <%= flash_messages %>
     <div class="form-group">
       <%= f.label :personal_access_token %>
-      <%= f.text_field :personal_access_token, value: nil, placeholder: placeholder, class: 'form-control' %>
+      <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
     </div>
 
     <%= submit_tag 'Save', class: 'btn btn-primary' %>

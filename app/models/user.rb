@@ -63,4 +63,9 @@ class User < ApplicationRecord
     end
   end
 
+  def masked_personal_access_token
+    personal_access_token.blank? ? '' :
+    "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
+  end
+
 end
