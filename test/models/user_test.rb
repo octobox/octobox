@@ -2,6 +2,11 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  setup do
+    stub_user_request
+    stub_notifications_request
+  end
+
   test 'must have a github id' do
     user = users(:andrew)
     user.github_id = nil
@@ -56,6 +61,22 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal 1, user.github_id
     assert_equal 'abcdefg', user.access_token
+  end
+
+  test 'does not allow a personal_access_token for another user' do
+    user = users(:andrew)
+    user.personal_access_token = '1234'
+    stub_user_request(body: '{"id": 98}')
+    refute user.valid?
+    assert_equal User::ERRORS[:invalid_token], user.errors.first
+  end
+
+  test 'does not allow a personal_access_token without the notifications scope' do
+    user = users(:andrew)
+    user.personal_access_token = '1234'
+    stub_user_request(oauth_scopes: 'user, repo')
+    refute user.valid?
+    assert_equal User::ERRORS[:missing_scope], user.errors.first
   end
 
   test '#github_client returns an Octokit::Client with the correct access_token' do

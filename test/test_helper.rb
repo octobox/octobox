@@ -18,10 +18,10 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
   include FactoryGirl::Syntax::Methods
-  include NotificationDownloadHelper
+  include ApiStubHelper
 end
 
 class ActionDispatch::IntegrationTest
   include SignInHelper
-  include NotificationDownloadHelper
+  include ApiStubHelper
 end

@@ -3,6 +3,7 @@ require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notifications_request
+    stub_user_request
     @user = users(:andrew)
   end
 
