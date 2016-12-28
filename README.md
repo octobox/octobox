@@ -7,6 +7,9 @@ Take back control of your GitHub Notifications with [Octobox]( https://octobox.i
 [![Build Status](https://travis-ci.org/octobox/octobox.svg?branch=master)](https://travis-ci.org/octobox/octobox)
 [![Code Climate](https://img.shields.io/codeclimate/github/octobox/octobox.svg?style=flat)](https://codeclimate.com/github/octobox/octobox)
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/octobox/octobox.svg?style=flat)](https://codeclimate.com/github/octobox/octobox)
+[![Code Climate](https://img.shields.io/codeclimate/issues/github/octobox/octobox.svg)](https://codeclimate.com/github/octobox/octobox/issues)
+[![license](https://img.shields.io/github/license/octobox/octobox.svg)](https://github.com/octobox/octobox/blob/master/LICENSE.txt)
+[![Docker Automated build](https://img.shields.io/docker/automated/octoboxio/octobox.svg)](https://hub.docker.com/r/octoboxio/octobox/)
 
 ## Why is this a thing?
 
