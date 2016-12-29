@@ -11,7 +11,8 @@ class User < ApplicationRecord
 
   ERRORS = {
     invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
-    missing_scope: [:personal_access_token, 'does not include the notifications scope']
+    missing_scope: [:personal_access_token, 'does not include the notifications scope'],
+    disallowed_tokens: [:personal_access_token, 'is not allowed in this instance']
   }.freeze
 
   def self.find_by_auth_hash(auth_hash)
@@ -22,7 +23,7 @@ class User < ApplicationRecord
     github_attributes = {
       github_id: auth_hash['uid'],
       github_login: auth_hash['info']['nickname'],
-      access_token: auth_hash.dig('credentials', 'token')
+      access_token: auth_hash.dig('credentials', 'token'),
     }
 
     update_attributes(github_attributes)
@@ -50,6 +51,10 @@ class User < ApplicationRecord
 
   def personal_access_token_validator
     return unless personal_access_token.present?
+    unless Octobox.personal_access_tokens_enabled?
+      errors.add(*ERRORS[:disallowed_tokens])
+      return
+    end
     unless Octokit::Client.new.validate_credentials(access_token: effective_access_token)
       errors.add(*ERRORS[:invalid_token])
       return

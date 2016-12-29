@@ -8,6 +8,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update user' do
+    stub_personal_access_tokens_enabled
     sign_in_as(@user)
     patch user_url(@user), params: {user: { personal_access_token: '12345'}}
     @user.reload

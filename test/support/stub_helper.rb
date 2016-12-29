@@ -1,4 +1,4 @@
-module ApiStubHelper
+module StubHelper
   def stub_notifications_request(body: nil)
     notifications_url = %r{https://api.github.com/notifications}
 
@@ -17,5 +17,9 @@ module ApiStubHelper
     response = { status: 200, body: body, headers: headers }
 
     stub_request(:get, user_url).to_return(response)
+  end
+
+  def stub_personal_access_tokens_enabled(value: 'true')
+    Octobox.stubs(:personal_access_tokens_enabled).returns(true)
   end
 end
