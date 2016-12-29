@@ -5,12 +5,19 @@
   <hr>
 
   <%= form_for current_user do |f| %>
-    <div class="form-group">
-      <%= f.label :personal_access_token %>
-      <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
-    </div>
 
-    <%= submit_tag 'Save', class: 'btn btn-primary' %>
-    <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
+    <% if Octobox.personal_access_tokens_enabled? %>
+      <div class="form-group">
+        <%= f.label :personal_access_token %>
+        <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
+      </div>
+      <%= submit_tag 'Save', class: 'btn btn-primary' %>
+      <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
+    <% else %>
+      <div>
+        There are no currently configurable user options. Check back later.
+      </div>
+    <% end %>
+
   <% end %>
 </div>
