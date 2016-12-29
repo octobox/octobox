@@ -4,7 +4,9 @@
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#octobox-menu" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
-        <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, class: 'img-rounded navbar-avatar' %>
+        <% if current_user %>
+          <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, class: 'img-rounded navbar-avatar' %>
+        <% end %>
       </button>
       <a class="navbar-brand" href="/">
         <%= octobox_icon(28) %>
@@ -17,8 +19,10 @@
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
-            <%= current_user.github_login %> <span class="caret hidden-xs"></span>
+            <% if current_user %>
+              <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
+              <%= current_user.github_login %> <span class="caret hidden-xs"></span>
+            <% end %>
           </a>
           <ul class="dropdown-menu">
             <li>

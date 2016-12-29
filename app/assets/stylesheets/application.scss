@@ -25,12 +25,35 @@ body {
   font-size: 14px;
   padding-top: 75px;
 }
-
 html {
   position: relative;
   min-height: 100%;
 }
 
+.flex-body {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+.flex-content {
+  display: flex;
+}
+.flex-sidebar {
+  background: red;
+  flex: 0 0 200px;
+  overflow: scroll;
+}
+.flex-main {
+  background: blue;
+  flex: 1;
+  overflow: scroll;
+}
+.sidebar-container {
+  height: 2000px;
+}
+.main-container {
+  height: 3000px;
+}
 .turbolinks-progress-bar {
   height: 2px !important;
   background-color: #77b6ff !important;
