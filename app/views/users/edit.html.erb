@@ -10,6 +10,10 @@
       <div class="form-group">
         <%= f.label :personal_access_token %>
         <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
+        <em>
+          Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token
+          that was generated when you logged in.  There is no need to set this unless you have a specific reason.
+        </em>
       </div>
       <%= submit_tag 'Save', class: 'btn btn-primary' %>
       <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
