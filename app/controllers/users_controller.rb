@@ -7,6 +7,7 @@ class UsersController < ApplicationController
       redirect_to root_path
     else
       flash[:error] = 'Could not update your account'
+      flash[:alert] = current_user.errors.full_messages.to_sentence
       redirect_to :user_preferences
     end
   end
