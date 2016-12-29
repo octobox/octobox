@@ -46,7 +46,7 @@ class User < ApplicationRecord
   end
 
   def effective_access_token
-    personal_access_token.present? ? personal_access_token : access_token
+    Octobox.personal_access_tokens_enabled? && personal_access_token.present? ? personal_access_token : access_token
   end
 
   def personal_access_token_validator

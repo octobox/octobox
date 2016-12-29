@@ -4,3 +4,9 @@ andrew:
   github_id: 1060
   access_token: <%= SecureRandom.hex(20) %>
   github_login: 'andrew'
+
+tokenuser:
+  github_id: 82784922
+  access_token: <%= SecureRandom.hex(20) %>
+  github_login: 'tokenuser'
+  personal_access_token: 'deadbeef'

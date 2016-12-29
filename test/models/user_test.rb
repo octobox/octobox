@@ -36,13 +36,20 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#effective_access_token returns personal_access_token if it is defined' do
-    user = User.create(github_id: 888, access_token: '12345', personal_access_token: '67890', github_login: 'foo')
-    assert_equal user.effective_access_token, '67890'
+    stub_personal_access_tokens_enabled
+    user = users(:tokenuser)
+    assert_equal user.personal_access_token, user.effective_access_token
+  end
+
+  test '#effective_access_token returns access_token if personal_access_tokens_enabled? is false' do
+    user = users(:tokenuser)
+    assert_equal user.access_token, user.effective_access_token
   end
 
   test '#effective_access_token returns access_token if no personal_access_token is defined' do
-    user = User.create(github_id: 999, access_token: '12345', github_login: 'foo')
-    assert_equal user.effective_access_token, '12345'
+    stub_personal_access_tokens_enabled
+    user = users(:andrew)
+    assert_equal user.access_token, user.effective_access_token
   end
 
   test '.find_by_auth_hash finds a User by their github_id' do
