@@ -102,7 +102,7 @@ function checkSelectAll() {
 }
 
 function toggleArchive() {
-  if ( $(".js-table-notifications tr").length == 0 ) return;
+  if ( $(".js-table-notifications tr").length === 0 ) return;
 
   var cssClass, value;
 
@@ -185,7 +185,7 @@ function moveCursor(upOrDown) {
 }
 
 function recoverPreviousCursorPosition() {
-  if ( current_id == undefined ) {
+  if ( current_id === undefined ) {
     row_index = Math.min(row_index, $(".js-table-notifications tr").length);
     row_index = Math.max(row_index, 1);
   } else {

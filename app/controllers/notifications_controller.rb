@@ -20,11 +20,10 @@ class NotificationsController < ApplicationController
     @reasons             = scope.distinct.group(:reason).count
     @unread_repositories = scope.distinct.group(:repository_full_name).count
 
-    scope = scope.repo(params[:repo])     if params[:repo].present?
-    scope = scope.reason(params[:reason]) if params[:reason].present?
-    scope = scope.type(params[:type])     if params[:type].present?
-    scope = scope.status(params[:status]) if params[:status].present?
-    scope = scope.owner(params[:owner])   if params[:owner].present?
+    sub_scopes = [:repo, :reason, :type, :status, :owner]
+    sub_scopes.each do |sub_scope|
+      scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
+    end
 
     check_out_of_bounds(scope)
     @notifications = scope.newest.page(page).per(per_page)
