@@ -361,6 +361,7 @@ td.keys {
   }
   .flex-sidebar {
     position: absolute;
+    bottom: 0;
     top: 0;
     width: $sidebar-width;
     left: -$sidebar-width;
@@ -457,8 +458,4 @@ td.keys {
 
 .spinning{
   animation: spin 1s infinite steps(90);
-}
-
-.archive_selected, .unarchive_selected {
-  display: none;
 }
