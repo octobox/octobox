@@ -42,7 +42,7 @@ document.addEventListener("turbolinks:before-cache", function() {
 $(document).ready(enableKeyboardShortcuts);
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
-  $('.row-offcanvas').toggleClass('active')
+  $('.flex-content').toggleClass('active')
 });
 
 if(!('ontouchstart' in window))

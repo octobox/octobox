@@ -28,6 +28,11 @@
   </head>
 
   <body class="flex-body">
+    <% if current_user %>
+      <div class="flex-header">
+        <%= render 'layouts/header' %>
+      </div>
+    <% end %>
     <div class="flex-header header-flash-messages">
       <%= flash_messages %>
     </div>

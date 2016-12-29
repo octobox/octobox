@@ -23,7 +23,6 @@ html, body {
 
 body {
   font-size: 14px;
-  padding-top: 75px;
 }
 html {
   position: relative;
@@ -35,24 +34,25 @@ html {
   height: 100vh;
   flex-direction: column;
 }
+.flex-header {
+  flex: 0 0 auto;
+}
 .flex-content {
   display: flex;
 }
 .flex-sidebar {
-  background: red;
-  flex: 0 0 200px;
+  flex: 0 0 250px;
   overflow: scroll;
 }
 .flex-main {
-  background: blue;
   flex: 1;
   overflow: scroll;
 }
-.sidebar-container {
-  height: 2000px;
-}
-.main-container {
-  height: 3000px;
+.flex-container {
+  padding: 15px;
+  .flex-sidebar & {
+    padding-right: 0;
+  }
 }
 .turbolinks-progress-bar {
   height: 2px !important;
@@ -66,12 +66,15 @@ html {
 }
 
 .jumbotron {
+  margin-top: 70px;
   .octobox-icon {
     margin-right: 8px;
     vertical-align: -14px;
   }
 }
-
+.navbar-main {
+  margin-bottom: 0;
+}
 .navbar-brand {
   .octobox-icon {
     fill: #333;
@@ -350,44 +353,27 @@ td.keys {
 @media screen and (max-width: $screen-sm-max) {
   $sidebar-width: 250px;
 
-  .row-offcanvas {
+  .flex-content {
     position: relative;
     -webkit-transition: all .25s ease-out;
          -o-transition: all .25s ease-out;
             transition: all .25s ease-out;
   }
-
-  .row-offcanvas-right {
-    right: 0;
-  }
-
-  .row-offcanvas-left {
-    left: 0;
-  }
-
-  .row-offcanvas-right
-  .sidebar-offcanvas {
-    right: -$sidebar-width;
-  }
-
-  .row-offcanvas-left
-  .sidebar-offcanvas {
-    left: -$sidebar-width;
-  }
-
-  .row-offcanvas-right.active {
-    right: $sidebar-width;
-  }
-
-  .row-offcanvas-left.active {
-    left: $sidebar-width;
-  }
-
-  .sidebar-offcanvas {
+  .flex-sidebar {
     position: absolute;
     top: 0;
     width: $sidebar-width;
+    left: -$sidebar-width;
   }
+
+  .flex-content {
+    left: 0;
+  }
+
+  .flex-content.active {
+    left: $sidebar-width;
+  }
+
 }
 
 .header-flash-messages {
