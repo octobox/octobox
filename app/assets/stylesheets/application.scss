@@ -430,6 +430,18 @@ td.keys {
   padding: 6px 10px;
 }
 
+.select-all input {
+  margin-top: 0;
+  position: relative;
+  top: -1px;
+}
+
+@media (max-width: $screen-xs-max) {
+  .select-all input {
+    top: 2px;
+  }
+}
+
 @keyframes spin {
   to { transform: rotate(1turn); }
 }
