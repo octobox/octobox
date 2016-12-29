@@ -14,6 +14,11 @@
           Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token
           that was generated when you logged in.  There is no need to set this unless you have a specific reason.
         </em>
+
+      </div>
+      <div class="form-group">
+        <label for="clear_personal_access_token">Clear personal access token</label>
+        <input type="checkbox" name="clear_personal_access_token" id="clear_personal_access_token"/>
       </div>
       <%= submit_tag 'Save', class: 'btn btn-primary' %>
       <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
