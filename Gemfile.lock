@@ -49,7 +49,7 @@ GEM
     bugsnag (5.0.1)
     builder (3.2.2)
     byebug (9.0.6)
-    codeclimate-test-reporter (1.0.3)
+    codeclimate-test-reporter (1.0.4)
       simplecov
     concurrent-ruby (1.0.4)
     crack (0.4.3)
