@@ -43,6 +43,7 @@ html {
 .flex-sidebar {
   flex: 0 0 250px;
   overflow: scroll;
+  padding-bottom: 60px;
 }
 .flex-main {
   flex: 1;
@@ -50,10 +51,22 @@ html {
 }
 .flex-container {
   padding: 15px;
-  .flex-sidebar & {
-    padding-right: 0;
+  .flex-main & {
+    padding-left: 0;
   }
 }
+
+@media (max-width: $screen-xs-max) {
+  .flex-container {
+    .flex-main & {
+      padding-left: 15px;
+    }
+    .flex-sidebar & {
+      padding-right: 0;
+    }
+  }
+}
+
 .turbolinks-progress-bar {
   height: 2px !important;
   background-color: #77b6ff !important;
@@ -94,7 +107,9 @@ html {
 }
 
 .navbar-avatar {
-  margin-top: -3px;
+  margin-bottom: -3px;
+  position: relative;
+  top: -3px;
 }
 
 .navbar-nav {
@@ -289,11 +304,18 @@ td.keys {
 }
 
 @media (min-width: $screen-sm-min) {
-  .notification-checkbox,
   .notification-star,
   .notification-icon {
     width: 1%;
     text-align: center;
+  }
+  .notification-checkbox {
+    input {
+      margin-left: 9px;
+      margin-right: 9px;
+      position: relative;
+      top: -1px;
+    }
   }
 }
 
@@ -334,7 +356,7 @@ td.keys {
       left: 10px;
     }
     .notification-star {
-      top: 32px;
+      top: 38px;
       left: 10px;
     }
     .notification-icon,
@@ -437,13 +459,17 @@ td.keys {
 
 .panel-heading,
 .panel-footer {
-  padding: 6px 10px;
+  padding: 6px 8px;
 }
 
-.select-all input {
-  margin-top: 0;
-  position: relative;
-  top: -1px;
+.select-all {
+  padding-left: 10px;
+  padding-right: 10px;
+  input {
+    margin-top: 0;
+    position: relative;
+    top: -1px;
+  }
 }
 
 @media (max-width: $screen-xs-max) {
