@@ -1,24 +1,23 @@
 
 <div class="container">
   <h1>Settings</h1>
-
-  <hr>
-
   <%= form_for current_user do |f| %>
-
     <% if Octobox.personal_access_tokens_enabled? %>
+      <hr>
       <div class="form-group">
-        <%= f.label :personal_access_token %>
+        <%= f.label :personal_access_token, "Personal Access Token" %>
         <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
-        <em>
-          Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token
-          that was generated when you logged in.  There is no need to set this unless you have a specific reason.
-        </em>
+        <span class="help-block">Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token that was generated when you logged in.  There is no need to set this unless you have a specific reason.
+        </span>
 
       </div>
       <div class="form-group">
-        <label for="clear_personal_access_token">Clear personal access token</label>
-        <input type="checkbox" name="clear_personal_access_token" id="clear_personal_access_token"/>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="clear_personal_access_token" id="clear_personal_access_token"/>
+            Clear personal access token
+          </label>
+        </div>
       </div>
       <%= submit_tag 'Save', class: 'btn btn-primary' %>
       <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
@@ -27,11 +26,5 @@
   <hr>
   <div class="form-group" >
     <%= link_to 'Delete my Octobox account', current_user, method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure you want to do this?'}%>
-    <br/><em>
-      Deleting your Octobox account permanently removes all data associate with your user from Octobox's database.
-    Once you have deleted your account, logging in again will create a new account associated with your github user and
-    load existing notifications.
-  </em>
-  </div>
-
+    <span class="help-block">Deleting your Octobox account permanently removes all data associated with your user from Octobox's database. Once you have deleted your account, logging in again will create a new account associated with your GitHub user and load existing notifications.</span>
 </div>
