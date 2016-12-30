@@ -14,6 +14,11 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse js-octobox-menu" id="octobox-menu">
+      <%= form_tag root_path, method: :get, class: 'navbar-form navbar-left', enforce_utf8: false do |f| %>
+        <div class="form-group">
+          <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search...', class: 'form-control', size: 40, id: 'search-box' %>
+        </div>
+      <% end %>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -52,5 +57,7 @@
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->
+
+
   </div><!-- /.container-fluid -->
 </nav>
