@@ -46,4 +46,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_nil user.personal_access_token
   end
 
+  test 'requires logged in user' do
+    user = users(:tokenuser)
+    stub_personal_access_tokens_enabled
+    stub_user_request(user: user)
+    patch user_url(user), params: {user: { personal_access_token: '12345'}}
+    assert_response :unauthorized
+  end
+
+  test 'rejects changing a different user' do
+    user = users(:tokenuser)
+    stub_personal_access_tokens_enabled
+    stub_user_request(user: user)
+    sign_in_as(users(:andrew))
+    patch user_url(user), params: {user: { personal_access_token: '12345'}}
+    assert_response :unauthorized
+  end
+
 end
