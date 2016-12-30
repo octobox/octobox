@@ -33,14 +33,12 @@
                 Octobox Support
               <% end %>
             </li>
-            <% if Octobox.personal_access_tokens_enabled? %>
-              <li>
-                <%= link_to "settings" do %>
-                  <%= octicon 'settings', height: 16, class: 'text-muted' %>
-                  Settings
-                <% end %>
-              </li>
-            <% end %>
+            <li>
+              <%= link_to "settings" do %>
+                <%= octicon 'settings', height: 16, class: 'text-muted' %>
+                Settings
+              <% end %>
+            </li>
             <li role="separator" class="divider"></li>
             <li>
               <%= link_to logout_path do %>

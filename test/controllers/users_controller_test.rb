@@ -70,4 +70,25 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_nil users(:andrew).personal_access_token
   end
 
+  test 'deletes a user' do
+    sign_in_as(users(:andrew))
+    delete user_url(users(:andrew))
+    assert_redirected_to root_path
+    assert_equal "User deleted: #{users(:andrew).github_login}", flash[:success]
+    refute User.exists?(users(:andrew).id)
+  end
+
+  test 'cannot delete another user' do
+    sign_in_as(users(:tokenuser))
+    delete user_url(users(:andrew))
+    assert_response :unauthorized
+    assert User.exists?(users(:andrew).id)
+    assert User.exists?(users(:tokenuser).id)
+  end
+
+  test 'cannot delete user without logging in' do
+    delete user_url(users(:andrew))
+    assert_redirected_to root_path
+    assert User.exists?(users(:andrew).id)
+  end
 end

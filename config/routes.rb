@@ -22,5 +22,5 @@ Rails.application.routes.draw do
   end
 
   get '/settings', to: 'users#edit'
-  resources :users, only: [:update]
+  resources :users, only: [:update, :destroy]
 end
