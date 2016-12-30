@@ -47,10 +47,12 @@ html {
 }
 .flex-main {
   flex: 1;
+  min-width: 0;
   overflow: scroll;
 }
 .flex-container {
   padding: 15px;
+  min-width: 0;
   .flex-main & {
     padding-left: 0;
   }
@@ -355,6 +357,15 @@ td.keys {
     .notification-icon,
     .notification-subject {
       display: inline-block;
+    }
+    .notification-subject {
+      .link {
+        display: inline-block;
+        overflow: hidden;
+        width: 100px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
     .notification-date {
       top: 10px;
