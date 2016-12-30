@@ -23,7 +23,7 @@ class User < ApplicationRecord
     github_attributes = {
       github_id: auth_hash['uid'],
       github_login: auth_hash['info']['nickname'],
-      access_token: auth_hash.dig('credentials', 'token'),
+      access_token: auth_hash.dig('credentials', 'token')
     }
 
     update_attributes(github_attributes)
