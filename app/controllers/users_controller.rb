@@ -14,6 +14,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    user = User.find(current_user.id)
+    github_login = user.github_login
+    user.destroy
+    flash[:success] = "User deleted: #{github_login}"
+    redirect_to root_path
+  end
+
   private
 
   def ensure_correct_user
