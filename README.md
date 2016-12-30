@@ -63,7 +63,7 @@ Example:
 PERSONAL_ACCESS_TOKENS_ENABLED=1
 ```
 
-Once that is set, users can set a personal access token on the User Preferences page (found on the user drop-down menu).
+Once that is set, users can set a personal access token on the Settings page (found on the user drop-down menu).
 
 ## Development
 
