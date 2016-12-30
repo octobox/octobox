@@ -16,7 +16,9 @@
     <div class="collapse navbar-collapse js-octobox-menu" id="octobox-menu">
       <%= form_tag root_path, method: :get, class: 'navbar-form navbar-left', enforce_utf8: false do |f| %>
         <div class="form-group">
-          <%= hidden_field_tag :parameters, request.query_string  %>
+          <% @text_search_hidden_field_params.each do |name, value| %>
+            <%= hidden_field_tag name, value  %>
+          <% end %>
           <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search...', class: 'form-control', size: 40, id: 'search-box' %>
         </div>
       <% end %>
