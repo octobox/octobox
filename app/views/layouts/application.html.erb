@@ -32,7 +32,10 @@
       <%= flash_messages %>
     </div>
 
-    <%= render 'layouts/header' %>
+    <% if logged_in? %>
+      <%= render 'layouts/header' %>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
