@@ -27,6 +27,11 @@
   <hr>
   <div class="form-group" >
     <%= link_to 'Delete my Octobox account', current_user, method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure you want to do this?'}%>
+    <br/><em>
+      Deleting your Octobox account permanently removes all data associate with your user from Octobox's database.
+    Once you have deleted your account, logging in again will create a new account associated with your github user and
+    load existing notifications.
+  </em>
   </div>
 
 </div>
