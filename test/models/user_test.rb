@@ -124,4 +124,15 @@ class UserTest < ActiveSupport::TestCase
 
     assert_requested :get, notifications_url
   end
+
+  test '#masked_personal_access_token returns empty string if personal_access_token is missing' do
+    user = users(:andrew)
+    assert_equal user.masked_personal_access_token, ''
+  end
+
+  test '#masked_personal_access_token returns stars with the last 8 chars of token' do
+    user = users(:andrew)
+    user.personal_access_token = 'abcdefghijklmnopqrstuvwxyz'
+    assert_equal user.masked_personal_access_token, '********************************stuvwxyz'
+  end
 end
