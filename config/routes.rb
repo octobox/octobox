@@ -20,4 +20,7 @@ Rails.application.routes.draw do
       get :star
     end
   end
+
+  get '/settings', to: 'users#edit'
+  resources :users, only: [:update]
 end

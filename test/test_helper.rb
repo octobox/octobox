@@ -7,6 +7,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'webmock/minitest'
+require 'mocha/mini_test'
 
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
 
@@ -18,10 +19,10 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
   include FactoryGirl::Syntax::Methods
-  include NotificationDownloadHelper
+  include StubHelper
 end
 
 class ActionDispatch::IntegrationTest
   include SignInHelper
-  include NotificationDownloadHelper
+  include StubHelper
 end

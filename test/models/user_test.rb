@@ -2,6 +2,11 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  setup do
+    stub_user_request
+    stub_notifications_request
+  end
+
   test 'must have a github id' do
     user = users(:andrew)
     user.github_id = nil
@@ -30,6 +35,23 @@ class UserTest < ActiveSupport::TestCase
     refute user.valid?
   end
 
+  test '#effective_access_token returns personal_access_token if it is defined' do
+    stub_personal_access_tokens_enabled
+    user = users(:tokenuser)
+    assert_equal user.personal_access_token, user.effective_access_token
+  end
+
+  test '#effective_access_token returns access_token if personal_access_tokens_enabled? is false' do
+    user = users(:tokenuser)
+    assert_equal user.access_token, user.effective_access_token
+  end
+
+  test '#effective_access_token returns access_token if no personal_access_token is defined' do
+    stub_personal_access_tokens_enabled
+    user = users(:andrew)
+    assert_equal user.access_token, user.effective_access_token
+  end
+
   test '.find_by_auth_hash finds a User by their github_id' do
     omniauth_config     = OmniAuth.config.mock_auth[:github]
     omniauth_config.uid = users(:andrew).github_id
@@ -48,10 +70,45 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'abcdefg', user.access_token
   end
 
+  test 'does not allow a personal_access_token for another user' do
+    stub_personal_access_tokens_enabled
+    user = users(:andrew)
+    user.personal_access_token = '1234'
+    stub_user_request(body: '{"id": 98}')
+    refute user.valid?
+    assert_equal User::ERRORS[:invalid_token], user.errors.first
+  end
+
+  test 'does not allow a personal_access_token without the notifications scope' do
+    stub_personal_access_tokens_enabled
+    user = users(:andrew)
+    user.personal_access_token = '1234'
+    stub_user_request(oauth_scopes: 'user, repo')
+    refute user.valid?
+    assert_equal User::ERRORS[:missing_scope], user.errors.first
+  end
+
+  test 'does not allow setting personal_access_token without being enabled' do
+    user = users(:andrew)
+    user.personal_access_token = '1234'
+    refute user.valid?
+    assert_equal User::ERRORS[:disallowed_tokens], user.errors.first
+  end
+
   test '#github_client returns an Octokit::Client with the correct access_token' do
     user = users(:andrew)
     assert_equal user.github_client.class, Octokit::Client
     assert_equal user.github_client.access_token, user.access_token
+  end
+
+  test '#github_client returns an Octokit::Client with the correct access_token after adding personal_access_token' do
+    stub_personal_access_tokens_enabled
+    user = users(:andrew)
+    assert_equal user.github_client.class, Octokit::Client
+    assert_equal user.access_token, user.github_client.access_token
+    user.personal_access_token = '67890'
+    user.save
+    assert_equal '67890', user.github_client.access_token
   end
 
   test "triggers sync_notifications on save" do

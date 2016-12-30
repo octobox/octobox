@@ -53,6 +53,18 @@ GITHUB_DOMAIN=https://github.foobar.com
 
 And that's it :sparkles:
 
+## Using Personal Access Tokens
+Octobox can optionally allow you to set a personal access token to use when querying for notifications.  This must be enabled
+at the server level.  In order to enable it, add the environment variable `PERSONAL_ACCESS_TOKENS_ENABLED` to the `.env` file / deployed environment.
+
+Example:
+
+```bash
+PERSONAL_ACCESS_TOKENS_ENABLED=1
+```
+
+Once that is set, users can set a personal access token on the Settings page (found on the user drop-down menu).
+
 ## Development
 
 The source code is hosted at [GitHub](https://github.com/octobox/octobox).

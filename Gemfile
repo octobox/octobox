@@ -30,6 +30,7 @@ group :test do
   gem 'simplecov'
   gem 'codeclimate-test-reporter'
   gem 'webmock'
+  gem 'mocha'
 end
 
 group :development do
