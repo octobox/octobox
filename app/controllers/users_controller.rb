@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class UsersController < ApplicationController
+  before_action :ensure_correct_user
+
   def edit; end
 
   def update
@@ -13,6 +15,11 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def ensure_correct_user
+    return unless params[:id]
+    head :unauthorized unless current_user.id.to_s == params[:id]
+  end
 
   def update_user_params
 

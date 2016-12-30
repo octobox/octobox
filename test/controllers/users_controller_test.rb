@@ -50,8 +50,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     user = users(:tokenuser)
     stub_personal_access_tokens_enabled
     stub_user_request(user: user)
+    expected_token = user.personal_access_token
     patch user_url(user), params: {user: { personal_access_token: '12345'}}
-    assert_response :unauthorized
+    assert_redirected_to root_path
+    user.reload
+    assert_equal expected_token, user.personal_access_token
   end
 
   test 'rejects changing a different user' do
@@ -59,8 +62,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     stub_personal_access_tokens_enabled
     stub_user_request(user: user)
     sign_in_as(users(:andrew))
+    expected_token = user.personal_access_token
     patch user_url(user), params: {user: { personal_access_token: '12345'}}
     assert_response :unauthorized
+    user.reload
+    assert_equal expected_token, user.personal_access_token
+    assert_nil users(:andrew).personal_access_token
   end
 
 end
