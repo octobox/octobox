@@ -22,11 +22,11 @@
       </div>
       <%= submit_tag 'Save', class: 'btn btn-primary' %>
       <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
-    <% else %>
-      <div>
-        There are no currently configurable user options. Check back later.
-      </div>
     <% end %>
-
   <% end %>
+  <hr>
+  <div class="form-group" >
+    <%= link_to 'Delete my Octobox account', current_user, method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure you want to do this?'}%>
+  </div>
+
 </div>
