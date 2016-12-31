@@ -16,8 +16,20 @@ module NotificationsHelper
     }
   end
 
+  def notification_param_keys
+    filters.keys - [:per_page]
+  end
+
+  def bucket_param_keys
+    [:archived, :starred]
+  end
+
+  def filter_param_keys
+    notification_param_keys - bucket_param_keys
+  end
+
   def any_active_filters?
-    [:status, :reason, :type, :repo, :owner].any?{|param| filters[param].present? }
+    filter_param_keys.any?{|param| filters[param].present? }
   end
 
   def filtered_params(override = {})

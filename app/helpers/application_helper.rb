@@ -51,6 +51,6 @@ module ApplicationHelper
   end
 
   def no_url_filter_parameters_present
-    [:archive, :repo, :type, :status, :reason, :owner, :starred].all?{|param| params[param].nil? }
+    notification_param_keys.all?{|param| params[param].blank? }
   end
 end
