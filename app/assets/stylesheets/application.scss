@@ -461,9 +461,11 @@ td.keys {
   pointer-events: none;
 }
 
-.panel-heading,
-.panel-footer {
-  padding: 6px 8px;
+.panel-notifications {
+  .panel-heading,
+  .panel-footer {
+    padding: 6px 8px;
+  }
 }
 
 .select-all {

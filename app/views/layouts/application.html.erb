@@ -28,7 +28,7 @@
   </head>
 
   <body class="flex-body">
-    <% if current_user %>
+    <% if logged_in? %>
       <div class="flex-header">
         <%= render 'layouts/header' %>
       </div>
