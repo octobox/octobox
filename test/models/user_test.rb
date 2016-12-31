@@ -111,20 +111,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal '67890', user.github_client.access_token
   end
 
-  test "triggers sync_notifications on save" do
-    notifications_url = %r{https://api.github.com/notifications}
-
-    body     = '[]'
-    headers  = { 'Content-Type' => 'application/json' }
-    response = { status: 200, body: body, headers: headers }
-
-    stub_request(:get, notifications_url).to_return(response)
-
-    User.create(github_id: 42, github_login: 'douglas_adams', access_token: 'abcdefg')
-
-    assert_requested :get, notifications_url
-  end
-
   test '#masked_personal_access_token returns empty string if personal_access_token is missing' do
     user = users(:andrew)
     assert_equal user.masked_personal_access_token, ''
