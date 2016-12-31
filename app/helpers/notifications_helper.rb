@@ -1,8 +1,20 @@
 module NotificationsHelper
-  def menu_separator(custom_class=nil)
-    "<li class='divider #{custom_class}'></li>".html_safe
-  end
+  REASON_LABELS = {
+    'comment'      => 'primary',
+    'author'       => 'success',
+    'state_change' => 'info',
+    'mention'      => 'warning',
+    'assign'       => 'danger'
+  }.freeze
 
+  SUBJECT_TYPES = {
+    'RepositoryInvitation' => 'mail-read',
+    'Issue'                => 'issue-opened',
+    'PullRequest'          => 'git-pull-request',
+    'Commit'               => 'git-commit',
+    'Release'              => 'tag'
+  }.freeze
+  
   def filters
     {
       reason:   params[:reason],
@@ -42,5 +54,17 @@ module NotificationsHelper
                class: "archive_toggle #{action}_selected #{custom_class}") do
       "#{action} selected".capitalize
     end
+  end
+
+  def no_url_filter_parameters_present
+    notification_param_keys.all?{|param| params[param].blank? }
+  end
+
+  def notification_icon(subject_type)
+    SUBJECT_TYPES[subject_type]
+  end
+
+  def reason_label(reason)
+    REASON_LABELS.fetch(reason, 'default')
   end
 end
