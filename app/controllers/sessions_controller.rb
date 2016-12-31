@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
     user      = User.find_by_auth_hash(auth_hash) || User.new
 
     user.assign_from_auth_hash(auth_hash)
+    user.sync_notifications
 
     session[:user_id] = user.id
     redirect_to root_path
