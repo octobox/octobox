@@ -362,7 +362,7 @@ td.keys {
       .link {
         display: inline-block;
         overflow: hidden;
-        width: 190px;
+        width: calc(100vw - 200px);
         white-space: nowrap;
         text-overflow: ellipsis;
       }
