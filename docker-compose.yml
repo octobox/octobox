@@ -5,7 +5,8 @@ services:
     image: postgres:9.6
     environment:
       - POSTGRES_PASSWORD=development
-
+  memcached:
+    image: memcached
   app:
     image: octobox
     build:
@@ -15,6 +16,7 @@ services:
       - 3000:3000
     links:
       - database:database.service.octobox.internal
+      - memcached:memcached.service.octobox.internal
     environment:
       - RAILS_ENV=development
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
@@ -23,4 +25,5 @@ services:
       - OCTOBOX_DATABASE_USER=postgres
       - OCTOBOX_DATABASE_PASSWORD=development
       - OCTOBOX_DATABASE_HOST=database.service.octobox.internal
+      - MEMCACHEDCLOUD_SERVERS=memcached.service.octobox.internal
     command: bin/docker-start
