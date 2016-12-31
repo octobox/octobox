@@ -47,7 +47,7 @@ class Notification < ApplicationRecord
           end
 
           n.attributes = attrs
-          n.save if n.changed?
+          n.save(touch: false) if n.changed?
         rescue ActiveRecord::RecordNotUnique
           nil
         end
