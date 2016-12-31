@@ -32,7 +32,7 @@
   </td>
   <td class='notification-date'>
     <small class='text-muted'>
-      <%= notification.updated_at.localtime.to_s(:short) %>
+      <%= local_time(notification.updated_at, :short) %>
     </small>
   </td>
 </tr>
