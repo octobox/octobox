@@ -7,8 +7,6 @@ class User < ApplicationRecord
   validates :github_login, presence: true
   validate :personal_access_token_validator
 
-  after_commit :sync_notifications, on: :create
-
   ERRORS = {
     invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
     missing_scope: [:personal_access_token, 'does not include the notifications scope'],
