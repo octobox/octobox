@@ -32,7 +32,7 @@
           <label class="btn btn-default select-all" for="select_all">
             <input id="select_all" type="checkbox" class='js-select_all'>
         </label>
-          <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
+          <%= link_to sync_notifications_path(filters), class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', :height => 16 %>
           <% end %>
           <%= archive_selected_button("btn btn-default hidden") %>
