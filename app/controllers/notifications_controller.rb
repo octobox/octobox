@@ -41,7 +41,7 @@ class NotificationsController < ApplicationController
 
   def sync
     current_user.sync_notifications
-    redirect_to root_path(type: params[:type], repo: params[:repo])
+    redirect_back fallback_location: root_path
   end
 
   private
