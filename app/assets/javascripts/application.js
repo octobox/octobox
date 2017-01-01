@@ -15,10 +15,10 @@ document.addEventListener("turbolinks:load", function() {
       } else {
         $(".js-select_all").prop("indeterminate", true);
       }
-      $('button.archive_selected, button.unarchive_selected').show();
+      $('button.archive_selected, button.unarchive_selected').removeClass('hidden');
     } else {
       $(".js-select_all").prop('checked', false)
-      $('button.archive_selected, button.unarchive_selected').hide();
+      $('button.archive_selected, button.unarchive_selected').addClass('hidden');
     }
   });
   $('.toggle-star').click(function() {
@@ -43,7 +43,7 @@ document.addEventListener("turbolinks:before-cache", function() {
 $(document).ready(enableKeyboardShortcuts);
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
-  $('.row-offcanvas').toggleClass('active')
+  $('.flex-content').toggleClass('active')
 });
 
 if(!('ontouchstart' in window))

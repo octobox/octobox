@@ -27,12 +27,16 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-  <body>
-    <div class="header-flash-messages">
+  <body class="flex-body">
+    <% if logged_in? %>
+      <div class="flex-header">
+        <%= render 'layouts/header' %>
+      </div>
+    <% end %>
+    <div class="flex-header header-flash-messages">
       <%= flash_messages %>
     </div>
 
-    <%= render('layouts/header') if logged_in? %>
     <%= yield %>
   </body>
 </html>

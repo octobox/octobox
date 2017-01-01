@@ -23,12 +23,50 @@ html, body {
 
 body {
   font-size: 14px;
-  padding-top: 75px;
 }
-
 html {
   position: relative;
   min-height: 100%;
+}
+
+.flex-body {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+.flex-header {
+  flex: 0 0 auto;
+}
+.flex-content {
+  display: flex;
+}
+.flex-sidebar {
+  flex: 0 0 250px;
+  overflow: scroll;
+  padding-bottom: 60px;
+}
+.flex-main {
+  flex: 1;
+  min-width: 0;
+  overflow: scroll;
+}
+.flex-container {
+  padding: 15px;
+  min-width: 0;
+  .flex-main & {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: $screen-xs-max) {
+  .flex-container {
+    .flex-main & {
+      padding-left: 15px;
+    }
+    .flex-sidebar & {
+      padding-right: 0;
+    }
+  }
 }
 
 .turbolinks-progress-bar {
@@ -43,12 +81,15 @@ html {
 }
 
 .jumbotron {
+  margin-top: 70px;
   .octobox-icon {
     margin-right: 8px;
     vertical-align: -14px;
   }
 }
-
+.navbar-main {
+  margin-bottom: 0;
+}
 .navbar-brand {
   .octobox-icon {
     fill: #333;
@@ -68,7 +109,9 @@ html {
 }
 
 .navbar-avatar {
-  margin-top: -3px;
+  margin-bottom: -3px;
+  position: relative;
+  top: -3px;
 }
 
 .navbar-nav {
@@ -125,12 +168,6 @@ html {
   cursor: pointer;
 }
 
-@media (max-width: $screen-xs-max) {
-  .table-notifications tr {
-    border-left: 2px solid transparent;
-  }
-}
-
 @media (min-width: $screen-sm-min ) {
   .table-notifications tr td:first-child {
     border-left: 2px solid #fff;
@@ -141,10 +178,9 @@ html {
   .table-notifications tr.active td:first-child {
     border-left: 2px solid $table-bg-active;
   }
-  .table-notifications tr:hover td:first-child {
+  .table-notifications tr.active:hover td:first-child {
     border-left: 2px solid #ededed;
   }
-
   td.current {
     border-left: 2px solid #64beff !important;
   }
@@ -263,11 +299,18 @@ td.keys {
 }
 
 @media (min-width: $screen-sm-min) {
-  .notification-checkbox,
   .notification-star,
   .notification-icon {
     width: 1%;
     text-align: center;
+  }
+  .notification-checkbox {
+    input {
+      margin-left: 9px;
+      margin-right: 9px;
+      position: relative;
+      top: -1px;
+    }
   }
 }
 
@@ -297,6 +340,9 @@ td.keys {
       border-top: 1px solid #ddd;
       position: relative;
       padding: 10px 10px 10px 40px;
+      &:first-child {
+        border-top: none;
+      }
     }
     .notification-checkbox,
     .notification-star,
@@ -304,16 +350,25 @@ td.keys {
       position: absolute;
     }
     .notification-checkbox {
-      top: 10px;
+      top: 8px;
       left: 10px;
     }
     .notification-star {
-      top: 32px;
+      top: 38px;
       left: 10px;
     }
     .notification-icon,
     .notification-subject {
       display: inline-block;
+    }
+    .notification-subject {
+      .link {
+        display: inline-block;
+        overflow: hidden;
+        width: calc(100vw - 200px);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
     .notification-date {
       top: 10px;
@@ -327,44 +382,28 @@ td.keys {
 @media screen and (max-width: $screen-sm-max) {
   $sidebar-width: 250px;
 
-  .row-offcanvas {
+  .flex-content {
     position: relative;
     -webkit-transition: all .25s ease-out;
          -o-transition: all .25s ease-out;
             transition: all .25s ease-out;
   }
-
-  .row-offcanvas-right {
-    right: 0;
-  }
-
-  .row-offcanvas-left {
-    left: 0;
-  }
-
-  .row-offcanvas-right
-  .sidebar-offcanvas {
-    right: -$sidebar-width;
-  }
-
-  .row-offcanvas-left
-  .sidebar-offcanvas {
+  .flex-sidebar {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    width: $sidebar-width;
     left: -$sidebar-width;
   }
 
-  .row-offcanvas-right.active {
-    right: $sidebar-width;
+  .flex-content {
+    left: 0;
   }
 
-  .row-offcanvas-left.active {
+  .flex-content.active {
     left: $sidebar-width;
   }
 
-  .sidebar-offcanvas {
-    position: absolute;
-    top: 0;
-    width: $sidebar-width;
-  }
 }
 
 .header-flash-messages {
@@ -425,20 +464,29 @@ td.keys {
   pointer-events: none;
 }
 
-.panel-heading,
-.panel-footer {
-  padding: 6px 10px;
+.panel-notifications {
+  .panel-heading,
+  .panel-footer {
+    padding: 6px 8px;
+  }
 }
 
-.select-all input {
-  margin-top: 0;
-  position: relative;
-  top: -1px;
+.select-all {
+  padding-left: 10px;
+  padding-right: 10px;
+  input {
+    margin-top: 0;
+    position: relative;
+    top: -1px;
+  }
 }
 
 @media (max-width: $screen-xs-max) {
-  .select-all input {
-    top: 2px;
+  .select-all {
+    padding-right: 8px;
+    input {
+      top: 2px;
+    }
   }
 }
 
@@ -448,8 +496,4 @@ td.keys {
 
 .spinning{
   animation: spin 1s infinite steps(90);
-}
-
-.archive_selected, .unarchive_selected {
-  display: none;
 }

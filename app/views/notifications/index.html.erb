@@ -1,10 +1,12 @@
-<div class="container-fluid">
-  <div class="row row-offcanvas row-offcanvas-left">
-    <div class="col-6 col-md-2 sidebar-offcanvas" id="sidebar">
+<div class="flex-content">
+  <div class="flex-sidebar">
+    <div class="flex-container">
       <%= render "sidebar" %>
     </div>
-    <div class="col-12 col-md-10">
-      <div class="panel panel-default">
+  </div>
+  <div class="flex-main">
+    <div class="flex-container">
+      <div class="panel panel-default panel-notifications">
         <div class="panel-heading">
           <div class="btn-group pull-right hidden-xs">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -21,8 +23,8 @@
               <% end %>
             </ul>
           </div>
-          <div class="btn help pull-right hidden-xs" data-toggle="modal" data-target="#help-box">
-            <%= octicon 'question', :height => 16 %>
+          <div class="btn btn-link help pull-right hidden-xs" data-toggle="modal" data-target="#help-box">
+            <%= octicon 'keyboard', :height => 16 %>
           </div>
           <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
             <%= octicon 'three-bars', :height => 16 %>
@@ -33,7 +35,7 @@
           <%= link_to sync_notifications_path, class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', :height => 16 %>
           <% end %>
-          <%= archive_selected_button("btn btn-default") %>
+          <%= archive_selected_button("btn btn-default hidden") %>
           <%= render 'filter-list' %>
         </div>
 
