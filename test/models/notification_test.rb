@@ -26,6 +26,17 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
+  test '#download fetches notifications since last sync when quick_sync is set' do
+    travel_to "2016-12-19T20:00:00Z" do
+      user = users(:andrew)
+      user.last_synced_at = "2016-12-19T19:00:00Z"
+
+      Notification.download(user, quick_sync: true)
+
+      assert_requested :get, "https://api.github.com/notifications?all=true&per_page=100&since=2016-12-19T19:00:00Z"
+    end
+  end
+
   test "#download will set the url for a Repository invitation correctly" do
     stub_notifications_request(body: file_fixture('repository_invitation_notification.json'))
     user = users(:andrew)

@@ -90,7 +90,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     @user.sync_on_load = true
     @user.save
     sign_in_as(@user)
-    User.any_instance.expects(:sync_notifications).once
+    User.any_instance.expects(:sync_notifications).with({quick_sync: true}).once
     get '/'
     assert_response :success
     assert_template 'notifications/index'

@@ -5,7 +5,7 @@ class NotificationsController < ApplicationController
   before_action :find_notification, only: [:archive, :unarchive, :star]
 
   def index
-    current_user.sync_notifications if current_user.sync_on_load
+    current_user.sync_notifications(quick_sync: true) if current_user.sync_on_load
 
     scope    = current_user.notifications
 
@@ -42,8 +42,9 @@ class NotificationsController < ApplicationController
   end
 
   def sync
+    quick_sync = params[:quick]
     # When a user has sync_on_load enabled, doing a sync here would cause a double sync when index is reloaded
-    current_user.sync_notifications unless current_user.sync_on_load
+    current_user.sync_notifications(quick_sync: quick_sync) unless current_user.sync_on_load
     redirect_back fallback_location: root_path
   end
 
