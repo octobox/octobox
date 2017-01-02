@@ -1,8 +1,12 @@
 <div class="container">
   <h1>Settings</h1>
-  <% if Octobox.personal_access_tokens_enabled? %>
-    <hr>
-    <%= form_for current_user do |f| %>
+  <hr>
+  <%= form_for current_user do |f| %>
+    <div class="form-group">
+      <%= f.label :sync_on_load, "Sync notifications with every page load" %>
+      <%= f.check_box :sync_on_load, class: 'form-control' %>
+    </div>
+    <% if Octobox.personal_access_tokens_enabled? %>
       <div class="form-group">
         <%= f.label :personal_access_token, "Personal Access Token" %>
         <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
@@ -17,10 +21,9 @@
           </label>
         </div>
       </div>
-
-      <%= submit_tag 'Save', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
     <% end %>
+    <%= submit_tag 'Save', class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
   <% end %>
 
   <hr>

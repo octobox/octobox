@@ -91,4 +91,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert User.exists?(users(:andrew).id)
   end
+
+  test 'updates sync_on_load' do
+    refute @user.sync_on_load
+    sign_in_as(@user)
+    patch user_url(@user), params: {user: { sync_on_load: 'true'}}
+    @user.reload
+    assert @user.sync_on_load
+    patch user_url(@user), params: {user: { sync_on_load: 'false'}}
+    @user.reload
+    refute @user.sync_on_load
+  end
 end
