@@ -7,6 +7,11 @@ class UserTest < ActiveSupport::TestCase
     stub_notifications_request
   end
 
+  def assert_error_present(model_object, error)
+    refute model_object.valid?
+    model_object.errors[error[0]].include? error[1]
+  end
+
   test 'must have a github id' do
     user = users(:andrew)
     user.github_id = nil
@@ -75,8 +80,7 @@ class UserTest < ActiveSupport::TestCase
     user = users(:andrew)
     user.personal_access_token = '1234'
     stub_user_request(body: '{"id": 98}')
-    refute user.valid?
-    assert_equal User::ERRORS[:invalid_token], user.errors.first
+    assert_error_present(user, User::ERRORS[:invalid_token])
   end
 
   test 'does not allow a personal_access_token without the notifications scope' do
@@ -84,15 +88,13 @@ class UserTest < ActiveSupport::TestCase
     user = users(:andrew)
     user.personal_access_token = '1234'
     stub_user_request(oauth_scopes: 'user, repo')
-    refute user.valid?
-    assert_equal User::ERRORS[:missing_scope], user.errors.first
+    assert_error_present(user, User::ERRORS[:missing_scope])
   end
 
   test 'does not allow setting personal_access_token without being enabled' do
     user = users(:andrew)
     user.personal_access_token = '1234'
-    refute user.valid?
-    assert_equal User::ERRORS[:disallowed_tokens], user.errors.first
+    assert_error_present(user, User::ERRORS[:disallowed_tokens])
   end
 
   test '#github_client returns an Octokit::Client with the correct access_token' do
