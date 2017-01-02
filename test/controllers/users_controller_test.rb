@@ -91,4 +91,41 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
     assert User.exists?(users(:andrew).id)
   end
+
+  test 'sets refresh_interval' do
+    user = users(:andrew)
+    stub_user_request(user: user)
+    sign_in_as(user)
+    patch user_url(user), params: {user: { refresh_interval: 12_345}}
+    user.reload
+    assert_equal 12_345, user.refresh_interval
+  end
+
+  test 'sets refresh_interval from minutes' do
+    user = users(:andrew)
+    stub_user_request(user: user)
+    sign_in_as(user)
+    patch user_url(user), params: {user: { refresh_interval_minutes: 2}}
+    user.reload
+    assert_equal 120_000, user.refresh_interval
+  end
+
+  test 'rejects refresh_interval > 1 day' do
+    user = users(:andrew)
+    stub_user_request(user: user)
+    sign_in_as(user)
+    patch user_url(user), params: {user: { refresh_interval_minutes: 1500}}
+    user.reload
+    assert_equal 0, user.refresh_interval
+  end
+
+  test 'rejects negative refresh_interval' do
+    user = users(:andrew)
+    stub_user_request(user: user)
+    sign_in_as(user)
+    patch user_url(user), params: {user: { refresh_interval: -60_000}}
+    user.reload
+    assert_equal 0, user.refresh_interval
+  end
+
 end
