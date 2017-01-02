@@ -37,6 +37,13 @@
           <%= params[:owner] %>
         <% end %>
       <% end %>
+
+      <% if filters[:q].present? %>
+        <%= link_to root_path(filters.except(:q)), class: 'btn btn-default' do %>
+          <%= octicon 'x', :height => 16 %>
+          Search: <%= params[:q] %>
+        <% end %>
+      <% end %>
     </span>
   </span>
 <% end %>

@@ -14,7 +14,7 @@ module NotificationsHelper
     'Commit'               => 'git-commit',
     'Release'              => 'tag'
   }.freeze
-  
+
   def filters
     {
       reason:   params[:reason],
@@ -24,7 +24,8 @@ module NotificationsHelper
       archive:  params[:archive],
       starred:  params[:starred],
       owner:    params[:owner],
-      per_page: params[:per_page]
+      per_page: params[:per_page],
+      q:        params[:q]
     }
   end
 

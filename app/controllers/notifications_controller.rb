@@ -27,8 +27,6 @@ class NotificationsController < ApplicationController
     scope = scope.search_by_subject_title(params[:q])   if params[:q].present?
 
     check_out_of_bounds(scope)
-    @query = params[:q] if params[:q].present?
-    @text_search_hidden_field_params = params
 
     @notifications = scope.newest.page(page).per(per_page)
   end
