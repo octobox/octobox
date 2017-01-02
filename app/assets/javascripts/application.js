@@ -159,14 +159,16 @@ function autoSync() {
   }
 }
 
-function setAutoSyncTimer(interval) {
-  if (isNaN(interval)) {
+function setAutoSyncTimer() {
+  if (isNaN(refresh_interval)) {
     return;
   }
-  if (interval > 0) {
-    setInterval(autoSync, interval)
+  if (refresh_interval > 0) {
+    setInterval(autoSync, refresh_interval)
   }
 }
+
+$(document).ready(setAutoSyncTimer);
 
 function scrollToCursor() {
   var current = $('td.js-current');
