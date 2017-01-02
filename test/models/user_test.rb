@@ -121,4 +121,15 @@ class UserTest < ActiveSupport::TestCase
     user.personal_access_token = 'abcdefghijklmnopqrstuvwxyz'
     assert_equal user.masked_personal_access_token, '********************************stuvwxyz'
   end
+
+  test 'sync_on_load attribute' do
+    user = users(:andrew)
+    refute user.sync_on_load
+    user.sync_on_load = true
+    user.save
+    assert user.valid?
+    assert user.sync_on_load
+  end
+
+
 end
