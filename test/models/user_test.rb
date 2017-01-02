@@ -123,4 +123,25 @@ class UserTest < ActiveSupport::TestCase
     user.personal_access_token = 'abcdefghijklmnopqrstuvwxyz'
     assert_equal user.masked_personal_access_token, '********************************stuvwxyz'
   end
+
+  test 'rejects refresh_interval over a day' do
+    user = users(:andrew)
+    user.refresh_interval = 90_000_000
+    refute user.valid?
+    assert_error_present(user, User::ERRORS[:refresh_interval_size])
+  end
+
+  test 'rejects negative refresh_interval' do
+    user = users(:andrew)
+    user.refresh_interval = -90_000
+    refute user.valid?
+    assert_error_present(user, User::ERRORS[:refresh_interval_size])
+  end
+
+  test 'sets refresh interval' do
+    user = users(:andrew)
+    user.refresh_interval = 60_000
+    user.save
+    assert_equal 60_000, users(:andrew).refresh_interval
+  end
 end
