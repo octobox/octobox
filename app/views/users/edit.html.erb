@@ -5,7 +5,7 @@
     <% if Octobox.refresh_interval_enabled? %>
       <div class="form-group">
         <%= f.label :refresh_interval_minutes, 'Notification Refresh Interval' %>
-        <%= f.number_field :refresh_interval_minutes, max: 1440, min: 0, value: current_user.refresh_interval / 60_000, class: 'form-control' %>
+        <%= f.number_field :refresh_interval_minutes, max: 1440, min: Octobox.minimum_refresh_interval, value: current_user.effective_refresh_interval / 60_000, class: 'form-control' %>
         <p>
           <em>
             Auto refresh every N minutes when you are viewing notifications. If set to 0, no auto refreshes will occur.
