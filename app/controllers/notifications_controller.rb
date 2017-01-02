@@ -5,6 +5,8 @@ class NotificationsController < ApplicationController
   before_action :find_notification, only: [:archive, :unarchive, :star]
 
   def index
+    current_user.sync_notifications if current_user.sync_on_load
+
     scope    = current_user.notifications
 
     scope = if params[:starred].present?
@@ -40,7 +42,8 @@ class NotificationsController < ApplicationController
   end
 
   def sync
-    current_user.sync_notifications
+    # When a user has sync_on_load enabled, doing a sync here would cause a double sync when index is reloaded
+    current_user.sync_notifications unless current_user.sync_on_load
     redirect_back fallback_location: root_path
   end
 

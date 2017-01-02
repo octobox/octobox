@@ -85,4 +85,24 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     post "/notifications/sync"
     assert_response :redirect
   end
+
+  test 'syncs when loading the index if sync_on_load is enabled' do
+    @user.sync_on_load = true
+    @user.save
+    sign_in_as(@user)
+    User.any_instance.expects(:sync_notifications).once
+    get '/'
+    assert_response :success
+    assert_template 'notifications/index'
+  end
+
+  test 'does not sync when loading the index if sync_on_load is disabled' do
+    @user.sync_on_load = false
+    @user.save
+    sign_in_as(@user)
+    User.any_instance.expects(:sync_notifications).never
+    get '/'
+    assert_response :success
+    assert_template 'notifications/index'
+  end
 end
