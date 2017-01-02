@@ -152,6 +152,22 @@ function sync() {
   $("a.sync").click();
 }
 
+function autoSync() {
+  marked = $(".js-table-notifications input:checked")
+  if ( marked.length == 0 ) {
+    sync()
+  }
+}
+
+function setAutoSyncTimer(interval) {
+  if (isNaN(interval)) {
+    return;
+  }
+  if (interval > 0) {
+    setInterval(autoSync, interval)
+  }
+}
+
 function scrollToCursor() {
   var current = $('td.js-current');
   var table_offset = $('.js-table-notifications').position().top;
