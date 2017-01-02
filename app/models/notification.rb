@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
   include PgSearch
-  pg_search_scope :search_by_subject_title, :against => :subject_title
+  pg_search_scope :search_by_subject_title,
+                  against: :subject_title,
+                  using: {
+                    tsearch: {
+                      prefix: true,
+                      negation: true,
+                      dictionary: "english"
+                    }
+                  }
 
   belongs_to :user
 
