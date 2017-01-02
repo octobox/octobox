@@ -160,6 +160,7 @@ function autoSync() {
 }
 
 function setAutoSyncTimer() {
+  refresh_interval = $('.js-table-notifications').data('refresh-interval');
   if (isNaN(refresh_interval)) {
     return;
   }
