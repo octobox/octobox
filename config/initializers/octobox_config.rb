@@ -13,5 +13,9 @@ module Octobox
       @minimum_refresh_interval || ENV['MINIMUM_REFRESH_INTERVAL'].to_i
     end
     attr_writer :minimum_refresh_interval
+
+    def refresh_interval_enabled?
+      minimum_refresh_interval > 0
+    end
   end
 end
