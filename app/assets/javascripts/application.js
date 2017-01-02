@@ -199,3 +199,11 @@ function recoverPreviousCursorPosition() {
 function loadTurbolinksArchiveURL(link, route) {
   Turbolinks.visit('/notifications/'+$(link).val()+'/'+route+location.search)
 }
+
+// Clicking a row marks it current
+$(document).ready(function() {
+  $("tr.notification").click(function() {
+    $(".current.js-current").removeClass("current js-current");
+    $( this ).find("td").first().addClass("current js-current");
+  })
+});
