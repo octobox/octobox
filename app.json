@@ -13,6 +13,10 @@
     "GITHUB_CLIENT_SECRET": {
       "description": "The GitHub Application Client Secret",
       "required": true
+    },
+    "MINIMUM_REFRESH_INTERVAL": {
+      "description": "Minimum value allowed for a user to set auto-refresh.  Setting to 0 means this is disabled.",
+      "value": "10"
     }
   },
   "addons": [
