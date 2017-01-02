@@ -144,4 +144,19 @@ class UserTest < ActiveSupport::TestCase
     user.save
     assert_equal 60_000, users(:andrew).refresh_interval
   end
+
+  [{refresh_interval: 90_000, minimum_refresh_interval: 0, expected_result: 0},
+   {refresh_interval: 90_000, minimum_refresh_interval: 60, expected_result: 60 * 60_000},
+   {refresh_interval: 0, minimum_refresh_interval: 60, expected_result: 0},
+   {refresh_interval: 0, minimum_refresh_interval: 0, expected_result: 0}
+  ].each do |t|
+    test "effective_refresh_interval returns #{t[:expected_result]} when minimum_refresh_interval is #{t[:minimum_refresh_interval]} and refresh_interval is #{t[:refresh_interval]}" do
+      stub_minimum_refresh_interval(t[:minimum_refresh_interval])
+      user = users(:andrew)
+      user.refresh_interval = t[:refresh_interval]
+      user.save
+      assert_equal t[:expected_result], user.effective_refresh_interval
+    end
+  end
+
 end

@@ -51,6 +51,12 @@ class User < ApplicationRecord
     "#{domain}/#{github_login}.png"
   end
 
+  # Use the greater of the system minimum or the user's setting
+  def effective_refresh_interval
+    return 0 if [Octobox.minimum_refresh_interval, refresh_interval].include?(0)
+    [Octobox.minimum_refresh_interval * 60_000, refresh_interval].max
+  end
+
   def effective_access_token
     Octobox.personal_access_tokens_enabled? && personal_access_token.present? ? personal_access_token : access_token
   end
