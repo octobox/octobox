@@ -1,8 +1,18 @@
 <div class="container">
   <h1>Settings</h1>
-  <% if Octobox.personal_access_tokens_enabled? %>
-    <hr>
-    <%= form_for current_user do |f| %>
+  <hr>
+  <%= form_for current_user do |f| %>
+    <div class="form-group">
+      <%= f.label :refresh_interval_minutes, 'Notification Refresh Interval' %>
+      <%= f.number_field :refresh_interval_minutes, max: 1440, min: 0, value: current_user.refresh_interval / 60_000,  class:'form-control' %>
+      <p>
+        <em>
+          Auto refresh every N minutes when you are viewing notifications.  If set to 0, no auto refreshes will occur.
+        </em>
+      </p>
+    </div>
+
+    <% if Octobox.personal_access_tokens_enabled? %>
       <div class="form-group">
         <%= f.label :personal_access_token, "Personal Access Token" %>
         <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
@@ -18,9 +28,9 @@
         </div>
       </div>
 
-      <%= submit_tag 'Save', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
     <% end %>
+    <%= submit_tag 'Save', class: 'btn btn-primary' %>
+    <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
   <% end %>
 
   <hr>
