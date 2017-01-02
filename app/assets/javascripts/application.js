@@ -157,7 +157,7 @@ function sync() {
 
 function autoSync() {
   marked = $(".js-table-notifications input:checked")
-  if ( marked.length == 0 ) {
+  if ( marked.length === 0 ) {
     sync()
   }
 }
