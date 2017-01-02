@@ -72,3 +72,4 @@
 </div>
 
 <%= render 'help-box' %>
+<%= javascript_tag "setAutoSyncTimer(#{current_user.refresh_interval})" %>
