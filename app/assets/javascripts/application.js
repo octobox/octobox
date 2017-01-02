@@ -58,8 +58,11 @@ function enableKeyboardShortcuts() {
   window.current_id = undefined
 
   $(document).keydown(function(e) {
-    var shortcutFunction = shortcuts[e.which]
-    if (shortcutFunction) { shortcutFunction(e) }
+    // disable shortcuts for the seach box
+    if (e.target.id !== 'search-box') {
+      var shortcutFunction = shortcuts[e.which]
+      if (shortcutFunction) { shortcutFunction(e) }
+    }
   });
 }
 

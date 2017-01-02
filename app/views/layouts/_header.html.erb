@@ -15,6 +15,17 @@
     </div>
 
     <div class="collapse navbar-collapse js-octobox-menu" id="octobox-menu">
+      <%= form_tag root_path, method: :get, class: 'navbar-form navbar-left', enforce_utf8: false do |f| %>
+        <div class="form-group">
+          <% @text_search_hidden_field_params.each do |name, value| %>
+            <!-- filter out unwanted query params -->
+            <% if (name != 'controller') && (name != 'action') %>
+              <%= hidden_field_tag name, value  %>
+            <% end %>
+          <% end %>
+          <%= text_field_tag 'q', "#{@query || '' }", placeholder: 'Search...', class: 'form-control', size: 40, id: 'search-box' %>
+        </div>
+      <% end %>
       <ul class="nav navbar-nav navbar-right">
         <% if current_user %>
           <li class="dropdown">
@@ -59,5 +70,7 @@
         <% end %>
       </ul>
     </div><!-- /.navbar-collapse -->
+
+
   </div><!-- /.container-fluid -->
 </nav>
