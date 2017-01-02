@@ -152,6 +152,25 @@ function sync() {
   $("a.sync").click();
 }
 
+function autoSync() {
+  marked = $(".js-table-notifications input:checked")
+  if ( marked.length == 0 ) {
+    sync()
+  }
+}
+
+function setAutoSyncTimer() {
+  refresh_interval = $('.js-table-notifications').data('refresh-interval');
+  if (isNaN(refresh_interval)) {
+    return;
+  }
+  if (refresh_interval > 0) {
+    setInterval(autoSync, refresh_interval)
+  }
+}
+
+$(document).ready(setAutoSyncTimer);
+
 function scrollToCursor() {
   var current = $('td.js-current');
   var table_offset = $('.js-table-notifications').position().top;
@@ -199,3 +218,11 @@ function recoverPreviousCursorPosition() {
 function loadTurbolinksArchiveURL(link, route) {
   Turbolinks.visit('/notifications/'+$(link).val()+'/'+route+location.search)
 }
+
+// Clicking a row marks it current
+$(document).ready(function() {
+  $("tr.notification").click(function() {
+    $(".current.js-current").removeClass("current js-current");
+    $( this ).find("td").first().addClass("current js-current");
+  })
+});

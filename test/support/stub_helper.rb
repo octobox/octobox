@@ -25,4 +25,8 @@ module StubHelper
   def stub_personal_access_tokens_enabled(value: 'true')
     Octobox.stubs(:personal_access_tokens_enabled).returns(true)
   end
+
+  def stub_minimum_refresh_interval(value = 0)
+    Octobox.stubs(:minimum_refresh_interval).returns(value)
+  end
 end

@@ -6,6 +6,18 @@
       <%= f.label :sync_on_load, "Sync notifications with every page load" %>
       <%= f.check_box :sync_on_load, class: 'form-control' %>
     </div>
+    <% if Octobox.refresh_interval_enabled? %>
+      <div class="form-group">
+        <%= f.label :refresh_interval_minutes, 'Notification Refresh Interval' %>
+        <%= f.number_field :refresh_interval_minutes, max: 1440, min: Octobox.minimum_refresh_interval, value: current_user.effective_refresh_interval / 60_000, class: 'form-control' %>
+        <p>
+          <em>
+            Auto refresh every N minutes when you are viewing notifications. If set to 0, no auto refreshes will occur.
+          </em>
+        </p>
+      </div>
+    <% end %>
+
     <% if Octobox.personal_access_tokens_enabled? %>
       <div class="form-group">
         <%= f.label :personal_access_token, "Personal Access Token" %>
@@ -21,6 +33,7 @@
           </label>
         </div>
       </div>
+
     <% end %>
     <%= submit_tag 'Save', class: 'btn btn-primary' %>
     <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>

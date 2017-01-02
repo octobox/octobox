@@ -30,6 +30,9 @@ class UsersController < ApplicationController
   end
 
   def update_user_params
+    if params[:user][:refresh_interval_minutes].present?
+      params[:user][:refresh_interval] = params[:user][:refresh_interval_minutes].to_i * 60_000
+    end
 
     # If the user changes nothing in the form, personal_access_token will be blank.  In that case we don't want to update it.
     if params[:user][:personal_access_token].blank?
@@ -41,6 +44,6 @@ class UsersController < ApplicationController
       params[:user][:personal_access_token] = nil
     end
 
-    params.require(:user).permit(:personal_access_token, :sync_on_load)
+    params.require(:user).permit(:personal_access_token, :sync_on_load, :refresh_interval)
   end
 end

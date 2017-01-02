@@ -37,14 +37,15 @@ ActiveRecord::Schema.define(version: 20170102174718) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer  "github_id",                             null: false
-    t.string   "access_token",                          null: false
-    t.string   "github_login",                          null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.integer  "github_id",                         null: false
+    t.string   "access_token",                      null: false
+    t.string   "github_login",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.datetime "last_synced_at"
     t.string   "personal_access_token"
     t.boolean  "sync_on_load",          default: false, null: false
+    t.integer  "refresh_interval",      default: 0, null: false
     t.index ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
     t.index ["github_id"], name: "index_users_on_github_id", unique: true, using: :btree
   end
