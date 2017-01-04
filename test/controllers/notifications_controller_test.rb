@@ -68,6 +68,25 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     refute notification3.reload.archived?
   end
 
+  test 'mutes multiple notifications' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, archived: false)
+    notification2 = create(:notification, user: @user, archived: false)
+    notification3 = create(:notification, user: @user, archived: false)
+    User.any_instance.stubs(:github_client).returns(mock {
+      expects(:update_thread_subscription).with(notification1.github_id, ignored: true).returns true
+      expects(:update_thread_subscription).with(notification2.github_id, ignored: true).returns true
+      expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
+      expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
+    })
+    post '/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }
+    assert_response :ok
+
+    assert notification1.reload.archived?
+    assert notification2.reload.archived?
+    refute notification3.reload.archived?
+  end
+
   test 'toggles starred on a notification' do
     notification = create(:notification, user: @user, starred: false)
 

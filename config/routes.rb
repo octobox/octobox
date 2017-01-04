@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     collection do
       post :archive_selected
       post :sync
+      post :mute_selected
     end
 
     member do

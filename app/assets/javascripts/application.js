@@ -7,6 +7,7 @@
 
 document.addEventListener("turbolinks:load", function() {
   $('button.archive_selected, button.unarchive_selected').click(function () { toggleArchive(); });
+  $('button.mute_selected').click(function () { mute(); });
   $('input.archive, input.unarchive').change(function() {
     var marked = $(".js-table-notifications input:checked");
     if ( marked.length > 0 ) {
@@ -15,10 +16,10 @@ document.addEventListener("turbolinks:load", function() {
       } else {
         $(".js-select_all").prop("indeterminate", true);
       }
-      $('button.archive_selected, button.unarchive_selected').removeClass('hidden');
+      $('button.archive_selected, button.unarchive_selected, button.mute_selected').removeClass('hidden');
     } else {
       $(".js-select_all").prop('checked', false)
-      $('button.archive_selected, button.unarchive_selected').addClass('hidden');
+      $('button.archive_selected, button.unarchive_selected, button.mute_selected').addClass('hidden');
     }
   });
   $('.toggle-star').click(function() {
@@ -73,6 +74,7 @@ var shortcuts = {
   83:  toggleStar,      // s
   88:  markCurrent,     // x
   89:  toggleArchive,   // y
+  77:  mute,            // m
   13:  openCurrentLink, // Enter
   79:  openCurrentLink, // o
   191: openModal,       // ?
@@ -103,6 +105,28 @@ function checkAll(checked) {
 function checkSelectAll() {
   var allSelected = $(".js-select_all").prop('checked')
   $(".js-select_all").prop('checked', !allSelected).trigger('change')
+}
+
+function mute() {
+  if ( $(".js-table-notifications tr").length === 0 ) return;
+  marked = $(".js-table-notifications input:checked");
+  if ( marked.length > 0 ) {
+    ids = marked.map(function() { return this.value; }).get();
+  } else {
+    ids = [ $('td.js-current input').val() ];
+  }
+  $.post( "/notifications/mute_selected", { 'id[]': ids}).done(function() {
+    // calculating new position of the cursor
+    current = $('td.js-current').parent();
+    while ( $.inArray(current.find('input').val(), ids) > -1 && current.next().length > 0) {
+      current = current.next();
+    }
+    window.current_id = current.find('input').val();
+    if ( $.inArray(window.current_id, ids ) > -1 ) {
+      window.current_id = $(".js-table-notifications input:not(:checked)").last().val();
+    }
+    Turbolinks.visit("/"+location.search);
+  });
 }
 
 function toggleArchive() {
