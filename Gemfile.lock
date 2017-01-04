@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/twalpole/local_time
+  revision: b78fa43fab54cc81bfd4de7a1af2419355d582dc
+  branch: turbolinks5
+  specs:
+    local_time (1.0.3)
+      coffee-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -98,8 +106,6 @@ GEM
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-    local_time (1.0.3)
-      coffee-rails
     lograge (0.4.1)
       actionpack (>= 4, < 5.1)
       activesupport (>= 4, < 5.1)
@@ -262,7 +268,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen (~> 3.0.5)
-  local_time
+  local_time!
   lograge
   mocha
   newrelic_rpm
