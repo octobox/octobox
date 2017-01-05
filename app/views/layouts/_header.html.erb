@@ -7,14 +7,17 @@
           <span class="sr-only">Toggle navigation</span>
           <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, class: 'img-rounded navbar-avatar' %>
         </button>
+        <button type="button" class="navbar-toggle navbar-search-toggle collapsed" data-toggle="collapse" data-target="#search" aria-expanded="false">
+          <span class="sr-only">Toggle search</span>
+          <%= octicon 'search', height: 16, class: 'text-muted' %>
+        </button>
       <% end %>
       <a class="navbar-brand" href="/">
         <%= octobox_icon(28) %>
-        Octobox
+        <span class="hidden-xs">Octobox</span>
       </a>
     </div>
-
-    <div class="collapse navbar-collapse js-octobox-menu" id="octobox-menu">
+    <div class="collapse navbar-collapse" id="search">
       <%= form_tag root_path, method: :get, class: 'navbar-form navbar-left', enforce_utf8: false do |f| %>
         <div class="form-group">
           <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
@@ -23,6 +26,8 @@
           <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 40, id: 'search-box' %>
         </div>
       <% end %>
+    </div>
+    <div class="collapse navbar-collapse js-octobox-menu" id="octobox-menu">
       <ul class="nav navbar-nav navbar-right">
         <% if current_user %>
           <li class="dropdown">

@@ -58,7 +58,7 @@ html {
   }
 }
 
-@media (max-width: $screen-xs-max) {
+@media (max-width: $screen-sm-max) {
   .flex-container {
     .flex-main & {
       padding-left: 15px;
@@ -107,7 +107,11 @@ html {
   padding: 0;
   margin-top: 12px;
 }
-
+.navbar-search-toggle {
+  margin-top: 9px;
+  padding: 6px 10px 7px;
+  margin-right: 8px;
+}
 .navbar-avatar {
   margin-bottom: -3px;
   position: relative;
@@ -121,7 +125,11 @@ html {
     width: 16px;
   }
 }
-
+@media (min-width: $screen-sm-min) {
+  #search {
+    float: left;
+  }
+}
 @media (max-width: $screen-xs-max) {
   .navbar-nav .dropdown .dropdown-menu {
     display: block;
@@ -149,6 +157,12 @@ html {
     .divider {
       background-color: #e5e5e5;
     }
+  }
+  .navbar-form {
+    border-top: none;
+    border-bottom: none;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 
