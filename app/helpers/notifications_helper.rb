@@ -49,6 +49,14 @@ module NotificationsHelper
     filters.merge(override)
   end
 
+  def mute_selected_button(custom_class=nil)
+    unless params[:archive]
+      button_tag(type: 'button', class: "mute_selected #{custom_class}") do
+        'Mute Selected'
+      end
+    end
+  end
+
   def archive_selected_button(custom_class=nil)
     action = params[:archive] ? 'unarchive' : 'archive'
     button_tag(type: "button",

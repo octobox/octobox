@@ -193,6 +193,7 @@ You can use keyboard shortcuts to navigate and perform certain actions:
  - `s` - star current notification
  - `x` - mark/unmark current notification
  - `y` - archive current/marked notification(s)
+ - `m` - mute current/marked notification(s)
  - `o` or `Enter` - open current notification in a new window
 
 Press `?` for the help menu.

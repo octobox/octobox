@@ -36,4 +36,32 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal 'RepositoryInvitation', notification.subject_type
     assert_match %r{https://github.com/.+/invitations$}, notification.subject_url
   end
+
+  test 'ignore_thread sends ignore request to github' do
+    user = users(:andrew)
+    notification = create(:notification, user: user, archived: false)
+    user.stubs(:github_client).returns(mock {
+      expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
+    })
+    assert notification.ignore_thread
+  end
+
+  test 'mark_as_read updates the github thread' do
+    user = users(:andrew)
+    notification = create(:notification, user: user, archived: false)
+    user.stubs(:github_client).returns(mock {
+      expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
+    })
+    assert notification.mark_as_read
+  end
+
+  test 'mute ignores the thread and marks it as read' do
+    user = users(:andrew)
+    notification = create(:notification, user: user, archived: false)
+    user.stubs(:github_client).returns(mock {
+      expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
+      expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
+    })
+    assert notification.mute
+  end
 end

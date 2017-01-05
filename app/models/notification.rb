@@ -82,6 +82,19 @@ class Notification < ApplicationRecord
     end
   end
 
+  def mark_as_read
+    user.github_client.mark_thread_as_read(github_id, read: true)
+  end
+
+  def ignore_thread
+    user.github_client.update_thread_subscription(github_id, ignored: true)
+  end
+
+  def mute
+    mark_as_read
+    ignore_thread
+  end
+
   def web_url
     subject_url.gsub("#{Octobox.github_api_prefix}/repos", Octobox.github_domain)
                .gsub('/pulls/', '/pull/')
