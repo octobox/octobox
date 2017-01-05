@@ -52,7 +52,7 @@ module NotificationsHelper
   def mute_selected_button(custom_class=nil)
     unless params[:archive]
       button_tag(type: 'button', class: "mute_selected #{custom_class}") do
-        'Mute Selected'
+        'Mute selected'
       end
     end
   end
