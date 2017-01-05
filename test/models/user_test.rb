@@ -159,4 +159,14 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+
+  test 'sync_on_load attribute' do
+    user = users(:andrew)
+    refute user.sync_on_load
+    user.sync_on_load = true
+    user.save
+    assert user.valid?
+    assert user.sync_on_load
+  end
+
 end

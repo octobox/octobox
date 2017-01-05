@@ -2,6 +2,10 @@
   <h1>Settings</h1>
   <hr>
   <%= form_for current_user do |f| %>
+    <div class="form-group">
+      <%= f.label :sync_on_load, "Sync notifications with every page load" %>
+      <%= f.check_box :sync_on_load, class: 'form-control' %>
+    </div>
     <% if Octobox.refresh_interval_enabled? %>
       <div class="form-group">
         <%= f.label :refresh_interval_minutes, 'Notification Refresh Interval' %>

@@ -44,6 +44,6 @@ class UsersController < ApplicationController
       params[:user][:personal_access_token] = nil
     end
 
-    params.require(:user).permit(:personal_access_token, :refresh_interval)
+    params.require(:user).permit(:personal_access_token, :sync_on_load, :refresh_interval)
   end
 end

@@ -35,8 +35,8 @@ class User < ApplicationRecord
     update_attributes(github_attributes)
   end
 
-  def sync_notifications
-    Notification.download(self)
+  def sync_notifications(options = {})
+    Notification.download(self, options)
   end
 
   def github_client

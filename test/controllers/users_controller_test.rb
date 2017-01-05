@@ -128,4 +128,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, user.refresh_interval
   end
 
+
+  test 'updates sync_on_load' do
+    refute @user.sync_on_load
+    sign_in_as(@user)
+    patch user_url(@user), params: {user: { sync_on_load: '1'}}
+    @user.reload
+    assert @user.sync_on_load
+    patch user_url(@user), params: {user: { sync_on_load: '0'}}
+    @user.reload
+    refute @user.sync_on_load
+  end
 end

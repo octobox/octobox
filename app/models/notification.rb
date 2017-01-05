@@ -27,10 +27,10 @@ class Notification < ApplicationRecord
   paginates_per 20
 
   class << self
-    def download(user)
+    def download(user, options = {})
       timestamp = Time.current
 
-      fetch_notifications(user) do |notification|
+      fetch_notifications(user, options) do |notification|
         begin
           n = user.notifications.find_or_initialize_by(github_id: notification.id)
 
@@ -69,15 +69,19 @@ class Notification < ApplicationRecord
 
     private
 
-    def fetch_notifications(user)
-      user.github_client.notifications(fetch_params(user)).each { |n| yield n }
+    def fetch_notifications(user, options = {})
+      params = fetch_params(user, options)
+      user.github_client.notifications(params).each { |n| yield n }
     end
 
-    def fetch_params(user)
-      if user.last_synced_at?
-        { all: true, since: 1.week.ago.iso8601 }
-      else
-        { all: true, since: 1.month.ago.iso8601 }
+    def fetch_params(user, quick_sync: false)
+      case
+        when !user.last_synced_at
+          {all: true, since: 1.month.ago.iso8601}
+        when quick_sync
+          {all: true, since: user.last_synced_at.iso8601}
+        else
+          {all: true, since: 1.week.ago.iso8601}
       end
     end
   end
