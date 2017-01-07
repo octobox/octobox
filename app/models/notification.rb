@@ -99,6 +99,7 @@ class Notification < ApplicationRecord
     subject_url.gsub("#{Octobox.github_api_prefix}/repos", Octobox.github_domain)
                .gsub('/pulls/', '/pull/')
                .gsub('/commits/', '/commit/')
+               .gsub(/\/releases\/\d+/, '/releases/')
   end
 
   def repo_url
