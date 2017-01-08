@@ -50,6 +50,9 @@
             <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
             <h3>You're in the clear!</h3>
             <p>There are no notifications that need your attention.</p>
+            <p class='text-muted'>
+              <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+            </p>
           </div>
         <% else %>
           <div class="blankslate blankslate-spacious blankslate-clean-background">
@@ -57,6 +60,9 @@
             <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
             <h3>Nothing to see here.</h3>
             <p>You can always try <%= link_to 'refreshing', root_path %>.</p>
+            <p class='text-muted'>
+              <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+            </p>
           </div>
         <% end %>
       </div>
