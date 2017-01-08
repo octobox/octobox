@@ -52,9 +52,9 @@ class Notification < ApplicationRecord
     end
 
     def attributes_from_api_response(api_response)
-      attrs = API_ATTRIBUTE_MAP.map{|attr, path|
+      attrs = API_ATTRIBUTE_MAP.map do |attr, path|
         [attr, api_response.to_h.dig(*path)]
-      }.to_h
+      end.to_h
       if "RepositoryInvitation" == api_response.subject.type
         attrs[:subject_url] = "#{api_response.repository.html_url}/invitations"
       end
