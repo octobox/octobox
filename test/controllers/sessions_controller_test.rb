@@ -25,9 +25,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'POST #create forces the user to sync their notifications' do
     OmniAuth.config.mock_auth[:github].uid = users(:andrew).github_id
-
     post '/auth/github/callback'
-    assert_requested @notifications_request
+    assert_requested :get, %r{https://api\.github\.com/notifications}
   end
 
   test 'GET #destroy redirects to /' do

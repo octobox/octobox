@@ -10,3 +10,13 @@ tokenuser:
   access_token: <%= SecureRandom.hex(20) %>
   github_login: 'tokenuser'
   personal_access_token: 'deadbeef'
+
+userwithunread:
+  github_id: 92873
+  access_token: <%= SecureRandom.hex(20) %>
+  github_login: 'userwithunread'
+
+morty:
+  github_id: 947168
+  access_token: <%= SecureRandom.hex(20) %>
+  github_login: 'morty'
