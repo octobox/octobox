@@ -69,7 +69,6 @@ GEM
     concurrent-ruby (1.0.4)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    dalli (2.7.6)
     debug_inspector (0.0.2)
     docile (1.1.5)
     dotenv (2.1.1)
@@ -84,10 +83,6 @@ GEM
       activesupport (>= 3.0.0)
     faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
-    faraday-http-cache (2.0.0)
-      faraday (~> 0.8)
-    faraday_middleware (0.10.1)
-      faraday (>= 0.7.4, < 1.0)
     ffi (1.9.14)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -260,11 +255,8 @@ DEPENDENCIES
   bugsnag
   byebug
   codeclimate-test-reporter
-  dalli
   dotenv-rails
   factory_girl
-  faraday-http-cache
-  faraday_middleware
   jquery-rails
   kaminari
   listen (~> 3.0.5)
