@@ -27,7 +27,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github].uid = users(:andrew).github_id
 
     post '/auth/github/callback'
-    assert_requested @notifications_request
+    assert_requested  @notifications_request, times: 2
   end
 
   test 'GET #destroy redirects to /' do

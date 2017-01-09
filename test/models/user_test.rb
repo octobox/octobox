@@ -47,6 +47,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test '#effective_access_token returns access_token if personal_access_tokens_enabled? is false' do
+    stub_personal_access_tokens_enabled(value: false)
     user = users(:tokenuser)
     assert_equal user.access_token, user.effective_access_token
   end
@@ -92,6 +93,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'does not allow setting personal_access_token without being enabled' do
+    stub_personal_access_tokens_enabled(value: false)
     user = users(:andrew)
     user.personal_access_token = '1234'
     assert_error_present(user, User::ERRORS[:disallowed_tokens])

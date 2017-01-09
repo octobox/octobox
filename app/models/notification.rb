@@ -26,59 +26,90 @@ class Notification < ApplicationRecord
 
   paginates_per 20
 
+  API_ATTRIBUTE_MAP = {
+    repository_id: [:repository, :id],
+    repository_full_name: [:repository, :full_name],
+    repository_owner_name: [:repository, :owner, :login],
+    subject_title: [:subject, :title],
+    subject_type: [:subject, :type],
+    subject_url: [:subject, :url],
+    reason: [:reason],
+    unread: [:unread],
+    updated_at: [:updated_at],
+    last_read_at: [:last_read_at],
+    url: [:url],
+    github_id: [:id]
+  }.freeze
+
   class << self
     def download(user)
       timestamp = Time.current
 
-      fetch_notifications(user) do |notification|
-        begin
-          n = user.notifications.find_or_initialize_by(github_id: notification.id)
-
-          if n.archived && n.updated_at < notification.updated_at
-            n.archived = false
-          end
-
-          attrs = {}.tap do |attr|
-            attr[:repository_id]         = notification.repository.id
-            attr[:repository_full_name]  = notification.repository.full_name
-            attr[:repository_owner_name] = notification.repository.owner.login
-            attr[:subject_title]         = notification.subject.title
-            attr[:subject_type]          = notification.subject.type
-            attr[:reason]                = notification.reason
-            attr[:unread]                = notification.unread
-            attr[:updated_at]            = notification.updated_at
-            attr[:last_read_at]          = notification.last_read_at
-            attr[:url]                   = notification.url
-
-            attr[:subject_url] = if notification.subject.type == "RepositoryInvitation"
-                                   "#{notification.repository.html_url}/invitations"
-                                 else
-                                   notification.subject.url
-                                 end
-          end
-
-          n.attributes = attrs
-          n.save(touch: false) if n.changed?
-        rescue ActiveRecord::RecordNotUnique
-          nil
-        end
+      if user.last_synced_at
+        fetch_read_notifications(user)
+      else
+        new_user_fetch(user)
       end
 
+      fetch_unread_notifications(user)
       user.update_column(:last_synced_at, timestamp)
+    end
+
+    def attributes_from_api_response(api_response)
+      attrs = API_ATTRIBUTE_MAP.map do |attr, path|
+        [attr, api_response.to_h.dig(*path)]
+      end.to_h
+      if "RepositoryInvitation" == api_response.subject.type
+        attrs[:subject_url] = "#{api_response.repository.html_url}/invitations"
+      end
+      attrs
     end
 
     private
 
-    def fetch_notifications(user)
-      user.github_client.notifications(fetch_params(user)).each { |n| yield n }
+    def process_unread_notifications(notifications, user)
+      return if notifications.blank?
+      notifications.each do |notification|
+        begin
+          n =  user.notifications.find_or_initialize_by(github_id: notification[:id])
+          n.update_from_api_response(notification, unarchive: true)
+        rescue ActiveRecord::RecordNotUnique
+          nil
+        end
+      end
     end
 
-    def fetch_params(user)
-      if user.last_synced_at?
-        { all: true, since: 1.week.ago.iso8601 }
-      else
-        { all: true, since: 1.month.ago.iso8601 }
+    def process_read_notifications(notifications, user)
+      return if notifications.blank?
+      notifications.each do |notification|
+        next if notification.unread
+        n = user.notifications.find_or_initialize_by(github_id: notification.id)
+        next unless n
+        n.update_from_api_response(notification)
       end
+    end
+
+    def fetch_unread_notifications(user)
+      headers = {cache_control: %w(no-store no-cache)}
+      headers[:if_modified_since] = user.last_synced_at.iso8601 if user.last_synced_at.respond_to?(:iso8601)
+      notifications = user.github_client.notifications(headers: headers)
+      process_unread_notifications(notifications, user)
+    end
+
+    def fetch_read_notifications(user)
+      oldest_unread = user.notifications.status(true).newest.last
+      if oldest_unread && oldest_unread.updated_at.respond_to?(:iso8601)
+        headers = {cache_control: %w(no-store no-cache)}
+        since = oldest_unread.updated_at - 1
+        notifications = user.github_client.notifications(all: true, since: since.iso8601, headers: headers)
+        process_read_notifications(notifications, user)
+      end
+    end
+
+    def new_user_fetch(user)
+      headers = {cache_control: %w(no-store no-cache)}
+      notifications = user.github_client.notifications(all: true, headers: headers)
+      process_read_notifications(notifications, user)
     end
   end
 
@@ -104,5 +135,21 @@ class Notification < ApplicationRecord
 
   def repo_url
     "#{Octobox.github_domain}/#{repository_full_name}"
+  end
+
+  def unarchive_if_updated
+    return unless self.archived?
+    change = changes['updated_at']
+    return unless change
+    if self.archived && change[1] > change[0]
+      self.archived = false
+    end
+  end
+
+  def update_from_api_response(api_response, unarchive: false)
+    attrs = Notification.attributes_from_api_response(api_response)
+    self.attributes = attrs
+    unarchive_if_updated if unarchive
+    save(touch: false) if changed?
   end
 end
