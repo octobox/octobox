@@ -52,7 +52,7 @@ module NotificationsHelper
   def mute_selected_button(custom_class=nil)
     unless params[:archive]
       button_tag(type: 'button', class: "mute_selected #{custom_class}") do
-        'Mute selected'
+        octicon('mute', height: 16) + content_tag(:span, ' Mute selected', class: 'hidden-xs')
       end
     end
   end
@@ -61,7 +61,7 @@ module NotificationsHelper
     action = params[:archive] ? 'unarchive' : 'archive'
     button_tag(type: "button",
                class: "archive_toggle #{action}_selected #{custom_class}") do
-      "#{action} selected".capitalize
+      octicon('checklist', height: 16) + content_tag(:span, " #{action.capitalize} selected", class: 'hidden-xs')
     end
   end
 
