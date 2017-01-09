@@ -3,23 +3,33 @@ require 'test_helper'
 
 class NotificationTest < ActiveSupport::TestCase
 
-  test '#download only fetches unread notifications when a user has no unread notifications' do
-    user = users(:tokenuser)
+  test '#download fetches all read notification for a new user' do
+    user = users(:newuser)
+    all_notifications = notifications_from_fixture('newuser_all_notifications.json')
+    unread_notifications = notifications_from_fixture('newuser_notifications.json')
+    expected_attributes = build_expected_attributes(all_notifications)
     User.any_instance.stubs(:github_client).returns(mock {
-      expects(:notifications).returns([])
+      expects(:notifications).with(all: true, headers: {cache_control: ['no-store', 'no-cache']})
+        .returns(all_notifications)
+      expects(:notifications).with(headers: {cache_control: ['no-store', 'no-cache']}).returns(unread_notifications)
     })
     Notification.download(user)
+    notifications = user.notifications.map(&:attributes)
+    expected_attributes.each do |expected|
+      assert attrs = notifications.select{|n| n['github_id'] == expected['github_id']}.first
+      assert_equal attrs, attrs.merge(expected)
+    end
   end
 
   test '#download fetches notifications newer than the oldest unread' do
-    # one second before oldest unread notification
     user = users(:userwithunread)
-    expected_since =( user.notifications.status(true).first.updated_at - 1).iso8601
+    # one second before oldest unread notification
+    unread_since =( user.notifications.status(true).first.updated_at - 1).iso8601
+    read_since =user.last_synced_at.iso8601
     User.any_instance.stubs(:github_client).returns(mock {
-      expects(:notifications).returns([])
-      expects(:notifications).with(all: true, since: expected_since, headers: {cache_control: ['no-store', 'no-cache']}).returns([])
+      expects(:notifications).with(headers: {cache_control: ['no-store', 'no-cache'], if_modified_since: read_since}).returns([])
+      expects(:notifications).with(all: true, since: unread_since, headers: {cache_control: ['no-store', 'no-cache']}).returns([])
     })
-
     Notification.download(user)
   end
 

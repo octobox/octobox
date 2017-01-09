@@ -45,9 +45,13 @@ class Notification < ApplicationRecord
     def download(user)
       timestamp = Time.current
 
-      fetch_unread_notifications(user)
-      fetch_read_notifications(user)
+      if user.last_synced_at
+        fetch_read_notifications(user)
+      else
+        new_user_fetch(user)
+      end
 
+      fetch_unread_notifications(user)
       user.update_column(:last_synced_at, timestamp)
     end
 
@@ -79,7 +83,7 @@ class Notification < ApplicationRecord
       return if notifications.blank?
       notifications.each do |notification|
         next if notification.unread
-        n = user.notifications.find_by(github_id: notification.id)
+        n = user.notifications.find_or_initialize_by(github_id: notification.id)
         next unless n
         n.update_from_api_response(notification)
       end
@@ -100,6 +104,12 @@ class Notification < ApplicationRecord
         notifications = user.github_client.notifications(all: true, since: since.iso8601, headers: headers)
         process_read_notifications(notifications, user)
       end
+    end
+
+    def new_user_fetch(user)
+      headers = {cache_control: %w(no-store no-cache)}
+      notifications = user.github_client.notifications(all: true, headers: headers)
+      process_read_notifications(notifications, user)
     end
   end
 

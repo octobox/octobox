@@ -15,8 +15,15 @@ userwithunread:
   github_id: 92873
   access_token: <%= SecureRandom.hex(20) %>
   github_login: 'userwithunread'
+  last_synced_at: <%= Time.parse('2016-12-19T12:00:00Z') %>
 
 morty:
   github_id: 947168
   access_token: <%= SecureRandom.hex(20) %>
   github_login: 'morty'
+  last_synced_at: <%= Time.parse('2016-12-19T12:00:00Z') %>
+
+newuser:
+  github_id: 297580
+  access_token: <%= SecureRandom.hex(20) %>
+  github_login: 'newuser'
