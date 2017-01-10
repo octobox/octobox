@@ -3,46 +3,28 @@
     <span class="btn-group">
       <a href="#" class="btn btn-default filter-label" role="button" aria-disabled="true">Filter:</a>
 
-      <% if filters[:reason].present? %>
-        <%= link_to root_path(filters.except(:reason)), class: 'btn btn-default' do %>
-          <%= octicon 'x', :height => 16 %>
-          <%= params[:reason].underscore.humanize %>
-        <% end %>
+      <%= filter_option :reason do %>
+        <%= params[:reason].underscore.humanize %>
       <% end %>
 
-      <% if filters[:status].present? %>
-        <%= link_to root_path(filters.except(:status)), class: 'btn btn-default' do %>
-          <%= octicon 'x', :height => 16 %>
-          <%= (params[:status] === 'true'? 'Unread' : 'Read') %>
-        <% end %>
+      <%= filter_option :status do %>
+        <%= (params[:status] === 'true'? 'Unread' : 'Read') %>
       <% end %>
 
-      <% if filters[:repo].present? %>
-        <%= link_to root_path(filters.except(:repo)), class: 'btn btn-default' do %>
-          <%= octicon 'x', :height => 16 %>
-          <%= params[:repo] %>
-        <% end %>
+      <%= filter_option :repo do %>
+        <%= params[:repo] %>
       <% end %>
 
-      <% if filters[:type].present? %>
-        <%= link_to root_path(filters.except(:type)), class: 'btn btn-default' do %>
-          <%= octicon 'x', :height => 16 %>
-          <%= params[:type].underscore.humanize %>
-        <% end %>
+      <%= filter_option :type do %>
+        <%= params[:type].underscore.humanize %>
       <% end %>
 
-      <% if filters[:owner].present? %>
-        <%= link_to root_path(filters.except(:owner)), class: 'btn btn-default' do %>
-          <%= octicon 'x', :height => 16 %>
-          <%= params[:owner] %>
-        <% end %>
+      <%= filter_option :owner do %>
+        <%= params[:owner] %>
       <% end %>
 
-      <% if filters[:q].present? %>
-        <%= link_to root_path(filters.except(:q)), class: 'btn btn-default' do %>
-          <%= octicon 'x', :height => 16 %>
-          Search: <%= params[:q] %>
-        <% end %>
+      <%= filter_option :q do %>
+        Search: <%= params[:q] %>
       <% end %>
     </span>
   </span>
