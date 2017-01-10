@@ -76,4 +76,14 @@ module NotificationsHelper
   def reason_label(reason)
     REASON_LABELS.fetch(reason, 'default')
   end
+
+  def filter_option(param, &block)
+    if filters[param].present?
+      link_to root_path(filters.except(param)), class: 'btn btn-default' do
+        concat octicon('x', :height => 16)
+        concat ' '
+        concat block.call
+      end
+    end
+  end
 end
