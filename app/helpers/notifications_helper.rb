@@ -34,7 +34,7 @@ module NotificationsHelper
   end
 
   def bucket_param_keys
-    [:archived, :starred]
+    [:archive, :starred]
   end
 
   def filter_param_keys
