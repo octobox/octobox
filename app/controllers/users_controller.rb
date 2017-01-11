@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   end
 
   def update_user_params
-    if params[:user][:refresh_interval_minutes].present?
+    if params[:user].has_key? :refresh_interval_minutes
       params[:user][:refresh_interval] = params[:user][:refresh_interval_minutes].to_i * 60_000
     end
 
