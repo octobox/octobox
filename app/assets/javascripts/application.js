@@ -129,6 +129,11 @@ function mute() {
   });
 }
 
+function markAsRead(id) {
+  $.get( "/notifications/"+id+"/mark_as_read");
+  $('#notification-'+id).removeClass('active');
+}
+
 function toggleArchive() {
   if ( $(".js-table-notifications tr").length === 0 ) return;
 
