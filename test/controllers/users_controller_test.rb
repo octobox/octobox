@@ -101,22 +101,29 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 12_345, user.refresh_interval
   end
 
-  test 'sets refresh_interval from minutes' do
-    user = users(:andrew)
-    stub_user_request(user: user)
-    sign_in_as(user)
-    patch user_url(user), params: {user: { refresh_interval_minutes: 2}}
-    user.reload
-    assert_equal 120_000, user.refresh_interval
-  end
-
-  test 'rejects refresh_interval > 1 day' do
-    user = users(:andrew)
-    stub_user_request(user: user)
-    sign_in_as(user)
-    patch user_url(user), params: {user: { refresh_interval_minutes: 1500}}
-    user.reload
-    assert_equal 0, user.refresh_interval
+  [{
+     refresh_interval_minutes: 2,
+     expected_refresh_interval: 120_000
+   },
+   {
+     refresh_interval_minutes: '',
+     expected_refresh_interval: nil
+   },
+   {
+     refresh_interval_minutes: 1500,
+     expected_refresh_interval: nil
+   }].each do |t|
+    test "sets refresh_interval to #{t[:expected_refresh_interval] || 'nil'} when refresh_interval_minutes is '#{t[:refresh_interval_minutes]}'" do
+      user = users(:andrew)
+      sign_in_as(user)
+      patch user_url(user), params: {user: {refresh_interval_minutes: t[:refresh_interval_minutes]}}
+      user.reload
+      if t[:expected_refresh_interval].nil?
+        assert_nil user.refresh_interval
+      else
+        assert_equal t[:expected_refresh_interval], user.refresh_interval
+      end
+    end
   end
 
   test 'rejects negative refresh_interval' do
@@ -125,7 +132,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(user)
     patch user_url(user), params: {user: { refresh_interval: -60_000}}
     user.reload
-    assert_equal 0, user.refresh_interval
+    assert_nil user.refresh_interval
   end
 
 end
