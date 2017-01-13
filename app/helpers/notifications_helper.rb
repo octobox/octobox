@@ -4,7 +4,9 @@ module NotificationsHelper
     'author'       => 'success',
     'state_change' => 'info',
     'mention'      => 'warning',
-    'assign'       => 'danger'
+    'assign'       => 'danger',
+    'subscribed'   => 'subscribed',
+    'team_mention' => 'team_mention'
   }.freeze
 
   SUBJECT_TYPES = {
