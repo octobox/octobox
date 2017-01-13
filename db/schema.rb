@@ -32,19 +32,19 @@ ActiveRecord::Schema.define(version: 20170111185505) do
     t.datetime "created_at",                            null: false
     t.boolean  "starred",               default: false
     t.string   "repository_owner_name", default: ""
+    t.index "to_tsvector('english'::regconfig, (subject_title)::text)", name: "notifications_subject_title", using: :gin
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at", using: :btree
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true, using: :btree
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer  "github_id",                             null: false
-    t.string   "access_token",                          null: false
-    t.string   "github_login",                          null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.integer  "github_id",                         null: false
+    t.string   "access_token",                      null: false
+    t.string   "github_login",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.datetime "last_synced_at"
     t.string   "personal_access_token"
-    t.boolean  "sync_on_load",          default: false, null: false
     t.integer  "refresh_interval",      default: 0
     t.index ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
     t.index ["github_id"], name: "index_users_on_github_id", unique: true, using: :btree
