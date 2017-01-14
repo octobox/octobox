@@ -26,3 +26,22 @@ class ActionDispatch::IntegrationTest
   include SignInHelper
   include StubHelper
 end
+
+module NotificationTestHelper
+  def build_expected_attributes(expected_notifications, keys: nil)
+    keys ||= DownloadService::API_ATTRIBUTE_MAP.keys
+    expected_notifications.map{|n|
+      notification = Notification.new
+      notification.attributes = Notification.attributes_from_api_response(n)
+      attrs = notification.attributes
+      notification.destroy
+      attrs.slice(*(keys.map(&:to_s)))
+    }
+  end
+
+  def notifications_from_fixture(fixture_file)
+    JSON.parse(file_fixture(fixture_file).read, object_class: OpenStruct).tap do |notifications|
+      notifications.map { |n| n.last_read_at = Time.parse(n.last_read_at).to_s if n.last_read_at }
+    end
+  end
+end

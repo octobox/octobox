@@ -27,10 +27,6 @@ class Notification < ApplicationRecord
   paginates_per 20
 
   class << self
-    def download(user)
-      user.download_service.download
-    end
-
     def attributes_from_api_response(api_response)
       attrs = DownloadService::API_ATTRIBUTE_MAP.map do |attr, path|
         [attr, api_response.to_h.dig(*path)]

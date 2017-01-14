@@ -36,7 +36,7 @@ class User < ApplicationRecord
   end
 
   def sync_notifications
-    Notification.download(self)
+    download_service.download
   end
 
   def download_service
