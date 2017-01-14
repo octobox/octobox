@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
     member do
       get :star
+      get :mark_as_read
     end
   end
 

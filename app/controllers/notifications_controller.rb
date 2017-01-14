@@ -2,7 +2,7 @@
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
   before_action :render_home_page_unless_authenticated, only: [:index]
-  before_action :find_notification, only: [:archive, :unarchive, :star]
+  before_action :find_notification, only: [:archive, :unarchive, :star, :mark_as_read]
 
   def index
     scope    = current_user.notifications
@@ -42,6 +42,11 @@ class NotificationsController < ApplicationController
 
   def archive_selected
     current_user.notifications.where(id: params[:id]).update_all archived: params[:value]
+    head :ok
+  end
+
+  def mark_as_read
+    @notification.update_columns unread: false
     head :ok
   end
 
