@@ -79,4 +79,10 @@ class DownloadServiceTest < ActiveSupport::TestCase
     user = users(:morty)
     user.download_service.download
   end
+
+  test 'non_paging_client is non-paging' do
+    download_service = DownloadService.new(users(:morty))
+    refute download_service.non_paging_client.auto_paginate
+  end
+
 end

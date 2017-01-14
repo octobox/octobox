@@ -6,9 +6,6 @@ class DownloadService
     @user = user
   end
 
-  def github_client
-    user.github_client
-  end
 
   API_ATTRIBUTE_MAP = {
     repository_id: [:repository, :id],
@@ -24,6 +21,13 @@ class DownloadService
     url: [:url],
     github_id: [:id]
   }.freeze
+
+  def non_paging_client
+    @non_paging_client ||= ->(client) {
+      client.auto_paginate = false
+      client
+    }.call(user.github_client.dup)
+  end
 
   def process_unread_notifications(notifications)
     return if notifications.blank?
