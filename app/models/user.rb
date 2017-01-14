@@ -39,6 +39,10 @@ class User < ApplicationRecord
     Notification.download(self)
   end
 
+  def download_service
+    @download_service ||= DownloadService.new(self)
+  end
+
   def github_client
     unless defined?(@github_client) && effective_access_token == @github_client.access_token
       @github_client = Octokit::Client.new(access_token: effective_access_token, auto_paginate: true)

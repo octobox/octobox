@@ -28,16 +28,7 @@ class Notification < ApplicationRecord
 
   class << self
     def download(user)
-      timestamp = Time.current
-
-      if user.last_synced_at
-        fetch_read_notifications(user)
-      else
-        new_user_fetch(user)
-      end
-
-      fetch_unread_notifications(user)
-      user.update_column(:last_synced_at, timestamp)
+      user.download_service.download
     end
 
     def attributes_from_api_response(api_response)
@@ -48,53 +39,6 @@ class Notification < ApplicationRecord
         attrs[:subject_url] = "#{api_response.repository.html_url}/invitations"
       end
       attrs
-    end
-
-    private
-
-    def process_unread_notifications(notifications, user)
-      return if notifications.blank?
-      notifications.each do |notification|
-        begin
-          n =  user.notifications.find_or_initialize_by(github_id: notification[:id])
-          n.update_from_api_response(notification, unarchive: true)
-        rescue ActiveRecord::RecordNotUnique
-          nil
-        end
-      end
-    end
-
-    def process_read_notifications(notifications, user)
-      return if notifications.blank?
-      notifications.each do |notification|
-        next if notification.unread
-        n = user.notifications.find_or_initialize_by(github_id: notification.id)
-        next unless n
-        n.update_from_api_response(notification)
-      end
-    end
-
-    def fetch_unread_notifications(user)
-      headers = {cache_control: %w(no-store no-cache)}
-      headers[:if_modified_since] = user.last_synced_at.iso8601 if user.last_synced_at.respond_to?(:iso8601)
-      notifications = user.github_client.notifications(headers: headers)
-      process_unread_notifications(notifications, user)
-    end
-
-    def fetch_read_notifications(user)
-      oldest_unread = user.notifications.status(true).newest.last
-      if oldest_unread && oldest_unread.updated_at.respond_to?(:iso8601)
-        headers = {cache_control: %w(no-store no-cache)}
-        since = oldest_unread.updated_at - 1
-        notifications = user.github_client.notifications(all: true, since: since.iso8601, headers: headers)
-        process_read_notifications(notifications, user)
-      end
-    end
-
-    def new_user_fetch(user)
-      headers = {cache_control: %w(no-store no-cache)}
-      notifications = user.github_client.notifications(all: true, headers: headers)
-      process_read_notifications(notifications, user)
     end
   end
 
