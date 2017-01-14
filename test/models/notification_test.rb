@@ -175,7 +175,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   def build_expected_attributes(expected_notifications, keys: nil)
-    keys ||= Notification::API_ATTRIBUTE_MAP.keys
+    keys ||= DownloadService::API_ATTRIBUTE_MAP.keys
     expected_notifications.map{|n|
       notification = Notification.new
       notification.attributes = Notification.attributes_from_api_response(n)

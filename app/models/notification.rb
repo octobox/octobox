@@ -26,21 +26,6 @@ class Notification < ApplicationRecord
 
   paginates_per 20
 
-  API_ATTRIBUTE_MAP = {
-    repository_id: [:repository, :id],
-    repository_full_name: [:repository, :full_name],
-    repository_owner_name: [:repository, :owner, :login],
-    subject_title: [:subject, :title],
-    subject_type: [:subject, :type],
-    subject_url: [:subject, :url],
-    reason: [:reason],
-    unread: [:unread],
-    updated_at: [:updated_at],
-    last_read_at: [:last_read_at],
-    url: [:url],
-    github_id: [:id]
-  }.freeze
-
   class << self
     def download(user)
       timestamp = Time.current
@@ -56,7 +41,7 @@ class Notification < ApplicationRecord
     end
 
     def attributes_from_api_response(api_response)
-      attrs = API_ATTRIBUTE_MAP.map do |attr, path|
+      attrs = DownloadService::API_ATTRIBUTE_MAP.map do |attr, path|
         [attr, api_response.to_h.dig(*path)]
       end.to_h
       if "RepositoryInvitation" == api_response.subject.type
