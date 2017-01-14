@@ -55,7 +55,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     bugsnag (5.0.1)
-    builder (3.2.2)
+    builder (3.2.3)
     byebug (9.0.6)
     codeclimate-test-reporter (1.0.4)
       simplecov
@@ -83,7 +83,7 @@ GEM
       activesupport (>= 3.0.0)
     faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.14)
+    ffi (1.9.17)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     hashdiff (0.3.2)
