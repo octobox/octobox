@@ -7,14 +7,17 @@ class DownloadServiceTest < ActiveSupport::TestCase
   test '#download fetches all read notification for a new user' do
     user = users(:newuser)
     all_notifications = notifications_from_fixture('newuser_all_notifications.json')
-    unread_notifications = notifications_from_fixture('newuser_notifications.json')
     expected_attributes = build_expected_attributes(all_notifications)
-    User.any_instance.stubs(:github_client).returns(mock {
-      expects(:notifications).with(all: true, headers: {cache_control: ['no-store', 'no-cache']})
-        .returns(all_notifications)
-      expects(:notifications).with(headers: {cache_control: ['no-store', 'no-cache']}).returns(unread_notifications)
-    })
-    user.download_service.download
+    download_service = DownloadService.new(user)
+    stub_notifications_request(
+      url: 'https://api.github.com/notifications?all=true&per_page=100',
+      body: file_fixture('newuser_all_notifications.json')
+    )
+    stub_notifications_request(
+      url: 'https://api.github.com/notifications?per_page=100',
+      body: file_fixture('newuser_notifications.json')
+    )
+    download_service.download
     notifications = user.notifications.map(&:attributes)
     expected_attributes.each do |expected|
       assert attrs = notifications.select{|n| n['github_id'] == expected['github_id']}.first
@@ -26,12 +29,14 @@ class DownloadServiceTest < ActiveSupport::TestCase
     user = users(:userwithunread)
     # one second before oldest unread notification
     unread_since =( user.notifications.status(true).first.updated_at - 1).iso8601
-    read_since =user.last_synced_at.iso8601
-    User.any_instance.stubs(:github_client).returns(mock {
-      expects(:notifications).with(headers: {cache_control: ['no-store', 'no-cache'], if_modified_since: read_since}).returns([])
-      expects(:notifications).with(all: true, since: unread_since, headers: {cache_control: ['no-store', 'no-cache']}).returns([])
-    })
-    user.download_service.download
+    download_service = DownloadService.new(user)
+    stub_notifications_request(
+      url: "https://api.github.com/notifications?all=true&per_page=100&since=#{unread_since}"
+    )
+    stub_notifications_request(
+      url: 'https://api.github.com/notifications?per_page=100'
+    )
+    download_service.download
   end
 
   test '#download will create new notification' do
@@ -75,14 +80,74 @@ class DownloadServiceTest < ActiveSupport::TestCase
   end
 
   test '#download handles no new notifications' do
-    Octokit::Client.any_instance.stubs(:notifications).returns('')
     user = users(:morty)
-    user.download_service.download
+    download_service = DownloadService.new(user)
+    unread_since =( user.notifications.status(true).first.updated_at - 1).iso8601
+    stub_notifications_request(
+      url: "https://api.github.com/notifications?all=true&per_page=100&since=#{unread_since}",
+      body: ''
+    )
+    stub_notifications_request(
+      url: 'https://api.github.com/notifications?per_page=100',
+      body: ''
+    )
+    download_service.download
   end
 
-  test 'non_paging_client is non-paging' do
+  test 'fetch_notifications pages until the end' do
+    setup_paging_stubs
     download_service = DownloadService.new(users(:morty))
-    refute download_service.non_paging_client.auto_paginate
+    fetched_notifications = download_service.fetch_notifications(params: {per_page: 2}, max_results:50)
+    assert_equal 8, fetched_notifications.size
   end
 
+  test 'fetch_notifications pages stops at max_notifications' do
+    setup_paging_stubs
+    download_service = DownloadService.new(users(:morty))
+    fetched_notifications = download_service.fetch_notifications(params: {per_page: 2}, max_results:5)
+    assert_equal 5, fetched_notifications.size
+  end
+
+  test 'fetch_notifications works when max_results is not set' do
+    setup_paging_stubs
+    download_service = DownloadService.new(users(:morty))
+    fetched_notifications = download_service.fetch_notifications(params: {per_page: 2})
+    assert_equal 8, fetched_notifications.size
+  end
+
+  def setup_paging_stubs
+    [
+      {
+        page_number: 1,
+        link_header: '<https://api.github.com/notifications?page=2&per_page=2>; rel="next"'
+      },
+      {
+        page_number: 2,
+        link_header: '<https://api.github.com/notifications?page=3&per_page=2>; rel="next"'
+      },
+      {
+        page_number: 3,
+        link_header: '<https://api.github.com/notifications?page=4&per_page=2>; rel="next"'
+      },
+      {
+        page_number: 4,
+        link_header: '<https://api.github.com/notifications?page=1&per_page=2>; rel="first"'
+      }
+    ].each do |page|
+      notifications = JSON.parse(file_fixture('morty_notifications.json').read)
+      id = page[:page_number] * 2
+      notifications.each do |n|
+        n['id'] = id.to_s
+        id += 1
+      end
+      page_url = page[:page_number] > 1 ?
+        "https://api.github.com/notifications?page=#{page[:page_number]}&per_page=2" :
+        'https://api.github.com/notifications?per_page=2'
+      stub_notifications_request(
+        url: page_url,
+        body: notifications.to_json,
+        extra_headers: {'Link' => page[:link_header]}
+      )
+    end
+  end
 end

@@ -1,12 +1,11 @@
 module StubHelper
-  def stub_notifications_request(body: nil)
-    notifications_url = %r{https://api.github.com/notifications}
-
+  def stub_notifications_request(url: nil, body: nil, extra_headers: {})
+    url ||= %r{https://api.github.com/notifications}
     body     ||= file_fixture('notifications.json')
-    headers  = { 'Content-Type' => 'application/json' }
+    headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
     response = { status: 200, body: body, headers: headers }
 
-    stub_request(:get, notifications_url).to_return(response)
+    stub_request(:get, url).to_return(response)
   end
 
   def stub_user_request(body: nil, oauth_scopes: 'notifications', user: nil)
