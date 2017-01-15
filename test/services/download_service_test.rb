@@ -108,11 +108,12 @@ class DownloadServiceTest < ActiveSupport::TestCase
     assert_equal 5, fetched_notifications.size
   end
 
-  test 'fetch_notifications works when max_results is not set' do
+  test 'fetch_notifications respects Octobox.max_notifications_to_sync' do
     setup_paging_stubs
+    Octobox.stubs(:max_notifications_to_sync).returns(5)
     download_service = DownloadService.new(users(:morty))
     fetched_notifications = download_service.fetch_notifications(params: {per_page: 2})
-    assert_equal 8, fetched_notifications.size
+    assert_equal 5, fetched_notifications.size
   end
 
   def setup_paging_stubs
