@@ -19,7 +19,13 @@ module Octobox
     end
 
     def max_notifications_to_sync
-      @max_notifications_to_sync || ENV['MAX_NOTIFICATIONS_TO_SYNC'] || 500
+      if @max_notifications_to_sync
+        @max_notifications_to_sync
+      elsif ENV['MAX_NOTIFICATIONS_TO_SYNC'].present?
+        ENV['MAX_NOTIFICATIONS_TO_SYNC'].to_i
+      else
+        500
+      end
     end
     attr_writer :max_notifications_to_sync
   end
