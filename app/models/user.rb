@@ -14,12 +14,23 @@ class User < ApplicationRecord
   validates :github_login, presence: true
   validates :refresh_interval, numericality: {
     only_integer: true,
-    allow_blank: false,
+    allow_blank: true,
     greater_than_or_equal_to: 0,
     less_than_or_equal_to: 86_400_000,
     message: ERRORS[:refresh_interval_size][1]
   }
   validate :personal_access_token_validator
+
+  def refresh_interval=(val)
+    val = nil if 0 == val
+    super(val)
+  end
+
+  # For users who had zero values set before 20170111185505_allow_null_for_last_synced_at_in_users.rb
+  # We want their zeros treated like nils
+  def refresh_interval
+    0 == super ? nil : super
+  end
 
   def self.find_by_auth_hash(auth_hash)
     User.find_by(github_id: auth_hash['uid'])
@@ -57,8 +68,9 @@ class User < ApplicationRecord
 
   # Use the greater of the system minimum or the user's setting
   def effective_refresh_interval
-    return 0 if [Octobox.minimum_refresh_interval, refresh_interval].include?(0)
-    [Octobox.minimum_refresh_interval * 60_000, refresh_interval].max
+    if Octobox.refresh_interval_enabled? && refresh_interval
+      [Octobox.minimum_refresh_interval * 60_000, refresh_interval].max
+    end
   end
 
   def effective_access_token

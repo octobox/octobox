@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170102152008) do
+ActiveRecord::Schema.define(version: 20170111185505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20170102152008) do
     t.datetime "created_at",                            null: false
     t.boolean  "starred",               default: false
     t.string   "repository_owner_name", default: ""
+    t.index "to_tsvector('english'::regconfig, (subject_title)::text)", name: "notifications_subject_title", using: :gin
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at", using: :btree
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true, using: :btree
   end
@@ -44,7 +45,7 @@ ActiveRecord::Schema.define(version: 20170102152008) do
     t.datetime "updated_at",                        null: false
     t.datetime "last_synced_at"
     t.string   "personal_access_token"
-    t.integer  "refresh_interval",      default: 0, null: false
+    t.integer  "refresh_interval",      default: 0
     t.index ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
     t.index ["github_id"], name: "index_users_on_github_id", unique: true, using: :btree
   end

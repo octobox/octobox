@@ -11,6 +11,8 @@ $component-active-bg: #eee;
 $component-active-color: #444;
 $panel-default-heading-bg: #f8f8f8;
 $panel-footer-bg: $panel-default-heading-bg;
+$subscribed-color: #a128ca;
+$team_mention-color: #ff9fe7;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -456,6 +458,28 @@ td.keys {
 
 .text-default {
   fill: $text-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
+}
+
+.label-subscribed{
+  background-color: $subscribed-color;
+}
+
+.text-subscribed{
+  fill: $subscribed-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
+}
+
+.label-team_mention{
+  background-color: $team_mention-color;
+}
+
+.text-team_mention{
+  fill: $team_mention-color;
   &.sidebar-icon {
     fill: $text-muted;
   }
