@@ -75,19 +75,20 @@ function enableKeyboardShortcuts() {
 }
 
 var shortcuts = {
-  65:  checkSelectAll, // a
-  74:  cursorDown,      // j
-  75:  cursorUp,        // k
-  83:  toggleStar,      // s
-  88:  markCurrent,     // x
-  89:  toggleArchive,   // y
-  77:  mute,            // m
-  13:  openCurrentLink, // Enter
-  79:  openCurrentLink, // o
-  191: openModal,       // ?
-  190: sync,            // .
-  82:  sync             // r
-}
+  65:  checkSelectAll,    // a
+  68:  markReadSelected,  // d
+  74:  cursorDown,        // j
+  75:  cursorUp,          // k
+  83:  toggleStar,        // s
+  88:  markCurrent,       // x
+  89:  toggleArchive,     // y
+  77:  mute,              // m
+  13:  openCurrentLink,   // Enter
+  79:  openCurrentLink,   // o
+  191: openModal,         // ?
+  190: sync,              // .
+  82:  sync               // r
+};
 
 function cursorDown() {
   moveCursor('up')
@@ -145,7 +146,7 @@ function markReadSelected() {
     ids = [ $('td.js-current input').val() ];
   }
   $.post( "/notifications/mark_read_selected", {'id[]': ids}).done(function() {
-    marked.parents('tr').removeClass('active');
+    ids.forEach(function(id){$('.js-table-notifications #notification-'+id).removeClass('active')});
     $('button.mark_read_selected').addClass('hidden');
   })
 }
