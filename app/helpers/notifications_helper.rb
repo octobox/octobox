@@ -59,6 +59,12 @@ module NotificationsHelper
     end
   end
 
+  def mark_read_selected_button(custom_class=nil)
+    button_tag(type: 'button', class: "mark_read_selected #{custom_class}") do
+      octicon('eye', height: 16) + content_tag(:span, ' Mark as read', class: 'hidden-xs')
+    end
+  end
+
   def archive_selected_button(custom_class=nil)
     action = params[:archive] ? 'unarchive' : 'archive'
     button_tag(type: "button",
