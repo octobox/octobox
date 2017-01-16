@@ -150,8 +150,8 @@ function markReadSelected() {
   })
 }
 
-function markAsRead(id) {
-  $.get( "/notifications/"+id+"/mark_as_read");
+function markRead(id) {
+  $.get( "/notifications/"+id+"/mark_read");
   $('#notification-'+id).removeClass('active');
 }
 

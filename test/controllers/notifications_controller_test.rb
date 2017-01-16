@@ -120,7 +120,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in_as(@user)
 
-    get "/notifications/#{notification.id}/mark_as_read"
+    get "/notifications/#{notification.id}/mark_read"
     assert_response :ok
 
     refute notification.reload.unread?

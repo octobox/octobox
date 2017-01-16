@@ -16,7 +16,7 @@
     <%= octicon notification_icon(notification.subject_type), :height => 16 %>
   </td>
   <td class='notification-subject'>
-    <%= link_to notification.subject_title, notification.web_url, target: '_blank', class: 'link', onclick: "markAsRead(#{notification.id})" %>
+    <%= link_to notification.subject_title, notification.web_url, target: '_blank', class: 'link', onclick: "markRead(#{notification.id})" %>
   </td>
   <% unless params[:repo].present? %>
   <td class='notification-repo'>
