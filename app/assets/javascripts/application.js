@@ -16,10 +16,16 @@ document.addEventListener("turbolinks:load", function() {
       } else {
         $(".js-select_all").prop("indeterminate", true);
       }
-      $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.mark_read_selected').removeClass('hidden');
+      $('button.archive_selected, button.unarchive_selected, button.mute_selected').removeClass('hidden');
     } else {
       $(".js-select_all").prop('checked', false)
-      $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.mark_read_selected').addClass('hidden');
+      $('button.archive_selected, button.unarchive_selected, button.mute_selected').addClass('hidden');
+    }
+    var marked_unread_length = marked.parents('tr.active').length;
+    if ( marked_unread_length > 0 ) {
+      $('button.mark_read_selected').removeClass('hidden');
+    } else {
+      $('button.mark_read_selected').addClass('hidden');
     }
   });
   $('.toggle-star').click(function() {
