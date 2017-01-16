@@ -47,7 +47,11 @@ class User < ApplicationRecord
   end
 
   def sync_notifications
-    Notification.download(self)
+    download_service.download
+  end
+
+  def download_service
+    @download_service ||= DownloadService.new(self)
   end
 
   def github_client

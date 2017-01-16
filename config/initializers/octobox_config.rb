@@ -17,5 +17,16 @@ module Octobox
     def refresh_interval_enabled?
       minimum_refresh_interval > 0
     end
+
+    def max_notifications_to_sync
+      if @max_notifications_to_sync
+        @max_notifications_to_sync
+      elsif ENV['MAX_NOTIFICATIONS_TO_SYNC'].present?
+        ENV['MAX_NOTIFICATIONS_TO_SYNC'].to_i
+      else
+        500
+      end
+    end
+    attr_writer :max_notifications_to_sync
   end
 end
