@@ -48,7 +48,7 @@ class NotificationsController < ApplicationController
   def mark_read_selected
     notifications = current_user.notifications.where(id: params[:id])
     notifications.each do |notification|
-      notification.mark_as_read(update_github: true)
+      notification.mark_read(update_github: true)
     end
     head :ok
   end

@@ -38,7 +38,7 @@ class Notification < ApplicationRecord
     end
   end
 
-  def mark_as_read(update_github: false)
+  def mark_read(update_github: false)
     self[:unread] = false
     save(touch: false) if changed?
 
@@ -52,7 +52,7 @@ class Notification < ApplicationRecord
   end
 
   def mute
-    mark_as_read(update_github: true)
+    mark_read(update_github: true)
     ignore_thread
   end
 
