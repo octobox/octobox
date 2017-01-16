@@ -8,6 +8,7 @@
 document.addEventListener("turbolinks:load", function() {
   $('button.archive_selected, button.unarchive_selected').click(function () { toggleArchive(); });
   $('button.mute_selected').click(function () { mute(); });
+  $('button.mark_read_selected').click(function() {markReadSelected()});
   $('input.archive, input.unarchive').change(function() {
     var marked = $(".js-table-notifications input:checked");
     if ( marked.length > 0 ) {
@@ -133,6 +134,20 @@ function mute() {
     }
     Turbolinks.visit("/"+location.search);
   });
+}
+
+function markReadSelected() {
+  if ( $(".js-table-notifications tr").length === 0 ) return;
+  marked = $(".js-table-notifications tr.active input:checked");
+  if ( marked.length > 0 ) {
+    ids = marked.map(function() { return this.value; }).get();
+  } else {
+    ids = [ $('td.js-current input').val() ];
+  }
+  $.post( "/notifications/mark_read_selected", {'id[]': ids}).done(function() {
+    marked.parents('tr').removeClass('active');
+    $('button.mark_read_selected').addClass('hidden');
+  })
 }
 
 function markAsRead(id) {

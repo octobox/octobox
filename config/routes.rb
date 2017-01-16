@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       post :archive_selected
       post :sync
       post :mute_selected
+      post :mark_read_selected
     end
 
     member do

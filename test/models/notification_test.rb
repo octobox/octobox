@@ -14,12 +14,30 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'mark_as_read updates the github thread' do
-    user = users(:andrew)
-    notification = create(:notification, user: user, archived: false)
-    user.stubs(:github_client).returns(mock {
+    notification = notifications(:unreadone)
+    notification.user.stubs(:github_client).returns(mock {
       expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
     })
-    assert notification.mark_as_read
+    notification.mark_as_read(update_github: true)
+    refute notification.reload.unread?
+  end
+
+  test 'mark_as_read does not change updated_at' do
+    notification = notifications(:unreadone)
+    expected_updated_at = notification.updated_at
+    notification.mark_as_read
+    assert_equal expected_updated_at, notification.reload.updated_at
+  end
+
+  test 'mark_as_read turns unread to false' do
+    notification = notifications(:unreadone)
+    notification.mark_as_read
+    refute notification.reload.unread?
+  end
+
+  test 'mark_as_read does not update github when update_github:false' do
+    # the real assertion here is that no http request is made
+    notifications(:unreadone).mark_as_read
   end
 
   test 'mute ignores the thread and marks it as read' do

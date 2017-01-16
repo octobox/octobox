@@ -87,6 +87,23 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     refute notification3.reload.archived?
   end
 
+  test 'marks read multiple notifications' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, archived: false)
+    notification2 = create(:notification, user: @user, archived: false)
+    notification3 = create(:notification, user: @user, archived: false)
+    User.any_instance.stubs(:github_client).returns(mock {
+      expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
+      expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
+    })
+    post '/notifications/mark_read_selected', params: { id: [notification1.id, notification2.id] }
+    assert_response :ok
+
+    refute notification1.reload.unread?
+    refute notification2.reload.unread?
+    assert notification3.reload.unread?
+  end
+
   test 'toggles starred on a notification' do
     notification = create(:notification, user: @user, starred: false)
 
