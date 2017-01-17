@@ -45,7 +45,7 @@ document.addEventListener("turbolinks:load", function() {
       $(".js-select_all").prop('checked', false);
       $('button.archive_selected, button.unarchive_selected, button.mute_selected').addClass('hidden');
     }
-    var marked_unread_length = marked.parents('tr.active').length;
+    var marked_unread_length = getMarkedRows().filter('.active').length;
     if ( marked_unread_length > 0 ) {
       $('button.mark_read_selected').removeClass('hidden');
     } else {
