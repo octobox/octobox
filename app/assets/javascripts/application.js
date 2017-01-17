@@ -64,6 +64,8 @@ document.addEventListener("turbolinks:load", function() {
   $('.js-select_all').change(function() {
     checkAll($(".js-select_all").prop('checked'))
   })
+
+  $('[data-toggle="tooltip"]').tooltip()
 });
 
 document.addEventListener("turbolinks:before-cache", function() {
