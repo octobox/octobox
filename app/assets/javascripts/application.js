@@ -146,7 +146,7 @@ function mute() {
 function markReadSelected() {
   if (getDisplayedRows().length === 0) return;
   var rows = getMarkedOrCurrentRows();
-  $.post("/notifications/mark_read_selected", {'id[]': getIdsFromRows(rows)}).done(function (rows) {
+  $.post("/notifications/mark_read_selected", {'id[]': getIdsFromRows(rows)}).done(function () {
     rows.removeClass('active');
   })
 }
