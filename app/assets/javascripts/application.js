@@ -107,6 +107,7 @@ var shortcuts = {
   83:  toggleStar,        // s
   88:  markCurrent,       // x
   89:  toggleArchive,     // y
+  69:  toggleArchive,     // e
   77:  mute,              // m
   13:  openCurrentLink,   // Enter
   79:  openCurrentLink,   // o
