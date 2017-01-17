@@ -192,7 +192,7 @@ You can use keyboard shortcuts to navigate and perform certain actions:
  - `k` - move up the list
  - `s` - star current notification
  - `x` - mark/unmark current notification
- - `y` - archive current/marked notification(s)
+ - `y` or `e` - archive current/marked notification(s)
  - `m` - mute current/marked notification(s)
  - `d` - mark current/marked notification(s) as read here and on GitHub
  - `o` or `Enter` - open current notification in a new window
