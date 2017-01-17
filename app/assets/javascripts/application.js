@@ -144,16 +144,10 @@ function mute() {
 }
 
 function markReadSelected() {
-  if ( $(".js-table-notifications tr").length === 0 ) return;
-  marked = $(".js-table-notifications tr.active input:checked");
-  if ( marked.length > 0 ) {
-    ids = marked.map(function() { return this.value; }).get();
-  } else {
-    ids = [ $('td.js-current input').val() ];
-  }
-  $.post( "/notifications/mark_read_selected", {'id[]': ids}).done(function() {
-    ids.forEach(function(id){$('.js-table-notifications #notification-'+id).removeClass('active')});
-    $('button.mark_read_selected').addClass('hidden');
+  if (getDisplayedRows().length === 0) return;
+  var rows = getMarkedOrCurrentRows();
+  $.post("/notifications/mark_read_selected", {'id[]': getIdsFromRows(rows)}).done(function (rows) {
+    rows.removeClass('active');
   })
 }
 
