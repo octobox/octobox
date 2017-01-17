@@ -716,7 +716,7 @@ Style/LineEndConcatenation:
                  line end.
   Enabled: false
 
-Style/MethodCallParentheses:
+Style/MethodCallWithoutArgsParentheses:
   Description: 'Do not use parentheses for method calls with no arguments.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-args-no-parens'
   Enabled: false
