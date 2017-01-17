@@ -9,7 +9,7 @@
       <div class="panel panel-default panel-notifications">
         <div class="panel-heading">
           <% if @notifications.any? %>
-            <div class="btn-group pull-right hidden-xs">
+            <div class="btn-group pull-right hidden-xs" data-toggle="tooltip" data-placement="left" title="Notifications per page">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <% if params[:per_page].present? %>
                   <%= params[:per_page] %>
