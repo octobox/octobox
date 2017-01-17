@@ -51,25 +51,22 @@ module NotificationsHelper
     filters.merge(override)
   end
 
-  def mute_selected_button(custom_class=nil)
-    unless params[:archive]
-      button_tag(type: 'button', class: "mute_selected #{custom_class}") do
-        octicon('mute', height: 16) + content_tag(:span, ' Mute selected', class: 'hidden-xs')
-      end
-    end
+  def mute_selected_button
+    function_button('Mute selected', 'mute', 'mute_selected') unless params[:archive]
   end
 
-  def mark_read_selected_button(custom_class=nil)
-    button_tag(type: 'button', class: "mark_read_selected #{custom_class}") do
-      octicon('eye', height: 16) + content_tag(:span, ' Mark as read', class: 'hidden-xs')
-    end
+  def mark_read_selected_button
+    function_button('Mark as read', 'eye', 'mark_read_selected')
   end
 
-  def archive_selected_button(custom_class=nil)
+  def archive_selected_button
     action = params[:archive] ? 'unarchive' : 'archive'
-    button_tag(type: "button",
-               class: "archive_toggle #{action}_selected #{custom_class}") do
-      octicon('checklist', height: 16) + content_tag(:span, " #{action.capitalize} selected", class: 'hidden-xs')
+    function_button("#{action.capitalize} selected", 'checklist', "archive_toggle #{action}_selected")
+  end
+
+  def function_button(title, octicon, css_class)
+    button_tag(type: 'button', class: "#{css_class} btn btn-default hidden") do
+      octicon(octicon, height: 16) + content_tag(:span, " #{title}", class: 'hidden-xs')
     end
   end
 
