@@ -34,6 +34,8 @@ function getMarkedOrCurrentRows() {
 document.addEventListener("turbolinks:load", function() {
   $('button.archive_selected, button.unarchive_selected').click(toggleArchive);
   $('button.mute_selected').click(mute);
+  $('button.mark_read_selected').click(markReadSelected);
+
   $('input.archive, input.unarchive').change(function() {
     if ( hasMarkedRows() ) {
       var prop = hasMarkedRows(true) ? 'indeterminate' : 'checked';
@@ -42,6 +44,12 @@ document.addEventListener("turbolinks:load", function() {
     } else {
       $(".js-select_all").prop('checked', false);
       $('button.archive_selected, button.unarchive_selected, button.mute_selected').addClass('hidden');
+    }
+    var marked_unread_length = marked.parents('tr.active').length;
+    if ( marked_unread_length > 0 ) {
+      $('button.mark_read_selected').removeClass('hidden');
+    } else {
+      $('button.mark_read_selected').addClass('hidden');
     }
   });
   $('.toggle-star').click(function() {
@@ -90,18 +98,19 @@ function enableKeyboardShortcuts() {
 }
 
 var shortcuts = {
-  65:  checkSelectAll, // a
-  74:  cursorDown,      // j
-  75:  cursorUp,        // k
-  83:  toggleStar,      // s
-  88:  markCurrent,     // x
-  89:  toggleArchive,   // y
-  77:  mute,            // m
-  13:  openCurrentLink, // Enter
-  79:  openCurrentLink, // o
-  191: openModal,       // ?
-  190: sync,            // .
-  82:  sync             // r
+  65:  checkSelectAll,    // a
+  68:  markReadSelected,  // d
+  74:  cursorDown,        // j
+  75:  cursorUp,          // k
+  83:  toggleStar,        // s
+  88:  markCurrent,       // x
+  89:  toggleArchive,     // y
+  77:  mute,              // m
+  13:  openCurrentLink,   // Enter
+  79:  openCurrentLink,   // o
+  191: openModal,         // ?
+  190: sync,              // .
+  82:  sync               // r
 };
 
 function cursorDown() {
@@ -131,8 +140,22 @@ function mute() {
   $.post( "/notifications/mute_selected", { 'id[]': ids}).done(resetCursorAfterRowsRemoved(ids));
 }
 
-function markAsRead(id) {
-  $.get( "/notifications/"+id+"/mark_as_read");
+function markReadSelected() {
+  if ( $(".js-table-notifications tr").length === 0 ) return;
+  marked = $(".js-table-notifications tr.active input:checked");
+  if ( marked.length > 0 ) {
+    ids = marked.map(function() { return this.value; }).get();
+  } else {
+    ids = [ $('td.js-current input').val() ];
+  }
+  $.post( "/notifications/mark_read_selected", {'id[]': ids}).done(function() {
+    ids.forEach(function(id){$('.js-table-notifications #notification-'+id).removeClass('active')});
+    $('button.mark_read_selected').addClass('hidden');
+  })
+}
+
+function markRead(id) {
+  $.get( "/notifications/"+id+"/mark_read");
   $('#notification-'+id).removeClass('active');
 }
 

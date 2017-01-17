@@ -2,7 +2,7 @@
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
   before_action :render_home_page_unless_authenticated, only: [:index]
-  before_action :find_notification, only: [:archive, :unarchive, :star, :mark_as_read]
+  before_action :find_notification, only: [:archive, :unarchive, :star, :mark_read]
 
   def index
     scope    = current_user.notifications
@@ -45,7 +45,15 @@ class NotificationsController < ApplicationController
     head :ok
   end
 
-  def mark_as_read
+  def mark_read_selected
+    notifications = current_user.notifications.where(id: params[:id])
+    notifications.each do |notification|
+      notification.mark_read(update_github: true)
+    end
+    head :ok
+  end
+
+  def mark_read
     @notification.update_columns unread: false
     head :ok
   end
