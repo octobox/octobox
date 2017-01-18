@@ -45,4 +45,5 @@ group :production do
   gem 'lograge'
   gem 'rails_safe_tasks'
   gem 'bugsnag'
+  gem 'puma_worker_killer'
 end
