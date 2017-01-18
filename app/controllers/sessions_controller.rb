@@ -45,26 +45,21 @@ class SessionsController < ApplicationController
     redirect_to root_path
   end
 
-  def organization_member?(client, nickname)
-    return false unless ENV['GITHUB_ORGANIZATION_ID'].present?
-
-    begin
-      client.organization_member?(
-        ENV['GITHUB_ORGANIZATION_ID'].to_i,
-        nickname,
-        headers: { 'Cache-Control' => 'no-cache, no-store' }
-      )
-    rescue Octokit::Error
-      false
-    end
+  def organization_member?(*args)
+    member?(*args, type: :organization)
   end
 
-  def team_member?(client, nickname)
-    return false unless ENV['GITHUB_TEAM_ID'].present?
+  def team_member?(*args)
+    member?(*args, type: :team)
+  end
+
+  def member?(client, nickname, type:)
+    id = ENV["GITHUB_#{type.to_s.upcase}]_ID"]
+    return false unless id.present?
 
     begin
-      client.team_member?(
-        ENV['GITHUB_TEAM_ID'].to_i,
+      client.public_send("#{type}_member?",
+        id.to_i,
         nickname,
         headers: { 'Cache-Control' => 'no-cache, no-store' }
       )
