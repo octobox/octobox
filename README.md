@@ -65,6 +65,17 @@ PERSONAL_ACCESS_TOKENS_ENABLED=1
 
 Once that is set, users can set a personal access token on the Settings page (found on the user drop-down menu).
 
+## Limiting Access
+You can restrict access to your Octobox instance, and only allow members or a GitHub organization or team.  To limit access set the environment variable
+`RESTRICTED_ACCESS_ENABLED=1` then set either `GITHUB_ORGANIZATION_ID=<org_id_number>` `GITHUB_TEAM_ID=<team_id_number>`.
+
+You can get an organization's id with this curl command:
+`curl https://api.github.com/orgs/<org_name>`
+
+To get a team's id:
+`curl https://api.github.com/orgs/<org_name>/teams`.
+You must be authenticated with access to the org. This will show you a list of the org's teams. Find your team on the list and copy its id
+
 ## Development
 
 The source code is hosted at [GitHub](https://github.com/octobox/octobox).

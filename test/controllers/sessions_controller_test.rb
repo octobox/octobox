@@ -27,7 +27,61 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github].uid = users(:andrew).github_id
 
     post '/auth/github/callback'
-    assert_requested  @notifications_request, times: 2
+    assert_requested @notifications_request, times: 2
+  end
+
+  test 'POST #create redirects to the root_path with an error message if they are not an org member' do
+    user = users(:andrew)
+    OmniAuth.config.mock_auth[:github].uid           = user.github_id
+    OmniAuth.config.mock_auth[:github].info.nickname = user.github_login
+
+    stub_restricted_access_enabled
+    stub_env('GITHUB_ORGANIZATION_ID', value: 1)
+    stub_organization_membership_request(organization_id: 1, login: user.github_login, successful: false)
+
+    post '/auth/github/callback'
+    assert_redirected_to root_path
+    assert_equal 'Access denied.', flash[:error]
+  end
+
+  test 'POST #create redirects to the root_path with an error message if they are not an team member' do
+    user = users(:andrew)
+    OmniAuth.config.mock_auth[:github].uid           = user.github_id
+    OmniAuth.config.mock_auth[:github].info.nickname = user.github_login
+
+    stub_restricted_access_enabled
+    stub_env('GITHUB_TEAM_ID', value: 1)
+    stub_team_membership_request(team_id: 1, login: user.github_login, successful: false)
+
+    post '/auth/github/callback'
+    assert_redirected_to root_path
+    assert_equal 'Access denied.', flash[:error]
+  end
+
+  test 'POST #create is successful if the user is an org member' do
+    user = users(:andrew)
+    OmniAuth.config.mock_auth[:github].uid           = user.github_id
+    OmniAuth.config.mock_auth[:github].info.nickname = user.github_login
+
+    stub_restricted_access_enabled
+    stub_env('GITHUB_ORGANIZATION_ID', value: 1)
+    stub_organization_membership_request(organization_id: 1, login: user.github_login, successful: true)
+
+    post '/auth/github/callback'
+    assert_redirected_to root_path
+  end
+
+  test 'POST #create is successful if the user is a team member' do
+    user = users(:andrew)
+    OmniAuth.config.mock_auth[:github].uid           = user.github_id
+    OmniAuth.config.mock_auth[:github].info.nickname = user.github_login
+
+    stub_restricted_access_enabled
+    stub_env('GITHUB_TEAM_ID', value: 1)
+    stub_team_membership_request(team_id: 1, login: user.github_login, successful: true)
+
+    post '/auth/github/callback'
+    assert_redirected_to root_path
   end
 
   test 'GET #destroy redirects to /' do

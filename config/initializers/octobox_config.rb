@@ -1,5 +1,5 @@
 module Octobox
-  class <<self
+  class << self
     def personal_access_tokens_enabled
       @personal_access_tokens_enabled || ENV['PERSONAL_ACCESS_TOKENS_ENABLED'].present?
     end
@@ -28,5 +28,14 @@ module Octobox
       end
     end
     attr_writer :max_notifications_to_sync
+
+    def restricted_access_enabled
+      @restricted_access_enabled || ENV['RESTRICTED_ACCESS_ENABLED'].present?
+    end
+    attr_writer :restricted_access_enabled
+
+    def restricted_access_enabled?
+      restricted_access_enabled
+    end
   end
 end
