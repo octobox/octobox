@@ -1,5 +1,5 @@
 namespace :octobox do
-  desc "Get overall stats for application"
+  desc "Get overall stats for the application"
   task stats: :environment do
     users         = "| Users: #{User.count}"
     notifications = "| Notifications: #{Notification.count}"
