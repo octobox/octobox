@@ -85,6 +85,7 @@ GEM
     faraday (0.10.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.17)
+    get_process_mem (0.2.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     hashdiff (0.3.2)
@@ -167,6 +168,9 @@ GEM
     powerpack (0.1.1)
     public_suffix (2.0.5)
     puma (3.6.2)
+    puma_worker_killer (0.0.7)
+      get_process_mem (~> 0.2)
+      puma (>= 2.7, < 4)
     rack (2.0.1)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -292,6 +296,7 @@ DEPENDENCIES
   pg
   pg_search
   puma
+  puma_worker_killer
   rails (= 5.0.1)
   rails-controller-testing
   rails_safe_tasks
