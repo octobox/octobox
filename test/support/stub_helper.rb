@@ -1,4 +1,31 @@
 module StubHelper
+  def stub_env(variable, value:)
+    ENV.stubs(:[])
+    ENV.stubs(:[]).with(variable).returns(value.to_s)
+  end
+
+  def stub_organization_membership_request(organization_id:, login:, successful:)
+    membership_url = %r{https://api.github.com/organizations/#{organization_id}/members/#{login}}
+
+    headers          = { 'Content-Type' => 'application/json', 'Cache-Control' => 'no-cach, no-store' }
+    default_response = { body: nil, headers: headers }
+
+    response = successful ? default_response.merge(status: 204) : default_response.merge(status: 404)
+
+    stub_request(:get, membership_url).to_return(response)
+  end
+
+  def stub_team_membership_request(team_id:, login:, successful:)
+    membership_url = %r{https://api.github.com/teams/#{team_id}/members/#{login}}
+
+    headers          = { 'Content-Type' => 'application/json', 'Cache-Control' => 'no-cach, no-store' }
+    default_response = { body: nil, headers: headers }
+
+    response = successful ? default_response.merge(status: 204) : default_response.merge(status: 404)
+
+    stub_request(:get, membership_url).to_return(response)
+  end
+
   def stub_notifications_request(url: nil, body: nil, extra_headers: {})
     url ||= %r{https://api.github.com/notifications}
     body     ||= file_fixture('notifications.json')
@@ -27,5 +54,9 @@ module StubHelper
 
   def stub_minimum_refresh_interval(value = 0)
     Octobox.stubs(:minimum_refresh_interval).returns(value)
+  end
+
+  def stub_restricted_access_enabled(value: true)
+    Octobox.stubs(:restricted_access_enabled).returns(value)
   end
 end
