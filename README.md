@@ -162,6 +162,7 @@ Octobox will be running on [http://localhost:3000](http://localhost:3000).
 **Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
 
 ### Sync notifications automatically
+> Note that this is *not* done on the hosted version (octobox.io).
 
 Now that you've set all to go you can configure the app to sync the notifications automatically, there is a rake task that will do this for every user
 
