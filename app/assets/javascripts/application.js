@@ -32,7 +32,6 @@ function getMarkedOrCurrentRows() {
 }
 
 function updateFavicon() {
-  console.log("update")
   $.get( "/notifications/unread_count", function(data) {
     var unread_count = data["count"];
     if ( unread_count > 0 ) {
