@@ -73,6 +73,21 @@ html {
   .flex-container {
     .flex-main & {
       padding-left: 15px;
+      overflow-y: hidden;
+      height: 100%;
+      > .panel {
+        height: 100%;
+        overflow-y: scroll;
+        > .panel-heading {
+          position: absolute;
+          z-index: 1;
+          right: 16px;
+          left: 16px;
+        }
+        > .table {
+          margin-top: 46px;
+        }
+      }
     }
     .flex-sidebar & {
       padding-right: 0;
