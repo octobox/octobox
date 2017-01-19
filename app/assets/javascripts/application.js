@@ -31,6 +31,47 @@ function getMarkedOrCurrentRows() {
   return hasMarkedRows() ? getMarkedRows() : getCurrentRow()
 }
 
+function updateFavicon() {
+  console.log("update")
+  $.get( "/notifications/unread_count", function(data) {
+    var unread_count = data["count"];
+    if ( unread_count > 0 ) {
+      var old_link = document.getElementById('favicon-count');
+      if ( old_link ) {
+        $(old_link).remove();
+      }
+      
+      var canvas = document.createElement('canvas'),
+        ctx,
+        img = document.createElement('img'),
+        link = document.getElementById('favicon').cloneNode(true),
+        txt = unread_count + '';
+
+      link.id = "favicon-count";
+      
+      if (canvas.getContext) {
+        canvas.height = canvas.width = 16;
+        ctx = canvas.getContext('2d');
+        img.onload = function () {
+          ctx.drawImage(this, 0, 0);
+          
+          ctx.fillStyle = '#f93e00';
+          var width = ctx.measureText(txt).width;
+          ctx.fillRect(0, 0, width+2, 12);
+          
+          ctx.font = 'bold 10px "helvetica", sans-serif';
+          ctx.fillStyle = '#fff';
+          ctx.fillText(txt, 1, 10);
+          
+          link.href = canvas.toDataURL('image/png');
+          document.body.appendChild(link);
+        };
+        img.src = "/favicon-16x16.png";
+      }
+    }
+  });
+}
+
 document.addEventListener("turbolinks:load", function() {
   $('button.archive_selected, button.unarchive_selected').click(toggleArchive);
   $('button.mute_selected').click(mute);
@@ -66,6 +107,8 @@ document.addEventListener("turbolinks:load", function() {
   })
 
   $('[data-toggle="tooltip"]').tooltip()
+
+  updateFavicon()
 });
 
 document.addEventListener("turbolinks:before-cache", function() {
@@ -148,6 +191,7 @@ function markReadSelected() {
   var rows = getMarkedOrCurrentRows();
   $.post("/notifications/mark_read_selected", {'id[]': getIdsFromRows(rows)}).done(function () {
     rows.removeClass('active');
+    updateFavicon();
   })
 }
 
