@@ -69,6 +69,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     post '/auth/github/callback'
     assert_redirected_to root_path
+    assert_nil flash[:error]
   end
 
   test 'POST #create is successful if the user is a team member' do
@@ -82,6 +83,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     post '/auth/github/callback'
     assert_redirected_to root_path
+    assert_nil flash[:error]
   end
 
   test 'GET #destroy redirects to /' do
