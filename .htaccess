@@ -1,3 +1,0 @@
-ErrorDocument 404 https://octobox.io/404.html
-ErrorDocument 500 https://octobox.io/500.html
-ErrorDocument 422 https://octobox.io/422.html
