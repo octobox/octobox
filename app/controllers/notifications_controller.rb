@@ -31,6 +31,12 @@ class NotificationsController < ApplicationController
     @notifications = scope.newest.page(page).per(per_page)
   end
 
+  def unread_count
+    scope = current_user.notifications
+    count = scope.inbox.distinct.group(:unread).count.fetch(true){ 0 }
+    render json: { 'count': count }
+  end
+  
   def mute_selected
     notifications = current_user.notifications.where(id: params[:id])
     notifications.each do |notification|
