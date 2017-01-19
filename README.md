@@ -25,7 +25,7 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 
 You can use [a hosted version](https://octobox.io) right now.
 
-You could also host it yourself, in Heroku or otherwise.
+You could also host it yourself, in [Heroku](https://github.com/octobox/octobox#deployment-to-heroku) or otherwise.
 
 Check out the open issues for a glimpse of the future: https://github.com/octobox/octobox/issues.
 
