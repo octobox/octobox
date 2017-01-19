@@ -84,7 +84,7 @@ For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass)
 
 ### Getting Started
 
-New to Ruby? No worries! You can follow these instructions to install a local server, or you can use the included [Vagrant](https://www.vagrantup.com/docs/why-vagrant/) setup.
+New to Ruby? No worries! You can follow these instructions to install a local server, or you can use the included [Docker](https://www.docker.com/) setup.
 
 Prefer PHP? We got you covered! There is a *(work-in-progress)* PHP version called [LaraGit](https://github.com/m1guelpf/laragit).
 
