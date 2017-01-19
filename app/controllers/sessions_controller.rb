@@ -54,7 +54,7 @@ class SessionsController < ApplicationController
   end
 
   def member?(client, nickname, type:)
-    id = ENV["GITHUB_#{type.to_s.upcase}_ID"]
+    id = ENV["GITHUB_#{type.to_s.upcase}]_ID"]
     return false unless id.present?
 
     begin
