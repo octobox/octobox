@@ -17,7 +17,7 @@
     "MINIMUM_REFRESH_INTERVAL": {
       "description": "Minimum value allowed for a user to set auto-refresh.  Setting to 0 means this is disabled.",
       "value": "10"
-    }
+    },
     "WEB_CONCURRENCY": {
       "description": "Specifies the number of `workers` to boot in clustered mode.",
       "value": "2"
