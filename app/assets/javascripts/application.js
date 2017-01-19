@@ -196,7 +196,9 @@ function markReadSelected() {
 }
 
 function markRead(id) {
-  $.get( "/notifications/"+id+"/mark_read");
+  $.get( "/notifications/"+id+"/mark_read", function() {
+    updateFavicon();
+  });
   $('#notification-'+id).removeClass('active');
 }
 
