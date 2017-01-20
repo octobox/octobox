@@ -25,6 +25,13 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 
 You can use Octobox right now at [octobox.io](https://octobox.io), a shared instance hosted by the Octobox team.
 
+**Note:** octobox.io has a few features intentionally disabled:
+
+* Auto refreshing of notifications page ([#200](https://github.com/octobox/octobox/pull/200))
+* Personal Access Tokens ([#185](https://github.com/octobox/octobox/pull/185))
+
+Features are disabled for various reasons, such as not wanting to store users' tokens at this time.
+
 ### Installation
 
 You can also host Octobox yourself! See [INSTALLATION](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
