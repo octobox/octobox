@@ -100,7 +100,7 @@ module NotificationsHelper
         block.call
         if active
           concat content_tag(:span, octicon('x', :height => 16), class: 'label text-muted')
-        else
+        elsif count.present?
           concat content_tag(:span, count, class: 'label label-muted')
         end
       end
