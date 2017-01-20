@@ -27,8 +27,8 @@ You can use Octobox right now at [octobox.io](https://octobox.io), a shared inst
 
 ### Installation
 
-You can also host Octobox yourself! See the [INSTALLATION_AND_CONFIGURATION](https://github.com/octobox/octobox/blob/master/INSTALLATION_AND_CONFIGURATION.md)
-guide for installation instructions and details regarding deployment to Heroku, Docker, and more.
+You can also host Octobox yourself! See [INSTALLATION](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
+for installation instructions and details regarding deployment to Heroku, Docker, and more.
 
 Prefer PHP? We got you covered! There is a *(work-in-progress)* PHP version called [LaraGit](https://github.com/m1guelpf/laragit).
 
