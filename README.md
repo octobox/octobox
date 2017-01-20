@@ -37,8 +37,6 @@ Features are disabled for various reasons, such as not wanting to store users' t
 You can also host Octobox yourself! See [INSTALLATION](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
 for installation instructions and details regarding deployment to Heroku, Docker, and more.
 
-Prefer PHP? We got you covered! There is a *(work-in-progress)* PHP version called [LaraGit](https://github.com/m1guelpf/laragit).
-
 ## Requirements
 
 Web notifications must be enabled in your GitHub settings for Octobox to work: https://github.com/settings/notifications
@@ -61,6 +59,11 @@ You can use keyboard shortcuts to navigate and perform certain actions:
  - `o` or `Enter` - open current notification in a new window
 
 Press `?` for the help menu.
+
+## Alternatives
+
+- [LaraGit](https://github.com/m1guelpf/laragit) - PHP rewrite
+- [octobox.js](https://github.com/doowb/octobox.js) - JavaScript rewrite
 
 ## Development
 
