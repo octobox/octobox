@@ -21,6 +21,8 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
   gem 'rails-controller-testing'
+  gem 'teaspoon-mocha'
+  gem 'magic_lamp'
 end
 
 group :test do
@@ -30,6 +32,7 @@ group :test do
   gem 'codeclimate-test-reporter'
   gem 'webmock'
   gem 'mocha'
+  gem 'phantomjs'
 end
 
 group :development do

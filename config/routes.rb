@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+  mount MagicLamp::Genie, at: '/magic_lamp' if defined?(MagicLamp)
+
   root to: 'notifications#index'
 
   get :login,  to: 'sessions#new'
