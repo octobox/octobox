@@ -38,13 +38,7 @@ Web notifications must be enabled in your GitHub settings for Octobox to work: h
 
 <img width="757" alt="Notifications settings screen" src="https://cloud.githubusercontent.com/assets/1060/21509954/3a01794c-cc86-11e6-9bbc-9b33b55f85d1.png">
 
-## Development
-
-The source code is hosted at [GitHub](https://github.com/octobox/octobox).
-You can report issues/feature requests on [GitHub Issues](https://github.com/octobox/octobox/issues).
-For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
-
-### Keyboard shortcuts
+## Keyboard shortcuts
 
 You can use keyboard shortcuts to navigate and perform certain actions:
 
@@ -60,6 +54,12 @@ You can use keyboard shortcuts to navigate and perform certain actions:
  - `o` or `Enter` - open current notification in a new window
 
 Press `?` for the help menu.
+
+## Development
+
+The source code is hosted at [GitHub](https://github.com/octobox/octobox).
+You can report issues/feature requests on [GitHub Issues](https://github.com/octobox/octobox/issues).
+For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
 
 ### Note on Patches/Pull Requests
 
