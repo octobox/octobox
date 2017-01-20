@@ -93,17 +93,40 @@ module NotificationsHelper
   end
 
   def filter_link(param, value, count, &block)
-    active = params[param] == value.to_s
+    sidebar_filter_link(params[param] == value.to_s, param, value, count) do
+      block.call
+    end
+  end
 
+  def org_filter_link(param, value, count, &block)
+    sidebar_filter_link(params[param] == value.to_s, param, value, nil, :repo, 'owner-label') do
+      block.call
+    end
+  end
+
+  def repo_filter_link(param, value, count, &block)
+    active = params[param] == value || params[:owner] == value.split('/')[0]
+    sidebar_filter_link(active, param, value, count, :owner, 'repo-label') do
+      block.call
+    end
+  end
+
+  def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, &block)
     content_tag :li, class: (active ? 'active' : '') do
-      link_to root_path(filtered_params(param => (active ? nil : value))), class: 'filter' do
+      active = (active && not_repo_in_active_org(param))
+      link_to root_path(filtered_params(param => (active ? nil : value)).except(except)), class: "filter #{link_class}" do
         block.call
-        if active
+        if active && not_repo_in_active_org(param)
           concat content_tag(:span, octicon('x', :height => 16), class: 'label text-muted')
         elsif count.present?
           concat content_tag(:span, count, class: 'label label-muted')
         end
       end
     end
+  end
+
+  def not_repo_in_active_org(param)
+    return true unless param == :repo
+    !params[:owner].present?
   end
 end

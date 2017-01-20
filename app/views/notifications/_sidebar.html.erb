@@ -60,20 +60,18 @@
   <%= menu_separator unless @reasons.empty? %>
 
   <% @unread_repositories.sort.group_by{|repo_name, count| repo_name.split('/')[0] }.each do |org, repos| %>
-    <li class="<%= 'active' if params[:owner] == org %>">
-      <%= link_to root_path(filtered_params(owner: org).except(:repo)), class: 'filter owner-label' do %>
-        <%= image_tag "https://github.com/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
-        <%= org %>
-      <% end %>
-    </li>
+    <%= org_filter_link :owner, org, nil do %>
+      <%= image_tag "https://github.com/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
+      <%= org %>
+    <% end %>
+
     <% repos.each do |repo_name, count| %>
       <% repo_owner, repo_label = repo_name.split('/') %>
-      <li class="<%= 'active' if params[:repo] == repo_name || params[:owner] == org %>">
-         <%= link_to root_path(filtered_params(repo: repo_name).except(:owner)), class: 'filter repo-label' do %>
-           <%= octicon('repo', size: 20) %>
-           <%= repo_label %>
-           <span class="label label-muted"><%= count %></span>
-       <% end %>
+
+      <%= repo_filter_link :repo, repo_name, count do %>
+        <%= octicon('repo', size: 20) %>
+        <%= repo_label %>
+      <% end %>
      </li>
     <% end %>
   <% end %>
