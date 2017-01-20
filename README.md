@@ -15,20 +15,20 @@ Take back control of your GitHub Notifications with [Octobox]( https://octobox.i
 
 If you manage more than one active project on GitHub, you probably find [GitHub Notifications](https://github.com/notifications) pretty lacking.
 
-Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on.
-
-Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
+Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
 
 Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
 
-## What state is the project in right now?
+## Getting Started
 
-You can use [a hosted version](https://octobox.io) right now.
+### Octobox.io
+
+You can use Octobox right now at [octobox.io](https://octobox.io), a shared instance hosted by the Octobox team.
+
+### Installation
 
 You can also host Octobox yourself! See the [INSTALLATION_AND_CONFIGURATION](https://github.com/octobox/octobox/blob/master/INSTALLATION_AND_CONFIGURATION.md)
 guide for installation instructions and details regarding deployment to Heroku, Docker, and more.
-
-Check out the open issues for a glimpse of the future: https://github.com/octobox/octobox/issues.
 
 Prefer PHP? We got you covered! There is a *(work-in-progress)* PHP version called [LaraGit](https://github.com/m1guelpf/laragit).
 
