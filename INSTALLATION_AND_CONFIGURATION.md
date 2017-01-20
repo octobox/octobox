@@ -3,6 +3,9 @@
 The Octobox team hosts a shared instance of Octobox at [octobox.io](https://octobox.io/), but perhaps you're looking to host
 your own or get yourself set up to contribute to Octobox. Fantastic! There are a number of install options available to you.
 
+Before you begin, remember that [web notifications must be enabled](https://github.com/octobox/octobox/tree/reorganize-readme#requirements)
+in your GitHub settings for Octobox to work.
+
 #### Installation
 
 * [Deployment to Heroku](#deployment-to-heroku)
