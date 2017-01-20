@@ -94,6 +94,8 @@ You can use Docker to run Octobox in development.
 
 First, [install Docker](https://docs.docker.com/engine/installation/). If you've got run macOS or Windows, Docker for Mac/Windows makes this really easy.
 
+> If you have Windows Home Edition, you'll need to download and run [Docker Toolbox](https://www.docker.com/products/docker-toolbox).
+
 Then, run:
 
 ```bash
