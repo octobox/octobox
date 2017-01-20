@@ -91,4 +91,19 @@ module NotificationsHelper
       end
     end
   end
+
+  def filter_link(param, value, count, &block)
+    active = params[param] == value.to_s
+
+    content_tag :li, class: (active ? 'active' : '') do
+      link_to root_path(filtered_params(param => (active ? nil : value))), class: 'filter' do
+        block.call
+        if active
+          concat content_tag(:span, octicon('x', :height => 16), class: 'label text-muted')
+        else
+          concat content_tag(:span, count, class: 'label label-muted')
+        end
+      end
+    end
+  end
 end
