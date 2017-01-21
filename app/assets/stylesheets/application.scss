@@ -60,6 +60,10 @@ html {
   }
 }
 
+.footer {
+  text-align: center;
+}
+
 @media (max-width: $screen-sm-max) {
   .flex-container {
     .flex-main & {
@@ -539,3 +543,4 @@ td.keys {
 .spinning{
   animation: spin 1s infinite steps(90);
 }
+

@@ -29,4 +29,8 @@ module ApplicationHelper
   def menu_separator(custom_class=nil)
     "<li class='divider #{custom_class}'></li>".html_safe
   end
+
+  def copyright_message
+    "© 2017 Andrew Nesbitt, <a href='#{Octobox.source_repo}'>source</a> available under <a href='#{Octobox.source_repo}/blob/master/LICENSE.txt'>AGPL 3.0</a>".html_safe
+  end
 end
