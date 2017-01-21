@@ -37,5 +37,11 @@ module Octobox
     def restricted_access_enabled?
       restricted_access_enabled
     end
+
+    def source_repo
+      @source_repo || ENV['SOURCE_REPO'] || 'https://github.com/octobox/octobox'
+    end
+    attr_writer :source_repo
+
   end
 end
