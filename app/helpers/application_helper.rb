@@ -30,7 +30,15 @@ module ApplicationHelper
     "<li class='divider #{custom_class}'></li>".html_safe
   end
 
+  def license_message
+    source_link = "<a href='#{Octobox.source_repo}'>Source</a>"
+    license_link = "<a href='#{Octobox.source_repo}/blob/master/LICENSE.txt'>AGPL 3.0</a>"
+    "#{source_link} available under #{license_link}".html_safe
+  end
+
   def copyright_message
-    "© 2017 Andrew Nesbitt, <a href='#{Octobox.source_repo}'>source</a> available under <a href='#{Octobox.source_repo}/blob/master/LICENSE.txt'>AGPL 3.0</a>".html_safe
+    et_al = Octobox.contributors ?
+      "<a href='#' data-toggle='modal' data-target='#et-al'>et al</a>" : 'et al'
+    "© 2017 Andrew Nesbitt, #{et_al}".html_safe
   end
 end
