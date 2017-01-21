@@ -183,3 +183,8 @@ To get a team's id:
 `curl https://api.github.com/orgs/<org_name>/teams`.
 You must be authenticated with access to the org. This will show you a list of the org's teams. Find your team on the list and copy its id
 
+## Source Link for Modified Code
+
+If you have modified the Octobox code in any way, in order to comply with the AGPLv3 license, you must link to the modified source.  You
+can do this by setting the `SOURCE_REPO` environment variable to the url of a GitHub repo with the modified source.  For instance, if 
+you run this from a fork in the 'NotOctobox' org, you would set `SOURCE_REPO=https://github.com/NotOctobox/octobox`.
