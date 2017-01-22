@@ -1,5 +1,15 @@
 module Octobox
   class Configurator
+    def github_organization_id
+      @github_organization_id || ENV['GITHUB_ORGANIZATION_ID']
+    end
+    attr_writer :github_organization_id
+
+    def github_team_id
+      @github_team_id || ENV['GITHUB_TEAM_ID']
+    end
+    attr_writer :github_team_id
+
     def personal_access_tokens_enabled
       @personal_access_tokens_enabled || ENV['PERSONAL_ACCESS_TOKENS_ENABLED'].present?
     end
