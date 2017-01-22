@@ -43,5 +43,11 @@ module Octobox
     end
     attr_writer :source_repo
 
+    def contributors
+      @contributors ||= Octokit::Client.new(auto_paginate: true).contributors(Octokit::Repository.from_url(source_repo))
+    rescue
+      nil
+    end
+    attr_writer :contributors
   end
 end
