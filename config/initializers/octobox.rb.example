@@ -1,0 +1,50 @@
+###
+# Octobox can be configured using environment variables or via it's
+# configuration API directly. To use this file, copy it to config/initializers/octobox.rb
+# Changes in your new configuration file will not be tracked by Git.
+#
+# Note that all of these options have a corrresponding environment variable
+# that can be utilized as well.
+#
+
+Octobox.config do |c|
+  # When true, allows personal access tokens to be used when querying for notifications.
+  #
+  # Defaults to false
+  #
+  # c.personal_access_tokens_enabled = false
+
+  # Allows users to set an auto-refresh interval that will cause a periodic
+  # sync and page reload when they are viewing notifications. Set to any
+  # integer above 0.  This number is the lowest number of minutes between
+  # auto-syncs that the server will allow. When enabled, user settings pages
+  # will have an 'Notification Refresh Interval' option. This can be set to any
+  # value above minimum_refresh_interval.
+  #
+  # Defaults to 0
+  #
+  # c.minimum_refresh_interval = 0
+
+  # The maximum notifications allowed to be synced at a given time.
+  #
+  # Defaults to 500
+  #
+  # c.max_notifications_to_sync = 500
+
+  # You can restrict access to your Octobox instance, and only allow members or a
+  # GitHub organization or team. After enabling this option,
+  # set either GITHUB_ORGANIZATION_ID=<org_id_number> or GITHUB_TEAM_ID=<team_id_number>.
+  #
+  # Defaults to false
+  #
+  # c.restricted_access_enabled = false
+
+  # According to the Octobox's license (see LICENSE), you should make sure that
+  # your Octobox instance provides a way for users to get its source. This
+  # option allows you to specify the link used for source links in the event
+  # that you fork the Octobox project and modify its code for your own purpose.
+  #
+  # Defaults to the original repository of octobox/octobox
+  #
+  # c.source_repo = 'https://github.com/octobox/octobox'
+end
