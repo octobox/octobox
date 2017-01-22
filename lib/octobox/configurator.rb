@@ -1,17 +1,5 @@
 module Octobox
   class Configurator
-    def github_organization_id
-      id = @github_organization_id || ENV['GITHUB_ORGANIZATION_ID']
-      return id.to_i if id.present?
-    end
-    attr_writer :github_organization_id
-
-    def github_team_id
-      id = @github_team_id || ENV['GITHUB_TEAM_ID']
-      return id.to_i if id.present?
-    end
-    attr_writer :github_team_id
-
     def personal_access_tokens_enabled
       @personal_access_tokens_enabled || ENV['PERSONAL_ACCESS_TOKENS_ENABLED'].present?
     end
@@ -37,6 +25,18 @@ module Octobox
       @restricted_access_enabled || ENV['RESTRICTED_ACCESS_ENABLED'].present?
     end
     attr_writer :restricted_access_enabled
+
+    def github_organization_id
+      id = @github_organization_id || ENV['GITHUB_ORGANIZATION_ID']
+      return id.to_i if id.present?
+    end
+    attr_writer :github_organization_id
+
+    def github_team_id
+      id = @github_team_id || ENV['GITHUB_TEAM_ID']
+      return id.to_i if id.present?
+    end
+    attr_writer :github_team_id
 
     def source_repo
       @source_repo || ENV['SOURCE_REPO'] || 'https://github.com/octobox/octobox'
