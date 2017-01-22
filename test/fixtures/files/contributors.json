@@ -1,0 +1,42 @@
+[
+  {
+    "login": "andrew",
+    "id": 1060,
+    "avatar_url": "https://avatars.githubusercontent.com/u/1060?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/andrew",
+    "html_url": "https://github.com/andrew",
+    "followers_url": "https://api.github.com/users/andrew/followers",
+    "following_url": "https://api.github.com/users/andrew/following{/other_user}",
+    "gists_url": "https://api.github.com/users/andrew/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/andrew/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/andrew/subscriptions",
+    "organizations_url": "https://api.github.com/users/andrew/orgs",
+    "repos_url": "https://api.github.com/users/andrew/repos",
+    "events_url": "https://api.github.com/users/andrew/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/andrew/received_events",
+    "type": "User",
+    "site_admin": false,
+    "contributions": 262
+  },
+  {
+    "login": "tarebyte",
+    "id": 564113,
+    "avatar_url": "https://avatars.githubusercontent.com/u/564113?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/tarebyte",
+    "html_url": "https://github.com/tarebyte",
+    "followers_url": "https://api.github.com/users/tarebyte/followers",
+    "following_url": "https://api.github.com/users/tarebyte/following{/other_user}",
+    "gists_url": "https://api.github.com/users/tarebyte/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/tarebyte/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/tarebyte/subscriptions",
+    "organizations_url": "https://api.github.com/users/tarebyte/orgs",
+    "repos_url": "https://api.github.com/users/tarebyte/repos",
+    "events_url": "https://api.github.com/users/tarebyte/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/tarebyte/received_events",
+    "type": "User",
+    "site_admin": true,
+    "contributions": 151
+  }
+]
