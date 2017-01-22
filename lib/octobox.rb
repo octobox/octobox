@@ -21,5 +21,11 @@ module Octobox
     def restricted_access_enabled?
       config.restricted_access_enabled
     end
+
+    def contributors
+      @contributors ||= Octokit::Client.new(auto_paginate: true).contributors(Octokit::Repository.from_url(config.source_repo))
+    rescue
+      nil
+    end
   end
 end
