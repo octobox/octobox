@@ -33,11 +33,13 @@ Octobox.config do |c|
 
   # You can restrict access to your Octobox instance, and only allow members or a
   # GitHub organization or team. After enabling this option,
-  # set either GITHUB_ORGANIZATION_ID=<org_id_number> or GITHUB_TEAM_ID=<team_id_number>.
+  # set either github_organization_id = <org_id_number> or github_team_id = <team_id_number>
   #
   # Defaults to false
   #
   # c.restricted_access_enabled = false
+  # c.github_organization_id    = nil
+  # c.github_team_id            = nil
 
   # According to the Octobox's license (see LICENSE), you should make sure that
   # your Octobox instance provides a way for users to get its source. This
