@@ -8,6 +8,12 @@
 #
 
 Octobox.config do |c|
+  # Sets the domain used for GitHub services, allowing for use of Octobox on GitHub Enterprise.
+  #
+  # Defaults to https://github.com
+  #
+  # c.github_domain = https://github.com
+
   # When true, allows personal access tokens to be used when querying for notifications.
   #
   # Defaults to false

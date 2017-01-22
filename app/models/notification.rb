@@ -57,14 +57,14 @@ class Notification < ApplicationRecord
   end
 
   def web_url
-    subject_url.gsub("#{Octobox.github_api_prefix}/repos", Octobox.github_domain)
+    subject_url.gsub("#{Octobox.config.github_api_prefix}/repos", Octobox.config.github_domain)
                .gsub('/pulls/', '/pull/')
                .gsub('/commits/', '/commit/')
                .gsub(/\/releases\/\d+/, '/releases/')
   end
 
   def repo_url
-    "#{Octobox.github_domain}/#{repository_full_name}"
+    "#{Octobox.config.github_domain}/#{repository_full_name}"
   end
 
   def unarchive_if_updated

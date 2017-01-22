@@ -1,5 +1,20 @@
 module Octobox
   class Configurator
+    def github_domain
+      @github_domain || ENV.fetch('GITHUB_DOMAIN', 'https://github.com')
+    end
+    attr_writer :github_domain
+
+    def github_api_prefix
+      return @github_domain_api_prefix if defined?(@github_domain_api_prefix)
+
+      if github_domain != 'https://github.com'
+        @github_domain_api_prefix = "#{github_domain}/api/v3"
+      else
+        @github_domain_api_prefix = "https://api.github.com"
+      end
+    end
+
     def personal_access_tokens_enabled
       @personal_access_tokens_enabled || ENV['PERSONAL_ACCESS_TOKENS_ENABLED'].present?
     end
