@@ -1,12 +1,14 @@
 module Octobox
   class Configurator
     def github_organization_id
-      @github_organization_id || ENV['GITHUB_ORGANIZATION_ID']
+      id = @github_organization_id || ENV['GITHUB_ORGANIZATION_ID']
+      return id.to_i if id.present?
     end
     attr_writer :github_organization_id
 
     def github_team_id
-      @github_team_id || ENV['GITHUB_TEAM_ID']
+      id = @github_team_id || ENV['GITHUB_TEAM_ID']
+      return id.to_i if id.present?
     end
     attr_writer :github_team_id
 

@@ -59,7 +59,7 @@ class SessionsController < ApplicationController
 
     begin
       client.public_send("#{type}_member?",
-        id.to_i,
+        id,
         nickname,
         headers: { 'Cache-Control' => 'no-cache, no-store' }
       )
