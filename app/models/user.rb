@@ -69,7 +69,7 @@ class User < ApplicationRecord
   # Use the greater of the system minimum or the user's setting
   def effective_refresh_interval
     if Octobox.refresh_interval_enabled? && refresh_interval
-      [Octobox.minimum_refresh_interval * 60_000, refresh_interval].max
+      [Octobox.config.minimum_refresh_interval * 60_000, refresh_interval].max
     end
   end
 
