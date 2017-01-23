@@ -11,7 +11,7 @@ before_script:
 
 script:
   - RAILS_ENV=test bundle exec rake --trace db:migrate test && bundle exec codeclimate-test-reporter
-  - bundle exec teaspoon
+  - bundle exec rake test:javascript
 
 bundler_args: --without development production --deployment --jobs=3 --retry=3
 
