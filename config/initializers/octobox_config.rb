@@ -37,5 +37,17 @@ module Octobox
     def restricted_access_enabled?
       restricted_access_enabled
     end
+
+    def source_repo
+      @source_repo || ENV['SOURCE_REPO'] || 'https://github.com/octobox/octobox'
+    end
+    attr_writer :source_repo
+
+    def contributors
+      @contributors ||= Octokit::Client.new(auto_paginate: true).contributors(Octokit::Repository.from_url(source_repo))
+    rescue
+      nil
+    end
+    attr_writer :contributors
   end
 end

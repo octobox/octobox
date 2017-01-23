@@ -58,7 +58,7 @@ GEM
     bugsnag (5.0.1)
     builder (3.2.3)
     byebug (9.0.6)
-    codeclimate-test-reporter (1.0.4)
+    codeclimate-test-reporter (1.0.5)
       simplecov
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
@@ -221,7 +221,7 @@ GEM
     ruby-progressbar (1.8.1)
     safe_yaml (1.0.4)
     sass (3.4.23)
-    sassc (1.11.1)
+    sassc (1.11.2)
       bundler
       ffi (~> 1.9.6)
       sass (>= 3.3.0)
