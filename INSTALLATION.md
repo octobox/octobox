@@ -6,19 +6,22 @@ your own or get yourself set up to contribute to Octobox. Fantastic! There are a
 Before you begin, remember that [web notifications must be enabled](https://github.com/octobox/octobox/tree/reorganize-readme#requirements)
 in your GitHub settings for Octobox to work.
 
-#### Installation
+### Installation
 
 * [Deployment to Heroku](#deployment-to-heroku)
 * [Local installation](#local-installation)
 * [Using Docker](#using-docker)
 
-#### Configuration
+### Configuration
+
+* [Using the Configuration API](#using-the-configuration-api)
 * [Allowing periodic notification refreshes](#allowing-periodic-notification-refreshes)
 * [Scheduling server-side notification syncs](#scheduling-server-side-notification-syncs)
 * [Running Octobox for GitHub Enterprise](#running-octobox-for-github-enterprise)
 * [Using Personal Access Tokens](#using-personal-access-tokens)
 * [Limiting Access](#limiting-access)
 
+# Installation
 ## Deployment to Heroku
 
 You can host your own instance of Octobox using Heroku.
@@ -105,6 +108,30 @@ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compo
 Octobox will be running on [http://localhost:3000](http://localhost:3000).
 
 **Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
+
+# Configuration
+
+### Using the Configuration API
+
+Besides environment variables (which are used throughout this guide), Octobox can also be programmatically customized with a configuration block:
+
+```ruby
+Octobox.config do |c|
+  # Example: Enabling personal access tokens
+  c.personal_access_tokens_enabled = true
+end
+```
+
+A sample configuration block with all available options can be found in
+`config/initializers/octobox.rb.example`. Note that each environment variable\*
+mentioned in this guide has a corresponding option in the configuration block.
+
+To use and customize these options, copy `octobox.rb.example` to `octobox.rb`.
+Your new file will not be tracked by Git, allowing you to customize Octobox to
+your heart's content.
+
+**Note:** \*Credentials should never be stored within your code and thus any
+options related to credentials are only customizable via environment variables.
 
 ### Allowing periodic notification refreshes
 
