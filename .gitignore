@@ -16,5 +16,8 @@
 # Ignore Byebug command history file.
 .byebug_history
 
+# Ignore an initializer to allow for individual customization
+config/initializers/custom.rb
+
 .env
 coverage

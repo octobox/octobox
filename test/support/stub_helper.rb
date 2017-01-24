@@ -49,15 +49,15 @@ module StubHelper
   end
 
   def stub_personal_access_tokens_enabled(value: true)
-    Octobox.stubs(:personal_access_tokens_enabled).returns(value)
+    Octobox.config.stubs(:personal_access_tokens_enabled).returns(value)
   end
 
   def stub_minimum_refresh_interval(value = 0)
-    Octobox.stubs(:minimum_refresh_interval).returns(value)
+    Octobox.config.stubs(:minimum_refresh_interval).returns(value)
   end
 
   def stub_restricted_access_enabled(value: true)
-    Octobox.stubs(:restricted_access_enabled).returns(value)
+    Octobox.config.stubs(:restricted_access_enabled).returns(value)
   end
 
   def stub_contributors(body: nil)

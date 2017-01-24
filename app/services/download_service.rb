@@ -48,7 +48,7 @@ class DownloadService
     end
   end
 
-  def fetch_notifications(params: {}, max_results: Octobox.max_notifications_to_sync)
+  def fetch_notifications(params: {}, max_results: Octobox.config.max_notifications_to_sync)
     client = page_limiting_client
     params[:max_results] = max_results
     client.notifications(params)
