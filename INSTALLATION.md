@@ -14,12 +14,12 @@ in your GitHub settings for Octobox to work.
 
 ### Configuration
 
-* [Using the Configuration API](#using-the-configuration-api)
 * [Allowing periodic notification refreshes](#allowing-periodic-notification-refreshes)
 * [Scheduling server-side notification syncs](#scheduling-server-side-notification-syncs)
 * [Running Octobox for GitHub Enterprise](#running-octobox-for-github-enterprise)
 * [Using Personal Access Tokens](#using-personal-access-tokens)
 * [Limiting Access](#limiting-access)
+* [Adding a custom initializer](#adding-a-custom-initializer)
 
 # Installation
 ## Deployment to Heroku
@@ -111,29 +111,7 @@ Octobox will be running on [http://localhost:3000](http://localhost:3000).
 
 # Configuration
 
-### Using the Configuration API
-
-Besides environment variables (which are used throughout this guide), Octobox can also be programmatically customized with a configuration block:
-
-```ruby
-Octobox.config do |c|
-  # Example: Enabling personal access tokens
-  c.personal_access_tokens_enabled = true
-end
-```
-
-A sample configuration block with all available options can be found in
-`config/initializers/octobox.rb.example`. Note that each environment variable\*
-mentioned in this guide has a corresponding option in the configuration block.
-
-To use and customize these options, copy `octobox.rb.example` to `octobox.rb`.
-Your new file will not be tracked by Git, allowing you to customize Octobox to
-your heart's content.
-
-**Note:** \*Credentials should never be stored within your code and thus any
-options related to credentials are only customizable via environment variables.
-
-### Allowing periodic notification refreshes
+## Allowing periodic notification refreshes
 
 **Note**: This is *not* enabled on the hosted version (octobox.io).
 
@@ -215,3 +193,16 @@ You must be authenticated with access to the org. This will show you a list of t
 If you have modified the Octobox code in any way, in order to comply with the AGPLv3 license, you must link to the modified source.  You
 can do this by setting the `SOURCE_REPO` environment variable to the url of a GitHub repo with the modified source.  For instance, if 
 you run this from a fork in the 'NotOctobox' org, you would set `SOURCE_REPO=https://github.com/NotOctobox/octobox`.
+
+## Adding a custom initializer
+
+If you have some need to run custom Ruby code or wish to configure Octobox directly on application load, you may add a file named
+`custom.rb` in `config/initializers`. This file is gitignored. Example:
+
+```ruby
+# config/initializers/custom.rb
+
+Octobox.config do |c|
+  c.personal_access_tokens_enabled = true
+end
+```

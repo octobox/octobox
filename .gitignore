@@ -16,8 +16,8 @@
 # Ignore Byebug command history file.
 .byebug_history
 
-# Ignore Octobox initializer to allow for individual customization
-config/initializers/octobox.rb
+# Ignore an initializer to allow for individual customization
+config/initializers/custom.rb
 
 .env
 coverage
