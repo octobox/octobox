@@ -5,7 +5,9 @@ class UsersController < ApplicationController
   def edit; end
 
   def update
-    if current_user.update_attributes(update_user_params)
+    params = update_user_params
+    user = current_user
+    if user.update_attributes(params)
       redirect_to root_path
     else
       flash[:error] = 'Could not update your account'

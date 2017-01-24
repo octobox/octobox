@@ -35,17 +35,25 @@ module StubHelper
     stub_request(:get, url).to_return(response)
   end
 
-  def stub_user_request(body: nil, oauth_scopes: 'notifications', user: nil)
+  def stub_user_request(body: nil, oauth_scopes: 'notifications', user: nil, any_auth: false)
+     # ActiveSupport::TestCase.file_fixture_path
     user_url = %r{https://api.github.com/user}
     unless body
-      body = JSON.parse(file_fixture('user.json').read)
+      file_fixture = file_fixture('user.json')
+      file_fixture_content = file_fixture.read
+      body = JSON.parse(file_fixture_content)
       body[:id] = user.github_id if user.respond_to?(:github_id)
       body = body.to_json
     end
     headers  = { 'Content-Type': 'application/json', 'X-OAuth-Scopes': oauth_scopes }
     response = { status: 200, body: body, headers: headers }
-
-    stub_request(:get, user_url).to_return(response)
+    any_auth = true unless user.respond_to?(:effective_access_token)
+    if any_auth
+      stub_request(:get, user_url).to_return(response)
+    else
+      request_headers = {Authorization: "token #{user.effective_access_token}"}
+      stub_request(:get, user_url).with(headers: request_headers).to_return(response)
+    end
   end
 
   def stub_personal_access_tokens_enabled(value: true)
