@@ -23,7 +23,7 @@ in your GitHub settings for Octobox to work.
 
 You can host your own instance of Octobox using Heroku.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/octobox/octobox)
 
 Heroku will ask you to provide OAuth client ID and secret, which you can create
 on GitHub. When creating the OAuth application, make sure you enable the
