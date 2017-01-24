@@ -19,6 +19,7 @@ in your GitHub settings for Octobox to work.
 * [Running Octobox for GitHub Enterprise](#running-octobox-for-github-enterprise)
 * [Using Personal Access Tokens](#using-personal-access-tokens)
 * [Limiting Access](#limiting-access)
+* [Customizing Source Link for Modified Code](#customizing-source-link-for-modified-code)
 * [Adding a custom initializer](#adding-a-custom-initializer)
 
 # Installation
@@ -188,7 +189,7 @@ To get a team's id:
 `curl https://api.github.com/orgs/<org_name>/teams`.
 You must be authenticated with access to the org. This will show you a list of the org's teams. Find your team on the list and copy its id
 
-## Source Link for Modified Code
+## Customizing Source Link for Modified Code
 
 If you have modified the Octobox code in any way, in order to comply with the AGPLv3 license, you must link to the modified source.  You
 can do this by setting the `SOURCE_REPO` environment variable to the url of a GitHub repo with the modified source.  For instance, if 
