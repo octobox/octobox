@@ -2,23 +2,18 @@ require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    stub_user_request(user: build(:token_user))
-    @token_user = create(:token_user)
     @user = create(:user)
     stub_notifications_request
   end
 
-  test 'should update user' do
+  def create_token_user
     stub_personal_access_tokens_enabled
-    sign_in_as(@user)
-    stub_user_request(user: @user, any_auth: true)
-    patch user_url(@user), params: {user: { personal_access_token: '12345'}}
-    @user.reload
-    assert_equal '12345', @user.personal_access_token
+    stub_user_request(user: build(:token_user))
+    @token_user = create(:token_user)
   end
 
   test 'updates personal_access_token' do
-    stub_personal_access_tokens_enabled
+    create_token_user
     sign_in_as(@token_user)
     stub_user_request(user: @token_user, any_auth: true)
     patch user_url(@token_user), params: {user: {personal_access_token: '12345'}}
@@ -27,7 +22,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'will not clear personal access token if clear_personal_access_token is not set' do
-    stub_personal_access_tokens_enabled
+    create_token_user
     stub_user_request(user: @token_user)
     sign_in_as(@token_user)
     expected_token = @token_user.personal_access_token
@@ -37,7 +32,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'clears personal access token when clear_personal_access_token is set' do
-    stub_personal_access_tokens_enabled
+    create_token_user
     stub_user_request(user: @token_user)
     sign_in_as(@token_user)
     patch user_url(@token_user), params: {user: {personal_access_token: 'asdf'}, clear_personal_access_token: 'on'}
@@ -46,7 +41,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'requires logged in user' do
-    stub_personal_access_tokens_enabled
+    create_token_user
     stub_user_request(user: @token_user)
     expected_token = @token_user.personal_access_token
     patch user_url(@token_user), params: {user: {personal_access_token: '12345'}}
@@ -56,7 +51,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'rejects changing a different user' do
-    stub_personal_access_tokens_enabled
+    create_token_user
     stub_user_request(user: @token_user)
     sign_in_as(@user)
     expected_token = @token_user.personal_access_token
@@ -76,11 +71,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'cannot delete another user' do
-    sign_in_as(@token_user)
+    other_user = create(:user)
+    sign_in_as(other_user)
     delete user_url(@user)
     assert_response :unauthorized
     assert User.exists?(@user.id)
-    assert User.exists?(@token_user.id)
+    assert User.exists?(other_user.id)
   end
 
   test 'cannot delete user without logging in' do
