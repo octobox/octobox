@@ -5,7 +5,7 @@ class NotificationTest < ActiveSupport::TestCase
   include NotificationTestHelper
 
   test 'ignore_thread sends ignore request to github' do
-    user = users(:andrew)
+    user = create(:user)
     notification = create(:notification, user: user, archived: false)
     user.stubs(:github_client).returns(mock {
       expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
@@ -14,8 +14,9 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'mark_read updates the github thread' do
-    notification = notifications(:unreadone)
-    notification.user.stubs(:github_client).returns(mock {
+    user = create(:user)
+    notification = create(:notification, user: user)
+    user.stubs(:github_client).returns(mock {
       expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
     })
     notification.mark_read(update_github: true)
@@ -23,25 +24,25 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'mark_read does not change updated_at' do
-    notification = notifications(:unreadone)
+    notification = create(:notification)
     expected_updated_at = notification.updated_at
     notification.mark_read
     assert_equal expected_updated_at, notification.reload.updated_at
   end
 
   test 'mark_read turns unread to false' do
-    notification = notifications(:unreadone)
+    notification = create(:notification, unread: true)
     notification.mark_read
     refute notification.reload.unread?
   end
 
   test 'mark_read does not update github when update_github:false' do
     # the real assertion here is that no http request is made
-    notifications(:unreadone).mark_read
+    create(:notification, unread: true).mark_read
   end
 
   test 'mute ignores the thread and marks it as read' do
-    user = users(:andrew)
+    user = create(:user)
     notification = create(:notification, user: user, archived: false)
     user.stubs(:github_client).returns(mock {
       expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
@@ -51,35 +52,35 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'unarchive_if_updated unarchives when updated_at is newer' do
-    notification = notifications(:archived)
+    notification = create(:archived)
     notification.updated_at += 1
     notification.unarchive_if_updated
     refute notification.archived?
   end
 
   test 'unarchive_if_updated does nothing when updated_at is older' do
-    notification = notifications(:archived)
+    notification = create(:archived)
     notification.updated_at -= 1
     notification.unarchive_if_updated
     assert notification.archived?
   end
 
   test 'unarchive_if_updated does nothing unless updated_at is changed' do
-    notification = notifications(:archived)
+    notification = create(:archived)
     notification.subject_title = "whatever"
     notification.unarchive_if_updated
     assert notification.archived?
   end
 
   test 'unarchive_if_updated does nothing if nothing is changed' do
-    notification = notifications(:archived)
+    notification = create(:archived)
     notification.unarchive_if_updated
     assert notification.archived?
   end
 
   test 'update_from_api_response updates attributes' do
     api_response = notifications_from_fixture('morty_notifications.json').first
-    notification = notifications(:morty_updated)
+    notification = create(:morty_updated)
     expected_attributes = notification.attributes.merge(
       {last_read_at: '2016-12-19 22:01:45 UTC',
        updated_at: Time.zone.parse('2016-12-19T22:01:45Z'),
@@ -92,7 +93,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'update_from_api_response updates attributes on a new notification' do
-    user = users(:morty)
+    user = create(:morty)
     expected_attributes = {
       user_id: user.id,
       github_id: 421,

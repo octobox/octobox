@@ -5,7 +5,7 @@ class TasksTest < ActiveSupport::TestCase
 
   test 'fetches notifications' do
     travel_to "2016-12-19T19:00:00Z" do
-      user = users(:andrew)
+      user = create(:user)
 
       Rake::Task['tasks:sync_notifications'].invoke
 

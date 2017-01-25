@@ -5,7 +5,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notifications_request
     stub_contributors
-    @user = users(:andrew)
+    @user = create(:user)
   end
 
   test 'will render the home page if not authenticated' do
