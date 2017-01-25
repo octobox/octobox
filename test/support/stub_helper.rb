@@ -1,7 +1,14 @@
 module StubHelper
-  def stub_env(variable, value:)
+  def stub_env_var(variable, value = nil)
+    stub_env({"#{variable}": value})
+  end
+
+  def stub_env(env = {})
     ENV.stubs(:[])
-    ENV.stubs(:[]).with(variable).returns(value.to_s)
+    env.each do |variable, value|
+      value = value.to_s unless value.nil?
+      ENV.stubs(:[]).with(variable.to_s).returns(value)
+    end
   end
 
   def stub_organization_membership_request(organization_id:, login:, successful:)

@@ -38,7 +38,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github].info.nickname = @user.github_login
 
     stub_restricted_access_enabled
-    stub_env('GITHUB_ORGANIZATION_ID', value: 1)
+    stub_env_var('GITHUB_ORGANIZATION_ID', 1)
     stub_organization_membership_request(organization_id: 1, login: @user.github_login, successful: false)
 
     post '/auth/github/callback'
@@ -51,7 +51,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github].info.nickname = @user.github_login
 
     stub_restricted_access_enabled
-    stub_env('GITHUB_TEAM_ID', value: 1)
+    stub_env_var('GITHUB_TEAM_ID', 1)
     stub_team_membership_request(team_id: 1, login: @user.github_login, successful: false)
 
     post '/auth/github/callback'
@@ -64,7 +64,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github].info.nickname = @user.github_login
 
     stub_restricted_access_enabled
-    stub_env('GITHUB_ORGANIZATION_ID', value: 1)
+    stub_env_var('GITHUB_ORGANIZATION_ID', 1)
     stub_organization_membership_request(organization_id: 1, login: @user.github_login, successful: true)
 
     post '/auth/github/callback'
@@ -77,7 +77,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github].info.nickname = @user.github_login
 
     stub_restricted_access_enabled
-    stub_env('GITHUB_TEAM_ID', value: 1)
+    stub_env_var('GITHUB_TEAM_ID', 1)
     stub_team_membership_request(team_id: 1, login: @user.github_login, successful: true)
 
     post '/auth/github/callback'
