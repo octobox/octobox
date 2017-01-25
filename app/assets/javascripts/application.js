@@ -182,7 +182,7 @@ function mute() {
   if (getDisplayedRows().length === 0) return;
   if ( $(".js-table-notifications tr").length === 0 ) return;
   var ids = getIdsFromRows(getMarkedOrCurrentRows());
-  $.post( "/notifications/mute_selected", { 'id[]': ids}).done(resetCursorAfterRowsRemoved(ids));
+  $.post( "/notifications/mute_selected", { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
 }
 
 function markReadSelected() {
@@ -209,7 +209,7 @@ function toggleArchive() {
 
   var ids = getIdsFromRows(getMarkedOrCurrentRows());
 
-  $.post( "/notifications/archive_selected", { 'id[]': ids, 'value': value } ).done(resetCursorAfterRowsRemoved(ids));
+  $.post( "/notifications/archive_selected", { 'id[]': ids, 'value': value } ).done(function() {resetCursorAfterRowsRemoved(ids)});
 }
 
 function resetCursorAfterRowsRemoved(ids) {

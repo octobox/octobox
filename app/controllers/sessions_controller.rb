@@ -54,12 +54,12 @@ class SessionsController < ApplicationController
   end
 
   def member?(client, nickname, type:)
-    id = ENV["GITHUB_#{type.to_s.upcase}_ID"]
+    id = Octobox.config.public_send("github_#{type}_id")
     return false unless id.present?
 
     begin
       client.public_send("#{type}_member?",
-        id.to_i,
+        id,
         nickname,
         headers: { 'Cache-Control' => 'no-cache, no-store' }
       )
