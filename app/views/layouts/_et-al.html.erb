@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
          <% Octobox.contributors.each do |contributor| %>
-            <div><a href="<%= contributor.html_url%>"><%= contributor.login %></a></div>
+            <div><a href="<%= contributor.html_url%>" target="_blank"><%= contributor.login %></a></div>
           <% end %>
       </div>
     </div>
