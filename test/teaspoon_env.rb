@@ -10,11 +10,11 @@ Teaspoon.configure do |config|
 
   # Paths that will be appended to the Rails assets paths
   # Note: Relative to `config.root`.
-  config.asset_paths = ["spec/javascripts", "spec/javascripts/stylesheets"]
+  config.asset_paths = ["test/javascripts"]
 
   # Fixtures are rendered through a controller, which allows using HAML, RABL/JBuilder, etc. Files in these paths will
   # be rendered as fixtures.
-  config.fixture_paths = ["spec/javascripts/fixtures"]
+  config.fixture_paths = ["test/javascripts/fixtures"]
 
   # SUITES
   #
@@ -38,7 +38,7 @@ Teaspoon.configure do |config|
 
     # Specify a file matcher as a regular expression and all matching files will be loaded when the suite is run. These
     # files need to be within an asset path. You can add asset paths using the `config.asset_paths`.
-    suite.matcher = "{spec/javascripts,app/assets}/**/*_spec.{js,js.coffee,coffee}"
+    suite.matcher = "{test/javascripts,app/assets}/**/*_spec.{js,js.coffee,coffee}"
 
     # Load additional JS files, but requiring them in your spec helper is the preferred way to do this.
     #suite.javascripts = []
