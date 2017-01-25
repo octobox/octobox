@@ -62,14 +62,13 @@ class User < ApplicationRecord
   end
 
   def github_avatar_url
-    domain = ENV.fetch('GITHUB_DOMAIN', 'https://github.com')
-    "#{domain}/#{github_login}.png"
+    "#{Octobox.config.github_domain}/#{github_login}.png"
   end
 
   # Use the greater of the system minimum or the user's setting
   def effective_refresh_interval
     if Octobox.refresh_interval_enabled? && refresh_interval
-      [Octobox.minimum_refresh_interval * 60_000, refresh_interval].max
+      [Octobox.config.minimum_refresh_interval * 60_000, refresh_interval].max
     end
   end
 

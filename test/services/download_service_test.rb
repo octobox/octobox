@@ -5,7 +5,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   include NotificationTestHelper
 
   test '#download fetches all read notification for a new user' do
-    user = users(:newuser)
+    user = create(:user)
     all_notifications = notifications_from_fixture('newuser_all_notifications.json')
     expected_attributes = build_expected_attributes(all_notifications)
     download_service = DownloadService.new(user)
@@ -26,7 +26,8 @@ class DownloadServiceTest < ActiveSupport::TestCase
   end
 
   test '#download fetches notifications newer than the oldest unread' do
-    user = users(:userwithunread)
+    user = create(:morty)
+    create(:notification, last_read_at: 5.days.ago, updated_at: 30.minutes.ago, user: user)
     # one second before oldest unread notification
     unread_since =( user.notifications.status(true).first.updated_at - 1).iso8601
     download_service = DownloadService.new(user)
@@ -42,7 +43,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   test '#download will create new notification' do
     expected_attributes = build_expected_attributes(notifications_from_fixture('morty_notifications.json'))
     stub_notifications_request(body: file_fixture('morty_notifications.json'))
-    user = users(:morty)
+    user = create(:morty)
     user.notifications.destroy_all
     user.download_service.download
     notifications = user.notifications.map(&:attributes)
@@ -56,8 +57,8 @@ class DownloadServiceTest < ActiveSupport::TestCase
     expected_attributes =  build_expected_attributes(notifications_from_fixture('morty_notifications.json'))
                              .find{|n| n['github_id'] == 420}
     stub_notifications_request(body: file_fixture('morty_notifications.json'))
-    user = users(:morty)
-    notification = notifications(:morty_updated)
+    user = create(:morty)
+    notification = user.notifications.find_by_github_id(420)
     assert notification.archived?
     refute notification.unread?
     user.download_service.download
@@ -70,7 +71,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
 
   test "#download will set the url for a Repository invitation correctly" do
     stub_notifications_request(body: file_fixture('repository_invitation_notification.json'))
-    user = users(:andrew)
+    user = create(:user)
 
     user.download_service.download
 
@@ -80,7 +81,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   end
 
   test '#download handles no new notifications' do
-    user = users(:morty)
+    user = create(:morty)
     download_service = DownloadService.new(user)
     unread_since =( user.notifications.status(true).first.updated_at - 1).iso8601
     stub_notifications_request(
@@ -96,22 +97,22 @@ class DownloadServiceTest < ActiveSupport::TestCase
 
   test 'fetch_notifications pages until the end' do
     setup_paging_stubs
-    download_service = DownloadService.new(users(:morty))
+    download_service = DownloadService.new(create(:morty))
     fetched_notifications = download_service.fetch_notifications(params: {per_page: 2}, max_results:50)
     assert_equal 8, fetched_notifications.size
   end
 
   test 'fetch_notifications pages stops at max_notifications' do
     setup_paging_stubs
-    download_service = DownloadService.new(users(:morty))
+    download_service = DownloadService.new(create(:morty))
     fetched_notifications = download_service.fetch_notifications(params: {per_page: 2}, max_results:5)
     assert_equal 5, fetched_notifications.size
   end
 
-  test 'fetch_notifications respects Octobox.max_notifications_to_sync' do
+  test 'fetch_notifications respects Octobox.config.max_notifications_to_sync' do
     setup_paging_stubs
-    Octobox.stubs(:max_notifications_to_sync).returns(5)
-    download_service = DownloadService.new(users(:morty))
+    Octobox.config.stubs(:max_notifications_to_sync).returns(5)
+    download_service = DownloadService.new(create(:morty))
     fetched_notifications = download_service.fetch_notifications(params: {per_page: 2})
     assert_equal 5, fetched_notifications.size
   end

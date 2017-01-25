@@ -6,24 +6,28 @@ your own or get yourself set up to contribute to Octobox. Fantastic! There are a
 Before you begin, remember that [web notifications must be enabled](https://github.com/octobox/octobox/tree/reorganize-readme#requirements)
 in your GitHub settings for Octobox to work.
 
-#### Installation
+### Installation
 
 * [Deployment to Heroku](#deployment-to-heroku)
 * [Local installation](#local-installation)
 * [Using Docker](#using-docker)
 
-#### Configuration
+### Configuration
+
 * [Allowing periodic notification refreshes](#allowing-periodic-notification-refreshes)
 * [Scheduling server-side notification syncs](#scheduling-server-side-notification-syncs)
 * [Running Octobox for GitHub Enterprise](#running-octobox-for-github-enterprise)
 * [Using Personal Access Tokens](#using-personal-access-tokens)
 * [Limiting Access](#limiting-access)
+* [Customizing Source Link for Modified Code](#customizing-source-link-for-modified-code)
+* [Adding a custom initializer](#adding-a-custom-initializer)
 
+# Installation
 ## Deployment to Heroku
 
 You can host your own instance of Octobox using Heroku.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/octobox/octobox)
 
 Heroku will ask you to provide OAuth client ID and secret, which you can create
 on GitHub. When creating the OAuth application, make sure you enable the
@@ -106,7 +110,9 @@ Octobox will be running on [http://localhost:3000](http://localhost:3000).
 
 **Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
 
-### Allowing periodic notification refreshes
+# Configuration
+
+## Allowing periodic notification refreshes
 
 **Note**: This is *not* enabled on the hosted version (octobox.io).
 
@@ -183,8 +189,21 @@ To get a team's id:
 `curl https://api.github.com/orgs/<org_name>/teams`.
 You must be authenticated with access to the org. This will show you a list of the org's teams. Find your team on the list and copy its id
 
-## Source Link for Modified Code
+## Customizing Source Link for Modified Code
 
 If you have modified the Octobox code in any way, in order to comply with the AGPLv3 license, you must link to the modified source.  You
 can do this by setting the `SOURCE_REPO` environment variable to the url of a GitHub repo with the modified source.  For instance, if 
 you run this from a fork in the 'NotOctobox' org, you would set `SOURCE_REPO=https://github.com/NotOctobox/octobox`.
+
+## Adding a custom initializer
+
+If you have some need to run custom Ruby code or wish to configure Octobox directly on application load, you may add a file named
+`custom.rb` in `config/initializers`. This file is gitignored. Example:
+
+```ruby
+# config/initializers/custom.rb
+
+Octobox.config do |c|
+  c.personal_access_tokens_enabled = true
+end
+```
