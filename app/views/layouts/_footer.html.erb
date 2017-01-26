@@ -1,5 +1,22 @@
+<head>
+  <style>
+  #left{
+    float: left;
+    margin-right: 80px;
+}
+
+#centre {
+  float: left;
+  margin-right: 40px;
+    }
+    
+#right{
+   float: left;
+}
+    </style>
+</head>
 <div class="footer text-muted">
-  <div class="footer-data"><p><%= copyright_message %></p></div>
-  <div class="footer-expendable"><%= octobox_icon %></div>
-  <div class="footer-data"><p><%= license_message %></p></div>
+  <div class="footer-data" id="left"><p><%= copyright_message %></p></div>
+  <div class="footer-expendable" id=centre><p><%= octobox_icon %></p></div>
+  <div class="footer-data" id="right"><p><%= license_message %></p></div>
 </div>
