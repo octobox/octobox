@@ -39,6 +39,6 @@ module ApplicationHelper
   def copyright_message
     et_al = Octobox.contributors ?
       "<a href='#' data-toggle='modal' data-target='#et-al'>et al</a>" : 'et al'
-    "© 2017 Andrew Nesbitt, #{et_al}".html_safe
+    "© 2017 <a href='https://github.com/andrew' target='_blank'>Andrew Nesbitt</a>, #{et_al}".html_safe
   end
 end
