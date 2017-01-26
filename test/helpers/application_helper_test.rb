@@ -16,7 +16,7 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test 'copyright_message has et al link' do
     stub_contributors
-    assert_equal "© 2017 Andrew Nesbitt, <a href='#' data-toggle='modal' data-target='#et-al'>et al</a>", copyright_message
+    assert_equal "© 2017 <a href='https://github.com/andrew'>Andrew Nesbitt</a>, <a href='#' data-toggle='modal' data-target='#et-al'>et al</a>", copyright_message
   end
 
   test 'license_message has correct link when SOURCE_REPO is not set' do
