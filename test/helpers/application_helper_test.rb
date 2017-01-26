@@ -21,13 +21,13 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test 'license_message has correct link when SOURCE_REPO is not set' do
     ENV.stubs(:[]).with('SOURCE_REPO').returns(nil)
-    expected_message = "<a href='https://github.com/octobox/octobox'>Source</a> available under <a href='https://github.com/octobox/octobox/blob/master/LICENSE.txt'>AGPL 3.0</a>"
+    expected_message = "<a href='https://github.com/octobox/octobox' target='_blank'>Source</a> available under <a href='https://github.com/octobox/octobox/blob/master/LICENSE.txt' target='_blank'>AGPL 3.0</a>"
     assert_equal expected_message, license_message
   end
 
   test 'license_message has correct link when SOURCE_REPO is set' do
     ENV.stubs(:[]).with('SOURCE_REPO').returns('https://github.com/foo/bar')
-    expected_message = "<a href='https://github.com/foo/bar'>Source</a> available under <a href='https://github.com/foo/bar/blob/master/LICENSE.txt'>AGPL 3.0</a>"
+    expected_message = "<a href='https://github.com/foo/bar' target='_blank'>Source</a> available under <a href='https://github.com/foo/bar/blob/master/LICENSE.txt' target='_blank'>AGPL 3.0</a>"
     assert_equal expected_message, license_message
   end
 end
