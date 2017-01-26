@@ -11,7 +11,7 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test 'copyright_message has no et al link when no contributors are found' do
     Octobox.stubs(:contributors).returns(nil)
-    assert_equal '© 2017 Andrew Nesbitt, et al', copyright_message
+    assert_equal '© 2017 <a href='https://github.com/andrew' target='_blank'>Andrew Nesbitt</a>, et al', copyright_message
   end
 
   test 'copyright_message has et al link' do
