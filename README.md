@@ -37,6 +37,17 @@ Features are disabled for various reasons, such as not wanting to store users' t
 You can also host Octobox yourself! See [INSTALLATION](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
 for installation instructions and details regarding deployment to Heroku, Docker, and more.
 
+### Desktop usage
+
+You can run Octobox locally as a desktop app too if you'd like, using [Nativefier](https://www.npmjs.com/package/nativefier):
+
+```bash
+npm install -g nativefier
+nativefier "https://octobox.io" # Or your own self-hosted URL
+```
+
+This will build a local application (.exe, .app, etc) and put it in your current folder, ready to use.
+
 ## Requirements
 
 Web notifications must be enabled in your GitHub settings for Octobox to work: https://github.com/settings/notifications
