@@ -31,8 +31,8 @@ module ApplicationHelper
   end
 
   def license_message
-    source_link = "<a href='#{Octobox.config.source_repo}'>Source</a>"
-    license_link = "<a href='#{Octobox.config.source_repo}/blob/master/LICENSE.txt'>AGPL 3.0</a>"
+    source_link = "<a href='#{Octobox.config.source_repo}' target='_blank'>Source</a>"
+    license_link = "<a href='#{Octobox.config.source_repo}/blob/master/LICENSE.txt' target='_blank'>AGPL 3.0</a>"
     "#{source_link} available under #{license_link}".html_safe
   end
 
