@@ -25,7 +25,7 @@ module Octobox
     def contributors
       @contributors ||= Octokit::Client.new(auto_paginate: true).contributors(Octokit::Repository.from_url(config.source_repo))
     rescue
-      nil
+      []
     end
   end
 end
