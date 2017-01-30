@@ -54,7 +54,8 @@ module Octobox
     attr_writer :github_team_id
 
     def source_repo
-      @source_repo || ENV['SOURCE_REPO'] || 'https://github.com/octobox/octobox'
+      env_value = ENV['SOURCE_REPO'].blank? ? nil : ENV['SOURCE_REPO']
+      @source_repo || env_value || 'https://github.com/octobox/octobox'
     end
     attr_writer :source_repo
   end
