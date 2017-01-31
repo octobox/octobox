@@ -50,7 +50,7 @@ GEM
       public_suffix (~> 2.0, >= 2.0.2)
     arel (7.1.4)
     ast (2.3.0)
-    autoprefixer-rails (6.7.0)
+    autoprefixer-rails (6.7.1)
       execjs
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -109,9 +109,10 @@ GEM
       activerecord
       kaminari-core (= 1.0.1)
     kaminari-core (1.0.1)
-    listen (3.0.8)
+    listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     lograge (0.4.1)
       actionpack (>= 4, < 5.1)
       activesupport (>= 4, < 5.1)
@@ -214,6 +215,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
+    ruby_dep (1.5.0)
     safe_yaml (1.0.4)
     sass (3.4.23)
     sassc (1.11.2)
@@ -285,7 +287,7 @@ DEPENDENCIES
   factory_girl
   jquery-rails
   kaminari
-  listen (~> 3.0.5)
+  listen
   local_time!
   lograge
   mocha
@@ -305,7 +307,7 @@ DEPENDENCIES
   sassc-rails
   simplecov
   spring
-  spring-watcher-listen (~> 2.0.0)
+  spring-watcher-listen
   turbolinks
   typhoeus
   uglifier
