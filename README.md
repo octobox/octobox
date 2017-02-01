@@ -34,7 +34,7 @@ Features are disabled for various reasons, such as not wanting to store users' t
 
 ### Installation
 
-You can also host Octobox yourself! See [INSTALLATION](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
+You can also host Octobox yourself! See [the installation guide](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
 for installation instructions and details regarding deployment to Heroku, Docker, and more.
 
 ### Desktop usage
@@ -50,7 +50,7 @@ This will build a local application (.exe, .app, etc) and put it in your current
 
 ## Requirements
 
-Web notifications must be enabled in your GitHub settings for Octobox to work: https://github.com/settings/notifications
+[Web notifications](https://github.com/settings/notifications) must be enabled in your GitHub settings for Octobox to work.
 
 <img width="757" alt="Notifications settings screen" src="https://cloud.githubusercontent.com/assets/1060/21509954/3a01794c-cc86-11e6-9bbc-9b33b55f85d1.png">
 
@@ -59,15 +59,15 @@ Web notifications must be enabled in your GitHub settings for Octobox to work: h
 You can use keyboard shortcuts to navigate and perform certain actions:
 
  - `a` - Select/deselect all
- - `r` or `.` - refresh list
- - `j` - move down the list
- - `k` - move up the list
- - `s` - star current notification
- - `x` - mark/unmark current notification
- - `y` or `e` - archive current/marked notification(s)
- - `m` - mute current/marked notification(s)
- - `d` - mark current/marked notification(s) as read here and on GitHub
- - `o` or `Enter` - open current notification in a new window
+ - `r` or `.` - Refresh list
+ - `j` - Move down the list
+ - `k` - Move up the list
+ - `s` - Star current notification
+ - `x` - Mark/unmark current notification
+ - `y` or `e` - Archive current/marked notification(s)
+ - `m` - Mute current/marked notification(s)
+ - `d` - Mark current/marked notification(s) as read here and on GitHub
+ - `o` or `Enter` - Open current notification in a new window
 
 Press `?` for the help menu.
 
@@ -95,4 +95,4 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Copyright
 
-Copyright (c) 2017 Andrew Nesbitt. See [LICENSE](https://github.com/octobox/octobox/blob/master/LICENSE.txt) for details.
+Copyright (c) 2017 [Andrew Nesbitt](https://github.com/andrew). See [the licence](https://github.com/octobox/octobox/blob/master/LICENSE.txt) for details.
