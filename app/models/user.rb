@@ -48,6 +48,7 @@ class User < ApplicationRecord
 
   def sync_notifications
     download_service.download
+    Rails.logger.info("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} synced their notifications\033[0m\n\n")
   end
 
   def download_service
