@@ -15,7 +15,8 @@ function getMarkedRows(unmarked) {
 }
 
 function getIdsFromRows(rows) {
-  return $.map(rows, function(row) {return $(row).find("input").val()})
+  return $('button.select_all').hasClass('all_selected') ?
+    'all' : $.map(rows, function(row) {return $(row).find("input").val()})
 }
 
 // returns true if there are any marked rows (or unmarked rows if unmarked is true)
@@ -39,7 +40,7 @@ function updateFavicon() {
       if ( old_link ) {
         $(old_link).remove();
       }
-      
+
       var canvas = document.createElement('canvas'),
         ctx,
         img = document.createElement('img'),
@@ -47,21 +48,21 @@ function updateFavicon() {
         txt = unread_count + '';
 
       link.id = "favicon-count";
-      
+
       if (canvas.getContext) {
         canvas.height = canvas.width = 16;
         ctx = canvas.getContext('2d');
         img.onload = function () {
           ctx.drawImage(this, 0, 0);
-          
+
           ctx.fillStyle = '#f93e00';
           var width = ctx.measureText(txt).width;
           ctx.fillRect(0, 0, width+2, 12);
-          
+
           ctx.font = 'bold 10px "helvetica", sans-serif';
           ctx.fillStyle = '#fff';
           ctx.fillText(txt, 1, 10);
-          
+
           link.href = canvas.toDataURL('image/png');
           document.body.appendChild(link);
         };
@@ -73,6 +74,7 @@ function updateFavicon() {
 
 document.addEventListener("turbolinks:load", function() {
   $('button.archive_selected, button.unarchive_selected').click(toggleArchive);
+  $('button.select_all').click(toggleSelectAll);
   $('button.mute_selected').click(mute);
   $('button.mark_read_selected').click(markReadSelected);
 
@@ -81,9 +83,14 @@ document.addEventListener("turbolinks:load", function() {
       var prop = hasMarkedRows(true) ? 'indeterminate' : 'checked';
       $(".js-select_all").prop(prop, true);
       $('button.archive_selected, button.unarchive_selected, button.mute_selected').removeClass('hidden');
+      if ( prop === 'checked' ) {
+        $('button.select_all').removeClass('hidden');
+      } else {
+        $('button.select_all').addClass('hidden');
+      }
     } else {
       $(".js-select_all").prop('checked', false);
-      $('button.archive_selected, button.unarchive_selected, button.mute_selected').addClass('hidden');
+      $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').addClass('hidden');
     }
     var marked_unread_length = getMarkedRows().filter('.active').length;
     if ( marked_unread_length > 0 ) {
@@ -209,7 +216,14 @@ function toggleArchive() {
 
   var ids = getIdsFromRows(getMarkedOrCurrentRows());
 
-  $.post( "/notifications/archive_selected", { 'id[]': ids, 'value': value } ).done(function() {resetCursorAfterRowsRemoved(ids)});
+  $.post( "/notifications/archive_selected" + location.search, { 'id[]': ids, 'value': value } ).done(function() {resetCursorAfterRowsRemoved(ids)});
+}
+
+function toggleSelectAll() {
+  $.map($('button.select_all > span'), function( val, i ) {
+    $(val).toggleClass('bold')
+  });
+  $('button.select_all').toggleClass('all_selected')
 }
 
 function resetCursorAfterRowsRemoved(ids) {

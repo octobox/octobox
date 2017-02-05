@@ -5,30 +5,17 @@ class NotificationsController < ApplicationController
   before_action :find_notification, only: [:archive, :unarchive, :star, :mark_read]
 
   def index
-    scope    = current_user.notifications
-
-    scope = if params[:starred].present?
-              scope.starred
-            elsif params[:archive].present?
-              scope.archived
-            else
-              scope.inbox
-            end
-
+    scope = notifications_for_presentation
     @types               = scope.distinct.group(:subject_type).count
     @statuses            = scope.distinct.group(:unread).count
     @reasons             = scope.distinct.group(:reason).count
     @unread_repositories = scope.distinct.group(:repository_full_name).count
-
-    sub_scopes = [:repo, :reason, :type, :status, :owner]
-    sub_scopes.each do |sub_scope|
-      scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
-    end
-    scope = scope.search_by_subject_title(params[:q])   if params[:q].present?
-
+    scope = current_notifications(scope)
     check_out_of_bounds(scope)
 
+    @total = scope.count
     @notifications = scope.newest.page(page).per(per_page)
+    @cur_selected = [per_page, @total].min
   end
 
   def unread_count
@@ -36,10 +23,9 @@ class NotificationsController < ApplicationController
     count = scope.inbox.distinct.group(:unread).count.fetch(true){ 0 }
     render json: { 'count': count }
   end
-  
+
   def mute_selected
-    notifications = current_user.notifications.where(id: params[:id])
-    notifications.each do |notification|
+    selected_notifications.each do |notification|
       notification.mute
       notification.update archived: true
     end
@@ -47,13 +33,12 @@ class NotificationsController < ApplicationController
   end
 
   def archive_selected
-    current_user.notifications.where(id: params[:id]).update_all archived: params[:value]
+    selected_notifications.update_all archived: params[:value]
     head :ok
   end
 
   def mark_read_selected
-    notifications = current_user.notifications.where(id: params[:id])
-    notifications.each do |notification|
+    selected_notifications.each do |notification|
       notification.mark_read(update_github: true)
     end
     head :ok
@@ -75,6 +60,35 @@ class NotificationsController < ApplicationController
   end
 
   private
+
+  def selected_notifications
+    if params[:id] == ['all']
+      current_notifications
+    else
+      current_user.notifications.where(id: params[:id])
+    end
+  end
+
+  def current_notifications(scope = notifications_for_presentation)
+    sub_scopes = [:repo, :reason, :type, :status, :owner]
+    sub_scopes.each do |sub_scope|
+      scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
+    end
+    scope = scope.search_by_subject_title(params[:q])   if params[:q].present?
+    scope
+  end
+
+  def notifications_for_presentation
+    scope    = current_user.notifications
+
+    scope = if params[:starred].present?
+              scope.starred
+            elsif params[:archive].present?
+              scope.archived
+            else
+              scope.inbox
+            end
+  end
 
   def check_out_of_bounds(scope)
     return unless page > 1

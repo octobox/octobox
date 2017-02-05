@@ -534,6 +534,10 @@ td.keys {
   .panel-footer {
     padding: 6px 8px;
   }
+
+  .bold {
+    font-weight: bold;
+  }
 }
 
 .select-all {
@@ -562,4 +566,3 @@ td.keys {
 .spinning{
   animation: spin 1s infinite steps(90);
 }
-
