@@ -65,7 +65,7 @@ module NotificationsHelper
   end
 
   def select_all_button(cur_selected, total)
-    button_tag(type: 'button', class: "select_all btn btn-default hidden") do
+    button_tag(type: 'button', class: "select_all btn btn-default hidden", 'data-toggle': "tooltip", 'data-placement': "top", 'title': "Number of items selected") do
       octicon('check', height: 16) +
         content_tag(:span, " #{cur_selected}", class: 'bold hidden-xs') +
         " |" +
