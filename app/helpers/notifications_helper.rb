@@ -64,6 +64,15 @@ module NotificationsHelper
     function_button("#{action.capitalize} selected", 'checklist', "archive_toggle #{action}_selected")
   end
 
+  def select_all_button(cur_selected, total)
+    button_tag(type: 'button', class: "select_all btn btn-default hidden", 'data-toggle': "tooltip", 'data-placement': "top", 'title': "Number of items selected") do
+      octicon('check', height: 16) +
+        content_tag(:span, " #{cur_selected}", class: 'bold hidden-xs') +
+        " |" +
+        content_tag(:span, " #{total}", class: 'hidden-xs')
+    end if cur_selected < total
+  end
+
   def function_button(title, octicon, css_class)
     button_tag(type: 'button', class: "#{css_class} btn btn-default hidden") do
       octicon(octicon, height: 16) + content_tag(:span, " #{title}", class: 'hidden-xs')
@@ -84,7 +93,7 @@ module NotificationsHelper
 
   def filter_option(param, &block)
     if filters[param].present?
-      link_to root_path(filters.except(param)), class: 'btn btn-default' do
+      link_to root_path(filters.except(param)), class: "btn btn-default" do
         concat octicon('x', :height => 16)
         concat ' '
         concat block.call
