@@ -32,6 +32,14 @@ function getMarkedOrCurrentRows() {
   return hasMarkedRows() ? getMarkedRows() : getCurrentRow()
 }
 
+function moveCursorToClickedRow(event) {
+  // Don't event.preventDefault(), since we want the normal clicking behavior for links, starring, etc
+  oldCurrent = getCurrentRow();
+  target = $(this);
+  setRowCurrent(oldCurrent, false);
+  setRowCurrent(target, true);
+}
+
 function updateFavicon() {
   $.get( "/notifications/unread_count", function(data) {
     var unread_count = data["count"];
@@ -77,6 +85,7 @@ document.addEventListener("turbolinks:load", function() {
   $('button.select_all').click(toggleSelectAll);
   $('button.mute_selected').click(mute);
   $('button.mark_read_selected').click(markReadSelected);
+  $('tr.notification').click(moveCursorToClickedRow);
 
   $('input.archive, input.unarchive').change(function() {
     if ( hasMarkedRows() ) {
