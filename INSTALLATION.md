@@ -32,7 +32,7 @@ You can host your own instance of Octobox using Heroku.
 
 Heroku will ask you to provide OAuth client ID and secret, which you can create
 on GitHub. When creating the OAuth application, make sure you enable the
-notifications scope on it (you will also need the read:org scope if you enable restricted access).
+`notifications` scope on it (you will also need the `read:org` scope if you enable restricted access).
 For more help with setting up an OAuth application on GitHub, see below.
 
 ## Local installation
@@ -190,7 +190,7 @@ To get a team's id:
 `curl https://api.github.com/orgs/<org_name>/teams`.
 You must be authenticated with access to the org. This will show you a list of the org's teams. Find your team on the list and copy its id
 
-Make sure you add the read:org scope if you have customized the scope at all.
+Make sure you add the `read:org` scope if you have customized the scope at all.
 
 ## Customizing the Scopes on Github
 

@@ -94,7 +94,6 @@ class UserTest < ActiveSupport::TestCase
     assert_error_present(@user, User::ERRORS[:missing_read_org_scope])
   end
 
-
   test 'does not allow setting personal_access_token without being enabled' do
     stub_personal_access_tokens_enabled(value: false)
     @user.personal_access_token = '1234'
