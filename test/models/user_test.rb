@@ -83,8 +83,17 @@ class UserTest < ActiveSupport::TestCase
     stub_personal_access_tokens_enabled
     @user.personal_access_token = '1234'
     stub_user_request(oauth_scopes: 'user, repo')
-    assert_error_present(@user, User::ERRORS[:missing_scope])
+    assert_error_present(@user, User::ERRORS[:missing_notifications_scope])
   end
+
+  test 'does not allow a personal_access_token without the read:org scope if restricted_access enabled' do
+    stub_personal_access_tokens_enabled
+    stub_restricted_access_enabled
+    @user.personal_access_token = '1234'
+    stub_user_request(oauth_scopes: 'user, repo')
+    assert_error_present(@user, User::ERRORS[:missing_read_org_scope])
+  end
+
 
   test 'does not allow setting personal_access_token without being enabled' do
     stub_personal_access_tokens_enabled(value: false)
