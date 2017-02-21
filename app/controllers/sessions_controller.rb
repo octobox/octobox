@@ -37,34 +37,29 @@ class SessionsController < ApplicationController
     return true unless Octobox.restricted_access_enabled?
 
     client = Octokit::Client.new(access_token: auth_hash.credentials.token)
-    nickname = auth_hash.info.nickname
-
-    return true if organization_member?(client, nickname) || team_member?(client, nickname)
+    return true if organization_member?(client) || team_member?(client)
 
     flash[:error] = 'Access denied.'
     redirect_to root_path
   end
 
-  def organization_member?(*args)
-    member?(*args, type: :organization)
+  def organization_member?(client)
+    org_id = Octobox.config.github_organization_id
+    return false unless org_id
+
+    orgs = client.organizations
+    return false unless orgs
+
+    orgs.any? { |o| o['id'].to_i == org_id }
   end
 
-  def team_member?(*args)
-    member?(*args, type: :team)
-  end
+  def team_member?(client)
+    team_id = Octobox.config.github_team_id
+    return false unless team_id
 
-  def member?(client, nickname, type:)
-    id = Octobox.config.public_send("github_#{type}_id")
-    return false unless id.present?
+    teams = client.user_teams
+    return false unless teams
 
-    begin
-      client.public_send("#{type}_member?",
-        id,
-        nickname,
-        headers: { 'Cache-Control' => 'no-cache, no-store' }
-      )
-    rescue Octokit::Error
-      false
-    end
+    teams.any? { |t| t['id'].to_i == team_id }
   end
 end
