@@ -39,7 +39,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     stub_restricted_access_enabled
     stub_env_var('GITHUB_ORGANIZATION_ID', 1)
-    stub_organization_membership_request(organization_id: 1, successful: false)
+    stub_organization_membership_request(organization_id: 1, user: @user.github_login, successful: false)
 
     post '/auth/github/callback'
     assert_redirected_to root_path
@@ -52,7 +52,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     stub_restricted_access_enabled
     stub_env_var('GITHUB_TEAM_ID', 1)
-    stub_team_membership_request(team_id: 1, successful: false)
+    stub_team_membership_request(team_id: 1, user: @user.github_login, successful: false)
 
     post '/auth/github/callback'
     assert_redirected_to root_path
@@ -65,7 +65,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     stub_restricted_access_enabled
     stub_env_var('GITHUB_ORGANIZATION_ID', 1)
-    stub_organization_membership_request(organization_id: 1, successful: true)
+    stub_organization_membership_request(organization_id: 1, user: @user.github_login, successful: true)
 
     post '/auth/github/callback'
     assert_redirected_to root_path
@@ -78,7 +78,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     stub_restricted_access_enabled
     stub_env_var('GITHUB_TEAM_ID', 1)
-    stub_team_membership_request(team_id: 1, successful: true)
+    stub_team_membership_request(team_id: 1, user: @user.github_login, successful: true)
 
     post '/auth/github/callback'
     assert_redirected_to root_path

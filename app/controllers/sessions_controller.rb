@@ -36,30 +36,34 @@ class SessionsController < ApplicationController
   def authorize_access!
     return true unless Octobox.restricted_access_enabled?
 
-    client = Octokit::Client.new(access_token: auth_hash.credentials.token, auto_paginate: true)
-    return true if organization_member?(client) || team_member?(client)
+    client = Octokit::Client.new(access_token: auth_hash.credentials.token)
+    nickname = auth_hash.info.nickname
+    return true if organization_member?(client, user: nickname) || team_member?(client, user: nickname)
 
     flash[:error] = 'Access denied.'
     redirect_to root_path
   end
 
-  def organization_member?(client)
+  def organization_member?(client, user:)
     org_id = Octobox.config.github_organization_id
     return false unless org_id
-
-    orgs = client.organizations(headers: { 'Cache-Control' => 'no-cache, no-store' })
-    return false unless orgs
-
-    orgs.any? { |org| org['id'].to_i == org_id }
+    member?(client, method_name: :organization_member, id: org_id, user: user)
   end
 
-  def team_member?(client)
+  def team_member?(client, user:)
     team_id = Octobox.config.github_team_id
     return false unless team_id
+    member?(client, method_name: :team_member, id: team_id, user: user)
+  end
 
-    teams = client.user_teams(headers: { 'Cache-Control' => 'no-cache, no-store' })
-    return false unless teams
-
-    teams.any? { |team| team['id'].to_i == team_id }
+  def member?(client, method_name:, id:, user:)
+    case method_name
+    when :team_member
+      client.team_member?(id, user, headers: { 'Cache-Control' => 'no-cache, no-store' })
+    when :organization_member
+      client.organization_member?(id, user, headers: { 'Cache-Control' => 'no-cache, no-store' })
+    else
+      raise "#{method_name} is not a valid check for member?"
+    end
   end
 end
