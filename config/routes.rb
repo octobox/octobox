@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     match :failure,              to: 'sessions#failure', via: [:get, :post]
   end
 
-  resources :notifications, only: [] do
+  resources :notifications, only: [:index] do
     collection do
       post :archive_selected
       post :sync
@@ -26,5 +26,7 @@ Rails.application.routes.draw do
   end
 
   get '/settings', to: 'users#edit'
-  resources :users, only: [:update, :destroy]
+  resources :users, only: [:update, :destroy] do
+    collection { get :profile }
+  end
 end
