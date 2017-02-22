@@ -159,4 +159,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_nil @user.refresh_interval
   end
 
+  test 'rejects negative refresh_interval as json' do
+    stub_user_request(user: @user)
+    sign_in_as(@user)
+    patch user_url(@user, format: :json), params: {user: {refresh_interval: -60_000}}
+    @user.reload
+    assert_nil @user.refresh_interval
+    assert_response :unprocessable_entity
+  end
 end

@@ -45,7 +45,7 @@ class UsersController < ApplicationController
           flash[:alert] = current_user.errors.full_messages.to_sentence
           redirect_to :settings
         end
-        format.json { render json: { errors: current_user.errors.full_messages.to_sentence } }
+        format.json { render json: { errors: current_user.errors.full_messages.to_sentence }, status: :unprocessable_entity }
       end
     end
   end
