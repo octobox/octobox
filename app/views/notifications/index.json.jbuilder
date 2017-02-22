@@ -40,4 +40,3 @@ json.notifications do
     end
   end
 end
-

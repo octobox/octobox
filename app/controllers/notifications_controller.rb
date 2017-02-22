@@ -40,23 +40,23 @@ class NotificationsController < ApplicationController
   #    "notifications" : [  
   #       {  
   #          "id" : 29,
-  #          "github_id" :  12345,
+  #          "github_id" :  320,
   #          "reason" :  "mention",
   #          "unread" :  true,
   #          "archived" :  false,
   #          "starred" :  false,
-  #          "url" : "https://api.github.com/notifications/threads/12345",
-  #          "web_url" : "https://github.com/octobox/octobox/pull/12345",
+  #          "url" : "https://api.github.com/notifications/threads/320",
+  #          "web_url" : "https://github.com/octobox/octobox/pull/320",
   #          "last_read_at" : "2017-02-20 22:26:11 UTC",
   #          "created_at" : "2017-02-22T15:49:33.750Z",
   #          "updated_at" : "2017-02-22T15:40:21.000Z",
   #          "subject":{  
   #             "title" : "Add JSON API",
-  #             "url" : "https://api.github.com/repos/octobox/octobox/pulls/12345",
+  #             "url" : "https://api.github.com/repos/octobox/octobox/pulls/320",
   #             "type" : "PullRequest"
   #          },
   #          "repo":{  
-  #             "id": 12345,
+  #             "id": 320,
   #             "name" : "octobox/octobox",
   #             "owner" : "octobox",
   #             "repo_url" : "https://github.com/octobox/octobox"
