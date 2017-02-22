@@ -12,11 +12,38 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @token_user = create(:token_user)
   end
 
+  test 'does not get profile as html' do
+    create_token_user
+    sign_in_as(@token_user)
+    stub_user_request(user: @token_user, any_auth: true)
+    assert_raises ActionController::UrlGenerationError do
+      get profile_users_path
+    end
+  end
+
+  test 'gets profile as json' do
+    create_token_user
+    sign_in_as(@token_user)
+    stub_user_request(user: @token_user, any_auth: true)
+    get profile_users_path(format: :json)
+    assert_template 'users/profile'
+  end
+
   test 'updates personal_access_token' do
     create_token_user
     sign_in_as(@token_user)
     stub_user_request(user: @token_user, any_auth: true)
     patch user_url(@token_user), params: {user: {personal_access_token: '12345'}}
+    @token_user.reload
+    assert_equal '12345', @token_user.personal_access_token
+  end
+
+  test 'updates personal_access_token as json' do
+    create_token_user
+    sign_in_as(@token_user)
+    stub_user_request(user: @token_user, any_auth: true)
+    patch user_url(@token_user, format: :json), params: {user: {personal_access_token: '12345'}}
+    assert_response :ok
     @token_user.reload
     assert_equal '12345', @token_user.personal_access_token
   end
@@ -67,6 +94,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     delete user_url(@user)
     assert_redirected_to root_path
     assert_equal "User deleted: #{@user.github_login}", flash[:success]
+    refute User.exists?(@user.id)
+  end
+
+  test 'deletes a user as json' do
+    sign_in_as(@user)
+    delete user_url(@user, format: :json)
+    assert_response :ok
     refute User.exists?(@user.id)
   end
 

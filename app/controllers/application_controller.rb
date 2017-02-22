@@ -7,11 +7,10 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate_user!
-    unless logged_in?
-      respond_to do |format|
-        format.html { redirect_to root_path }
-        format.json { head :unauthorized }
-      end
+    return if logged_in?
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.json { render json: {}, status: :unauthorized }
     end
   end
 

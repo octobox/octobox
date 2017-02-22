@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
-  before_action :render_home_page_unless_authenticated, only: [:index]
+  before_action :authenticate_index!, only: [:index]
   before_action :find_notification, only: [:archive, :unarchive, :star, :mark_read]
 
   # Return a listing of notifications, including a summary of unread repos, notification reasons, and notification types
@@ -226,8 +226,12 @@ class NotificationsController < ApplicationController
     @notification = current_user.notifications.find(params[:id])
   end
 
-  def render_home_page_unless_authenticated
-    return render 'pages/home' unless logged_in?
+  def authenticate_index!
+    return if logged_in?
+    respond_to do |format|
+      format.html { render 'pages/home' }
+      format.json { authenticate_user! }
+    end
   end
 
   def page
