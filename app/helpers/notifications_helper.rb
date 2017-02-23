@@ -20,7 +20,7 @@ module NotificationsHelper
   def filters
     {
       reason:   params[:reason],
-      status:   params[:status],
+      unread:   params[:unread],
       repo:     params[:repo],
       type:     params[:type],
       archive:  params[:archive],

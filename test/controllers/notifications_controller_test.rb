@@ -90,7 +90,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    post '/notifications/archive_selected', params: { status: true, id: ['all'], value: true }
+    post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: true }
 
     assert_response :ok
 
