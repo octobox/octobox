@@ -6,10 +6,10 @@ class NotificationsController < ApplicationController
 
   def index
     scope = notifications_for_presentation
-    @types               = scope.distinct.group(:subject_type).count
-    @statuses            = scope.distinct.group(:unread).count
-    @reasons             = scope.distinct.group(:reason).count
-    @unread_repositories = scope.distinct.group(:repository_full_name).count
+    @types                 = scope.distinct.group(:subject_type).count
+    @unread_notifications  = scope.distinct.group(:unread).count
+    @reasons               = scope.distinct.group(:reason).count
+    @unread_repositories   = scope.distinct.group(:repository_full_name).count
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
 
@@ -70,7 +70,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    sub_scopes = [:repo, :reason, :type, :status, :owner]
+    sub_scopes = [:repo, :reason, :type, :unread, :owner]
     sub_scopes.each do |sub_scope|
       scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
     end

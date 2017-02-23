@@ -7,8 +7,8 @@
         <%= params[:reason].underscore.humanize %>
       <% end %>
 
-      <%= filter_option :status do %>
-        <%= (params[:status] === 'true'? 'Unread' : 'Read') %>
+      <%= filter_option :unread do %>
+        <%= (params[:unread] === 'true'? 'Unread' : 'Read') %>
       <% end %>
 
       <%= filter_option :repo do %>
