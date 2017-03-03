@@ -21,3 +21,4 @@ config/initializers/custom.rb
 
 .env
 coverage
+.DS_Store
