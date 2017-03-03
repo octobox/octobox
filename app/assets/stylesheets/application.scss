@@ -151,6 +151,14 @@ html {
     width: 16px;
   }
 }
+#search {
+  input {
+    background: rgba(255,255,255,0.125);
+    border: none;
+    box-shadow: none;
+    color: #fff;
+  }
+}
 @media (min-width: $screen-sm-min) {
   #search {
     float: left;
@@ -187,6 +195,8 @@ html {
   .navbar-form {
     border-top: none;
     border-bottom: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
     padding-top: 0;
     padding-bottom: 0;
   }
