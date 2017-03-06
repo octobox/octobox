@@ -413,6 +413,11 @@ td.keys {
         text-overflow: ellipsis;
       }
     }
+    .notification-subject-author:before {
+      content: "by ";
+      color: $text-muted;
+      font-size: 10px;
+    }
     .notification-date {
       top: 10px;
       right: 10px;
