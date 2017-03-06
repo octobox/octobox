@@ -138,4 +138,8 @@ module NotificationsHelper
     return true unless param == :repo
     !params[:owner].present?
   end
+
+  def display_subject_author?
+    Octobox.config.fetch_subject_author
+  end
 end

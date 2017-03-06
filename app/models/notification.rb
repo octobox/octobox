@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
+  NOTIFICATION_SUBJECT_TYPE =
+    /\/((?:issues|pulls)\/(?<issue_number>\d+))|((?:commits)\/(?<commit_sha>[0-9a-f]{5,40}))\z/
+
   include PgSearch
   pg_search_scope :search_by_subject_title,
                   against: :subject_title,
@@ -67,6 +70,10 @@ class Notification < ApplicationRecord
     "#{Octobox.config.github_domain}/#{repository_full_name}"
   end
 
+  def subject_author_url
+    subject_author ? "#{Octobox.config.github_domain}/#{subject_author}" : ""
+  end
+
   def unarchive_if_updated
     return unless self.archived?
     change = changes['updated_at']
@@ -79,7 +86,22 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
+    set_author(api_response)
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
+  end
+
+  private
+
+  def set_author(api_response)
+    NOTIFICATION_SUBJECT_TYPE =~ api_response[:subject][:url]
+    repo_name = api_response[:repository][:full_name]
+    self.subject_author = if issue_number
+                            issue = user.github_client.issue(repo_name, issue_number)
+                            issue.user.login
+                          elsif commit_sha
+                            commit = user.github_client.commit(repo_name, commit_sha)
+                            commit.author.login
+                          end
   end
 end
