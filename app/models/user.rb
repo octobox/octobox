@@ -4,7 +4,8 @@ class User < ApplicationRecord
 
   ERRORS = {
     invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
-    missing_scope: [:personal_access_token, 'does not include the notifications scope'],
+    missing_notifications_scope: [:personal_access_token, 'does not include the notifications scope'],
+    missing_read_org_scope: [:personal_access_token, 'does not include the read:org scope'],
     disallowed_tokens: [:personal_access_token, 'is not allowed in this instance'],
     refresh_interval_size: [:refresh_interval, 'must be less than 1 day']
   }.freeze
@@ -92,7 +93,10 @@ class User < ApplicationRecord
       return
     end
     unless github_client.scopes.include? 'notifications'
-      errors.add(*ERRORS[:missing_scope])
+      errors.add(*ERRORS[:missing_notifications_scope])
+    end
+    if Octobox.restricted_access_enabled? && !github_client.scopes.include?('read:org')
+      errors.add(*ERRORS[:missing_read_org_scope])
     end
   end
 

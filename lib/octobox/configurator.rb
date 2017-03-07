@@ -15,6 +15,11 @@ module Octobox
       end
     end
 
+    def scopes
+      default_scopes = Octobox.restricted_access_enabled? ? 'notifications, read:org' : 'notifications'
+      ENV.fetch('GITHUB_SCOPE', default_scopes)
+    end
+
     def personal_access_tokens_enabled
       @personal_access_tokens_enabled || ENV['PERSONAL_ACCESS_TOKENS_ENABLED'].present?
     end
