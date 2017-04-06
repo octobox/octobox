@@ -110,7 +110,7 @@ document.addEventListener("turbolinks:load", function() {
   });
   $('.toggle-star').click(function() {
     $(this).toggleClass("star-active star-inactive");
-    $.get('/notifications/'+$(this).data('id')+'/star')
+    $.post('/notifications/'+$(this).data('id')+'/star')
   });
   $('.sync .octicon').on('click', function() {
     $(this).toggleClass('spinning')
@@ -211,7 +211,7 @@ function markReadSelected() {
 }
 
 function markRead(id) {
-  $.get( "/notifications/"+id+"/mark_read", function() {
+  $.post( "/notifications/"+id+"/mark_read").done(function() {
     updateFavicon();
   });
   $('#notification-'+id).removeClass('active');
