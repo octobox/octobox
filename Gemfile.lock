@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/octokit/octokit.rb
-  revision: 207fb98100cf65d486e41156630ffa9288f297b3
-  ref: 207fb98100cf65d486e41156630ffa9288f297b3
-  specs:
-    octokit (4.6.2)
-      sawyer (~> 0.8.0, >= 0.5.3)
-
-GIT
   remote: https://github.com/twalpole/local_time
   revision: b78fa43fab54cc81bfd4de7a1af2419355d582dc
   branch: turbolinks5
@@ -156,6 +148,8 @@ GEM
     octicons_helper (3.0.1)
       octicons (~> 3.0)
       rails
+    octokit (4.7.0)
+      sawyer (~> 0.8.0, >= 0.5.3)
     omniauth (1.6.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
@@ -299,7 +293,7 @@ DEPENDENCIES
   mocha
   newrelic_rpm
   octicons_helper
-  octokit!
+  octokit (~> 4.7)
   omniauth-github
   pg
   pg_search
