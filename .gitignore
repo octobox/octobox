@@ -21,3 +21,5 @@ config/initializers/custom.rb
 
 .env
 coverage
+
+public/assets
