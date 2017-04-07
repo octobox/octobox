@@ -34,8 +34,8 @@ function getMarkedOrCurrentRows() {
 
 function moveCursorToClickedRow(event) {
   // Don't event.preventDefault(), since we want the normal clicking behavior for links, starring, etc
-  oldCurrent = getCurrentRow();
-  target = $(this);
+  var oldCurrent = getCurrentRow();
+  var target = $(this);
   setRowCurrent(oldCurrent, false);
   setRowCurrent(target, true);
 }
@@ -220,8 +220,15 @@ function markRead(id) {
 function toggleArchive() {
   if (getDisplayedRows().length === 0) return;
 
-  [cssClass, value] = $(".archive_toggle").hasClass("archive_selected") ?
-    ['.archive', true] : ['.unarchive', false];
+  var cssClass, value;
+
+  if ( $(".archive_toggle").hasClass("archive_selected") ) {
+    cssClass = '.archive'
+    value = true
+  } else {
+    cssClass = '.unarchive'
+    value = false
+  }
 
   var ids = getIdsFromRows(getMarkedOrCurrentRows());
 
