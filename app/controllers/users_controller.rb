@@ -2,24 +2,73 @@
 class UsersController < ApplicationController
   before_action :ensure_correct_user
 
+  # Return a user profile. Only shows the current user
+  #
+  # ==== Example
+  # 
+  # GET users/profile.json
+  # {  
+  #    "user" : {  
+  #       "id" : 1,
+  #       "github_id" : 3074765,
+  #       "github_login" : "jules2689",
+  #       "last_synced_at" : "2017-02-22T15:49:32.104Z",
+  #       "created_at" : "2017-02-22T15:49:32.099Z",
+  #       "updated_at" : "2017-02-22T15:49:32.099Z"
+  #    }
+  # }
+  def profile; end
+
   def edit; end
 
+  # Update a user profile. Only updates the current user
+  #
+  # * +:personal_access_token+ - The user's personal access token
+  # * +:refresh_interval+ - The refresh interval on which a sync should be initiated (while viewing the app). In milliseconds.
+  #
+  # ==== Example
+  # 
+  # PATCH users/:id.json
+  # { "user" : { "refresh_interval" : 60000 } }
+  # HEAD OK
+  #
   def update
     if current_user.update_attributes(update_user_params)
-      redirect_to root_path
+      respond_to do |format|
+        format.html { redirect_to root_path }
+        format.json { head :ok }
+      end
     else
-      flash[:error] = 'Could not update your account'
-      flash[:alert] = current_user.errors.full_messages.to_sentence
-      redirect_to :settings
+      respond_to do |format|
+        format.html do
+          flash[:error] = 'Could not update your account'
+          flash[:alert] = current_user.errors.full_messages.to_sentence
+          redirect_to :settings
+        end
+        format.json { render json: { errors: current_user.errors.full_messages.to_sentence }, status: :unprocessable_entity }
+      end
     end
   end
 
+  # Delete your user profile. Only can delete the current user
+  #
+  # ==== Example
+  # 
+  # DELETE users/:id.json
+  # HEAD OK
+  #
   def destroy
     user = User.find(current_user.id)
     github_login = user.github_login
     user.destroy
-    flash[:success] = "User deleted: #{github_login}"
-    redirect_to root_path
+
+    respond_to do |format|
+      format.html do
+        flash[:success] = "User deleted: #{github_login}"
+        redirect_to root_path
+      end
+      format.json { head :ok }
+    end
   end
 
   private

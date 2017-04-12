@@ -16,6 +16,7 @@ gem 'turbolinks'
 gem 'typhoeus'
 gem 'uglifier'
 gem 'pg_search'
+gem 'jbuilder'
 
 group :development, :test do
   gem 'byebug', platform: :mri
