@@ -11,26 +11,32 @@ module StubHelper
     end
   end
 
-  def stub_organization_membership_request(organization_id:, login:, successful:)
-    membership_url = %r{https://api.github.com/organizations/#{organization_id}/members/#{login}}
-
-    headers          = { 'Content-Type' => 'application/json', 'Cache-Control' => 'no-cach, no-store' }
-    default_response = { body: nil, headers: headers }
-
-    response = successful ? default_response.merge(status: 204) : default_response.merge(status: 404)
-
-    stub_request(:get, membership_url).to_return(response)
+  def stub_organization_membership_request(organization_id:, user:, successful:)
+    stub_membership_request(resource: 'organizations', id: organization_id, user: user, successful: successful)
   end
 
-  def stub_team_membership_request(team_id:, login:, successful:)
-    membership_url = %r{https://api.github.com/teams/#{team_id}/members/#{login}}
+  def stub_team_membership_request(team_id:, user:, successful:)
+    stub_membership_request(resource: 'teams', id: team_id, user: user, successful: successful)
+  end
 
-    headers          = { 'Content-Type' => 'application/json', 'Cache-Control' => 'no-cach, no-store' }
-    default_response = { body: nil, headers: headers }
+  def stub_membership_request(resource:, id:, user:, successful:)
+    url = %r{https://api.github.com/#{resource}/#{id}/members/#{user}}
 
-    response = successful ? default_response.merge(status: 204) : default_response.merge(status: 404)
+    headers = { 'Content-Type' => 'application/json', 'Cache-Control' => 'no-cache, no-store' }
+    response = { headers: headers }
 
-    stub_request(:get, membership_url).to_return(response)
+    if successful
+      response.merge!(
+        status: 204,
+        body: nil
+      )
+    else
+      response.merge!(
+        status: 404,
+        body: nil
+      )
+    end
+    stub_request(:get, url).to_return(response)
   end
 
   def stub_notifications_request(url: nil, body: nil, extra_headers: {})

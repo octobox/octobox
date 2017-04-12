@@ -21,8 +21,8 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :star
-      get :mark_read
+      post :star
+      post :mark_read
     end
   end
 

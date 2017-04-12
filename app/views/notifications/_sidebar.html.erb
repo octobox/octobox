@@ -21,9 +21,9 @@
 
   <%= menu_separator %>
 
-  <% @statuses.each do |status, count| %>
-    <%= filter_link :status, status, count do %>
-      <% if status %>
+  <% @unread_notifications.each do |unread_notification, count| %>
+    <%= filter_link :unread, unread_notification, count do %>
+      <% if unread_notification %>
         <%= octicon 'mail', height: 16, class: 'sidebar-icon star-active' %>
         Unread
       <% else %>
@@ -33,7 +33,7 @@
 
     <% end %>
   <% end %>
-  <%= menu_separator unless @statuses.empty? %>
+  <%= menu_separator unless @unread_notifications.empty? %>
 
   <% @types.each do |type, count| %>
     <%= filter_link :type, type, count do %>
