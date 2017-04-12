@@ -182,7 +182,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in_as(@user)
 
-    get "/notifications/#{notification.id}/star"
+    post "/notifications/#{notification.id}/star"
     assert_response :ok
 
     assert notification.reload.starred?
@@ -193,7 +193,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in_as(@user)
 
-    get "/notifications/#{notification.id}/mark_read"
+    post "/notifications/#{notification.id}/mark_read"
     assert_response :ok
 
     refute notification.reload.unread?

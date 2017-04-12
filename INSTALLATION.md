@@ -19,6 +19,7 @@ in your GitHub settings for Octobox to work.
 * [Running Octobox for GitHub Enterprise](#running-octobox-for-github-enterprise)
 * [Using Personal Access Tokens](#using-personal-access-tokens)
 * [Limiting Access](#limiting-access)
+* [Customizing the Scopes on Github](#customizing-the-scopes-on-github)
 * [Customizing Source Link for Modified Code](#customizing-source-link-for-modified-code)
 * [Adding a custom initializer](#adding-a-custom-initializer)
 
@@ -31,8 +32,8 @@ You can host your own instance of Octobox using Heroku.
 
 Heroku will ask you to provide OAuth client ID and secret, which you can create
 on GitHub. When creating the OAuth application, make sure you enable the
-notifications scope on it. For more help with setting up an OAuth application
-on GitHub, see below.
+`notifications` scope on it (you will also need the `read:org` scope if you enable restricted access).
+For more help with setting up an OAuth application on GitHub, see below.
 
 ## Local installation
 
@@ -188,6 +189,13 @@ You can get an organization's id with this curl command:
 To get a team's id:
 `curl https://api.github.com/orgs/<org_name>/teams`.
 You must be authenticated with access to the org. This will show you a list of the org's teams. Find your team on the list and copy its id
+
+Make sure you add the `read:org` scope if you have customized the scope at all.
+
+## Customizing the Scopes on Github
+
+You can customize the scopes required for Octobox to work by modifying the `GITHUB_SCOPE` environment variable.
+By default `notifications` is enabled, unless you also [limit access](#limiting-access), in which case the default is `notifications, read:org`. These are required for the application to function correctly.
 
 ## Customizing Source Link for Modified Code
 

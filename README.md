@@ -2,7 +2,7 @@
 
 Take back control of your GitHub Notifications with [Octobox]( https://octobox.io).
 
-![Screenshot of Github Inbox](https://cloud.githubusercontent.com/assets/1060/21510049/16ad341c-cc87-11e6-9a83-86c6be94535f.png)
+![Screenshot of  Octobox](https://cloud.githubusercontent.com/assets/1060/21510049/16ad341c-cc87-11e6-9a83-86c6be94535f.png)
 
 [![Build Status](https://travis-ci.org/octobox/octobox.svg?branch=master)](https://travis-ci.org/octobox/octobox)
 [![Code Climate](https://img.shields.io/codeclimate/github/octobox/octobox.svg?style=flat)](https://codeclimate.com/github/octobox/octobox)
@@ -18,6 +18,78 @@ If you manage more than one active project on GitHub, you probably find [GitHub 
 Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
 
 Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
+
+## Backers
+
+Support us with a monthly donation and help us continue our activities. [Become a backer](https://opencollective.com/octobox#backer)
+
+<a href="https://opencollective.com/octobox/backer/0/website" target="_blank"><img src="https://opencollective.com/octobox/backer/0/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/1/website" target="_blank"><img src="https://opencollective.com/octobox/backer/1/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/2/website" target="_blank"><img src="https://opencollective.com/octobox/backer/2/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/3/website" target="_blank"><img src="https://opencollective.com/octobox/backer/3/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/4/website" target="_blank"><img src="https://opencollective.com/octobox/backer/4/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/5/website" target="_blank"><img src="https://opencollective.com/octobox/backer/5/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/6/website" target="_blank"><img src="https://opencollective.com/octobox/backer/6/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/7/website" target="_blank"><img src="https://opencollective.com/octobox/backer/7/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/8/website" target="_blank"><img src="https://opencollective.com/octobox/backer/8/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/9/website" target="_blank"><img src="https://opencollective.com/octobox/backer/9/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/10/website" target="_blank"><img src="https://opencollective.com/octobox/backer/10/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/11/website" target="_blank"><img src="https://opencollective.com/octobox/backer/11/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/12/website" target="_blank"><img src="https://opencollective.com/octobox/backer/12/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/13/website" target="_blank"><img src="https://opencollective.com/octobox/backer/13/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/14/website" target="_blank"><img src="https://opencollective.com/octobox/backer/14/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/15/website" target="_blank"><img src="https://opencollective.com/octobox/backer/15/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/16/website" target="_blank"><img src="https://opencollective.com/octobox/backer/16/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/17/website" target="_blank"><img src="https://opencollective.com/octobox/backer/17/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/18/website" target="_blank"><img src="https://opencollective.com/octobox/backer/18/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/19/website" target="_blank"><img src="https://opencollective.com/octobox/backer/19/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/20/website" target="_blank"><img src="https://opencollective.com/octobox/backer/20/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/21/website" target="_blank"><img src="https://opencollective.com/octobox/backer/21/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/22/website" target="_blank"><img src="https://opencollective.com/octobox/backer/22/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/23/website" target="_blank"><img src="https://opencollective.com/octobox/backer/23/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/24/website" target="_blank"><img src="https://opencollective.com/octobox/backer/24/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/25/website" target="_blank"><img src="https://opencollective.com/octobox/backer/25/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/26/website" target="_blank"><img src="https://opencollective.com/octobox/backer/26/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/27/website" target="_blank"><img src="https://opencollective.com/octobox/backer/27/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/28/website" target="_blank"><img src="https://opencollective.com/octobox/backer/28/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/backer/29/website" target="_blank"><img src="https://opencollective.com/octobox/backer/29/avatar.svg"></a>
+
+
+## Sponsors
+
+Become a sponsor and get your logo on our README on Github with a link to your site. [Become a sponsor](https://opencollective.com/octobox#sponsor)
+
+<a href="https://opencollective.com/octobox/sponsor/0/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/1/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/2/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/3/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/4/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/5/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/6/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/7/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/8/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/9/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/9/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/10/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/10/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/11/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/11/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/12/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/12/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/13/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/13/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/14/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/14/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/15/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/15/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/16/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/16/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/17/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/17/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/18/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/18/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/19/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/19/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/20/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/20/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/21/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/21/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/22/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/22/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/23/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/23/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/24/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/24/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/25/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/25/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/26/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/26/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/27/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/27/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/28/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/28/avatar.svg"></a>
+<a href="https://opencollective.com/octobox/sponsor/29/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/29/avatar.svg"></a>
+
 
 ## Getting Started
 
