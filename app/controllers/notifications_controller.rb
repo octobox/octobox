@@ -19,26 +19,26 @@ class NotificationsController < ApplicationController
   # If the +:per_page+ paremeter is set to more than 100, a 404 will be returned
   #
   # ==== Example
-  # 
+  #
   # GET notifications.json
-  # {  
-  #    "pagination" : {  
+  # {
+  #    "pagination" : {
   #       "total_notifications" : 1,
   #       "page" : 1,
   #       "total_pages" : 1,
   #       "per_page" : 20
   #    },
-  #    "types" : {  
+  #    "types" : {
   #       "PullRequest" : 1,
   #    },
-  #    "reasons" : {  
+  #    "reasons" : {
   #       "mention" : 1
   #    },
-  #    "unread_repositories" : {  
+  #    "unread_repositories" : {
   #       "octobox/octobox" : 1
   #    },
-  #    "notifications" : [  
-  #       {  
+  #    "notifications" : [
+  #       {
   #          "id" : 29,
   #          "github_id" :  320,
   #          "reason" :  "mention",
@@ -50,12 +50,12 @@ class NotificationsController < ApplicationController
   #          "last_read_at" : "2017-02-20 22:26:11 UTC",
   #          "created_at" : "2017-02-22T15:49:33.750Z",
   #          "updated_at" : "2017-02-22T15:40:21.000Z",
-  #          "subject":{  
+  #          "subject":{
   #             "title" : "Add JSON API",
   #             "url" : "https://api.github.com/repos/octobox/octobox/pulls/320",
   #             "type" : "PullRequest"
   #          },
-  #          "repo":{  
+  #          "repo":{
   #             "id": 320,
   #             "name" : "octobox/octobox",
   #             "owner" : "octobox",
@@ -82,7 +82,7 @@ class NotificationsController < ApplicationController
   # Return a count for the number of unread notifications
   #
   # ==== Example
-  # 
+  #
   # GET notifications/unread_count.json
   # { "count" : 1 }
   #
@@ -99,7 +99,7 @@ class NotificationsController < ApplicationController
   # * +:id+ - An array of IDs of notifications you'd like to mute. If ID is 'all', all notifications will be muted
   #
   # ==== Example
-  # 
+  #
   # POST notifications/mute_selected.json?id=all
   # HEAD 204
   #
@@ -118,7 +118,7 @@ class NotificationsController < ApplicationController
   # * +:id+ - An array of IDs of notifications you'd like to archive. If ID is 'all', all notifications will be archived
   #
   # ==== Example
-  # 
+  #
   # POST notifications/archive_selected.json?id=all
   # HEAD 204
   #
@@ -134,7 +134,7 @@ class NotificationsController < ApplicationController
   # * +:id+ - An array of IDs of notifications you'd like to mark as read. If ID is 'all', all notifications will be marked as read
   #
   # ==== Example
-  # 
+  #
   # POST notifications/mark_read_selected.json?id=all
   # HEAD 204
   #
@@ -148,7 +148,7 @@ class NotificationsController < ApplicationController
   # Mark a notification as read
   #
   # ==== Example
-  # 
+  #
   # POST notifications/:id/mark_read.json
   # HEAD 204
   #
@@ -160,7 +160,7 @@ class NotificationsController < ApplicationController
   # Star a notification
   #
   # ==== Example
-  # 
+  #
   # POST notifications/:id/star.json
   # HEAD 204
   #
@@ -172,7 +172,7 @@ class NotificationsController < ApplicationController
   # Synchronize notifications with Github
   #
   # ==== Example
-  # 
+  #
   # POST notifications/sync.json
   # HEAD 204
   #
