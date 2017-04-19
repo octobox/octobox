@@ -5,10 +5,10 @@ class UsersController < ApplicationController
   # Return a user profile. Only shows the current user
   #
   # ==== Example
-  # 
+  #
   # GET users/profile.json
-  # {  
-  #    "user" : {  
+  # {
+  #    "user" : {
   #       "id" : 1,
   #       "github_id" : 3074765,
   #       "github_login" : "jules2689",
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
   # * +:refresh_interval+ - The refresh interval on which a sync should be initiated (while viewing the app). In milliseconds.
   #
   # ==== Example
-  # 
+  #
   # PATCH users/:id.json
   # { "user" : { "refresh_interval" : 60000 } }
   # HEAD OK
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
   # Delete your user profile. Only can delete the current user
   #
   # ==== Example
-  # 
+  #
   # DELETE users/:id.json
   # HEAD OK
   #
