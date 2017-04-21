@@ -48,7 +48,7 @@
 
         <% if @notifications.any? %>
           <table class='table table-hover table-notifications js-table-notifications' data-refresh-interval=<%= current_user.effective_refresh_interval %>>
-            <%= render partial: 'notification', collection: @notifications %>
+            <%= render partial: 'notification', collection: @notifications, cached: true %>
           </table>
         <% elsif no_url_filter_parameters_present %>
           <div class="blankslate blankslate-spacious blankslate-clean-background">
