@@ -19,6 +19,73 @@ Notifications are marked as read and disappear from the list as soon as you load
 
 Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+	- [Octobox.io](#octoboxio)
+	- [Install](#install)
+	- [Desktop usage](#desktop-usage)
+- [Requirements](#requirements)
+- [Keyboard shortcuts](#keyboard-shortcuts)
+- [Alternatives](#alternatives)
+- [Development](#development)
+	- [Note on Patches/Pull Requests](#note-on-patchespull-requests)
+- [Contribute](#contribute)
+	- [Code of Conduct](#code-of-conduct)
+- [Copyright](#copyright)
+
+## Getting Started
+
+### Octobox.io
+
+You can use Octobox right now at [octobox.io](https://octobox.io), a shared instance hosted by the Octobox team.
+
+**Note:** octobox.io has a few features intentionally disabled:
+
+* Auto refreshing of notifications page ([#200](https://github.com/octobox/octobox/pull/200))
+* Personal Access Tokens ([#185](https://github.com/octobox/octobox/pull/185))
+
+Features are disabled for various reasons, such as not wanting to store users' tokens at this time.
+
+### Install
+
+You can also host Octobox yourself! See [the installation guide](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
+for installation instructions and details regarding deployment to Heroku, Docker, and more.
+
+### Desktop usage
+
+You can run Octobox locally as a desktop app too if you'd like, using [Nativefier](https://www.npmjs.com/package/nativefier):
+
+```bash
+npm install -g nativefier
+nativefier "https://octobox.io" # Or your own self-hosted URL
+```
+
+This will build a local application (.exe, .app, etc) and put it in your current folder, ready to use.
+
+## Requirements
+
+[Web notifications](https://github.com/settings/notifications) must be enabled in your GitHub settings for Octobox to work.
+
+<img width="757" alt="Notifications settings screen" src="https://cloud.githubusercontent.com/assets/1060/21509954/3a01794c-cc86-11e6-9bbc-9b33b55f85d1.png">
+
+## Keyboard shortcuts
+
+You can use keyboard shortcuts to navigate and perform certain actions:
+
+ - `a` - Select/deselect all
+ - `r` or `.` - Refresh list
+ - `j` - Move down the list
+ - `k` - Move up the list
+ - `s` - Star current notification
+ - `x` - Mark/unmark current notification
+ - `y` or `e` - Archive current/marked notification(s)
+ - `m` - Mute current/marked notification(s)
+ - `d` - Mark current/marked notification(s) as read here and on GitHub
+ - `o` or `Enter` - Open current notification in a new window
+
+Press `?` for the help menu.
+
 ## Backers
 
 Support us with a monthly donation and help us continue our activities. [Become a backer](https://opencollective.com/octobox#backer)
@@ -90,68 +157,19 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 <a href="https://opencollective.com/octobox/sponsor/28/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/28/avatar.svg"></a>
 <a href="https://opencollective.com/octobox/sponsor/29/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/29/avatar.svg"></a>
 
-
-## Getting Started
-
-### Octobox.io
-
-You can use Octobox right now at [octobox.io](https://octobox.io), a shared instance hosted by the Octobox team.
-
-**Note:** octobox.io has a few features intentionally disabled:
-
-* Auto refreshing of notifications page ([#200](https://github.com/octobox/octobox/pull/200))
-* Personal Access Tokens ([#185](https://github.com/octobox/octobox/pull/185))
-
-Features are disabled for various reasons, such as not wanting to store users' tokens at this time.
-
-### Installation
-
-You can also host Octobox yourself! See [the installation guide](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
-for installation instructions and details regarding deployment to Heroku, Docker, and more.
-
-### Desktop usage
-
-You can run Octobox locally as a desktop app too if you'd like, using [Nativefier](https://www.npmjs.com/package/nativefier):
-
-```bash
-npm install -g nativefier
-nativefier "https://octobox.io" # Or your own self-hosted URL
-```
-
-This will build a local application (.exe, .app, etc) and put it in your current folder, ready to use.
-
-## Requirements
-
-[Web notifications](https://github.com/settings/notifications) must be enabled in your GitHub settings for Octobox to work.
-
-<img width="757" alt="Notifications settings screen" src="https://cloud.githubusercontent.com/assets/1060/21509954/3a01794c-cc86-11e6-9bbc-9b33b55f85d1.png">
-
-## Keyboard shortcuts
-
-You can use keyboard shortcuts to navigate and perform certain actions:
-
- - `a` - Select/deselect all
- - `r` or `.` - Refresh list
- - `j` - Move down the list
- - `k` - Move up the list
- - `s` - Star current notification
- - `x` - Mark/unmark current notification
- - `y` or `e` - Archive current/marked notification(s)
- - `m` - Mute current/marked notification(s)
- - `d` - Mark current/marked notification(s) as read here and on GitHub
- - `o` or `Enter` - Open current notification in a new window
-
-Press `?` for the help menu.
-
 ## Alternatives
 
 - [LaraGit](https://github.com/m1guelpf/laragit) - PHP rewrite
 - [octobox.js](https://github.com/doowb/octobox.js) - JavaScript rewrite
 
-## Development
+## Contribute
 
-The source code is hosted at [GitHub](https://github.com/octobox/octobox).
-You can report issues/feature requests on [GitHub Issues](https://github.com/octobox/octobox/issues).
+Please do! The source code is hosted at [GitHub](https://github.com/octobox/octobox). If you want something, [open an issue](https://github.com/octobox/octobox/issues/new) or a pull request.
+
+If you need want to contribute but don't know where to start, take a look at the issues tagged as ["Help Wanted"](https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
+
+Finally, this is an open source project. If you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.
+
 For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
 
 ### Note on Patches/Pull Requests
@@ -167,4 +185,4 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Copyright
 
-Copyright (c) 2017 [Andrew Nesbitt](https://github.com/andrew). See [the licence](https://github.com/octobox/octobox/blob/master/LICENSE.txt) for details.
+[GNU Affero License](LICENSE.txt) © 2017 [Andrew Nesbitt](https://github.com/andrew).

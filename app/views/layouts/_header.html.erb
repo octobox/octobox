@@ -12,9 +12,8 @@
           <%= octicon 'search', height: 16, class: 'text-muted' %>
         </button>
       <% end %>
-      <a class="navbar-brand" href="/">
+      <a class="navbar-brand" href="/" title='Octobox'>
         <%= octobox_reverse_icon(28) %>
-        <span class="hidden-xs">Octobox</span>
       </a>
     </div>
     <div class="collapse navbar-collapse" id="search">
@@ -70,6 +69,11 @@
             <% end %>
           </li>
         <% end %>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="https://opencollective.com/octobox/" class='opencollective' target='_blank'><%= octicon 'gift', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %></a>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
 

@@ -63,24 +63,9 @@ html {
 
 .footer {
   text-align: center;
-}
-
-.footer-expendable {
-  display: inline-block;
-}
-
-.footer-data {
-  width: 30%;
-  display:inline-block;
-}
-
-@media (max-width: $screen-xs-max) {
-  .footer-data {
-    width: unset;
-    display: block;
-  }
-  .footer-expendable {
-    display: none;
+  color: #999;
+  a{
+    color: #666;
   }
 }
 
@@ -162,6 +147,7 @@ html {
 @media (min-width: $screen-sm-min) {
   #search {
     float: left;
+    margin-left: -18px;
   }
 }
 @media (max-width: $screen-xs-max) {
@@ -576,4 +562,8 @@ td.keys {
 
 .spinning{
   animation: spin 1s infinite steps(90);
+}
+
+.screenshot{
+  max-width: 100%;
 }

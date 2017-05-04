@@ -80,11 +80,4 @@ module StubHelper
   def stub_restricted_access_enabled(value: true)
     Octobox.config.stubs(:restricted_access_enabled).returns(value)
   end
-
-  def stub_contributors(body: nil)
-    url = %r{https://api.github.com/repos/.+/.+/contributors.*}
-    body ||= file_fixture('contributors.json')
-    headers = { 'Content-Type' => 'application/json' }
-    stub_request(:get, url).to_return( status: 200, body: body, headers: headers)
-  end
 end

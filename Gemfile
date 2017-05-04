@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby '2.4.0'
+ruby '2.4.1'
 
-gem 'rails', '~> 5.0', '>= 5.0.2'
+gem 'rails', '~> 5.1'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'kaminari'
@@ -16,6 +16,7 @@ gem 'turbolinks'
 gem 'typhoeus'
 gem 'uglifier'
 gem 'pg_search'
+gem 'jbuilder'
 
 group :development, :test do
   gem 'byebug', platform: :mri

@@ -35,7 +35,7 @@
   <% end %>
   <%= menu_separator unless @unread_notifications.empty? %>
 
-  <% @types.each do |type, count| %>
+  <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
     <%= filter_link :type, type, count do %>
       <% if notification_icon(type).nil? %>
           <span class='sidebar-icon'></span>
@@ -48,7 +48,7 @@
   <% end %>
   <%= menu_separator unless @types.empty? %>
 
-  <% @reasons.each do |reason, count| %>
+  <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
     <%= filter_link :reason, reason, count do %>
       <span class='text-<%= reason_label(reason) %>'>
         <%= octicon 'primitive-dot', height: 24, class: 'sidebar-icon' %>
@@ -59,7 +59,7 @@
   <% end %>
   <%= menu_separator unless @reasons.empty? %>
 
-  <% @unread_repositories.sort.group_by{|repo_name, count| repo_name.split('/')[0] }.each do |org, repos| %>
+  <% @unread_repositories.sort_by{|repo_name, count| repo_name.downcase }.group_by{|repo_name, count| repo_name.split('/')[0] }.each do |org, repos| %>
     <%= org_filter_link :owner, org, nil do %>
       <%= image_tag "https://github.com/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
       <%= org %>
