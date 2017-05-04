@@ -138,6 +138,7 @@ html {
 @media (min-width: $screen-sm-min) {
   #search {
     float: left;
+    margin-left: -18px;
   }
 }
 @media (max-width: $screen-xs-max) {
