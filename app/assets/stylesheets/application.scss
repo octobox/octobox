@@ -73,6 +73,20 @@ html {
   display:inline-block;
 }
 
+.footer-spread {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+#left {
+  margin-right: 40px;
+}
+
+#centre {
+  margin-right: 40px;
+}
+
 @media (max-width: $screen-xs-max) {
   .footer-data {
     width: unset;
