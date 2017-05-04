@@ -94,13 +94,13 @@ class Notification < ApplicationRecord
   private
 
   def set_author(api_response)
-    NOTIFICATION_SUBJECT_TYPE =~ api_response[:subject][:url]
+    url = NOTIFICATION_SUBJECT_TYPE.match(api_response[:subject][:url])
     repo_name = api_response[:repository][:full_name]
-    self.subject_author = if issue_number
-                            issue = user.github_client.issue(repo_name, issue_number)
+    self.subject_author = if url[:issue_number]
+                            issue = user.github_client.issue(repo_name, url[:issue_number])
                             issue.user.login
-                          elsif commit_sha
-                            commit = user.github_client.commit(repo_name, commit_sha)
+                          elsif url[:commit_sha]
+                            commit = user.github_client.commit(repo_name, url[:commit_sha])
                             commit.author.login
                           end
   end
