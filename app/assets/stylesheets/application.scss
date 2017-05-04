@@ -62,24 +62,9 @@ html {
 
 .footer {
   text-align: center;
-}
-
-.footer-expendable {
-  display: inline-block;
-}
-
-.footer-data {
-  width: 30%;
-  display:inline-block;
-}
-
-@media (max-width: $screen-xs-max) {
-  .footer-data {
-    width: unset;
-    display: block;
-  }
-  .footer-expendable {
-    display: none;
+  color: #999;
+  a{
+    color: #666;
   }
 }
 

@@ -29,16 +29,4 @@ module ApplicationHelper
   def menu_separator(custom_class=nil)
     "<li class='divider #{custom_class}'></li>".html_safe
   end
-
-  def license_message
-    source_link = "<a href='#{Octobox.config.source_repo}' target='_blank'>Source</a>"
-    license_link = "<a href='#{Octobox.config.source_repo}/blob/master/LICENSE.txt' target='_blank'>AGPL 3.0</a>"
-    "#{source_link} available under #{license_link}".html_safe
-  end
-
-  def copyright_message
-    et_al = Octobox.contributors.present? ?
-      "<a href='#' data-toggle='modal' data-target='#et-al'>et al</a>" : 'et al'
-    "© 2017 <a href='https://github.com/andrew' target='_blank'>Andrew Nesbitt</a>, #{et_al}".html_safe
-  end
 end
