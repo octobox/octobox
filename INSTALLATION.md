@@ -37,13 +37,13 @@ For more help with setting up an OAuth application on GitHub, see below.
 
 ## Local installation
 
-First things first, you'll need to install Ruby 2.4.0. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to install Ruby 2.4.1. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.4.0
-rbenv global 2.4.0
+rbenv install 2.4.1
+rbenv global 2.4.1
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
