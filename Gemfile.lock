@@ -171,7 +171,7 @@ GEM
       arel (>= 6)
     powerpack (0.1.1)
     public_suffix (2.0.5)
-    puma (3.8.2)
+    puma (3.6.2)
     puma_worker_killer (0.0.7)
       get_process_mem (~> 0.2)
       puma (>= 2.7, < 4)
@@ -303,7 +303,7 @@ DEPENDENCIES
   omniauth-github
   pg
   pg_search
-  puma
+  puma (= 3.6.2)
   puma_worker_killer
   rails (~> 5.1)
   rails-controller-testing
