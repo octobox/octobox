@@ -1,5 +1,10 @@
-<div class="footer text-muted">
-  <div class="footer-data"><p><%= copyright_message %></p></div>
-  <div class="footer-expendable"><%= octobox_icon %></div>
-  <div class="footer-data"><p><%= license_message %></p></div>
+<div class="footer text-muted small">
+  <p>
+    © 2017 <a href='https://github.com/andrew' >Andrew Nesbitt</a>,
+    <%= link_to 'et al', "#{Octobox.config.source_repo}/graphs/contributors", target: '_blank' %>
+    &mdash;
+    <%= link_to 'Source', Octobox.config.source_repo, target: '_blank' %>
+    available under
+    <%= link_to 'AGPL 3.0', "#{Octobox.config.source_repo}/blob/master/LICENSE.txt", target: '_blank' %>
+  </p>
 </div>

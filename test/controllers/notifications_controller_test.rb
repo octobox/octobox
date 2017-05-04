@@ -4,7 +4,6 @@ require 'test_helper'
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notifications_request
-    stub_contributors
     @user = create(:user)
   end
 
