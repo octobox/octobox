@@ -83,8 +83,17 @@ module NotificationsHelper
     notification_param_keys.all?{|param| params[param].blank? }
   end
 
-  def notification_icon(subject_type)
+  def notification_icon(subject_type, state = nil)
+    return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     SUBJECT_TYPES[subject_type]
+  end
+
+  def notification_icon_color(state)
+    {
+      'open' => 'text-success',
+      'closed' => 'text-danger',
+      'merged' => 'text-subscribed'
+    }[state]
   end
 
   def reason_label(reason)

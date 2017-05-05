@@ -38,6 +38,15 @@ class Notification < ApplicationRecord
     end
   end
 
+
+  def subject
+    @subject ||= user.github_client.get(subject_url)
+  end
+
+  def state
+    subject.merged_at.present? ? 'merged' : subject.state
+  end
+
   def mark_read(update_github: false)
     self[:unread] = false
     save(touch: false) if changed?
