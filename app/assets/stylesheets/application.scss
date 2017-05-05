@@ -1,6 +1,7 @@
 $navbar-default-bg: #f5f5f5;
-$navbar-inverse-bg: darken(#428bca, 6.5%);
+$navbar-inverse-bg: #24292e;
 $navbar-height: 48px;
+$link-color: #0366d6;
 $border-radius-base: 3px;
 $table-bg-active: #fafafa;
 $tooltip-opacity: 1;
@@ -101,12 +102,12 @@ html {
 }
 .navbar-brand {
   .octobox-icon {
-    fill: #333;
+    fill: #fff;
     margin-right: 3px;
   }
   &:hover {
     .octobox-icon {
-      fill: $link-color;
+      fill: #fff;
     }
   }
 }
@@ -134,6 +135,14 @@ html {
     width: 16px;
   }
 }
+#search {
+  input {
+    background: rgba(255,255,255,0.125);
+    border: none;
+    box-shadow: none;
+    color: #fff;
+  }
+}
 @media (min-width: $screen-sm-min) {
   #search {
     float: left;
@@ -151,12 +160,12 @@ html {
     border: 0;
     box-shadow: none;
     > li > a {
-      color: #777;
+      color: #ddd;
       line-height: 20px;
       padding: 5px 15px 5px 25px;
       &:hover,
       &:focus {
-        color: $text-color;
+        color: #fff;
         background-color: transparent;
       }
     }
@@ -165,12 +174,14 @@ html {
       padding: 5px 15px 5px 25px;
     }
     .divider {
-      background-color: #e5e5e5;
+      background-color: #444;
     }
   }
   .navbar-form {
     border-top: none;
     border-bottom: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
     padding-top: 0;
     padding-bottom: 0;
   }
@@ -554,4 +565,8 @@ td.keys {
 
 .screenshot{
   max-width: 100%;
+}
+
+.opencollective{
+  fill: #ddd;
 }
