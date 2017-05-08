@@ -1,6 +1,5 @@
 version: '2'
 services:
-
   database:
     image: postgres:9.6
     environment:
