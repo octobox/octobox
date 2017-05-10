@@ -200,6 +200,8 @@ class NotificationsController < ApplicationController
       scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
     end
     scope = scope.search_by_subject_title(params[:q])   if params[:q].present?
+    scope = scope.unscope(where: :archived)             if params[:q].present?
+
     scope
   end
 
