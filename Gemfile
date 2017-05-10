@@ -31,6 +31,7 @@ group :test do
   gem 'codeclimate-test-reporter'
   gem 'webmock'
   gem 'mocha'
+  gem 'minitest', '5.10.1'
 end
 
 group :development do
