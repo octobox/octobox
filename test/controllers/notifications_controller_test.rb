@@ -57,6 +57,14 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/index'
   end
 
+  test 'shows archived search results by default' do
+    sign_in_as(@user)
+    5.times.each { create(:notification, user: @user, archived: true, subject_title:'release-1') }
+
+    get '/?q=release'
+    assert_equal assigns(:notifications).length, 5
+  end
+
   test 'shows only 20 notifications per page' do
     sign_in_as(@user)
     25.times.each { create(:notification, user: @user, archived: false) }
