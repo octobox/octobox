@@ -4,7 +4,6 @@ require 'test_helper'
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_notifications_request
-    stub_contributors
     @user = create(:user)
   end
 
@@ -14,12 +13,32 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'pages/home'
   end
 
+  test 'will render 401 if not authenticated as json' do
+    get notifications_path(format: :json)
+    assert_response :unauthorized
+  end
+
+  test 'will render 404 if not json' do
+    sign_in_as(@user)
+    assert_raises ActionController::UrlGenerationError do
+      get notifications_path
+    end
+  end
+
   test 'renders the index page if authenticated' do
     sign_in_as(@user)
 
     get '/'
     assert_response :success
-    assert_template 'notifications/index'
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+  end
+
+  test 'renders the index page as json if authenticated' do
+    sign_in_as(@user)
+
+    get notifications_path(format: :json)
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.json.jbuilder'
   end
 
   test 'renders the starred page' do
@@ -36,6 +55,13 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?archive=true'
     assert_response :success
     assert_template 'notifications/index'
+  end
+
+  test 'shows archived search results by default' do
+    sign_in_as(@user)
+    5.times.each { create(:notification, user: @user, archived: true, subject_title:'release-1') }
+    get '/?q=release'
+    assert_equal assigns(:notifications).length, 5
   end
 
   test 'shows only 20 notifications per page' do
@@ -182,7 +208,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in_as(@user)
 
-    get "/notifications/#{notification.id}/star"
+    post "/notifications/#{notification.id}/star"
     assert_response :ok
 
     assert notification.reload.starred?
@@ -193,7 +219,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in_as(@user)
 
-    get "/notifications/#{notification.id}/mark_read"
+    post "/notifications/#{notification.id}/mark_read"
     assert_response :ok
 
     refute notification.reload.unread?
@@ -204,5 +230,12 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     post "/notifications/sync"
     assert_response :redirect
+  end
+
+  test 'syncs users notifications as json' do
+    sign_in_as(@user)
+
+    post "/notifications/sync.json"
+    assert_response :ok
   end
 end

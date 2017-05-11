@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-static-top navbar-main">
+<nav class="navbar navbar-inverse navbar-static-top navbar-main">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -12,9 +12,8 @@
           <%= octicon 'search', height: 16, class: 'text-muted' %>
         </button>
       <% end %>
-      <a class="navbar-brand" href="/">
-        <%= octobox_icon(28) %>
-        <span class="hidden-xs">Octobox</span>
+      <a class="navbar-brand" href="/" title='Octobox'>
+        <%= octobox_reverse_icon(28) %>
       </a>
     </div>
     <div class="collapse navbar-collapse" id="search">
@@ -70,6 +69,11 @@
             <% end %>
           </li>
         <% end %>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="https://opencollective.com/octobox/" class='opencollective' target='_blank'><%= octicon 'gift', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %></a>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
 

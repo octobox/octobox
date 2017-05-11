@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     match :failure,              to: 'sessions#failure', via: [:get, :post]
   end
 
+  resources :notifications, only: :index, format: true, constraints: { format: :json }
   resources :notifications, only: [] do
     collection do
       post :archive_selected
@@ -20,11 +21,17 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :star
-      get :mark_read
+      post :star
+      post :mark_read
     end
   end
 
   get '/settings', to: 'users#edit'
-  resources :users, only: [:update, :destroy]
+  resources :users, only: [:update, :destroy] do
+    collection do
+      scope format: true, constraints: { format: 'json' } do
+        get :profile
+      end
+    end
+  end
 end

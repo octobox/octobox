@@ -1,16 +1,18 @@
-FROM ruby:2.4.0
-RUN \
-    apt-get update \
-    && apt-get install -y --no-install-recommends netcat nodejs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+FROM ruby:2.4.1-alpine
+RUN apk add --update \
+  build-base \
+  netcat-openbsd \
+  git \
+  nodejs \
+  postgresql-dev \
+  tzdata \
+  && rm -rf /var/cache/apk/*
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY Gemfile /usr/src/app/
-COPY Gemfile.lock /usr/src/app/
-RUN bundle install
+COPY Gemfile Gemfile.lock /usr/src/app/
+RUN bundle install --without test production
 
 COPY . /usr/src/app

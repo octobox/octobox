@@ -1,21 +1,22 @@
 source 'https://rubygems.org'
-ruby '2.4.0'
+ruby '2.4.1'
 
-gem 'rails', '5.0.1'
+gem 'rails', '~> 5.1'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'local_time', git: 'https://github.com/twalpole/local_time', branch: 'turbolinks5'
 gem 'octicons_helper'
-gem 'octokit'
+gem 'octokit', '~> 4.7'
 gem 'omniauth-github'
 gem 'pg'
-gem 'puma'
+gem 'puma', '3.6.2'
 gem 'sassc-rails'
 gem 'turbolinks'
 gem 'typhoeus'
 gem 'uglifier'
 gem 'pg_search'
+gem 'jbuilder'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -30,6 +31,7 @@ group :test do
   gem 'codeclimate-test-reporter'
   gem 'webmock'
   gem 'mocha'
+  gem 'minitest', '5.10.1'
 end
 
 group :development do

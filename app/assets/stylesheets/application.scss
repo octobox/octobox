@@ -1,6 +1,7 @@
 $navbar-default-bg: #f5f5f5;
-$navbar-inverse-bg: darken(#428bca, 6.5%);
+$navbar-inverse-bg: #24292e;
 $navbar-height: 48px;
+$link-color: #0366d6;
 $border-radius-base: 3px;
 $table-bg-active: #fafafa;
 $tooltip-opacity: 1;
@@ -62,24 +63,9 @@ html {
 
 .footer {
   text-align: center;
-}
-
-.footer-expendable {
-  display: inline-block;
-}
-
-.footer-data {
-  width: 30%;
-  display:inline-block;
-}
-
-@media (max-width: $screen-xs-max) {
-  .footer-data {
-    width: unset;
-    display: block;
-  }
-  .footer-expendable {
-    display: none;
+  color: #999;
+  a{
+    color: #666;
   }
 }
 
@@ -106,7 +92,6 @@ html {
 }
 
 .jumbotron {
-  margin-top: 70px;
   .octobox-icon {
     margin-right: 8px;
     vertical-align: -14px;
@@ -117,12 +102,12 @@ html {
 }
 .navbar-brand {
   .octobox-icon {
-    fill: #333;
+    fill: #fff;
     margin-right: 3px;
   }
   &:hover {
     .octobox-icon {
-      fill: $link-color;
+      fill: #fff;
     }
   }
 }
@@ -150,9 +135,18 @@ html {
     width: 16px;
   }
 }
+#search {
+  input {
+    background: rgba(255,255,255,0.125);
+    border: none;
+    box-shadow: none;
+    color: #fff;
+  }
+}
 @media (min-width: $screen-sm-min) {
   #search {
     float: left;
+    margin-left: -18px;
   }
 }
 @media (max-width: $screen-xs-max) {
@@ -166,12 +160,12 @@ html {
     border: 0;
     box-shadow: none;
     > li > a {
-      color: #777;
+      color: #ddd;
       line-height: 20px;
       padding: 5px 15px 5px 25px;
       &:hover,
       &:focus {
-        color: $text-color;
+        color: #fff;
         background-color: transparent;
       }
     }
@@ -180,12 +174,14 @@ html {
       padding: 5px 15px 5px 25px;
     }
     .divider {
-      background-color: #e5e5e5;
+      background-color: #444;
     }
   }
   .navbar-form {
     border-top: none;
     border-bottom: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
     padding-top: 0;
     padding-bottom: 0;
   }
@@ -570,4 +566,12 @@ td.keys {
 
 .spinning{
   animation: spin 1s infinite steps(90);
+}
+
+.screenshot{
+  max-width: 100%;
+}
+
+.opencollective{
+  fill: #ddd;
 }
