@@ -14,8 +14,8 @@ $panel-default-heading-bg: #f8f8f8;
 $panel-footer-bg: $panel-default-heading-bg;
 $subscribed-color: #a128ca;
 $team_mention-color: #5d477e;
+$text-color: #333;
 
-@import "bootstrap-sprockets";
 @import "bootstrap";
 @import "patterns/blankslate";
 
@@ -69,7 +69,7 @@ html {
   }
 }
 
-@media (max-width: $screen-sm-max) {
+@include media-breakpoint-down(sm) {
   .flex-container {
     .flex-main & {
       padding-left: 15px;
@@ -143,13 +143,13 @@ html {
     color: #fff;
   }
 }
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(sm) {
   #search {
     float: left;
     margin-left: -18px;
   }
 }
-@media (max-width: $screen-xs-max) {
+@include media-breakpoint-down(xs) {
   .navbar-nav .dropdown .dropdown-menu {
     display: block;
     position: static;
@@ -207,7 +207,7 @@ html {
   cursor: pointer;
 }
 
-@media (min-width: $screen-sm-min ) {
+@include media-breakpoint-up(sm) {
   .table-notifications tr td:first-child {
     border-left: 2px solid #fff;
   }
@@ -337,7 +337,7 @@ td.keys {
   white-space: nowrap;
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(sm) {
   .notification-star,
   .notification-icon {
     width: 1%;
@@ -353,7 +353,7 @@ td.keys {
   }
 }
 
-@media (max-width: $screen-xs-max) {
+@include media-breakpoint-down(xs) {
   .table-notifications {
     table,
     thead,
@@ -418,7 +418,8 @@ td.keys {
 
 // Bootstrap Off Canvas
 
-@media screen and (max-width: $screen-sm-max) {
+// @media screen and (max-width: $screen-sm-max) {
+@include media-breakpoint-down(sm) {
   $sidebar-width: 250px;
 
   .flex-content {
@@ -546,7 +547,7 @@ td.keys {
   }
 }
 
-@media (max-width: $screen-xs-max) {
+@include media-breakpoint-down(xs) {
   .select-all {
     padding-right: 8px;
     input {

@@ -53,9 +53,9 @@ GEM
     autoprefixer-rails (7.0.1)
       execjs
     bindex (0.5.0)
-    bootstrap-sass (3.3.7)
-      autoprefixer-rails (>= 5.2.1)
-      sass (>= 3.3.4)
+    bootstrap (4.0.0.alpha6)
+      autoprefixer-rails (>= 6.0.3)
+      sass (>= 3.4.19)
     bugsnag (5.3.2)
     builder (3.2.3)
     byebug (9.0.6)
@@ -284,7 +284,7 @@ PLATFORMS
   x86_64-darwin-16
 
 DEPENDENCIES
-  bootstrap-sass
+  bootstrap (~> 4.0.0.alpha6)
   bugsnag
   byebug
   codeclimate-test-reporter
