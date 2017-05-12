@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
     user.assign_from_auth_hash(auth_hash)
     user.sync_notifications
 
-    cookies.permanent.signed[:user_id] = user.id
+    cookies.permanent.signed[:user_id] = {value: user.id, httponly: true}
     redirect_to root_path
   end
 
