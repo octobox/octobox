@@ -86,8 +86,10 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'GET #destroy redirects to /' do
+    cookies['user_id'] = 1
     get '/logout'
     assert_redirected_to '/'
+    assert_empty cookies['user_id']
   end
 
   test 'GET #failure redirects to / and sets a flash message' do
