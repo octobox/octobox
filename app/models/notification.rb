@@ -95,6 +95,10 @@ class Notification < ApplicationRecord
 
   def set_author(api_response)
     url = NOTIFICATION_SUBJECT_TYPE.match(api_response[:subject][:url])
+    unless url
+      logger.warn "Unknown notification subject URL: #{api_response[:subject][:url]}"
+      return
+    end
     repo_name = api_response[:repository][:full_name]
     self.subject_author = if url[:issue_number]
                             issue = user.github_client.issue(repo_name, url[:issue_number])
