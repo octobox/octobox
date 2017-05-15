@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
   NOTIFICATION_SUBJECT_TYPE =
-    /\/((?:issues|pulls)\/(?<issue_number>\d+))|((?:commits)\/(?<commit_sha>[0-9a-f]{5,40}))\z/
+    /\/((?:issues|pulls)\/(?<issue_number>\d+))|((?:commits)\/(?<commit_sha>[0-9a-f]{5,40}))|((?:releases)\/(?<release_id>\d+))\z/
 
   include PgSearch
   pg_search_scope :search_by_subject_title,
@@ -106,6 +106,9 @@ class Notification < ApplicationRecord
                           elsif url[:commit_sha]
                             commit = user.github_client.commit(repo_name, url[:commit_sha])
                             commit.author.login
+                          elsif url[:release_id]
+                            release = user.github_client.release(repo_name, url[:release_id])
+                            release.author.login
                           end
   end
 end
