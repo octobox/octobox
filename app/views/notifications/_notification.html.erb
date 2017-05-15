@@ -24,6 +24,11 @@
       <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
     </small>
   </td>
+  <td class='notification-subject-author'>
+    <small>
+      <%= link_to notification.subject_author, notification.subject_author_url, class: 'text-muted', target: '_blank' %>
+    </small>
+  </td>
   <% end %>
   <td class='notification-reason'>
     <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "label label-#{reason_label(notification.reason)}" %>
