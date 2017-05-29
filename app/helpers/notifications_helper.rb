@@ -83,8 +83,17 @@ module NotificationsHelper
     notification_param_keys.all?{|param| params[param].blank? }
   end
 
-  def notification_icon(subject_type)
+  def notification_icon(subject_type, state = nil)
+    return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     SUBJECT_TYPES[subject_type]
+  end
+
+  def notification_icon_color(state)
+    {
+      'open' => 'text-success',
+      'closed' => 'text-danger',
+      'merged' => 'text-subscribed'
+    }[state]
   end
 
   def reason_label(reason)
@@ -137,5 +146,9 @@ module NotificationsHelper
   def not_repo_in_active_org(param)
     return true unless param == :repo
     !params[:owner].present?
+  end
+
+  def display_subject_author?
+    Octobox.config.fetch_subject_author
   end
 end

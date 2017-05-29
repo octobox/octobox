@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
+  NOTIFICATION_SUBJECT_TYPE =
+    /\/((?:issues|pulls)\/(?<issue_number>\d+))|((?:commits)\/(?<commit_sha>[0-9a-f]{5,40}))|((?:releases)\/(?<release_id>\d+))\z/
+
   include PgSearch
   pg_search_scope :search_by_subject_title,
                   against: :subject_title,
@@ -38,6 +41,15 @@ class Notification < ApplicationRecord
     end
   end
 
+
+  def subject
+    @subject ||= user.github_client.get(subject_url)
+  end
+
+  def state
+    subject.merged_at.present? ? 'merged' : subject.state
+  end
+
   def mark_read(update_github: false)
     self[:unread] = false
     save(touch: false) if changed?
@@ -67,6 +79,10 @@ class Notification < ApplicationRecord
     "#{Octobox.config.github_domain}/#{repository_full_name}"
   end
 
+  def subject_author_url
+    subject_author ? "#{Octobox.config.github_domain}/#{subject_author}" : ""
+  end
+
   def unarchive_if_updated
     return unless self.archived?
     change = changes['updated_at']
@@ -79,7 +95,29 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
+    set_author(api_response)
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
+  end
+
+  private
+
+  def set_author(api_response)
+    url = NOTIFICATION_SUBJECT_TYPE.match(api_response[:subject][:url])
+    unless url
+      logger.warn "Unknown notification subject URL: #{api_response[:subject][:url]}"
+      return
+    end
+    repo_name = api_response[:repository][:full_name]
+    self.subject_author = if url[:issue_number]
+                            issue = user.github_client.issue(repo_name, url[:issue_number])
+                            issue.user.login
+                          elsif url[:commit_sha]
+                            commit = user.github_client.commit(repo_name, url[:commit_sha])
+                            commit.author.login
+                          elsif url[:release_id]
+                            release = user.github_client.release(repo_name, url[:release_id])
+                            release.author.login
+                          end
   end
 end

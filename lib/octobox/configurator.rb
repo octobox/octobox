@@ -20,6 +20,11 @@ module Octobox
       ENV.fetch('GITHUB_SCOPE', default_scopes)
     end
 
+    def fetch_subject_author
+      @fetch_subject_author || ENV['FETCH_SUBJECT_AUTHOR'].present?
+    end
+    attr_writer :fetch_subject_author
+
     def personal_access_tokens_enabled
       @personal_access_tokens_enabled || ENV['PERSONAL_ACCESS_TOKENS_ENABLED'].present?
     end
