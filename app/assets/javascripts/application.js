@@ -342,21 +342,21 @@ $(document).ready(function() {
 var lastCheckedNotifcation = null;
 // handle shift+click multiple check
 $(document).ready(function() {
-    var notifcationCheckboxes = $('input.archive[type="checkbox"]');
-    notifcationCheckboxes.click(function(e) {
-        if(!lastCheckedNotifcation) {
-            lastCheckedNotifcation = this;
-            return;
-        }
+  var notifcationCheckboxes = $('input.archive[type="checkbox"]');
+  notifcationCheckboxes.click(function(e) {
+    if(!lastCheckedNotifcation) {
+      lastCheckedNotifcation = this;
+      return;
+    }
 
-        if(e.shiftKey) {
-            var start = notifcationCheckboxes.index(this);
-            var end = notifcationCheckboxes.index(lastCheckedNotifcation);
+    if(e.shiftKey) {
+      var start = notifcationCheckboxes.index(this);
+      var end = notifcationCheckboxes.index(lastCheckedNotifcation);
 
-            notifcationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastCheckedNotifcation.checked);
+      notifcationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastCheckedNotifcation.checked);
 
-        }
+    }
 
-        lastCheckedNotifcation = this;
-    });
+    lastCheckedNotifcation = this;
+  });
 });
