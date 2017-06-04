@@ -238,4 +238,28 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     post "/notifications/sync.json"
     assert_response :ok
   end
+
+  test 'renders the correct inbox, archived and starred notification counts in the sidebar' do
+    sign_in_as(@user)
+    create(:notification, user: @user, archived: false)
+    create(:notification, user: @user, archived: false)
+    create(:notification, user: @user, archived: false)
+
+    create(:notification, user: @user, archived: true)
+    create(:notification, user: @user, archived: true)
+
+    create(:notification, user: @user, starred: true)
+    create(:notification, user: @user, starred: true)
+    create(:notification, user: @user, starred: true)
+
+    get '/'
+    assert_response :success
+
+    assert_select("li[role='presentation'] > a > span") do |elements|
+      assert_equal elements[0].text, '7'
+      assert_equal elements[1].text, '2'
+      assert_equal elements[2].text, '3'
+    end
+  end
+
 end
