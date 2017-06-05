@@ -77,8 +77,6 @@ class NotificationsController < ApplicationController
     @total = scope.count
 
     @inbox_notification    = current_user.notifications.inbox.count
-    @starred_notification  = current_user.notifications.starred.count
-    @archived_notification = current_user.notifications.archived.count
 
     @notifications = scope.newest.page(page).per(per_page)
     @cur_selected = [per_page, @total].min

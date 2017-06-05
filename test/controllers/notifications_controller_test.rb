@@ -239,7 +239,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
-  test 'renders the correct inbox, archived and starred notification counts in the sidebar' do
+  test 'renders the inbox notifcation count in the sidebar' do
     sign_in_as(@user)
     create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
@@ -257,8 +257,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_select("li[role='presentation'] > a > span") do |elements|
       assert_equal elements[0].text, '7'
-      assert_equal elements[1].text, '2'
-      assert_equal elements[2].text, '3'
     end
   end
 

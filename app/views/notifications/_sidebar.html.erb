@@ -10,7 +10,6 @@
     <%= link_to root_path(archive: true, per_page: params[:per_page]) do %>
       <%= octicon 'check', height: 16, class: 'sidebar-icon text-success' %>
       Archive
-      <span class="label label-muted"><%= @archived_notification %></span>
     <% end %>
   </li>
 
@@ -18,7 +17,6 @@
     <%= link_to root_path(starred: true, per_page: params[:per_page]) do %>
       <%= octicon 'star', height: 16, class: 'sidebar-icon star-active' %>
       Starred
-      <span class="label label-muted"><%= @starred_notification %></span>
     <% end %>
   </li>
 
