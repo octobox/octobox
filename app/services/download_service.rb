@@ -28,9 +28,11 @@ class DownloadService
 
   def process_unread_notifications(notifications)
     return if notifications.blank?
+    existing_notifications = user.notifications.where(github_id: notifications.map(&:id))
     notifications.each do |notification|
       begin
-        n =  user.notifications.find_or_initialize_by(github_id: notification[:id])
+        n = existing_notifications.find{|n| n.github_id == notification.id.to_i}
+        n = user.notifications.new(github_id: notification.id) if n.nil?
         n.update_from_api_response(notification, unarchive: true)
       rescue ActiveRecord::RecordNotUnique
         nil
@@ -40,9 +42,11 @@ class DownloadService
 
   def process_read_notifications(notifications)
     return if notifications.blank?
+    existing_notifications = user.notifications.where(github_id: notifications.map(&:id))
     notifications.each do |notification|
       next if notification.unread
-      n = user.notifications.find_or_initialize_by(github_id: notification.id)
+      n = existing_notifications.find{|n| n.github_id == notification.id.to_i }
+      n = user.notifications.new(github_id: notification.id) if n.nil?
       next unless n
       n.update_from_api_response(notification)
     end
