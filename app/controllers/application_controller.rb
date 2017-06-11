@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
+    return nil unless cookies.permanent.signed[:user_id].present?
     @current_user ||= User.find_by(id: cookies.permanent.signed[:user_id])
   end
 
