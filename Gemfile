@@ -22,6 +22,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
   gem 'rails-controller-testing'
+  gem 'sql_queries_count'
 end
 
 group :test do
