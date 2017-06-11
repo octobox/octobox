@@ -45,13 +45,15 @@ html {
 }
 .flex-sidebar {
   flex: 0 0 250px;
-  overflow: auto;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 60px;
 }
 .flex-main {
   flex: 1;
   min-width: 0;
-  overflow: auto;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 .flex-container {
   padding: 15px;
