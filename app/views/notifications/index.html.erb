@@ -8,7 +8,7 @@
     <div class="flex-container">
       <div class="panel panel-default panel-notifications">
         <div class="panel-heading">
-          <% if @notifications.any? %>
+          <% if @notifications.to_a.any? %>
             <div class="btn-group pull-right hidden-xs" data-toggle="tooltip" data-placement="left" title="Notifications per page">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <% if params[:per_page].present? %>
@@ -31,7 +31,7 @@
           <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
             <%= octicon 'three-bars', :height => 16 %>
           </button>
-          <% if @notifications.any? %>
+          <% if @notifications.to_a.any? %>
           <label class="btn btn-default select-all" for="select_all">
             <input id="select_all" type="checkbox" class='js-select_all'>
           </label>
@@ -46,7 +46,7 @@
           <%= render 'filter-list' %>
         </div>
 
-        <% if @notifications.any? %>
+        <% if @notifications.to_a.any? %>
           <table class='table table-hover table-notifications js-table-notifications' data-refresh-interval=<%= current_user.effective_refresh_interval %>>
             <%= render partial: 'notification', collection: @notifications %>
           </table>

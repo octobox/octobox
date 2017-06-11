@@ -76,8 +76,6 @@ class NotificationsController < ApplicationController
 
     @total = scope.count
 
-    @inbox_notification    = current_user.notifications.inbox.count
-
     @notifications = scope.newest.page(page).per(per_page)
     @cur_selected = [per_page, @total].min
   end
