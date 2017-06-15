@@ -1,0 +1,6 @@
+dependencies:
+  override: []
+
+deploy:
+  override:
+    - push-to-heroku shopify-octobox
