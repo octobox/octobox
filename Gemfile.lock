@@ -50,7 +50,7 @@ GEM
       public_suffix (~> 2.0, >= 2.0.2)
     arel (8.0.0)
     ast (2.3.0)
-    autoprefixer-rails (7.1.1.2)
+    autoprefixer-rails (7.1.2.1)
       execjs
     bindex (0.5.0)
     bootstrap-sass (3.3.7)
@@ -90,7 +90,7 @@ GEM
       activesupport (>= 4.2.0)
     hashdiff (0.3.4)
     hashie (3.5.5)
-    i18n (0.8.4)
+    i18n (0.8.6)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -223,7 +223,7 @@ GEM
     ruby-progressbar (1.8.1)
     ruby_dep (1.5.0)
     safe_yaml (1.0.4)
-    sass (3.4.24)
+    sass (3.4.25)
     sassc (1.11.2)
       bundler
       ffi (~> 1.9.6)
