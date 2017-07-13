@@ -26,6 +26,43 @@ class DownloadService
   end
   attr_writer :page_limiting_client
 
+  def fetch_notifications(params: {}, max_results: Octobox.config.max_notifications_to_sync)
+    client = page_limiting_client
+    params[:max_results] = max_results
+    client.notifications(params)
+  end
+
+  def download
+    timestamp = Time.current
+
+    if user.last_synced_at
+      fetch_read_notifications
+    else
+      new_user_fetch
+    end
+    fetch_unread_notifications
+    user.update_column(:last_synced_at, timestamp)
+  end
+
+  private
+
+  def fetch_unread_notifications
+    headers = {cache_control: %w(no-store no-cache)}
+    headers[:if_modified_since] = user.last_synced_at.iso8601 if user.last_synced_at.respond_to?(:iso8601)
+    notifications = fetch_notifications(params: {headers: headers})
+    process_unread_notifications(notifications)
+  end
+
+  def fetch_read_notifications
+    oldest_unread = user.notifications.unread(true).newest.last
+    if oldest_unread && oldest_unread.updated_at.respond_to?(:iso8601)
+      headers = {cache_control: %w(no-store no-cache)}
+      since = oldest_unread.updated_at - 1
+      notifications = fetch_notifications(params: {all: true, since: since.iso8601, headers: headers})
+      process_read_notifications(notifications)
+    end
+  end
+
   def process_unread_notifications(notifications)
     return if notifications.blank?
     existing_notifications = user.notifications.where(github_id: notifications.map(&:id))
@@ -52,45 +89,10 @@ class DownloadService
     end
   end
 
-  def fetch_notifications(params: {}, max_results: Octobox.config.max_notifications_to_sync)
-    client = page_limiting_client
-    params[:max_results] = max_results
-    client.notifications(params)
-  end
-
-  def fetch_unread_notifications
-    headers = {cache_control: %w(no-store no-cache)}
-    headers[:if_modified_since] = user.last_synced_at.iso8601 if user.last_synced_at.respond_to?(:iso8601)
-    notifications = fetch_notifications(params: {headers: headers})
-    process_unread_notifications(notifications)
-  end
-
-  def fetch_read_notifications
-    oldest_unread = user.notifications.unread(true).newest.last
-    if oldest_unread && oldest_unread.updated_at.respond_to?(:iso8601)
-      headers = {cache_control: %w(no-store no-cache)}
-      since = oldest_unread.updated_at - 1
-      notifications = fetch_notifications(params: {all: true, since: since.iso8601, headers: headers})
-      process_read_notifications(notifications)
-    end
-  end
-
   def new_user_fetch
     headers = {cache_control: %w(no-store no-cache)}
     notifications = fetch_notifications(params: {all: true, headers: headers})
     process_read_notifications(notifications)
-  end
-
-  def download
-    timestamp = Time.current
-
-    if user.last_synced_at
-      fetch_read_notifications
-    else
-      new_user_fetch
-    end
-    fetch_unread_notifications
-    user.update_column(:last_synced_at, timestamp)
   end
 end
 
