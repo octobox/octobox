@@ -31,6 +31,18 @@ module NotificationsHelper
     }
   end
 
+  def inbox_selected?
+    !archive_selected? && !starred_selected?
+  end
+
+  def archive_selected?
+    filters[:archive].present?
+  end
+
+  def starred_selected?
+    filters[:starred].present?
+  end
+
   def notification_param_keys
     filters.keys - [:per_page]
   end
