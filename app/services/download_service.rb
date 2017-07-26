@@ -1,4 +1,3 @@
-
 class DownloadService
   attr_accessor :user
 
