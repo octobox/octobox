@@ -14,6 +14,7 @@ FactoryGirl.define do
     sequence(:url) { |n| "https://api.github.com/notifications/threads/#{n}" }
     archived false
     starred false
+    user
 
     factory :archived do
       repository_id 2
