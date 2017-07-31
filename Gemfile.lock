@@ -166,7 +166,7 @@ GEM
     parser (2.4.0.0)
       ast (~> 2.2)
     pg (0.21.0)
-    pg_search (2.0.1)
+    pg_search (2.1.0)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
       arel (>= 6)
