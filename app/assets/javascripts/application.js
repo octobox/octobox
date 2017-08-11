@@ -206,7 +206,9 @@ function mute() {
 function markReadSelected() {
   if (getDisplayedRows().length === 0) return;
   var rows = getMarkedOrCurrentRows();
+  rows.addClass('blur-action');
   $.post("/notifications/mark_read_selected", {'id[]': getIdsFromRows(rows)}).done(function () {
+    rows.removeClass('blur-action')
     rows.removeClass('active');
     updateFavicon();
   })
