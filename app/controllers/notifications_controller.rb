@@ -67,6 +67,7 @@ class NotificationsController < ApplicationController
   #
   def index
     scope = notifications_for_presentation
+    @states                = scope.distinct.joins(:subject).group('subjects.state').count
     @types                 = scope.distinct.group(:subject_type).count
     @unread_notifications  = scope.distinct.group(:unread).count
     @reasons               = scope.distinct.group(:reason).count
@@ -195,7 +196,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    sub_scopes = [:repo, :reason, :type, :unread, :owner]
+    sub_scopes = [:repo, :reason, :type, :unread, :owner, :state]
     sub_scopes.each do |sub_scope|
       scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
     end
@@ -206,7 +207,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    scope    = current_user.notifications
+    scope    = current_user.notifications.includes(:subject)
 
     scope = if params[:starred].present?
               scope.starred

@@ -15,6 +15,7 @@ class Notification < ApplicationRecord
                   }
 
   belongs_to :user
+  belongs_to :subject, foreign_key: :subject_url, primary_key: :url
 
   scope :inbox,    -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
@@ -26,6 +27,8 @@ class Notification < ApplicationRecord
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :unread,   ->(unread)       { where(unread: unread) }
   scope :owner,    ->(owner_name)   { where(repository_owner_name: owner_name) }
+
+  scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
 
   paginates_per 20
 
@@ -41,14 +44,7 @@ class Notification < ApplicationRecord
     end
   end
 
-
-  def subject
-    @subject ||= user.github_client.get(subject_url)
-  end
-
-  def state
-    subject.merged_at.present? ? 'merged' : subject.state
-  end
+  delegate :state, to: :subject
 
   def mark_read(update_github: false)
     self[:unread] = false
@@ -79,10 +75,6 @@ class Notification < ApplicationRecord
     "#{Octobox.config.github_domain}/#{repository_full_name}"
   end
 
-  def subject_author_url
-    subject_author ? "#{Octobox.config.github_domain}/#{subject_author}" : ""
-  end
-
   def unarchive_if_updated
     return unless self.archived?
     change = changes['updated_at']
@@ -95,29 +87,36 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
-    set_author(api_response)
+    update_subject
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
   end
 
   private
 
-  def set_author(api_response)
-    url = NOTIFICATION_SUBJECT_TYPE.match(api_response[:subject][:url])
-    unless url
-      logger.warn "Unknown notification subject URL: #{api_response[:subject][:url]}"
-      return
+  def download_subject
+    user.github_client.get(subject_url)
+  end
+
+  def update_subject
+    existing_subject = Subject.find_or_create_by(url: subject_url)
+
+    subject_updates = case subject_type
+    when 'Issue', 'PullRequest'
+      remote_subject = download_subject
+       {
+        state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
+        author: remote_subject.user.login
+      }
+    when 'Commit', 'Release'
+      remote_subject = download_subject
+      subject_updates = {
+        author: remote_subject.author.login
+      }
+    else
+      {}
     end
-    repo_name = api_response[:repository][:full_name]
-    self.subject_author = if url[:issue_number]
-                            issue = user.github_client.issue(repo_name, url[:issue_number])
-                            issue.user.login
-                          elsif url[:commit_sha]
-                            commit = user.github_client.commit(repo_name, url[:commit_sha])
-                            commit.author.login
-                          elsif url[:release_id]
-                            release = user.github_client.release(repo_name, url[:release_id])
-                            release.author.login
-                          end
+
+    existing_subject.update(subject_updates)
   end
 end

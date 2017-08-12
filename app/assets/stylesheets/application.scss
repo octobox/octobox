@@ -323,7 +323,7 @@ td.keys {
   display: inline-block;
   margin-right: 5px;
   width: 18px;
-  &.octicon-primitive-dot {
+  &.octicon-primitive-dot, &.octicon-primitive-square {
     margin-top: -3px;
     margin-bottom: -3px;
   }

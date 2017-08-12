@@ -9,6 +9,12 @@ module NotificationsHelper
     'team_mention' => 'team_mention'
   }.freeze
 
+  STATE_LABELS = {
+    'open'   => 'success',
+    'closed' => 'danger',
+    'merged' => 'subscribed'
+  }
+
   SUBJECT_TYPES = {
     'RepositoryInvitation' => 'mail-read',
     'Issue'                => 'issue-opened',
@@ -27,7 +33,8 @@ module NotificationsHelper
       starred:  params[:starred],
       owner:    params[:owner],
       per_page: params[:per_page],
-      q:        params[:q]
+      q:        params[:q],
+      state:    params[:state]
     }
   end
 
@@ -100,6 +107,10 @@ module NotificationsHelper
     REASON_LABELS.fetch(reason, 'default')
   end
 
+  def state_label(state)
+    STATE_LABELS.fetch(state, 'default')
+  end
+
   def filter_option(param, &block)
     if filters[param].present?
       link_to root_path(filters.except(param)), class: "btn btn-default" do
@@ -148,7 +159,7 @@ module NotificationsHelper
     !params[:owner].present?
   end
 
-  def display_subject_author?
-    Octobox.config.fetch_subject_author
+  def display_subject?
+    Octobox.config.fetch_subject
   end
 end

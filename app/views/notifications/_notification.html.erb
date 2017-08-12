@@ -25,11 +25,13 @@
     </small>
   </td>
   <% end %>
-  <% if display_subject_author? %>
+  <% if display_subject? %>
     <td class='notification-subject-author'>
-      <small>
-        <%= link_to notification.subject_author, notification.subject_author_url, class: 'text-muted', target: '_blank' %>
-      </small>
+      <% if notification.subject %>
+        <small>
+          <%= link_to notification.subject.author, notification.subject.author_url, class: 'text-muted', target: '_blank' %>
+        </small>
+      <% end %>
     </td>
   <% end %>
   <td class='notification-reason'>

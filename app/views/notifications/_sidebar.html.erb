@@ -35,6 +35,18 @@
   <% end %>
   <%= menu_separator unless @unread_notifications.empty? %>
 
+  <% @states.sort_by{|state, count| state.to_s }.reverse.each do |state, count| %>
+    <% next if state.nil? %>
+    <%= filter_link :state, state, count do %>
+      <span class='text-<%= state_label(state) %>'>
+        <%= octicon 'primitive-square', height: 24, class: 'sidebar-icon' %>
+      </span>
+      <%= state.underscore.humanize %>
+
+    <% end %>
+  <% end %>
+  <%= menu_separator unless @states.empty? %>
+
   <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
     <%= filter_link :type, type, count do %>
       <% if notification_icon(type).nil? %>
