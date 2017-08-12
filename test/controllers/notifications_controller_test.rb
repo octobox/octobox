@@ -238,4 +238,53 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     post "/notifications/sync.json"
     assert_response :ok
   end
+
+  test 'renders the inbox notifcation count in the sidebar' do
+    sign_in_as(@user)
+    create(:notification, user: @user, archived: false)
+    create(:notification, user: @user, archived: false)
+    create(:notification, user: @user, archived: false)
+
+    create(:notification, user: @user, archived: true)
+    create(:notification, user: @user, archived: true)
+
+    create(:notification, user: @user, starred: true)
+    create(:notification, user: @user, starred: true)
+    create(:notification, user: @user, starred: true)
+
+    get '/'
+    assert_response :success
+
+    assert_select("li[role='presentation'] > a > span") do |elements|
+      assert_equal elements[0].text, '7'
+    end
+  end
+
+  test 'renders pagination info for notifications in json' do
+    sign_in_as(@user)
+
+    get notifications_path(format: :json)
+
+    assert_response :success
+    json = JSON.parse(response.body)
+    notification_count = Notification.inbox.where(user: @user).count
+    assert_equal notification_count, json["pagination"]["total_notifications"]
+    assert_equal 0, json["pagination"]["page"]
+    assert_equal (notification_count.to_f / 20).ceil, json["pagination"]["total_pages"]
+    assert_equal [notification_count, 20].min, json["pagination"]["per_page"]
+  end
+
+  test 'renders pagination info for zero notifications in json' do
+    sign_in_as(@user)
+    Notification.destroy_all
+
+    get notifications_path(format: :json)
+
+    assert_response :success
+    json = JSON.parse(response.body)
+    assert_equal 0, json["pagination"]["total_notifications"]
+    assert_equal 0, json["pagination"]["page"]
+    assert_equal 0, json["pagination"]["total_pages"]
+    assert_equal 0, json["pagination"]["per_page"]
+  end
 end

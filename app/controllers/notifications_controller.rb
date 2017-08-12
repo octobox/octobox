@@ -76,6 +76,7 @@ class NotificationsController < ApplicationController
     check_out_of_bounds(scope)
 
     @total = scope.count
+
     @notifications = scope.newest.page(page).per(per_page)
     @cur_selected = [per_page, @total].min
   end
@@ -242,6 +243,10 @@ class NotificationsController < ApplicationController
   end
 
   def per_page
+    @per_page ||= restrict_per_page
+  end
+
+  def restrict_per_page
     per_page = params[:per_page].to_i rescue 20
     per_page = 20 if per_page < 1
     raise ActiveRecord::RecordNotFound if per_page > 100

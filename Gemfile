@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.4.1'
 
-gem 'rails', '~> 5.1'
+gem 'rails', '~> 5.1', '>= 5.1.3'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'kaminari'
@@ -10,7 +10,7 @@ gem 'octicons_helper'
 gem 'octokit', '~> 4.7'
 gem 'omniauth-github'
 gem 'pg'
-gem 'puma', '3.6.2'
+gem 'puma'
 gem 'sassc-rails'
 gem 'turbolinks'
 gem 'typhoeus'
@@ -22,10 +22,11 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
   gem 'rails-controller-testing'
+  gem 'sql_queries_count'
 end
 
 group :test do
-  gem 'rake', '~> 12.0'
+  gem 'rake'
   gem 'factory_girl'
   gem 'simplecov'
   gem 'codeclimate-test-reporter'

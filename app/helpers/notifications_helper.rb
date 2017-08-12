@@ -38,6 +38,18 @@ module NotificationsHelper
     }
   end
 
+  def inbox_selected?
+    !archive_selected? && !starred_selected?
+  end
+
+  def archive_selected?
+    filters[:archive].present?
+  end
+
+  def starred_selected?
+    filters[:starred].present?
+  end
+
   def notification_param_keys
     filters.keys - [:per_page]
   end
@@ -59,20 +71,20 @@ module NotificationsHelper
   end
 
   def mute_selected_button
-    function_button('Mute selected', 'mute', 'mute_selected') unless params[:archive]
+    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items') unless params[:archive]
   end
 
   def mark_read_selected_button
-    function_button('Mark as read', 'eye', 'mark_read_selected')
+    function_button('Mark as read', 'eye', 'mark_read_selected', 'Mark items as read')
   end
 
   def archive_selected_button
     action = params[:archive] ? 'unarchive' : 'archive'
-    function_button("#{action.capitalize} selected", 'checklist', "archive_toggle #{action}_selected")
+    function_button("#{action.capitalize} selected", 'checklist', "archive_toggle #{action}_selected", 'Archive selected items')
   end
 
   def select_all_button(cur_selected, total)
-    button_tag(type: 'button', class: "select_all btn btn-default hidden", 'data-toggle': "tooltip", 'data-placement': "top", 'title': "Number of items selected") do
+    button_tag(type: 'button', class: "select_all btn btn-default hidden", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': "Number of items selected") do
       octicon('check', height: 16) +
         content_tag(:span, " #{cur_selected}", class: 'bold hidden-xs') +
         " |" +
@@ -80,8 +92,8 @@ module NotificationsHelper
     end if cur_selected < total
   end
 
-  def function_button(title, octicon, css_class)
-    button_tag(type: 'button', class: "#{css_class} btn btn-default hidden") do
+  def function_button(title, octicon, css_class, tooltip)
+    button_tag(type: 'button', class: "#{css_class} btn btn-default hidden", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
       octicon(octicon, height: 16) + content_tag(:span, " #{title}", class: 'hidden-xs')
     end
   end
