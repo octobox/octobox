@@ -15,7 +15,7 @@ class Notification < ApplicationRecord
                   }
 
   belongs_to :user
-  belongs_to :subject, foreign_key: :subject_url, primary_key: :url
+  belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true
 
   scope :inbox,    -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
