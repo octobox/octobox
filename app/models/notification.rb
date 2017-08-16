@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
-  NOTIFICATION_SUBJECT_TYPE =
-    /\/((?:issues|pulls)\/(?<issue_number>\d+))|((?:commits)\/(?<commit_sha>[0-9a-f]{5,40}))|((?:releases)\/(?<release_id>\d+))\z/
-
   include PgSearch
   pg_search_scope :search_by_subject_title,
                   against: :subject_title,
