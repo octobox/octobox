@@ -96,24 +96,25 @@ class Notification < ApplicationRecord
   end
 
   def update_subject
-    existing_subject = Subject.find_or_create_by(url: subject_url)
-
-    subject_updates = case subject_type
-    when 'Issue', 'PullRequest'
-      remote_subject = download_subject
-       {
-        state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
-        author: remote_subject.user.login
-      }
-    when 'Commit', 'Release'
-      remote_subject = download_subject
-      subject_updates = {
-        author: remote_subject.author.login
-      }
+    if subject
+      # TODO skip unless notification is newer than subject updated_at
+      case subject_type
+      when 'Issue', 'PullRequest'
+        remote_subject = download_subject
+        subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
+        subject.save if subject.changed?
+      end
     else
-      {}
+      case subject_type
+      when 'Issue', 'PullRequest'
+        remote_subject = download_subject
+        create_subject({
+          state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
+          author: remote_subject.user.login
+        })
+      when 'Commit', 'Release'
+        create_subject(author: download_subject.author.login)
+      end
     end
-
-    existing_subject.update(subject_updates)
   end
 end
