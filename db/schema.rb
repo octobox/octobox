@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20170812203351) do
     t.string "author"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["url"], name: "index_subjects_on_url"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
