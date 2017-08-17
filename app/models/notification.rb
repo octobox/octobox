@@ -96,6 +96,7 @@ class Notification < ApplicationRecord
   end
 
   def update_subject
+    return unless Octobox.config.fetch_subject
     if subject
       # TODO skip unless notification is newer than subject updated_at
       case subject_type
