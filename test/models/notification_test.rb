@@ -117,4 +117,31 @@ class NotificationTest < ActiveSupport::TestCase
     attributes = n.attributes
     assert_equal attributes, attributes.merge(expected_attributes)
   end
+
+  test 'update_from_api_response does not create a subject when fetch_subject is disabled' do
+    stub_fetch_subject_enabled(value: false)
+
+    user = create(:user)
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+    notification.update_from_api_response(api_response, unarchive: true)
+
+    assert_nil notification.subject
+  end
+
+  test 'update_from_api_response creates a subject when fetch_subject is enabled' do
+    stub_fetch_subject_enabled
+    response = { status: 200, body: file_fixture('open_issue.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, 'https://api.github.com/repos/octobox/octobox/issues/560').and_return(response)
+
+    user = create(:user)
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+    notification.update_from_api_response(api_response, unarchive: true)
+
+    refute_nil notification.subject
+    assert_equal "https://api.github.com/repos/octobox/octobox/issues/560", notification.subject.url
+    assert_equal "open", notification.subject.state
+    assert_equal "andrew", notification.subject.author
+  end
 end
