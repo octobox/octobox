@@ -98,7 +98,9 @@ class Notification < ApplicationRecord
   def update_subject
     return unless Octobox.config.fetch_subject
     if subject
-      # TODO skip unless notification is newer than subject updated_at
+      # skip syncing if the notification was updated around the same time as subject
+      return unless updated_at > (subject.updated_at + 2.seconds)
+
       case subject_type
       when 'Issue', 'PullRequest'
         remote_subject = download_subject
