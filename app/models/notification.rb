@@ -41,7 +41,7 @@ class Notification < ApplicationRecord
     end
   end
 
-  delegate :state, to: :subject
+  delegate :state, to: :subject, allow_nil: true
 
   def mark_read(update_github: false)
     self[:unread] = false
