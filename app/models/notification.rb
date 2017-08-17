@@ -103,7 +103,7 @@ class Notification < ApplicationRecord
       when 'Issue', 'PullRequest'
         remote_subject = download_subject
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
-        subject.save if subject.changed?
+        subject.save(touch: false) if subject.changed?
       end
     else
       case subject_type
@@ -111,10 +111,17 @@ class Notification < ApplicationRecord
         remote_subject = download_subject
         create_subject({
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
-          author: remote_subject.user.login
+          author: remote_subject.user.login,
+          created_at: remote_subject.created_at,
+          updated_at: remote_subject.updated_at
         })
       when 'Commit', 'Release'
-        create_subject(author: download_subject.author.login)
+        remote_subject = download_subject
+        create_subject({
+          author: remote_subject.author.login,
+          created_at: remote_subject.created_at,
+          updated_at: remote_subject.updated_at
+        })
       end
     end
   end
