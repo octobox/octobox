@@ -99,7 +99,7 @@ class Notification < ApplicationRecord
     return unless Octobox.config.fetch_subject
     if subject
       # skip syncing if the notification was updated around the same time as subject
-      return unless updated_at > (subject.updated_at + 2.seconds)
+      return if updated_at - subject.updated_at < 2.seconds
 
       case subject_type
       when 'Issue', 'PullRequest'

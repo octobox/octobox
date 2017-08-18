@@ -131,8 +131,9 @@ class NotificationTest < ActiveSupport::TestCase
 
   test 'update_from_api_response creates a subject when fetch_subject is enabled' do
     stub_fetch_subject_enabled
+    url = 'https://api.github.com/repos/octobox/octobox/issues/560'
     response = { status: 200, body: file_fixture('open_issue.json'), headers: { 'Content-Type' => 'application/json' } }
-    stub_request(:get, 'https://api.github.com/repos/octobox/octobox/issues/560').and_return(response)
+    stub_request(:get, url).and_return(response)
 
     user = create(:user)
     api_response = notifications_from_fixture('morty_notifications.json').second
@@ -140,8 +141,38 @@ class NotificationTest < ActiveSupport::TestCase
     notification.update_from_api_response(api_response, unarchive: true)
 
     refute_nil notification.subject
-    assert_equal "https://api.github.com/repos/octobox/octobox/issues/560", notification.subject.url
+    assert_equal url, notification.subject.url
     assert_equal "open", notification.subject.state
     assert_equal "andrew", notification.subject.author
+  end
+
+  test 'update_from_api_response does not update the subject if the subject was recently updated' do
+    stub_fetch_subject_enabled
+    url = 'https://api.github.com/repos/octobox/octobox/issues/560'
+
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification_updated_at = Time.parse(api_response.updated_at)
+    user = create(:morty)
+    subject = create(:subject, url: url, updated_at: (notification_updated_at - 1.seconds))
+    notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
+    notification.update_from_api_response(api_response, unarchive: true)
+
+    refute_requested :get, subject.url
+  end
+
+  test 'update_from_api_response updates the subject if the subject was not recently updated' do
+    stub_fetch_subject_enabled
+    url = 'https://api.github.com/repos/octobox/octobox/issues/560'
+    response = { status: 200, body: file_fixture('open_issue.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification_updated_at = Time.parse(api_response.updated_at)
+    user = create(:morty)
+    subject = create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
+    notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
+    notification.update_from_api_response(api_response, unarchive: true)
+
+    assert_requested :get, subject.url
   end
 end
