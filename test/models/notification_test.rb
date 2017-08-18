@@ -175,4 +175,21 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert_requested :get, subject.url
   end
+
+  test 'updated_from_api_response updates the existing subject if present' do
+    stub_fetch_subject_enabled
+    url = 'https://api.github.com/repos/octobox/octobox/pulls/403'
+    response = { status: 200, body: file_fixture('merged_pull_request.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    api_response = notifications_from_fixture('morty_notifications.json').third
+    notification_updated_at = Time.parse(api_response.updated_at)
+    user = create(:morty)
+    subject = create(:subject, state: 'open', url: url, updated_at: (notification_updated_at - 5.seconds))
+    notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
+    notification.update_from_api_response(api_response, unarchive: true)
+
+    subject.reload
+    assert_equal 'merged', subject.state
+  end
 end
