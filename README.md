@@ -9,6 +9,7 @@ Take back control of your GitHub Notifications with [Octobox]( https://octobox.i
 [![Test Coverage](https://img.shields.io/codeclimate/coverage/github/octobox/octobox.svg?style=flat)](https://codeclimate.com/github/octobox/octobox)
 [![Code Climate](https://img.shields.io/codeclimate/issues/github/octobox/octobox.svg)](https://codeclimate.com/github/octobox/octobox/issues)
 [![Docker](https://img.shields.io/docker/pulls/octoboxio/octobox.svg)](https://hub.docker.com/r/octoboxio/octobox/)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/octobox/octobox)
 [![license](https://img.shields.io/github/license/octobox/octobox.svg)](https://github.com/octobox/octobox/blob/master/LICENSE.txt)
 
 
