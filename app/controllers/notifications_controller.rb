@@ -207,15 +207,15 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    scope    = current_user.notifications
+    scope = current_user.notifications
 
-    scope = if params[:starred].present?
-              scope.starred
-            elsif params[:archive].present?
-              scope.archived
-            else
-              scope.inbox
-            end
+    if params[:starred].present?
+      scope.starred
+    elsif params[:archive].present?
+      scope.archived
+    else
+      scope.inbox
+    end
   end
 
   def check_out_of_bounds(scope)
