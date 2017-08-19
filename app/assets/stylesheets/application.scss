@@ -212,7 +212,7 @@ html {
     border-left: 2px solid #fff;
   }
   .table-notifications tr:hover td:first-child {
-    border-left: 2px solid $table-bg-hover;
+    border-left: 2px solid $table-hover-bg;
   }
   .table-notifications tr.active td:first-child {
     border-left: 2px solid $table-bg-active;
@@ -461,23 +461,23 @@ td.keys {
 }
 
 .text-primary {
-  fill: $brand-primary;
+  fill: theme-color("primary");
 }
 
 .text-success {
-  fill: $brand-success;
+  fill: theme-color("success");
 }
 
 .text-info {
-  fill: $brand-info;
+  fill: theme-color("info");
 }
 
 .text-warning {
-  fill: $brand-warning;
+  fill: theme-color("warning");
 }
 
 .text-danger {
-  fill: $brand-danger;
+  fill: theme-color("-danger");
 }
 
 .text-default {
