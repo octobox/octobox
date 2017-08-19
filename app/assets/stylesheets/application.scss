@@ -10,8 +10,7 @@ $body-bg: #fff;
 $jumbotron-bg: $body-bg;
 $component-active-bg: #eee;
 $component-active-color: #444;
-$panel-default-heading-bg: #f8f8f8;
-$panel-footer-bg: $panel-default-heading-bg;
+$card-default-header-bg: #f8f8f8;
 $subscribed-color: #a128ca;
 $team_mention-color: #5d477e;
 $text-color: #333;
@@ -279,7 +278,7 @@ td.keys {
   }
   > li > a {
     position: relative;
-    .label {
+    .badge {
       top: 11px;
     }
     &.filter {
@@ -293,12 +292,12 @@ td.keys {
         }
       }
 
-      .label {
+      .badge {
         top: 6px;
       }
     }
   }
-  .label {
+  .badge {
     line-height: 12px;
     position: absolute;
     right: 10px;
@@ -478,7 +477,7 @@ td.keys {
   }
 }
 
-.label-subscribed{
+.badge-subscribed{
   background-color: $subscribed-color;
 }
 
@@ -489,7 +488,7 @@ td.keys {
   }
 }
 
-.label-team_mention{
+.badge-team_mention{
   background-color: $team_mention-color;
 }
 
@@ -517,9 +516,8 @@ td.keys {
   pointer-events: none;
 }
 
-.panel-notifications {
-  .panel-heading,
-  .panel-footer {
+.card-notifications {
+  .card-header {
     padding: 6px 8px;
   }
 

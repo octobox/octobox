@@ -140,7 +140,7 @@ module NotificationsHelper
         if active && not_repo_in_active_org(param)
           concat content_tag(:span, octicon('x', :height => 16), class: 'label text-muted')
         elsif count.present?
-          concat content_tag(:span, count, class: 'label label-muted')
+          concat content_tag(:span, count, class: 'badge badge-muted')
         end
       end
     end

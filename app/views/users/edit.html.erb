@@ -41,11 +41,11 @@
 
   <hr>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Manage Oauth Access</h3>
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Manage Oauth Access</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
       <p>Octobox can only show notifications for Organsiations that you've granted it access to via GitHub</p>
       <p>If you've been added to a new Organisation you may need to enable or request access for Octobox to sync notifications for those repositories.</p>
       <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_client_id}", class: 'btn btn-default' do %>
@@ -55,11 +55,11 @@
     </div>
   </div>
 
-  <div class="panel panel-danger">
-    <div class="panel-heading">
-      <h3 class="panel-title">Danger zone</h3>
+  <div class="panel card-danger">
+    <div class="card-header">
+      <h3 class="card-title">Danger zone</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
       <p>Deleting your Octobox account permanently removes all data associate with your user from Octobox's database.</p>
       <p>Once you have deleted your account, logging in again will create a new account associated with your GitHub user and load existing notifications.</p>
       <%= link_to current_user, method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure you want to do this?' } do %>
