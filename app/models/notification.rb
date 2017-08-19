@@ -27,6 +27,9 @@ class Notification < ApplicationRecord
 
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
 
+  scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
+  scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
+
   paginates_per 20
 
   class << self
