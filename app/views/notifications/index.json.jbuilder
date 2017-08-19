@@ -1,7 +1,7 @@
 json.pagination do
   json.total_notifications @total
   json.page @page
-  json.total_pages((@total.to_f / @cur_selected).ceil)
+  json.total_pages((@total.to_f / @per_page).ceil)
   json.per_page @cur_selected
 end
 

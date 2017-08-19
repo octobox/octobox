@@ -21,6 +21,6 @@ Bundler.require(*Rails.groups)
 
 module Octobox
   class Application < Rails::Application
-    require Rails.root.join('lib/octobox')
+    config.eager_load_paths << Rails.root.join("lib")
   end
 end
