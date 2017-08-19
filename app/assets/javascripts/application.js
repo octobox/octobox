@@ -1,8 +1,9 @@
-//= require jquery
+//= require jquery3
 //= require jquery_ujs
 //= require turbolinks
 //= require local_time
-//= require bootstrap-sprockets
+//= require popper
+//= require bootstrap
 //= require_tree .
 
 function getDisplayedRows() {

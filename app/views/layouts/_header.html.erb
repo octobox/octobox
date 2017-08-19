@@ -1,7 +1,7 @@
-<nav class="navbar navbar-inverse navbar-static-top navbar-main">
+<nav class="navbar navbar-dark bg-dark navbar-static-top navbar-expand">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
+    <!-- <div class="navbar-header">
       <% if current_user %>
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#octobox-menu" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
@@ -12,13 +12,14 @@
           <%= octicon 'search', height: 16, class: 'text-muted' %>
         </button>
       <% end %>
-      <a class="navbar-brand" href="/" title='Octobox'>
-        <%= octobox_reverse_icon(28) %>
-      </a>
-    </div>
-    <div class="collapse navbar-collapse" id="search">
-      <%= form_tag root_path, method: :get, class: 'navbar-form navbar-left', enforce_utf8: false do |f| %>
-        <div class="form-group">
+    </div> -->
+
+    <a class="navbar-brand" href="/" title='Octobox'>
+      <%= octobox_reverse_icon(28) %>
+    </a>
+    <div id='search' class='mr-auto'>
+      <%= form_tag root_path, method: :get, class: 'form-inline', enforce_utf8: false do |f| %>
+        <div class="input-group">
           <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
               <%= hidden_field_tag name, value %>
           <% end %>
@@ -26,57 +27,34 @@
         </div>
       <% end %>
     </div>
-    <div class="collapse navbar-collapse js-octobox-menu" id="octobox-menu">
-      <ul class="nav navbar-nav navbar-right">
-        <% if current_user %>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
-              <%= current_user.github_login %> <span class="caret hidden-xs"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li>
-                <%= link_to "https://github.com/", target: "_blank" do %>
-                  <%= octicon 'mark-github', height: 16, class: 'text-muted' %>
-                  GitHub Dashboard
-                <% end %>
-              </li>
-              <li>
-                <%= link_to "https://github.com/octobox/octobox/issues", target: "_blank" do %>
-                  <%= octicon 'question', height: 16, class: 'text-muted' %>
-                  Octobox Support
-                <% end %>
-              </li>
-              <li>
-                <%= link_to "settings" do %>
-                  <%= octicon 'settings', height: 16, class: 'text-muted' %>
-                  Settings
-                <% end %>
-              </li>
-              <li role="separator" class="divider"></li>
-              <li>
-                <%= link_to logout_path do %>
-                  <%= octicon 'sign-out', height: 16, class: 'text-muted' %>
-                  Logout
-                <% end %>
-              </li>
-            </ul>
-          </li>
-        <% else %>
-          <li>
-            <%= link_to "https://github.com/octobox/octobox/issues", target: "_blank" do %>
-              <%= octicon 'question', height: 16, class: 'text-muted' %>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href="https://opencollective.com/octobox/" class='opencollective' target='_blank'><%= octicon 'gift', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %></a>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
 
-
-  </div><!-- /.container-fluid -->
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+      <li class="nav-item nav-link">
+        <a href="https://opencollective.com/octobox/" class='opencollective' target='_blank'><%= octicon 'gift', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
+          <%= link_to "https://github.com/", class: 'dropdown-item', target: "_blank" do %>
+            <%= octicon 'mark-github', height: 16, class: 'text-muted' %>
+            GitHub Dashboard
+          <% end %>
+          <%= link_to "https://github.com/octobox/octobox/issues", class: 'dropdown-item', target: "_blank" do %>
+            <%= octicon 'question', height: 16, class: 'text-muted' %>
+            Octobox Support
+          <% end %>
+          <%= link_to "settings", class: 'dropdown-item' do %>
+            <%= octicon 'settings', height: 16, class: 'text-muted' %>
+            Settings
+          <% end %>
+          <%= link_to logout_path, class: 'dropdown-item' do %>
+            <%= octicon 'sign-out', height: 16, class: 'text-muted' %>
+            Logout
+          <% end %>
+        </div>
+      </li>
+    </ul>
+  </div>
 </nav>

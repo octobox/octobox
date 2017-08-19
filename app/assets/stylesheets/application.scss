@@ -143,12 +143,7 @@ html {
     color: #fff;
   }
 }
-@include media-breakpoint-up(sm) {
-  #search {
-    float: left;
-    margin-left: -18px;
-  }
-}
+
 @include media-breakpoint-down(xs) {
   .navbar-nav .dropdown .dropdown-menu {
     display: block;
@@ -261,10 +256,6 @@ td.keys {
 
 .img-rounded {
   border-radius: 3px;
-}
-
-.dropdown {
-  display: inline-block;
 }
 
 .table-notifications {
