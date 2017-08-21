@@ -8,7 +8,7 @@ class PageLimitingOctokitClientTest < ActiveSupport::TestCase
     setup_paging_stubs
     client = create(:morty).github_client.dup.extend(PageLimitingOctokitClient)
     fetched_notifications = client.notifications(per_page: 2)
-    assert_equal 8, fetched_notifications.size
+    assert_equal 12, fetched_notifications.size
   end
 
   test 'notification pages stop at max_results' do

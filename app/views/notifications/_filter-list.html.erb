@@ -23,6 +23,10 @@
         <%= params[:owner] %>
       <% end %>
 
+      <%= filter_option :state do %>
+        <%= params[:state].humanize %>
+      <% end %>
+
       <%= filter_option :q do %>
         Search: <%= params[:q] %>
       <% end %>

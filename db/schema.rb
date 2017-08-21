@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111185505) do
+ActiveRecord::Schema.define(version: 20170812203351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "notifications", force: :cascade do |t|
+  create_table "notifications", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "github_id"
     t.integer "repository_id"
@@ -32,11 +32,21 @@ ActiveRecord::Schema.define(version: 20170111185505) do
     t.datetime "created_at", null: false
     t.boolean "starred", default: false
     t.string "repository_owner_name", default: ""
+    t.index "to_tsvector('english'::regconfig, (subject_title)::text)", name: "notifications_subject_title", using: :gin
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at"
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "subjects", force: :cascade do |t|
+    t.string "url"
+    t.string "state"
+    t.string "author"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["url"], name: "index_subjects_on_url"
+  end
+
+  create_table "users", id: :serial, force: :cascade do |t|
     t.integer "github_id", null: false
     t.string "access_token", null: false
     t.string "github_login", null: false

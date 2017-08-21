@@ -323,7 +323,7 @@ td.keys {
   display: inline-block;
   margin-right: 5px;
   width: 18px;
-  &.octicon-primitive-dot {
+  &.octicon-primitive-dot, &.octicon-primitive-square {
     margin-top: -3px;
     margin-bottom: -3px;
   }
@@ -333,7 +333,7 @@ td.keys {
   margin-right: 3px;
 }
 
-.notification-date {
+.notification-repo, .notification-date {
   white-space: nowrap;
 }
 
@@ -408,6 +408,11 @@ td.keys {
         white-space: nowrap;
         text-overflow: ellipsis;
       }
+    }
+    .notification-subject-author:before {
+      content: "by ";
+      color: $text-muted;
+      font-size: 10px;
     }
     .notification-date {
       top: 10px;
@@ -571,6 +576,12 @@ td.keys {
   fill: #ddd;
 }
 
+.notification-open{
+  fill: #5cb85c;
+}
+.notification-closed{
+  fill: #d9534f;
+}
 .octicon.inverse{
   fill: #fff;
 }

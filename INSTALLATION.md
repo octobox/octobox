@@ -22,6 +22,7 @@ in your GitHub settings for Octobox to work.
 * [Customizing the Scopes on Github](#customizing-the-scopes-on-github)
 * [Customizing Source Link for Modified Code](#customizing-source-link-for-modified-code)
 * [Adding a custom initializer](#adding-a-custom-initializer)
+* [Downloading subjects](#downloading-subjects)
 
 # Installation
 ## Deployment to Heroku
@@ -200,7 +201,7 @@ By default `notifications` is enabled, unless you also [limit access](#limiting-
 ## Customizing Source Link for Modified Code
 
 If you have modified the Octobox code in any way, in order to comply with the AGPLv3 license, you must link to the modified source.  You
-can do this by setting the `SOURCE_REPO` environment variable to the url of a GitHub repo with the modified source.  For instance, if 
+can do this by setting the `SOURCE_REPO` environment variable to the url of a GitHub repo with the modified source.  For instance, if
 you run this from a fork in the 'NotOctobox' org, you would set `SOURCE_REPO=https://github.com/NotOctobox/octobox`.
 
 ## Adding a custom initializer
@@ -215,3 +216,16 @@ Octobox.config do |c|
   c.personal_access_tokens_enabled = true
 end
 ```
+
+## Downloading subjects
+
+Experimental feature for downloading extra information about the subject of each notification, namely:
+
+- Author for Issues, Pull Requests, Commit Comments and Releases
+- State (open/closed/merged) for Issues, Pull Requests
+
+To enable this feature set the following environment variable:
+
+    FETCH_SUBJECT=true
+
+If you want this feature to work for private repositories, you'll need to [Customize the Scopes on Github](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.

@@ -12,10 +12,11 @@ class Notification < ApplicationRecord
                   }
 
   belongs_to :user
+  belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true
 
   scope :inbox,    -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
-  scope :newest,   -> { order('updated_at DESC') }
+  scope :newest,   -> { order('notifications.updated_at DESC') }
   scope :starred,  -> { where(starred: true) }
 
   scope :repo,     ->(repo_name)    { where(repository_full_name: repo_name) }
@@ -23,6 +24,11 @@ class Notification < ApplicationRecord
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :unread,   ->(unread)       { where(unread: unread) }
   scope :owner,    ->(owner_name)   { where(repository_owner_name: owner_name) }
+
+  scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
+
+  scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
+  scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
 
   paginates_per 20
 
@@ -37,6 +43,8 @@ class Notification < ApplicationRecord
       attrs
     end
   end
+
+  delegate :state, to: :subject, allow_nil: true
 
   def mark_read(update_github: false)
     self[:unread] = false
@@ -79,7 +87,47 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
+    update_subject
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
+  end
+
+  private
+
+  def download_subject
+    user.github_client.get(subject_url)
+  end
+
+  def update_subject
+    return unless Octobox.config.fetch_subject
+    if subject
+      # skip syncing if the notification was updated around the same time as subject
+      return if updated_at - subject.updated_at < 2.seconds
+
+      case subject_type
+      when 'Issue', 'PullRequest'
+        remote_subject = download_subject
+        subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
+        subject.save(touch: false) if subject.changed?
+      end
+    else
+      case subject_type
+      when 'Issue', 'PullRequest'
+        remote_subject = download_subject
+        create_subject({
+          state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
+          author: remote_subject.user.login,
+          created_at: remote_subject.created_at,
+          updated_at: remote_subject.updated_at
+        })
+      when 'Commit', 'Release'
+        remote_subject = download_subject
+        create_subject({
+          author: remote_subject.author.login,
+          created_at: remote_subject.created_at,
+          updated_at: remote_subject.updated_at
+        })
+      end
+    end
   end
 end

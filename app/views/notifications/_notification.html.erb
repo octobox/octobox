@@ -12,8 +12,8 @@
   <td class='notification-star'>
     <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id }%>
   </td>
-  <td class='notification-icon'>
-    <%= octicon notification_icon(notification.subject_type), :height => 16 %>
+  <td class='notification-icon <%= notification_icon_color(notification.state) %>'>
+    <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
   </td>
   <td class='notification-subject'>
     <%= link_to notification.subject_title, notification.web_url, target: '_blank', class: 'link', onclick: "markRead(#{notification.id})" %>
@@ -24,6 +24,15 @@
       <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
     </small>
   </td>
+  <% end %>
+  <% if display_subject? %>
+    <td class='notification-subject-author'>
+      <% if notification.subject %>
+        <small>
+          <%= link_to notification.subject.author, notification.subject.author_url, class: 'text-muted', target: '_blank' %>
+        </small>
+      <% end %>
+    </td>
   <% end %>
   <td class='notification-reason'>
     <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "label label-#{reason_label(notification.reason)}" %>

@@ -36,7 +36,7 @@ It goes without saying that you're welcome to help investigate further and/or fi
 
 ## Contributing to an existing issue
 
-### Finding an issue to work on 
+### Finding an issue to work on
 
 We've got a few open issues and are always glad to get help on that front. You can view the list of issues [here](https://github.com/octobox/octobox/issues). Most of the issues are labelled, so you can use the labels to get an idea of which issue could be a good fit for you. (Here's [a good article](https://medium.freecodecamp.com/finding-your-first-open-source-project-or-bug-to-work-on-1712f651e5ba) on how to find your first bug to fix).
 
@@ -44,7 +44,7 @@ Before getting to work, take a look at the issue and at the conversation around 
 
 If the issue is a few months old, it might be a good idea to write a short comment to double-check that the issue or feature is still a valid one to jump on.
 
-Feel free to ask for more detail on what is expected: are there any more details or specifications you need to know? 
+Feel free to ask for more detail on what is expected: are there any more details or specifications you need to know?
 And if at any point you get stuck: don't hesitate to ask for help.  
 
 ### Making your contribution  
@@ -65,7 +65,7 @@ We've outlined the contribution workflow [here](#contribution-workflow). If you'
 - **i18n**: Issues related to localisation or translation are marked with these labels. They can range from missing translations for a specific language to grammatical issues and cultural differences. These will usually require a specialist in a non-English language to close.
 - **invalid**: These are rare, and normally have been submitted in error.
 - **needs rebase**: You will find this label normally attached to pull requests, and means that the maintainers would like to you squash commits or rebase existing commits from master into your branch before we can merge your pull request. A maintainer will clarify this in the comment thread.
-- **question**: Issues can be marked with this label by anybody who would like other contributors or maintainers to answer a specific question before an issue can be closed. These normally do not assume any skill level (although may sometimes require maintainers to have the final say on them) and are great opportunities for all members of our community to steer the direction of the project. 
+- **question**: Issues can be marked with this label by anybody who would like other contributors or maintainers to answer a specific question before an issue can be closed. These normally do not assume any skill level (although may sometimes require maintainers to have the final say on them) and are great opportunities for all members of our community to steer the direction of the project.
 - **refactoring**: If an issue requires code to be refactored before a particular change can be made, or if you spot inelegant patterns or implementations in code that you feel could be better, then feel free to add this label to an issue. If the issue is the latter type, please be careful about the language you use in these threads. For example, things like "this code sucks!" or "you must be an idiot!" are unacceptable!. Programmers have feelings too and there are ways to suggest code changes without insulting people!
 - **security**: If you spot an issue related to security issues (e.g. invalid SSL certs, potential CSRF issues), mark it with this label. Don't forget to be a good OSS citizen and always report zero-day issues through a private channel to minimise impact to your fellow users!
 - **UX**: These issues relate to how the site works, or more holistically, how the site _feels_ to the end user, and will normally be related to the front-end of the website. These issues might typically relate to confusion stemming from navigation, form elements, input validation, or breaks in user flows.

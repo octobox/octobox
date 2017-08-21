@@ -9,6 +9,12 @@ module NotificationsHelper
     'team_mention' => 'team_mention'
   }.freeze
 
+  STATE_LABELS = {
+    'open'   => 'success',
+    'closed' => 'danger',
+    'merged' => 'subscribed'
+  }
+
   SUBJECT_TYPES = {
     'RepositoryInvitation' => 'mail-read',
     'Issue'                => 'issue-opened',
@@ -27,7 +33,8 @@ module NotificationsHelper
       starred:  params[:starred],
       owner:    params[:owner],
       per_page: params[:per_page],
-      q:        params[:q]
+      q:        params[:q],
+      state:    params[:state]
     }
   end
 
@@ -95,12 +102,25 @@ module NotificationsHelper
     notification_param_keys.all?{|param| params[param].blank? }
   end
 
-  def notification_icon(subject_type)
+  def notification_icon(subject_type, state = nil)
+    return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     SUBJECT_TYPES[subject_type]
+  end
+
+  def notification_icon_color(state)
+    {
+      'open' => 'text-success',
+      'closed' => 'text-danger',
+      'merged' => 'text-subscribed'
+    }[state]
   end
 
   def reason_label(reason)
     REASON_LABELS.fetch(reason, 'default')
+  end
+
+  def state_label(state)
+    STATE_LABELS.fetch(state, 'default')
   end
 
   def filter_option(param, &block)
@@ -149,5 +169,9 @@ module NotificationsHelper
   def not_repo_in_active_org(param)
     return true unless param == :repo
     !params[:owner].present?
+  end
+
+  def display_subject?
+    Octobox.config.fetch_subject
   end
 end

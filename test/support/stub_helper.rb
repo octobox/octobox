@@ -80,4 +80,8 @@ module StubHelper
   def stub_restricted_access_enabled(value: true)
     Octobox.config.stubs(:restricted_access_enabled).returns(value)
   end
+
+  def stub_fetch_subject_enabled(value: true)
+    Octobox.config.stubs(:fetch_subject).returns(value)
+  end
 end
