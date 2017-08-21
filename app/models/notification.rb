@@ -16,7 +16,7 @@ class Notification < ApplicationRecord
 
   scope :inbox,    -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
-  scope :newest,   -> { order('updated_at DESC') }
+  scope :newest,   -> { order('notifications.updated_at DESC') }
   scope :starred,  -> { where(starred: true) }
 
   scope :repo,     ->(repo_name)    { where(repository_full_name: repo_name) }
