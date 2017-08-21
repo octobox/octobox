@@ -12,6 +12,6 @@ namespace :tasks do
 
   desc "Sync subjects"
   task sync_subjects: :environment do
-    Notification.subjectable.without_subject.each{|n| n.send(:update_subject) }
+    Notification.subjectable.without_subject.find_each{|n| n.send(:update_subject) }
   end
 end
