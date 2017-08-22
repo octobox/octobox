@@ -96,24 +96,27 @@ class Notification < ApplicationRecord
 
   def download_subject
     user.github_client.get(subject_url)
+  rescue Octokit::Forbidden, Octokit::NotFound
   end
 
   def update_subject
     return unless Octobox.config.fetch_subject
+
+    remote_subject = download_subject
+    return unless remote_subject.present?
+
     if subject
       # skip syncing if the notification was updated around the same time as subject
       return if updated_at - subject.updated_at < 2.seconds
 
       case subject_type
       when 'Issue', 'PullRequest'
-        remote_subject = download_subject
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
       end
     else
       case subject_type
       when 'Issue', 'PullRequest'
-        remote_subject = download_subject
         create_subject({
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
@@ -121,7 +124,6 @@ class Notification < ApplicationRecord
           updated_at: remote_subject.updated_at
         })
       when 'Commit', 'Release'
-        remote_subject = download_subject
         create_subject({
           author: remote_subject.author.login,
           created_at: remote_subject.created_at,
