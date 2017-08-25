@@ -7,8 +7,8 @@ class NotificationTest < ActiveSupport::TestCase
   test 'ignore_thread sends ignore request to github' do
     user = create(:user)
     notification = create(:notification, user: user, archived: false)
-    user.stubs(:github_client).returns(mock {
-      expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
+    user.stubs(:github_client).returns(mock.tap { |client|
+      client.expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
     })
     assert notification.ignore_thread
   end
@@ -16,8 +16,8 @@ class NotificationTest < ActiveSupport::TestCase
   test 'mark_read updates the github thread' do
     user = create(:user)
     notification = create(:notification, user: user)
-    user.stubs(:github_client).returns(mock {
-      expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
+    user.stubs(:github_client).returns(mock.tap { |client|
+      client.expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
     })
     notification.mark_read(update_github: true)
     refute notification.reload.unread?
@@ -44,9 +44,9 @@ class NotificationTest < ActiveSupport::TestCase
   test 'mute ignores the thread and marks it as read' do
     user = create(:user)
     notification = create(:notification, user: user, archived: false)
-    user.stubs(:github_client).returns(mock {
-      expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
-      expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
+    user.stubs(:github_client).returns(mock.tap { |client|
+      client.expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
+      client.expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
     })
     assert notification.mute
   end
