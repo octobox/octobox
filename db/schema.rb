@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(version: 20170812203351) do
     t.datetime "created_at", null: false
     t.boolean "starred", default: false
     t.string "repository_owner_name", default: ""
-    t.index "to_tsvector('english'::regconfig, (subject_title)::text)", name: "notifications_subject_title", using: :gin
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at"
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true
   end

@@ -87,6 +87,9 @@ document.addEventListener("turbolinks:load", function() {
     $('button.mute_selected').click(mute);
     $('button.mark_read_selected').click(markReadSelected);
     $('tr.notification').click(moveCursorToClickedRow);
+    $('button.subscribe_repo').click(subscribeRepo);
+    $('button.unsubscribe_repo').click(unsubscribeRepo);
+
 
     $('input.archive, input.unarchive').change(function() {
       if ( hasMarkedRows() ) {
@@ -211,8 +214,16 @@ function markReadSelected() {
     rows.removeClass('blur-action')
     rows.removeClass('active');
     updateFavicon();
-  })
+  }) 
 }
+
+function subscribeRepo(){
+  $.post("/notifications/subscribe_repo", {'repo': $('button.subscribe_repo').attr('id') }).done(function(){ window.location.reload(); });
+ }
+
+function unsubscribeRepo(){
+  $.post("/notifications/unsubscribe_repo", {'repo': $('button.unsubscribe_repo').attr('id') }).done(function(){ window.location.reload(); });
+ }
 
 function markRead(id) {
   $.post( "/notifications/"+id+"/mark_read").done(function() {
@@ -337,6 +348,8 @@ function recoverPreviousCursorPosition() {
 
 // Clicking a row marks it current
 $(document).ready(function() {
+
+
   $("tr.notification").click(function() {
     $(".current.js-current").removeClass("current js-current");
     $( this ).find("td").first().addClass("current js-current");

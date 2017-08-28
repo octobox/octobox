@@ -38,6 +38,18 @@ module NotificationsHelper
     }
   end
 
+  def repo_selected?
+    filters[:repo].present?
+  end
+
+  def repo_subscribed?
+    begin
+      return true if current_user.github_client.subscription("#{filters[:repo]}")
+    rescue
+      false
+    end
+  end
+  
   def inbox_selected?
     !archive_selected? && !starred_selected?
   end
@@ -77,6 +89,22 @@ module NotificationsHelper
   def mark_read_selected_button
     function_button('Mark as read', 'eye', 'mark_read_selected', 'Mark items as read')
   end
+
+  def subscribe_repo_button
+      button_tag(type: 'button', id: "#{filters[:repo]}", class: "subscribe_repo btn btn-default", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Subscribe to this repository' ) do
+      octicon('check', height: 16) + content_tag(:span, " Subscribe repository", class: 'hidden-xs')
+    end
+  end
+
+  def unsubscribe_repo_button
+  #  function_button('Unsubscribe repository', 'circle-slash', 'unsubscribe_repo', 'Unsubscribe this repository')
+    button_tag(type: 'button', id: "#{filters[:repo]}", class: "unsubscribe_repo btn btn-default", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Unsubscribe this repository' ) do
+      octicon('circle-slash', height: 16) + content_tag(:span, " Unsubscribe repository", class: 'hidden-xs')
+    end
+
+  end
+
+
 
   def archive_selected_button
     action = params[:archive] ? 'unarchive' : 'archive'

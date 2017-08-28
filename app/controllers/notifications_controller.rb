@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+ # frozen_string_literal: true
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
   before_action :authenticate_index!, only: [:index]
@@ -184,6 +184,16 @@ class NotificationsController < ApplicationController
       format.html { redirect_back fallback_location: root_path }
       format.json { head :ok }
     end
+  end
+
+  def subscribe_repo
+    current_user.github_client.update_subscription("#{params[:repo]}", {subscribed: true})
+    head :ok
+  end
+
+  def unsubscribe_repo
+    current_user.github_client.delete_subscription("#{params[:repo]}")
+    head :ok
   end
 
   private
