@@ -187,12 +187,12 @@ class NotificationsController < ApplicationController
   end
 
   def subscribe_repo
-    current_user.github_client.update_subscription("#{params[:repo]}", {subscribed: true})
+    current_user.github_client.update_subscription(params[:repo], {subscribed: true})
     head :ok
   end
 
   def unsubscribe_repo
-    current_user.github_client.delete_subscription("#{params[:repo]}")
+    current_user.github_client.delete_subscription(params[:repo])
     head :ok
   end
 
