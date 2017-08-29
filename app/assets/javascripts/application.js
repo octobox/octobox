@@ -174,7 +174,7 @@ var shortcuts = {
   191: openModal,         // ?
   190: sync,              // .
   82:  sync,              // r
-  27:  clearFilters
+  27:  clearFilters       // esc
 };
 
 function cursorDown() {
@@ -280,7 +280,7 @@ function autoSync() {
   hasMarkedRows() || sync()
 }
 
-function clearFilters(){
+function clearFilters() {
   Turbolinks.visit("/");
 }
 
