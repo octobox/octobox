@@ -13,12 +13,7 @@ module Octobox
         .gsub('/pulls/', '/pull/')
         .gsub('/commits/', '/commit/')
         .gsub(/\/releases\/\d+/, '/releases/')
-
-      if @latest_comment_url.present?
-        if pull_request? || issue? then web_url << "#issuecomment-#{comment_id}"
-        elsif commit? then web_url << "#commitcomment-#{comment_id}"
-        end
-      end
+      web_url << latest_comment_anchor
 
       web_url
     end
@@ -45,6 +40,14 @@ module Octobox
       return @comment_id if defined?(@comment_id)
       match = /comments\/(?<comment_id>\d+)\z/.match(@latest_comment_url)
       @comment_id = match[:comment_id] if match.present?
+    end
+
+    def latest_comment_anchor
+      return "" unless comment_id.present?
+
+      if pull_request? || issue? then "#issuecomment-#{comment_id}"
+      elsif commit? then "#commitcomment-#{comment_id}"
+      end
     end
   end
 end
