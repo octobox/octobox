@@ -91,20 +91,16 @@ module NotificationsHelper
   end
 
   def subscribe_repo_button
-      button_tag(type: 'button', id: "#{filters[:repo]}", class: "subscribe_repo btn btn-default", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Subscribe to this repository' ) do
+    button_tag(type: 'button', id: "#{filters[:repo]}", class: "subscribe_repo btn btn-default", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Subscribe to this repository' ) do
       octicon('unmute', height: 16) + content_tag(:span, " Subscribe repository", class: 'hidden-xs')
     end
   end
 
   def unsubscribe_repo_button
-  #  function_button('Unsubscribe repository', 'circle-slash', 'unsubscribe_repo', 'Unsubscribe this repository')
     button_tag(type: 'button', id: "#{filters[:repo]}", class: "unsubscribe_repo btn btn-default", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Unsubscribe this repository' ) do
       octicon('mute', height: 16) + content_tag(:span, " Unsubscribe repository", class: 'hidden-xs')
     end
-
   end
-
-
 
   def archive_selected_button
     action = params[:archive] ? 'unarchive' : 'archive'
