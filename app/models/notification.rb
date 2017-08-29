@@ -65,10 +65,17 @@ class Notification < ApplicationRecord
   end
 
   def web_url
-    subject_url.gsub("#{Octobox.config.github_api_prefix}/repos", Octobox.config.github_domain)
-               .gsub('/pulls/', '/pull/')
-               .gsub('/commits/', '/commit/')
-               .gsub(/\/releases\/\d+/, '/releases/')
+    url = subject_url.gsub("#{Octobox.config.github_api_prefix}/repos", Octobox.config.github_domain)
+      .gsub('/pulls/', '/pull/')
+      .gsub('/commits/', '/commit/')
+      .gsub(/\/releases\/\d+/, '/releases/')
+    if latest_comment_url.present?
+      /comments\/(\d+)\z/.match(latest_comment_url) do |match|
+        url << "#issuecomment-#{match[1]}" if match[1]
+      end
+    end
+
+    url
   end
 
   def repo_url

@@ -17,7 +17,8 @@ class DownloadService
     updated_at: [:updated_at],
     last_read_at: [:last_read_at],
     url: [:url],
-    github_id: [:id]
+    github_id: [:id],
+    latest_comment_url: [:subject, :latest_comment_url]
   }.freeze
 
   def download
