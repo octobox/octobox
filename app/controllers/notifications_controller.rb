@@ -1,4 +1,4 @@
- # frozen_string_literal: true
+# frozen_string_literal: true
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
   before_action :authenticate_index!, only: [:index]

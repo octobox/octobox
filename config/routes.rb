@@ -20,7 +20,6 @@ Rails.application.routes.draw do
       post :subscribe_repo
       post :unsubscribe_repo
       get :unread_count
-
     end
 
     member do

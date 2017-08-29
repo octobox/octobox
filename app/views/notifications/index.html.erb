@@ -39,11 +39,10 @@
           <% end %>
           <%= link_to sync_notifications_path(filters), class: 'btn btn-default sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', :height => 16 %>
-           <% end %>
+          <% end %>
           <%= archive_selected_button %>
           <%= mute_selected_button %>
           <%= mark_read_selected_button %>
-
           <%= render 'filter-list' %>
         </div>
         <div id="options" class="panel-heading">

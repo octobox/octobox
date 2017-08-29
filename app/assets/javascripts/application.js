@@ -90,7 +90,6 @@ document.addEventListener("turbolinks:load", function() {
     $('button.subscribe_repo').click(subscribeRepo);
     $('button.unsubscribe_repo').click(unsubscribeRepo);
 
-
     $('input.archive, input.unarchive').change(function() {
       if ( hasMarkedRows() ) {
         var prop = hasMarkedRows(true) ? 'indeterminate' : 'checked';
@@ -214,14 +213,14 @@ function markReadSelected() {
     rows.removeClass('blur-action')
     rows.removeClass('active');
     updateFavicon();
-  }) 
+  })
 }
 
-function subscribeRepo(){
+function subscribeRepo() {
   $.post("/notifications/subscribe_repo", {'repo': $('button.subscribe_repo').attr('id') }).done(function(){ window.location.reload(); });
  }
 
-function unsubscribeRepo(){
+function unsubscribeRepo() {
   $.post("/notifications/unsubscribe_repo", {'repo': $('button.unsubscribe_repo').attr('id') }).done(function(){ window.location.reload(); });
  }
 
@@ -348,8 +347,6 @@ function recoverPreviousCursorPosition() {
 
 // Clicking a row marks it current
 $(document).ready(function() {
-
-
   $("tr.notification").click(function() {
     $(".current.js-current").removeClass("current js-current");
     $( this ).find("td").first().addClass("current js-current");
