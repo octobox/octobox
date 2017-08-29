@@ -178,7 +178,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test 'updated_from_api_response updates the existing subject if present' do
     stub_fetch_subject_enabled
-    url = 'https://api.github.com/repos/octobox/octobox/pulls/403'
+    url = 'https://api.github.com/repos/octobox/octobox/issues/403'
     response = { status: 200, body: file_fixture('merged_pull_request.json'), headers: { 'Content-Type' => 'application/json' } }
     stub_request(:get, url).and_return(response)
 

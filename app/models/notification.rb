@@ -95,7 +95,13 @@ class Notification < ApplicationRecord
   private
 
   def download_subject
-    user.github_client.get(subject_url)
+    if ['Issue', 'PullRequest'].include? subject_type
+      /(?<repo_name>[-_\w]+\/[-_.\w]+)\/(pulls|issues)\/(?<number>\d+)\z/ =~ subject_url
+      user.github_client.issue(repo_name, number)
+    else
+      user.github_client.get(subject_url)
+    end
+
   rescue Octokit::Forbidden, Octokit::NotFound => e
     Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
   end
@@ -110,7 +116,7 @@ class Notification < ApplicationRecord
       when 'Issue', 'PullRequest'
         remote_subject = download_subject
         return unless remote_subject.present?
-
+        subject.labels = remote_subject.labels.map(&:name)
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
       end
@@ -123,6 +129,7 @@ class Notification < ApplicationRecord
         create_subject({
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
+          labels: remote_subject.labels.map(&:name),
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at
         })
