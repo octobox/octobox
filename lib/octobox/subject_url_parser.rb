@@ -1,15 +1,21 @@
 module Octobox
   class SubjectUrlParser
-    attr_reader :url
+    attr_reader :url,
+                :github_api_prefix,
+                :github_domain
 
-    def initialize(url, latest_comment_url: nil)
+    delegate :config, to: Octobox
+
+    def initialize(url, github_api_prefix: config.github_api_prefix, github_domain: config.github_domain, latest_comment_url: nil)
       @url = url
+      @github_api_prefix = github_api_prefix
+      @github_domain = github_domain
       @latest_comment_url = latest_comment_url
     end
 
     # NOTE Releases are defaulted to the release index page
     def to_web_url
-      web_url = url.gsub("#{Octobox.config.github_api_prefix}/repos", Octobox.config.github_domain)
+      web_url = url.gsub("#{github_api_prefix}/repos", github_domain)
         .gsub('/pulls/', '/pull/')
         .gsub('/commits/', '/commit/')
         .gsub(/\/releases\/\d+/, '/releases/')
