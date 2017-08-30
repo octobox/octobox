@@ -90,16 +90,16 @@ document.addEventListener("turbolinks:load", function() {
 
     $('input.archive, input.unarchive').change(function() {
       if ( hasMarkedRows() ) {
-        var prop = hasMarkedRows(true) ? 'indeterminate' : 'checked';
-        $(".js-select_all").prop(prop, true);
         $('button.archive_selected, button.unarchive_selected, button.mute_selected').removeClass('hidden');
-        if ( prop === 'checked' ) {
+        if ( !hasMarkedRows(true) ) {
+          $(".js-select_all").prop('checked', true).prop('indeterminate', false);
           $('button.select_all').removeClass('hidden');
         } else {
+          $(".js-select_all").prop('checked', false).prop('indeterminate', true);
           $('button.select_all').addClass('hidden');
         }
       } else {
-        $(".js-select_all").prop('checked', false);
+        $(".js-select_all").prop('checked', false).prop('indeterminate', false);
         $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').addClass('hidden');
       }
       var marked_unread_length = getMarkedRows().filter('.active').length;
