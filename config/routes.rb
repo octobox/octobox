@@ -17,6 +17,8 @@ Rails.application.routes.draw do
       post :sync
       post :mute_selected
       post :mark_read_selected
+      post :subscribe_repo
+      post :unsubscribe_repo
       get :unread_count
     end
 

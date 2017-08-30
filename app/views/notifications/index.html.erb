@@ -45,7 +45,9 @@
           <%= mark_read_selected_button %>
           <%= render 'filter-list' %>
         </div>
-
+        <div id="options" class="panel-heading">
+          <%= repo_subscribed? ? unsubscribe_repo_button : subscribe_repo_button  if repo_selected? %>
+        </div>
         <% if @notifications.to_a.any? %>
           <table class='table table-hover table-notifications js-table-notifications' data-refresh-interval=<%= current_user.effective_refresh_interval %>>
             <%= render partial: 'notification', collection: @notifications %>
