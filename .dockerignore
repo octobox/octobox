@@ -1,0 +1,16 @@
+.git
+.gitignore
+README.md
+
+log
+tmp
+coverage/
+.bundle
+.ruby-version
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+.dockerignore
+docker-compose.yml
