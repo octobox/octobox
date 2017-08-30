@@ -6,6 +6,7 @@ RUN apk add --update \
   nodejs \
   postgresql-dev \
   tzdata \
+  curl-dev \
   && rm -rf /var/cache/apk/*
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
