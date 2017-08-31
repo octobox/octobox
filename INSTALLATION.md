@@ -96,13 +96,15 @@ rails s
 
 ## Using Docker
 
-### Development environment
+### Using Docker Compose
 
 You can use Docker to run Octobox in development.
 
 First, [install Docker](https://docs.docker.com/engine/installation/). If you've got run macOS or Windows, Docker for Mac/Windows makes this really easy.
 
 > If you have Windows Home Edition, you'll need to download and run [Docker Toolbox](https://www.docker.com/products/docker-toolbox).
+
+Second, download the `docker-compose.yml` file from [here](https://raw.githubusercontent.com/octobox/octobox/master/docker-compose.yml)
 
 Then, run:
 
@@ -140,8 +142,8 @@ Octobox will be running on [http://localhost:3000](http://localhost:3000).
 
 ### Upgrading docker image:
 
-1. Pull the latest image using the command `docker pull octoboxio/octobox:latest`
-2. Restart your running container using the command `docker restart octobox`
+1. Pull the latest image using the command `docker pull octoboxio/octobox:latest` or `docker-compose pull` if you are using docker-compose.
+2. Restart your running container using the command `docker restart octobox` or `docker-compose restart` if you are using docker-compose.
 
 
 # Configuration
