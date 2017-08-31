@@ -138,7 +138,7 @@ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker run -
 
 Octobox will be running on [http://localhost:3000](http://localhost:3000).
 
-### Upgrading docker:
+### Upgrading docker image:
 
 1. Pull the latest image using the command `docker pull octoboxio/octobox:latest`
 2. Restart your running container using the command `docker restart octobox`
