@@ -65,10 +65,8 @@ class Notification < ApplicationRecord
   end
 
   def web_url
-    subject_url.gsub("#{Octobox.config.github_api_prefix}/repos", Octobox.config.github_domain)
-               .gsub('/pulls/', '/pull/')
-               .gsub('/commits/', '/commit/')
-               .gsub(/\/releases\/\d+/, '/releases/')
+    Octobox::SubjectUrlParser.new(subject_url, latest_comment_url: latest_comment_url)
+      .to_web_url
   end
 
   def repo_url

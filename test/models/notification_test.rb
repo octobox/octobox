@@ -82,10 +82,13 @@ class NotificationTest < ActiveSupport::TestCase
     api_response = notifications_from_fixture('morty_notifications.json').first
     notification = create(:morty_updated)
     expected_attributes = notification.attributes.merge(
-      {last_read_at: '2016-12-19 22:01:45 UTC',
-       updated_at: Time.zone.parse('2016-12-19T22:01:45Z'),
-       unread: true,
-       archived: false}.stringify_keys)
+      {
+        last_read_at: '2016-12-19 22:01:45 UTC',
+        updated_at: Time.zone.parse('2016-12-19T22:01:45Z'),
+        unread: true,
+        archived: false,
+        latest_comment_url: "https://api.github.com/repos/octobox/octobox/issues/comments/123"
+      }.stringify_keys)
     notification.update_from_api_response(api_response, unarchive: true)
     assert notification.unread?
     refute notification.archived?
