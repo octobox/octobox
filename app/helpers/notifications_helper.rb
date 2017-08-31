@@ -133,9 +133,9 @@ module NotificationsHelper
   end
 
   def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, &block)
-    content_tag :li, class: (active ? 'active' : '') do
+    content_tag :li, class: (active ? 'active nav-item' : 'nav-item') do
       active = (active && not_repo_in_active_org(param))
-      link_to root_path(filtered_params(param => (active ? nil : value)).except(except)), class: "filter #{link_class}" do
+      link_to root_path(filtered_params(param => (active ? nil : value)).except(except)), class: "nav-link filter #{link_class}" do
         block.call
         if active && not_repo_in_active_org(param)
           concat content_tag(:span, octicon('x', :height => 16), class: 'label text-muted')
