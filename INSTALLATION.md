@@ -117,6 +117,13 @@ Octobox will be running on [http://localhost:3000](http://localhost:3000).
 **Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
 
 
+**Note**: If you want to help with the development of this project you should clone the code, and then run:
+
+```bash
+GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose -f docker-compose-dev.yml up --build
+```
+
+
 ### Production environment
 
 First, Create a network interface 
@@ -128,14 +135,15 @@ docker network create octobox-network
 Second, download and run postgres instance
 
 ```bash
-docker run -d --network octobox-network --name=database -e POSTGRES_PASSWORD=development -v pg_data:/var/lib/postgresql/data postgres:9.6-alpine
+docker run -d --network octobox-network --name=database.service.octobox.internal -e POSTGRES_PASSWORD=development -v pg_data:/var/lib/postgresql/data postgres:9.6-alpine
 ```
 
+**Note**: you should name your database instance `database.service.octobox.internal` so that `octobox` container can connect to it. 
 
 Then, run the following command to download the latest docker image and start octobox in the background.
 
 ```bash
-GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker run -d --network octobox-network --name=octobox -e RAILS_ENV=development -e GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID -e GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USER=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal --link database:database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
+GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker run -d --network octobox-network --name=octobox -e RAILS_ENV=development -e GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID -e GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USER=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
 ```
 
 Octobox will be running on [http://localhost:3000](http://localhost:3000).

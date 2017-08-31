@@ -1,6 +1,6 @@
-version: '2'
+version: '3'
 services:
-  database:
+  database.service.octobox.internal:
     image: postgres:9.6-alpine
     environment:
       - POSTGRES_PASSWORD=development
@@ -11,8 +11,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
-    links:
-      - database:database.service.octobox.internal
     environment:
       - RAILS_ENV=development
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
