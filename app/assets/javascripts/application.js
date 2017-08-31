@@ -113,8 +113,8 @@ document.addEventListener("turbolinks:load", function() {
       $(this).toggleClass("star-active star-inactive");
       $.post('/notifications/'+$(this).data('id')+'/star')
     });
-    $('.sync .octicon').on('click', function() {
-      $(this).toggleClass('spinning')
+    $('a.sync').on('click', function() {
+      $('.sync .octicon').toggleClass('spinning')
     });
     recoverPreviousCursorPosition();
 
