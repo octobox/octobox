@@ -17,3 +17,4 @@ COPY Gemfile Gemfile.lock /usr/src/app/
 RUN bundle install --without test production --jobs 2
 
 COPY . /usr/src/app
+CMD ["bin/docker-start"]
