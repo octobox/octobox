@@ -96,6 +96,8 @@ rails s
 
 ## Using Docker
 
+### Development environment
+
 You can use Docker to run Octobox in development.
 
 First, [install Docker](https://docs.docker.com/engine/installation/). If you've got run macOS or Windows, Docker for Mac/Windows makes this really easy.
@@ -111,6 +113,36 @@ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compo
 Octobox will be running on [http://localhost:3000](http://localhost:3000).
 
 **Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
+
+
+### Production environment
+
+First, Create a network interface 
+
+```bash
+docker network create octobox-network 
+```
+
+First, download and run postgres instance
+
+```bash
+docker run -d --network octobox-network --name=database -e POSTGRES_PASSWORD=development -v pg_data:/var/lib/postgresql/data postgres:9.6-alpine
+```
+
+
+Second, run the following command to download the latest docker image and start octobox in the background.
+
+```bash
+GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker run -d --network octobox-network --name=octobox -e RAILS_ENV=development -e GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID -e GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USER=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal --link database:database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
+```
+
+Octobox will be running on [http://localhost:3000](http://localhost:3000).
+
+### Upgrading docker:
+
+1. Pull the latest image using the command `docker pull octoboxio/octobox:latest`
+2. Restart your running container using the command `docker restart octobox`
+
 
 # Configuration
 
