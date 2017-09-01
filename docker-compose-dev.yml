@@ -4,12 +4,11 @@ services:
     image: postgres:9.6-alpine
     environment:
       - POSTGRES_PASSWORD=development
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    networks:
-      - internal
   app:
-    image: zaherg/octobox:latest
+    image: octobox
+    build:
+      context: ./
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     environment:
@@ -20,12 +19,3 @@ services:
       - OCTOBOX_DATABASE_USER=postgres
       - OCTOBOX_DATABASE_PASSWORD=development
       - OCTOBOX_DATABASE_HOST=database.service.octobox.internal
-    networks:
-      - internal
-
-volumes:
-  pg_data:
-
-networks:
-  internal:
-    driver: bridge            
