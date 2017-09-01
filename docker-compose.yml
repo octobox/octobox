@@ -9,7 +9,7 @@ services:
     networks:
       - internal
   app:
-    image: zaherg/octobox:latest
+    image: octoboxio/octobox:latest
     ports:
       - 3000:3000
     environment:
@@ -28,4 +28,4 @@ volumes:
 
 networks:
   internal:
-    driver: bridge            
+    driver: bridge
