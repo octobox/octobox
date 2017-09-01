@@ -239,6 +239,23 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test 'gracefully handles failed user notification syncs' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
+
+    post "/notifications/sync"
+    assert_response :redirect
+    assert_equal "Syncing notifications with GitHub failed. Please try again.", flash[:error]
+  end
+
+  test 'gracefully handles failed user notification syncs as json' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
+
+    post "/notifications/sync.json"
+    assert_response :service_unavailable
+  end
+
   test 'renders the inbox notifcation count in the sidebar' do
     sign_in_as(@user)
     create(:notification, user: @user, archived: false)
