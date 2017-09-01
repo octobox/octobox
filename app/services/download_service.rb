@@ -49,7 +49,7 @@ class DownloadService
     headers = {cache_control: %w(no-store no-cache)}
     headers[:if_modified_since] = user.last_synced_at.iso8601 if user.last_synced_at.respond_to?(:iso8601)
     notifications = fetch_notifications(params: {headers: headers})
-    process_unread_notifications(notifications)
+    process_notifications(notifications, unarchive: true)
   end
 
   def fetch_read_notifications
@@ -58,39 +58,24 @@ class DownloadService
       headers = {cache_control: %w(no-store no-cache)}
       since = oldest_unread.updated_at - 1
       notifications = fetch_notifications(params: {all: true, since: since.iso8601, headers: headers})
-      process_read_notifications(notifications)
+      process_notifications(notifications)
     end
   end
 
-  def process_unread_notifications(notifications)
+  def process_notifications(notifications, unarchive: false)
     return if notifications.blank?
     existing_notifications = user.notifications.includes(:subject).where(github_id: notifications.map(&:id))
-    notifications.each do |notification|
-      begin
-        n = existing_notifications.find{|n| n.github_id == notification.id.to_i}
-        n = user.notifications.includes(:subject).new(github_id: notification.id) if n.nil?
-        n.update_from_api_response(notification, unarchive: true)
-      rescue ActiveRecord::RecordNotUnique
-        nil
-      end
-    end
-  end
-
-  def process_read_notifications(notifications)
-    return if notifications.blank?
-    existing_notifications = user.notifications.includes(:subject).where(github_id: notifications.map(&:id))
-    notifications.each do |notification|
-      next if notification.unread
-      n = existing_notifications.find{|n| n.github_id == notification.id.to_i }
-      n = user.notifications.includes(:subject).new(github_id: notification.id) if n.nil?
+    notifications.reject{|n| !unarchive && n.unread }.each do |notification|
+      n = existing_notifications.find{|n| n.github_id == notification.id.to_i}
+      n = user.notifications.new(github_id: notification.id) if n.nil?
       next unless n
-      n.update_from_api_response(notification)
+      n.update_from_api_response(notification, unarchive: unarchive) rescue ActiveRecord::RecordNotUnique nil
     end
   end
 
   def new_user_fetch
     headers = {cache_control: %w(no-store no-cache)}
     notifications = fetch_notifications(params: {all: true, headers: headers})
-    process_read_notifications(notifications)
+    process_notifications(notifications)
   end
 end
