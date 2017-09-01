@@ -56,7 +56,7 @@ class DownloadService
     oldest_unread = user.notifications.unread(true).newest.select(:updated_at).last
     if oldest_unread && oldest_unread.updated_at.respond_to?(:iso8601)
       headers = {cache_control: %w(no-store no-cache)}
-      since = oldest_unread.updated_at - 1
+      since = oldest_unread.updated_at - 1.second
       notifications = fetch_notifications(params: {all: true, since: since.iso8601, headers: headers})
       process_notifications(notifications)
     end
