@@ -108,7 +108,6 @@ class NotificationsController < ApplicationController
   def mute_selected
     selected_notifications.each do |notification|
       notification.mute
-      notification.update archived: true
     end
     head :ok
   end

@@ -60,8 +60,9 @@ class Notification < ApplicationRecord
   end
 
   def mute
-    mark_read
+    user.github_client.mark_thread_as_read(github_id, read: true)
     ignore_thread
+    update_columns archived: true, unread: false
   end
 
   def web_url
