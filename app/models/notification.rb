@@ -52,17 +52,21 @@ class Notification < ApplicationRecord
   def mark_read
     self[:unread] = false
     save(touch: false) if changed?
-    user.github_client.mark_thread_as_read(github_id, read: true)
+    user.github_client.mark_thread_as_read(github_id)
   end
 
-  def ignore_thread
-    user.github_client.update_thread_subscription(github_id, ignored: true)
-  end
-
-  def mute
-    user.github_client.mark_thread_as_read(github_id, read: true)
-    ignore_thread
-    update_columns archived: true, unread: false
+  def self.mute(notifications)
+    user = notifications.to_a.first.user
+    conn = user.github_client.client_without_redirects
+    notifications.each_slice(10) do |batch|
+      conn.in_parallel do
+        batch.each do |b|
+          conn.patch "notifications/threads/#{b.github_id}"
+          conn.put "notifications/threads/#{b.github_id}/subscription", {ignored: true}.to_json
+        end
+      end
+    end
+    notifications.update_all(archived: true, unread: false)
   end
 
   def web_url

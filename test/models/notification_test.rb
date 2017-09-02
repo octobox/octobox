@@ -4,15 +4,6 @@ require 'test_helper'
 class NotificationTest < ActiveSupport::TestCase
   include NotificationTestHelper
 
-  test 'ignore_thread sends ignore request to github' do
-    user = create(:user)
-    notification = create(:notification, user: user, archived: false)
-    user.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
-    })
-    assert notification.ignore_thread
-  end
-
   test 'mark_read updates the github thread' do
     user = create(:user)
     notification = create(:notification, user: user)

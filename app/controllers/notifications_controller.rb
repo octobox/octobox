@@ -106,9 +106,7 @@ class NotificationsController < ApplicationController
   # HEAD 204
   #
   def mute_selected
-    selected_notifications.each do |notification|
-      notification.mute
-    end
+    Notification.mute(selected_notifications)
     head :ok
   end
 
