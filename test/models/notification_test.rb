@@ -19,11 +19,12 @@ class NotificationTest < ActiveSupport::TestCase
     user.stubs(:github_client).returns(mock.tap { |client|
       client.expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
     })
-    notification.mark_read(update_github: true)
+    notification.mark_read
     refute notification.reload.unread?
   end
 
   test 'mark_read does not change updated_at' do
+    stub_notifications_request(method: :patch)
     notification = create(:notification)
     expected_updated_at = notification.updated_at
     notification.mark_read
@@ -31,14 +32,10 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'mark_read turns unread to false' do
+    stub_notifications_request(method: :patch)
     notification = create(:notification, unread: true)
     notification.mark_read
     refute notification.reload.unread?
-  end
-
-  test 'mark_read does not update github when update_github:false' do
-    # the real assertion here is that no http request is made
-    create(:notification, unread: true).mark_read
   end
 
   test 'mute ignores the thread and marks it as read' do

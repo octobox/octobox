@@ -142,7 +142,7 @@ class NotificationsController < ApplicationController
   #
   def mark_read_selected
     selected_notifications.each do |notification|
-      notification.mark_read(update_github: true)
+      notification.mark_read
     end
     head :ok
   end

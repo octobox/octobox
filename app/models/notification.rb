@@ -46,13 +46,10 @@ class Notification < ApplicationRecord
 
   delegate :state, to: :subject, allow_nil: true
 
-  def mark_read(update_github: false)
+  def mark_read
     self[:unread] = false
     save(touch: false) if changed?
-
-    if update_github
-      user.github_client.mark_thread_as_read(github_id, read: true)
-    end
+    user.github_client.mark_thread_as_read(github_id, read: true)
   end
 
   def ignore_thread
@@ -60,7 +57,7 @@ class Notification < ApplicationRecord
   end
 
   def mute
-    mark_read(update_github: true)
+    mark_read
     ignore_thread
   end
 
