@@ -201,14 +201,14 @@ function mute() {
   if (getDisplayedRows().length === 0) return;
   if ( $(".js-table-notifications tr").length === 0 ) return;
   var ids = getIdsFromRows(getMarkedOrCurrentRows());
-  $.post( "/notifications/mute_selected", { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
+  $.post( "/notifications/mute_selected" + location.search, { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
 }
 
 function markReadSelected() {
   if (getDisplayedRows().length === 0) return;
   var rows = getMarkedOrCurrentRows();
   rows.addClass('blur-action');
-  $.post("/notifications/mark_read_selected", {'id[]': getIdsFromRows(rows)}).done(function () {
+  $.post("/notifications/mark_read_selected" + location.search, {'id[]': getIdsFromRows(rows)}).done(function () {
     rows.removeClass('blur-action')
     rows.removeClass('active');
     updateFavicon();
