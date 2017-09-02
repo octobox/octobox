@@ -44,7 +44,10 @@ class Notification < ApplicationRecord
     end
   end
 
-  delegate :state, to: :subject, allow_nil: true
+  def state
+    return unless Octobox.config.fetch_subject
+    subject.try(:state)
+  end
 
   def mark_read
     self[:unread] = false
