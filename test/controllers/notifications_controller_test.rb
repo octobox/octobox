@@ -131,18 +131,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
-    User.any_instance.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:update_thread_subscription).with(notification1.github_id, ignored: true).returns true
-      client.expects(:update_thread_subscription).with(notification2.github_id, ignored: true).returns true
-      client.expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
-      client.expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
-    })
+
+    Notification.expects(:mute).with([notification1, notification2])
+
     post '/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }
     assert_response :ok
-
-    assert notification1.reload.archived?
-    assert notification2.reload.archived?
-    refute notification3.reload.archived?
   end
 
   test 'mutes all notifications in current scope' do
@@ -151,20 +144,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
-    User.any_instance.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:update_thread_subscription).with(notification1.github_id, ignored: true).returns true
-      client.expects(:update_thread_subscription).with(notification2.github_id, ignored: true).returns true
-      client.expects(:update_thread_subscription).with(notification3.github_id, ignored: true).returns true
-      client.expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
-      client.expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
-      client.expects(:mark_thread_as_read).with(notification3.github_id, read: true).returns true
-    })
+
+    Notification.expects(:mute).with([notification1, notification2, notification3])
+
     post '/notifications/mute_selected', params: { id: ['all'] }
     assert_response :ok
-
-    assert notification1.reload.archived?
-    assert notification2.reload.archived?
-    assert notification3.reload.archived?
   end
 
   test 'marks read multiple notifications' do
@@ -173,8 +157,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
     User.any_instance.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
-      client.expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
+      client.expects(:mark_thread_as_read).with(notification1.github_id).returns true
+      client.expects(:mark_thread_as_read).with(notification2.github_id).returns true
     })
     post '/notifications/mark_read_selected', params: { id: [notification1.id, notification2.id] }
     assert_response :ok
@@ -191,9 +175,9 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
     User.any_instance.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
-      client.expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
-      client.expects(:mark_thread_as_read).with(notification3.github_id, read: true).returns true
+      client.expects(:mark_thread_as_read).with(notification1.github_id).returns true
+      client.expects(:mark_thread_as_read).with(notification2.github_id).returns true
+      client.expects(:mark_thread_as_read).with(notification3.github_id).returns true
     })
     post '/notifications/mark_read_selected', params: { id: ['all'] }
     assert_response :ok

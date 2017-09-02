@@ -8,7 +8,7 @@ class NotificationTest < ActiveSupport::TestCase
     user = create(:user)
     notification = create(:notification, user: user)
     user.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
+      client.expects(:mark_thread_as_read).with(notification.github_id).returns true
     })
     notification.mark_read
     refute notification.reload.unread?
@@ -27,16 +27,6 @@ class NotificationTest < ActiveSupport::TestCase
     notification = create(:notification, unread: true)
     notification.mark_read
     refute notification.reload.unread?
-  end
-
-  test 'mute ignores the thread and marks it as read' do
-    user = create(:user)
-    notification = create(:notification, user: user, archived: false)
-    user.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:update_thread_subscription).with(notification.github_id, ignored: true).returns true
-      client.expects(:mark_thread_as_read).with(notification.github_id, read: true).returns true
-    })
-    assert notification.mute
   end
 
   test 'unarchive_if_updated unarchives when updated_at is newer' do
