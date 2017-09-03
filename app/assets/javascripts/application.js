@@ -82,6 +82,8 @@ function updateFavicon() {
 }
 
 document.addEventListener("turbolinks:load", function() {
+  // Add shortcut events only once
+  enableKeyboardShortcuts()
   if($("#help-box").length){
     $('button.archive_selected, button.unarchive_selected').click(toggleArchive);
     $('button.select_all').click(toggleSelectAll);
@@ -132,9 +134,6 @@ document.addEventListener("turbolinks:load", function() {
 document.addEventListener("turbolinks:before-cache", function() {
   $('td.js-current').removeClass("current js-current");
 });
-
-// Add shortcut events only once
-$(document).ready(enableKeyboardShortcuts);
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.flex-content').toggleClass('active')
