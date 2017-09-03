@@ -79,15 +79,15 @@ module NotificationsHelper
   def select_all_button(cur_selected, total)
     button_tag(type: 'button', class: "select_all btn btn-default hidden", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': "Number of items selected") do
       octicon('check', height: 16) +
-        content_tag(:span, " #{cur_selected}", class: 'bold hidden-xs') +
+        content_tag(:span, " #{cur_selected}", class: 'bold d-none d-sm-block') +
         " |" +
-        content_tag(:span, " #{total}", class: 'hidden-xs')
+        content_tag(:span, " #{total}", class: 'd-none d-sm-block')
     end if cur_selected < total
   end
 
   def function_button(title, octicon, css_class, tooltip)
     button_tag(type: 'button', class: "#{css_class} btn btn-default hidden", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
-      octicon(octicon, height: 16) + content_tag(:span, " #{title}", class: 'hidden-xs')
+      octicon(octicon, height: 16) + content_tag(:span, " #{title}", class: 'd-none d-sm-block')
     end
   end
 
