@@ -20,7 +20,7 @@
               </button>
               <ul class="dropdown-menu">
                 <% %w(20 40 60 80 100).map do |pagination_interval| %>
-                  <li><%= link_to pagination_interval, root_path(filtered_params(per_page: pagination_interval.to_i)) %></li>
+                  <li class="dropdown-item"><%= link_to pagination_interval, root_path(filtered_params(per_page: pagination_interval.to_i)) %></li>
                 <% end %>
               </ul>
             </div>
