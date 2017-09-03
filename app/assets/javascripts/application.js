@@ -95,21 +95,21 @@ document.addEventListener("turbolinks:load", function() {
       if ( hasMarkedRows() ) {
         var prop = hasMarkedRows(true) ? 'indeterminate' : 'checked';
         $(".js-select_all").prop(prop, true);
-        $('button.archive_selected, button.unarchive_selected, button.mute_selected').removeClass('hidden');
+        $('button.archive_selected, button.unarchive_selected, button.mute_selected').show();
         if ( prop === 'checked' ) {
-          $('button.select_all').removeClass('hidden');
+          $('button.select_all').show();
         } else {
-          $('button.select_all').addClass('hidden');
+          $('button.select_all').hide();
         }
       } else {
         $(".js-select_all").prop('checked', false);
-        $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').addClass('hidden');
+        $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').hide();
       }
       var marked_unread_length = getMarkedRows().filter('.active').length;
       if ( marked_unread_length > 0 ) {
-        $('button.mark_read_selected').removeClass('hidden');
+        $('button.mark_read_selected').show();
       } else {
-        $('button.mark_read_selected').addClass('hidden');
+        $('button.mark_read_selected').hide();
       }
     });
     $('.toggle-star').click(function() {
