@@ -25,10 +25,10 @@
               </ul>
             </div>
           <% end %>
-          <div class="btn btn-link help float-right d-none d-sm-block" data-toggle="modal" data-target="#help-box">
+          <div class="btn btn-link help float-right d-none d-sm-inline-block" data-toggle="modal" data-target="#help-box">
             <%= octicon 'keyboard', :height => 16 %>
           </div>
-          <button type="button" class="d-block d-md-none d-lg-block btn btn-default" data-toggle="offcanvas">
+          <button type="button" class="d-inline-block d-md-none btn btn-default" data-toggle="offcanvas">
             <%= octicon 'three-bars', :height => 16 %>
           </button>
           <% if @notifications.to_a.any? %>
