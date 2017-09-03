@@ -77,11 +77,11 @@
         <% end %>
       </div>
 
-      <div class="text-center visible-xs-block">
+      <div class="text-center d-sm-none">
         <%= paginate @notifications, left: 1, right: 1, window: 0 %>
       </div>
 
-      <div class="text-center visible-sm-block visible-md-block visible-lg-block visible-xl-block">
+      <div class="text-center d-none d-sm-block">
         <%= paginate @notifications %>
       </div>
 
