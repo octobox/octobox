@@ -1,6 +1,6 @@
-<ul class="nav nav-pills nav-stacked nav-filters">
-  <li role="presentation" class="<%= 'active' if inbox_selected? %>">
-    <%= link_to root_path(per_page: params[:per_page]) do %>
+<ul class="nav flex-column nav-filters">
+  <li role="presentation" class="<%= 'active' if inbox_selected? %> nav-item">
+    <%= link_to root_path(per_page: params[:per_page]), { :class=>"nav-link" } do %>
       <%= octicon 'inbox', height: 16, class: 'sidebar-icon text-primary' %>
       Inbox
       <% if inbox_selected? %>
@@ -8,8 +8,8 @@
       <% end %>
     <% end %>
   </li>
-  <li role="presentation" class="<%= 'active' if archive_selected? %>">
-    <%= link_to root_path(archive: true, per_page: params[:per_page]) do %>
+  <li role="presentation" class="<%= 'active' if archive_selected? %> nav-item">
+    <%= link_to root_path(archive: true, per_page: params[:per_page]), { :class=>"nav-link" } do %>
       <%= octicon 'check', height: 16, class: 'sidebar-icon text-success' %>
       Archive
       <% if archive_selected? %>
@@ -17,8 +17,8 @@
       <% end %>
     <% end %>
   </li>
-  <li role="presentation" class="<%= 'active' if starred_selected? %>">
-    <%= link_to root_path(starred: true, per_page: params[:per_page]) do %>
+  <li role="presentation" class="<%= 'active' if starred_selected? %> nav-item">
+    <%= link_to root_path(starred: true, per_page: params[:per_page]), { :class=>"nav-link" } do %>
       <%= octicon 'star', height: 16, class: 'sidebar-icon star-active' %>
       Starred
       <% if starred_selected? %>

@@ -554,3 +554,11 @@ td.keys {
 .octicon.inverse{
   fill: #fff;
 }
+// some reason this is not a valid style
+.badge-muted{
+  background-color: #636c72;
+}
+
+.hidden-button {
+  display: none;
+}

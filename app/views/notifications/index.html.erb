@@ -9,7 +9,7 @@
       <div class="card card-notifications">
         <div class="card-header">
           <% if @notifications.to_a.any? %>
-            <div class="btn-group pull-right hidden-xs" data-toggle="tooltip" data-placement="left" title="Notifications per page">
+            <div class="btn-group float-right d-none d-sm-block" data-toggle="tooltip" data-placement="left" title="Notifications per page">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <% if params[:per_page].present? %>
                   <%= params[:per_page] %>
@@ -20,15 +20,15 @@
               </button>
               <ul class="dropdown-menu">
                 <% %w(20 40 60 80 100).map do |pagination_interval| %>
-                  <li><%= link_to pagination_interval, root_path(filtered_params(per_page: pagination_interval.to_i)) %></li>
+                  <li class="dropdown-item"><%= link_to pagination_interval, root_path(filtered_params(per_page: pagination_interval.to_i)) %></li>
                 <% end %>
               </ul>
             </div>
           <% end %>
-          <div class="btn btn-link help pull-right hidden-xs" data-toggle="modal" data-target="#help-box">
+          <div class="btn btn-link help float-right d-none d-sm-inline-block" data-toggle="modal" data-target="#help-box">
             <%= octicon 'keyboard', :height => 16 %>
           </div>
-          <button type="button" class="hidden-md hidden-lg btn btn-default" data-toggle="offcanvas">
+          <button type="button" class="d-inline-block d-md-none btn btn-default" data-toggle="offcanvas">
             <%= octicon 'three-bars', :height => 16 %>
           </button>
           <% if @notifications.to_a.any? %>
@@ -77,11 +77,11 @@
         <% end %>
       </div>
 
-      <div class="text-center visible-xs-block">
+      <div class="text-center d-sm-none">
         <%= paginate @notifications, left: 1, right: 1, window: 0 %>
       </div>
 
-      <div class="text-center visible-sm-block visible-md-block visible-lg-block visible-xl-block">
+      <div class="text-center d-none d-sm-block">
         <%= paginate @notifications %>
       </div>
 
