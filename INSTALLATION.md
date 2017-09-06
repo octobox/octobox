@@ -126,10 +126,10 @@ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compo
 
 ### Production environment
 
-First, Create a network interface 
+First, Create a network interface
 
 ```bash
-docker network create octobox-network 
+docker network create octobox-network
 ```
 
 Second, download and run postgres instance
@@ -138,7 +138,7 @@ Second, download and run postgres instance
 docker run -d --network octobox-network --name=database.service.octobox.internal -e POSTGRES_PASSWORD=development -v pg_data:/var/lib/postgresql/data postgres:9.6-alpine
 ```
 
-**Note**: you should name your database instance `database.service.octobox.internal` so that `octobox` container can connect to it. 
+**Note**: you should name your database instance `database.service.octobox.internal` so that `octobox` container can connect to it.
 
 Then, run the following command to download the latest docker image and start octobox in the background.
 
@@ -271,3 +271,9 @@ To enable this feature set the following environment variable:
     FETCH_SUBJECT=true
 
 If you want this feature to work for private repositories, you'll need to [Customize the Scopes on Github](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
+
+## Google Analytics
+
+To enable Google analytics tracking set the following environment variable:
+
+    GA_ANALYTICS_ID=UA-XXXXXX-XX
