@@ -183,6 +183,13 @@ class NotificationsController < ApplicationController
       format.html { redirect_back fallback_location: root_path }
       format.json { head :ok }
     end
+  rescue Octokit::BadGateway, Octokit::ServiceUnavailable => e
+    logger.error("Failed to sync notifications for #{current_user.github_login} - #{e.class}: #{e.message}")
+    flash[:error] = 'Syncing notifications with GitHub failed. Please try again.'
+    respond_to do |format|
+      format.html { redirect_back fallback_location: root_path }
+      format.json { head :service_unavailable }
+    end
   end
 
   private
