@@ -252,10 +252,11 @@ function resetCursorAfterRowsRemoved(ids) {
   while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.next().length > 0) {
     current = current.next();
   }
-  window.current_id = getIdsFromRows(current)[0];
-  if ( $.inArray(window.current_id, ids ) > -1 ) {
-    window.current_id = getIdsFromRows(getMarkedRows(true).last())[0];
+  while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.prev().length > 0) {
+    current = current.prev();
   }
+
+  window.current_id = getIdsFromRows(current)[0];
   Turbolinks.visit("/"+location.search);
 }
 
