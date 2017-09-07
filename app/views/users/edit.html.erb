@@ -46,7 +46,7 @@
       <h3 class="panel-title">Manage Oauth Access</h3>
     </div>
     <div class="panel-body">
-      <p>Octobox can only show notifications for Organsiations that you've granted it access to via GitHub</p>
+      <p>Octobox can only show notifications for Organisations that you've granted it access to via GitHub</p>
       <p>If you've been added to a new Organisation you may need to enable or request access for Octobox to sync notifications for those repositories.</p>
       <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_client_id}", class: 'btn btn-default' do %>
         <%= octicon 'tools' %>&nbsp;
