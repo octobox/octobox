@@ -122,6 +122,7 @@ class Notification < ApplicationRecord
         create_subject({
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
+          html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at
         })
@@ -131,6 +132,7 @@ class Notification < ApplicationRecord
 
         create_subject({
           author: remote_subject.author.login,
+          html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at
         })
