@@ -46,35 +46,35 @@
           <%= render 'filter-list' %>
         </div>
 
-        <% if @notifications.to_a.any? %>
-          <table class='table table-hover table-notifications js-table-notifications' data-refresh-interval=<%= current_user.effective_refresh_interval %>>
+        <table class='table table-hover table-notifications js-table-notifications' data-refresh-interval=<%= current_user.effective_refresh_interval %>>
+          <% if @notifications.to_a.any? %>
             <%= render partial: 'notification', collection: @notifications %>
-          </table>
-        <% elsif no_url_filter_parameters_present %>
-          <div class="blankslate blankslate-spacious blankslate-clean-background">
-            <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
-            <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
-            <h3>You're in the clear!</h3>
-            <p>There are no notifications that need your attention.</p>
-            <% if current_user.last_synced_at %>
-              <p class='text-muted'>
+          <% elsif no_url_filter_parameters_present %>
+            <div class="blankslate blankslate-spacious blankslate-clean-background">
+              <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
+              <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
+              <h3>You're in the clear!</h3>
+              <p>There are no notifications that need your attention.</p>
+              <% if current_user.last_synced_at %>
+                <p class='text-muted'>
                 <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
-              </p>
-            <% end %>
-          </div>
-        <% else %>
-          <div class="blankslate blankslate-spacious blankslate-clean-background">
-            <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
-            <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
-            <h3>Nothing to see here.</h3>
-            <p>You can always try <%= link_to 'refreshing', sync_notifications_path(filters), method: :post %>.</p>
-            <% if current_user.last_synced_at %>
-              <p class='text-muted'>
+                </p>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="blankslate blankslate-spacious blankslate-clean-background">
+              <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
+              <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
+              <h3>Nothing to see here.</h3>
+              <p>You can always try <%= link_to 'refreshing', sync_notifications_path(filters), method: :post %>.</p>
+              <% if current_user.last_synced_at %>
+                <p class='text-muted'>
                 <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
-              </p>
-            <% end %>
-          </div>
-        <% end %>
+                </p>
+              <% end %>
+            </div>
+          <% end %>
+        </table>
       </div>
 
       <div class="text-center visible-xs-block">
