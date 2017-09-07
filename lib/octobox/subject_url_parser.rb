@@ -1,5 +1,12 @@
 module Octobox
   class SubjectUrlParser
+    # DEPRECATED
+    # This parser acts primarily as a hack to convert GitHub API URLs in to HTML ones
+    # With the recent addition of subject syncing, exact HTML URLs are available directly
+    # from the API and so this parsing need not happen.
+    #
+    # In the future this class will be replaced by one that simply handles comment anchor logic only.
+
     attr_reader :url,
                 :github_api_prefix,
                 :github_domain
