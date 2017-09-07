@@ -1,5 +1,12 @@
 module Octobox
   class SubjectUrlParser
+    # DEPRECATED
+    # This parser acts primarily as a hack to convert GitHub API URLs in to HTML ones
+    # With the recent addition of subject syncing, exact HTML URLs are available directly
+    # from the API and so this parsing need not happen.
+    #
+    # In the future this class will be replaced by one that simply handles comment anchor logic only.
+
     attr_reader :url,
                 :github_api_prefix,
                 :github_domain
@@ -11,17 +18,31 @@ module Octobox
       @github_api_prefix = github_api_prefix
       @github_domain = github_domain
       @latest_comment_url = latest_comment_url
+
+      raise ArgumentError, "Unidentifiable URL: '#{url}'" unless html_url? || api_url?
     end
 
     # NOTE Releases are defaulted to the release index page
-    def to_web_url
-      web_url = url.gsub("#{github_api_prefix}/repos", github_domain)
-        .gsub('/pulls/', '/pull/')
-        .gsub('/commits/', '/commit/')
-        .gsub(/\/releases\/\d+/, '/releases/')
-      web_url << latest_comment_anchor
+    def to_html_url
+      html_url = if api_url?
+                   url.gsub("#{github_api_prefix}/repos", github_domain)
+                     .gsub('/pulls/', '/pull/')
+                     .gsub('/commits/', '/commit/')
+                     .gsub(/\/releases\/\d+/, '/releases/')
+                 else
+                   url
+                 end
+      html_url << latest_comment_anchor
 
-      web_url
+      html_url
+    end
+
+    def html_url?
+      /#{github_domain}/ =~ url
+    end
+
+    def api_url?
+      /#{github_api_prefix}/ =~ url
     end
 
     def pull_request?

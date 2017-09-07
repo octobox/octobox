@@ -66,8 +66,9 @@ class Notification < ApplicationRecord
   end
 
   def web_url
-    Octobox::SubjectUrlParser.new(subject_url, latest_comment_url: latest_comment_url)
-      .to_web_url
+    url = subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
+    Octobox::SubjectUrlParser.new(url, latest_comment_url: latest_comment_url)
+      .to_html_url
   end
 
   def repo_url
@@ -122,6 +123,7 @@ class Notification < ApplicationRecord
         create_subject({
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
+          html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at
         })
@@ -131,6 +133,7 @@ class Notification < ApplicationRecord
 
         create_subject({
           author: remote_subject.author.login,
+          html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at
         })
