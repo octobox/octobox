@@ -18,6 +18,7 @@ gem 'faraday_middleware'
 gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
+gem 'rake'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -27,7 +28,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rake'
   gem 'factory_girl'
   gem 'simplecov'
   gem 'codeclimate-test-reporter'
