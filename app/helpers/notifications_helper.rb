@@ -139,7 +139,7 @@ module NotificationsHelper
     end
   end
 
-  def org_filter_link(param, value, count, &block)
+  def org_filter_link(param, value, &block)
     sidebar_filter_link(params[param] == value.to_s, param, value, nil, :repo, 'owner-label') do
       block.call
     end

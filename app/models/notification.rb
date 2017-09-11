@@ -44,15 +44,15 @@ class Notification < ApplicationRecord
     end
   end
 
-  delegate :state, to: :subject, allow_nil: true
+  def state
+    return unless Octobox.config.fetch_subject
+    subject.try(:state)
+  end
 
-  def mark_read(update_github: false)
+  def mark_read
     self[:unread] = false
     save(touch: false) if changed?
-
-    if update_github
-      user.github_client.mark_thread_as_read(github_id, read: true)
-    end
+    user.github_client.mark_thread_as_read(github_id, read: true)
   end
 
   def ignore_thread
@@ -60,15 +60,15 @@ class Notification < ApplicationRecord
   end
 
   def mute
-    mark_read(update_github: true)
+    user.github_client.mark_thread_as_read(github_id, read: true)
     ignore_thread
+    update_columns archived: true, unread: false
   end
 
   def web_url
-    subject_url.gsub("#{Octobox.config.github_api_prefix}/repos", Octobox.config.github_domain)
-               .gsub('/pulls/', '/pull/')
-               .gsub('/commits/', '/commit/')
-               .gsub(/\/releases\/\d+/, '/releases/')
+    url = subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
+    Octobox::SubjectUrlParser.new(url, latest_comment_url: latest_comment_url)
+      .to_html_url
   end
 
   def repo_url
@@ -130,6 +130,7 @@ class Notification < ApplicationRecord
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
           labels: remote_subject.labels.map(&:name),
+          html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at
         })
@@ -139,6 +140,7 @@ class Notification < ApplicationRecord
 
         create_subject({
           author: remote_subject.author.login,
+          html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at
         })

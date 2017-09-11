@@ -90,16 +90,16 @@ document.addEventListener("turbolinks:load", function() {
 
     $('input.archive, input.unarchive').change(function() {
       if ( hasMarkedRows() ) {
-        var prop = hasMarkedRows(true) ? 'indeterminate' : 'checked';
-        $(".js-select_all").prop(prop, true);
         $('button.archive_selected, button.unarchive_selected, button.mute_selected').removeClass('hidden');
-        if ( prop === 'checked' ) {
+        if ( !hasMarkedRows(true) ) {
+          $(".js-select_all").prop('checked', true).prop('indeterminate', false);
           $('button.select_all').removeClass('hidden');
         } else {
+          $(".js-select_all").prop('checked', false).prop('indeterminate', true);
           $('button.select_all').addClass('hidden');
         }
       } else {
-        $(".js-select_all").prop('checked', false);
+        $(".js-select_all").prop('checked', false).prop('indeterminate', false);
         $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').addClass('hidden');
       }
       var marked_unread_length = getMarkedRows().filter('.active').length;
@@ -113,8 +113,8 @@ document.addEventListener("turbolinks:load", function() {
       $(this).toggleClass("star-active star-inactive");
       $.post('/notifications/'+$(this).data('id')+'/star')
     });
-    $('.sync .octicon').on('click', function() {
-      $(this).toggleClass('spinning')
+    $('a.sync').on('click', function() {
+      $('.sync .octicon').toggleClass('spinning')
     });
     recoverPreviousCursorPosition();
 
@@ -173,7 +173,8 @@ var shortcuts = {
   79:  openCurrentLink,   // o
   191: openModal,         // ?
   190: sync,              // .
-  82:  sync               // r
+  82:  sync,              // r
+  27:  clearFilters       // esc
 };
 
 function cursorDown() {
@@ -200,14 +201,14 @@ function mute() {
   if (getDisplayedRows().length === 0) return;
   if ( $(".js-table-notifications tr").length === 0 ) return;
   var ids = getIdsFromRows(getMarkedOrCurrentRows());
-  $.post( "/notifications/mute_selected", { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
+  $.post( "/notifications/mute_selected" + location.search, { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
 }
 
 function markReadSelected() {
   if (getDisplayedRows().length === 0) return;
   var rows = getMarkedOrCurrentRows();
   rows.addClass('blur-action');
-  $.post("/notifications/mark_read_selected", {'id[]': getIdsFromRows(rows)}).done(function () {
+  $.post("/notifications/mark_read_selected" + location.search, {'id[]': getIdsFromRows(rows)}).done(function () {
     rows.removeClass('blur-action')
     rows.removeClass('active');
     updateFavicon();
@@ -251,10 +252,11 @@ function resetCursorAfterRowsRemoved(ids) {
   while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.next().length > 0) {
     current = current.next();
   }
-  window.current_id = getIdsFromRows(current)[0];
-  if ( $.inArray(window.current_id, ids ) > -1 ) {
-    window.current_id = getIdsFromRows(getMarkedRows(true).last())[0];
+  while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.prev().length > 0) {
+    current = current.prev();
   }
+
+  window.current_id = getIdsFromRows(current)[0];
   Turbolinks.visit("/"+location.search);
 }
 
@@ -277,6 +279,10 @@ function sync() {
 
 function autoSync() {
   hasMarkedRows() || sync()
+}
+
+function clearFilters() {
+  Turbolinks.visit("/");
 }
 
 function setAutoSyncTimer() {

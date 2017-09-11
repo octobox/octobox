@@ -6,6 +6,7 @@ RUN apk add --update \
   nodejs \
   postgresql-dev \
   tzdata \
+  curl-dev \
   && rm -rf /var/cache/apk/*
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
@@ -16,3 +17,4 @@ COPY Gemfile Gemfile.lock /usr/src/app/
 RUN bundle install --without test production --jobs 2
 
 COPY . /usr/src/app
+CMD ["bin/docker-start"]
