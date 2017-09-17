@@ -245,12 +245,46 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     post "/notifications/sync"
     assert_response :redirect
-    assert_equal "Syncing notifications with GitHub failed. Please try again.", flash[:error]
+    assert_equal "Having issues connecting to Github. Please try again.", flash[:error]
   end
 
   test 'gracefully handles failed user notification syncs as json' do
     sign_in_as(@user)
     User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
+
+    post "/notifications/sync.json"
+    assert_response :service_unavailable
+  end
+
+  test 'gracefully handles failed user notification syncs with wrong token' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::Unauthorized)
+
+    post "/notifications/sync"
+    assert_response :redirect
+    assert_equal "Your Github token seems to be invalid. Please try again.", flash[:error]
+  end
+
+  test 'gracefully handles failed user notification syncs with bad token as json' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::Unauthorized)
+
+    post "/notifications/sync.json"
+    assert_response :service_unavailable
+  end
+
+  test 'gracefully handles failed user notification syncs when user is offline' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Faraday::ConnectionFailed.new('offline error'))
+
+    post "/notifications/sync"
+    assert_response :redirect
+    assert_equal "You seem to be offline. Please try again.", flash[:error]
+  end
+
+  test 'gracefully handles failed user notification syncs when user is offline as json' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Faraday::ConnectionFailed.new('offline error'))
 
     post "/notifications/sync.json"
     assert_response :service_unavailable
