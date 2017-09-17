@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  API_HEADER = 'X-Octobox-API'
+
+  protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
   helper_method :current_user, :logged_in?
   before_action :authenticate_user!
 
@@ -25,12 +27,17 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    return nil unless cookies.permanent.signed[:user_id].present?
-    @current_user ||= User.find_by(id: cookies.permanent.signed[:user_id])
+    user_id = cookies.permanent.signed[:user_id]
+    return nil unless user_id.present?
+    @current_user ||= User.find_by(id: user_id)
   end
 
   def logged_in?
     !current_user.nil?
+  end
+
+  def octobox_api_request?
+    request.headers[API_HEADER].present?
   end
 
   def handle_exception(exception, status, message='')

@@ -50,6 +50,7 @@ class Notification < ApplicationRecord
   end
 
   def mark_read
+    return unless unread?
     self[:unread] = false
     save(touch: false) if changed?
     user.github_client.mark_thread_as_read(github_id, read: true)
