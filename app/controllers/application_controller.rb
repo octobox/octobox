@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :logged_in?
   before_action :authenticate_user!
 
-  rescue_from Octokit::Unauthorized do |exception|
+  rescue_from Octokit::Unauthorized, Octokit::Forbidden do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.unauthorized"))
   end
   rescue_from Octokit::BadGateway, Octokit::ServiceUnavailable do |exception|

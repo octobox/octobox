@@ -265,6 +265,15 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Your Github token seems to be invalid. Please try again.", flash[:error]
   end
 
+  test 'gracefully handles forbidden user notification syncs' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::Forbidden)
+
+    post "/notifications/sync"
+    assert_response :redirect
+    assert_equal "Your Github token seems to be invalid. Please try again.", flash[:error]
+  end
+
   test 'gracefully handles failed user notification syncs with bad token as json' do
     sign_in_as(@user)
     User.any_instance.stubs(:sync_notifications).raises(Octokit::Unauthorized)
