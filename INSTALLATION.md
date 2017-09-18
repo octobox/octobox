@@ -19,7 +19,7 @@ in your GitHub settings for Octobox to work.
 * [Running Octobox for GitHub Enterprise](#running-octobox-for-github-enterprise)
 * [Using Personal Access Tokens](#using-personal-access-tokens)
 * [Limiting Access](#limiting-access)
-* [Customizing the Scopes on Github](#customizing-the-scopes-on-github)
+* [Customizing the Scopes on GitHub](#customizing-the-scopes-on-github)
 * [Customizing Source Link for Modified Code](#customizing-source-link-for-modified-code)
 * [Adding a custom initializer](#adding-a-custom-initializer)
 * [Downloading subjects](#downloading-subjects)
@@ -235,7 +235,7 @@ You must be authenticated with access to the org. This will show you a list of t
 
 Make sure you add the `read:org` scope if you have customized the scope at all.
 
-## Customizing the Scopes on Github
+## Customizing the Scopes on GitHub
 
 You can customize the scopes required for Octobox to work by modifying the `GITHUB_SCOPE` environment variable.
 By default `notifications` is enabled, unless you also [limit access](#limiting-access), in which case the default is `notifications, read:org`. These are required for the application to function correctly.
@@ -270,7 +270,7 @@ To enable this feature set the following environment variable:
 
     FETCH_SUBJECT=true
 
-If you want this feature to work for private repositories, you'll need to [Customize the Scopes on Github](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
+If you want this feature to work for private repositories, you'll need to [Customize the Scopes on GitHub](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
 
 ## Google Analytics
 

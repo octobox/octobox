@@ -26,7 +26,7 @@ en:
       next: 'Next'
   exceptions:
     octokit:
-      unauthorized: 'Your Github token seems to be invalid'
-      unavailable: 'Having issues connecting to Github'
+      unauthorized: 'Your GitHub token seems to be invalid'
+      unavailable: 'Having issues connecting to GitHub'
     faraday:
       connection_failed: 'You seem to be offline'
