@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :logged_in?
   before_action :authenticate_user!
 
+  before_bugsnag_notify :add_user_info_to_bugsnag if Rails.env.production?
+
   rescue_from Octokit::Unauthorized, Octokit::Forbidden do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.unauthorized"))
   end
@@ -17,6 +19,15 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def add_user_info_to_bugsnag(notification)
+    return unless logged_in?
+
+    notification.user = {
+      id: current_user.id,
+      login: current_user.github_login
+    }
+  end
 
   def authenticate_user!
     return if logged_in?
