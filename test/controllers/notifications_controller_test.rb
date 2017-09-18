@@ -245,7 +245,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     post "/notifications/sync"
     assert_response :redirect
-    assert_equal "Having issues connecting to Github. Please try again.", flash[:error]
+    assert_equal "Having issues connecting to GitHub. Please try again.", flash[:error]
   end
 
   test 'gracefully handles failed user notification syncs as json' do
@@ -262,7 +262,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     post "/notifications/sync"
     assert_response :redirect
-    assert_equal "Your Github token seems to be invalid. Please try again.", flash[:error]
+    assert_equal "Your GitHub token seems to be invalid. Please try again.", flash[:error]
   end
 
   test 'gracefully handles forbidden user notification syncs' do
@@ -271,7 +271,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     post "/notifications/sync"
     assert_response :redirect
-    assert_equal "Your Github token seems to be invalid. Please try again.", flash[:error]
+    assert_equal "Your GitHub token seems to be invalid. Please try again.", flash[:error]
   end
 
   test 'gracefully handles failed user notification syncs with bad token as json' do

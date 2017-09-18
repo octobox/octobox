@@ -170,7 +170,7 @@ class NotificationsController < ApplicationController
     head :ok
   end
 
-  # Synchronize notifications with Github
+  # Synchronize notifications with GitHub
   #
   # ==== Example
   #
