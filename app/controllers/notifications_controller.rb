@@ -223,9 +223,7 @@ class NotificationsController < ApplicationController
     return unless page > 1
     total_pages = (scope.count / per_page.to_f).ceil
     page_num = [page, total_pages].min
-    redirect_params = {
-      page: page_num
-    }.merge(params.except(:page).permit!)
+    redirect_params = params.permit!.merge(page: page_num)
     redirect_to url_for(redirect_params) if page_num != page
   end
 
