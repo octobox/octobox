@@ -80,6 +80,14 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to '/?page=2'
   end
 
+  test 'redirect back to last page of results if page is out of bounds and send filters' do
+    sign_in_as(@user)
+    25.times.each { create(:notification, user: @user, archived: false, unread: true) }
+
+    get '/?page=3&reason=subscribed&unread=true'
+    assert_redirected_to '/?page=2&reason=subscribed&unread=true'
+  end
+
   test 'archives multiple notifications' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
