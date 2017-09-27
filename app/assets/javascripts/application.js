@@ -43,7 +43,11 @@ function moveCursorToClickedRow(event) {
 function updateFavicon() {
   $.get( "/notifications/unread_count", function(data) {
     var unread_count = data["count"];
-    var title = 'Octobox' + (unread_count > 0 ? ` (${unread_count})` : '');
+    var title = 'Octobox';
+    if (unread_count > 0) {
+      title += ' (' + unread_count +')';
+    }
+
     window.document.title = title;
 
     if ( unread_count > 0 ) {
