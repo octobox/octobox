@@ -71,5 +71,10 @@ module Octobox
       @source_repo || env_value || 'https://github.com/octobox/octobox'
     end
     attr_writer :source_repo
+
+    def octobox_io
+      @octobox_io || ENV['OCTOBOX_IO'].present?
+    end
+    attr_writer :octobox_io
   end
 end

@@ -26,6 +26,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/privacy', to: 'pages#privacy'
+  get '/terms', to: 'pages#terms'
   get '/settings', to: 'users#edit'
   resources :users, only: [:update, :destroy] do
     collection do
