@@ -26,8 +26,11 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/privacy', to: 'pages#privacy'
-  get '/terms', to: 'pages#terms'
+  if Octobox.config.octobox_io
+    get '/privacy', to: 'pages#privacy'
+    get '/terms', to: 'pages#terms'
+  end
+
   get '/settings', to: 'users#edit'
   resources :users, only: [:update, :destroy] do
     collection do
