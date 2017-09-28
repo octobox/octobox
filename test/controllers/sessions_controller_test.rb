@@ -26,11 +26,11 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
-  test 'POST #create forces the user to sync their notifications' do
+  test 'POST #create forces the user to sync their notifications if they have synced before' do
     OmniAuth.config.mock_auth[:github].uid = @user.github_id
 
     post '/auth/github/callback'
-    assert_requested @notifications_request, times: 2
+    assert_requested @notifications_request
   end
 
   test 'POST #create redirects to the root_path with an error message if they are not an org member' do

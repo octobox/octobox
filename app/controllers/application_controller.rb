@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   API_HEADER = 'X-Octobox-API'
 
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :logged_in?, :initial_sync?
   before_action :authenticate_user!
 
   before_bugsnag_notify :add_user_info_to_bugsnag if Rails.env.production?
@@ -45,6 +45,10 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     !current_user.nil?
+  end
+
+  def initial_sync?
+    current_user.last_synced_at.nil?
   end
 
   def octobox_api_request?

@@ -5,7 +5,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   include NotificationTestHelper
 
   test '#download fetches all read notification for a new user' do
-    user = create(:user)
+    user = create(:user, last_synced_at: nil)
     all_notifications = notifications_from_fixture('newuser_all_notifications.json')
     expected_attributes = build_expected_attributes(all_notifications)
     download_service = DownloadService.new(user)
