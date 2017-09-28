@@ -70,7 +70,11 @@ class DownloadService
       n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
       n = user.notifications.new(github_id: notification.id) if n.nil?
       next unless n
-      n.update_from_api_response(notification, unarchive: unarchive) rescue ActiveRecord::RecordNotUnique nil
+      begin
+        n.update_from_api_response(notification, unarchive: unarchive)
+      rescue ActiveRecord::RecordNotUnique
+        nil
+      end
     end
   end
 
