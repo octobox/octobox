@@ -66,7 +66,8 @@ class Notification < ApplicationRecord
         end
       end
     end
-    notifications.update_all(archived: true, unread: false)
+
+    where(id: notifications.map(&:id)).update_all(archived: true, unread: false)
   end
 
   def web_url
