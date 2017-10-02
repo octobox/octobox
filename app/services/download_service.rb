@@ -26,10 +26,10 @@ class DownloadService
 
     if user.last_synced_at
       fetch_read_notifications
+      fetch_unread_notifications
     else
       new_user_fetch
     end
-    fetch_unread_notifications
     user.update_column(:last_synced_at, timestamp)
   end
 
