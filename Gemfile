@@ -19,6 +19,7 @@ gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
 gem 'rake'
+gem 'activerecord-import'
 
 group :development, :test do
   gem 'byebug', platform: :mri

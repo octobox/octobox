@@ -65,16 +65,14 @@ class DownloadService
   def process_notifications(notifications, unarchive: false)
     return if notifications.blank?
     existing_notifications = user.notifications.includes(:subject).where(github_id: notifications.map(&:id))
-    notifications.reject{|n| !unarchive && n.unread }.each do |notification|
+    updates = notifications.reject{|n| !unarchive && n.unread }.map do |notification|
       n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
       n = user.notifications.new(github_id: notification.id) if n.nil?
       next unless n
-      begin
-        n.update_from_api_response(notification, unarchive: unarchive)
-      rescue ActiveRecord::RecordNotUnique
-        nil
-      end
+      n.update_from_api_response(notification, unarchive: unarchive)
     end
+
+    Notification.import updates, on_duplicate_key_update: API_ATTRIBUTE_MAP.keys
   end
 
   def new_user_fetch

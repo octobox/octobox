@@ -3,6 +3,9 @@ sudo: false
 rvm:
   - 2.4.2
 
+addons:
+  postgresql: "9.5"
+
 services:
   - postgresql
 

@@ -100,7 +100,7 @@ class Notification < ApplicationRecord
     self.attributes = attrs
     update_subject
     unarchive_if_updated if unarchive
-    save(touch: false) if changed?
+    self
   end
 
   private
