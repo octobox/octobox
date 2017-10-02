@@ -164,16 +164,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
-    User.any_instance.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:mark_thread_as_read).with(notification1.github_id).returns true
-      client.expects(:mark_thread_as_read).with(notification2.github_id).returns true
-    })
+
+    Notification.expects(:mark_read).with([notification1, notification2])
+
     post '/notifications/mark_read_selected', params: { id: [notification1.id, notification2.id] }
     assert_response :ok
-
-    refute notification1.reload.unread?
-    refute notification2.reload.unread?
-    assert notification3.reload.unread?
   end
 
   test 'marks read all notifications' do
@@ -182,17 +177,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
-    User.any_instance.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:mark_thread_as_read).with(notification1.github_id).returns true
-      client.expects(:mark_thread_as_read).with(notification2.github_id).returns true
-      client.expects(:mark_thread_as_read).with(notification3.github_id).returns true
-    })
+
+    Notification.expects(:mark_read).with([notification1, notification2, notification3])
+
     post '/notifications/mark_read_selected', params: { id: ['all'] }
     assert_response :ok
-
-    refute notification1.reload.unread?
-    refute notification2.reload.unread?
-    refute notification3.reload.unread?
   end
 
   test 'toggles starred on a notification' do
