@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
 
   def handle_exception(exception, status, message='')
     logger.error("[ERROR] #{controller_name}##{action_name} \
-                 #{current_user.github_login} - #{exception.class}: #{exception.message}")
+                 #{current_user.try(:github_login)} - #{exception.class}: #{exception.message}")
 
     flash[:error] = "#{message}. Please try again."
 
