@@ -49,11 +49,17 @@ class Notification < ApplicationRecord
     subject.try(:state)
   end
 
-  def mark_read
-    return unless unread?
-    self[:unread] = false
-    save(touch: false) if changed?
-    user.github_client.mark_thread_as_read(github_id)
+  def self.mark_read(notifications)
+    unread = notifications.select(&:unread)
+    user = unread.first.user
+    conn = user.github_client.client_without_redirects
+    manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
+    conn.in_parallel(manager) do
+      unread.each do |n|
+        conn.patch "notifications/threads/#{n.github_id}"
+      end
+    end
+    where(id: unread.map(&:id)).update_all(unread: false)
   end
 
   def self.mute(notifications)

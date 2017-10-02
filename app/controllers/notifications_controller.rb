@@ -138,9 +138,7 @@ class NotificationsController < ApplicationController
   # HEAD 204
   #
   def mark_read_selected
-    selected_notifications.each do |notification|
-      notification.mark_read
-    end
+    Notification.mark_read(selected_notifications)
     head :ok
   end
 

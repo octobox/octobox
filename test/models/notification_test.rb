@@ -4,31 +4,6 @@ require 'test_helper'
 class NotificationTest < ActiveSupport::TestCase
   include NotificationTestHelper
 
-  test 'mark_read updates the github thread' do
-    user = create(:user)
-    notification = create(:notification, user: user)
-    user.stubs(:github_client).returns(mock.tap { |client|
-      client.expects(:mark_thread_as_read).with(notification.github_id).returns true
-    })
-    notification.mark_read
-    refute notification.reload.unread?
-  end
-
-  test 'mark_read does not change updated_at' do
-    stub_notifications_request(method: :patch)
-    notification = create(:notification)
-    expected_updated_at = notification.updated_at
-    notification.mark_read
-    assert_equal expected_updated_at, notification.reload.updated_at
-  end
-
-  test 'mark_read turns unread to false' do
-    stub_notifications_request(method: :patch)
-    notification = create(:notification, unread: true)
-    notification.mark_read
-    refute notification.reload.unread?
-  end
-
   test 'unarchive_if_updated unarchives when updated_at is newer' do
     notification = create(:archived)
     notification.updated_at += 1
@@ -71,6 +46,21 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert notification1.reload.archived?
     assert notification2.reload.archived?
+  end
+
+  test '#mark_read marks multiple notifications as read' do
+    user = create(:user)
+
+    notification1 = create(:notification, user: user)
+    notification2 = create(:notification, user: user)
+
+    stub_notifications_request(method: :patch, url: "https://api.github.com/notifications/threads/#{notification1.github_id}")
+    stub_notifications_request(method: :patch, url: "https://api.github.com/notifications/threads/#{notification2.github_id}")
+
+    Notification.mark_read([notification1, notification2])
+
+    refute notification1.reload.unread?
+    refute notification2.reload.unread?
   end
 
   test 'update_from_api_response updates attributes' do
