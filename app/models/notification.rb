@@ -58,12 +58,11 @@ class Notification < ApplicationRecord
   def self.mute(notifications)
     user = notifications.to_a.first.user
     conn = user.github_client.client_without_redirects
-    notifications.each_slice(10) do |batch|
-      conn.in_parallel do
-        batch.each do |b|
-          conn.patch "notifications/threads/#{b.github_id}"
-          conn.put "notifications/threads/#{b.github_id}/subscription", {ignored: true}.to_json
-        end
+    manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
+    conn.in_parallel(manager) do
+      notifications.each do |n|
+        conn.patch "notifications/threads/#{n.github_id}"
+        conn.put "notifications/threads/#{n.github_id}/subscription", {ignored: true}.to_json
       end
     end
 
