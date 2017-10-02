@@ -56,6 +56,23 @@ class NotificationTest < ActiveSupport::TestCase
     assert notification.archived?
   end
 
+  test '#mute mutes multiple notifications' do
+    user = create(:user)
+
+    notification1 = create(:notification, archived: false, user: user)
+    notification2 = create(:notification, archived: false, user: user)
+
+    stub_notifications_request(method: :patch, url: "https://api.github.com/notifications/threads/#{notification1.github_id}")
+    stub_notifications_request(method: :put, url: "https://api.github.com/notifications/threads/#{notification1.github_id}/subscription")
+    stub_notifications_request(method: :patch, url: "https://api.github.com/notifications/threads/#{notification2.github_id}")
+    stub_notifications_request(method: :put, url: "https://api.github.com/notifications/threads/#{notification2.github_id}/subscription")
+
+    Notification.mute([notification1, notification2])
+
+    assert notification1.reload.archived?
+    assert notification2.reload.archived?
+  end
+
   test 'update_from_api_response updates attributes' do
     api_response = notifications_from_fixture('morty_notifications.json').first
     notification = create(:morty_updated)

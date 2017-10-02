@@ -49,6 +49,17 @@ module Octobox
     end
     attr_writer :max_notifications_to_sync
 
+    def max_concurrency
+      if @max_concurrency
+        @max_concurrency
+      elsif ENV['MAX_CONCURRENCY'].present?
+        ENV['MAX_CONCURRENCY'].to_i
+      else
+        10
+      end
+    end
+    attr_writer :max_notifications_to_sync
+
     def restricted_access_enabled
       @restricted_access_enabled || ENV['RESTRICTED_ACCESS_ENABLED'].present?
     end
