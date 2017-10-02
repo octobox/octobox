@@ -205,8 +205,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = Octobox.config.fetch_subject ? :subject : nil
-    scope = current_user.notifications.includes(eager_load_relation)
+    scope = current_user.notifications.includes(:subject)
 
     if params[:starred].present?
       scope.starred
