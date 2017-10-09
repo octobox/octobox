@@ -43,7 +43,7 @@
   <% end %>
   <%= menu_separator unless @unread_notifications.empty? %>
 
-  <% @states.sort_by{|state, count| state.to_s }.reverse.each do |state, count| %>
+  <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
     <% next if state.nil? %>
     <%= filter_link :state, state, count do %>
       <span class='text-<%= state_label(state) %>'>
