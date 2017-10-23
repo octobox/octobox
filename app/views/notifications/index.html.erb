@@ -62,6 +62,7 @@
               <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
               <h3>You're in the clear!</h3>
               <p>There are no notifications that need your attention.</p>
+              <p><i>Expecting notifications? Make sure <a href="https://github.com/settings/notifications">Web Notifications</a> are enabled on your Github account.</i></p>
               <% if current_user.last_synced_at %>
                 <p class='text-muted'>
                 <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
@@ -74,6 +75,7 @@
               <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
               <h3>Nothing to see here.</h3>
               <p>You can always try <%= link_to 'refreshing', sync_notifications_path(filters), method: :post %>.</p>
+              <p><i>Expecting notifications? Make sure <a href="https://github.com/settings/notifications">Web Notifications</a> are enabled on your Github account.</i></p>
               <% if current_user.last_synced_at %>
                 <p class='text-muted'>
                 <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
