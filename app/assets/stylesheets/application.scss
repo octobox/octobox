@@ -93,6 +93,16 @@ html {
       padding-right: 0;
     }
   }
+  .filter-options {
+    display: flex;
+    position: relative;
+    margin-left: 120px;
+    margin-top: -34px;
+    > .btn-group {
+      display: flex;
+      overflow-x: scroll;
+    }
+  }
 }
 
 .turbolinks-progress-bar {
