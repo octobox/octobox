@@ -194,7 +194,9 @@ class NotificationsController < ApplicationController
   def current_notifications(scope = notifications_for_presentation)
     sub_scopes = [:repo, :reason, :type, :unread, :owner, :state]
     sub_scopes.each do |sub_scope|
-      scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
+      if scope_params = parsed_scope_param(sub_scope)
+        scope = scope.send(sub_scope, scope_params)
+      end
     end
     scope = scope.search_by_subject_title(params[:q])   if params[:q].present?
     scope = scope.unscope(where: :archived)             if params[:q].present?
@@ -211,6 +213,19 @@ class NotificationsController < ApplicationController
       scope.archived
     else
       scope.inbox
+    end
+  end
+  
+  def parsed_scope_param(sub_scope)
+    param = params[sub_scope]
+    
+    return nil unless param.present?
+    return param unless sub_scope == :reason
+    
+    if param.include?(',')
+      param.split(',')
+    else
+      param
     end
   end
 

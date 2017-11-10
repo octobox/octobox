@@ -87,7 +87,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?page=3&reason=subscribed&unread=true'
     assert_redirected_to '/?page=2&reason=subscribed&unread=true'
   end
-
+  
   test 'archives multiple notifications' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
@@ -327,5 +327,25 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, json["pagination"]["page"]
     assert_equal 0, json["pagination"]["total_pages"]
     assert_equal 0, json["pagination"]["per_page"]
+  end
+  
+  test 'renders a union of notifications when multiple reasons given' do
+    sign_in_as(@user)
+    Notification.destroy_all
+    
+    notification1 = create(:notification, user: @user, archived: false, reason: "assign")
+    notification2 = create(:notification, user: @user, archived: false, reason: "mention")
+    notification3 = create(:notification, user: @user, archived: false, reason: "subscribed")
+    
+    get notifications_path(format: :json, reason: "assign,mention")
+    
+    assert_response :success
+    
+    json = JSON.parse(response.body)
+    notification_ids = json["notifications"].map { |n| n["id"] }
+
+    assert notification_ids.include?(notification1.id)
+    assert notification_ids.include?(notification2.id)
+    refute notification_ids.include?(notification3.id)
   end
 end
