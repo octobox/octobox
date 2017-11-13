@@ -1,15 +1,21 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
-  include PgSearch
-  pg_search_scope :search_by_subject_title,
-                  against: :subject_title,
-                  using: {
-                    tsearch: {
-                      prefix: true,
-                      negation: true,
-                      dictionary: "english"
+  if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+    include PgSearch
+    pg_search_scope :search_by_subject_title,
+                    against: :subject_title,
+                    using: {
+                      tsearch: {
+                        prefix: true,
+                        negation: true,
+                        dictionary: "english"
+                      }
                     }
-                  }
+  else
+    def self.search_by_subject_title(title)
+      where('subject_title like ?', "%#{title}%")
+    end
+  end
 
   belongs_to :user
   belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true
