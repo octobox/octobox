@@ -220,6 +220,13 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test 'get to syncs redirects' do
+    sign_in_as(@user)
+
+    get "/notifications/sync"
+    assert_response :redirect
+  end
+
   test 'gracefully handles failed user notification syncs' do
     sign_in_as(@user)
     User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
