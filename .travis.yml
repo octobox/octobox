@@ -20,8 +20,8 @@ cache: bundler
 
 env:
   matrix:
-    - DATABASE=mysql
-    - DATABASE=pg
+    - DATABASE=mysql2
+    - DATABASE=postgresql
 
 notifications:
   email: false

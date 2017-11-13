@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 20170907022825) do
 
-  create_table "notifications", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "notifications", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "github_id"
     t.integer "repository_id"
@@ -34,7 +37,7 @@ ActiveRecord::Schema.define(version: 20170907022825) do
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true
   end
 
-  create_table "subjects", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "subjects", force: :cascade do |t|
     t.string "url"
     t.string "state"
     t.string "author"
@@ -44,7 +47,7 @@ ActiveRecord::Schema.define(version: 20170907022825) do
     t.index ["url"], name: "index_subjects_on_url"
   end
 
-  create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.integer "github_id", null: false
     t.string "access_token", null: false
     t.string "github_login", null: false
