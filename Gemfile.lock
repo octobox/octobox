@@ -140,6 +140,7 @@ GEM
     multi_json (1.12.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    mysql2 (0.4.9)
     newrelic_rpm (4.5.0.337)
     nio4r (2.1.0)
     nokogiri (1.8.1)
@@ -312,6 +313,7 @@ DEPENDENCIES
   lograge
   minitest
   mocha
+  mysql2
   newrelic_rpm
   octicons_helper
   octokit (~> 4.7)

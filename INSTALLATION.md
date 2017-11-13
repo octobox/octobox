@@ -8,6 +8,7 @@ in your GitHub settings for Octobox to work.
 
 ### Installation
 
+* [Database Selection](#database-selection)
 * [Deployment to Heroku](#deployment-to-heroku)
 * [Local installation](#local-installation)
 * [Using Docker](#using-docker)
@@ -25,6 +26,18 @@ in your GitHub settings for Octobox to work.
 * [Downloading subjects](#downloading-subjects)
 
 # Installation
+## Database Selection
+
+Octobox supports a few database adapters. The full list can be found [here](https://github.com/octobox/octobox/blob/master/lib/datbase_config.rb#L2).
+
+#### How to specify an adapter
+
+- The default is `postgres`
+- you can specify an environment variable `DATABASE=<adapter>`
+- you can make a `.database` file that specifies the adapter in it. This file is gitignored.
+
+Note, databases other than PostgreSQL don't have full text support (or recently have it). For this reason, search may be degraded as we can no longer use the `pg_search` gem. 
+
 ## Deployment to Heroku
 
 You can host your own instance of Octobox using Heroku.

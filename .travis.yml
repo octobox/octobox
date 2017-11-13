@@ -5,9 +5,11 @@ rvm:
 
 services:
   - postgresql
+  - mysql
 
 before_script:
-  - psql -c 'create database "octobox_test";' -U postgres
+  - psql -c 'create database "octobox_test";' -U postgres || true
+  - mysql -u root -e 'create database octobox_test;' || true
 
 script:
   - RAILS_ENV=test bundle exec rake --trace db:migrate test && bundle exec codeclimate-test-reporter
@@ -15,6 +17,11 @@ script:
 bundler_args: --without development production --deployment --jobs=3 --retry=3
 
 cache: bundler
+
+env:
+  matrix:
+    - DATABASE=mysql
+    - DATABASE=pg
 
 notifications:
   email: false
