@@ -20,8 +20,8 @@ gem 'jbuilder'
 gem 'rake'
 
 # Supported databases
-gem 'mysql2'
-gem 'pg'
+gem 'mysql2', require: false
+gem 'pg', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri
