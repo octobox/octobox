@@ -34,7 +34,7 @@ Octobox supports a few database adapters. The full list can be found [here](http
 
 - The default is `postgres`
 - you can specify an environment variable `DATABASE=<adapter>`
-- you can make a `.database` file that specifies the adapter in it. This file is gitignored.
+- Protip: you can make a `.env` file that include the `DATABASE=<adapter>` if you don't want to specify it all the time.
 
 Note, databases other than PostgreSQL don't have full text support (or recently have it). For this reason, search may be degraded as we can no longer use the `pg_search` gem. 
 

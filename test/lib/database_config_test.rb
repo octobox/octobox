@@ -1,10 +1,6 @@
 require 'test_helper'
 
 class DatabaseConfigTest < ActiveSupport::TestCase
-  setup do
-    DatabaseConfig.stubs(:database_adapter_file_path).returns('/this/wont/exist')
-  end
-
   test 'chooses the right DB' do
     if ENV['DATABASE']
       assert_equal ENV['DATABASE'].downcase, ActiveRecord::Base.connection.adapter_name.downcase
@@ -26,14 +22,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       assert_raises do
         DatabaseConfig.adapter
       end
-    end
-
-    set_env('DATABASE', nil) do
-      tmp_path = Rails.root.join('tmp/.database')
-      File.write(tmp_path, 'mysql2')
-      DatabaseConfig.unstub(:database_adapter_file_path)
-      DatabaseConfig.stubs(:database_adapter_file_path).returns(tmp_path)
-      assert_equal 'mysql2', DatabaseConfig.adapter
     end
   end
 

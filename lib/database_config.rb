@@ -5,8 +5,6 @@ module DatabaseConfig
     def adapter
       adapter = if ENV['DATABASE']
         ENV['DATABASE']
-      elsif File.exist?(database_adapter_file_path)
-        File.read(database_adapter_file_path).strip
       else
         'postgresql'
       end
@@ -54,10 +52,6 @@ module DatabaseConfig
     end
 
     private
-
-    def database_adapter_file_path
-      Rails.root.join('.database')
-    end
 
     def is_mysql?
       adapter.downcase == 'mysql2'
