@@ -1,12 +1,13 @@
 module NotificationsHelper
   REASON_LABELS = {
-    'comment'      => 'primary',
-    'author'       => 'success',
-    'state_change' => 'info',
-    'mention'      => 'warning',
-    'assign'       => 'danger',
-    'subscribed'   => 'subscribed',
-    'team_mention' => 'team_mention'
+    'comment'        => 'primary',
+    'author'         => 'success',
+    'state_change'   => 'info',
+    'mention'        => 'warning',
+    'assign'         => 'danger',
+    'subscribed'     => 'subscribed',
+    'team_mention'   => 'team_mention',
+    'security_alert' => 'security_alert'
   }.freeze
 
   STATE_LABELS = {
@@ -16,11 +17,12 @@ module NotificationsHelper
   }
 
   SUBJECT_TYPES = {
-    'RepositoryInvitation' => 'mail-read',
-    'Issue'                => 'issue-opened',
-    'PullRequest'          => 'git-pull-request',
-    'Commit'               => 'git-commit',
-    'Release'              => 'tag'
+    'RepositoryInvitation'         => 'mail-read',
+    'Issue'                        => 'issue-opened',
+    'PullRequest'                  => 'git-pull-request',
+    'Commit'                       => 'git-commit',
+    'Release'                      => 'tag',
+    'RepositoryVulnerabilityAlert' => 'alert'
   }.freeze
 
   def filters
