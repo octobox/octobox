@@ -289,7 +289,9 @@ function autoSync() {
 }
 
 function clearFilters() {
-  Turbolinks.visit("/");
+  if ($("#help-box:hidden") == 0) {
+    Turbolinks.visit("/");
+  }
 }
 
 function setAutoSyncTimer() {
