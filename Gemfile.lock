@@ -81,7 +81,7 @@ GEM
     ethon (0.11.0)
       ffi (>= 1.3.0)
     execjs (2.7.0)
-    factory_girl (4.9.0)
+    factory_bot (4.8.2)
       activesupport (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
@@ -301,7 +301,7 @@ DEPENDENCIES
   byebug
   codeclimate-test-reporter
   dotenv-rails
-  factory_girl
+  factory_bot
   faraday_middleware
   jbuilder
   jquery-rails

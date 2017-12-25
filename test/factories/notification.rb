@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :notification do
     sequence(:github_id, 1000000) { |n| n }
     repository_id 930405
