@@ -29,6 +29,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_template 'users/profile'
   end
 
+  test 'displays settings page' do
+    sign_in_as(@user)
+    get settings_path
+    assert_template 'users/edit'
+  end
+
+  test 'assigns latest git sha on settings page' do
+    sign_in_as(@user)
+    get settings_path
+    assert_equal assigns(:latest_git_sha).length, 7
+  end
+
   test 'updates personal_access_token' do
     create_token_user
     sign_in_as(@token_user)

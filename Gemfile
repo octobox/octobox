@@ -19,6 +19,7 @@ gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
 gem 'rake'
+gem 'git'
 
 group :development, :test do
   gem 'byebug', platform: :mri
