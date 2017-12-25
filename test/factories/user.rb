@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     sequence(:github_id, 1000000){|n| n}
     access_token { SecureRandom.hex(20) }
