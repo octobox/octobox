@@ -56,7 +56,7 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bugsnag (6.3.0)
+    bugsnag (6.4.0)
     builder (3.2.3)
     byebug (9.1.0)
     codeclimate-test-reporter (1.0.7)
@@ -93,7 +93,7 @@ GEM
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hashdiff (0.3.7)
-    hashie (3.5.6)
+    hashie (3.5.7)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -141,7 +141,7 @@ GEM
     multi_json (1.12.2)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
-    newrelic_rpm (4.6.0.338)
+    newrelic_rpm (4.7.1.340)
     nio4r (2.1.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
@@ -156,7 +156,7 @@ GEM
     octicons_helper (4.0.7)
       octicons
       rails
-    octokit (4.7.0)
+    octokit (4.8.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     omniauth (1.7.1)
       hashie (>= 3.4.6, < 3.6.0)
@@ -171,7 +171,7 @@ GEM
     parser (2.4.0.2)
       ast (~> 2.3)
     pg (0.21.0)
-    pg_search (2.1.1)
+    pg_search (2.1.2)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
       arel (>= 6)
@@ -341,4 +341,4 @@ RUBY VERSION
    ruby 2.4.2p111
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
