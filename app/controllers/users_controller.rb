@@ -19,7 +19,9 @@ class UsersController < ApplicationController
   # }
   def profile; end
 
-  def edit; end
+  def edit
+    @latest_git_sha = Git.open(Rails.root).object('HEAD').sha[0..6] rescue nil
+  end
 
   # Update a user profile. Only updates the current user
   #

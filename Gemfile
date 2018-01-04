@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.4.2'
+ruby '2.5.0'
 
 gem 'rails', '~> 5.1', '>= 5.1.3'
 gem 'bootstrap-sass'
@@ -18,6 +18,7 @@ gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
 gem 'rake'
+gem 'git'
 
 # Supported databases
 gem 'mysql2', require: false
@@ -31,7 +32,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'factory_girl'
+  gem 'factory_bot'
   gem 'simplecov'
   gem 'codeclimate-test-reporter'
   gem 'webmock'

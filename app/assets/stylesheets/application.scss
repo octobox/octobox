@@ -14,6 +14,7 @@ $panel-default-heading-bg: #f8f8f8;
 $panel-footer-bg: $panel-default-heading-bg;
 $subscribed-color: #a128ca;
 $team_mention-color: #5d477e;
+$security_alert-color: #800000;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -539,6 +540,17 @@ td.keys {
   }
 }
 
+.label-security_alert{
+  background-color: $security_alert-color;
+}
+
+.text-security_alert{
+  fill: $security_alert-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
+}
+
 .octicon-star {
   fill: none;
   stroke: #aaa;
@@ -610,4 +622,8 @@ td.keys {
 }
 .octicon.inverse{
   fill: #fff;
+}
+
+.settings-sha {
+  margin: 35px 0 10px;
 }

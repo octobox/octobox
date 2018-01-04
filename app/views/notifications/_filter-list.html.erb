@@ -16,7 +16,7 @@
       <% end %>
 
       <%= filter_option :type do %>
-        <%= params[:type].underscore.humanize %>
+        <%= params[:type].underscore.gsub('repository', '').humanize %>
       <% end %>
 
       <%= filter_option :owner do %>

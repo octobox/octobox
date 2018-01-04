@@ -1,4 +1,4 @@
-FROM ruby:2.4.2-alpine
+FROM ruby:2.5.0-alpine
 RUN apk add --update \
   build-base \
   netcat-openbsd \
