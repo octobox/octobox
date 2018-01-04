@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
-  if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+  if DatabaseConfig.is_postgres?
     include PgSearch
     pg_search_scope :search_by_subject_title,
                     against: :subject_title,

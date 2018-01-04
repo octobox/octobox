@@ -110,6 +110,18 @@ class DatabaseConfigTest < ActiveSupport::TestCase
     end
   end
 
+  test 'is_mysql? and is_postgres?' do
+    set_env('DATABASE', 'postgresql') do
+      assert DatabaseConfig.is_postgres?, 'was not postgres, it should have been'
+      refute DatabaseConfig.is_mysql?, 'was mysql, it should not have been'
+    end
+
+    set_env('DATABASE', 'mysql2') do
+      assert DatabaseConfig.is_mysql?, 'was not mysql, it should have been'
+      refute DatabaseConfig.is_postgres?, 'was postgres, it should not have been'
+    end
+  end
+
   def set_env(key, val)
     original = ENV[key]
     if val

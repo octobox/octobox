@@ -196,7 +196,7 @@ class NotificationsController < ApplicationController
   def current_notifications(scope = notifications_for_presentation)
     [:repo, :reason, :type, :unread, :owner, :state].each do |sub_scope|
       next unless params[sub_scope].present?
-      # This case is required due to a bug in Rails 5.1
+      # This cast is required due to a bug in Rails 5.1
       # TODO: Rails 5.2 fixes this, so this should be removed when that ships
       # https://github.com/rails/rails/commit/68fe6b08ee72cc47263e0d2c9ff07f75c4b42761
       type = scope.klass.type_for_attribute(sub_scope.to_s).class

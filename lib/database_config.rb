@@ -51,10 +51,12 @@ module DatabaseConfig
       ENV.fetch('OCTOBOX_DATABASE_HOST') { 'localhost' }
     end
 
-    private
-
     def is_mysql?
       adapter.downcase == 'mysql2'
+    end
+
+    def is_postgres?
+      adapter.downcase == 'postgresql'
     end
   end
 end
