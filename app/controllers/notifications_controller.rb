@@ -122,7 +122,9 @@ class NotificationsController < ApplicationController
   # HEAD 204
   #
   def archive_selected
-    selected_notifications.update_all archived: params[:value]
+    selected_notifications.update_all(
+      archived: ActiveRecord::Type::Boolean.new.cast(params[:value])
+    )
     head :ok
   end
 
@@ -192,13 +194,17 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    sub_scopes = [:repo, :reason, :type, :unread, :owner, :state]
-    sub_scopes.each do |sub_scope|
-      scope = scope.send(sub_scope, params[sub_scope]) if params[sub_scope].present?
+    [:repo, :reason, :type, :unread, :owner, :state].each do |sub_scope|
+      next unless params[sub_scope].present?
+      # This cast is required due to a bug in Rails 5.1
+      # TODO: Rails 5.2 fixes this, so this should be removed when that ships
+      # https://github.com/rails/rails/commit/68fe6b08ee72cc47263e0d2c9ff07f75c4b42761
+      type = scope.klass.type_for_attribute(sub_scope.to_s).class
+      val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
+      scope = scope.where(sub_scope => val)
     end
-    scope = scope.search_by_subject_title(params[:q])   if params[:q].present?
-    scope = scope.unscope(where: :archived)             if params[:q].present?
-
+    scope = scope.search_by_subject_title(params[:q]) if params[:q].present?
+    scope = scope.unscope(where: :archived)           if params[:q].present?
     scope
   end
 

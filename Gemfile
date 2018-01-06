@@ -9,7 +9,6 @@ gem 'local_time', git: 'https://github.com/twalpole/local_time', branch: 'turbol
 gem 'octicons_helper'
 gem 'octokit', '~> 4.7'
 gem 'omniauth-github'
-gem 'pg'
 gem 'puma'
 gem 'sassc-rails'
 gem 'turbolinks'
@@ -20,6 +19,10 @@ gem 'pg_search'
 gem 'jbuilder'
 gem 'rake'
 gem 'git'
+
+# Supported databases
+gem 'mysql2', require: false
+gem 'pg', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri

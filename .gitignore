@@ -23,3 +23,4 @@ config/initializers/custom.rb
 coverage
 .DS_Store
 public/assets
+.database
