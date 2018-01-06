@@ -28,7 +28,7 @@ in your GitHub settings for Octobox to work.
 # Installation
 ## Database Selection
 
-Octobox supports a few database adapters. The full list can be found [here](https://github.com/Shopify/octobox/blob/6bd151725678f70aa0adda0f7720cc93fb4b284a/lib/database_config.rb#L2).
+Octobox supports a few database adapters. The full list can be found [here](https://github.com/octobox/octobox/blob/85bfbed9111a36e94aa74d4026633dc6ff844bf6/lib/database_config.rb#L2).
 
 #### How to specify an adapter
 
