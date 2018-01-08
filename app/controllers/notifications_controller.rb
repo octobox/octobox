@@ -201,7 +201,7 @@ class NotificationsController < ApplicationController
       # https://github.com/rails/rails/commit/68fe6b08ee72cc47263e0d2c9ff07f75c4b42761
       type = scope.klass.type_for_attribute(sub_scope.to_s).class
       val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
-      scope = scope.where(sub_scope => val)
+      scope = scope.send(sub_scope, val)
     end
     scope = scope.search_by_subject_title(params[:q]) if params[:q].present?
     scope = scope.unscope(where: :archived)           if params[:q].present?
