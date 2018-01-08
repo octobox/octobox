@@ -33,6 +33,52 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/index', file: 'notifications/index.html.erb'
   end
 
+  test 'will render the home page with filters' do
+    sign_in_as(@user)
+
+    # Repo Filter
+    get '/?repo=a/b'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'a/b'
+
+    # Reason Filter
+    get '/?reason=Assign'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Assign'
+
+    # Type Filter
+    get '/?type=repository_a_b'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'A b'
+
+    # Unread Filter
+    get '/?unread=true'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Unread'
+
+    # Owner Filter
+    get '/?owner=bob'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'bob'
+
+    # State Filter
+    get '/?state=archive'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Archive'
+
+    # query Filter
+    get '/?q=query'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Search: query'
+  end
+
   test 'renders the index page as json if authenticated' do
     sign_in_as(@user)
 
