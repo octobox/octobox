@@ -81,6 +81,6 @@ class DownloadService
   def new_user_fetch
     headers = {cache_control: %w(no-store no-cache)}
     notifications = fetch_notifications(params: {all: true, headers: headers})
-    process_notifications(notifications)
+    process_notifications(notifications, unarchive: true)
   end
 end
