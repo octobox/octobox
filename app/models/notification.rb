@@ -1,15 +1,21 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
-  include PgSearch
-  pg_search_scope :search_by_subject_title,
-                  against: :subject_title,
-                  using: {
-                    tsearch: {
-                      prefix: true,
-                      negation: true,
-                      dictionary: "english"
+  if DatabaseConfig.is_postgres?
+    include PgSearch
+    pg_search_scope :search_by_subject_title,
+                    against: :subject_title,
+                    using: {
+                      tsearch: {
+                        prefix: true,
+                        negation: true,
+                        dictionary: "english"
+                      }
                     }
-                  }
+  else
+    def self.search_by_subject_title(title)
+      where('subject_title like ?', "%#{title}%")
+    end
+  end
 
   belongs_to :user
   belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true
@@ -76,9 +82,13 @@ class Notification < ApplicationRecord
     where(id: notifications.map(&:id)).update_all(archived: true, unread: false)
   end
 
+  def expanded_subject_url
+    return subject_url unless Octobox.config.fetch_subject
+    subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
+  end
+
   def web_url
-    url = subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
-    Octobox::SubjectUrlParser.new(url, latest_comment_url: latest_comment_url)
+    Octobox::SubjectUrlParser.new(expanded_subject_url, latest_comment_url: latest_comment_url)
       .to_html_url
   end
 

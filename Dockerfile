@@ -1,10 +1,11 @@
-FROM ruby:2.4.2-alpine
+FROM ruby:2.5.0-alpine
 RUN apk add --update \
   build-base \
   netcat-openbsd \
   git \
   nodejs \
   postgresql-dev \
+  mysql-dev \
   tzdata \
   curl-dev \
   && rm -rf /var/cache/apk/*

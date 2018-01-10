@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :subject do
     sequence(:url) { |n| "https://api.github.com/repos/octobox/octobox/issues/#{n}" }
     state 'open'

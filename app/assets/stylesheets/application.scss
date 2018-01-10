@@ -14,6 +14,7 @@ $panel-default-heading-bg: #f8f8f8;
 $panel-footer-bg: $panel-default-heading-bg;
 $subscribed-color: #a128ca;
 $team_mention-color: #5d477e;
+$security_alert-color: #800000;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -73,9 +74,34 @@ html {
   .flex-container {
     .flex-main & {
       padding-left: 15px;
+      overflow-y: hidden;
+      height: 100%;
+      > .panel {
+        height: 100%;
+        overflow-y: scroll;
+        > .panel-heading {
+          position: absolute;
+          z-index: 1;
+          right: 16px;
+          left: 16px;
+        }
+        > .table {
+          margin-top: 46px;
+        }
+      }
     }
     .flex-sidebar & {
       padding-right: 0;
+    }
+  }
+  .filter-options {
+    display: flex;
+    position: relative;
+    margin-left: 120px;
+    margin-top: -33.5px;
+    > .btn-group {
+      display: flex;
+      overflow-x: scroll;
     }
   }
 }
@@ -514,6 +540,17 @@ td.keys {
   }
 }
 
+.label-security_alert{
+  background-color: $security_alert-color;
+}
+
+.text-security_alert{
+  fill: $security_alert-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
+}
+
 .octicon-star {
   fill: none;
   stroke: #aaa;
@@ -585,4 +622,8 @@ td.keys {
 }
 .octicon.inverse{
   fill: #fff;
+}
+
+.settings-sha {
+  margin: 35px 0 10px;
 }
