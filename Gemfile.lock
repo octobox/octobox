@@ -142,7 +142,6 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     mysql2 (0.4.10)
-    newrelic_rpm (4.7.1.340)
     nio4r (2.2.0)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
@@ -254,6 +253,8 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    skylight (1.5.0)
+      activesupport (>= 3.0.0)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -316,7 +317,6 @@ DEPENDENCIES
   minitest
   mocha
   mysql2
-  newrelic_rpm
   octicons_helper
   octokit (~> 4.7)
   omniauth-github
@@ -331,6 +331,7 @@ DEPENDENCIES
   rubocop
   sassc-rails
   simplecov
+  skylight
   spring
   spring-watcher-listen
   sql_queries_count
