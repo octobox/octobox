@@ -82,9 +82,13 @@ class Notification < ApplicationRecord
     where(id: notifications.map(&:id)).update_all(archived: true, unread: false)
   end
 
+  def expanded_subject_url
+    return subject_url unless Octobox.config.fetch_subject
+    subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
+  end
+
   def web_url
-    url = subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
-    Octobox::SubjectUrlParser.new(url, latest_comment_url: latest_comment_url)
+    Octobox::SubjectUrlParser.new(expanded_subject_url, latest_comment_url: latest_comment_url)
       .to_html_url
   end
 
