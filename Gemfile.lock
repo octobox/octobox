@@ -321,7 +321,7 @@ DEPENDENCIES
   octicons_helper
   octokit (~> 4.7)
   omniauth-github
-  pg
+  pg (~> 0.18)
   pg_search
   puma
   puma_worker_killer

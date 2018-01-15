@@ -22,7 +22,7 @@ gem 'git'
 
 # Supported databases
 gem 'mysql2', require: false
-gem 'pg', require: false
+gem 'pg', '~> 0.18', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri
