@@ -220,6 +220,7 @@ GEM
       ffi (>= 0.5.0, < 2)
     request_store (1.4.0)
       rack (>= 1.4)
+    rgb (0.1.0)
     rubocop (0.52.1)
       parallel (~> 1.10)
       parser (>= 2.4.0.2, < 3.0)
@@ -329,6 +330,7 @@ DEPENDENCIES
   rails-controller-testing
   rails_safe_tasks
   rake
+  rgb
   rubocop
   sassc-rails
   simplecov

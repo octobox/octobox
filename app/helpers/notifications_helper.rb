@@ -36,7 +36,8 @@ module NotificationsHelper
       owner:    params[:owner],
       per_page: params[:per_page],
       q:        params[:q],
-      state:    params[:state]
+      state:    params[:state],
+      label:    params[:label],
     }
   end
 

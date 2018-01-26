@@ -3,7 +3,7 @@
 The Octobox team hosts a shared instance of Octobox at [octobox.io](https://octobox.io/), but perhaps you're looking to host
 your own or get yourself set up to contribute to Octobox. Fantastic! There are a number of install options available to you.
 
-Before you begin, remember that [web notifications must be enabled](https://github.com/octobox/octobox/tree/reorganize-readme#requirements)
+Before you begin, remember that [web notifications must be enabled](README.md#requirements)
 in your GitHub settings for Octobox to work.
 
 ### Installation
@@ -36,7 +36,7 @@ Octobox supports a few database adapters. The full list can be found [here](http
 - you can specify an environment variable `DATABASE=<adapter>`
 - Protip: you can make a `.env` file that include the `DATABASE=<adapter>` if you don't want to specify it all the time.
 
-Note, databases other than PostgreSQL don't have full text support (or recently have it). For this reason, search may be degraded as we can no longer use the `pg_search` gem. 
+Note, databases other than PostgreSQL don't have full text support (or recently have it). For this reason, search may be degraded as we can no longer use the `pg_search` gem.
 
 ## Deployment to Heroku
 
@@ -278,6 +278,7 @@ Experimental feature for downloading extra information about the subject of each
 
 - Author for Issues, Pull Requests, Commit Comments and Releases
 - State (open/closed/merged) for Issues, Pull Requests
+- Labels
 
 To enable this feature set the following environment variable:
 

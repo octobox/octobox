@@ -27,6 +27,10 @@
         <%= params[:state].humanize %>
       <% end %>
 
+      <%= filter_option :label do %>
+        label: <%= params[:label] %>
+      <% end %>
+
       <%= filter_option :q do %>
         Search: <%= params[:q] %>
       <% end %>

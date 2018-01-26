@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907022825) do
+ActiveRecord::Schema.define(version: 20180126052651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "labels", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.bigint "subject_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_labels_on_name"
+    t.index ["subject_id"], name: "index_labels_on_subject_id"
+  end
 
   create_table "notifications", id: :serial, force: :cascade do |t|
     t.integer "user_id"
@@ -60,4 +70,5 @@ ActiveRecord::Schema.define(version: 20170907022825) do
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end
 
+  add_foreign_key "labels", "subjects", on_update: :cascade, on_delete: :cascade
 end
