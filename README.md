@@ -189,4 +189,4 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Copyright
 
-[GNU Affero License](LICENSE.txt) © 2017 [Andrew Nesbitt](https://github.com/andrew).
+[GNU Affero License](LICENSE.txt) © 2018 [Andrew Nesbitt](https://github.com/andrew).
