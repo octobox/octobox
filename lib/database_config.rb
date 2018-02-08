@@ -14,6 +14,9 @@ module DatabaseConfig
         'postgresql'
       end
 
+      # Allow postgres://... as the Heroku buildpack dues
+      adapter = 'postgresql' if adapter == 'postgres'
+
       unless SUPPORTED_ADAPTERS.include?(adapter)
         raise "Unsupported database adapter #{adapter} specified"
       end
