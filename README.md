@@ -5,6 +5,7 @@ Take back control of your GitHub Notifications with [Octobox]( https://octobox.i
 ![Screenshot of  Octobox](https://cloud.githubusercontent.com/assets/1060/25845986/feeca52c-34a7-11e7-82cf-d9b64546e4f6.png)
 
 [![Build Status](https://travis-ci.org/octobox/octobox.svg?branch=master)](https://travis-ci.org/octobox/octobox)
+[![View Performance Data on Skylight](https://badges.skylight.io/status/eLvcBBdLmV6k.svg)](https://oss.skylight.io/app/applications/eLvcBBdLmV6k)
 [![Maintainability](https://api.codeclimate.com/v1/badges/091229be339f6ebe2c53/maintainability)](https://codeclimate.com/github/octobox/octobox/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/091229be339f6ebe2c53/test_coverage)](https://codeclimate.com/github/octobox/octobox/test_coverage)
 [![Code Climate](https://img.shields.io/codeclimate/issues/github/octobox/octobox.svg)](https://codeclimate.com/github/octobox/octobox/issues)
