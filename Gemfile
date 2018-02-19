@@ -20,6 +20,7 @@ gem 'jbuilder'
 gem 'rake'
 gem 'git'
 gem 'sidekiq'
+gem 'sidekiq-unique-jobs'
 
 # Supported databases
 gem 'mysql2', require: false

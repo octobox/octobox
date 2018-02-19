@@ -258,6 +258,9 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
+    sidekiq-unique-jobs (5.0.10)
+      sidekiq (>= 4.0, <= 6.0)
+      thor (~> 0)
     simplecov (0.15.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -341,6 +344,7 @@ DEPENDENCIES
   rubocop
   sassc-rails
   sidekiq
+  sidekiq-unique-jobs
   simplecov
   skylight
   spring
