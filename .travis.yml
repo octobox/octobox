@@ -9,6 +9,7 @@ before_install:
 services:
   - postgresql
   - mysql
+  - redis
 
 before_script:
   - psql -c 'create database "octobox_test";' -U postgres || true
