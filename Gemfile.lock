@@ -70,6 +70,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.3)
@@ -183,6 +184,8 @@ GEM
       get_process_mem (~> 0.2)
       puma (>= 2.7, < 4)
     rack (2.0.4)
+    rack-protection (2.0.1)
+      rack
     rack-test (0.8.2)
       rack (>= 1.0, < 3)
     rails (5.1.5)
@@ -218,6 +221,7 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    redis (4.0.1)
     request_store (1.4.0)
       rack (>= 1.4)
     rubocop (0.52.1)
@@ -249,6 +253,11 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
+    sidekiq (5.1.1)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      rack-protection (>= 1.5.0)
+      redis (>= 3.3.5, < 5)
     simplecov (0.15.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -331,6 +340,7 @@ DEPENDENCIES
   rake
   rubocop
   sassc-rails
+  sidekiq
   simplecov
   skylight
   spring

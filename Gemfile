@@ -19,6 +19,7 @@ gem 'pg_search'
 gem 'jbuilder'
 gem 'rake'
 gem 'git'
+gem 'sidekiq'
 
 # Supported databases
 gem 'mysql2', require: false
