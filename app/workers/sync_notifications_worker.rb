@@ -8,7 +8,7 @@ class SyncNotificationsWorker
     user = User.find_by(id: user_id)
     return unless user.present?
 
-    user.try(:sync_notifications)
+    user.sync_notifications
   rescue Octokit::Unauthorized, Octokit::Forbidden => exception
     handle_exception(exception, user)
   rescue Octokit::BadGateway, Octokit::ServiceUnavailable => exception
