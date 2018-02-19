@@ -38,6 +38,19 @@ class UserTest < ActiveSupport::TestCase
     refute @user.valid?
   end
 
+  test "#admin? returns true when the users's github is included in the ENV variable" do
+    cached_admin_github_ids = ENV["ADMIN_GITHUB_IDS"]
+    ENV["ADMIN_GITHUB_IDS"] = @user.github_id.to_s
+
+    assert_predicate @user, :admin?
+
+    ENV["ADMIN_GITHUB_IDS"] = cached_admin_github_ids
+  end
+
+  test "users are not admins by default" do
+    refute_predicate @user, :admin?
+  end
+
   test '#effective_access_token returns personal_access_token if it is defined' do
     stub_personal_access_tokens_enabled
     user = build(:token_user)

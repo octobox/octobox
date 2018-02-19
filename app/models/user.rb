@@ -22,6 +22,9 @@ class User < ApplicationRecord
   }
   validate :personal_access_token_validator
 
+  def admin?
+  end
+
   def refresh_interval=(val)
     val = nil if 0 == val
     super(val)
