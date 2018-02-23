@@ -53,6 +53,14 @@
                   Settings
                 <% end %>
               </li>
+              <% if File.exist?(Rails.root.join('public', 'docs', 'index.html')) %>
+                <li>
+                  <%= link_to "docs/" do %>
+                    <%= octicon 'book', height: 16, class: 'text-muted' %>
+                    API Documentation
+                  <% end %>
+                </li>
+              <% end %>
               <li role="separator" class="divider"></li>
               <li>
                 <%= link_to logout_path do %>

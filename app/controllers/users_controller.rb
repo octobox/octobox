@@ -6,20 +6,20 @@ class UsersController < ApplicationController
   #
   # ==== Example
   #
-  # GET users/profile.json
-  # {
-  #    "user" : {
-  #       "id" : 1,
-  #       "github_id" : 3074765,
-  #       "github_login" : "jules2689",
-  #       "last_synced_at" : "2017-02-22T15:49:32.104Z",
-  #       "created_at" : "2017-02-22T15:49:32.099Z",
-  #       "updated_at" : "2017-02-22T15:49:32.099Z"
-  #    }
-  # }
+  # <code>GET users/profile.json</code>
+  #   {
+  #     "user" : {
+  #         "id" : 1,
+  #         "github_id" : 3074765,
+  #         "github_login" : "jules2689",
+  #         "last_synced_at" : "2017-02-22T15:49:32.104Z",
+  #         "created_at" : "2017-02-22T15:49:32.099Z",
+  #         "updated_at" : "2017-02-22T15:49:32.099Z"
+  #     }
+  #   }
   def profile; end
 
-  def edit
+  def edit # :nodoc:
     @latest_git_sha = Git.open(Rails.root).object('HEAD').sha[0..6] rescue nil
   end
 
@@ -30,9 +30,10 @@ class UsersController < ApplicationController
   #
   # ==== Example
   #
-  # PATCH users/:id.json
-  # { "user" : { "refresh_interval" : 60000 } }
-  # HEAD OK
+  # <code>PATCH users/:id.json</code>
+  #   { "user" : { "refresh_interval" : 60000 } }
+  #
+  #   HEAD OK
   #
   def update
     if current_user.update_attributes(update_user_params)
@@ -52,12 +53,12 @@ class UsersController < ApplicationController
     end
   end
 
-  # Delete your user profile. Only can delete the current user
+  # Delete your user profile. Can only delete the current user
   #
   # ==== Example
   #
-  # DELETE users/:id.json
-  # HEAD OK
+  # <code>DELETE users/:id.json</code>
+  #   HEAD OK
   #
   def destroy
     user = User.find(current_user.id)

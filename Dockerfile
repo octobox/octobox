@@ -18,4 +18,6 @@ COPY Gemfile Gemfile.lock /usr/src/app/
 RUN bundle install --without test production --jobs 2
 
 COPY . /usr/src/app
+# Generate API Docs
+RUN RAILS_ENV=development bin/rails api_docs:generate
 CMD ["bin/docker-start"]
