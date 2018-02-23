@@ -41,6 +41,14 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:latest_git_sha).length, 7
   end
 
+  test 'updates api_token' do
+    sign_in_as(@user)
+    token = @user.api_token
+    patch user_url(@user), params: {user: {regenerate_api_token: '1'}}
+    @user.reload
+    assert_not_equal token, @user.api_token
+  end
+
   test 'updates personal_access_token' do
     create_token_user
     sign_in_as(@token_user)
