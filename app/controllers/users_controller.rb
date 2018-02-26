@@ -36,8 +36,12 @@ class UsersController < ApplicationController
   #
   def update
     if current_user.update_attributes(update_user_params)
+      if params[:user][:regenerate_api_token]
+        current_user.regenerate_api_token
+      end
+
       respond_to do |format|
-        format.html { redirect_to root_path }
+        format.html { redirect_back(fallback_location: root_path) }
         format.json { head :ok }
       end
     else

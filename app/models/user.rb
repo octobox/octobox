@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class User < ApplicationRecord
+  has_secure_token :api_token
   has_many :notifications, dependent: :delete_all
 
   ERRORS = {

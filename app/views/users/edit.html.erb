@@ -52,6 +52,31 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
+      <h3 class="panel-title">Octobox API Access</h3>
+    </div>
+    <div class="panel-body">
+      <p>This is your API Token for Octobox access. Keep it safe and do not commit it to version control.</p>
+
+      <ul class="list-inline">
+        <li>
+          <button onclick="document.getElementById('api_token').classList.remove('hide'); this.parentNode.classList.add('hide')" class="btn btn-default">Show API Token</button>
+        </li>
+        <li>
+          <%= form_tag current_user, method: :put do %>
+            <%= hidden_field_tag 'user[regenerate_api_token]', '1' %>
+            <%= submit_tag "Regenerate Token", class: 'btn btn-default' %>
+          <% end %>
+        </li>
+      </ul>
+
+      <div id="api_token" class="blankslate hide">
+        <code><%= current_user.api_token || 'None, please click the button to regenerate your token' %></code>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
       <h3 class="panel-title">Manage Oauth Access</h3>
     </div>
     <div class="panel-body">
