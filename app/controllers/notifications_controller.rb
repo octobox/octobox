@@ -2,7 +2,7 @@
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
   before_action :authenticate_index!, only: [:index]
-  before_action :find_notification, only: [:archive, :unarchive, :star, :mark_read]
+  before_action :find_notification, only: [:star, :mark_read]
 
   # Return a listing of notifications, including a summary of unread repos, notification reasons, and notification types
   #
