@@ -13,7 +13,6 @@ Take back control of your GitHub Notifications with [Octobox]( https://octobox.i
 [![Gitter](https://img.shields.io/gitter/room/octobox/octobox.svg)](https://gitter.im/octobox/octobox)
 [![license](https://img.shields.io/github/license/octobox/octobox.svg)](https://github.com/octobox/octobox/blob/master/LICENSE.txt)
 
-
 ## Why is this a thing?
 
 If you manage more than one active project on GitHub, you probably find [GitHub Notifications](https://github.com/notifications) pretty lacking.
@@ -167,11 +166,13 @@ Become a sponsor and get your logo on our README on GitHub with a link to your s
 - [LaraGit](https://github.com/m1guelpf/laragit) - PHP rewrite
 - [octobox.js](https://github.com/doowb/octobox.js) - JavaScript rewrite
 
-## Contribute
+## Contribute [![Open Source Helpers](https://www.codetriage.com/andrew/github-inbox/badges/users.svg)](https://www.codetriage.com/andrew/github-inbox)
 
 Please do! The source code is hosted at [GitHub](https://github.com/octobox/octobox). If you want something, [open an issue](https://github.com/octobox/octobox/issues/new) or a pull request.
 
 If you need want to contribute but don't know where to start, take a look at the issues tagged as ["Help Wanted"](https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
+
+You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to [subscribe to github-inbox on CodeTriage](https://www.codetriage.com/andrew/github-inbox).
 
 Finally, this is an open source project. If you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.
 
