@@ -628,32 +628,34 @@ td.keys {
   margin: 35px 0 10px;
 }
 
-.table-notifications {
-  table-layout: fixed;
+@media (min-width: $screen-sm-min) {
+  .table-notifications {
+    table-layout: fixed;
 
-  td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 
-    &.notification-checkbox {
-      width: 50px;
-    }
+      &.notification-checkbox {
+        width: 50px;
+      }
 
-    &.notification-star, &.notification-icon {
-      width: 25px;
-    }
+      &.notification-star, &.notification-icon {
+        width: 25px;
+      }
 
-    &.notification-repo {
-      width: 260px;
-    }
+      &.notification-repo {
+        width: 160px;
+      }
 
-    &.notification-reason {
-      width: 100px;
-    }
+      &.notification-reason {
+        width: 100px;
+      }
 
-    &.notification-date {
-      width: 100px;
+      &.notification-date {
+        width: 100px;
+      }
     }
   }
 }
