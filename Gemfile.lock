@@ -50,7 +50,7 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
     ast (2.4.0)
-    autoprefixer-rails (8.0.0)
+    autoprefixer-rails (8.1.0)
       execjs
     bindex (0.5.0)
     bootstrap-sass (3.3.7)
@@ -183,7 +183,7 @@ GEM
       get_process_mem (~> 0.2)
       puma (>= 2.7, < 4)
     rack (2.0.4)
-    rack-test (0.8.2)
+    rack-test (0.8.3)
       rack (>= 1.0, < 3)
     rails (5.1.5)
       actioncable (= 5.1.5)
@@ -215,7 +215,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (3.0.0)
     rake (12.3.0)
-    rb-fsevent (0.10.2)
+    rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     request_store (1.4.0)
@@ -325,7 +325,7 @@ DEPENDENCIES
   pg_search
   puma
   puma_worker_killer
-  rails (~> 5.1)
+  rails (~> 5.1, >= 5.1.5)
   rails-controller-testing
   rails_safe_tasks
   rake
