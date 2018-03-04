@@ -24,6 +24,7 @@ in your GitHub settings for Octobox to work.
 * [Customizing Source Link for Modified Code](#customizing-source-link-for-modified-code)
 * [Adding a custom initializer](#adding-a-custom-initializer)
 * [Downloading subjects](#downloading-subjects)
+* [API Documentation](#api-documentation)
 
 # Installation
 ## Database Selection
@@ -284,6 +285,13 @@ To enable this feature set the following environment variable:
     FETCH_SUBJECT=true
 
 If you want this feature to work for private repositories, you'll need to [Customize the Scopes on GitHub](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
+
+## API Documentation
+
+API Documentation will be generated from the applications's controllers using `bin/rake api_docs:generate`. Once generated it will be automatically listed in the Header dropdown.
+
+This is included by default in the container build using `Dockerfile`. To include in your build, simply run the command listed above before deploy.
+
 
 ## Google Analytics
 

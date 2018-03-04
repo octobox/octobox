@@ -4,6 +4,7 @@ FactoryBot.define do
     access_token { SecureRandom.hex(20) }
     github_login {"user#{github_id}"}
     last_synced_at { Time.parse('2016-12-19T12:00:00Z') }
+    api_token { SecureRandom.hex(10) }
 
     factory :token_user do
       personal_access_token 'deadbeef'

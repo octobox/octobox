@@ -33,14 +33,13 @@ class ApplicationController < ActionController::Base
     return if logged_in?
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.json { render json: {}, status: :unauthorized }
+      format.json { render json: { "error" => "unauthorized" }, status: :unauthorized }
     end
   end
 
   def current_user
-    user_id = cookies.permanent.signed[:user_id]
-    return nil unless user_id.present?
-    @current_user ||= User.find_by(id: user_id)
+    @current_user ||= authenticate_with_http_token { |token, _| User.find_by(api_token: token) }
+    @current_user ||= (cookies.permanent.signed[:user_id] && User.find_by(id: cookies.permanent.signed[:user_id]))
   end
 
   def logged_in?
