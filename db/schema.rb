@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20180223194652) do
     t.string "author"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "labels", default: [], array: true
     t.string "html_url"
     t.index ["url"], name: "index_subjects_on_url"
   end
