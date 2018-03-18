@@ -25,6 +25,7 @@
   },
   "addons": [
     "heroku-postgresql",
+    "heroku-redis",
     "scheduler"
   ]
 }

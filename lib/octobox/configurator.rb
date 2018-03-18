@@ -87,5 +87,18 @@ module Octobox
       @octobox_io || ENV['OCTOBOX_IO'].present?
     end
     attr_writer :octobox_io
+
+    def redis_url
+      return @redis_url if defined?(@redis_url)
+      @redis_url = ENV.fetch("REDIS_URL", "redis://localhost:6379")
+    end
+
+    def github_admin_ids
+      return @github_admin_ids if defined?(@github_admin_ids)
+      admin_github_ids = ENV.fetch("ADMIN_GITHUB_IDS", "").to_s
+
+      return @admin_github_ids = [] unless admin_github_ids.present?
+      @github_admin_ids = admin_github_ids.split(',')
+    end
   end
 end

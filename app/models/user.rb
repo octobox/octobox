@@ -23,6 +23,10 @@ class User < ApplicationRecord
   }
   validate :personal_access_token_validator
 
+  def admin?
+    Octobox.config.github_admin_ids.include?(github_id.to_s)
+  end
+
   def refresh_interval=(val)
     val = nil if 0 == val
     super(val)

@@ -47,6 +47,14 @@
                   Octobox Support
                 <% end %>
               </li>
+              <% if current_user.admin? %>
+                <li>
+                  <%= link_to admin_sidekiq_web_path do %>
+                    <%= octicon 'graph', height: 16, class: 'text-muted' %>
+                    Sidekiq
+                  <% end %>
+                </li>
+              <% end %>
               <li>
                 <%= link_to "settings" do %>
                   <%= octicon 'settings', height: 16, class: 'text-muted' %>
