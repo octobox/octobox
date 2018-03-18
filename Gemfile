@@ -19,6 +19,7 @@ gem 'pg_search'
 gem 'jbuilder'
 gem 'rake'
 gem 'git'
+gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 
