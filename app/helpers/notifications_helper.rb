@@ -136,6 +136,19 @@ module NotificationsHelper
     end
   end
 
+  def reason_filter_option(reason)
+    if filters[:reason].present? && reason.present?
+      reasons = filters[:reason].split(',').reject(&:empty?)
+      index = reasons.index(reason.underscore.downcase)
+      reasons.delete_at(index) if index
+      link_to root_path(filters.merge(:reason => reasons.join(','))), class: "btn btn-default" do
+        concat octicon('x', :height => 16)
+        concat ' '
+        concat yield
+      end
+    end
+  end
+
   def filter_link(param, value, count)
     sidebar_filter_link(params[param] == value.to_s, param, value, count) do
       yield
@@ -155,10 +168,11 @@ module NotificationsHelper
     end
   end
 
-  def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil)
+  def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, path_params = nil)
     content_tag :li, class: (active ? 'active' : '') do
       active = (active && not_repo_in_active_org(param))
-      link_to root_path(filtered_params(param => (active ? nil : value)).except(except)), class: "filter #{link_class}" do
+      path_params ||= filtered_params(param => (active ? nil : value)).except(except)
+      link_to root_path(path_params), class: "filter #{link_class}" do
         yield
         if active && not_repo_in_active_org(param)
           concat content_tag(:span, octicon('x', :height => 16), class: 'label text-muted')
@@ -167,6 +181,22 @@ module NotificationsHelper
         end
       end
     end
+  end
+
+  def reason_filter_link(value, count)
+    active = params[:reason].present? && params[:reason].split(',').include?(value.to_s)
+    link_value = reason_link_param_value(params[:reason], value, active)
+    path_params = filtered_params(:reason => link_value)
+
+    sidebar_filter_link(active, :reason, link_value, count, nil, nil, path_params) do
+      yield
+    end
+  end
+
+  def reason_link_param_value(param, value, active)
+    reasons = param.try(:split, ',') || []
+    active ? reasons.delete(value) : reasons.push(value)
+    reasons.try(:join, ',')
   end
 
   def not_repo_in_active_org(param)
