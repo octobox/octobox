@@ -1,6 +1,6 @@
 App.sync = App.cable.subscriptions.create("SyncChannel", {
   received: function(data) {
-    // Called when there's incoming data on the websocket for this channel
-    console.log(data)
+    // Refresh the page after a sync has completed
+    Turbolinks.visit("/"+location.search);
   }
 });
