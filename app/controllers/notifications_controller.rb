@@ -220,6 +220,7 @@ class NotificationsController < ApplicationController
       val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
       scope = scope.send(sub_scope, val)
     end
+    scope = scope.labels(params[:label]) if params[:label].present?
     scope = scope.search_by_subject_title(params[:q]) if params[:q].present?
     scope = scope.unscope(where: :archived)           if params[:q].present?
     scope

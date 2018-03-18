@@ -77,6 +77,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_template 'notifications/index', file: 'notifications/index.html.erb'
     assert_select "span.filter-options *", text: 'Search: query'
+
+    get '/?label=bug'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'label: bug'
   end
 
   test 'renders the index page as json if authenticated' do
@@ -101,6 +106,26 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?archive=true'
     assert_response :success
     assert_template 'notifications/index'
+  end
+
+  test 'renders notifications filtered by label' do
+    stub_fetch_subject_enabled
+    sign_in_as(@user)
+
+    get '/'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 2}
+
+    get '/?label=question'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 1}
+
+    get '/?label=other-label'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 0}
   end
 
   test 'shows archived search results by default' do
@@ -350,7 +375,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select("li[role='presentation'] > a > span") do |elements|
-      assert_equal elements[0].text, '7'
+      assert_equal elements[0].text, '8'
     end
   end
 

@@ -1,11 +1,29 @@
 class Subject < ApplicationRecord
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
+  has_many :labels
 
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
   private_constant :BOT_AUTHOR_REGEX
 
   def author_url
     "#{Octobox.config.github_domain}#{author_url_path}"
+  end
+
+  def update_labels(remote_labels)
+    remote_labels.each do |l|
+      label = labels.find_by_id(l.id)
+      if label.nil?
+        labels.create({
+          id: l.id,
+          color: l.color,
+          name: l.name,
+        })
+      else
+        label.color = l.color
+        label.name = l.name
+        label.save() if label.changed?
+      end
+    end
   end
 
   private
