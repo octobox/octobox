@@ -21,7 +21,7 @@ class Subject < ApplicationRecord
       else
         label.color = l.color
         label.name = l.name
-        label.save() if label.changed?
+        label.save if label.changed?
       end
     end
   end
