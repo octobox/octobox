@@ -3,11 +3,12 @@
 The Octobox team hosts a shared instance of Octobox at [octobox.io](https://octobox.io/), but perhaps you're looking to host
 your own or get yourself set up to contribute to Octobox. Fantastic! There are a number of install options available to you.
 
-Before you begin, remember that [web notifications must be enabled](https://github.com/octobox/octobox/tree/reorganize-readme#requirements)
+Before you begin, remember that [web notifications must be enabled](README.md#requirements)
 in your GitHub settings for Octobox to work.
 
 ### Installation
 
+* [Database Selection](#database-selection)
 * [Deployment to Heroku](#deployment-to-heroku)
 * [Local installation](#local-installation)
 * [Using Docker](#using-docker)
@@ -23,8 +24,21 @@ in your GitHub settings for Octobox to work.
 * [Customizing Source Link for Modified Code](#customizing-source-link-for-modified-code)
 * [Adding a custom initializer](#adding-a-custom-initializer)
 * [Downloading subjects](#downloading-subjects)
+* [API Documentation](#api-documentation)
 
 # Installation
+## Database Selection
+
+Octobox supports a few database adapters. The full list can be found [here](https://github.com/octobox/octobox/blob/85bfbed9111a36e94aa74d4026633dc6ff844bf6/lib/database_config.rb#L2).
+
+#### How to specify an adapter
+
+- The default is `postgres`
+- you can specify an environment variable `DATABASE=<adapter>`
+- Protip: you can make a `.env` file that include the `DATABASE=<adapter>` if you don't want to specify it all the time.
+
+Note, databases other than PostgreSQL don't have full text support (or recently have it). For this reason, search may be degraded as we can no longer use the `pg_search` gem.
+
 ## Deployment to Heroku
 
 You can host your own instance of Octobox using Heroku.
@@ -38,13 +52,13 @@ For more help with setting up an OAuth application on GitHub, see below.
 
 ## Local installation
 
-First things first, you'll need to install Ruby 2.4.2. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to install Ruby 2.5.0. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.4.2
-rbenv global 2.4.2
+rbenv install 2.5.0
+rbenv global 2.5.0
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
@@ -265,12 +279,20 @@ Experimental feature for downloading extra information about the subject of each
 
 - Author for Issues, Pull Requests, Commit Comments and Releases
 - State (open/closed/merged) for Issues, Pull Requests
+- Labels
 
 To enable this feature set the following environment variable:
 
     FETCH_SUBJECT=true
 
 If you want this feature to work for private repositories, you'll need to [Customize the Scopes on GitHub](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
+
+## API Documentation
+
+API Documentation will be generated from the applications's controllers using `bin/rake api_docs:generate`. Once generated it will be automatically listed in the Header dropdown.
+
+This is included by default in the container build using `Dockerfile`. To include in your build, simply run the command listed above before deploy.
+
 
 ## Google Analytics
 

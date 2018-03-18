@@ -17,6 +17,12 @@
   </td>
   <td class='notification-subject'>
     <%= link_to notification.subject_title, notification.web_url, target: '_blank', class: 'link', onclick: "markRead(#{notification.id})" %>
+
+    <% if notification.subject %>
+      <% notification.subject.labels.each do |label| %>
+        <%= link_to label.name, root_path(filtered_params(label: label.name)), class: "label", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+      <% end %>
+    <% end %>
   </td>
   <% unless params[:repo].present? %>
   <td class='notification-repo'>

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby '2.4.2'
+ruby '2.5.0'
 
-gem 'rails', '~> 5.1', '>= 5.1.3'
+gem 'rails', '~> 5.1', '>= 5.1.5'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'kaminari'
@@ -9,7 +9,6 @@ gem 'local_time', git: 'https://github.com/twalpole/local_time', branch: 'turbol
 gem 'octicons_helper'
 gem 'octokit', '~> 4.7'
 gem 'omniauth-github'
-gem 'pg'
 gem 'puma'
 gem 'sassc-rails'
 gem 'turbolinks'
@@ -19,6 +18,12 @@ gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
 gem 'rake'
+gem 'git'
+gem 'rgb'
+
+# Supported databases
+gem 'mysql2', require: false
+gem 'pg', '~> 0.18', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -28,7 +33,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'factory_girl'
+  gem 'factory_bot'
   gem 'simplecov'
   gem 'codeclimate-test-reporter'
   gem 'webmock'
@@ -45,7 +50,7 @@ group :development do
 end
 
 group :production do
-  gem 'newrelic_rpm'
+  gem 'skylight'
   gem 'lograge'
   gem 'rails_safe_tasks'
   gem 'bugsnag'

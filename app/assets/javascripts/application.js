@@ -181,7 +181,7 @@ var shortcuts = {
   191: openModal,         // ?
   190: sync,              // .
   82:  sync,              // r
-  27:  clearFilters       // esc
+  27:  escPressed,        // esc
 };
 
 function cursorDown() {
@@ -272,7 +272,7 @@ function toggleStar() {
 }
 
 function openModal() {
-  $("#help-box").modal();
+  $("#help-box").modal({ keyboard: false });
 }
 
 function openCurrentLink(e) {
@@ -286,6 +286,14 @@ function sync() {
 
 function autoSync() {
   hasMarkedRows() || sync()
+}
+
+function escPressed(e) {
+  if ($("#help-box").is(':visible')) {
+    $("#help-box").modal('hide');
+  } else {
+    clearFilters();
+  }
 }
 
 function clearFilters() {

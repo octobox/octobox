@@ -1,10 +1,11 @@
-FROM ruby:2.4.2-alpine
+FROM ruby:2.5.0-alpine
 RUN apk add --update \
   build-base \
   netcat-openbsd \
   git \
   nodejs \
   postgresql-dev \
+  mysql-dev \
   tzdata \
   curl-dev \
   && rm -rf /var/cache/apk/*
@@ -17,4 +18,6 @@ COPY Gemfile Gemfile.lock /usr/src/app/
 RUN bundle install --without test production --jobs 2
 
 COPY . /usr/src/app
+# Generate API Docs
+RUN RAILS_ENV=development bin/rails api_docs:generate
 CMD ["bin/docker-start"]

@@ -62,7 +62,7 @@
       <% else %>
           <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
       <% end %>
-      <%= type.underscore.humanize %>
+      <%= type.underscore.gsub('repository', '').humanize %>
 
     <% end %>
   <% end %>
@@ -81,7 +81,7 @@
 
   <% @unread_repositories.sort_by{|repo_name, count| repo_name.downcase }.group_by{|repo_name, count| repo_name.split('/')[0] }.each do |org, repos| %>
     <%= org_filter_link :owner, org do %>
-      <%= image_tag "https://github.com/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
+      <%= image_tag "#{Octobox.config.github_domain}/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
       <%= org %>
     <% end %>
 

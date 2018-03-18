@@ -20,7 +20,7 @@
       <% end %>
 
       <%= filter_option :type do %>
-        <%= params[:type].underscore.humanize %>
+        <%= params[:type].underscore.gsub('repository', '').humanize %>
       <% end %>
 
       <%= filter_option :owner do %>
@@ -29,6 +29,10 @@
 
       <%= filter_option :state do %>
         <%= params[:state].humanize %>
+      <% end %>
+
+      <%= filter_option :label do %>
+        label: <%= params[:label] %>
       <% end %>
 
       <%= filter_option :q do %>

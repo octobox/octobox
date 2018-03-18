@@ -1,12 +1,13 @@
 module NotificationsHelper
   REASON_LABELS = {
-    'comment'      => 'primary',
-    'author'       => 'success',
-    'state_change' => 'info',
-    'mention'      => 'warning',
-    'assign'       => 'danger',
-    'subscribed'   => 'subscribed',
-    'team_mention' => 'team_mention'
+    'comment'        => 'primary',
+    'author'         => 'success',
+    'state_change'   => 'info',
+    'mention'        => 'warning',
+    'assign'         => 'danger',
+    'subscribed'     => 'subscribed',
+    'team_mention'   => 'team_mention',
+    'security_alert' => 'security_alert'
   }.freeze
 
   STATE_LABELS = {
@@ -16,11 +17,12 @@ module NotificationsHelper
   }
 
   SUBJECT_TYPES = {
-    'RepositoryInvitation' => 'mail-read',
-    'Issue'                => 'issue-opened',
-    'PullRequest'          => 'git-pull-request',
-    'Commit'               => 'git-commit',
-    'Release'              => 'tag'
+    'RepositoryInvitation'         => 'mail-read',
+    'Issue'                        => 'issue-opened',
+    'PullRequest'                  => 'git-pull-request',
+    'Commit'                       => 'git-commit',
+    'Release'                      => 'tag',
+    'RepositoryVulnerabilityAlert' => 'alert'
   }.freeze
 
   def filters
@@ -34,7 +36,8 @@ module NotificationsHelper
       owner:    params[:owner],
       per_page: params[:per_page],
       q:        params[:q],
-      state:    params[:state]
+      state:    params[:state],
+      label:    params[:label],
     }
   end
 
@@ -136,7 +139,8 @@ module NotificationsHelper
   def reason_filter_option(reason)
     if filters[:reason].present? && reason.present?
       reasons = filters[:reason].split(',').reject(&:empty?)
-      reasons.delete_at(reasons.index(reason.underscore.downcase))
+      index = reasons.index(reason.underscore.downcase)
+      reasons.delete_at(index) if index
       link_to root_path(filters.merge(:reason => reasons.join(','))), class: "btn btn-default" do
         concat octicon('x', :height => 16)
         concat ' '

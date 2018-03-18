@@ -33,6 +33,57 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/index', file: 'notifications/index.html.erb'
   end
 
+  test 'will render the home page with filters' do
+    sign_in_as(@user)
+
+    # Repo Filter
+    get '/?repo=a/b'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'a/b'
+
+    # Reason Filter
+    get '/?reason=Assign'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Assign'
+
+    # Type Filter
+    get '/?type=repository_a_b'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'A b'
+
+    # Unread Filter
+    get '/?unread=true'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Unread'
+
+    # Owner Filter
+    get '/?owner=bob'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'bob'
+
+    # State Filter
+    get '/?state=archive'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Archive'
+
+    # query Filter
+    get '/?q=query'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Search: query'
+
+    get '/?label=bug'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'label: bug'
+  end
+
   test 'renders the index page as json if authenticated' do
     sign_in_as(@user)
 
@@ -55,6 +106,26 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?archive=true'
     assert_response :success
     assert_template 'notifications/index'
+  end
+
+  test 'renders notifications filtered by label' do
+    stub_fetch_subject_enabled
+    sign_in_as(@user)
+
+    get '/'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 2}
+
+    get '/?label=question'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 1}
+
+    get '/?label=other-label'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 0}
   end
 
   test 'shows archived search results by default' do
@@ -87,7 +158,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?page=3&reason=subscribed&unread=true'
     assert_redirected_to '/?page=2&reason=subscribed&unread=true'
   end
-  
+
   test 'archives multiple notifications' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
@@ -220,6 +291,13 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test 'get to syncs redirects' do
+    sign_in_as(@user)
+
+    get "/notifications/sync"
+    assert_response :redirect
+  end
+
   test 'gracefully handles failed user notification syncs' do
     sign_in_as(@user)
     User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
@@ -297,7 +375,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select("li[role='presentation'] > a > span") do |elements|
-      assert_equal elements[0].text, '7'
+      assert_equal elements[0].text, '8'
     end
   end
 
@@ -328,19 +406,19 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, json["pagination"]["total_pages"]
     assert_equal 0, json["pagination"]["per_page"]
   end
-  
+
   test 'renders a union of notifications when multiple reasons given' do
     sign_in_as(@user)
     Notification.destroy_all
-    
+
     notification1 = create(:notification, user: @user, archived: false, reason: "assign")
     notification2 = create(:notification, user: @user, archived: false, reason: "mention")
     notification3 = create(:notification, user: @user, archived: false, reason: "subscribed")
-    
+
     get notifications_path(format: :json, reason: "assign,mention")
-    
+
     assert_response :success
-    
+
     json = JSON.parse(response.body)
     notification_ids = json["notifications"].map { |n| n["id"] }
 

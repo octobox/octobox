@@ -15,9 +15,10 @@ Rails.application.routes.draw do
     collection do
       post :archive_selected
       post :sync
+      get  :sync
       post :mute_selected
       post :mark_read_selected
-      get :unread_count
+      get  :unread_count
     end
 
     member do

@@ -40,9 +40,17 @@ module StubHelper
   end
 
   def stub_notifications_request(url: nil, body: nil, method: :get, extra_headers: {})
+    headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
+
+    if url.nil?
+      stub_request(:get, 'https://api.github.com/repos/octobox/octobox/issues/56')
+      .to_return({ status: 200, body: file_fixture('subject_56.json'), headers: headers })
+      stub_request(:get, 'https://api.github.com/repos/octobox/octobox/issues/57')
+      .to_return({ status: 200, body: file_fixture('subject_57.json'), headers: headers })
+    end
+
     url ||= %r{https://api.github.com/notifications}
     body     ||= file_fixture('notifications.json')
-    headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
     response = { status: 200, body: body, headers: headers }
 
     stub_request(method, url).to_return(response)

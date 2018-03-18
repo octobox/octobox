@@ -1,18 +1,25 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
-  include PgSearch
-  pg_search_scope :search_by_subject_title,
-                  against: :subject_title,
-                  using: {
-                    tsearch: {
-                      prefix: true,
-                      negation: true,
-                      dictionary: "english"
+  if DatabaseConfig.is_postgres?
+    include PgSearch
+    pg_search_scope :search_by_subject_title,
+                    against: :subject_title,
+                    using: {
+                      tsearch: {
+                        prefix: true,
+                        negation: true,
+                        dictionary: "english"
+                      }
                     }
-                  }
+  else
+    def self.search_by_subject_title(title)
+      where('subject_title like ?', "%#{title}%")
+    end
+  end
 
   belongs_to :user
   belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true
+  has_many :labels, through: :subject
 
   scope :inbox,    -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
@@ -26,6 +33,8 @@ class Notification < ApplicationRecord
   scope :owner,    ->(owner_name)   { where(repository_owner_name: owner_name) }
 
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
+
+  scope :labels,    ->(label_name) { joins(:labels).where('labels.name = ?', label_name)}
 
   scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
   scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
@@ -76,9 +85,13 @@ class Notification < ApplicationRecord
     where(id: notifications.map(&:id)).update_all(archived: true, unread: false)
   end
 
+  def expanded_subject_url
+    return subject_url unless Octobox.config.fetch_subject
+    subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
+  end
+
   def web_url
-    url = subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
-    Octobox::SubjectUrlParser.new(url, latest_comment_url: latest_comment_url)
+    Octobox::SubjectUrlParser.new(expanded_subject_url, latest_comment_url: latest_comment_url)
       .to_html_url
   end
 
@@ -113,24 +126,21 @@ class Notification < ApplicationRecord
 
   def update_subject
     return unless Octobox.config.fetch_subject
-    if subject
-      # skip syncing if the notification was updated around the same time as subject
-      return if updated_at - subject.updated_at < 2.seconds
+    # skip syncing if the notification was updated around the same time as subject
+    return if subject != nil && updated_at - subject.updated_at < 2.seconds
 
+    remote_subject = download_subject
+    return unless remote_subject.present?
+
+    if subject
       case subject_type
       when 'Issue', 'PullRequest'
-        remote_subject = download_subject
-        return unless remote_subject.present?
-
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
       end
     else
       case subject_type
       when 'Issue', 'PullRequest'
-        remote_subject = download_subject
-        return unless remote_subject.present?
-
         create_subject({
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
@@ -139,9 +149,6 @@ class Notification < ApplicationRecord
           updated_at: remote_subject.updated_at
         })
       when 'Commit', 'Release'
-        remote_subject = download_subject
-        return unless remote_subject.present?
-
         create_subject({
           author: remote_subject.author.login,
           html_url: remote_subject.html_url,
@@ -149,6 +156,11 @@ class Notification < ApplicationRecord
           updated_at: remote_subject.updated_at
         })
       end
+    end
+
+    case subject_type
+    when 'Issue', 'PullRequest'
+      subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
     end
   end
 end
