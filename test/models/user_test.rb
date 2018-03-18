@@ -39,12 +39,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "#admin? returns true when the users's github is included in the ENV variable" do
-    cached_admin_github_ids = ENV["ADMIN_GITHUB_IDS"]
-    ENV["ADMIN_GITHUB_IDS"] = @user.github_id.to_s
-
+    Octobox.config.stubs(:github_admin_ids).returns(["#{@user.github_id}"])
     assert_predicate @user, :admin?
-
-    ENV["ADMIN_GITHUB_IDS"] = cached_admin_github_ids
   end
 
   test "users are not admins by default" do

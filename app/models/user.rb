@@ -24,10 +24,7 @@ class User < ApplicationRecord
   validate :personal_access_token_validator
 
   def admin?
-    admin_github_ids = ENV.fetch("ADMIN_GITHUB_IDS", "").to_s
-    return false unless admin_github_ids.present?
-
-    admin_github_ids.split(',').include?(github_id.to_s)
+    Octobox.config.github_admin_ids.include?(github_id.to_s)
   end
 
   def refresh_interval=(val)
