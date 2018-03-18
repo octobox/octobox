@@ -69,7 +69,7 @@
   <%= menu_separator unless @types.empty? %>
 
   <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
-    <%= reason_filter_link :reason, reason, count do %>
+    <%= reason_filter_link reason, count do %>
       <span class='text-<%= reason_label(reason) %>'>
         <%= octicon 'primitive-dot', height: 24, class: 'sidebar-icon' %>
       </span>

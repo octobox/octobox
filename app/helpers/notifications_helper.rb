@@ -133,6 +133,18 @@ module NotificationsHelper
     end
   end
 
+  def reason_filter_option(reason)
+    if filters[:reason].present? && reason.present?
+      reasons = filters[:reason].split(',').reject(&:empty?)
+      reasons.delete_at(reasons.index(reason.underscore.downcase))
+      link_to root_path(filters.merge(:reason => reasons.join(','))), class: "btn btn-default" do
+        concat octicon('x', :height => 16)
+        concat ' '
+        concat yield
+      end
+    end
+  end
+
   def filter_link(param, value, count)
     sidebar_filter_link(params[param] == value.to_s, param, value, count) do
       yield
@@ -166,29 +178,21 @@ module NotificationsHelper
       end
     end
   end
-  
-  def reason_filter_link(param, value, count)
-    active = params[param].present? && params[param].include?(value.to_s)
-    link_value = reason_link_param_value(params[param], value, active)
-    path_params = filtered_params(param => link_value)
-    
-    sidebar_filter_link(active, param, link_value, count, nil, nil, path_params) do
+
+  def reason_filter_link(value, count)
+    active = params[:reason].present? && params[:reason].split(',').include?(value.to_s)
+    link_value = reason_link_param_value(params[:reason], value, active)
+    path_params = filtered_params(:reason => link_value)
+
+    sidebar_filter_link(active, :reason, link_value, count, nil, nil, path_params) do
       yield
     end
   end
-  
+
   def reason_link_param_value(param, value, active)
-    reasons = (param || []).split(',')
-    if active
-      reasons.delete(value)
-    else
-      reasons.push(value)
-    end
-    if reasons.empty?
-      nil
-    else
-      reasons.join(',')
-    end
+    reasons = param.try(:split, ',') || []
+    active ? reasons.delete(value) : reasons.push(value)
+    reasons.try(:join, ',')
   end
 
   def not_repo_in_active_org(param)
