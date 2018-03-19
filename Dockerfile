@@ -20,4 +20,9 @@ RUN bundle install --without test production --jobs 2
 COPY . /usr/src/app
 # Generate API Docs
 RUN RAILS_ENV=development bin/rails api_docs:generate
+
+# Allow the image to run with an arbitrary uid, but gid set to 0 (the OpenShift case)
+RUN chgrp -R 0 /usr/src/app \
+ && chmod -R g=u /usr/src/app
+
 CMD ["bin/docker-start"]
