@@ -1,7 +1,8 @@
 #!/bin/sh
 set -e
 
-while ! nc -z database.service.octobox.internal 5432; do
+db_host=${OCTOBOX_DATABASE_HOST:-database.service.octobox.internal}
+while ! nc -z  $db_host 5432; do
   echo "Waiting for database to be available..."
   sleep 1
 done
