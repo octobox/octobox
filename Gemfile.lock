@@ -225,7 +225,7 @@ GEM
     request_store (1.4.1)
       rack (>= 1.4)
     rgb (0.1.0)
-    rubocop (0.53.0)
+    rubocop (0.54.0)
       parallel (~> 1.10)
       parser (>= 2.5)
       powerpack (~> 0.1)
