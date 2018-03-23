@@ -20,7 +20,7 @@
 
     <% if notification.subject %>
       <% notification.subject.labels.each do |label| %>
-        <%= link_to label.name, root_path(filtered_params(label: label.name)), class: "label", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+        <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "label", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
       <% end %>
     <% end %>
   </td>
