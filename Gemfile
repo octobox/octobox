@@ -22,6 +22,7 @@ gem 'git'
 gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
+gem 'gemoji'
 
 # Supported databases
 gem 'mysql2', require: false
