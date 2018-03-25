@@ -31,17 +31,13 @@ parameters:
   description: Version to use. "latest" by default
   value: latest
   required: true
-- name: VERSION
-  description: Version to use. "latest" by default
-  value: latest
-  required: true
 - name: MINIMUM_REFRESH_INTERVAL
   description: Interval for autorefresh. Set to 0 for disabling it
   value: "5"
   required: true
 - name: FETCH_SUBJECT
   description: Set to 'true' for switching on fetching of extra information
-  value: "true"
+  value: "false"
   required: true
 - name: MEMORY_LIMIT_OCTOBOX
   description: Memory limit used for the Octobox Rails backend
