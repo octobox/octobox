@@ -15,4 +15,18 @@ class ConfiguratorTest < ActiveSupport::TestCase
     end
   end
 
+  test "when ENV['FETCH_SUBJECT'] is false, config.fetch_subject is false" do
+    stub_env_var('FETCH_SUBJECT', 'false')
+    assert_equal false, Octobox.config.fetch_subject
+  end
+
+  test "when ENV['FETCH_SUBJECT'] is nil, config.fetch_subject is false" do
+    stub_env_var('FETCH_SUBJECT', '')
+    assert_equal false, Octobox.config.fetch_subject
+  end
+
+  test "when ENV['FETCH_SUBJECT'] is true, config.fetch_subject is true" do
+    stub_env_var('FETCH_SUBJECT', 'true')
+    assert_equal true, Octobox.config.fetch_subject
+  end
 end
