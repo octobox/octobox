@@ -24,7 +24,7 @@ module Octobox
     end
 
     def fetch_subject
-      @fetch_subject || ENV['FETCH_SUBJECT'].present?
+      @fetch_subject || (ENV.has_key?('FETCH_SUBJECT') && ENV['FETCH_SUBJECT'].casecmp("true") == 0)
     end
     attr_writer :fetch_subject
 
