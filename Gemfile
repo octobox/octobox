@@ -25,7 +25,7 @@ gem 'sidekiq-unique-jobs'
 gem 'gemoji'
 
 # Supported databases
-gem 'mysql2', require: false
+gem 'mysql2', '~> 0.4.10', require: false
 gem 'pg', '~> 0.18', require: false
 
 group :development, :test do
