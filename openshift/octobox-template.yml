@@ -1,0 +1,266 @@
+# ================================================================================
+# Template for installing OctoBox on OpenShift
+# --------------------------------------------
+
+# Usage:
+
+# Create own OpenShift project:
+# $ oc new-project octobox
+
+# Create template:
+# $ oc create -f openshift-template.yml
+
+# Instantiate app:
+# $ oc new-app octobox \
+#    -p ROUTE_HOSTNAME=app-octobox.my.base.cluster.com \
+#    -p GITHUB_CLIENT_ID=1234589abcfde \
+#    -p GITHUB_CLIENT_SECRET=d84c1502e5565bb3ee4532324324324234
+
+apiVersion: v1
+kind: Template
+metadata:
+  name: octobox
+parameters:
+- name: GITHUB_CLIENT_ID
+  description: GitHub ID of your registered OAuth App
+  required: true
+- name: GITHUB_CLIENT_SECRET
+  description: The GitHub secret for the OAuth App
+  required: true
+- name: VERSION
+  description: Version to use. "latest" by default
+  value: latest
+  required: true
+- name: MINIMUM_REFRESH_INTERVAL
+  description: Interval for autorefresh. Set to 0 for disabling it
+  value: "5"
+  required: true
+- name: FETCH_SUBJECT
+  description: Set to 'true' for switching on fetching of extra information
+  value: "false"
+  required: true
+- name: MEMORY_LIMIT_OCTOBOX
+  description: Memory limit used for the Octobox Rails backend
+  value: "600Mi"
+  required:
+- name: MEMORY_LIMIT_REDIS
+  description: Memory limit for the internal Redis session cache
+  value: "200Mi"
+  required:
+- name: MEMORY_LIMIT_POSTGRES
+  description: Memory limit for the Postgres database
+  value: "200Mi"
+  required:
+- name: POSTGRES_PASSWORD
+  description: Password for the PostgreSQL connection user.
+  displayName: PostgreSQL Connection Password
+  from: '[a-zA-Z0-9]{16}'
+  generate: expression
+  required: true
+message: |
+  OctoBox is installed.
+  See https://github.com/octobox for configuration and usage instructions.
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: octobox
+    name: octobox
+  spec:
+    ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: octobox
+      type: backend
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: octobox
+    labels:
+      app: octobox
+      type: backend
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: octoboxio/octobox:${VERSION}
+      name: ${VERSION}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: octobox
+    labels:
+      app: octobox
+  spec:
+    replicas: 1
+    selector:
+      app: octobox
+      type: backend
+    # No "RollingUpdate" to save memory
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: octobox
+          type: backend
+      spec:
+        containers:
+        - name: octobox
+          image: ' '
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: RAILS_ENV
+            value: development
+          - name: GITHUB_CLIENT_ID
+            value: ${GITHUB_CLIENT_ID}
+          - name: GITHUB_CLIENT_SECRET
+            value: ${GITHUB_CLIENT_SECRET}
+          - name: OCTOBOX_DATABASE_NAME
+            value: postgres
+          - name: OCTOBOX_DATABASE_USERNAME
+            value: postgres
+          - name: OCTOBOX_DATABASE_PASSWORD
+            value: ${POSTGRES_PASSWORD}
+          - name: OCTOBOX_DATABASE_HOST
+            value: octobox-db
+          - name: REDIS_URL
+            value: localhost
+          - name: MINIMUM_REFRESH_INTERVAL
+            value: ${MINIMUM_REFRESH_INTERVAL}
+          - name: FETCH_SUBJECT
+            value: ${FETCH_SUBJECT}
+          resources:
+            limits:
+              memory: ${MEMORY_LIMIT_OCTOBOX}
+          ports:
+          - containerPort: 3000
+        - name: redis
+          image: centos/redis-32-centos7:3.2
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            initialDelaySeconds: 30
+            tcpSocket:
+              port: 6379
+          resources:
+            limits:
+              memory: ${MEMORY_LIMIT_REDIS}
+          volumeMounts:
+            - mountPath: /var/lib/redis/data
+              name: redis-data
+        restartPolicy: Always
+        volumes:
+        - emptyDir: {}
+          name: redis-data
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - octobox
+        from:
+          kind: ImageStreamTag
+          name: octobox:${VERSION}
+      type: ImageChange
+# -----------------------------------------------------------------
+# Postgres DB
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: octobox-db
+    labels:
+      app: octobox
+      type: db
+  spec:
+    ports:
+    - name: postgresql
+      nodePort: 0
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      app: octobox
+      type: db
+    type: ClusterIP
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: octobox-db
+    labels:
+      app: octobox
+      type: db
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: octobox-db
+    labels:
+      app: octobox
+      type: db
+  spec:
+    strategy:
+      type: Recreate
+    replicas: 1
+    selector:
+      app: octobox
+      type: db
+    template:
+      metadata:
+        labels:
+          app: octobox
+          type: db
+      spec:
+        containers:
+        - name: postgres
+          image: ' '
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: POSTGRESQL_USER
+            value: postgres
+          - name: POSTGRESQL_PASSWORD
+            value: ${POSTGRES_PASSWORD}
+          - name: POSTGRESQL_DATABASE
+            value: postgres
+          ports:
+          - containerPort: 5432
+          livenessProbe:
+            initialDelaySeconds: 60
+            tcpSocket:
+              port: 5432
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -i
+              - -c
+              - psql -h 127.0.0.1 -U postgres -q -d postgres -c 'SELECT 1'
+            initialDelaySeconds: 5
+          resources:
+            limits:
+              memory: ${MEMORY_LIMIT_POSTGRES}
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: octobox-db-data
+        volumes:
+        - name: octobox-db-data
+          persistentVolumeClaim:
+            claimName: octobox-db
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - postgres
+        from:
+          kind: ImageStreamTag
+          name: postgresql:9.5
+          namespace: openshift
+      type: ImageChange

@@ -10,6 +10,7 @@ in your GitHub settings for Octobox to work.
 
 * [Database Selection](#database-selection)
 * [Deployment to Heroku](#deployment-to-heroku)
+* [Deployment to OpenShift Online](#deployment-to-openshift-online)
 * [Local installation](#local-installation)
 * [Using Docker](#using-docker)
 
@@ -49,6 +50,13 @@ Heroku will ask you to provide OAuth client ID and secret, which you can create
 on GitHub. When creating the OAuth application, make sure you enable the
 `notifications` scope on it (you will also need the `read:org` scope if you enable restricted access).
 For more help with setting up an OAuth application on GitHub, see below.
+
+## Deployment to OpenShift Online
+
+Octobox can be easily installed to [OpenShift Online](https://www.openshift.com/pricing/index.html), too.
+As OpenShift Online provides a free "Starter" tier its also a very inexpensive way to try out an personalized Octobox installation in the cloud.
+
+Please refer to the separate [OpenShift installation](openshift/OPENSHIFT_INSTALLATION.md) document for detailed installation instructions.
 
 ## Local installation
 
