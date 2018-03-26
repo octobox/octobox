@@ -23,6 +23,7 @@ gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'gemoji'
+gem 'bootsnap', require: false
 
 # Supported databases
 gem 'mysql2', '~> 0.4.10', require: false

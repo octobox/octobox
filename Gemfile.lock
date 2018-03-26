@@ -53,6 +53,8 @@ GEM
     autoprefixer-rails (8.2.0)
       execjs
     bindex (0.5.0)
+    bootsnap (1.2.1)
+      msgpack (~> 1.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -141,6 +143,7 @@ GEM
     minitest (5.11.3)
     mocha (1.4.0)
       metaclass (~> 0.0.1)
+    msgpack (1.2.4)
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -314,6 +317,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootsnap
   bootstrap-sass
   bugsnag
   byebug
