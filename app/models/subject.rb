@@ -11,14 +11,15 @@ class Subject < ApplicationRecord
 
   def update_labels(remote_labels)
     remote_labels.each do |l|
-      label = labels.find_by_id(l.id)
+      label = labels.find_by_github_id(l.id)
       if label.nil?
         labels.create({
-          id: l.id,
+          github_id: l.id,
           color: l.color,
           name: l.name,
         })
       else
+        label.github_id = l.id # smoothly migrate legacy labels
         label.color = l.color
         label.name = l.name
         label.save if label.changed?
