@@ -319,7 +319,7 @@ DEPENDENCIES
   mocha
   mysql2
   octicons_helper
-  octokit (~> 4.7)
+  octokit
   omniauth-github
   pg (~> 0.18)
   pg_search
