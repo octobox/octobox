@@ -1,11 +1,3 @@
-GIT
-  remote: https://github.com/twalpole/local_time
-  revision: b78fa43fab54cc81bfd4de7a1af2419355d582dc
-  branch: turbolinks5
-  specs:
-    local_time (1.0.3)
-      coffee-rails
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -62,13 +54,6 @@ GEM
     byebug (10.0.1)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
-    coffee-rails (4.2.2)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     crack (0.4.3)
@@ -124,6 +109,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
+    local_time (2.0.0)
     lograge (0.9.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -327,7 +313,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen
-  local_time!
+  local_time
   lograge
   minitest
   mocha
