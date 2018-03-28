@@ -317,7 +317,7 @@ DEPENDENCIES
   lograge
   minitest
   mocha
-  mysql2
+  mysql2 (~> 0.4.10)
   octicons_helper
   octokit
   omniauth-github
