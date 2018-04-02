@@ -2,18 +2,18 @@
 
 
 First of all, you need an OpenShift cluster to which you want to install Octobox.
-This can be e.g. [Minishift][https://github.com/minishift/minishift] for a simple development environment or [OpenShift Online][https://www.openshift.com/pricing/index.html], the hosted offering by Red Hat.
+This can be e.g. [Minishift][(https://github.com/minishift/minishift) for a simple development environment or [OpenShift Online](https://www.openshift.com/pricing/index.html), the hosted offering by Red Hat.
 OpenShift online has a free "Starter" tier, so you can test the installation without any extra costs.
 
-The installation same are the same everywhere:
+The installation procedure is the same everywhere:
 
 * Register a GitHub OAuth app
 * Install an [OpenShift template](octobox-template.yml) to the cluster
 * Instantiate the template by providing some required information like the GitHub OAuth app credentials
 * Create a route so the application is accessible from the outside
-* Configure the OAuth callback URL for you OAuth app
+* Configure the OAuth callback URL for you OAuth app in GitHub
 
-The remaing part of this documentation now focusses on OpenShift Online, but the description are applicable to other setups as well.
+The remaing part of this documentation describes the installation on OpenShift Online, but the description are applicable to other setups as well.
 
 ### Register GitHub OAuth app
 
@@ -22,11 +22,16 @@ You can do this either for a GitHub organization of for an User.
 
 To do so, go to your accounts [Developer Settings](https://github.com/settings/developers)
 
+
 ![GitHub OAuth settings](images/github_oauth_settings.png)
+
+-----
 
 Select "Oauth Apps" on the left side and press "New OAuth App" to reach the settings page:
 
 ![GitHub OAuth registration](images/github_oauth_registration.png)
+
+-----
 
 Give the app a name, enter an homepage URL and then press "Register application".
 On the next screen you have now access to the "Client ID" and "Client Secret".
@@ -34,38 +39,51 @@ We will this data later when instantiating the Octobox app
 
 <a name="oauth-creds">![GitHub OAuth creds](images/github_oauth_creds.png)</a>
 
+-----
+
 You don't have to fill out the "Authorization callback URL" yet.
 We will do this later when we have created the OpenShift route.
 
 ### OpenShift Online Account
 
-First of all you have to create an OpenShift Online account.
-Got to the [OpenShift Online login form](https://manage.openshift.com/accounts/auth/keycloak) and either login with an existing Red Hat account or create a new one:
+
+Go to the [OpenShift Online login form](https://manage.openshift.com/accounts/auth/keycloak) to get an OpenShift Online subscription and either login with an existing Red Hat account or create a new one. Don't worry, the Starter plan is for free and you don't need to enter any credit card details.
 
 ![OpenShift Online Login Form](images/openshift_login.png)
+
+-----
 
 After you logged in you are asked for the plan.
 Choose the "Starter" plan here.
 
 ![OpenShift Plan](images/openshift_plan.png)
 
-Next you are asked for the region.
-Choose the region you prefer.
+-----
+
+Now choose the region of your preference:
 
 ![OpenShift Region](images/openshift_region.png)
 
-On the final screen confirm you subscriptions
+-----
+
+On the final screen confirm you subscriptions:
 
 ![OpenShift confirmation](images/openshift_confirm.png)
+
+-----
 
 Now you have to wait for some minutes.
 Just reload the final confirmation screen after some minutes and you will see your subscription overview page.
 
 ![OpenShift confirmation](images/openshift_launch.png)
 
-Now open the Web console by pressing the button to reach the OpenShift console
+-----
+
+Open the Web console by pressing the button to reach the OpenShift console
 
 ![OpenShift console](images/openshift_console.png)
+
+-----
 
 ### Install and process Template
 
@@ -74,10 +92,14 @@ On the OpenShift console select "Import YAML/JSON" from the top menu
 
 ![OpenShift Import YAML](images/openshift_import_yaml.png)
 
+-----
+
 Fill out a project name, display name and if you like also the description.
 Then select "Browse..." and pick up the [Octobox OpenShift Template](octobox-template.yml) and upload it:
 
 ![OpenShift Import YAML](images/openshift_import_yaml_2.png)
+
+-----
 
 It could be that the project name is already taken. Just use another name then.
 
@@ -85,10 +107,14 @@ Now you are access to process the template right now:
 
 ![OpenShift process template](images/openshift_process_template.png)
 
+-----
+
 So why not ? Select "Process the template" and "continue"
 It's now time to fill out the template parameters:
 
 ![OpenShift template parameters](images/openshift_template_params.png)
+
+-----
 
 The only mandatory fields to fill out here are `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
 Choose the credentials that you have [created](#oauth-creds) when registering the GitHub OAuth App.
@@ -99,11 +125,13 @@ The other parameters should be more or less self explaining:
 * `VERSION` : Docker image version to use. "latest" by default
 * `MINIMUM_REFRESH_INTERVAL` the minimal refresh value to allow (5 by default). Set it to 0 to not allow automatic refreshes.
 * `FETCH_SUBJECT` : Set to `true` if you want to fetch additional information like labels (experimental). It set to `false` by default.
-- `MEMORY_LIMIT_OCTOBOX`, `MEMORY_LIMIT_REDIS`, `MEMORY_LIMIT_POSTGRES` : Memory limit for the various application parts. Don't change this when running on the starte tier.
+- `MEMORY_LIMIT_OCTOBOX`, `MEMORY_LIMIT_REDIS`, `MEMORY_LIMIT_POSTGRES` : Memory limit for the various application parts. Don't change this when running on the starter plan.
 
 If everything goes well you should end up with
 
 ![OpenShift template success](images/openshift_template_success.png)
+
+-----
 
 ### Create Route
 
@@ -112,6 +140,8 @@ Goto the create OpenShift project from the main page ("Octobox" in this case):
 
 ![OpenShift template success](images/openshift_project_menu.png)
 
+-----
+
 On the project console, select "Applications" on the left menu, then "Routes":
 
 ![OpenShift template success](images/openshift_route_menu.png)
@@ -119,6 +149,8 @@ On the project console, select "Applications" on the left menu, then "Routes":
 Press "Create" here:
 
 ![OpenShift route create](images/openshift_route_create.png)
+
+-----
 
 Then:
 
@@ -129,20 +161,26 @@ Then:
 
 ![OpenShift route form](images/openshift_route_form.png)
 
+-----
+
 On the followup screen you will see the URL with which your application can be accessed.
 This is you entry URL to your Octobox instance.
 Note down this URL as you need it in the final step
 
 ![OpenShift route url](images/openshift_route_url.png)
 
+-----
+
 ### Configure Callback URL
 
-Now its time to configure the callback URL for your GitHub OAuth app.
-Got back to GitHub, "Developer Settings" --> "OAuth Apps" --> "Octobox"
+Finally you have to configure the callback URL for your GitHub OAuth app.
+Go back to GitHub, "Developer Settings" --> "OAuth Apps" --> "Octobox"
 
 In the callback form field enter: `<route URL>/auth/github/callback` and save:
 
 ![GitHub callback URL](images/github_callback_url.png)
+
+-----
 
 Et voilà !
 
