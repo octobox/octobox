@@ -51,7 +51,7 @@ GEM
     bugsnag (6.6.4)
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
-    byebug (10.0.1)
+    byebug (10.0.2)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
     concurrent-ruby (1.0.5)
