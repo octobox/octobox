@@ -146,7 +146,9 @@ On the project console, select "Applications" on the left menu, then "Routes":
 
 ![OpenShift template success](images/openshift_route_menu.png)
 
-Press "Create" here:
+-----
+
+Press "Create Route" here:
 
 ![OpenShift route create](images/openshift_route_create.png)
 
