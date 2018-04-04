@@ -120,7 +120,7 @@ class Notification < ApplicationRecord
 
   def download_subject
     user.github_client.get(subject_url)
-  rescue Octokit::Forbidden, Octokit::NotFound => e
+  rescue Octokit::Forbidden, Octokit::NotFound, Octokit::ClientError => e
     Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
     nil
   end
