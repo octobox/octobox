@@ -5,6 +5,7 @@
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"
   },
+  "license": "AGPL-3.0-only",
   "env": {
     "GITHUB_CLIENT_ID": {
       "description": "The GitHub Application Client ID",
