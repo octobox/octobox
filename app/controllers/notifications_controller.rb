@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class NotificationsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:index]
-  before_action :authenticate_index!, only: [:index]
+  skip_before_action :authenticate_user!
+  before_action :authenticate_web_or_api!
   before_action :find_notification, only: [:star, :mark_read]
 
   # Return a listing of notifications, including a summary of unread repos, notification reasons, and notification types
@@ -56,7 +56,8 @@ class NotificationsController < ApplicationController
   #            "subject":{
   #               "title" : "Add JSON API",
   #               "url" : "https://api.github.com/repos/octobox/octobox/pulls/320",
-  #               "type" : "PullRequest"
+  #               "type" : "PullRequest",
+  #               "state" : "merged"
   #            },
   #            "repo":{
   #               "id": 320,
@@ -255,7 +256,7 @@ class NotificationsController < ApplicationController
     @notification = current_user.notifications.find(params[:id])
   end
 
-  def authenticate_index!
+  def authenticate_web_or_api!
     return if logged_in?
     respond_to do |format|
       format.html { render 'pages/home' }
