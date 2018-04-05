@@ -164,6 +164,22 @@ class NotificationTest < ActiveSupport::TestCase
     assert_requested :get, subject.url
   end
 
+  test 'update_from_api_response updates the subject that returns a 40x error' do
+    Octobox.config.fetch_subject = true
+    url = 'https://api.github.com/repos/octobox/octobox/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e'
+    response = { status: 401, headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    api_response = notifications_from_fixture('commit_notification_no_author.json').first
+    notification = create(:morty_updated)
+
+    assert_no_difference 'Subject.count' do
+      notification.update_from_api_response(api_response, unarchive: true)
+    end
+  ensure
+    Octobox.config.fetch_subject = false
+  end
+
   test 'updated_from_api_response updates the existing subject if present' do
     stub_fetch_subject_enabled
     url = 'https://api.github.com/repos/octobox/octobox/pulls/403'

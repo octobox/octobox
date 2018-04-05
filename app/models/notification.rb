@@ -120,7 +120,14 @@ class Notification < ApplicationRecord
 
   def download_subject
     user.github_client.get(subject_url)
-  rescue Octokit::Forbidden, Octokit::NotFound, Octokit::ClientError => e
+
+  # If permissions changd and the user hasnt accepted, we get a 401
+  # We may receive a 403 Forbidden or a 403 Not Available
+  # We may be rate limited and get a 403 as well
+  # We may also get blocked by legal reasons (451)
+  # Regardless of the reason, any client error should be rescued and warned so we don't
+  # end up blocking other syncs
+  rescue Octokit::ClientError => e
     Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
     nil
   end
