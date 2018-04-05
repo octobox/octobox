@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require 'sidekiq/web'
+if Octobox.config.sidekiq_schedule_enabled?
+  require 'sidekiq-scheduler/web'
+end
 require 'admin_constraint'
 
 Rails.application.routes.draw do
