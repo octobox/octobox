@@ -1,11 +1,3 @@
-GIT
-  remote: https://github.com/twalpole/local_time
-  revision: b78fa43fab54cc81bfd4de7a1af2419355d582dc
-  branch: turbolinks5
-  specs:
-    local_time (1.0.3)
-      coffee-rails
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -57,29 +49,22 @@ GEM
     autoprefixer-rails (8.2.0)
       execjs
     bindex (0.5.0)
-    bootsnap (1.2.1)
+    bootsnap (1.3.0)
       msgpack (~> 1.0)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bugsnag (6.6.4)
+    bugsnag (6.7.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
-    byebug (10.0.1)
+    byebug (10.0.2)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
-    coffee-rails (4.2.2)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.3)
+    crass (1.0.4)
     docile (1.1.5)
     dotenv (2.2.1)
     dotenv-rails (2.2.1)
@@ -130,7 +115,8 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    lograge (0.9.0)
+    local_time (2.0.0)
+    lograge (0.10.0)
       actionpack (>= 4)
       activesupport (>= 4)
       railties (>= 4)
@@ -140,7 +126,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.0)
       mini_mime (>= 0.1.1)
-    marcel (0.3.1)
+    marcel (0.3.2)
       mimemagic (~> 0.3.2)
     metaclass (0.0.4)
     method_source (0.9.0)
@@ -148,7 +134,7 @@ GEM
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
-    mocha (1.4.0)
+    mocha (1.5.0)
       metaclass (~> 0.0.1)
     msgpack (1.2.4)
     multi_json (1.13.1)
@@ -197,7 +183,7 @@ GEM
     rack (2.0.4)
     rack-protection (2.0.1)
       rack
-    rack-test (0.8.3)
+    rack-test (1.0.0)
       rack (>= 1.0, < 3)
     rails (5.2.0.rc2)
       actioncable (= 5.2.0.rc2)
@@ -266,7 +252,7 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
-    sidekiq (5.1.1)
+    sidekiq (5.1.3)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
@@ -339,13 +325,13 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen
-  local_time!
+  local_time
   lograge
   minitest
   mocha
   mysql2 (~> 0.4.10)
   octicons_helper
-  octokit (~> 4.7)
+  octokit
   omniauth-github
   pg (~> 0.18)
   pg_search
@@ -372,7 +358,7 @@ DEPENDENCIES
   webmock
 
 RUBY VERSION
-   ruby 2.5.0p0
+   ruby 2.5.1p57
 
 BUNDLED WITH
    1.16.1
