@@ -26,7 +26,7 @@ gem 'gemoji'
 gem 'bootsnap', require: false
 
 # Supported databases
-gem 'mysql2', '~> 0.4.10', require: false
+gem 'mysql2', require: false
 gem 'pg', require: false
 
 group :development, :test do
