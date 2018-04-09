@@ -58,7 +58,7 @@ GEM
     connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    crass (1.0.3)
+    crass (1.0.4)
     docile (1.1.5)
     dotenv (2.2.1)
     dotenv-rails (2.2.1)
