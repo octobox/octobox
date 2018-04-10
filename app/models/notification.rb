@@ -121,7 +121,7 @@ class Notification < ApplicationRecord
   def download_subject
     user.github_client.get(subject_url)
 
-  # If permissions changd and the user hasnt accepted, we get a 401
+  # If permissions changed and the user hasn't accepted, we get a 401
   # We may receive a 403 Forbidden or a 403 Not Available
   # We may be rate limited and get a 403 as well
   # We may also get blocked by legal reasons (451)
