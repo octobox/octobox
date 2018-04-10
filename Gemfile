@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.5.1'
 
-gem 'rails', '~> 5.1'
+gem 'rails', '~> 5.2'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
 gem 'kaminari'
@@ -23,10 +23,11 @@ gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'gemoji'
+gem 'bootsnap', require: false
 
 # Supported databases
-gem 'mysql2', '~> 0.4.10', require: false
-gem 'pg', '~> 0.18', require: false
+gem 'mysql2', require: false
+gem 'pg', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri

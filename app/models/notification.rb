@@ -111,9 +111,9 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
-    update_subject
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
+    update_subject
   end
 
   private
