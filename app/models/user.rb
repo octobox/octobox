@@ -57,7 +57,24 @@ class User < ApplicationRecord
     update_attributes!(github_attributes)
   end
 
-  def sync_notifications
+  def syncing?
+    return false unless sync_job_id
+    !Sidekiq::Status::complete?(sync_job_id)
+  end
+
+  def sync_notifications(priority: true)
+    return true if syncing?
+
+    # If the call declares it is priority, then we will override it and put it on the priority queue
+    # This is useful for an initial sync or user-invoked sync, otherwise those could be stuck behind scheduled background syncs
+    args_override = {}
+    args_override[:queue] = :priority_sync_notifications if priority
+
+    job_id = SyncNotificationsWorker.set(args_override).perform_async(self.id)
+    update(sync_job_id: job_id)
+  end
+
+  def sync_notifications_in_foreground
     download_service.download
     Rails.logger.info("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} synced their notifications\033[0m\n\n")
   rescue Octokit::Unauthorized => e
