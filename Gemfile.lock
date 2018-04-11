@@ -61,6 +61,8 @@ GEM
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
     byebug (10.0.2)
+    chronic_duration (0.10.6)
+      numerizer (~> 0.1.1)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
     concurrent-ruby (1.0.5)
@@ -154,6 +156,7 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
+    numerizer (0.1.1)
     oauth2 (1.4.0)
       faraday (>= 0.8, < 0.13)
       jwt (~> 1.0)
@@ -277,6 +280,10 @@ GEM
       rufus-scheduler (~> 3.2)
       sidekiq (>= 3)
       tilt (>= 1.4.0)
+    sidekiq-status (1.0.1)
+      chronic_duration
+      sidekiq (>= 3.0)
+      sidekiq-unique-jobs (= 6.0.6)
     sidekiq-unique-jobs (6.0.6)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 4.0, < 6.0)
@@ -370,6 +377,7 @@ DEPENDENCIES
   sassc-rails
   sidekiq
   sidekiq-scheduler
+  sidekiq-status
   sidekiq-unique-jobs
   simplecov
   skylight
