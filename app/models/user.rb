@@ -59,7 +59,8 @@ class User < ApplicationRecord
 
   def syncing?
     return false unless sync_job_id
-    !Sidekiq::Status::complete?(sync_job_id)
+    # We are syncing if we are queued or working, all other states mean we are not working
+    [:queued, :working].include?(Sidekiq::Status.status(sync_job_id))
   end
 
   def sync_notifications(priority: true)

@@ -292,6 +292,21 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'syncs users notifications async' do
+    sign_in_as(@user)
+    job_id = @user.reload.sync_job_id
+
+    inline_sidekiq_status do
+      post "/notifications/sync?async=true"
+    end
+
+    assert_response :redirect
+    assert_not_equal job_id, @user.reload.sync_job_id
+    assert_not_nil @user.reload.sync_job_id, 'Sync job id was nil'
+    assert_equal 1, SyncNotificationsWorker.jobs.size
+    assert_equal "Syncing notifications in the background. The page will refresh automatically", flash[:notice]
+  end
+
   test 'syncs users notifications as json' do
     sign_in_as(@user)
 
