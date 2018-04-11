@@ -206,6 +206,8 @@ You can set the `OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED` environment variable, which w
 
 The schedule, [located here](./config/sidekiq_schedule.yml), defines what is to be run and can be overriden using the `OCTOBOX_SIDEKIQ_SCHEDULE_PATH` variable in case you want to customize the schedule at all.
 
+We gitignore the path `config/sidekiq_custom_schedule.yml` for the convenience of adding a custom schedule that doesn't get committed to your fork.
+
 #### Heroku
 
 Create a Heroku Scheduler
