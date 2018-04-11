@@ -60,6 +60,16 @@ module Octobox
     end
     attr_writer :max_notifications_to_sync
 
+    def sidekiq_schedule_enabled?
+      @sidekiq_schedule_enabled || ENV['OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED'].present?
+    end
+    attr_writer :sidekiq_schedule_enabled
+
+    def sidekiq_schedule_path
+      @sidekiq_schedule_path || ENV.fetch('OCTOBOX_SIDEKIQ_SCHEDULE_PATH', Rails.root.join('config', 'sidekiq_schedule.yml'))
+    end
+    attr_writer :sidekiq_schedule_path
+
     def restricted_access_enabled
       @restricted_access_enabled || ENV['RESTRICTED_ACCESS_ENABLED'].present?
     end

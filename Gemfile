@@ -22,6 +22,7 @@ gem 'git'
 gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
+gem 'sidekiq-scheduler'
 gem 'gemoji'
 gem 'bootsnap', require: false
 

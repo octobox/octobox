@@ -190,6 +190,8 @@ When enabled, user settings pages will have an 'Notification Refresh Interval' o
 
 **Note**: This is *not* enabled on the hosted version (octobox.io).
 
+### Option 1
+
 Now that you've set all to go you can configure the app to sync the notifications automatically, there is a rake task that will do this for every user
 
 ```
@@ -197,6 +199,14 @@ rake tasks:sync_notifications
 ```
 
 You will need to configure this to run automatically
+
+### Option 2
+
+You can set the `OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED` environment variable, which will enable `sidekiq-scheduler`.
+
+The schedule, [located here](./config/sidekiq_schedule.yml), defines what is to be run and can be overriden using the `OCTOBOX_SIDEKIQ_SCHEDULE_PATH` variable in case you want to customize the schedule at all.
+
+We gitignore the path `config/sidekiq_custom_schedule.yml` for the convenience of adding a custom schedule that doesn't get committed to your fork.
 
 #### Heroku
 
