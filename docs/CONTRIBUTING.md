@@ -20,7 +20,7 @@ Want to contribute to Octobox? That's great! Here are a couple of guidelines tha
 
 ## Setup instructions
 
-You can find in-depth instructions to install the correct Ruby version, Postgres, and to set up the database in our [README](https://github.com/octobox/octobox/blob/master/README.md#development).
+You can find in-depth instructions to install the correct Ruby version, Postgres, and to set up the database in our [README](README.md#development).
 
 ## Reporting a bug
 

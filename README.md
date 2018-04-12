@@ -14,7 +14,7 @@
 [![OpenCollective](https://opencollective.com/octobox/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/octobox/sponsors/badge.svg)](#sponsors)
 [![Open Source Helpers](https://www.codetriage.com/andrew/github-inbox/badges/users.svg)](https://www.codetriage.com/andrew/github-inbox)
-[![license](https://img.shields.io/github/license/octobox/octobox.svg)](https://github.com/octobox/octobox/blob/master/LICENSE.txt)
+[![license](https://img.shields.io/github/license/octobox/octobox.svg)](LICENSE.txt)
 
 ## Why is this a thing?
 
@@ -57,7 +57,7 @@ Some features might never be enabled, and some just might have other prerequisit
 
 ### Install
 
-You can also host Octobox yourself! See [the installation guide](https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md)
+You can also host Octobox yourself! See [the installation guide](docs/INSTALLATION.md)
 for installation instructions and details regarding deployment to Heroku, Docker, and more.
 
 ### Desktop usage
