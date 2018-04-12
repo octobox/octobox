@@ -57,7 +57,7 @@ Some features might never be enabled, and some just might have other prerequisit
 
 ### Install
 
-You can also host Octobox yourself! See [the installation guide](https://github.com/octobox/octobox/blob/master/INSTALLATION.md)
+You can also host Octobox yourself! See [the installation guide](https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md)
 for installation instructions and details regarding deployment to Heroku, Docker, and more.
 
 ### Desktop usage
@@ -144,7 +144,7 @@ For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass)
 
 ### Code of Conduct
 
-Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](docs/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## Copyright
 
