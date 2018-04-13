@@ -165,7 +165,7 @@ docker run -d --network octobox-network --name=database.service.octobox.internal
 Then, run the following command to download the latest docker image and start octobox in the background.
 
 ```bash
-GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker run -d --network octobox-network --name=octobox -e RAILS_ENV=development -e GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID -e GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USER=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
+docker run -d --network octobox-network --name=octobox -e RAILS_ENV=development -e GITHUB_CLIENT_ID=yourclientid -e GITHUB_CLIENT_SECRET=yourclientsecret -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USERNAME=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
 ```
 
 Octobox will be running on [http://localhost:3000](http://localhost:3000).
