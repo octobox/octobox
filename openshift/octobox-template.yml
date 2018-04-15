@@ -88,6 +88,10 @@ objects:
         kind: DockerImage
         name: octoboxio/octobox:${VERSION}
       name: ${VERSION}
+      # Periodically check Docker Hub for new images and do
+      # automatic redeployment in case:
+      importPolicy:
+        scheduled: true
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:

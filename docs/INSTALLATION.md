@@ -56,7 +56,7 @@ For more help with setting up an OAuth application on GitHub, see below.
 Octobox can be easily installed to [OpenShift Online](https://www.openshift.com/pricing/index.html), too.
 As OpenShift Online provides a free "Starter" tier its also a very inexpensive way to try out an personalized Octobox installation in the cloud.
 
-Please refer to the separate [OpenShift installation](openshift/OPENSHIFT_INSTALLATION.md) document for detailed installation instructions.
+Please refer to the separate [OpenShift installation](../openshift/OPENSHIFT_INSTALLATION.md) document for detailed installation instructions.
 
 ## Local installation
 
