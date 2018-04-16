@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     end
   end
 
+  mount ActionCable.server => '/cable'
+
   get :login,  to: 'sessions#new'
   get :logout, to: 'sessions#destroy'
 

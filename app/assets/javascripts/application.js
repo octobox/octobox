@@ -121,7 +121,8 @@ document.addEventListener("turbolinks:load", function() {
       $.post('/notifications/'+$(this).data('id')+'/star')
     });
     $('a.sync').on('click', function() {
-      $('.sync .octicon').toggleClass('spinning')
+      sync();
+      return false;
     });
     recoverPreviousCursorPosition();
 
@@ -281,7 +282,8 @@ function openCurrentLink(e) {
 }
 
 function sync() {
-  $("a.sync").click();
+  $('.sync .octicon').toggleClass('spinning')
+  $.getJSON('/notifications/sync')
 }
 
 function autoSync() {

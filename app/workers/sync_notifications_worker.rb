@@ -9,6 +9,8 @@ class SyncNotificationsWorker
     return unless user.present?
 
     user.sync_notifications
+
+    ActionCable.server.broadcast "sync:#{user.id}", { sync: 'complete' }
   rescue Octokit::Unauthorized, Octokit::Forbidden => exception
     handle_exception(exception, user)
   rescue Octokit::BadGateway, Octokit::ServiceUnavailable => exception
