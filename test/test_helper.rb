@@ -9,6 +9,10 @@ require 'rails/test_help'
 require 'webmock/minitest'
 require 'mocha/minitest'
 
+require 'sidekiq_unique_jobs/testing'
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
+
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
 
 FactoryBot.find_definitions
