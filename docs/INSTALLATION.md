@@ -11,6 +11,7 @@ in your GitHub settings for Octobox to work.
 * [Database Selection](#database-selection)
 * [Deployment to Heroku](#deployment-to-heroku)
 * [Deployment to OpenShift Online](#deployment-to-openshift-online)
+* [Encryption Key](#encryption-key)
 * [Local installation](#local-installation)
 * [Using Docker](#using-docker)
 * [Using reverse proxy](#using-reverse-proxy)
@@ -62,6 +63,12 @@ Octobox can be easily installed to [OpenShift Online](https://www.openshift.com/
 As OpenShift Online provides a free "Starter" tier its also a very inexpensive way to try out an personalized Octobox installation in the cloud.
 
 Please refer to the separate [OpenShift installation](../openshift/OPENSHIFT_INSTALLATION.md) document for detailed installation instructions.
+
+## Encryption Key
+
+Octobox uses [`encrypted_attr`](https://github.com/attr-encrypted/attr_encrypted) to store access tokens and personal access tokens on the user object.
+
+Therefore to install and launch Octobox, you must provide a 32 byte encryption key as the env var `OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY`
 
 ## Local installation
 
@@ -170,7 +177,7 @@ docker run -d --network octobox-network --name=database.service.octobox.internal
 Then, run the following command to download the latest docker image and start octobox in the background.
 
 ```bash
-docker run -d --network octobox-network --name=octobox -e RAILS_ENV=development -e GITHUB_CLIENT_ID=yourclientid -e GITHUB_CLIENT_SECRET=yourclientsecret -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USERNAME=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
+docker run -d --network octobox-network --name=octobox -e OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY=my_key RAILS_ENV=development -e GITHUB_CLIENT_ID=yourclientid -e GITHUB_CLIENT_SECRET=yourclientsecret -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USERNAME=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
 ```
 
 Octobox will be running on [http://localhost:3000](http://localhost:3000).

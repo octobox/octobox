@@ -61,15 +61,16 @@ ActiveRecord::Schema.define(version: 2018_08_03_073302) do
 
   create_table "users", id: :serial, force: :cascade do |t|
     t.integer "github_id", null: false
-    t.string "access_token", null: false
     t.string "github_login", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "last_synced_at"
-    t.string "personal_access_token"
     t.integer "refresh_interval", default: 0
     t.string "api_token"
-    t.index ["access_token"], name: "index_users_on_access_token", unique: true
+    t.string "encrypted_access_token"
+    t.string "encrypted_access_token_iv"
+    t.string "encrypted_personal_access_token"
+    t.string "encrypted_personal_access_token_iv"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end
