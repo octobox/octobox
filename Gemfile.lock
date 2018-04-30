@@ -305,7 +305,7 @@ GEM
     uglifier (4.1.10)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.3.2)
-    web-console (3.6.1)
+    web-console (3.6.2)
       actionview (>= 5.0)
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
