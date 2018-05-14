@@ -157,7 +157,7 @@ GEM
     octicons_helper (4.3.0)
       octicons (= 5.3.0)
       rails
-    octokit (4.8.0)
+    octokit (4.9.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     omniauth (1.8.1)
       hashie (>= 3.4.6, < 3.6.0)
