@@ -13,6 +13,7 @@ in your GitHub settings for Octobox to work.
 * [Deployment to OpenShift Online](#deployment-to-openshift-online)
 * [Local installation](#local-installation)
 * [Using Docker](#using-docker)
+* [Using reverse proxy](#using-reverse-proxy)
 
 ### Configuration
 
@@ -175,6 +176,31 @@ Octobox will be running on [http://localhost:3000](http://localhost:3000).
 1. Pull the latest image using the command `docker pull octoboxio/octobox:latest` or `docker-compose pull` if you are using docker-compose.
 2. Restart your running container using the command `docker restart octobox` or `docker-compose restart` if you are using docker-compose.
 
+## Using reverse proxy
+
+If you want to use a public domain name to access your local Octobox deployment, you will need to set up a reverse proxy
+(e.g. Apache, Nginx). Information about the domain name needs to be properly passed to Octobox, in order not to
+interfere with the OAuth flow.
+
+### Example Nginx configuration
+
+```bash
+server {
+  listen 443 ssl http2 ;
+  server_name octobox.example.com;
+  ssl on;
+  ssl_certificate_key /etc/ssl/letsencrypt/live/octobox.example.com/privkey.pem;
+  ssl_certificate /etc/ssl/letsencrypt/live/octobox.example.com/fullchain.pem;
+  location / {
+    # Set up proper headers for OAuth flow
+    proxy_set_header Host $proxy_host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_pass http://localhost:3000;
+  }
+}
+```
 
 # Configuration
 
@@ -204,7 +230,7 @@ You will need to configure this to run automatically
 
 You can set the `OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED` environment variable, which will enable `sidekiq-scheduler`.
 
-The schedule, [located here](./config/sidekiq_schedule.yml), defines what is to be run and can be overriden using the `OCTOBOX_SIDEKIQ_SCHEDULE_PATH` variable in case you want to customize the schedule at all.
+The schedule, [located here](./config/sidekiq_schedule.yml), defines what is to be run and can be overridden using the `OCTOBOX_SIDEKIQ_SCHEDULE_PATH` variable in case you want to customize the schedule at all.
 
 We gitignore the path `config/sidekiq_custom_schedule.yml` for the convenience of adding a custom schedule that doesn't get committed to your fork.
 
@@ -307,7 +333,7 @@ If you want this feature to work for private repositories, you'll need to [Custo
 
 ## API Documentation
 
-API Documentation will be generated from the applications's controllers using `bin/rake api_docs:generate`. Once generated it will be automatically listed in the Header dropdown.
+API Documentation will be generated from the application's controllers using `bin/rake api_docs:generate`. Once generated it will be automatically listed in the Header dropdown.
 
 This is included by default in the container build using `Dockerfile`. To include in your build, simply run the command listed above before deploy.
 
