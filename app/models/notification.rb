@@ -60,6 +60,7 @@ class Notification < ApplicationRecord
 
   def self.mark_read(notifications)
     unread = notifications.select(&:unread)
+    return if unread.empty?
     user = unread.first.user
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
@@ -72,6 +73,7 @@ class Notification < ApplicationRecord
   end
 
   def self.mute(notifications)
+    return if notifications.empty?
     user = notifications.to_a.first.user
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)

@@ -48,6 +48,10 @@ class NotificationTest < ActiveSupport::TestCase
     assert notification2.reload.archived?
   end
 
+  test '#mute doesnt fail if there is no notifications given' do
+    Notification.mute([])
+  end
+
   test '#mark_read marks multiple notifications as read' do
     user = create(:user)
 
@@ -61,6 +65,12 @@ class NotificationTest < ActiveSupport::TestCase
 
     refute notification1.reload.unread?
     refute notification2.reload.unread?
+  end
+
+  test '#mark_read doesnt fail if nothing is to be marked as read' do
+    user = create(:user)
+    notification1 = create(:notification, user: user, unread: false)
+    Notification.mark_read([notification1])
   end
 
   test 'update_from_api_response updates attributes' do
