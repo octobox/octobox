@@ -2,7 +2,7 @@
 
 
 First of all, you need an OpenShift cluster to which you want to install Octobox.
-This can be e.g. [Minishift][(https://github.com/minishift/minishift) for a simple development environment or [OpenShift Online](https://www.openshift.com/pricing/index.html), the hosted offering by Red Hat.
+This can be e.g. [Minishift](https://github.com/minishift/minishift) for a simple development environment or [OpenShift Online](https://www.openshift.com/pricing/index.html), the hosted offering by Red Hat.
 OpenShift online has a free "Starter" tier, so you can test the installation without any extra costs.
 
 The installation procedure is the same everywhere:
@@ -11,9 +11,9 @@ The installation procedure is the same everywhere:
 * Install an [OpenShift template](octobox-template.yml) to the cluster
 * Instantiate the template by providing some required information like the GitHub OAuth app credentials
 * Create a route so the application is accessible from the outside
-* Configure the OAuth callback URL for you OAuth app in GitHub
+* Configure the OAuth callback URL for your OAuth app in GitHub
 
-The remaing part of this documentation describes the installation on OpenShift Online, but the description are applicable to other setups as well.
+The remaining part of this documentation describes the installation on OpenShift Online, but the description are applicable to other setups as well.
 
 ### Register GitHub OAuth app
 
@@ -103,13 +103,13 @@ Then select "Browse..." and pick up the [Octobox OpenShift Template](octobox-tem
 
 It could be that the project name is already taken. Just use another name then.
 
-Now you are access to process the template right now:
+Now you are able to process the template right now:
 
 ![OpenShift process template](images/openshift_process_template.png)
 
 -----
 
-So why not ? Select "Process the template" and "continue"
+Select "Process the template" and "continue".
 It's now time to fill out the template parameters:
 
 ![OpenShift template parameters](images/openshift_template_params.png)
@@ -124,7 +124,7 @@ The other parameters should be more or less self explaining:
 * `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` : GitHub OAuth creds
 * `VERSION` : Docker image version to use. "latest" by default
 * `MINIMUM_REFRESH_INTERVAL` the minimal refresh value to allow (5 by default). Set it to 0 to not allow automatic refreshes.
-* `FETCH_SUBJECT` : Set to `true` if you want to fetch additional information like labels (experimental). It set to `false` by default.
+* `FETCH_SUBJECT` : Set to `true` if you want to fetch additional information like labels (experimental). It's `false` by default.
 - `MEMORY_LIMIT_OCTOBOX`, `MEMORY_LIMIT_REDIS`, `MEMORY_LIMIT_POSTGRES` : Memory limit for the various application parts. Don't change this when running on the starter plan.
 
 If everything goes well you should end up with
@@ -136,7 +136,7 @@ If everything goes well you should end up with
 ### Create Route
 
 In order to access Octobox from externally we have to create a "Route".
-Goto the create OpenShift project from the main page ("Octobox" in this case):
+Go to the created OpenShift project from the main page by following the project name link ("Octobox" in this case):
 
 ![OpenShift template success](images/openshift_project_menu.png)
 
@@ -166,8 +166,8 @@ Then:
 -----
 
 On the followup screen you will see the URL with which your application can be accessed.
-This is you entry URL to your Octobox instance.
-Note down this URL as you need it in the final step
+This is the entry URL to your Octobox instance.
+Copy this URL as you need it in the final step
 
 ![OpenShift route url](images/openshift_route_url.png)
 
