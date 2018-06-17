@@ -22,4 +22,4 @@ docker-compose-dev.yml
 .eslintignore
 .eslintrc
 
-app.json
+Dockerfile
