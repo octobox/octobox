@@ -38,7 +38,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'assigns latest git sha on settings page' do
     sign_in_as(@user)
     get settings_path
-    assert_equal assigns(:latest_git_sha).length, 7
+    assert_equal assigns(:latest_git_sha).length, 40
   end
 
   test 'updates api_token' do
