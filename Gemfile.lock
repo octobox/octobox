@@ -186,7 +186,7 @@ GEM
     puma_worker_killer (0.1.0)
       get_process_mem (~> 0.2)
       puma (>= 2.7, < 4)
-    raabro (1.1.5)
+    raabro (1.1.6)
     rack (2.0.5)
     rack-protection (2.0.3)
       rack
