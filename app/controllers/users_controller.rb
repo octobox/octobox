@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 
   def edit # :nodoc:
     counts = current_user.notifications.group(:repository_full_name).count
-    @latest_git_sha = Git.open(Rails.root).object('HEAD').sha[0..6] rescue nil
+    @latest_git_sha = ENV['HEROKU_SLUG_COMMIT'] || Git.open(Rails.root).object('HEAD').sha rescue nil
     @total = counts.sum(&:last)
     @most_active = counts.sort_by(&:last).reverse.first(10)
   end
