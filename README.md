@@ -1,6 +1,6 @@
-# Octobox &#128238;
+# [Octobox](https://octobox.io) &#128238;
 
-:postbox: Take back control of your GitHub Notifications with [Octobox]( https://octobox.io).
+:postbox: The best way to manage your GitHub Notifications.
 
 ![Screenshot of  Octobox](https://cloud.githubusercontent.com/assets/1060/25845986/feeca52c-34a7-11e7-82cf-d9b64546e4f6.png)
 
