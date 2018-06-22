@@ -89,6 +89,29 @@
     </div>
   </div>
 
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Statistics</h3>
+    </div>
+    <div class="panel-body">
+      <p>
+        <%= pluralize @total, 'notification' %> synced since you started using Octobox <%= distance_of_time_in_words_to_now current_user.created_at %> ago.
+      </p>
+      <% if @most_active %>
+        <p>
+          <strong>Most active repositories</strong>
+        </p>
+        <ul>
+          <% @most_active.each do |repository_full_name, count| %>
+            <li>
+              <%= link_to repository_full_name, "#{Octobox.config.github_domain}/#{repository_full_name}" %> - <%= pluralize count, 'notification' %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+
   <div class="panel panel-danger">
     <div class="panel-heading">
       <h3 class="panel-title">Danger zone</h3>

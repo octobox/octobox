@@ -20,7 +20,10 @@ class UsersController < ApplicationController
   def profile; end
 
   def edit # :nodoc:
+    counts = current_user.notifications.group(:repository_full_name).count
     @latest_git_sha = Git.open(Rails.root).object('HEAD').sha[0..6] rescue nil
+    @total = counts.sum(&:last)
+    @most_active = counts.sort_by(&:last).reverse.first(10)
   end
 
   # Update a user profile. Only updates the current user
