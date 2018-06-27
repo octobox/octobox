@@ -5,7 +5,11 @@
     </div>
     <div class="col-xs-6">
       <% if @latest_git_sha %>
-        <p class="settings-sha pull-right" title="Latest Git commit SHA">Version: <%= @latest_git_sha %></p>
+        <p class="settings-sha pull-right" title="Latest Git commit SHA">
+          Version:
+          <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank' %>
+
+        </p>
       <% end %>
     </div>
   </div>
