@@ -5,6 +5,14 @@
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"
   },
+  "keywords": [
+    "github",
+    "notifications",
+    "productivity",
+    "rails",
+    "ruby"
+  ],
+  "website": "https://octobox.io/",
   "license": "AGPL-3.0-only",
   "env": {
     "GITHUB_CLIENT_ID": {
