@@ -64,10 +64,14 @@ class Notification < ApplicationRecord
     user = unread.first.user
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
-    conn.in_parallel(manager) do
-      unread.each do |n|
-        conn.patch "notifications/threads/#{n.github_id}"
+    begin
+      conn.in_parallel(manager) do
+        unread.each do |n|
+            conn.patch "notifications/threads/#{n.github_id}"
+        end
       end
+    rescue Octokit::Forbidden
+      # one or more notifications are for repos the user no longer has access to
     end
     where(id: unread.map(&:id)).update_all(unread: false)
   end
