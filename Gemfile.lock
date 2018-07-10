@@ -173,7 +173,7 @@ GEM
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
     parallel (1.12.1)
-    parser (2.5.1.1)
+    parser (2.5.1.2)
       ast (~> 2.4.0)
     pg (1.0.0)
     pg_search (2.1.2)
