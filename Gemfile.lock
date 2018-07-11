@@ -54,7 +54,7 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bugsnag (6.7.3)
+    bugsnag (6.8.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
     byebug (10.0.2)
