@@ -118,11 +118,6 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/octobox/sponsor/8/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/octobox/sponsor/9/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/9/avatar.svg"></a>
 
-## Alternatives
-
-- [LaraGit](https://github.com/m1guelpf/laragit) - PHP rewrite
-- [octobox.js](https://github.com/doowb/octobox.js) - JavaScript rewrite
-
 ## Contribute
 
 Please do! The source code is hosted at [GitHub](https://github.com/octobox/octobox). If you want something, [open an issue](https://github.com/octobox/octobox/issues/new) or a pull request.
