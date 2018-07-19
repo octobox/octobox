@@ -1,9 +1,16 @@
 class HooksController < ApplicationController
   skip_before_action :verify_authenticity_token
+  skip_before_action :authenticate_user!
   before_action :authenticate_github_request!
 
   def create
     p params
+    p event_header
+
+    if event_header == 'issue'
+      # create or update subject by url (params['issue']['url'])
+    end
+
     head :no_content
   end
 

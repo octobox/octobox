@@ -9,12 +9,16 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by_auth_hash(auth_hash) || User.new
-    user.assign_from_auth_hash(auth_hash)
+    user.assign_from_auth_hash(auth_hash, params[:provider])
 
     cookies.permanent.signed[:user_id] = {value: user.id, httponly: true}
 
-    user.sync_notifications unless initial_sync?
-    redirect_to root_path
+    if user.access_token.blank?
+      return redirect_to '/auth/github'
+    else
+      user.sync_notifications unless initial_sync?
+      redirect_to root_path
+    end
   end
 
   def destroy

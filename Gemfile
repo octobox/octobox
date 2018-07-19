@@ -25,6 +25,7 @@ gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler'
 gem 'gemoji'
 gem 'bootsnap', require: false
+gem 'jwt'
 
 # Supported databases
 gem 'mysql2', require: false
