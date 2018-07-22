@@ -51,7 +51,7 @@
           <% end %>
         </div>
 
-        <table class='table table-hover table-notifications js-table-notifications' data-refresh-interval=<%= current_user.effective_refresh_interval %>>
+        <table class='table table-hover table-notifications js-table-notifications <%= 'filtered' if any_active_filters? %>' data-refresh-interval=<%= current_user.effective_refresh_interval %>>
           <% if @notifications.to_a.any? %>
             <%= render partial: 'notification', collection: @notifications %>
           <% elsif initial_sync? %>

@@ -86,9 +86,12 @@ html {
           left: 16px;
         }
         > .table {
-          margin-top: 79.5px;
-          @media (max-width: $screen-sm-min) {
-            margin-top: 60.5px;
+          margin-top: 46px;
+          &.filtered {
+            margin-top: 79.5px;
+            @media (max-width: $screen-sm-min) {
+              margin-top: 60.5px;
+            }
           }
         }
       }
