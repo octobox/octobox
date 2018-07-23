@@ -128,7 +128,7 @@ You can also help triage issues. This can include reproducing bug reports, or as
 
 Finally, this is an open source project. If you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.
 
-For other updates, follow me on Twitter: [@teabass](https://twitter.com/teabass).
+For other updates, follow the project on Twitter: [@octoboxio](https://twitter.com/octoboxio).
 
 ### Note on Patches/Pull Requests
 
