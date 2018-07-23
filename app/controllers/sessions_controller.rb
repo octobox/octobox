@@ -15,6 +15,8 @@ class SessionsController < ApplicationController
 
     if user.access_token.blank?
       return redirect_to '/auth/github'
+    if Octobox.github_app? && user.app_token.blank?
+      return redirect_to '/auth/githubapp'
     else
       user.sync_notifications unless initial_sync?
       redirect_to root_path
