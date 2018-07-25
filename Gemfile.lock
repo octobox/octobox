@@ -89,6 +89,7 @@ GEM
     gemoji (3.0.0)
     get_process_mem (0.2.2)
     git (1.4.0)
+    github-markup (2.0.1)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hashdiff (0.3.7)
@@ -226,6 +227,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    redcarpet (3.4.0)
     redis (4.0.1)
     request_store (1.4.1)
       rack (>= 1.4)
@@ -337,6 +339,7 @@ DEPENDENCIES
   faraday_middleware
   gemoji
   git
+  github-markup
   jbuilder
   jquery-rails
   kaminari
@@ -357,6 +360,7 @@ DEPENDENCIES
   rails-controller-testing
   rails_safe_tasks
   rake
+  redcarpet
   rgb
   rubocop
   sassc-rails

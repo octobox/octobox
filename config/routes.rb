@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get  :show
       post :star
       post :mark_read
     end

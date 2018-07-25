@@ -1,0 +1,95 @@
+<div class="flex-content">
+  <div class="flex-sidebar">
+    <div class="flex-container">
+      <%= render "sidebar" %>
+    </div>
+  </div>
+  <div class="flex-main">
+    <div class="flex-container">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+
+          <%= link_to octicon('arrow-left', height: 18), root_path, class: 'btn btn-default' %>
+
+          <button class='btn btn-default'>
+            <%= octicon 'checklist' %> Archive
+          </button>
+
+          <button class='btn btn-default'>
+            <%= octicon 'star' %> Star
+          </button>
+
+          <button class='btn btn-default'>
+            <%= octicon 'mute' %> Mute
+          </button>
+
+        </div>
+        <div class="panel-body">
+          <h4 class='media-heading'>
+            <%= octicon notification_icon(@notification.subject_type, @notification.state), :height => 16 %>
+            <%= @notification.subject_title %>
+            <%= link_to octicon('link-external'), @notification.web_url, target: '_blank', class: 'link' %>
+            <small>
+              <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>
+            </small>
+
+            <% if display_subject? %>
+                <% if @notification.subject %>
+                  <small>
+                    <%= link_to @notification.subject.author, @notification.subject.author_url, class: 'text-muted', target: '_blank' %>
+                  </small>
+                <% end %>
+            <% end %>
+
+              <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "label label-#{reason_label(@notification.reason)}" %>
+
+
+              <small class='text-muted'>
+                <%= local_time(@notification.updated_at, :short) %>
+              </small>
+
+          </h3>
+          <% if @notification.subject %>
+            <% @notification.subject.labels.each do |label| %>
+              <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "label", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+      <% if @notification.subject %>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <%= image_tag("https://github.com/#{@notification.subject.author}.png?s=30", width: 30) %>
+            <%= @notification.subject.author %>
+            <small>
+              <%= @notification.subject.created_at.to_s(:short) %>
+            </small>
+          </div>
+          <div class="panel-body">
+            <article class="markdown-body">
+              <%== parse_markdown(@notification.subject.body) %>
+            </article>
+          </div>
+        </div>
+
+
+        <% @notification.subject.comments.each do |comment| %>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <%= image_tag("https://github.com/#{comment.author}.png?s=30", width: 30) %>
+              <%= comment.author %>
+              <small>
+                <%= comment.created_at.to_s(:short) %>
+              </small>
+            </div>
+            <div class="panel-body">
+              <article class="markdown-body">
+                <%== parse_markdown(comment.body) %>
+              </article>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 class Subject < ApplicationRecord
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
   has_many :labels
+  has_many :comments
 
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
   private_constant :BOT_AUTHOR_REGEX

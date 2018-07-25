@@ -207,4 +207,8 @@ module NotificationsHelper
   def display_subject?
     Octobox.config.fetch_subject
   end
+
+  def parse_markdown(str)
+    GitHub::Markup.render('.md', str)
+  end
 end

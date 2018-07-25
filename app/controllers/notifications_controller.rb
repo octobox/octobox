@@ -85,6 +85,17 @@ class NotificationsController < ApplicationController
     @cur_selected = [per_page, @total].min
   end
 
+  def show
+    scope = notifications_for_presentation
+    @states                = scope.distinct.joins(:subject).group('subjects.state').count
+    @types                 = scope.distinct.group(:subject_type).count
+    @unread_notifications  = scope.distinct.group(:unread).count
+    @reasons               = scope.distinct.group(:reason).count
+    @unread_repositories   = scope.distinct.group(:repository_full_name).count
+
+    @notification = current_user.notifications.includes(subject: [:comments, :labels]).find(params[:id])
+  end
+
   # Return a count for the number of unread notifications
   #
   # :category: Notifications CRUD

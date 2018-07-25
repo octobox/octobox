@@ -19,6 +19,7 @@ $security_alert-color: #800000;
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "patterns/blankslate";
+@import "github-markdown";
 
 html, body {
   overflow-x: hidden;

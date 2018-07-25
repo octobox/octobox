@@ -25,6 +25,8 @@ gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler'
 gem 'gemoji'
 gem 'bootsnap', require: false
+gem 'github-markup', require: 'github/markup'
+gem 'redcarpet'
 
 # Supported databases
 gem 'mysql2', require: false
