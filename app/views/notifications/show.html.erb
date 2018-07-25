@@ -59,7 +59,7 @@
       <% if @notification.subject %>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <%= image_tag("https://github.com/#{@notification.subject.author}.png?s=30", width: 30) %>
+            <%= image_tag("#{Octobox.config.github_domain}/#{@notification.subject.author}.png?s=30", width: 30) %>
             <%= @notification.subject.author %>
             <small>
               <%= @notification.subject.created_at.to_s(:short) %>
@@ -76,7 +76,7 @@
         <% @notification.subject.comments.each do |comment| %>
           <div class="panel panel-default">
             <div class="panel-heading">
-              <%= image_tag("https://github.com/#{comment.author}.png?s=30", width: 30) %>
+              <%= image_tag("#{Octobox.config.github_domain}/#{comment.author}.png?s=30", width: 30) %>
               <%= comment.author %>
               <small>
                 <%= comment.created_at.to_s(:short) %>
