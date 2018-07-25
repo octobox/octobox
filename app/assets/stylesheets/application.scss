@@ -366,7 +366,7 @@ td.keys {
   margin-right: 3px;
 }
 
-.notification-repo, .notification-date {
+.notification-repo, .notification-date, .notification-subject-author {
   white-space: nowrap;
 }
 
@@ -441,11 +441,6 @@ td.keys {
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-    }
-    .notification-subject-author:before {
-      content: "by ";
-      color: $text-muted;
-      font-size: 10px;
     }
     .notification-date {
       top: 10px;
@@ -633,4 +628,15 @@ td.keys {
 
 .settings-sha {
   margin: 35px 0 10px;
+}
+
+.author{
+  margin-left: -15px;
+  display: inline;
+  border-left: 1px solid $body-bg;
+
+  img{
+    border-radius: 2px;
+    background-color: $body-bg;
+  }
 }

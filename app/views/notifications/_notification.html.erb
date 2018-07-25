@@ -34,9 +34,11 @@
   <% if display_subject? %>
     <td class='notification-subject-author'>
       <% if notification.subject %>
-        <small>
-          <%= link_to notification.subject.author, notification.subject.author_url, class: 'text-muted', target: '_blank' %>
-        </small>
+
+        <% ([notification.subject.author] + notification.subject.comments.map(&:author)).uniq.last(5).each do |author| %>
+          <% author = /\A(.*)\[bot\]\z/.match(author)[1] if /\A(.*)\[bot\]\z/.match(author) %>
+          <%= link_to image_tag("#{Octobox.config.github_domain}/#{author}.png?s=20", width: 20), "#{Octobox.config.github_domain}/#{author}", class: 'author', target: '_blank' %>
+        <% end %>
       <% end %>
     </td>
   <% end %>
