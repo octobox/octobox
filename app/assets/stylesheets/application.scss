@@ -317,7 +317,7 @@ td.keys {
   white-space: nowrap;
 }
 
-@include media-breakpoint-up(sm) {
+@include media-breakpoint-up(md) {
   .notification-star,
   .notification-icon {
     width: 1%;
