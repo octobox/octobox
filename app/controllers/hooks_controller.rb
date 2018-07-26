@@ -7,7 +7,7 @@ class HooksController < ApplicationController
     p params
     p event_header
 
-    if event_header == 'issue'
+    if event_header == 'issues'
       subject = Subject.find_or_create_by(html_url: remote_subject.html_url)
       remote_subject = OpenStruct.new(params['issue'])
       subject.update({
