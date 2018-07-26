@@ -8,7 +8,7 @@ class HooksController < ApplicationController
     p event_header
 
     if event_header == 'issues'
-      remote_subject = OpenStruct.new(params['issue'])
+      remote_subject = JSON.parse(params['issue'].to_json, object_class: OpenStruct)
       subject = Subject.find_or_create_by(html_url: remote_subject.html_url)
       subject.update({
         state: remote_subject.state,
