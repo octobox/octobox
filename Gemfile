@@ -26,7 +26,7 @@ gem 'sidekiq-scheduler'
 gem 'gemoji'
 gem 'bootsnap', require: false
 gem 'github-markup', require: 'github/markup'
-gem 'redcarpet'
+gem 'kramdown'
 
 # Supported databases
 gem 'mysql2', require: false
