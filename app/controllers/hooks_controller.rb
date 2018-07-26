@@ -9,7 +9,7 @@ class HooksController < ApplicationController
 
     if event_header == 'issues'
       remote_subject = JSON.parse(params['issue'].to_json, object_class: OpenStruct)
-      subject = Subject.find_or_create_by(html_url: remote_subject.html_url)
+      subject = Subject.find_or_create_by(url: remote_subject.url)
       subject.update({
         state: remote_subject.state,
         author: remote_subject.user.login,
@@ -21,7 +21,7 @@ class HooksController < ApplicationController
 
     if event_header == 'pull_request'
       remote_subject = JSON.parse(params['pull_request'].to_json, object_class: OpenStruct)
-      subject = Subject.find_or_create_by(html_url: remote_subject.html_url)
+      subject = Subject.find_or_create_by(url: remote_subject.url)
       subject.update({
         state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
         author: remote_subject.user.login,
