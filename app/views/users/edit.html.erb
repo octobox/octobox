@@ -35,7 +35,7 @@
       <% end %>
 
       <%= submit_tag 'Save', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
+      <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
     <% end %>
   <% end %>
 
@@ -48,7 +48,7 @@
     <div class="card-body">
       <p>Octobox can only show notifications for Organsiations that you've granted it access to via GitHub</p>
       <p>If you've been added to a new Organisation you may need to enable or request access for Octobox to sync notifications for those repositories.</p>
-      <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_client_id}", class: 'btn btn-default' do %>
+      <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_client_id}", class: 'btn btn-outline-dark' do %>
         <%= octicon 'tools' %>&nbsp;
         Manage Oauth Access on GitHub
       <% end %>

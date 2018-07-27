@@ -1,7 +1,7 @@
 <% if any_active_filters? %>
   <span class="filter-options">
     <span class="btn-group">
-      <a href="#" class="btn btn-default filter-label" role="button" aria-disabled="true">Filter:</a>
+      <a href="#" class="btn btn-outline-dark filter-label" role="button" aria-disabled="true">Filter:</a>
 
       <%= filter_option :reason do %>
         <%= params[:reason].underscore.humanize %>
