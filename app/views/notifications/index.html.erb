@@ -10,7 +10,7 @@
         <div class="card-header">
           <% if @notifications.to_a.any? %>
             <div class="btn-group float-right d-none d-md-block" data-toggle="tooltip" data-placement="left" title="Notifications per page">
-              <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <% if params[:per_page].present? %>
                   <%= params[:per_page] %>
                 <% else %>
@@ -25,10 +25,10 @@
               </ul>
             </div>
           <% end %>
-          <div class="btn btn-link help float-right d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
+          <div class="btn btn-sm btn-link help float-right d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
             <%= octicon 'keyboard', :height => 16 %>
           </div>
-          <button type="button" class="d-inline-block d-md-none btn btn-outline-dark" data-toggle="offcanvas">
+          <button type="button" class="d-inline-block d-md-none btn btn-sm btn-outline-dark" data-toggle="offcanvas">
             <%= octicon 'three-bars', :height => 16 %>
           </button>
           <% if @notifications.to_a.any? %>
@@ -37,7 +37,7 @@
           </button>
           <%= select_all_button(@cur_selected, @total) %>
           <% end %>
-          <%= link_to sync_notifications_path(filters), class: 'btn btn-outline-secondary sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
+          <%= link_to sync_notifications_path(filters), class: 'btn btn-sm btn-outline-secondary sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync?}" %>
           <% end %>
           <%= archive_selected_button %>
