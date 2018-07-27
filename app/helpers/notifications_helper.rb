@@ -119,11 +119,11 @@ module NotificationsHelper
   end
 
   def reason_label(reason)
-    REASON_LABELS.fetch(reason, 'default')
+    REASON_LABELS.fetch(reason, 'secondary')
   end
 
   def state_label(state)
-    STATE_LABELS.fetch(state, 'default')
+    STATE_LABELS.fetch(state, 'secondary')
   end
 
   def filter_option(param)
