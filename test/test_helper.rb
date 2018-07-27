@@ -7,18 +7,21 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'webmock/minitest'
-require 'mocha/mini_test'
+require 'mocha/minitest'
 
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
 
-FactoryGirl.find_definitions
+FactoryBot.find_definitions
+
+puts "We are using #{ActiveRecord::Base.connection.adapter_name}"
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
-  include FactoryGirl::Syntax::Methods
+  include FactoryBot::Syntax::Methods
+  include SidekiqMinitestSupport
   include StubHelper
 end
 

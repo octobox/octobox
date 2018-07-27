@@ -1,0 +1,24 @@
+version: '3'
+services:
+  database.service.octobox.internal:
+    image: postgres:9.6-alpine
+    environment:
+      - POSTGRES_PASSWORD=development
+  redis.service.octobox.internal:
+    image: redis:3.2-alpine
+  app:
+    image: octobox
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - RAILS_ENV=development
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - OCTOBOX_DATABASE_NAME=postgres
+      - OCTOBOX_DATABASE_USERNAME=postgres
+      - OCTOBOX_DATABASE_PASSWORD=development
+      - OCTOBOX_DATABASE_HOST=database.service.octobox.internal
+      - REDIS_URL=redis.service.octobox.internal

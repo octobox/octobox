@@ -1,0 +1,5 @@
+sync_notifications:
+  cron: '*/10 * * * *'
+  class: SyncAllUserNotificationsWorker
+  queue: sync_notifications
+  description: 'Automatically Sync Notifications for all Users'

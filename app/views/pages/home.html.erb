@@ -1,7 +1,7 @@
 <div class="jumbotron">
   <div class="container">
     <h1 class="text-center"><%= octobox_icon(80) %> Octobox</h1>
-    <p class="text-center">Take back control of your GitHub notifications</p>
+    <p class="text-center">The best way to manage your GitHub Notifications</p>
     <div class="text-center">
       <%= image_tag 'screenshot.png', class: 'screenshot' %>
       <p>
@@ -15,7 +15,43 @@
         <a class="github-button" href="https://github.com/octobox/octobox/fork" data-icon="octicon-repo-forked" data-style="mega" data-count-href="/octobox/octobox/network" data-count-api="/repos/octobox/octobox#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork octobox/octobox on GitHub">Fork</a>
       </p>
     </div>
+
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h3>Why is this a thing?</h3>
+        <p>
+          If you manage more than one active project on GitHub, you probably find <a href="https://github.com/notifications">GitHub Notifications</a> pretty lacking.
+        </p>
+        <p>
+          Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
+        </p>
+        <p>
+          Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
+        </p>
+
+        <p class="text-center"><%= emojify(':keyboard:') %></p>
+
+        <h3>Run your own Octobox</h3>
+
+        <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox. Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
+
+        <p class="text-center"><%= emojify(':octopus:') %></p>
+
+        <h3>Contribute</h3>
+
+        <p>Octobox is open source and the source code is hosted at <a href="https://github.com/octobox/octobox">GitHub</a>. If you want something, open an <a href="https://github.com/octobox/octobox/issues/new">issue</a> or a pull request.</p>
+
+        <p>If you need want to contribute but don't know where to start, take a look at the issues tagged as <a href="https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22">"Help Wanted"</a>.</p>
+
+        <p>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
+
+        <p>Finally, this is an open source project. If you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
+
+        <p class="text-center"><%= emojify(':postbox:') %></p>
+      </div>
+    </div>
   </div>
 </div>
+
 <%= render 'layouts/footer'%>
 <script async defer src="https://buttons.github.io/buttons.js"></script>

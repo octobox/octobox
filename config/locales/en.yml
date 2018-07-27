@@ -24,3 +24,9 @@ en:
     pagination:
       previous: 'Previous'
       next: 'Next'
+  exceptions:
+    octokit:
+      unauthorized: 'Your GitHub token seems to be invalid'
+      unavailable: 'Having issues connecting to GitHub'
+    faraday:
+      connection_failed: 'You seem to be offline'

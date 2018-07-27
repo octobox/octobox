@@ -9,11 +9,11 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by_auth_hash(auth_hash) || User.new
-
     user.assign_from_auth_hash(auth_hash)
-    user.sync_notifications
 
     cookies.permanent.signed[:user_id] = {value: user.id, httponly: true}
+
+    user.sync_notifications unless initial_sync?
     redirect_to root_path
   end
 

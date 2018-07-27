@@ -1,6 +1,19 @@
 # frozen_string_literal: true
+
+require 'sidekiq/web'
+if Octobox.config.sidekiq_schedule_enabled?
+  require 'sidekiq-scheduler/web'
+end
+require 'admin_constraint'
+
 Rails.application.routes.draw do
   root to: 'notifications#index'
+
+  constraints AdminConstraint.new do
+    namespace :admin do
+      mount Sidekiq::Web => "/sidekiq"
+    end
+  end
 
   get :login,  to: 'sessions#new'
   get :logout, to: 'sessions#destroy'
@@ -15,15 +28,21 @@ Rails.application.routes.draw do
     collection do
       post :archive_selected
       post :sync
+      get  :sync
       post :mute_selected
       post :mark_read_selected
-      get :unread_count
+      get  :unread_count
     end
 
     member do
       post :star
       post :mark_read
     end
+  end
+
+  if Octobox.config.octobox_io
+    get '/privacy', to: 'pages#privacy'
+    get '/terms', to: 'pages#terms'
   end
 
   get '/settings', to: 'users#edit'

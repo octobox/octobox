@@ -1,7 +1,7 @@
 //= require jquery3
 //= require jquery_ujs
 //= require turbolinks
-//= require local_time
+//= require local-time
 //= require popper
 //= require bootstrap
 //= require_tree .
@@ -44,6 +44,13 @@ function moveCursorToClickedRow(event) {
 function updateFavicon() {
   $.get( "/notifications/unread_count", function(data) {
     var unread_count = data["count"];
+    var title = 'Octobox';
+    if (unread_count > 0) {
+      title += ' (' + unread_count +')';
+    }
+
+    window.document.title = title;
+
     if ( unread_count > 0 ) {
       var old_link = document.getElementById('favicon-count');
       if ( old_link ) {
@@ -59,23 +66,24 @@ function updateFavicon() {
       link.id = "favicon-count";
 
       if (canvas.getContext) {
-        canvas.height = canvas.width = 16;
+        canvas.height = canvas.width = 32;
         ctx = canvas.getContext('2d');
         img.onload = function () {
           ctx.drawImage(this, 0, 0);
 
           ctx.fillStyle = '#f93e00';
-          var width = ctx.measureText(txt).width;
-          ctx.fillRect(0, 0, width+2, 12);
+          ctx.font = 'bold 20px "helvetica", sans-serif';
 
-          ctx.font = 'bold 10px "helvetica", sans-serif';
+          var width = ctx.measureText(txt).width;
+          ctx.fillRect(0, 0, width+4, 24);
+
           ctx.fillStyle = '#fff';
-          ctx.fillText(txt, 1, 10);
+          ctx.fillText(txt, 2, 20);
 
           link.href = canvas.toDataURL('image/png');
           document.body.appendChild(link);
         };
-        img.src = "/favicon-16x16.png";
+        img.src = "/favicon-32x32.png";
       }
     }
   });
@@ -93,16 +101,16 @@ document.addEventListener("turbolinks:load", function() {
 
     $('input.archive, input.unarchive').change(function() {
       if ( hasMarkedRows() ) {
-        var prop = hasMarkedRows(true) ? 'indeterminate' : 'checked';
-        $(".js-select_all").prop(prop, true);
         $('button.archive_selected, button.unarchive_selected, button.mute_selected').show();
-        if ( prop === 'checked' ) {
+        if ( !hasMarkedRows(true) ) {
+          $(".js-select_all").prop('checked', true).prop('indeterminate', false);
           $('button.select_all').show();
         } else {
+          $(".js-select_all").prop('checked', false).prop('indeterminate', true);
           $('button.select_all').hide();
         }
       } else {
-        $(".js-select_all").prop('checked', false);
+        $(".js-select_all").prop('checked', false).prop('indeterminate', false);
         $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').hide();
       }
       var marked_unread_length = getMarkedRows().filter('.active').length;
@@ -116,8 +124,8 @@ document.addEventListener("turbolinks:load", function() {
       $(this).toggleClass("star-active star-inactive");
       $.post('/notifications/'+$(this).data('id')+'/star')
     });
-    $('.sync .octicon').on('click', function() {
-      $(this).toggleClass('spinning')
+    $('a.sync').on('click', function() {
+      $('.sync .octicon').toggleClass('spinning')
     });
     recoverPreviousCursorPosition();
 
@@ -173,7 +181,8 @@ var shortcuts = {
   79:  openCurrentLink,   // o
   191: openModal,         // ?
   190: sync,              // .
-  82:  sync               // r
+  82:  sync,              // r
+  27:  escPressed,        // esc
 };
 
 function cursorDown() {
@@ -200,14 +209,14 @@ function mute() {
   if (getDisplayedRows().length === 0) return;
   if ( $(".js-table-notifications tr").length === 0 ) return;
   var ids = getIdsFromRows(getMarkedOrCurrentRows());
-  $.post( "/notifications/mute_selected", { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
+  $.post( "/notifications/mute_selected" + location.search, { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
 }
 
 function markReadSelected() {
   if (getDisplayedRows().length === 0) return;
   var rows = getMarkedOrCurrentRows();
   rows.addClass('blur-action');
-  $.post("/notifications/mark_read_selected", {'id[]': getIdsFromRows(rows)}).done(function () {
+  $.post("/notifications/mark_read_selected" + location.search, {'id[]': getIdsFromRows(rows)}).done(function () {
     rows.removeClass('blur-action')
     rows.removeClass('active');
     updateFavicon();
@@ -251,10 +260,11 @@ function resetCursorAfterRowsRemoved(ids) {
   while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.next().length > 0) {
     current = current.next();
   }
-  window.current_id = getIdsFromRows(current)[0];
-  if ( $.inArray(window.current_id, ids ) > -1 ) {
-    window.current_id = getIdsFromRows(getMarkedRows(true).last())[0];
+  while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.prev().length > 0) {
+    current = current.prev();
   }
+
+  window.current_id = getIdsFromRows(current)[0];
   Turbolinks.visit("/"+location.search);
 }
 
@@ -263,7 +273,7 @@ function toggleStar() {
 }
 
 function openModal() {
-  $("#help-box").modal();
+  $("#help-box").modal({ keyboard: false });
 }
 
 function openCurrentLink(e) {
@@ -277,6 +287,18 @@ function sync() {
 
 function autoSync() {
   hasMarkedRows() || sync()
+}
+
+function escPressed(e) {
+  if ($("#help-box").is(':visible')) {
+    $("#help-box").modal('hide');
+  } else {
+    clearFilters();
+  }
+}
+
+function clearFilters() {
+  Turbolinks.visit("/");
 }
 
 function setAutoSyncTimer() {

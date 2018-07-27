@@ -1,20 +1,28 @@
 module NotificationsHelper
   REASON_LABELS = {
-    'comment'      => 'primary',
-    'author'       => 'success',
-    'state_change' => 'info',
-    'mention'      => 'warning',
-    'assign'       => 'danger',
-    'subscribed'   => 'subscribed',
-    'team_mention' => 'team_mention'
+    'comment'        => 'primary',
+    'author'         => 'success',
+    'state_change'   => 'info',
+    'mention'        => 'warning',
+    'assign'         => 'danger',
+    'subscribed'     => 'subscribed',
+    'team_mention'   => 'team_mention',
+    'security_alert' => 'security_alert'
   }.freeze
 
+  STATE_LABELS = {
+    'open'   => 'success',
+    'closed' => 'danger',
+    'merged' => 'subscribed'
+  }
+
   SUBJECT_TYPES = {
-    'RepositoryInvitation' => 'mail-read',
-    'Issue'                => 'issue-opened',
-    'PullRequest'          => 'git-pull-request',
-    'Commit'               => 'git-commit',
-    'Release'              => 'tag'
+    'RepositoryInvitation'         => 'mail-read',
+    'Issue'                        => 'issue-opened',
+    'PullRequest'                  => 'git-pull-request',
+    'Commit'                       => 'git-commit',
+    'Release'                      => 'tag',
+    'RepositoryVulnerabilityAlert' => 'alert'
   }.freeze
 
   def filters
@@ -27,7 +35,9 @@ module NotificationsHelper
       starred:  params[:starred],
       owner:    params[:owner],
       per_page: params[:per_page],
-      q:        params[:q]
+      q:        params[:q],
+      state:    params[:state],
+      label:    params[:label],
     }
   end
 
@@ -95,48 +105,75 @@ module NotificationsHelper
     notification_param_keys.all?{|param| params[param].blank? }
   end
 
-  def notification_icon(subject_type)
+  def notification_icon(subject_type, state = nil)
+    return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     SUBJECT_TYPES[subject_type]
+  end
+
+  def notification_icon_color(state)
+    {
+      'open' => 'text-success',
+      'closed' => 'text-danger',
+      'merged' => 'text-subscribed'
+    }[state]
   end
 
   def reason_label(reason)
     REASON_LABELS.fetch(reason, 'default')
   end
 
-  def filter_option(param, &block)
+  def state_label(state)
+    STATE_LABELS.fetch(state, 'default')
+  end
+
+  def filter_option(param)
     if filters[param].present?
       link_to root_path(filters.except(param)), class: "btn btn-outline-dark" do
         concat octicon('x', :height => 16)
         concat ' '
-        concat block.call
+        concat yield
       end
     end
   end
 
-  def filter_link(param, value, count, &block)
+  def reason_filter_option(reason)
+    if filters[:reason].present? && reason.present?
+      reasons = filters[:reason].split(',').reject(&:empty?)
+      index = reasons.index(reason.underscore.downcase)
+      reasons.delete_at(index) if index
+      link_to root_path(filters.merge(:reason => reasons.join(','))), class: "btn btn-default" do
+        concat octicon('x', :height => 16)
+        concat ' '
+        concat yield
+      end
+    end
+  end
+
+  def filter_link(param, value, count)
     sidebar_filter_link(params[param] == value.to_s, param, value, count) do
-      block.call
+      yield
     end
   end
 
-  def org_filter_link(param, value, count, &block)
+  def org_filter_link(param, value)
     sidebar_filter_link(params[param] == value.to_s, param, value, nil, :repo, 'owner-label') do
-      block.call
+      yield
     end
   end
 
-  def repo_filter_link(param, value, count, &block)
+  def repo_filter_link(param, value, count)
     active = params[param] == value || params[:owner] == value.split('/')[0]
     sidebar_filter_link(active, param, value, count, :owner, 'repo-label') do
-      block.call
+      yield
     end
   end
 
-  def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, &block)
+  def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, path_params = nil)
     content_tag :li, class: (active ? 'active nav-item' : 'nav-item') do
       active = (active && not_repo_in_active_org(param))
-      link_to root_path(filtered_params(param => (active ? nil : value)).except(except)), class: "nav-link filter #{link_class}" do
-        block.call
+      path_params ||= filtered_params(param => (active ? nil : value)).except(except)
+      link_to root_path(path_params), class: "nav-link filter #{link_class}" do
+        yield
         if active && not_repo_in_active_org(param)
           concat content_tag(:span, octicon('x', :height => 16), class: 'label text-muted')
         elsif count.present?
@@ -146,8 +183,28 @@ module NotificationsHelper
     end
   end
 
+  def reason_filter_link(value, count)
+    active = params[:reason].present? && params[:reason].split(',').include?(value.to_s)
+    link_value = reason_link_param_value(params[:reason], value, active)
+    path_params = filtered_params(:reason => link_value)
+
+    sidebar_filter_link(active, :reason, link_value, count, nil, nil, path_params) do
+      yield
+    end
+  end
+
+  def reason_link_param_value(param, value, active)
+    reasons = param.try(:split, ',') || []
+    active ? reasons.delete(value) : reasons.push(value)
+    reasons.try(:join, ',')
+  end
+
   def not_repo_in_active_org(param)
     return true unless param == :repo
     !params[:owner].present?
+  end
+
+  def display_subject?
+    Octobox.config.fetch_subject
   end
 end

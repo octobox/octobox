@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class User < ApplicationRecord
+  has_secure_token :api_token
   has_many :notifications, dependent: :delete_all
 
   ERRORS = {
@@ -21,6 +22,10 @@ class User < ApplicationRecord
     message: ERRORS[:refresh_interval_size][1]
   }
   validate :personal_access_token_validator
+
+  def admin?
+    Octobox.config.github_admin_ids.include?(github_id.to_s)
+  end
 
   def refresh_interval=(val)
     val = nil if 0 == val
@@ -50,6 +55,8 @@ class User < ApplicationRecord
   def sync_notifications
     download_service.download
     Rails.logger.info("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} synced their notifications\033[0m\n\n")
+  rescue Octokit::Unauthorized => e
+    Rails.logger.warn("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} failed to sync notifications -- #{e.message}\033[0m\n\n")
   end
 
   def download_service

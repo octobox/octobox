@@ -16,9 +16,17 @@ module Octobox
     end
 
     def scopes
-      default_scopes = Octobox.restricted_access_enabled? ? 'notifications, read:org' : 'notifications'
+      default_scopes = 'notifications'
+      default_scopes += ', read:org' if Octobox.restricted_access_enabled?
+      default_scopes += ', repo'     if fetch_subject
+
       ENV.fetch('GITHUB_SCOPE', default_scopes)
     end
+
+    def fetch_subject
+      @fetch_subject || (ENV['FETCH_SUBJECT'].try(:downcase) == "true")
+    end
+    attr_writer :fetch_subject
 
     def personal_access_tokens_enabled
       @personal_access_tokens_enabled || ENV['PERSONAL_ACCESS_TOKENS_ENABLED'].present?
@@ -40,6 +48,27 @@ module Octobox
       end
     end
     attr_writer :max_notifications_to_sync
+
+    def max_concurrency
+      if @max_concurrency
+        @max_concurrency
+      elsif ENV['MAX_CONCURRENCY'].present?
+        ENV['MAX_CONCURRENCY'].to_i
+      else
+        10
+      end
+    end
+    attr_writer :max_notifications_to_sync
+
+    def sidekiq_schedule_enabled?
+      @sidekiq_schedule_enabled || ENV['OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED'].present?
+    end
+    attr_writer :sidekiq_schedule_enabled
+
+    def sidekiq_schedule_path
+      @sidekiq_schedule_path || ENV.fetch('OCTOBOX_SIDEKIQ_SCHEDULE_PATH', Rails.root.join('config', 'sidekiq_schedule.yml'))
+    end
+    attr_writer :sidekiq_schedule_path
 
     def restricted_access_enabled
       @restricted_access_enabled || ENV['RESTRICTED_ACCESS_ENABLED'].present?
@@ -63,5 +92,23 @@ module Octobox
       @source_repo || env_value || 'https://github.com/octobox/octobox'
     end
     attr_writer :source_repo
+
+    def octobox_io
+      @octobox_io || ENV['OCTOBOX_IO'].present?
+    end
+    attr_writer :octobox_io
+
+    def redis_url
+      return @redis_url if defined?(@redis_url)
+      @redis_url = ENV.fetch("REDIS_URL", "redis://localhost:6379")
+    end
+
+    def github_admin_ids
+      return @github_admin_ids if defined?(@github_admin_ids)
+      admin_github_ids = ENV.fetch("ADMIN_GITHUB_IDS", "").to_s
+
+      return @admin_github_ids = [] unless admin_github_ids.present?
+      @github_admin_ids = admin_github_ids.split(',')
+    end
   end
 end

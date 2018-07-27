@@ -33,6 +33,57 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/index', file: 'notifications/index.html.erb'
   end
 
+  test 'will render the home page with filters' do
+    sign_in_as(@user)
+
+    # Repo Filter
+    get '/?repo=a/b'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'a/b'
+
+    # Reason Filter
+    get '/?reason=Assign'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Assign'
+
+    # Type Filter
+    get '/?type=repository_a_b'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'A b'
+
+    # Unread Filter
+    get '/?unread=true'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Unread'
+
+    # Owner Filter
+    get '/?owner=bob'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'bob'
+
+    # State Filter
+    get '/?state=archive'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Archive'
+
+    # query Filter
+    get '/?q=query'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Search: query'
+
+    get '/?label=bug'
+    assert_response :success
+    assert_template 'notifications/index', file: 'notifications/index.html.erb'
+    assert_select "span.filter-options *", text: 'Label: bug'
+  end
+
   test 'renders the index page as json if authenticated' do
     sign_in_as(@user)
 
@@ -57,6 +108,26 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/index'
   end
 
+  test 'renders notifications filtered by label' do
+    stub_fetch_subject_enabled
+    sign_in_as(@user)
+
+    get '/'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 2}
+
+    get '/?label=question'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 1}
+
+    get '/?label=other-label'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select 'table tr.notification', {count: 0}
+  end
+
   test 'shows archived search results by default' do
     sign_in_as(@user)
     5.times.each { create(:notification, user: @user, archived: true, subject_title:'release-1') }
@@ -78,6 +149,14 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     get '/?page=3'
     assert_redirected_to '/?page=2'
+  end
+
+  test 'redirect back to last page of results if page is out of bounds and send filters' do
+    sign_in_as(@user)
+    25.times.each { create(:notification, user: @user, archived: false, unread: true) }
+
+    get '/?page=3&reason=subscribed&unread=true'
+    assert_redirected_to '/?page=2&reason=subscribed&unread=true'
   end
 
   test 'archives multiple notifications' do
@@ -131,18 +210,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
-    User.any_instance.stubs(:github_client).returns(mock {
-      expects(:update_thread_subscription).with(notification1.github_id, ignored: true).returns true
-      expects(:update_thread_subscription).with(notification2.github_id, ignored: true).returns true
-      expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
-      expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
-    })
+
+    Notification.expects(:mute).with([notification1, notification2])
+
     post '/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }
     assert_response :ok
-
-    assert notification1.reload.archived?
-    assert notification2.reload.archived?
-    refute notification3.reload.archived?
   end
 
   test 'mutes all notifications in current scope' do
@@ -151,20 +223,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
-    User.any_instance.stubs(:github_client).returns(mock {
-      expects(:update_thread_subscription).with(notification1.github_id, ignored: true).returns true
-      expects(:update_thread_subscription).with(notification2.github_id, ignored: true).returns true
-      expects(:update_thread_subscription).with(notification3.github_id, ignored: true).returns true
-      expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
-      expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
-      expects(:mark_thread_as_read).with(notification3.github_id, read: true).returns true
-    })
+
+    Notification.expects(:mute).with([notification1, notification2, notification3])
+
     post '/notifications/mute_selected', params: { id: ['all'] }
     assert_response :ok
-
-    assert notification1.reload.archived?
-    assert notification2.reload.archived?
-    assert notification3.reload.archived?
   end
 
   test 'marks read multiple notifications' do
@@ -172,16 +235,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
-    User.any_instance.stubs(:github_client).returns(mock {
-      expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
-      expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
-    })
+
+    Notification.expects(:mark_read).with([notification1, notification2])
+
     post '/notifications/mark_read_selected', params: { id: [notification1.id, notification2.id] }
     assert_response :ok
-
-    refute notification1.reload.unread?
-    refute notification2.reload.unread?
-    assert notification3.reload.unread?
   end
 
   test 'marks read all notifications' do
@@ -190,17 +248,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
-    User.any_instance.stubs(:github_client).returns(mock {
-      expects(:mark_thread_as_read).with(notification1.github_id, read: true).returns true
-      expects(:mark_thread_as_read).with(notification2.github_id, read: true).returns true
-      expects(:mark_thread_as_read).with(notification3.github_id, read: true).returns true
-    })
+
+    Notification.expects(:mark_read).with([notification1, notification2, notification3])
+
     post '/notifications/mark_read_selected', params: { id: ['all'] }
     assert_response :ok
-
-    refute notification1.reload.unread?
-    refute notification2.reload.unread?
-    refute notification3.reload.unread?
   end
 
   test 'toggles starred on a notification' do
@@ -239,6 +291,73 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test 'get to syncs redirects' do
+    sign_in_as(@user)
+
+    get "/notifications/sync"
+    assert_response :redirect
+  end
+
+  test 'gracefully handles failed user notification syncs' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
+
+    post "/notifications/sync"
+    assert_response :redirect
+    assert_equal "Having issues connecting to GitHub. Please try again.", flash[:error]
+  end
+
+  test 'gracefully handles failed user notification syncs as json' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
+
+    post "/notifications/sync.json"
+    assert_response :service_unavailable
+  end
+
+  test 'gracefully handles failed user notification syncs with wrong token' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::Unauthorized)
+
+    post "/notifications/sync"
+    assert_response :redirect
+    assert_equal "Your GitHub token seems to be invalid. Please try again.", flash[:error]
+  end
+
+  test 'gracefully handles forbidden user notification syncs' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::Forbidden)
+
+    post "/notifications/sync"
+    assert_response :redirect
+    assert_equal "Your GitHub token seems to be invalid. Please try again.", flash[:error]
+  end
+
+  test 'gracefully handles failed user notification syncs with bad token as json' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Octokit::Unauthorized)
+
+    post "/notifications/sync.json"
+    assert_response :service_unavailable
+  end
+
+  test 'gracefully handles failed user notification syncs when user is offline' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Faraday::ConnectionFailed.new('offline error'))
+
+    post "/notifications/sync"
+    assert_response :redirect
+    assert_equal "You seem to be offline. Please try again.", flash[:error]
+  end
+
+  test 'gracefully handles failed user notification syncs when user is offline as json' do
+    sign_in_as(@user)
+    User.any_instance.stubs(:sync_notifications).raises(Faraday::ConnectionFailed.new('offline error'))
+
+    post "/notifications/sync.json"
+    assert_response :service_unavailable
+  end
+
   test 'renders the inbox notifcation count in the sidebar' do
     sign_in_as(@user)
     create(:notification, user: @user, archived: false)
@@ -256,7 +375,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select("li[role='presentation'] > a > span") do |elements|
-      assert_equal elements[0].text, '7'
+      assert_equal elements[0].text, '8'
     end
   end
 
@@ -286,5 +405,25 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, json["pagination"]["page"]
     assert_equal 0, json["pagination"]["total_pages"]
     assert_equal 0, json["pagination"]["per_page"]
+  end
+
+  test 'renders a union of notifications when multiple reasons given' do
+    sign_in_as(@user)
+    Notification.destroy_all
+
+    notification1 = create(:notification, user: @user, archived: false, reason: "assign")
+    notification2 = create(:notification, user: @user, archived: false, reason: "mention")
+    notification3 = create(:notification, user: @user, archived: false, reason: "subscribed")
+
+    get notifications_path(format: :json, reason: "assign,mention")
+
+    assert_response :success
+
+    json = JSON.parse(response.body)
+    notification_ids = json["notifications"].map { |n| n["id"] }
+
+    assert notification_ids.include?(notification1.id)
+    assert notification_ids.include?(notification2.id)
+    refute notification_ids.include?(notification3.id)
   end
 end

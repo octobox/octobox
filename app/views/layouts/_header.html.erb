@@ -37,7 +37,7 @@
           <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar' %>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-          <%= link_to "https://github.com/", class: 'dropdown-item', target: "_blank" do %>
+          <%= link_to "#{Octobox.config.github_domain}", class: 'dropdown-item', target: "_blank" do %>
             <%= octicon 'mark-github', height: 16, class: 'text-muted' %>
             GitHub Dashboard
           <% end %>
@@ -45,9 +45,21 @@
             <%= octicon 'question', height: 16, class: 'text-muted' %>
             Octobox Support
           <% end %>
+          <% if current_user.admin? %>
+            <%= link_to admin_sidekiq_web_path, class: 'dropdown-item' do %>
+              <%= octicon 'graph', height: 16, class: 'text-muted' %>
+              Sidekiq
+            <% end %>
+          <% end %>
           <%= link_to "settings", class: 'dropdown-item' do %>
             <%= octicon 'settings', height: 16, class: 'text-muted' %>
             Settings
+          <% end %>
+          <% if File.exist?(Rails.root.join('public', 'docs', 'index.html')) %>
+            <%= link_to "docs/" do %>
+              <%= octicon 'book', height: 16, class: 'text-muted' %>
+              API Documentation
+            <% end %>
           <% end %>
           <%= link_to logout_path, class: 'dropdown-item' do %>
             <%= octicon 'sign-out', height: 16, class: 'text-muted' %>

@@ -4,6 +4,7 @@ $jumbotron-bg: #fff;
 $subscribed-color: #a128ca;
 $team_mention-color: #5d477e;
 $text-color: #333;
+$security_alert-color: #800000;
 
 @import "bootstrap";
 @import "patterns/blankslate";
@@ -62,9 +63,40 @@ html {
   .flex-container {
     .flex-main & {
       padding-left: 15px;
+      overflow-y: hidden;
+      height: 100%;
+      > .panel {
+        height: 100%;
+        overflow-y: scroll;
+        > .panel-heading {
+          position: absolute;
+          z-index: 1;
+          right: 16px;
+          left: 16px;
+        }
+        > .table {
+          margin-top: 46px;
+          &.filtered {
+            margin-top: 79.5px;
+            @include media-breakpoint-down(md) {
+              margin-top: 60.5px;
+            }
+          }
+        }
+      }
     }
     .flex-sidebar & {
       padding-right: 0;
+    }
+  }
+  .filter-options {
+    display: flex;
+    position: relative;
+    margin-left: 120px;
+    margin-top: -33.5px;
+    > .btn-group {
+      display: flex;
+      overflow-x: scroll;
     }
   }
 }
@@ -303,7 +335,7 @@ td.keys {
   display: inline-block;
   margin-right: 5px;
   width: 18px;
-  &.octicon-primitive-dot {
+  &.octicon-primitive-dot, &.octicon-primitive-square {
     margin-top: -3px;
     margin-bottom: -3px;
   }
@@ -313,7 +345,7 @@ td.keys {
   margin-right: 3px;
 }
 
-.notification-date {
+.notification-repo, .notification-date {
   white-space: nowrap;
 }
 
@@ -389,6 +421,11 @@ td.keys {
         text-overflow: ellipsis;
       }
     }
+    .notification-subject-author:before {
+      content: "by ";
+      color: $text-muted;
+      font-size: 10px;
+    }
     .notification-date {
       top: 10px;
       right: 10px;
@@ -401,6 +438,7 @@ td.keys {
 
   .flex-content {
     position: relative;
+    height: 100%;
     -webkit-transition: all .25s ease-out;
          -o-transition: all .25s ease-out;
             transition: all .25s ease-out;
@@ -486,6 +524,17 @@ td.keys {
   }
 }
 
+.label-security_alert{
+  background-color: $security_alert-color;
+}
+
+.text-security_alert{
+  fill: $security_alert-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
+}
+
 .octicon-star {
   fill: none;
   stroke: #aaa;
@@ -536,10 +585,20 @@ td.keys {
   fill: #ddd;
 }
 
+.notification-open{
+  fill: #5cb85c;
+}
+.notification-closed{
+  fill: #d9534f;
+}
 .octicon.inverse{
   fill: #fff;
 }
 
 .hidden-button {
   display: none;
+}
+
+.settings-sha {
+  margin: 35px 0 10px;
 }

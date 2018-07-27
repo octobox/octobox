@@ -1,5 +1,18 @@
 <div class="container">
-  <h1>Settings</h1>
+  <div class="row">
+    <div class="col-xs-6">
+      <h1>Settings</h1>
+    </div>
+    <div class="col-xs-6">
+      <% if @latest_git_sha %>
+        <p class="settings-sha pull-right" title="Latest Git commit SHA">
+          Version:
+          <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank' %>
+
+        </p>
+      <% end %>
+    </div>
+  </div>
   <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
     <hr>
 
@@ -41,12 +54,37 @@
 
   <hr>
 
-  <div class="card">
+  <div class="card mb-3">
     <div class="card-header">
-      <h3 class="card-title">Manage Oauth Access</h3>
+      Octobox API Access
     </div>
     <div class="card-body">
-      <p>Octobox can only show notifications for Organsiations that you've granted it access to via GitHub</p>
+      <p>This is your API Token for Octobox access. Keep it safe and do not commit it to version control.</p>
+
+      <ul class="list-inline">
+        <li>
+          <button onclick="document.getElementById('api_token').classList.remove('hide'); this.parentNode.classList.add('hide')" class="btn btn-default">Show API Token</button>
+        </li>
+        <li>
+          <%= form_tag current_user, method: :put do %>
+            <%= hidden_field_tag 'user[regenerate_api_token]', '1' %>
+            <%= submit_tag "Regenerate Token", class: 'btn btn-default' %>
+          <% end %>
+        </li>
+      </ul>
+
+      <div id="api_token" class="blankslate hide">
+        <code><%= current_user.api_token || 'None, please click the button to regenerate your token' %></code>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header">
+      Manage Oauth Access
+    </div>
+    <div class="card-body">
+      <p>Octobox can only show notifications for Organisations that you've granted it access to via GitHub</p>
       <p>If you've been added to a new Organisation you may need to enable or request access for Octobox to sync notifications for those repositories.</p>
       <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_client_id}", class: 'btn btn-outline-dark' do %>
         <%= octicon 'tools' %>&nbsp;
@@ -55,9 +93,32 @@
     </div>
   </div>
 
-  <div class="panel card-danger">
+  <div class="card mb-3">
     <div class="card-header">
-      <h3 class="card-title">Danger zone</h3>
+      Statistics
+    </div>
+    <div class="card-body">
+      <p>
+        <%= pluralize @total, 'notification' %> synced since you started using Octobox <%= distance_of_time_in_words_to_now current_user.created_at %> ago.
+      </p>
+      <% if @most_active %>
+        <p>
+          <strong>Most active repositories</strong>
+        </p>
+        <ul>
+          <% @most_active.each do |repository_full_name, count| %>
+            <li>
+              <%= link_to repository_full_name, "#{Octobox.config.github_domain}/#{repository_full_name}" %> - <%= pluralize count, 'notification' %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header bg-danger text-white">
+      Danger zone
     </div>
     <div class="card-body">
       <p>Deleting your Octobox account permanently removes all data associate with your user from Octobox's database.</p>

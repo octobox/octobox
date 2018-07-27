@@ -43,6 +43,18 @@
   <% end %>
   <%= menu_separator unless @unread_notifications.empty? %>
 
+  <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
+    <% next if state.nil? %>
+    <%= filter_link :state, state, count do %>
+      <span class='text-<%= state_label(state) %>'>
+        <%= octicon 'primitive-square', height: 24, class: 'sidebar-icon' %>
+      </span>
+      <%= state.underscore.humanize %>
+
+    <% end %>
+  <% end %>
+  <%= menu_separator unless @states.empty? %>
+
   <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
     <%= filter_link :type, type, count do %>
       <% if notification_icon(type).nil? %>
@@ -50,14 +62,14 @@
       <% else %>
           <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
       <% end %>
-      <%= type.underscore.humanize %>
+      <%= type.underscore.gsub('repository', '').humanize %>
 
     <% end %>
   <% end %>
   <%= menu_separator unless @types.empty? %>
 
   <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
-    <%= filter_link :reason, reason, count do %>
+    <%= reason_filter_link reason, count do %>
       <span class='text-<%= reason_label(reason) %>'>
         <%= octicon 'primitive-dot', height: 24, class: 'sidebar-icon' %>
       </span>
@@ -68,8 +80,8 @@
   <%= menu_separator unless @reasons.empty? %>
 
   <% @unread_repositories.sort_by{|repo_name, count| repo_name.downcase }.group_by{|repo_name, count| repo_name.split('/')[0] }.each do |org, repos| %>
-    <%= org_filter_link :owner, org, nil do %>
-      <%= image_tag "https://github.com/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
+    <%= org_filter_link :owner, org do %>
+      <%= image_tag "#{Octobox.config.github_domain}/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
       <%= org %>
     <% end %>
 

@@ -39,13 +39,21 @@ module StubHelper
     stub_request(:get, url).to_return(response)
   end
 
-  def stub_notifications_request(url: nil, body: nil, extra_headers: {})
+  def stub_notifications_request(url: nil, body: nil, method: :get, extra_headers: {})
+    headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
+
+    if url.nil?
+      stub_request(:get, 'https://api.github.com/repos/octobox/octobox/issues/56')
+      .to_return({ status: 200, body: file_fixture('subject_56.json'), headers: headers })
+      stub_request(:get, 'https://api.github.com/repos/octobox/octobox/issues/57')
+      .to_return({ status: 200, body: file_fixture('subject_57.json'), headers: headers })
+    end
+
     url ||= %r{https://api.github.com/notifications}
     body     ||= file_fixture('notifications.json')
-    headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
     response = { status: 200, body: body, headers: headers }
 
-    stub_request(:get, url).to_return(response)
+    stub_request(method, url).to_return(response)
   end
 
   def stub_user_request(body: nil, oauth_scopes: 'notifications', user: nil, any_auth: false)
@@ -79,5 +87,9 @@ module StubHelper
 
   def stub_restricted_access_enabled(value: true)
     Octobox.config.stubs(:restricted_access_enabled).returns(value)
+  end
+
+  def stub_fetch_subject_enabled(value: true)
+    Octobox.config.stubs(:fetch_subject).returns(value)
   end
 end
