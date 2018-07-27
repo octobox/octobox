@@ -9,7 +9,7 @@
       <div class="card card-notifications">
         <div class="card-header">
           <% if @notifications.to_a.any? %>
-            <div class="btn-group float-right d-none d-sm-block" data-toggle="tooltip" data-placement="left" title="Notifications per page">
+            <div class="btn-group float-right d-none d-md-block" data-toggle="tooltip" data-placement="left" title="Notifications per page">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <% if params[:per_page].present? %>
                   <%= params[:per_page] %>
@@ -25,7 +25,7 @@
               </ul>
             </div>
           <% end %>
-          <div class="btn btn-link help float-right d-none d-sm-inline-block" data-toggle="modal" data-target="#help-box">
+          <div class="btn btn-link help float-right d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
             <%= octicon 'keyboard', :height => 16 %>
           </div>
           <button type="button" class="d-inline-block d-md-none btn btn-default" data-toggle="offcanvas">
