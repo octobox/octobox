@@ -25,6 +25,7 @@ gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler'
 gem 'gemoji'
 gem 'bootsnap', require: false
+gem 'bugsnag'
 
 # Supported databases
 gem 'mysql2', require: false
@@ -58,6 +59,5 @@ group :production do
   gem 'skylight'
   gem 'lograge'
   gem 'rails_safe_tasks'
-  gem 'bugsnag'
   gem 'puma_worker_killer'
 end
