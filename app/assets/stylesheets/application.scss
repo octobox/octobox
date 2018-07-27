@@ -58,7 +58,7 @@ html {
   }
 }
 
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-down(md) {
   .flex-container {
     .flex-main & {
       padding-left: 15px;
