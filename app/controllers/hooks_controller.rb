@@ -4,10 +4,8 @@ class HooksController < ApplicationController
   before_action :authenticate_github_request!
 
   def create
-    p params
-    p event_header
-
-    if event_header == 'issues'
+    case event_header
+    when 'issues'
       remote_subject = JSON.parse(params['issue'].to_json, object_class: OpenStruct)
       subject = Subject.find_or_create_by(url: remote_subject.url)
       subject.update({
@@ -17,9 +15,7 @@ class HooksController < ApplicationController
         created_at: remote_subject.created_at,
         updated_at: remote_subject.updated_at
       })
-    end
-
-    if event_header == 'pull_request'
+    when 'pull_request'
       remote_subject = JSON.parse(params['pull_request'].to_json, object_class: OpenStruct)
       subject = Subject.find_or_create_by(url: remote_subject.url)
       subject.update({
