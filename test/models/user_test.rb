@@ -38,6 +38,15 @@ class UserTest < ActiveSupport::TestCase
     refute @user.valid?
   end
 
+  test "#admin? returns true when the users's github is included in the ENV variable" do
+    Octobox.config.stubs(:github_admin_ids).returns(["#{@user.github_id}"])
+    assert_predicate @user, :admin?
+  end
+
+  test "users are not admins by default" do
+    refute_predicate @user, :admin?
+  end
+
   test '#effective_access_token returns personal_access_token if it is defined' do
     stub_personal_access_tokens_enabled
     user = build(:token_user)

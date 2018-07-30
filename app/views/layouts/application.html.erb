@@ -14,12 +14,27 @@
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', '<%= ENV["GA_ANALYTICS_ID"] %>', 'auto');
+        ga('create', '<%= Rails.application.secrets.google_analytics_id %>', 'auto');
       </script>
+    <% end %>
+
+    <% if Rails.application.secrets.bugsnag_js_api_key.present? %>
+      <script src="//d2wy8f7a9ursnm.cloudfront.net/v4/bugsnag.min.js"></script>
+      <script>window.bugsnagClient = bugsnag({ apiKey: '<%= Rails.application.secrets.bugsnag_js_api_key %>', releaseStage: '<%= ENV["RAILS_ENV"] %>' })</script>
     <% end %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <meta property="og:title" content="Octobox">
+    <meta property="og:description" content="The best way to manage your GitHub Notifications">
+    <meta property="og:image" content="<%= asset_url 'app-icon.png' %>">
+    <meta property="og:url" content="<%= root_url %>">
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Octobox" />
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="teabass">
   </head>
 
   <body class="flex-body">

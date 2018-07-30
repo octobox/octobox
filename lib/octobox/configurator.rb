@@ -24,7 +24,7 @@ module Octobox
     end
 
     def fetch_subject
-      @fetch_subject || ENV['FETCH_SUBJECT'].present?
+      @fetch_subject || (ENV['FETCH_SUBJECT'].try(:downcase) == "true")
     end
     attr_writer :fetch_subject
 
@@ -60,6 +60,16 @@ module Octobox
     end
     attr_writer :max_notifications_to_sync
 
+    def sidekiq_schedule_enabled?
+      @sidekiq_schedule_enabled || ENV['OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED'].present?
+    end
+    attr_writer :sidekiq_schedule_enabled
+
+    def sidekiq_schedule_path
+      @sidekiq_schedule_path || ENV.fetch('OCTOBOX_SIDEKIQ_SCHEDULE_PATH', Rails.root.join('config', 'sidekiq_schedule.yml'))
+    end
+    attr_writer :sidekiq_schedule_path
+
     def restricted_access_enabled
       @restricted_access_enabled || ENV['RESTRICTED_ACCESS_ENABLED'].present?
     end
@@ -87,5 +97,18 @@ module Octobox
       @octobox_io || ENV['OCTOBOX_IO'].present?
     end
     attr_writer :octobox_io
+
+    def redis_url
+      return @redis_url if defined?(@redis_url)
+      @redis_url = ENV.fetch("REDIS_URL", "redis://localhost:6379")
+    end
+
+    def github_admin_ids
+      return @github_admin_ids if defined?(@github_admin_ids)
+      admin_github_ids = ENV.fetch("ADMIN_GITHUB_IDS", "").to_s
+
+      return @admin_github_ids = [] unless admin_github_ids.present?
+      @github_admin_ids = admin_github_ids.split(',')
+    end
   end
 end

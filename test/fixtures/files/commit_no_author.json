@@ -1,0 +1,59 @@
+{
+  "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+  "commit": {
+    "author": {
+      "name": "User with no github account",
+      "email": "user@example.com",
+      "date": "2013-01-29T23:03:54Z"
+    },
+    "committer": {
+      "name": "User with no github account",
+      "email": "user@example.com",
+      "date": "2013-01-29T23:06:06Z"
+    },
+    "message": "Update both asset mtime and atime with touch",
+    "tree": {
+      "sha": "8c928b84c31f90f1bab5d3caf12002dae085362e",
+      "url": "https://api.github.com/repos/octobox/octobox/git/trees/8c928b84c31f90f1bab5d3caf12002dae085362e"
+    },
+    "url": "https://api.github.com/repos/octobox/octobox/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  },
+  "url": "https://api.github.com/repos/octobox/octobox/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+  "html_url": "https://github.com/octobox/octobox/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e",
+  "comments_url": "https://api.github.com/repos/octobox/octobox/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments",
+  "author": null,
+  "committer": null,
+  "parents": [
+    {
+      "sha": "ea5b03b4d38eeb296778a809d927297065624981",
+      "url": "https://api.github.com/repos/octobox/octobox/commits/ea5b03b4d38eeb296778a809d927297065624981",
+      "html_url": "https://github.com/octobox/octobox/commit/ea5b03b4d38eeb296778a809d927297065624981"
+    }
+  ],
+  "stats": {
+    "total": 2,
+    "additions": 1,
+    "deletions": 1
+  },
+  "files": [
+    {
+      "sha": "1671c415eef3055105d7fe31cc147cefff9ac765",
+      "filename": "lib/capistrano/recipes/deploy/assets.rb",
+      "status": "modified",
+      "additions": 1,
+      "deletions": 1,
+      "changes": 2,
+      "blob_url": "https://github.com/octobox/octobox/blob/6dcb09b5b57875f334f61aebed695e2e4193db5e/lib/capistrano/recipes/deploy/assets.rb",
+      "raw_url": "https://github.com/octobox/octobox/raw/6dcb09b5b57875f334f61aebed695e2e4193db5e/lib/capistrano/recipes/deploy/assets.rb",
+      "contents_url": "https://api.github.com/repos/octobox/octobox/contents/lib/capistrano/recipes/deploy/assets.rb?ref=6dcb09b5b57875f334f61aebed695e2e4193db5e",
+      "patch": "@@ -66,7 +66,7 @@\n         put current_assets.map{|a| \"#{shared_path}/assets/#{a}\" }.join(\"\\n\"), \"#{deploy_to}/TOUCH_ASSETS\"\n         run <<-CMD.compact\n           cat #{deploy_to.shellescape}/TOUCH_ASSETS | while read asset; do\n-            touch -cm -- \"$asset\";\n+            touch -c -- \"$asset\";\n           done &&\n           rm -f -- #{deploy_to.shellescape}/TOUCH_ASSETS\n         CMD"
+    }
+  ]
+}

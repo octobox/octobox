@@ -1,10 +1,11 @@
 language: ruby
 sudo: false
 rvm:
-  - 2.5.0
+  - 2.5.1
 
 before_install:
   - gem update --system
+  - gem install bundler
 
 addons:
   postgresql: "9.5"
@@ -12,6 +13,7 @@ addons:
 services:
   - postgresql
   - mysql
+  - redis
 
 before_script:
   - psql -c 'create database "octobox_test";' -U postgres || true

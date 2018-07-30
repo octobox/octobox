@@ -36,7 +36,7 @@
             </a>
             <ul class="dropdown-menu">
               <li>
-                <%= link_to "https://github.com/", target: "_blank" do %>
+                <%= link_to "#{Octobox.config.github_domain}", target: "_blank" do %>
                   <%= octicon 'mark-github', height: 16, class: 'text-muted' %>
                   GitHub Dashboard
                 <% end %>
@@ -47,12 +47,28 @@
                   Octobox Support
                 <% end %>
               </li>
+              <% if current_user.admin? %>
+                <li>
+                  <%= link_to admin_sidekiq_web_path do %>
+                    <%= octicon 'graph', height: 16, class: 'text-muted' %>
+                    Sidekiq
+                  <% end %>
+                </li>
+              <% end %>
               <li>
                 <%= link_to "settings" do %>
                   <%= octicon 'settings', height: 16, class: 'text-muted' %>
                   Settings
                 <% end %>
               </li>
+              <% if File.exist?(Rails.root.join('public', 'docs', 'index.html')) %>
+                <li>
+                  <%= link_to "docs/" do %>
+                    <%= octicon 'book', height: 16, class: 'text-muted' %>
+                    API Documentation
+                  <% end %>
+                </li>
+              <% end %>
               <li role="separator" class="divider"></li>
               <li>
                 <%= link_to logout_path do %>

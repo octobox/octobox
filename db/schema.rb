@@ -10,17 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907022825) do
+ActiveRecord::Schema.define(version: 20180326173747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "labels", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.bigint "subject_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "github_id"
+    t.index ["name"], name: "index_labels_on_name"
+    t.index ["subject_id"], name: "index_labels_on_subject_id"
+  end
 
   create_table "notifications", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "github_id"
     t.integer "repository_id"
     t.string "repository_full_name"
-    t.string "subject_title"
+    t.text "subject_title"
     t.string "subject_url"
     t.string "subject_type"
     t.string "reason"
@@ -56,8 +67,11 @@ ActiveRecord::Schema.define(version: 20170907022825) do
     t.datetime "last_synced_at"
     t.string "personal_access_token"
     t.integer "refresh_interval", default: 0
+    t.string "api_token"
     t.index ["access_token"], name: "index_users_on_access_token", unique: true
+    t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end
 
+  add_foreign_key "labels", "subjects", on_update: :cascade, on_delete: :cascade
 end

@@ -23,4 +23,6 @@ config/initializers/custom.rb
 coverage
 .DS_Store
 public/assets
+public/docs
 .database
+config/sidekiq_custom_schedule.yml

@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 class NotificationsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:index]
-  before_action :authenticate_index!, only: [:index]
-  before_action :find_notification, only: [:archive, :unarchive, :star, :mark_read]
+  skip_before_action :authenticate_user!
+  before_action :authenticate_web_or_api!
+  before_action :find_notification, only: [:star, :mark_read]
 
   # Return a listing of notifications, including a summary of unread repos, notification reasons, and notification types
+  #
+  # :category: Notifications CRUD
   #
   # ==== Parameters
   #
@@ -12,7 +14,7 @@ class NotificationsController < ApplicationController
   # * +:per_page+ - The number of results you would like to return per page. Max 100, default 20.
   # * +:starred+ - Return only the user's starred notifications
   # * +:archive+ - Return only the user's archived notifications
-  # * +:q: - Search by subject title of the notification
+  # * +:q+ - Search by subject title of the notification
   #
   # ==== Notes
   #
@@ -20,50 +22,52 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # GET notifications.json
-  # {
-  #    "pagination" : {
-  #       "total_notifications" : 1,
-  #       "page" : 1,
-  #       "total_pages" : 1,
-  #       "per_page" : 20
-  #    },
-  #    "types" : {
-  #       "PullRequest" : 1,
-  #    },
-  #    "reasons" : {
-  #       "mention" : 1
-  #    },
-  #    "unread_repositories" : {
-  #       "octobox/octobox" : 1
-  #    },
-  #    "notifications" : [
-  #       {
-  #          "id" : 29,
-  #          "github_id" :  320,
-  #          "reason" :  "mention",
-  #          "unread" :  true,
-  #          "archived" :  false,
-  #          "starred" :  false,
-  #          "url" : "https://api.github.com/notifications/threads/320",
-  #          "web_url" : "https://github.com/octobox/octobox/pull/320",
-  #          "last_read_at" : "2017-02-20 22:26:11 UTC",
-  #          "created_at" : "2017-02-22T15:49:33.750Z",
-  #          "updated_at" : "2017-02-22T15:40:21.000Z",
-  #          "subject":{
-  #             "title" : "Add JSON API",
-  #             "url" : "https://api.github.com/repos/octobox/octobox/pulls/320",
-  #             "type" : "PullRequest"
-  #          },
-  #          "repo":{
-  #             "id": 320,
-  #             "name" : "octobox/octobox",
-  #             "owner" : "octobox",
-  #             "repo_url" : "https://github.com/octobox/octobox"
-  #          }
-  #       }
-  #    ]
-  # }
+  # <code>GET notifications.json</code>
+  #
+  #   {
+  #      "pagination" : {
+  #         "total_notifications" : 1,
+  #         "page" : 1,
+  #         "total_pages" : 1,
+  #         "per_page" : 20
+  #      },
+  #      "types" : {
+  #         "PullRequest" : 1,
+  #      },
+  #      "reasons" : {
+  #         "mention" : 1
+  #      },
+  #      "unread_repositories" : {
+  #         "octobox/octobox" : 1
+  #      },
+  #      "notifications" : [
+  #         {
+  #            "id" : 29,
+  #            "github_id" :  320,
+  #            "reason" :  "mention",
+  #            "unread" :  true,
+  #            "archived" :  false,
+  #            "starred" :  false,
+  #            "url" : "https://api.github.com/notifications/threads/320",
+  #            "web_url" : "https://github.com/octobox/octobox/pull/320",
+  #            "last_read_at" : "2017-02-20 22:26:11 UTC",
+  #            "created_at" : "2017-02-22T15:49:33.750Z",
+  #            "updated_at" : "2017-02-22T15:40:21.000Z",
+  #            "subject":{
+  #               "title" : "Add JSON API",
+  #               "url" : "https://api.github.com/repos/octobox/octobox/pulls/320",
+  #               "type" : "PullRequest",
+  #               "state" : "merged"
+  #            },
+  #            "repo":{
+  #               "id": 320,
+  #               "name" : "octobox/octobox",
+  #               "owner" : "octobox",
+  #               "repo_url" : "https://github.com/octobox/octobox"
+  #            }
+  #         }
+  #      ]
+  #   }
   #
   def index
     scope = notifications_for_presentation
@@ -83,10 +87,12 @@ class NotificationsController < ApplicationController
 
   # Return a count for the number of unread notifications
   #
+  # :category: Notifications CRUD
+  #
   # ==== Example
   #
-  # GET notifications/unread_count.json
-  # { "count" : 1 }
+  # <code>GET notifications/unread_count.json</code>
+  #   { "count" : 1 }
   #
   def unread_count
     scope = current_user.notifications
@@ -96,14 +102,16 @@ class NotificationsController < ApplicationController
 
   # Mute selected notifications, this will also archive them
   #
+  # :category: Notifications Actions
+  #
   # ==== Parameters
   #
   # * +:id+ - An array of IDs of notifications you'd like to mute. If ID is 'all', all notifications will be muted
   #
   # ==== Example
   #
-  # POST notifications/mute_selected.json?id=all
-  # HEAD 204
+  # <code>POST notifications/mute_selected.json?id=all</code>
+  #   HEAD 204
   #
   def mute_selected
     Notification.mute(selected_notifications)
@@ -112,14 +120,16 @@ class NotificationsController < ApplicationController
 
   # Archive selected notifications
   #
+  # :category: Notifications Actions
+  #
   # ==== Parameters
   #
   # * +:id+ - An array of IDs of notifications you'd like to archive. If ID is 'all', all notifications will be archived
   #
   # ==== Example
   #
-  # POST notifications/archive_selected.json?id=all
-  # HEAD 204
+  # <code>POST notifications/archive_selected.json?id=all</code>
+  #   HEAD 204
   #
   def archive_selected
     selected_notifications.update_all(
@@ -130,14 +140,16 @@ class NotificationsController < ApplicationController
 
   # Mark selected notifications as read
   #
+  # :category: Notifications Actions
+  #
   # ==== Parameters
   #
   # * +:id+ - An array of IDs of notifications you'd like to mark as read. If ID is 'all', all notifications will be marked as read
   #
   # ==== Example
   #
-  # POST notifications/mark_read_selected.json?id=all
-  # HEAD 204
+  # <code>POST notifications/mark_read_selected.json?id=all</code>
+  #   HEAD 204
   #
   def mark_read_selected
     Notification.mark_read(selected_notifications)
@@ -146,10 +158,12 @@ class NotificationsController < ApplicationController
 
   # Mark a notification as read
   #
+  # :category: Notifications Actions
+  #
   # ==== Example
   #
-  # POST notifications/:id/mark_read.json
-  # HEAD 204
+  # <code>POST notifications/:id/mark_read.json</code>
+  #   HEAD 204
   #
   def mark_read
     @notification.update_columns unread: false
@@ -158,10 +172,12 @@ class NotificationsController < ApplicationController
 
   # Star a notification
   #
+  # :category: Notifications Actions
+  #
   # ==== Example
   #
-  # POST notifications/:id/star.json
-  # HEAD 204
+  # <code>POST notifications/:id/star.json</code>
+  #   HEAD 204
   #
   def star
     @notification.update_columns starred: !@notification.starred?
@@ -170,10 +186,12 @@ class NotificationsController < ApplicationController
 
   # Synchronize notifications with GitHub
   #
+  # :category: Notifications Actions
+  #
   # ==== Example
   #
-  # POST notifications/sync.json
-  # HEAD 204
+  # <code>POST notifications/sync.json</code>
+  #   HEAD 204
   #
   def sync
     current_user.sync_notifications
@@ -196,20 +214,27 @@ class NotificationsController < ApplicationController
   def current_notifications(scope = notifications_for_presentation)
     [:repo, :reason, :type, :unread, :owner, :state].each do |sub_scope|
       next unless params[sub_scope].present?
-      # This cast is required due to a bug in Rails 5.1
-      # TODO: Rails 5.2 fixes this, so this should be removed when that ships
+      # This cast is required due to a bug in type casting
+      # TODO: Rails 5.2 was supposed to fix this:
       # https://github.com/rails/rails/commit/68fe6b08ee72cc47263e0d2c9ff07f75c4b42761
-      type = scope.klass.type_for_attribute(sub_scope.to_s).class
-      val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
+      # but it seems that the issue persists when using MySQL
+      # https://github.com/rails/rails/issues/32624
+      if sub_scope == :reason
+        val = params[sub_scope].split(',')
+      else
+        type = scope.klass.type_for_attribute(sub_scope.to_s).class
+        val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
+      end
       scope = scope.send(sub_scope, val)
     end
+    scope = scope.labels(params[:label]) if params[:label].present?
     scope = scope.search_by_subject_title(params[:q]) if params[:q].present?
     scope = scope.unscope(where: :archived)           if params[:q].present?
     scope
   end
 
   def notifications_for_presentation
-    eager_load_relation = Octobox.config.fetch_subject ? :subject : nil
+    eager_load_relation = Octobox.config.fetch_subject ? {subject: :labels} : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
     if params[:starred].present?
@@ -233,7 +258,7 @@ class NotificationsController < ApplicationController
     @notification = current_user.notifications.find(params[:id])
   end
 
-  def authenticate_index!
+  def authenticate_web_or_api!
     return if logged_in?
     respond_to do |format|
       format.html { render 'pages/home' }

@@ -6,21 +6,24 @@ class UsersController < ApplicationController
   #
   # ==== Example
   #
-  # GET users/profile.json
-  # {
-  #    "user" : {
-  #       "id" : 1,
-  #       "github_id" : 3074765,
-  #       "github_login" : "jules2689",
-  #       "last_synced_at" : "2017-02-22T15:49:32.104Z",
-  #       "created_at" : "2017-02-22T15:49:32.099Z",
-  #       "updated_at" : "2017-02-22T15:49:32.099Z"
-  #    }
-  # }
+  # <code>GET users/profile.json</code>
+  #   {
+  #     "user" : {
+  #         "id" : 1,
+  #         "github_id" : 3074765,
+  #         "github_login" : "jules2689",
+  #         "last_synced_at" : "2017-02-22T15:49:32.104Z",
+  #         "created_at" : "2017-02-22T15:49:32.099Z",
+  #         "updated_at" : "2017-02-22T15:49:32.099Z"
+  #     }
+  #   }
   def profile; end
 
-  def edit
-    @latest_git_sha = Git.open(Rails.root).object('HEAD').sha[0..6] rescue nil
+  def edit # :nodoc:
+    counts = current_user.notifications.group(:repository_full_name).count
+    @latest_git_sha = ENV['HEROKU_SLUG_COMMIT'] || Git.open(Rails.root).object('HEAD').sha rescue nil
+    @total = counts.sum(&:last)
+    @most_active = counts.sort_by(&:last).reverse.first(10)
   end
 
   # Update a user profile. Only updates the current user
@@ -30,14 +33,19 @@ class UsersController < ApplicationController
   #
   # ==== Example
   #
-  # PATCH users/:id.json
-  # { "user" : { "refresh_interval" : 60000 } }
-  # HEAD OK
+  # <code>PATCH users/:id.json</code>
+  #   { "user" : { "refresh_interval" : 60000 } }
+  #
+  #   HEAD OK
   #
   def update
     if current_user.update_attributes(update_user_params)
+      if params[:user][:regenerate_api_token]
+        current_user.regenerate_api_token
+      end
+
       respond_to do |format|
-        format.html { redirect_to root_path }
+        format.html { redirect_back(fallback_location: root_path) }
         format.json { head :ok }
       end
     else
@@ -52,12 +60,12 @@ class UsersController < ApplicationController
     end
   end
 
-  # Delete your user profile. Only can delete the current user
+  # Delete your user profile. Can only delete the current user
   #
   # ==== Example
   #
-  # DELETE users/:id.json
-  # HEAD OK
+  # <code>DELETE users/:id.json</code>
+  #   HEAD OK
   #
   def destroy
     user = User.find(current_user.id)

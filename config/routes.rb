@@ -1,6 +1,19 @@
 # frozen_string_literal: true
+
+require 'sidekiq/web'
+if Octobox.config.sidekiq_schedule_enabled?
+  require 'sidekiq-scheduler/web'
+end
+require 'admin_constraint'
+
 Rails.application.routes.draw do
   root to: 'notifications#index'
+
+  constraints AdminConstraint.new do
+    namespace :admin do
+      mount Sidekiq::Web => "/sidekiq"
+    end
+  end
 
   get :login,  to: 'sessions#new'
   get :logout, to: 'sessions#destroy'

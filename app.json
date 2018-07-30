@@ -1,10 +1,19 @@
 {
   "name": "Octobox",
-  "description": "Take back control of your GitHub Notifications",
+  "description": "The best way to manage your GitHub Notifications",
   "repository": "https://github.com/octobox/octobox",
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"
   },
+  "keywords": [
+    "github",
+    "notifications",
+    "productivity",
+    "rails",
+    "ruby"
+  ],
+  "website": "https://octobox.io/",
+  "license": "AGPL-3.0-only",
   "env": {
     "GITHUB_CLIENT_ID": {
       "description": "The GitHub Application Client ID",
@@ -25,6 +34,7 @@
   },
   "addons": [
     "heroku-postgresql",
+    "heroku-redis",
     "scheduler"
   ]
 }

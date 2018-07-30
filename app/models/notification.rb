@@ -19,6 +19,7 @@ class Notification < ApplicationRecord
 
   belongs_to :user
   belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true
+  has_many :labels, through: :subject
 
   scope :inbox,    -> { where(archived: false) }
   scope :archived, -> { where(archived: true) }
@@ -33,6 +34,8 @@ class Notification < ApplicationRecord
 
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
 
+  scope :labels,    ->(label_name) { joins(:labels).where('labels.name = ?', label_name)}
+
   scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
   scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
 
@@ -41,7 +44,9 @@ class Notification < ApplicationRecord
   class << self
     def attributes_from_api_response(api_response)
       attrs = DownloadService::API_ATTRIBUTE_MAP.map do |attr, path|
-        [attr, api_response.to_h.dig(*path)]
+        value = api_response.to_h.dig(*path)
+        value.delete!("\u0000") if value.is_a?(String)
+        [attr, value]
       end.to_h
       if "RepositoryInvitation" == api_response.subject.type
         attrs[:subject_url] = "#{api_response.repository.html_url}/invitations"
@@ -57,18 +62,24 @@ class Notification < ApplicationRecord
 
   def self.mark_read(notifications)
     unread = notifications.select(&:unread)
+    return if unread.empty?
     user = unread.first.user
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
-    conn.in_parallel(manager) do
-      unread.each do |n|
-        conn.patch "notifications/threads/#{n.github_id}"
+    begin
+      conn.in_parallel(manager) do
+        unread.each do |n|
+            conn.patch "notifications/threads/#{n.github_id}"
+        end
       end
+    rescue Octokit::Forbidden
+      # one or more notifications are for repos the user no longer has access to
     end
     where(id: unread.map(&:id)).update_all(unread: false)
   end
 
   def self.mute(notifications)
+    return if notifications.empty?
     user = notifications.to_a.first.user
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
@@ -108,39 +119,44 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
-    update_subject
     unarchive_if_updated if unarchive
     self
+    update_subject
   end
 
   private
 
   def download_subject
     user.github_client.get(subject_url)
-  rescue Octokit::Forbidden, Octokit::NotFound => e
+
+  # If permissions changed and the user hasn't accepted, we get a 401
+  # We may receive a 403 Forbidden or a 403 Not Available
+  # We may be rate limited and get a 403 as well
+  # We may also get blocked by legal reasons (451)
+  # Regardless of the reason, any client error should be rescued and warned so we don't
+  # end up blocking other syncs
+  rescue Octokit::ClientError => e
     Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
+    nil
   end
 
   def update_subject
     return unless Octobox.config.fetch_subject
-    if subject
-      # skip syncing if the notification was updated around the same time as subject
-      return if updated_at - subject.updated_at < 2.seconds
+    # skip syncing if the notification was updated around the same time as subject
+    return if subject != nil && updated_at - subject.updated_at < 2.seconds
 
+    remote_subject = download_subject
+    return unless remote_subject.present?
+
+    if subject
       case subject_type
       when 'Issue', 'PullRequest'
-        remote_subject = download_subject
-        return unless remote_subject.present?
-
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
       end
     else
       case subject_type
       when 'Issue', 'PullRequest'
-        remote_subject = download_subject
-        return unless remote_subject.present?
-
         create_subject({
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
@@ -149,16 +165,18 @@ class Notification < ApplicationRecord
           updated_at: remote_subject.updated_at
         })
       when 'Commit', 'Release'
-        remote_subject = download_subject
-        return unless remote_subject.present?
-
         create_subject({
-          author: remote_subject.author.login,
+          author: remote_subject.author&.login,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at
         })
       end
+    end
+
+    case subject_type
+    when 'Issue', 'PullRequest'
+      subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
     end
   end
 end

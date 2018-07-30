@@ -8,6 +8,10 @@ services:
       - pg_data:/var/lib/postgresql/data
     networks:
       - internal
+  redis.service.octobox.internal:
+    image: redis:3.2-alpine
+    networks:
+      - internal
   app:
     image: octoboxio/octobox:latest
     ports:
@@ -20,6 +24,7 @@ services:
       - OCTOBOX_DATABASE_USERNAME=postgres
       - OCTOBOX_DATABASE_PASSWORD=development
       - OCTOBOX_DATABASE_HOST=database.service.octobox.internal
+      - REDIS_URL=redis.service.octobox.internal
     networks:
       - internal
 

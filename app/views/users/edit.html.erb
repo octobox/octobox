@@ -5,7 +5,11 @@
     </div>
     <div class="col-xs-6">
       <% if @latest_git_sha %>
-        <p class="settings-sha pull-right" title="Latest Git commit SHA">Version: <%= @latest_git_sha %></p>
+        <p class="settings-sha pull-right" title="Latest Git commit SHA">
+          Version:
+          <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank' %>
+
+        </p>
       <% end %>
     </div>
   </div>
@@ -52,6 +56,31 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
+      <h3 class="panel-title">Octobox API Access</h3>
+    </div>
+    <div class="panel-body">
+      <p>This is your API Token for Octobox access. Keep it safe and do not commit it to version control.</p>
+
+      <ul class="list-inline">
+        <li>
+          <button onclick="document.getElementById('api_token').classList.remove('hide'); this.parentNode.classList.add('hide')" class="btn btn-default">Show API Token</button>
+        </li>
+        <li>
+          <%= form_tag current_user, method: :put do %>
+            <%= hidden_field_tag 'user[regenerate_api_token]', '1' %>
+            <%= submit_tag "Regenerate Token", class: 'btn btn-default' %>
+          <% end %>
+        </li>
+      </ul>
+
+      <div id="api_token" class="blankslate hide">
+        <code><%= current_user.api_token || 'None, please click the button to regenerate your token' %></code>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
       <h3 class="panel-title">Manage Oauth Access</h3>
     </div>
     <div class="panel-body">
@@ -60,6 +89,29 @@
       <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_client_id}", class: 'btn btn-default' do %>
         <%= octicon 'tools' %>&nbsp;
         Manage Oauth Access on GitHub
+      <% end %>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Statistics</h3>
+    </div>
+    <div class="panel-body">
+      <p>
+        <%= pluralize @total, 'notification' %> synced since you started using Octobox <%= distance_of_time_in_words_to_now current_user.created_at %> ago.
+      </p>
+      <% if @most_active %>
+        <p>
+          <strong>Most active repositories</strong>
+        </p>
+        <ul>
+          <% @most_active.each do |repository_full_name, count| %>
+            <li>
+              <%= link_to repository_full_name, "#{Octobox.config.github_domain}/#{repository_full_name}" %> - <%= pluralize count, 'notification' %>
+            </li>
+          <% end %>
+        </ul>
       <% end %>
     </div>
   </div>

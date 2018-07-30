@@ -48,6 +48,10 @@ class NotificationTest < ActiveSupport::TestCase
     assert notification2.reload.archived?
   end
 
+  test '#mute doesnt fail if there is no notifications given' do
+    Notification.mute([])
+  end
+
   test '#mark_read marks multiple notifications as read' do
     user = create(:user)
 
@@ -61,6 +65,12 @@ class NotificationTest < ActiveSupport::TestCase
 
     refute notification1.reload.unread?
     refute notification2.reload.unread?
+  end
+
+  test '#mark_read doesnt fail if nothing is to be marked as read' do
+    user = create(:user)
+    notification1 = create(:notification, user: user, unread: false)
+    Notification.mark_read([notification1])
   end
 
   test 'update_from_api_response updates attributes' do
@@ -162,6 +172,39 @@ class NotificationTest < ActiveSupport::TestCase
     notification.update_from_api_response(api_response, unarchive: true)
 
     assert_requested :get, subject.url
+  end
+
+  test 'update_from_api_response updates the subject with no author available' do
+    Octobox.config.fetch_subject = true
+
+    url = 'https://api.github.com/repos/octobox/octobox/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e'
+    response = { status: 200, body: file_fixture('commit_no_author.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    api_response = notifications_from_fixture('commit_notification_no_author.json').first
+    notification = create(:morty_updated)
+
+    assert_difference 'Subject.count' do
+      notification.update_from_api_response(api_response, unarchive: true)
+    end
+  ensure
+    Octobox.config.fetch_subject = false
+  end
+
+  test 'update_from_api_response updates the subject that returns a 40x error' do
+    Octobox.config.fetch_subject = true
+    url = 'https://api.github.com/repos/octobox/octobox/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e'
+    response = { status: 401, headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    api_response = notifications_from_fixture('commit_notification_no_author.json').first
+    notification = create(:morty_updated)
+
+    assert_no_difference 'Subject.count' do
+      notification.update_from_api_response(api_response, unarchive: true)
+    end
+  ensure
+    Octobox.config.fetch_subject = false
   end
 
   test 'updated_from_api_response updates the existing subject if present' do

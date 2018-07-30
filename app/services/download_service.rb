@@ -26,10 +26,10 @@ class DownloadService
 
     if user.last_synced_at
       fetch_read_notifications
+      fetch_unread_notifications
     else
       new_user_fetch
     end
-    fetch_unread_notifications
     user.update_column(:last_synced_at, timestamp)
   end
 
@@ -79,6 +79,6 @@ class DownloadService
   def new_user_fetch
     headers = {cache_control: %w(no-store no-cache)}
     notifications = fetch_notifications(params: {all: true, headers: headers})
-    process_notifications(notifications)
+    process_notifications(notifications, unarchive: true)
   end
 end

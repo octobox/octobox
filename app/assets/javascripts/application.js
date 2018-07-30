@@ -1,7 +1,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require local_time
+//= require local-time
 //= require bootstrap-sprockets
 //= require_tree .
 
@@ -65,23 +65,24 @@ function updateFavicon() {
       link.id = "favicon-count";
 
       if (canvas.getContext) {
-        canvas.height = canvas.width = 16;
+        canvas.height = canvas.width = 32;
         ctx = canvas.getContext('2d');
         img.onload = function () {
           ctx.drawImage(this, 0, 0);
 
           ctx.fillStyle = '#f93e00';
-          var width = ctx.measureText(txt).width;
-          ctx.fillRect(0, 0, width+2, 12);
+          ctx.font = 'bold 20px "helvetica", sans-serif';
 
-          ctx.font = 'bold 10px "helvetica", sans-serif';
+          var width = ctx.measureText(txt).width;
+          ctx.fillRect(0, 0, width+4, 24);
+
           ctx.fillStyle = '#fff';
-          ctx.fillText(txt, 1, 10);
+          ctx.fillText(txt, 2, 20);
 
           link.href = canvas.toDataURL('image/png');
           document.body.appendChild(link);
         };
-        img.src = "/favicon-16x16.png";
+        img.src = "/favicon-32x32.png";
       }
     }
   });
