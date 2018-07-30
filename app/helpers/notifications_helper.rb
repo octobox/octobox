@@ -175,9 +175,9 @@ module NotificationsHelper
       link_to root_path(path_params), class: "nav-link filter #{link_class}" do
         yield
         if active && not_repo_in_active_org(param)
-          concat content_tag(:span, octicon('x', :height => 16), class: 'label text-muted')
+          concat content_tag(:span, octicon('x', :height => 16), class: 'badge badge-light')
         elsif count.present?
-          concat content_tag(:span, count, class: 'badge badge-muted')
+          concat content_tag(:span, count, class: 'badge')
         end
       end
     end
