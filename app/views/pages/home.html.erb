@@ -5,10 +5,16 @@
     <div class="text-center">
       <%= image_tag 'screenshot.png', class: 'screenshot' %>
       <p>
-      <%= link_to login_path, class: 'btn btn-default btn-lg' do %>
-        <%= octicon 'mark-github', height: 22 %>
-        Sign in with GitHub
-      <% end %>
+        <%= link_to login_path, class: 'btn btn-default btn-lg' do %>
+          <%= octicon 'mark-github', height: 22 %>
+          Sign in with GitHub
+        <% end %>
+        <% if Octobox.github_app? %>
+          <%= link_to Octobox.config.app_install_url, class: 'btn btn-default btn-lg' do %>
+            <%= octicon 'briefcase', height: 22 %>
+            Install the GitHub App
+          <% end %>
+        <% end %>
       </p>
       <p>
         <a class="github-button" href="https://github.com/octobox/octobox" data-icon="octicon-star" data-style="mega" data-count-href="/octobox/octobox/stargazers" data-count-api="/repos/octobox/octobox#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star octobox/octobox on GitHub">Star</a>

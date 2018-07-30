@@ -98,6 +98,21 @@ module Octobox
     end
     attr_writer :source_repo
 
+    def app_install_url
+      "#{app_url}/installations/new"
+    end
+    attr_writer :app_install_url
+
+    def app_url
+      "#{github_domain}/apps/#{app_slug}"
+    end
+    attr_writer :app_url
+
+    def app_slug
+      ENV['GITHUB_APP_SLUG']
+    end
+    attr_writer :app_slug
+
     def octobox_io
       @octobox_io || ENV['OCTOBOX_IO'].present?
     end
