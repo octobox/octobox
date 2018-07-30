@@ -44,7 +44,9 @@ class Notification < ApplicationRecord
   class << self
     def attributes_from_api_response(api_response)
       attrs = DownloadService::API_ATTRIBUTE_MAP.map do |attr, path|
-        [attr, api_response.to_h.dig(*path)]
+        value = api_response.to_h.dig(*path)
+        value.delete!("\u0000") if value.is_a?(String)
+        [attr, value]
       end.to_h
       if "RepositoryInvitation" == api_response.subject.type
         attrs[:subject_url] = "#{api_response.repository.html_url}/invitations"

@@ -27,6 +27,7 @@ gem 'gemoji'
 gem 'bootsnap', require: false
 gem 'github-markup', require: 'github/markup'
 gem 'kramdown'
+gem 'bugsnag'
 
 # Supported databases
 gem 'mysql2', require: false
@@ -60,6 +61,5 @@ group :production do
   gem 'skylight'
   gem 'lograge'
   gem 'rails_safe_tasks'
-  gem 'bugsnag'
   gem 'puma_worker_killer'
 end
