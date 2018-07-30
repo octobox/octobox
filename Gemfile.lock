@@ -214,7 +214,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
-    rails_safe_tasks (1.0.0)
     railties (5.2.0)
       actionpack (= 5.2.0)
       activesupport (= 5.2.0)
@@ -356,7 +355,6 @@ DEPENDENCIES
   puma_worker_killer
   rails (~> 5.2)
   rails-controller-testing
-  rails_safe_tasks
   rake
   rgb
   rubocop
