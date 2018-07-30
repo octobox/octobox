@@ -56,7 +56,7 @@
             Settings
           <% end %>
           <% if File.exist?(Rails.root.join('public', 'docs', 'index.html')) %>
-            <%= link_to "docs/" do %>
+            <%= link_to "docs/", class: 'dropdown-item' do %>
               <%= octicon 'book', height: 16, class: 'text-muted' %>
               API Documentation
             <% end %>
