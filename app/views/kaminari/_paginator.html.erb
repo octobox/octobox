@@ -1,5 +1,5 @@
 <%= paginator.render do -%>
-  <ul class="pagination">
+  <ul class="pagination justify-content-center">
     <%= prev_page_tag %>
     <% each_page do |page| -%>
       <% if page.left_outer? || page.right_outer? || page.inside_window? -%>
