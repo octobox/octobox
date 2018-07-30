@@ -128,7 +128,7 @@ module NotificationsHelper
 
   def filter_option(param)
     if filters[param].present?
-      link_to root_path(filters.except(param)), class: "btn btn-outline-dark" do
+      link_to root_path(filters.except(param)), class: "btn btn-sm btn-outline-dark" do
         concat octicon('x', :height => 16)
         concat ' '
         concat yield
@@ -141,7 +141,7 @@ module NotificationsHelper
       reasons = filters[:reason].split(',').reject(&:empty?)
       index = reasons.index(reason.underscore.downcase)
       reasons.delete_at(index) if index
-      link_to root_path(filters.merge(:reason => reasons.join(','))), class: "btn btn-default" do
+      link_to root_path(filters.merge(:reason => reasons.join(','))), class: "btn btn-sm outline-dark" do
         concat octicon('x', :height => 16)
         concat ' '
         concat yield
