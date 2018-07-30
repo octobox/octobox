@@ -81,7 +81,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?label=bug'
     assert_response :success
     assert_template 'notifications/index', file: 'notifications/index.html.erb'
-    assert_select "span.filter-options *", text: 'label: bug'
+    assert_select "span.filter-options *", text: 'Label: bug'
   end
 
   test 'renders the index page as json if authenticated' do
