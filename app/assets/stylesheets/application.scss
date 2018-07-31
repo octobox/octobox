@@ -66,10 +66,10 @@ html {
       padding-left: 15px;
       overflow-y: hidden;
       height: 100%;
-      > .panel {
+      > .card {
         height: 100%;
         overflow-y: scroll;
-        > .panel-heading {
+        > .card-header {
           position: absolute;
           z-index: 1;
           right: 16px;
