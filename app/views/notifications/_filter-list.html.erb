@@ -1,7 +1,7 @@
 <% if any_active_filters? %>
   <span class="filter-options">
     <span class="btn-group">
-      <a href="#" class="btn btn-outline-dark filter-label" role="button" aria-disabled="true">Filter:</a>
+      <a href="#" class="btn btn-sm btn-outline-dark filter-label" role="button" aria-disabled="true">Filter:</a>
 
       <% if params[:reason].present? %>
         <% params[:reason].split(',').compact.each do |reason| %>
