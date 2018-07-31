@@ -586,7 +586,10 @@ td.keys {
 .opencollective{
   fill: #ddd;
 }
-
+.nav-link.active svg{
+  fill: white;
+  stroke: white; 
+}
 .notification-open{
   fill: #5cb85c;
 }
@@ -596,7 +599,6 @@ td.keys {
 .octicon.inverse{
   fill: #fff;
 }
-
 .hidden-button {
   display: none;
 }
