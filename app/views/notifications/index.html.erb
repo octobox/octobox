@@ -89,13 +89,13 @@
             </div>
           <% end %>
         </table>
+
+        <div class="panel-footer visible-xs-block visible-sm-block">
+          <%= paginate @notifications, left: 1, right: 1, window: 0 %>
+        </div>
       </div>
 
-      <div class="text-center visible-xs-block">
-        <%= paginate @notifications, left: 1, right: 1, window: 0 %>
-      </div>
-
-      <div class="text-center visible-sm-block visible-md-block visible-lg-block visible-xl-block">
+      <div class="text-center visible-md-block visible-lg-block visible-xl-block">
         <%= paginate @notifications %>
       </div>
 
