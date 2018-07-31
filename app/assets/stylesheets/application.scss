@@ -558,6 +558,9 @@ td.keys {
   margin-bottom: 20px;
   .card-header {
     padding: 6px 8px;
+    .pagination{
+      margin: 6px 0px 0px;
+    }
   }
   .bold {
     font-weight: bold;

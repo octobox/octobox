@@ -89,10 +89,12 @@
             </div>
           <% end %>
         </table>
-      </div>
 
-      <div class="d-flex d-sm-none">
-        <%= paginate @notifications, left: 1, right: 1, window: 0 %>
+        <div class="card-footer d-sm-none">
+          <div class="d-flex">
+            <%= paginate @notifications, left: 1, right: 1, window: 0 %>
+          </div>
+        </div>
       </div>
 
       <div class="d-flex d-none d-sm-block">

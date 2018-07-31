@@ -58,6 +58,5 @@ end
 group :production do
   gem 'skylight'
   gem 'lograge'
-  gem 'rails_safe_tasks'
   gem 'puma_worker_killer'
 end
