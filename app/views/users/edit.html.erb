@@ -63,7 +63,7 @@
 
       <ul class="list-inline">
         <li class="list-inline-item">
-          <button onclick="document.getElementById('api_token').classList.remove('hide'); this.parentNode.classList.add('hide')" class="btn btn-outline-dark">Show API Token</button>
+          <button onclick="document.getElementById('api_token').classList.remove('d-none'); this.parentNode.classList.add('d-none')" class="btn btn-outline-dark">Show API Token</button>
         </li>
         <li class="list-inline-item">
           <%= form_tag current_user, method: :put do %>
@@ -73,7 +73,7 @@
         </li>
       </ul>
 
-      <div id="api_token" class="blankslate hide">
+      <div id="api_token" class="blankslate d-none">
         <code><%= current_user.api_token || 'None, please click the button to regenerate your token' %></code>
       </div>
     </div>
