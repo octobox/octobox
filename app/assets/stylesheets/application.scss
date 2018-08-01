@@ -594,6 +594,11 @@ td.keys {
   fill: white;
   stroke: white; 
 }
+.nav-item{
+  &:hover{
+    background-color: #eee; 
+  }
+}
 .notification-open{
   fill: #5cb85c;
 }

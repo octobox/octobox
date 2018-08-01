@@ -169,13 +169,13 @@ module NotificationsHelper
   end
 
   def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, path_params = nil)
-    content_tag :li, class: (active ? 'active nav-item' : 'nav-item') do
+    content_tag :li, class: (active ? 'nav-item active' : 'nav-item') do
       active = (active && not_repo_in_active_org(param))
       path_params ||= filtered_params(param => (active ? nil : value)).except(except)
-      link_to root_path(path_params), class: "nav-link filter #{link_class}" do
+      link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
         yield
         if active && not_repo_in_active_org(param)
-          concat content_tag(:span, octicon('x', :height => 16), class: 'badge badge-light')
+          concat content_tag(:span, octicon('x', :height => 16), class: 'badge')
         elsif count.present?
           concat content_tag(:span, count, class: 'badge')
         end
