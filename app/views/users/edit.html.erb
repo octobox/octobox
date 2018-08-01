@@ -56,6 +56,34 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
+      <h3 class="panel-title">User Interface Settings</h3>
+    </div>
+    <div class="panel-body">
+      <ul class="list-inline">
+        <li>
+          <%= form_for current_user do |f| %>
+            <%= f.fields_for :user_settings do |fs| %>
+            <div class="form-group">
+              <%= fs.label :new_tab, "Open issues in new tab" %>
+              <%= fs.check_box :new_tab %>
+              <%= fs.hidden_field :id %>
+              <span class="help-block">
+               If this option is set - you will have issues page open in the save tab as Octobox
+              </span>
+            </div>
+            <% end %>
+            <%= submit_tag 'Save', class: 'btn btn-primary' %>
+            <%= link_to 'Cancel', root_path, class: 'btn btn-default' %>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
       <h3 class="panel-title">Octobox API Access</h3>
     </div>
     <div class="panel-body">

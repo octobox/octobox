@@ -2,6 +2,8 @@
 class User < ApplicationRecord
   has_secure_token :api_token
   has_many :notifications, dependent: :delete_all
+  has_one :user_settings
+  accepts_nested_attributes_for :user_settings
 
   ERRORS = {
     invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
@@ -23,7 +25,11 @@ class User < ApplicationRecord
   }
   validate :personal_access_token_validator
 
-  def admin?
+  def user_settings
+    super || build_user_settings
+  end
+
+ def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)
   end
 
@@ -111,5 +117,4 @@ class User < ApplicationRecord
     personal_access_token.blank? ? '' :
     "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
   end
-
 end

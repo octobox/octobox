@@ -68,6 +68,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal '12345', @token_user.personal_access_token
   end
 
+  test 'updates new_tab setting' do
+    sign_in_as(@user)
+    patch user_url(@user, format: :json), params: {user: {user_settings_attributes: {new_tab: false}}}
+    assert_response :ok
+    @user.reload
+    assert_equal false, @user.user_settings.new_tab
+  end
+
+
   test 'will not clear personal access token if clear_personal_access_token is not set' do
     create_token_user
     stub_user_request(user: @token_user)
