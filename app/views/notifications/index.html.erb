@@ -45,7 +45,7 @@
           <%= mark_read_selected_button %>
           <%= render 'filter-list' %>
           <% if current_user.last_synced_at %>
-            <span class='text-muted hidden-xs'>
+            <span class='text-muted d-none d-sm-inline-block'>
               <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
             </span>
           <% end %>

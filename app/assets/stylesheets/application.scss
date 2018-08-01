@@ -72,8 +72,8 @@ html {
         > .card-header {
           position: absolute;
           z-index: 1;
-          right: 16px;
-          left: 16px;
+          right: 0;
+          left: 0;
         }
         > .table {
           margin-top: 46px;
@@ -88,16 +88,6 @@ html {
     }
     .flex-sidebar & {
       padding-right: 0;
-    }
-  }
-  .filter-options {
-    display: flex;
-    position: relative;
-    margin-left: 120px;
-    margin-top: -33.5px;
-    > .btn-group {
-      display: flex;
-      overflow-x: scroll;
     }
   }
 }
