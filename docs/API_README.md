@@ -7,10 +7,11 @@ This is the API Documentation for Octobox. With this API, you can access and man
 
 Every user has an API Token that you can see on [your settings page](/settings). Octobox uses standard API Token-based authentication.
 
-To use this authentication, simply send an Authentication header to Octobox:
+To use this authentication, send Authentication and X-Octobox-API headers to Octobox:
 
 ```
-Authorization Bearer <token>
+Authorization: Bearer <token>
+X-Octobox-API: 1
 ```
 
 For example, here is a basic Ruby example to get notifications:
@@ -24,6 +25,7 @@ url = URI.parse("#{base_url}/notifications.json")
 
 req = Net::HTTP::Get.new(url.path)
 req.add_field("Authorization", "Bearer #{token}")
+req.add_field("X-Octobox-API", "1")
 res = Net::HTTP.new(url.host, url.port).start do |http|
   http.request(req)
 end
