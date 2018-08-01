@@ -97,7 +97,7 @@ module NotificationsHelper
 
   def function_button(title, octicon, css_class, tooltip)
     button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
-      octicon(octicon, height: 16) + content_tag(:span, " #{title}", class: 'd-none d-md-inline-block')
+      octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-md-inline-block ml-1')
     end
   end
 
