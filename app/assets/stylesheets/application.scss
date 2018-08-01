@@ -38,6 +38,11 @@ html {
   flex: 0 0 250px;
   overflow: auto;
   padding-bottom: 60px;
+  .nav-item{
+    &:hover{
+      background-color: #eee;
+    }
+  }
 }
 .flex-main {
   flex: 1;
@@ -141,7 +146,7 @@ html {
  .navbar-avatar {
   position: relative;
   top: -3px
-} 
+}
 }
 
 .navbar-nav {
@@ -592,12 +597,7 @@ td.keys {
 }
 .nav-link.active svg{
   fill: white;
-  stroke: white; 
-}
-.nav-item{
-  &:hover{
-    background-color: #eee; 
-  }
+  stroke: white;
 }
 .notification-open{
   fill: #5cb85c;
