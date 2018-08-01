@@ -134,20 +134,24 @@ html {
   }
 }
 
-.navbar-toggle {
+.navbar-toggler {
   border: none;
   padding: 0;
-  margin-top: 12px;
 }
-.navbar-search-toggle {
-  margin-top: 9px;
+.search-toggler {
   padding: 6px 10px 7px;
-  margin-right: 8px;
 }
+
 .navbar-avatar {
   margin-bottom: -3px;
   position: relative;
-  top: -3px;
+}
+
+@include media-breakpoint-up(md){
+ .navbar-avatar {
+  position: relative;
+  top: -3px
+} 
 }
 
 .navbar-nav {
@@ -176,7 +180,7 @@ html {
     background-color: transparent;
     border: 0;
     box-shadow: none;
-    > li > a {
+    > a {
       color: #ddd;
       line-height: 20px;
       padding: 5px 15px 5px 25px;
@@ -186,22 +190,29 @@ html {
         background-color: transparent;
       }
     }
-    > li > a,
+    > a,
     .dropdown-header {
       padding: 5px 15px 5px 25px;
     }
-    .divider {
-      background-color: #444;
+    .dropdown-divider {
+      border-top-color: #444;
     }
   }
-  .navbar-form {
+  .navbar form {
     border-top: none;
     border-bottom: none;
     -webkit-box-shadow: none;
     box-shadow: none;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    .form-control{
+      width: 100%;
+    }
   }
+}
+
+.navbar-collapse.show{
+  border-top: solid 1px #444;
 }
 
 .table > tbody > tr:first-child > td {
