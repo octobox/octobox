@@ -3,7 +3,12 @@
 //= require turbolinks
 //= require local-time
 //= require popper
-//= require bootstrap
+//= require bootstrap/util
+//= require bootstrap/collapse
+//= require bootstrap/alert
+//= require bootstrap/tooltip
+//= require bootstrap/dropdown
+//= require bootstrap/modal
 //= require_tree .
 
 function getDisplayedRows() {
