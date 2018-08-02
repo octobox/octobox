@@ -5,7 +5,7 @@
     <div class="text-center">
       <%= image_tag 'screenshot.png', class: 'screenshot' %>
       <p>
-      <%= link_to login_path, class: 'btn btn-default btn-lg' do %>
+      <%= link_to login_path, class: 'btn btn-outline-dark btn-lg' do %>
         <%= octicon 'mark-github', height: 22 %>
         Sign in with GitHub
       <% end %>
@@ -16,8 +16,8 @@
       </p>
     </div>
 
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
         <h3>Why is this a thing?</h3>
         <p>
           If you manage more than one active project on GitHub, you probably find <a href="https://github.com/notifications">GitHub Notifications</a> pretty lacking.

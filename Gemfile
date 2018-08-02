@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.5.1'
 
 gem 'rails', '~> 5.2'
-gem 'bootstrap-sass'
+gem 'bootstrap'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'local_time'

@@ -1,8 +1,9 @@
-//= require jquery
+//= require jquery3
 //= require jquery_ujs
 //= require turbolinks
 //= require local-time
-//= require bootstrap-sprockets
+//= require popper
+//= require bootstrap
 //= require_tree .
 
 function getDisplayedRows() {
@@ -89,6 +90,8 @@ function updateFavicon() {
 }
 
 document.addEventListener("turbolinks:load", function() {
+  // Add shortcut events only once
+  enableKeyboardShortcuts()
   if($("#help-box").length){
     $('button.archive_selected, button.unarchive_selected').click(toggleArchive);
     $('button.select_all').click(toggleSelectAll);
@@ -98,23 +101,23 @@ document.addEventListener("turbolinks:load", function() {
 
     $('input.archive, input.unarchive').change(function() {
       if ( hasMarkedRows() ) {
-        $('button.archive_selected, button.unarchive_selected, button.mute_selected').removeClass('hidden');
+        $('button.archive_selected, button.unarchive_selected, button.mute_selected').show().css("display", "inline-block");
         if ( !hasMarkedRows(true) ) {
           $(".js-select_all").prop('checked', true).prop('indeterminate', false);
-          $('button.select_all').removeClass('hidden');
+          $('button.select_all').show().css("display", "inline-block");
         } else {
           $(".js-select_all").prop('checked', false).prop('indeterminate', true);
-          $('button.select_all').addClass('hidden');
+          $('button.select_all').hide();
         }
       } else {
         $(".js-select_all").prop('checked', false).prop('indeterminate', false);
-        $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').addClass('hidden');
+        $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').hide();
       }
       var marked_unread_length = getMarkedRows().filter('.active').length;
       if ( marked_unread_length > 0 ) {
-        $('button.mark_read_selected').removeClass('hidden');
+        $('button.mark_read_selected').show().css("display", "inline-block");
       } else {
-        $('button.mark_read_selected').addClass('hidden');
+        $('button.mark_read_selected').hide();
       }
     });
     $('.toggle-star').click(function() {
@@ -139,9 +142,6 @@ document.addEventListener("turbolinks:load", function() {
 document.addEventListener("turbolinks:before-cache", function() {
   $('td.js-current').removeClass("current js-current");
 });
-
-// Add shortcut events only once
-$(document).ready(enableKeyboardShortcuts);
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.flex-content').toggleClass('active')
