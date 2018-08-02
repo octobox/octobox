@@ -13,46 +13,62 @@
       <% end %>
     </div>
   </div>
+  <hr>
+
   <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
-    <hr>
 
     <%= form_for current_user do |f| %>
       <% if Octobox.refresh_interval_enabled? %>
-        <div class="form-group">
-          <%= f.label :refresh_interval_minutes, 'Notification Refresh Interval' %>
-          <%= f.number_field :refresh_interval_minutes, max: 1440, min: Octobox.config.minimum_refresh_interval, value: current_user.effective_refresh_interval.nil? ? '' : current_user.effective_refresh_interval / 60_000, class: 'form-control' %>
-          <p>
-            <em>
-              Auto refresh every N minutes when you are viewing notifications. If blank, no auto refreshes will occur.
-            </em>
-          </p>
-        </div>
-      <% end %>
+        <div class="card mb-3">
+          <h5 class="card-header">
+            Automatic Refresh Interval
+          </h5>
+          <div class="card-body">
+            <div class="form-group">
+              <%= f.number_field :refresh_interval_minutes, max: 1440, min: Octobox.config.minimum_refresh_interval, value: current_user.effective_refresh_interval.nil? ? '' : current_user.effective_refresh_interval / 60_000, class: 'form-control w-25' %>
 
-      <% if Octobox.personal_access_tokens_enabled? %>
-        <div class="form-group">
-          <%= f.label :personal_access_token, "Personal Access Token" %>
-          <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
-          <span class="help-block">Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token that was generated when you logged in.  There is no need to set this unless you have a specific reason.
-          </span>
-        </div>
-        <div class="form-group">
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" name="clear_personal_access_token" id="clear_personal_access_token"/>
-              Clear personal access token
-            </label>
+              <p>
+                <em>
+                  Auto refresh every N minutes when you are viewing notifications. If blank, no auto refreshes will occur.
+                </em>
+              </p>
+              <%= submit_tag 'Save', class: 'btn btn-primary' %>
+              <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+            </div>
           </div>
         </div>
 
       <% end %>
 
-      <%= submit_tag 'Save', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+      <% if Octobox.personal_access_tokens_enabled? %>
+        <div class="card mb-3">
+          <h5 class="card-header">
+            Octobox API Access
+          </h5>
+          <div class="card-body">
+            <div class="form-group">
+              <%= f.label :personal_access_token, "Personal Access Token" %>
+              <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
+              <span class="help-block">Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token that was generated when you logged in.  There is no need to set this unless you have a specific reason.
+              </span>
+            </div>
+            <div class="form-group">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="clear_personal_access_token" id="clear_personal_access_token"/>
+                  Clear personal access token
+                </label>
+              </div>
+            </div>
+            <%= submit_tag 'Save', class: 'btn btn-primary' %>
+            <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+          </div>
+        </div>
+      <% end %>
+
+
     <% end %>
   <% end %>
-
-  <hr>
 
   <div class="card mb-3">
     <h5 class="card-header">
