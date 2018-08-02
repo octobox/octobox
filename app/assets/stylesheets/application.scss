@@ -4,6 +4,7 @@ $jumbotron-bg: #fff;
 $subscribed-color: #a128ca;
 $subscribed-text-color: #fff;
 $team_mention-color: #5d477e;
+$team_mention-text-color: #fff;
 $text-color: #333;
 $security_alert-color: #800000;
 
@@ -512,6 +513,11 @@ td.keys {
 .badge-subscribed{
   background-color: $subscribed-color;
   color: $subscribed-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $subscribed-text-color;
+    text-decoration: none;
+    background-color: darken( $subscribed-color, 10% );
+  }
 }
 
 .text-subscribed{
@@ -523,6 +529,12 @@ td.keys {
 
 .badge-team_mention{
   background-color: $team_mention-color;
+  color: $team_mention-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $team_mention-text-color;
+    text-decoration: none;
+    background-color: darken( $team_mention-color, 10% );
+  }
 }
 
 .text-team_mention{
