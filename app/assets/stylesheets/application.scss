@@ -503,6 +503,10 @@ td.keys {
 .text-danger {
   fill: theme-color("danger");
 }
+.text-secondary {
+  fill: theme-color("secondary");
+}
+
 
 .text-default {
   fill: $text-color;
