@@ -4,6 +4,7 @@ $jumbotron-bg: #fff;
 $subscribed-color: #a128ca;
 $subscribed-text-color: #fff;
 $team_mention-color: #5d477e;
+$team_mention-text-color: #fff;
 $text-color: #333;
 $security_alert-color: #800000;
 
@@ -34,6 +35,7 @@ html {
 }
 .flex-content {
   display: flex;
+  min-height:0;
 }
 .flex-sidebar {
   flex: 0 0 250px;
@@ -495,8 +497,12 @@ td.keys {
 }
 
 .text-danger {
-  fill: theme-color("-danger");
+  fill: theme-color("danger");
 }
+.text-secondary {
+  fill: theme-color("secondary");
+}
+
 
 .text-default {
   fill: $text-color;
@@ -508,6 +514,11 @@ td.keys {
 .badge-subscribed{
   background-color: $subscribed-color;
   color: $subscribed-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $subscribed-text-color;
+    text-decoration: none;
+    background-color: darken( $subscribed-color, 10% );
+  }
 }
 
 .text-subscribed{
@@ -519,6 +530,12 @@ td.keys {
 
 .badge-team_mention{
   background-color: $team_mention-color;
+  color: $team_mention-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $team_mention-text-color;
+    text-decoration: none;
+    background-color: darken( $team_mention-color, 10% );
+  }
 }
 
 .text-team_mention{

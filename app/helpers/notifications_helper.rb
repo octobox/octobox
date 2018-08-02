@@ -110,6 +110,11 @@ module NotificationsHelper
     SUBJECT_TYPES[subject_type]
   end
 
+  def notification_icon_title(subject_type, state = nil)
+    return subject_type.underscore.humanize if state.blank?
+    "#{state.underscore.humanize} #{subject_type.underscore.humanize.downcase}"
+  end
+
   def notification_icon_color(state)
     {
       'open' => 'text-success',

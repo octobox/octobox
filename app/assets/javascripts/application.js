@@ -138,7 +138,7 @@ document.addEventListener("turbolinks:load", function() {
       checkAll($(".js-select_all").prop('checked'))
     })
 
-    $('[data-toggle="tooltip"]').tooltip({trigger: 'tooltip'})
+    $('[data-toggle="tooltip"]').tooltip()
 
     updateFavicon()
   }

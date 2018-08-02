@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 2018_07_25_101333) do
     t.string "personal_access_token"
     t.integer "refresh_interval", default: 0
     t.string "api_token"
+    t.string "app_token"
     t.index ["access_token"], name: "index_users_on_access_token", unique: true
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
