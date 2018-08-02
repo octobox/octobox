@@ -45,7 +45,7 @@
   </td>
   <td class='notification-date'>
     <small class='text-muted'>
-      <%= local_time(notification.updated_at, :short) %>
+      <%= local_relative_time(notification.updated_at, type: 'time-or-date') %>
     </small>
   </td>
 </tr>
