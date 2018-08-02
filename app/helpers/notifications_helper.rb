@@ -214,6 +214,7 @@ module NotificationsHelper
   end
 
   def parse_markdown(str)
+    return if str.blank?
     GitHub::Markup.render('.md', str)
   end
 end
