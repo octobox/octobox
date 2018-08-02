@@ -33,6 +33,7 @@ html {
 }
 .flex-content {
   display: flex;
+  min-height:0;
 }
 .flex-sidebar {
   flex: 0 0 250px;
