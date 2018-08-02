@@ -7,7 +7,7 @@ $team_mention-color: #5d477e;
 $text-color: #333;
 $security_alert-color: #800000;
 
-@import "bootstrap";
+@import 'bootstrap-custom';
 @import "patterns/blankslate";
 
 html, body {
