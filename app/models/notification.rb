@@ -4,6 +4,7 @@ class Notification < ApplicationRecord
     include PgSearch
     pg_search_scope :search_by_subject_title,
                     against: :subject_title,
+                    order_within_rank: 'notifications.updated_at DESC',
                     using: {
                       tsearch: {
                         prefix: true,

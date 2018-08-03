@@ -1,23 +1,14 @@
-$navbar-default-bg: #f5f5f5;
-$navbar-inverse-bg: #24292e;
-$navbar-height: 48px;
-$link-color: #0366d6;
-$border-radius-base: 3px;
 $table-bg-active: #fafafa;
-$tooltip-opacity: 1;
 $font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-$body-bg: #fff;
-$jumbotron-bg: $body-bg;
-$component-active-bg: #eee;
-$component-active-color: #444;
-$panel-default-heading-bg: #f8f8f8;
-$panel-footer-bg: $panel-default-heading-bg;
+$jumbotron-bg: #fff;
 $subscribed-color: #a128ca;
+$subscribed-text-color: #fff;
 $team_mention-color: #5d477e;
+$team_mention-text-color: #fff;
+$text-color: #333;
 $security_alert-color: #800000;
 
-@import "bootstrap-sprockets";
-@import "bootstrap";
+@import 'bootstrap-custom';
 @import "patterns/blankslate";
 
 html, body {
@@ -43,11 +34,17 @@ html {
 }
 .flex-content {
   display: flex;
+  min-height:0;
 }
 .flex-sidebar {
   flex: 0 0 250px;
   overflow: auto;
   padding-bottom: 60px;
+  .nav-item{
+    &:hover{
+      background-color: #eee;
+    }
+  }
 }
 .flex-main {
   flex: 1;
@@ -70,26 +67,26 @@ html {
   }
 }
 
-@media (max-width: $screen-sm-max) {
+@include media-breakpoint-down(md) {
   .flex-container {
     .flex-main & {
       padding-left: 15px;
       overflow-y: hidden;
       height: 100%;
-      > .panel {
+      > .card {
         height: 100%;
         overflow-y: scroll;
-        > .panel-heading {
+        > .card-header {
           position: absolute;
           z-index: 1;
-          right: 16px;
-          left: 16px;
+          right: 0;
+          left: 0;
         }
         > .table {
-          margin-top: 46px;
+          margin-top: 51px;
           &.filtered {
             margin-top: 79.5px;
-            @media (max-width: $screen-sm-min) {
+            @include media-breakpoint-down(md) {
               margin-top: 60.5px;
             }
           }
@@ -98,16 +95,6 @@ html {
     }
     .flex-sidebar & {
       padding-right: 0;
-    }
-  }
-  .filter-options {
-    display: flex;
-    position: relative;
-    margin-left: 120px;
-    margin-top: -33.5px;
-    > .btn-group {
-      display: flex;
-      overflow-x: scroll;
     }
   }
 }
@@ -144,20 +131,24 @@ html {
   }
 }
 
-.navbar-toggle {
+.navbar-toggler {
   border: none;
   padding: 0;
-  margin-top: 12px;
 }
-.navbar-search-toggle {
-  margin-top: 9px;
+.search-toggler {
   padding: 6px 10px 7px;
-  margin-right: 8px;
 }
+
 .navbar-avatar {
   margin-bottom: -3px;
   position: relative;
-  top: -3px;
+}
+
+@include media-breakpoint-up(md){
+ .navbar-avatar {
+  position: relative;
+  top: -3px
+}
 }
 
 .navbar-nav {
@@ -175,13 +166,8 @@ html {
     color: #fff;
   }
 }
-@media (min-width: $screen-sm-min) {
-  #search {
-    float: left;
-    margin-left: -18px;
-  }
-}
-@media (max-width: $screen-xs-max) {
+
+@include media-breakpoint-down(sm) {
   .navbar-nav .dropdown .dropdown-menu {
     display: block;
     position: static;
@@ -191,7 +177,7 @@ html {
     background-color: transparent;
     border: 0;
     box-shadow: none;
-    > li > a {
+    > a {
       color: #ddd;
       line-height: 20px;
       padding: 5px 15px 5px 25px;
@@ -201,22 +187,29 @@ html {
         background-color: transparent;
       }
     }
-    > li > a,
+    > a,
     .dropdown-header {
       padding: 5px 15px 5px 25px;
     }
-    .divider {
-      background-color: #444;
+    .dropdown-divider {
+      border-top-color: #444;
     }
   }
-  .navbar-form {
+  .navbar form {
     border-top: none;
     border-bottom: none;
     -webkit-box-shadow: none;
     box-shadow: none;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    .form-control{
+      width: 100%;
+    }
   }
+}
+
+.navbar-collapse.show{
+  border-top: solid 1px #444;
 }
 
 .table > tbody > tr:first-child > td {
@@ -239,12 +232,12 @@ html {
   cursor: pointer;
 }
 
-@media (min-width: $screen-sm-min ) {
+@include media-breakpoint-up(md) {
   .table-notifications tr td:first-child {
     border-left: 2px solid #fff;
   }
   .table-notifications tr:hover td:first-child {
-    border-left: 2px solid $table-bg-hover;
+    border-left: 2px solid $table-hover-bg;
   }
   .table-notifications tr.active td:first-child {
     border-left: 2px solid $table-bg-active;
@@ -295,10 +288,6 @@ td.keys {
   border-radius: 3px;
 }
 
-.dropdown {
-  display: inline-block;
-}
-
 .table-notifications {
   .active {
     font-weight: bold;
@@ -320,7 +309,7 @@ td.keys {
   }
   > li > a {
     position: relative;
-    .label {
+    .badge {
       top: 11px;
     }
     &.filter {
@@ -334,12 +323,12 @@ td.keys {
         }
       }
 
-      .label {
+      .badge {
         top: 6px;
       }
     }
   }
-  .label {
+  .badge {
     line-height: 12px;
     position: absolute;
     right: 10px;
@@ -369,7 +358,7 @@ td.keys {
   white-space: nowrap;
 }
 
-@media (min-width: $screen-sm-min) {
+@include media-breakpoint-up(md) {
   .notification-star,
   .notification-icon {
     width: 1%;
@@ -385,7 +374,7 @@ td.keys {
   }
 }
 
-@media (max-width: $screen-xs-max) {
+@include media-breakpoint-down(sm) {
   .table-notifications {
     table,
     thead,
@@ -453,9 +442,7 @@ td.keys {
   }
 }
 
-// Bootstrap Off Canvas
-
-@media screen and (max-width: $screen-sm-max) {
+@include media-breakpoint-down(md) {
   $sidebar-width: 250px;
 
   .flex-content {
@@ -498,24 +485,28 @@ td.keys {
 }
 
 .text-primary {
-  fill: $brand-primary;
+  fill: theme-color("primary");
 }
 
 .text-success {
-  fill: $brand-success;
+  fill: theme-color("success");
 }
 
 .text-info {
-  fill: $brand-info;
+  fill: theme-color("info");
 }
 
 .text-warning {
-  fill: $brand-warning;
+  fill: theme-color("warning");
 }
 
 .text-danger {
-  fill: $brand-danger;
+  fill: theme-color("danger");
 }
+.text-secondary {
+  fill: theme-color("secondary");
+}
+
 
 .text-default {
   fill: $text-color;
@@ -524,8 +515,14 @@ td.keys {
   }
 }
 
-.label-subscribed{
+.badge-subscribed{
   background-color: $subscribed-color;
+  color: $subscribed-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $subscribed-text-color;
+    text-decoration: none;
+    background-color: darken( $subscribed-color, 10% );
+  }
 }
 
 .text-subscribed{
@@ -535,8 +532,14 @@ td.keys {
   }
 }
 
-.label-team_mention{
+.badge-team_mention{
   background-color: $team_mention-color;
+  color: $team_mention-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $team_mention-text-color;
+    text-decoration: none;
+    background-color: darken( $team_mention-color, 10% );
+  }
 }
 
 .text-team_mention{
@@ -574,33 +577,23 @@ td.keys {
   pointer-events: none;
 }
 
-.panel-notifications {
-  .panel-heading,
-  .panel-footer {
+.card-notifications {
+  margin-bottom: 20px;
+  .card-header {
     padding: 6px 8px;
+    .pagination{
+      margin: 6px 0px 0px;
+    }
   }
-
   .bold {
     font-weight: bold;
   }
 }
 
 .select-all {
-  padding-left: 10px;
-  padding-right: 10px;
   input {
-    margin-top: 0;
     position: relative;
-    top: -1px;
-  }
-}
-
-@media (max-width: $screen-xs-max) {
-  .select-all {
-    padding-right: 8px;
-    input {
-      top: 2px;
-    }
+    left: 2px;
   }
 }
 
@@ -619,7 +612,10 @@ td.keys {
 .opencollective{
   fill: #ddd;
 }
-
+.nav-link.active svg{
+  fill: white;
+  stroke: white;
+}
 .notification-open{
   fill: #5cb85c;
 }
@@ -628,6 +624,9 @@ td.keys {
 }
 .octicon.inverse{
   fill: #fff;
+}
+.hidden-button {
+  display: none;
 }
 
 .settings-sha {
