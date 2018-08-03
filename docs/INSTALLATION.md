@@ -47,9 +47,13 @@ You can host your own instance of Octobox using Heroku.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/octobox/octobox)
 
-Heroku will ask you to provide OAuth client ID and secret, which you can create
-on GitHub. When creating the OAuth application, make sure you enable the
-`notifications` scope on it (you will also need the `read:org` scope if you enable restricted access).
+Heroku will ask you to provide an OAuth client ID and secret, which you can get by
+[registering a new OAuth application on GitHub](https://github.com/settings/applications/new)]. When creating the OAuth application:
+
+* Make sure you enable the `notifications` scope on it (you will also need the `read:org` scope if you enable restricted access).
+* You can provide Homepage and Authorization URLs by using the Heroku app name you choose. By default, a Heroku app is available at its Heroku domain, which has the form `[name of app].herokuapp.com`.
+  The callback url would then be `[name of app].herokuapp.com/auth/github/callback`.
+
 For more help with setting up an OAuth application on GitHub, see below.
 
 ## Deployment to OpenShift Online
