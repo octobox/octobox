@@ -1,6 +1,7 @@
 class Subject < ApplicationRecord
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
   has_many :labels
+  has_many :users, through: :notifications
 
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
   private_constant :BOT_AUTHOR_REGEX
@@ -25,6 +26,10 @@ class Subject < ApplicationRecord
         label.save if label.changed?
       end
     end
+  end
+
+  def sync_involved_users
+    user_ids.each { |user_id| SyncNotificationsWorker.perform_async(user_id) }
   end
 
   private
