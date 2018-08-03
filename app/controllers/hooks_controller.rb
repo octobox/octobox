@@ -15,6 +15,7 @@ class HooksController < ApplicationController
         created_at: remote_subject.created_at,
         updated_at: remote_subject.updated_at
       })
+      subject.sync_involved_users
     when 'pull_request'
       remote_subject = JSON.parse(params['pull_request'].to_json, object_class: OpenStruct)
       subject = Subject.find_or_create_by(url: remote_subject.url)
@@ -25,6 +26,7 @@ class HooksController < ApplicationController
         created_at: remote_subject.created_at,
         updated_at: remote_subject.updated_at
       })
+      subject.sync_involved_users
     when 'issue_comment'
       # TODO sync comments once thread-view branch merged
       # https://developer.github.com/v3/activity/events/types/#issuecommentevent
