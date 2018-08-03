@@ -28,6 +28,10 @@ class Subject < ApplicationRecord
     end
   end
 
+  def sync_involved_users
+    user_ids.each { |user_id| SyncNotificationsWorker.perform_async(user_id) }
+  end
+
   private
 
   def author_url_path
