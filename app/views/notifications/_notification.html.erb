@@ -16,11 +16,15 @@
     <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
   </td>
   <td class='notification-subject'>
-    <%= link_to notification.subject_title, notification, class: 'link', onclick: "markRead(#{notification.id})" %>
-
     <% if notification.subject %>
+      <%= link_to notification.subject_title, notification, class: 'link', onclick: "markRead(#{notification.id})" %>
+
       <% notification.subject.labels.each do |label| %>
         <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge d-sm", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+      <% end %>
+    <% else %>
+      <%= link_to notification.subject_url, class: 'link', onclick: "markRead(#{notification.id})" do %>
+        <%= notification.subject_title %> <%= octicon 'link-external', :height => 14 %>
       <% end %>
     <% end %>
   </td>
