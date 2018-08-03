@@ -25,6 +25,27 @@ class HooksController < ApplicationController
         created_at: remote_subject.created_at,
         updated_at: remote_subject.updated_at
       })
+    when 'issue_comment'
+      # TODO sync comments once thread-view branch merged
+      # https://developer.github.com/v3/activity/events/types/#issuecommentevent
+    when 'pull_request_review'
+      # TODO check to see if this gets fired other than when 'pull_request' is fired
+      # https://developer.github.com/v3/activity/events/types/#pullrequestreviewevent
+    when 'pull_request_review_comment'
+      # TODO check to see if this gets fired other than when 'pull_request' is fired
+      # https://developer.github.com/v3/activity/events/types/#pullrequestreviewcommentevent
+    when 'label'
+      # TODO find and update labels on subjects for the repo
+      # https://developer.github.com/v3/activity/events/types/#labelevent
+    when 'installation'
+      # TODO record/update github app installation
+      # https://developer.github.com/v3/activity/events/types/#installationevent
+    when 'installation_repositories'
+      # TODO add/remove repositories from an installation
+      # https://developer.github.com/v3/activity/events/types/#installationrepositoriesevent
+    when 'marketplace_purchase'
+      # TODO purchase, upgrade/downgrade or cancel marketplace plan
+      # https://developer.github.com/apps/marketplace/setting-up-github-marketplace-webhooks/about-webhook-payloads-for-a-github-marketplace-listing/
     end
 
     head :no_content
