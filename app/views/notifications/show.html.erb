@@ -6,86 +6,89 @@
   </div>
   <div class="flex-main">
     <div class="flex-container">
-      <div class="panel panel-default">
-        <div class="panel-heading">
 
-          <%= link_to octicon('arrow-left', height: 18), root_path, class: 'btn btn-default' %>
+      <div class="d-flex d-flex-row p-1 justify-content-between">
+       
+        <div>
+          <%= link_to octicon('arrow-left', height: 18), root_path, class: 'btn btn-sm btn-outline-dark' %>
 
-          <button class='btn btn-default'>
-            <%= octicon 'archive' %> Archive
+          <button class='btn btn-sm btn-outline-dark'>
+            <%= octicon 'checklist' %> Archive
           </button>
 
-          <button class='btn btn-default'>
+          <button class='btn btn-sm btn-outline-dark'>
             <%= octicon 'star' %> Star
           </button>
 
-          <button class='btn btn-default'>
+          <button class='btn btn-sm btn-outline-dark'>
             <%= octicon 'mute' %> Mute
           </button>
-
         </div>
-        <div class="panel-body">
-          <h4 class='media-heading'>
-            <%= octicon notification_icon(@notification.subject_type, @notification.state), :height => 16 %>
-            <%= @notification.subject_title %>
-            <%= link_to octicon('link-external'), @notification.web_url, target: '_blank', class: 'link' %>
-            <small>
-              <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>
-            </small>
+        <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "btn btn-sm btn-#{reason_label(@notification.reason)}" %>
 
-            <% if display_subject? %>
-                <% if @notification.subject %>
-                  <small>
-                    <%= link_to @notification.subject.author, @notification.subject.author_url, class: 'text-muted', target: '_blank' %>
-                  </small>
-                <% end %>
-            <% end %>
+      </div>
+      
+      <div class="p-3">
 
-              <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "label label-#{reason_label(@notification.reason)}" %>
+        <h1><%= @notification.subject_title %></h1>
 
+        <div class='d-block'>
 
-              <small class='text-muted'>
-                <%= local_time(@notification.updated_at, :short) %>
-              </small>
+          <%= octicon notification_icon(@notification.subject_type, @notification.state), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'}, class: "#{notification_icon_color(@notification.state) if display_subject?}" %>
 
-          </h3>
-          <% if @notification.subject %>
-            <% @notification.subject.labels.each do |label| %>
-              <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "label", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
-            <% end %>
+          <% if display_subject? %>
+              <% if @notification.subject %>
+                  <%= link_to @notification.subject.author, @notification.subject.author_url, class: 'text-muted', target: '_blank' %> opened this <%= @notification.subject_type.downcase %>
+              <% end %>
           <% end %>
+
+          on <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>
+
+          <%= time_ago_in_words(@notification.updated_at) %> ago.</span>
+
+          <%= link_to octicon('link-external'), @notification.web_url, target: '_blank', class: 'link' %>
+
+          <div class="pt-2">
+            <% if @notification.subject %>
+              <% @notification.subject.labels.each do |label| %>
+                <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+              <% end %>
+            <% end %> 
+          </div>
         </div>
       </div>
+
       <% if @notification.subject %>
-        <div class="panel panel-default">
-          <div class="panel-heading">
+        <div class="card mb-3">
+          <div class="card-header">
             <%= image_tag("#{Octobox.config.github_domain}/#{@notification.subject.author}.png?s=30", width: 30) %>
             <%= @notification.subject.author %>
             <small>
-              <%= @notification.subject.created_at.to_s(:short) %>
+              Commented <%= @notification.subject.created_at.to_s(:short) %>
             </small>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             <article class="markdown-body">
               <%== parse_markdown(@notification.subject.body) %>
             </article>
           </div>
         </div>
-
-
         <% @notification.subject.comments.each do |comment| %>
-          <div class="panel panel-default">
-            <div class="panel-heading">
+          <div class="card mb-3">
+            <div class="card-header">
               <%= image_tag("#{Octobox.config.github_domain}/#{comment.author}.png?s=30", width: 30) %>
               <%= comment.author %>
               <small>
-                <%= comment.created_at.to_s(:short) %>
+                Commented <%= comment.created_at.to_s(:short) %>
               </small>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
               <article class="markdown-body">
                 <%== parse_markdown(comment.body) %>
               </article>
+            </div>
+            <div class="card-footer">
+              Reactions
             </div>
           </div>
         <% end %>
