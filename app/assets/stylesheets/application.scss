@@ -41,6 +41,7 @@ html {
   overflow: auto;
   padding-bottom: 60px;
   .nav-item{
+    max-width: 100%;
     &:hover{
       background-color: #eee;
     }
