@@ -138,7 +138,10 @@ document.addEventListener("turbolinks:load", function() {
       checkAll($(".js-select_all").prop('checked'))
     })
 
-    $('[data-toggle="tooltip"]').tooltip()
+    if(!('ontouchstart' in window))
+    {
+      $('[data-toggle="tooltip"]').tooltip()
+    }
 
     updateFavicon()
   }
@@ -152,13 +155,6 @@ document.addEventListener("turbolinks:before-cache", function() {
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.flex-content').toggleClass('active')
 });
-
-if(!('ontouchstart' in window))
-{
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
-}
 
 function enableKeyboardShortcuts() {
   // Add shortcut events only once
