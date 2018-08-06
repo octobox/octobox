@@ -112,6 +112,12 @@ html {
   vertical-align: -.38em;
 }
 
+.btn-success, .btn-danger, .btn-subscribed{
+  svg{
+    fill: #fff;
+  }
+}
+
 .jumbotron {
   .octobox-icon {
     margin-right: 8px;
@@ -512,7 +518,7 @@ td.keys {
   }
 }
 
-.badge-subscribed{
+.badge-subscribed, .btn-subscribed{
   background-color: $subscribed-color;
   color: $subscribed-text-color;
   &[href]:hover, &[href]:focus {

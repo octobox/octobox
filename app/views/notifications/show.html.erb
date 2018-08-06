@@ -8,7 +8,7 @@
     <div class="flex-container">
 
       <div class="d-flex d-flex-row p-1 justify-content-between">
-       
+      
         <div>
           <%= link_to octicon('arrow-left', height: 18), root_path, class: 'btn btn-sm btn-outline-dark' %>
 
@@ -24,8 +24,18 @@
             <%= octicon 'mute' %> Mute
           </button>
         </div>
-        <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "btn btn-sm btn-#{reason_label(@notification.reason)}" %>
-
+        
+        <div>
+          <div class="btn btn-sm btn-link help d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
+            <%= octicon 'keyboard', :height => 16 %>
+          </div>
+          <button class='btn btn-sm btn-outline-dark'>
+            <%= octicon 'chevron-left' %>
+          </button>
+          <button class='btn btn-sm btn-outline-dark'>
+            <%= octicon 'chevron-right' %>
+          </button>
+        </div>
       </div>
       
       <div class="p-3">
@@ -34,7 +44,10 @@
 
         <div class='d-block'>
 
-          <%= octicon notification_icon(@notification.subject_type, @notification.state), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'}, class: "#{notification_icon_color(@notification.state) if display_subject?}" %>
+          <button class='btn btn-sm <%= notification_button_color(@notification.state) if display_subject? %>'>
+            <%= octicon notification_icon(@notification.subject_type, @notification.state), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
+            <%= notification_button_title(@notification.subject_type, @notification.state) %>
+          </button>
 
           <% if display_subject? %>
               <% if @notification.subject %>
@@ -49,6 +62,7 @@
           <%= link_to octicon('link-external'), @notification.web_url, target: '_blank', class: 'link' %>
 
           <div class="pt-2">
+            <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "badge badge-#{reason_label(@notification.reason)}" %>
             <% if @notification.subject %>
               <% @notification.subject.labels.each do |label| %>
                 <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
@@ -96,3 +110,6 @@
     </div>
   </div>
 </div>
+
+<%= render 'help-box' %>
+
