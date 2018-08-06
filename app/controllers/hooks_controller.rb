@@ -42,12 +42,34 @@ class HooksController < ApplicationController
     when 'installation'
       # TODO record/update github app installation
       # https://developer.github.com/v3/activity/events/types/#installationevent
+
+      # created
+
+        # find or create the AppInstallation object
+
+      # deleted
+
+        # find and delete the AppInstallation object
+
     when 'installation_repositories'
       # TODO add/remove repositories from an installation
       # https://developer.github.com/v3/activity/events/types/#installationrepositoriesevent
+
+      # repositories_added
+
+        # find or create Repositories
+
+      # repositories_removed
+
+        # find and delete Repositories
+
     when 'marketplace_purchase'
       # TODO purchase, upgrade/downgrade or cancel marketplace plan
       # https://developer.github.com/apps/marketplace/setting-up-github-marketplace-webhooks/about-webhook-payloads-for-a-github-marketplace-listing/
+
+      # find or create marketplace purchase
+
+      # also need to find or create the marketplace plan as well
     end
 
     head :no_content

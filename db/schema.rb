@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_03_073302) do
+ActiveRecord::Schema.define(version: 2018_08_06_154734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "app_installations", force: :cascade do |t|
+    t.integer "github_id"
+    t.string "account_login"
+    t.integer "account_id"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "comments", force: :cascade do |t|
     t.integer "subject_id"
@@ -57,6 +66,16 @@ ActiveRecord::Schema.define(version: 2018_08_03_073302) do
     t.index ["subject_url"], name: "index_notifications_on_subject_url"
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at"
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true
+  end
+
+  create_table "repositories", force: :cascade do |t|
+    t.integer "github_id"
+    t.integer "app_installation_id"
+    t.string "full_name"
+    t.string "owner"
+    t.boolean "private"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "subjects", force: :cascade do |t|

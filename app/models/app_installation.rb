@@ -1,0 +1,2 @@
+class AppInstallation < ApplicationRecord
+end
