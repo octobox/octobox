@@ -623,7 +623,9 @@ td.keys {
 }
 .nav-link.active svg{
   fill: white;
-  stroke: white;
+  &.octicon-star{
+    stroke: white;
+  }
 }
 .notification-open{
   fill: #5cb85c;
