@@ -77,6 +77,8 @@ html {
       > .card {
         height: 100%;
         overflow-y: scroll;
+        // enable momentum scrolling on mobile safari
+        -webkit-overflow-scrolling: touch;
         > .card-header {
           position: absolute;
           z-index: 1;
@@ -458,6 +460,9 @@ td.keys {
   }
   .flex-sidebar {
     position: absolute;
+    // enable momentum scrolling on mobile safari
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     bottom: 0;
     top: 0;
     width: $sidebar-width;
