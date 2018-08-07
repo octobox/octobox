@@ -12,17 +12,10 @@
         <div>
           <%= link_to octicon('arrow-left', height: 18), root_path, class: 'btn btn-sm btn-outline-dark' %>
 
-          <button class='btn btn-sm btn-outline-dark'>
-            <%= octicon 'checklist' %> Archive
-          </button>
+          <%= archive_selected_button() %>
+          <%= mute_selected_button() %>
+          <%= mark_read_selected_button() %>
 
-          <button class='btn btn-sm btn-outline-dark'>
-            <%= octicon 'star' %> Star
-          </button>
-
-          <button class='btn btn-sm btn-outline-dark'>
-            <%= octicon 'mute' %> Mute
-          </button>
         </div>
         
         <div>
@@ -100,9 +93,6 @@
               <article class="markdown-body">
                 <%== parse_markdown(comment.body) %>
               </article>
-            </div>
-            <div class="card-footer">
-              Reactions
             </div>
           </div>
         <% end %>

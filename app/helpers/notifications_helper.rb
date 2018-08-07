@@ -73,17 +73,17 @@ module NotificationsHelper
     filters.merge(override)
   end
 
-  def mute_selected_button
-    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items') unless params[:archive]
+  def mute_selected_button(hidden = false)
+    function_button('Mute selected', 'mute', "mute_selected #{'hidden-button' if hidden}", 'Mute selected items') unless params[:archive]
   end
 
-  def mark_read_selected_button
-    function_button('Mark as read', 'eye', 'mark_read_selected', 'Mark items as read')
+  def mark_read_selected_button(hidden = false)
+    function_button('Mark as read', 'eye', "mark_read_selected #{'hidden-button' if hidden}", 'Mark items as read')
   end
 
-  def archive_selected_button
+  def archive_selected_button(hidden = false)
     action = params[:archive] ? 'unarchive' : 'archive'
-    function_button("#{action.capitalize} selected", 'checklist', "archive_toggle #{action}_selected", 'Archive selected items')
+    function_button("#{action.capitalize} selected", 'checklist', "archive_toggle #{action}_selected #{'hidden-button' if hidden}", 'Archive selected items')
   end
 
   def select_all_button(cur_selected, total)
@@ -96,7 +96,7 @@ module NotificationsHelper
   end
 
   def function_button(title, octicon, css_class, tooltip)
-    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
+    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
       octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-md-inline-block ml-1')
     end
   end

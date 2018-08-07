@@ -40,9 +40,9 @@
           <%= link_to sync_notifications_path(filters), class: 'btn btn-sm btn-outline-secondary sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync?}" %>
           <% end %>
-          <%= archive_selected_button %>
-          <%= mute_selected_button %>
-          <%= mark_read_selected_button %>
+          <%= archive_selected_button(:hidden) %>
+          <%= mute_selected_button(:hidden) %>
+          <%= mark_read_selected_button(:hidden) %>
           <%= render 'filter-list' %>
           <% if current_user.last_synced_at %>
             <span class='text-muted d-none d-sm-inline-block'>
