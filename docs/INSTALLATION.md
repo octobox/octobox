@@ -70,6 +70,8 @@ Octobox uses [`encrypted_attr`](https://github.com/attr-encrypted/attr_encrypted
 
 Therefore to install and launch Octobox, you must provide a 32 byte encryption key as the env var `OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY`
 
+Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
+
 ## Local installation
 
 First things first, you'll need to install Ruby 2.5.1. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),

@@ -4,9 +4,9 @@ module Octobox
       @key ||= begin
         key = ENV['OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY']
 
-        if key.nil? && (Rails.env.test? || Rails.env.development?)
-          "1" * 32 # Fake key for test and development
-        elsif key.nil? || key.size != 32
+        if key.nil?
+          Rails.application.secret_key_base[0..31]
+        elsif key.size != 32
           raise ArgumentError,
             'Must provide a 32 byte encryption key as the env var OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY'
         else
