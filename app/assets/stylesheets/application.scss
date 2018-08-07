@@ -454,6 +454,9 @@ td.keys {
   }
   .flex-sidebar {
     position: absolute;
+    // enable momentum scrolling on mobile safari
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     bottom: 0;
     top: 0;
     width: $sidebar-width;
