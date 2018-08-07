@@ -290,6 +290,9 @@ td.keys {
 }
 
 .table-notifications {
+  td{
+    padding: 0.6rem;
+  }
   .active {
     font-weight: bold;
   }
