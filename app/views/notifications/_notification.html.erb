@@ -17,8 +17,7 @@
   </td>
   <td class='notification-subject'>
     <% if  display_subject? && notification.subject %>
-      <%= link_to notification.subject_title, notification, class: 'link', onclick: "markRead(#{notification.id})" %>
-
+      <%= link_to notification.subject_title, notification_path(filtered_params(id: notification.id)), class: 'link', onclick: "markRead(#{notification.id})" %>
       <% notification.subject.labels.each do |label| %>
         <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge d-sm", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
       <% end %>

@@ -10,7 +10,7 @@
       <div class="d-flex d-flex-row p-1 justify-content-between">
       
         <div>
-          <%= link_to octicon('arrow-left', height: 18), root_path, class: 'btn btn-sm btn-outline-dark' %>
+          <%= link_to octicon('arrow-left', height: 18), root_path(filtered_params({})), class: 'btn btn-sm btn-outline-dark' %>
 
           <%= archive_selected_button() %>
           <%= mute_selected_button() %>
