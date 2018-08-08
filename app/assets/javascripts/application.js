@@ -55,17 +55,19 @@ function moveCursorToClickedRow(event) {
   setRowCurrent(target, true);
 }
 
+var unread_count = 0;
+
 function updateFavicon() {
   $.get( "/notifications/unread_count", function(data) {
-    var unread_count = data["count"];
-    var title = 'Octobox';
-    if (unread_count > 0) {
-      title += ' (' + unread_count +')';
-    }
+    if (data["count"] !== unread_count) {
+      unread_count = data["count"]
 
-    window.document.title = title;
+      var title = 'Octobox';
+      if (unread_count > 0) {
+        title += ' (' + unread_count +')';
+      }
+      window.document.title = title;
 
-    if ( unread_count > 0 ) {
       var old_link = document.getElementById('favicon-count');
       if ( old_link ) {
         $(old_link).remove();
@@ -82,21 +84,25 @@ function updateFavicon() {
       if (canvas.getContext) {
         canvas.height = canvas.width = 32;
         ctx = canvas.getContext('2d');
-        img.onload = function () {
-          ctx.drawImage(this, 0, 0);
 
-          ctx.fillStyle = '#f93e00';
-          ctx.font = 'bold 20px "helvetica", sans-serif';
+          img.onload = function () {
+            ctx.drawImage(this, 0, 0);
 
-          var width = ctx.measureText(txt).width;
-          ctx.fillRect(0, 0, width+4, 24);
+            if (unread_count > 0){
+              ctx.fillStyle = '#f93e00';
+              ctx.font = 'bold 20px "helvetica", sans-serif';
 
-          ctx.fillStyle = '#fff';
-          ctx.fillText(txt, 2, 20);
+              var width = ctx.measureText(txt).width;
+              ctx.fillRect(0, 0, width+4, 24);
 
-          link.href = canvas.toDataURL('image/png');
-          document.body.appendChild(link);
-        };
+              ctx.fillStyle = '#fff';
+              ctx.fillText(txt, 2, 20);
+            }
+
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+          };
+
         img.src = "/favicon-32x32.png";
       }
     }
