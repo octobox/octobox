@@ -22,12 +22,11 @@
           <div class="btn btn-sm btn-link help d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
             <%= octicon 'keyboard', :height => 16 %>
           </div>
-          <button class='btn btn-sm btn-outline-dark'>
-            <%= octicon 'chevron-left' %>
-          </button>
-          <button class='btn btn-sm btn-outline-dark'>
-            <%= octicon 'chevron-right' %>
-          </button>
+
+          <%= link_to octicon('chevron-left'), @previous, class: "btn btn-sm #{@previous ? 'btn-outline-dark': 'btn-outline-light text-muted'}" %>
+
+          <%= link_to octicon('chevron-right'), @next, class: "btn btn-sm #{@next ? 'btn-outline-dark': 'btn-outline-light text-muted'}" %>
+          
         </div>
       </div>
       

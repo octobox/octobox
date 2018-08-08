@@ -93,7 +93,10 @@ class NotificationsController < ApplicationController
     @reasons               = scope.distinct.group(:reason).count
     @unread_repositories   = scope.distinct.group(:repository_full_name).count
 
-    @notification = current_user.notifications.includes(subject: [:comments, :labels]).find(params[:id])
+    scope =  current_notifications(scope)
+    @notification = scope.find(params[:id])
+    @next = scope.where('id > ?', params[:id]).first
+    @previous = scope.where('id < ?', params[:id]).last
   end
 
   # Return a count for the number of unread notifications
