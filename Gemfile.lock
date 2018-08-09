@@ -190,6 +190,9 @@ GEM
       puma (>= 2.7, < 4)
     raabro (1.1.6)
     rack (2.0.5)
+    rack-canonical-host (0.2.3)
+      addressable (> 0, < 3)
+      rack (>= 1.0.0, < 3)
     rack-protection (2.0.3)
       rack
     rack-test (1.1.0)
@@ -355,6 +358,7 @@ DEPENDENCIES
   pg_search
   puma
   puma_worker_killer
+  rack-canonical-host
   rails (~> 5.2)
   rails-controller-testing
   rake
