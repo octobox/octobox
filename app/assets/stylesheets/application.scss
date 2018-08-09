@@ -7,6 +7,7 @@ $team_mention-color: #5d477e;
 $team_mention-text-color: #fff;
 $text-color: #333;
 $security_alert-color: #800000;
+$security_alert-text-color: #fff;
 
 @import 'bootstrap-custom';
 @import "patterns/blankslate";
@@ -558,8 +559,14 @@ td.keys {
   }
 }
 
-.label-security_alert{
+.badge-security_alert{
   background-color: $security_alert-color;
+  color: $security_alert-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $security_alert-text-color;
+    text-decoration: none;
+    background-color: darken( $security_alert-color, 10% );
+  }
 }
 
 .text-security_alert{
