@@ -2,7 +2,7 @@
 
 :postbox: The best way to manage your GitHub Notifications.
 
-![Screenshot of  Octobox](https://cloud.githubusercontent.com/assets/1060/25845986/feeca52c-34a7-11e7-82cf-d9b64546e4f6.png)
+![Screenshot of  Octobox](app/assets/images/screenshot.png)
 
 [![Build Status](https://travis-ci.org/octobox/octobox.svg?branch=master)](https://travis-ci.org/octobox/octobox)
 [![View Performance Data on Skylight](https://badges.skylight.io/status/eLvcBBdLmV6k.svg)](https://oss.skylight.io/app/applications/eLvcBBdLmV6k)
