@@ -16,7 +16,7 @@
   "license": "AGPL-3.0-only",
   "env": {
     "OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY": {
-      "description": "Encryption key for access tokens in octobox",
+      "description": "32 byte encryption key for access tokens in octobox",
       "required": true
     },
     "GITHUB_CLIENT_ID": {
