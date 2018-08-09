@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 class User < ApplicationRecord
+  attr_encrypted :access_token, key: Octobox.config.attr_encyrption_key
+  attr_encrypted :personal_access_token, key: Octobox.config.attr_encyrption_key
+
   has_secure_token :api_token
   has_many :notifications, dependent: :delete_all
 
@@ -12,7 +15,7 @@ class User < ApplicationRecord
   }.freeze
 
   validates :github_id,    presence: true, uniqueness: true
-  validates :access_token, presence: true, uniqueness: true
+  validates :encrypted_access_token, presence: true, uniqueness: true
   validates :github_login, presence: true
   validates :refresh_interval, numericality: {
     only_integer: true,

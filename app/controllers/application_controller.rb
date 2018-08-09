@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
   helper_method :current_user, :logged_in?, :initial_sync?
   before_action :authenticate_user!
+  before_action :check_access_token_present
 
   before_bugsnag_notify :add_user_info_to_bugsnag if Rails.env.production?
 
@@ -44,6 +45,13 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     !current_user.nil?
+  end
+
+  def check_access_token_present
+    if current_user && current_user.access_token.nil?
+      cookies.delete(:user_id)
+      redirect_to root_url
+    end
   end
 
   def initial_sync?
