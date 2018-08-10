@@ -7,6 +7,15 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     @user = create(:user)
   end
 
+  test 'authenticated users without access tokens are logged out' do
+    sign_in_as(@user)
+    @user.access_token = nil
+    @user.save(validate: false) # Requires access token
+
+    get '/settings'
+    assert_redirected_to root_path
+  end
+
   test 'GET #new redirects to /auth/github' do
     get '/login'
     assert_redirected_to '/auth/github'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_06_154734) do
+ActiveRecord::Schema.define(version: 2018_08_10_075442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,21 +86,24 @@ ActiveRecord::Schema.define(version: 2018_08_06_154734) do
     t.datetime "updated_at", null: false
     t.string "html_url"
     t.text "body"
+    t.string "assignees", default: [], array: true
     t.index ["url"], name: "index_subjects_on_url"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
     t.integer "github_id", null: false
-    t.string "access_token", null: false
     t.string "github_login", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "last_synced_at"
-    t.string "personal_access_token"
     t.integer "refresh_interval", default: 0
     t.string "api_token"
     t.string "app_token"
-    t.index ["access_token"], name: "index_users_on_access_token", unique: true
+    t.string "encrypted_access_token"
+    t.string "encrypted_access_token_iv"
+    t.string "encrypted_personal_access_token"
+    t.string "encrypted_personal_access_token_iv"
+    t.string "theme", default: "light"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end

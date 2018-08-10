@@ -1,5 +1,20 @@
 module Octobox
   class Configurator
+    def attr_encyrption_key
+      @key ||= begin
+        key = ENV['OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY']
+
+        if key.nil?
+          Rails.application.secret_key_base[0..31]
+        elsif key.size != 32
+          raise ArgumentError,
+            'Must provide a 32 byte encryption key as the env var OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY'
+        else
+          key
+        end
+      end
+    end
+
     def github_domain
       @github_domain || ENV.fetch('GITHUB_DOMAIN', 'https://github.com')
     end

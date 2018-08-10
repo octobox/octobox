@@ -7,6 +7,7 @@ $team_mention-color: #5d477e;
 $team_mention-text-color: #fff;
 $text-color: #333;
 $security_alert-color: #800000;
+$security_alert-text-color: #fff;
 
 @import 'bootstrap-custom';
 @import "patterns/blankslate";
@@ -77,6 +78,8 @@ html {
       > .card {
         height: 100%;
         overflow-y: scroll;
+        // enable momentum scrolling on mobile safari
+        -webkit-overflow-scrolling: touch;
         > .card-header {
           position: absolute;
           z-index: 1;
@@ -290,6 +293,9 @@ td.keys {
 }
 
 .table-notifications {
+  td{
+    padding: 0.6rem;
+  }
   .active {
     font-weight: bold;
   }
@@ -455,6 +461,9 @@ td.keys {
   }
   .flex-sidebar {
     position: absolute;
+    // enable momentum scrolling on mobile safari
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     bottom: 0;
     top: 0;
     width: $sidebar-width;
@@ -550,8 +559,14 @@ td.keys {
   }
 }
 
-.label-security_alert{
+.badge-security_alert{
   background-color: $security_alert-color;
+  color: $security_alert-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $security_alert-text-color;
+    text-decoration: none;
+    background-color: darken( $security_alert-color, 10% );
+  }
 }
 
 .text-security_alert{
@@ -615,7 +630,9 @@ td.keys {
 }
 .nav-link.active svg{
   fill: white;
-  stroke: white;
+  &.octicon-star{
+    stroke: white;
+  }
 }
 .notification-open{
   fill: #5cb85c;
@@ -632,4 +649,13 @@ td.keys {
 
 .settings-sha {
   margin: 35px 0 10px;
+}
+
+.emoji{
+  height: 1em;
+  width: 1em;
+}
+
+.per-page .dropdown-menu{
+  min-width: 4rem;
 }

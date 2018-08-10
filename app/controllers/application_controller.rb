@@ -5,13 +5,14 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
   helper_method :current_user, :logged_in?, :initial_sync?
   before_action :authenticate_user!
+  before_action :check_access_token_present
 
   before_bugsnag_notify :add_user_info_to_bugsnag if Rails.env.production?
 
   rescue_from Octokit::Unauthorized, Octokit::Forbidden do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.unauthorized"))
   end
-  rescue_from Octokit::BadGateway, Octokit::ServiceUnavailable, Octokit::InternalServerError do |exception|
+  rescue_from Octokit::BadGateway, Octokit::ServiceUnavailable, Octokit::InternalServerError, Octokit::ServerError do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.unavailable"))
   end
   rescue_from Faraday::ClientError do |exception|
@@ -44,6 +45,13 @@ class ApplicationController < ActionController::Base
 
   def logged_in?
     !current_user.nil?
+  end
+
+  def check_access_token_present
+    if current_user && current_user.access_token.nil?
+      cookies.delete(:user_id)
+      redirect_to root_url
+    end
   end
 
   def initial_sync?
