@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   rescue_from Octokit::Unauthorized, Octokit::Forbidden do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.unauthorized"))
   end
-  rescue_from Octokit::BadGateway, Octokit::ServiceUnavailable, Octokit::InternalServerError do |exception|
+  rescue_from Octokit::BadGateway, Octokit::ServiceUnavailable, Octokit::InternalServerError, Octokit::ServerError do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.unavailable"))
   end
   rescue_from Faraday::ClientError do |exception|

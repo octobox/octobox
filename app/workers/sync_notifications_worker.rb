@@ -11,7 +11,7 @@ class SyncNotificationsWorker
     user.sync_notifications
   rescue Octokit::Unauthorized, Octokit::Forbidden => exception
     handle_exception(exception, user)
-  rescue Octokit::BadGateway, Octokit::ServiceUnavailable => exception
+  rescue Octokit::BadGateway, Octokit::ServerError, Octokit::ServiceUnavailable => exception
     handle_exception(exception, user)
   rescue Faraday::ClientError => exception
     handle_exception(exception, user)
