@@ -1,28 +1,28 @@
-<ul class="nav nav-pills nav-stacked nav-filters">
-  <li role="presentation" class="<%= 'active' if inbox_selected? %>">
-    <%= link_to root_path(per_page: params[:per_page]) do %>
+<ul class="nav nav-pills flex-column nav-filters">
+  <li role="presentation" class="nav-item">
+    <%= link_to root_path(per_page: params[:per_page]), { :class=>"nav-link #{'active' if inbox_selected?}" } do %>
       <%= octicon 'inbox', height: 16, class: 'sidebar-icon text-primary' %>
       Inbox
       <% if inbox_selected? %>
-        <span class="label label-muted"><%= @unread_notifications.sum(&:last) %></span>
+        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
       <% end %>
     <% end %>
   </li>
-  <li role="presentation" class="<%= 'active' if archive_selected? %>">
-    <%= link_to root_path(archive: true, per_page: params[:per_page]) do %>
+  <li role="presentation" class="nav-item">
+    <%= link_to root_path(archive: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if archive_selected?}" } do %>
       <%= octicon 'check', height: 16, class: 'sidebar-icon text-success' %>
       Archive
       <% if archive_selected? %>
-        <span class="label label-muted"><%= @unread_notifications.sum(&:last) %></span>
+        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
       <% end %>
     <% end %>
   </li>
-  <li role="presentation" class="<%= 'active' if starred_selected? %>">
-    <%= link_to root_path(starred: true, per_page: params[:per_page]) do %>
+  <li role="presentation" class="nav-item">
+    <%= link_to root_path(starred: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if starred_selected?}" } do %>
       <%= octicon 'star', height: 16, class: 'sidebar-icon star-active' %>
       Starred
       <% if starred_selected? %>
-        <span class="label label-muted"><%= @unread_notifications.sum(&:last) %></span>
+        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
       <% end %>
     <% end %>
   </li>
@@ -43,17 +43,19 @@
   <% end %>
   <%= menu_separator unless @unread_notifications.empty? %>
 
-  <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
-    <% next if state.nil? %>
-    <%= filter_link :state, state, count do %>
-      <span class='text-<%= state_label(state) %>'>
-        <%= octicon 'primitive-square', height: 24, class: 'sidebar-icon' %>
-      </span>
-      <%= state.underscore.humanize %>
+  <% if display_subject? %>
+    <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
+      <% next if state.nil? %>
+      <%= filter_link :state, state, count do %>
+        <span class='text-<%= state_label(state) %>'>
+          <%= octicon 'primitive-square', height: 24, class: 'sidebar-icon' %>
+        </span>
+        <%= state.underscore.humanize %>
 
+      <% end %>
     <% end %>
+    <%= menu_separator unless @states.empty? %>
   <% end %>
-  <%= menu_separator unless @states.empty? %>
 
   <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
     <%= filter_link :type, type, count do %>

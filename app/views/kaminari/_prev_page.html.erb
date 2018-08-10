@@ -1,9 +1,9 @@
 <% if current_page.first? %>
-  <li class="disabled">
-    <span><%= raw(t 'views.pagination.previous') %></span>
+  <li class="page-item disabled">
+    <span class="page-link"><%= raw(t 'views.pagination.previous') %></span>
   </li>
 <% else %>
-  <li>
-    <%= link_to raw(t 'views.pagination.previous'), url, :rel => 'prev', :remote => remote %>
+  <li class="page-item">
+    <%= link_to raw(t 'views.pagination.previous'), url, :rel => 'prev', :remote => remote, :class=>"page-link" %>
   </li>
 <% end %>

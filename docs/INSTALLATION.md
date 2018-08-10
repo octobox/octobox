@@ -11,6 +11,7 @@ in your GitHub settings for Octobox to work.
 * [Database Selection](#database-selection)
 * [Deployment to Heroku](#deployment-to-heroku)
 * [Deployment to OpenShift Online](#deployment-to-openshift-online)
+* [Encryption Key](#encryption-key)
 * [Local installation](#local-installation)
 * [Using Docker](#using-docker)
 * [Using reverse proxy](#using-reverse-proxy)
@@ -47,9 +48,13 @@ You can host your own instance of Octobox using Heroku.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/octobox/octobox)
 
-Heroku will ask you to provide OAuth client ID and secret, which you can create
-on GitHub. When creating the OAuth application, make sure you enable the
-`notifications` scope on it (you will also need the `read:org` scope if you enable restricted access).
+Heroku will ask you to provide an OAuth client ID and secret, which you can get by
+[registering a new OAuth application on GitHub](https://github.com/settings/applications/new)]. When creating the OAuth application:
+
+* Make sure you enable the `notifications` scope on it (you will also need the `read:org` scope if you enable restricted access).
+* You can provide Homepage and Authorization URLs by using the Heroku app name you choose. By default, a Heroku app is available at its Heroku domain, which has the form `[name of app].herokuapp.com`.
+  The callback url would then be `[name of app].herokuapp.com/auth/github/callback`.
+
 For more help with setting up an OAuth application on GitHub, see below.
 
 ## Deployment to OpenShift Online
@@ -58,6 +63,14 @@ Octobox can be easily installed to [OpenShift Online](https://www.openshift.com/
 As OpenShift Online provides a free "Starter" tier its also a very inexpensive way to try out an personalized Octobox installation in the cloud.
 
 Please refer to the separate [OpenShift installation](../openshift/OPENSHIFT_INSTALLATION.md) document for detailed installation instructions.
+
+## Encryption Key
+
+Octobox uses [`encrypted_attr`](https://github.com/attr-encrypted/attr_encrypted) to store access tokens and personal access tokens on the user object.
+
+Therefore to install and launch Octobox, you must provide a 32 byte encryption key as the env var `OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY`
+
+Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
 
 ## Local installation
 
@@ -166,7 +179,7 @@ docker run -d --network octobox-network --name=database.service.octobox.internal
 Then, run the following command to download the latest docker image and start octobox in the background.
 
 ```bash
-docker run -d --network octobox-network --name=octobox -e RAILS_ENV=development -e GITHUB_CLIENT_ID=yourclientid -e GITHUB_CLIENT_SECRET=yourclientsecret -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USERNAME=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
+docker run -d --network octobox-network --name=octobox -e OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY=my_key RAILS_ENV=development -e GITHUB_CLIENT_ID=yourclientid -e GITHUB_CLIENT_SECRET=yourclientsecret -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USERNAME=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
 ```
 
 Octobox will be running on [http://localhost:3000](http://localhost:3000).

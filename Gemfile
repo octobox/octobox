@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 ruby '2.5.1'
 
 gem 'rails', '~> 5.2'
-gem 'bootstrap-sass'
+gem 'bootstrap'
+gem "attr_encrypted", "~> 3.1.0"
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'local_time'
@@ -24,6 +25,7 @@ gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler'
+gem 'rack-canonical-host'
 gem 'gemoji'
 gem 'bootsnap', require: false
 gem 'bugsnag'
@@ -59,6 +61,5 @@ end
 group :production do
   gem 'skylight'
   gem 'lograge'
-  gem 'rails_safe_tasks'
   gem 'puma_worker_killer'
 end

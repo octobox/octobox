@@ -1,8 +1,14 @@
-//= require jquery
+//= require jquery3
 //= require jquery_ujs
 //= require turbolinks
 //= require local-time
-//= require bootstrap-sprockets
+//= require popper
+//= require bootstrap/util
+//= require bootstrap/collapse
+//= require bootstrap/alert
+//= require bootstrap/tooltip
+//= require bootstrap/dropdown
+//= require bootstrap/modal
 //= require_tree .
 
 function getDisplayedRows() {
@@ -40,17 +46,19 @@ function moveCursorToClickedRow(event) {
   setRowCurrent(target, true);
 }
 
+var unread_count = 0;
+
 function updateFavicon() {
   $.get( "/notifications/unread_count", function(data) {
-    var unread_count = data["count"];
-    var title = 'Octobox';
-    if (unread_count > 0) {
-      title += ' (' + unread_count +')';
-    }
+    if (data["count"] !== unread_count) {
+      unread_count = data["count"]
 
-    window.document.title = title;
+      var title = 'Octobox';
+      if (unread_count > 0) {
+        title += ' (' + unread_count +')';
+      }
+      window.document.title = title;
 
-    if ( unread_count > 0 ) {
       var old_link = document.getElementById('favicon-count');
       if ( old_link ) {
         $(old_link).remove();
@@ -67,21 +75,25 @@ function updateFavicon() {
       if (canvas.getContext) {
         canvas.height = canvas.width = 32;
         ctx = canvas.getContext('2d');
-        img.onload = function () {
-          ctx.drawImage(this, 0, 0);
 
-          ctx.fillStyle = '#f93e00';
-          ctx.font = 'bold 20px "helvetica", sans-serif';
+          img.onload = function () {
+            ctx.drawImage(this, 0, 0);
 
-          var width = ctx.measureText(txt).width;
-          ctx.fillRect(0, 0, width+4, 24);
+            if (unread_count > 0){
+              ctx.fillStyle = '#f93e00';
+              ctx.font = 'bold 20px "helvetica", sans-serif';
 
-          ctx.fillStyle = '#fff';
-          ctx.fillText(txt, 2, 20);
+              var width = ctx.measureText(txt).width;
+              ctx.fillRect(0, 0, width+4, 24);
 
-          link.href = canvas.toDataURL('image/png');
-          document.body.appendChild(link);
-        };
+              ctx.fillStyle = '#fff';
+              ctx.fillText(txt, 2, 20);
+            }
+
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+          };
+
         img.src = "/favicon-32x32.png";
       }
     }
@@ -89,6 +101,8 @@ function updateFavicon() {
 }
 
 document.addEventListener("turbolinks:load", function() {
+  enableKeyboardShortcuts();
+
   if($("#help-box").length){
     $('button.archive_selected, button.unarchive_selected').click(toggleArchive);
     $('button.select_all').click(toggleSelectAll);
@@ -98,23 +112,23 @@ document.addEventListener("turbolinks:load", function() {
 
     $('input.archive, input.unarchive').change(function() {
       if ( hasMarkedRows() ) {
-        $('button.archive_selected, button.unarchive_selected, button.mute_selected').removeClass('hidden');
+        $('button.archive_selected, button.unarchive_selected, button.mute_selected').show().css("display", "inline-block");
         if ( !hasMarkedRows(true) ) {
           $(".js-select_all").prop('checked', true).prop('indeterminate', false);
-          $('button.select_all').removeClass('hidden');
+          $('button.select_all').show().css("display", "inline-block");
         } else {
           $(".js-select_all").prop('checked', false).prop('indeterminate', true);
-          $('button.select_all').addClass('hidden');
+          $('button.select_all').hide();
         }
       } else {
         $(".js-select_all").prop('checked', false).prop('indeterminate', false);
-        $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').addClass('hidden');
+        $('button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all').hide();
       }
       var marked_unread_length = getMarkedRows().filter('.active').length;
       if ( marked_unread_length > 0 ) {
-        $('button.mark_read_selected').removeClass('hidden');
+        $('button.mark_read_selected').show().css("display", "inline-block");
       } else {
-        $('button.mark_read_selected').addClass('hidden');
+        $('button.mark_read_selected').hide();
       }
     });
     $('.toggle-star').click(function() {
@@ -130,31 +144,28 @@ document.addEventListener("turbolinks:load", function() {
       checkAll($(".js-select_all").prop('checked'))
     })
 
-    $('[data-toggle="tooltip"]').tooltip({trigger: 'tooltip'})
+    if(!('ontouchstart' in window))
+    {
+      $('[data-toggle="tooltip"]').tooltip()
+    }
 
     updateFavicon()
   }
 });
 
+
 document.addEventListener("turbolinks:before-cache", function() {
   $('td.js-current').removeClass("current js-current");
 });
-
-// Add shortcut events only once
-$(document).ready(enableKeyboardShortcuts);
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.flex-content').toggleClass('active')
 });
 
-if(!('ontouchstart' in window))
-{
-  $(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
-}
-
 function enableKeyboardShortcuts() {
+  // Add shortcut events only once
+  if (window.row_index !== undefined) return;
+
   window.row_index = 1;
   window.current_id = undefined;
 
