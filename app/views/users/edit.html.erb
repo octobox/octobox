@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container user-settings">
   <div class="row">
     <div class="col">
       <h1 class="pt-3">Settings</h1>
@@ -15,9 +15,8 @@
   </div>
   <hr>
 
-  <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
-
-    <%= form_for current_user do |f| %>
+  <%= form_for current_user do |f| %>
+    <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
       <% if Octobox.refresh_interval_enabled? %>
         <div class="card mb-3">
           <h5 class="card-header">
@@ -37,7 +36,6 @@
             </div>
           </div>
         </div>
-
       <% end %>
 
       <% if Octobox.personal_access_tokens_enabled? %>
@@ -65,9 +63,21 @@
           </div>
         </div>
       <% end %>
-
-
     <% end %>
+
+    <div class="card mb-3">
+      <h5 class="card-header">
+        Theme
+      </h5>
+      <div class="card-body">
+        <div class="form-group">
+          <%= f.select :theme, [['Light', 'light'], ['Dark', 'dark']], {}, class: 'form-control  w-25' %>
+        </div>
+
+        <%= submit_tag 'Save', class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+      </div>
+    </div>
   <% end %>
 
   <div class="card mb-3">

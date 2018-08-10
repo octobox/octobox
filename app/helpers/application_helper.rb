@@ -35,4 +35,8 @@ module ApplicationHelper
   def menu_separator(custom_class=nil)
     "<li class='divider #{custom_class}'></li>".html_safe
   end
+
+  def current_theme
+    current_user.try(:theme)
+  end
 end

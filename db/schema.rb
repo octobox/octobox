@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_03_073302) do
+ActiveRecord::Schema.define(version: 2018_08_10_075442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2018_08_03_073302) do
     t.string "encrypted_access_token_iv"
     t.string "encrypted_personal_access_token"
     t.string "encrypted_personal_access_token_iv"
+    t.string "theme", default: "light"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end

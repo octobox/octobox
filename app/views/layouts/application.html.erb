@@ -37,7 +37,7 @@
     <meta name="twitter:creator" content="teabass">
   </head>
 
-  <body class="flex-body">
+  <body class="flex-body <%= current_theme %>">
     <% if logged_in? %>
       <div class="flex-header">
         <%= render 'layouts/header' %>
