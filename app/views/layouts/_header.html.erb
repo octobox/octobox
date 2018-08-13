@@ -17,13 +17,13 @@
       <% end %>
     </button>
   </div>
-  
+
   <form class="form-inline collapse navbar-collapse" id="search">
     <%= form_tag root_path, method: :get, class: 'form-inline', enforce_utf8: false do |f| %>
         <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
             <%= hidden_field_tag name, value %>
         <% end %>
-        <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 40, id: 'search-box' %>
+        <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 50, id: 'search-box' %>
     <% end %>
   </form>
 
