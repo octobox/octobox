@@ -44,15 +44,6 @@
   <%= menu_separator unless @unread_notifications.empty? %>
 
   <% if display_subject? %>
-    <% if @bot_notifications > 0 %>
-      <%= filter_link :bot, true, @bot_notifications do %>
-        <%= octicon 'hubot', height: 18, class: 'sidebar-icon' %>
-        Bots
-      <% end %>
-
-      <%= menu_separator %>
-    <% end %>
-
     <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
       <% next if state.nil? %>
       <%= filter_link :state, state, count do %>
@@ -64,14 +55,21 @@
       <% end %>
     <% end %>
     <%= menu_separator unless @states.empty? %>
-  <% end %>
 
-  <% if @unlabelled > 0 %>
-    <%= filter_link :unlabelled, true, @unlabelled do %>
-      <%= octicon 'tag', height: 16, class: 'sidebar-icon' %>
-      Unlabelled
+    <% if @bot_notifications > 0 %>
+      <%= filter_link :bot, true, @bot_notifications do %>
+        <%= octicon 'hubot', height: 18, class: 'sidebar-icon' %>
+        Bots
+      <% end %>
     <% end %>
-    <%= menu_separator %>
+    <% if @unlabelled > 0 %>
+      <%= filter_link :unlabelled, true, @unlabelled do %>
+        <%= octicon 'tag', height: 16, class: 'sidebar-icon' %>
+        Unlabelled
+      <% end %>
+    <% end %>
+
+    <%= menu_separator if @unlabelled > 0 || @bot_notifications > 0 %>
   <% end %>
 
   <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
