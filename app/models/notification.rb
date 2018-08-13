@@ -20,6 +20,7 @@ class Notification < ApplicationRecord
 
   belongs_to :user
   belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true
+  belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_many :labels, through: :subject
 
   scope :inbox,    -> { where(archived: false) }
@@ -128,6 +129,7 @@ class Notification < ApplicationRecord
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
     update_subject
+    update_repository
   end
 
   private
@@ -183,6 +185,40 @@ class Notification < ApplicationRecord
     case subject_type
     when 'Issue', 'PullRequest'
       subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
+    end
+  end
+
+  def download_repository
+    user.github_client.repository(repository_full_name)
+  rescue Octokit::ClientError => e
+    nil
+  end
+
+  def update_repository
+    return unless Octobox.config.fetch_subject
+    return if repository != nil && updated_at - repository.updated_at < 2.seconds
+
+    remote_repository = download_repository
+
+    if remote_repository.nil?
+      # if we can't access the repository, assume that it's private
+      remote_repository = OpenStruct.new({
+        full_name: repository_full_name,
+        private: true,
+        owner: {login: repository_owner_name}
+      })
+    end
+
+    if repository
+      repository.update_attributes(remote_repository.to_h)
+    else
+      create_repository({
+        full_name: remote_repository.full_name,
+        private: remote_repository.private,
+        owner: remote_repository.owner[:login],
+        github_id: remote_repository.id,
+        last_synced_at: Time.current
+      })
     end
   end
 end

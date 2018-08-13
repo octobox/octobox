@@ -106,7 +106,11 @@
       <% repo_owner, repo_label = repo_name.split('/') %>
 
       <%= repo_filter_link :repo, repo_name, count do %>
-        <%= octicon('repo', size: 20) %>
+        <% if @repositories.find{|r| r.full_name == repo_name }.try(:private?) %>
+          <%= octicon('lock', class: 'private-repo') %>
+        <% else %>
+          <%= octicon('repo') %>
+        <% end %>
         <%= repo_label %>
       <% end %>
      </li>
