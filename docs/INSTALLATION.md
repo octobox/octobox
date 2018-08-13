@@ -219,8 +219,6 @@ server {
 
 ## Allowing periodic notification refreshes
 
-**Note**: This is *not* enabled on the hosted version (octobox.io).
-
 You may allow users to set an auto-refresh interval that will cause a periodic sync and page reload when they are viewing notifications.  To enable this simply set the environment variable `MINIMUM_REFRESH_INTERVAL` to any integer above 0.  `MINIMUM_REFRESH_INTERVAL` is the lowest number of minutes between auto-syncs that the server will allow.
 
 When enabled, user settings pages will have an 'Notification Refresh Interval' option.  This can be set to any value above `MINIMUM_REFRESH_INTERVAL`.

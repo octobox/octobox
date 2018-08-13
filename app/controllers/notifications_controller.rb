@@ -71,11 +71,17 @@ class NotificationsController < ApplicationController
   #
   def index
     scope = notifications_for_presentation
-    @states                = scope.distinct.joins(:subject).group('subjects.state').count
     @types                 = scope.distinct.group(:subject_type).count
     @unread_notifications  = scope.distinct.group(:unread).count
     @reasons               = scope.distinct.group(:reason).count
     @unread_repositories   = scope.distinct.group(:repository_full_name).count
+
+    if Octobox.config.fetch_subject
+      @states                = scope.distinct.joins(:subject).group('subjects.state').count
+      @unlabelled            = scope.unlabelled.count
+      @bot_notifications     = scope.bot_author.count
+    end
+
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
 
@@ -227,6 +233,8 @@ class NotificationsController < ApplicationController
       end
       scope = scope.send(sub_scope, val)
     end
+    scope = scope.unlabelled if params[:unlabelled].present?
+    scope = scope.bot_author if params[:bot].present?
     scope = scope.labels(params[:label]) if params[:label].present?
     scope = scope.search_by_subject_title(params[:q]) if params[:q].present?
     scope = scope.unscope(where: :archived)           if params[:q].present?

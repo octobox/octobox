@@ -35,10 +35,15 @@ class Notification < ApplicationRecord
 
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
 
-  scope :labels,    ->(label_name) { joins(:labels).where('labels.name = ?', label_name)}
+  scope :labelable,   -> { where(subject_type: ['Issue', 'PullRequest']) }
+  scope :labels,      ->(label_name) { joins(:labels).where('labels.name = ?', label_name)}
+  scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
   scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
+  scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
   scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
+
+  scope :bot_author, -> { joins(:subject).where('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot') }
 
   paginates_per 20
 
