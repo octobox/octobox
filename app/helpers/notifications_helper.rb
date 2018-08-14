@@ -73,21 +73,20 @@ module NotificationsHelper
     filters.merge(override)
   end
 
-  def mute_selected_button
-    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items') unless params[:archive]
+  def mute_selected_button(hidden=false)
+    function_button('Mute selected', 'mute', "mute_selected #{'hidden-button' if hidden}", 'Mute selected items') unless params[:archive]
   end
 
-  def mark_read_selected_button
-    function_button('Mark as read', 'eye', 'mark_read_selected', 'Mark items as read')
+  def mark_read_selected_button(hidden=false)
+    function_button('Mark as read', 'eye', "mark_read_selected #{'hidden-button' if hidden}", 'Mark items as read')
   end
 
-  def archive_selected_button
-    function_button("Archive selected", 'checklist', "archive_toggle archive_selected", 'Archive selected items')
+  def archive_selected_button(hidden=false)
+    function_button("Archive selected", 'checklist', "archive_toggle archive_selected #{'hidden-button' if hidden}", 'Archive selected items')
   end
 
-  def unarchive_selected_button
-    action = params[:archive] ? 'unarchive' : 'archive'
-    function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected", 'Unarchive selected items')
+  def unarchive_selected_button(hidden=false)
+    function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected #{'hidden-button' if hidden}", 'Unarchive selected items')
   end
 
   def select_all_button(cur_selected, total)

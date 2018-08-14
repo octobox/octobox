@@ -99,6 +99,12 @@ class NotificationsController < ApplicationController
     @reasons               = scope.distinct.group(:reason).count
     @unread_repositories   = scope.distinct.group(:repository_full_name).count
 
+    if Octobox.config.fetch_subject
+      @states                = scope.distinct.joins(:subject).group('subjects.state').count
+      @unlabelled            = scope.unlabelled.count
+      @bot_notifications     = scope.bot_author.count
+    end
+
     scope =  current_notifications(scope)
     @notification = scope.find(params[:id])
     @next = scope.where('id > ?', params[:id]).first

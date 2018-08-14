@@ -12,9 +12,10 @@
         <div>
           <%= link_to octicon('arrow-left', height: 18), root_path(filtered_params({})), class: 'btn btn-sm btn-outline-dark' %>
 
-          <%= archive_selected_button() %>
-          <%= mute_selected_button() %>
-          <%= mark_read_selected_button() %>
+          <%= archive_selected_button unless archive_selected? %>
+          <%= unarchive_selected_button unless inbox_selected? %>
+          <%= mute_selected_button %>
+          <%= mark_read_selected_button %>
 
         </div>
         
