@@ -141,7 +141,7 @@ GEM
     metaclass (0.0.4)
     method_source (0.9.0)
     mimemagic (0.3.2)
-    mini_mime (1.0.0)
+    mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     mocha (1.7.0)
