@@ -34,6 +34,8 @@ class Notification < ApplicationRecord
   scope :unread,   ->(unread)       { where(unread: unread) }
   scope :owner,    ->(owner_name)   { where(repository_owner_name: owner_name) }
 
+  scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
+
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
 
   scope :labelable,   -> { where(subject_type: ['Issue', 'PullRequest']) }

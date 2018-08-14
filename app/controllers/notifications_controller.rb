@@ -81,6 +81,7 @@ class NotificationsController < ApplicationController
       @unlabelled            = scope.unlabelled.count
       @bot_notifications     = scope.bot_author.count
       @repositories          = scope.map(&:repository).compact
+      @visiblity             = scope.distinct.joins(:repository).group('repositories.private').count
     end
 
     scope = current_notifications(scope)
