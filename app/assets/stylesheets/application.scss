@@ -373,7 +373,8 @@ td.keys {
 
 @include media-breakpoint-up(md) {
   .notification-star,
-  .notification-icon {
+  .notification-icon,
+  .notification-checkbox {
     width: 1%;
     text-align: center;
   }
