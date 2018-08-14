@@ -59,16 +59,8 @@ module StubHelper
   def stub_repository_request(url: nil, body: nil, method: :get, extra_headers: {})
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 
-    if url.nil?
-      stub_request(:get, "https://api.github.com/repos/octobox/octobox")
+    stub_request(:get, /https:\/\/api.github.com\/repos\/octobox\/octobox\z/)
       .to_return({ status: 200, body: file_fixture('repository.json'), headers: headers })
-    end
-
-    url ||= %r{https://api.github.com/repos}
-    body ||= file_fixture('repository.json')
-    response = { status: 200, body: body, headers: headers }
-
-    stub_request(method, url).to_return(status: 200, body: body, headers: headers)
   end
 
   def stub_user_request(body: nil, oauth_scopes: 'notifications', user: nil, any_auth: false)
