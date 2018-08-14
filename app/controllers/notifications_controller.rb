@@ -80,7 +80,7 @@ class NotificationsController < ApplicationController
       @states                = scope.distinct.joins(:subject).group('subjects.state').count
       @unlabelled            = scope.unlabelled.count
       @bot_notifications     = scope.bot_author.count
-      @repositories          = scope.map(&:repository)
+      @repositories          = scope.map(&:repository).compact
     end
 
     scope = current_notifications(scope)
