@@ -74,6 +74,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'update_from_api_response updates attributes' do
+    stub_fetch_subject_enabled(value: false)
     api_response = notifications_from_fixture('morty_notifications.json').first
     notification = create(:morty_updated)
     expected_attributes = notification.attributes.merge(
@@ -91,6 +92,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test 'update_from_api_response updates attributes on a new notification' do
+    stub_fetch_subject_enabled(value: false)
     user = create(:morty)
     expected_attributes = {
       user_id: user.id,
