@@ -82,8 +82,12 @@ module NotificationsHelper
   end
 
   def archive_selected_button
+    function_button("Archive selected", 'checklist', "archive_toggle archive_selected", 'Archive selected items')
+  end
+
+  def unarchive_selected_button
     action = params[:archive] ? 'unarchive' : 'archive'
-    function_button("#{action.capitalize} selected", 'checklist', "archive_toggle #{action}_selected", 'Archive selected items')
+    function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected", 'Unarchive selected items')
   end
 
   def select_all_button(cur_selected, total)

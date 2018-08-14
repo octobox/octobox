@@ -36,7 +36,8 @@
           <%= link_to sync_notifications_path(filters), class: 'btn btn-sm btn-outline-secondary sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
             <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync?}" %>
           <% end %>
-          <%= archive_selected_button %>
+          <%= archive_selected_button unless archive_selected? %>
+          <%= unarchive_selected_button unless inbox_selected? %>
           <%= mute_selected_button %>
           <%= mark_read_selected_button %>
           <%= render 'filter-list' %>
