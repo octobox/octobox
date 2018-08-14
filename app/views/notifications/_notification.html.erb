@@ -12,6 +12,15 @@
   <td class='notification-star'>
     <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
   </td>
+
+  <% if showing_search_results? %>
+    <td class='notification-archived'>
+      <% if notification.archived? %>
+        <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
+      <% end %>
+    </td>
+  <% end %>
+
   <td class='notification-icon <%= notification_icon_color(notification.state) if display_subject? %>'>
     <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
   </td>

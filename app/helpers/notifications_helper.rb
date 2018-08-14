@@ -42,7 +42,7 @@ module NotificationsHelper
   end
 
   def inbox_selected?
-    !archive_selected? && !starred_selected?
+    !archive_selected? && !starred_selected? && !showing_search_results?
   end
 
   def archive_selected?
@@ -51,6 +51,10 @@ module NotificationsHelper
 
   def starred_selected?
     filters[:starred].present?
+  end
+
+  def showing_search_results?
+    filters[:q].present?
   end
 
   def notification_param_keys
