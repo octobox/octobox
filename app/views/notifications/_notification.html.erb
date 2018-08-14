@@ -13,7 +13,7 @@
     <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
   </td>
 
-  <% if showing_search_results? %>
+  <% if show_archive_icon? %>
     <td class='notification-archived'>
       <% if notification.archived? %>
         <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>

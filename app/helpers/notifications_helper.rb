@@ -57,6 +57,10 @@ module NotificationsHelper
     filters[:q].present?
   end
 
+  def show_archive_icon?
+    starred_selected? || showing_search_results?
+  end
+
   def notification_param_keys
     filters.keys - [:per_page]
   end
