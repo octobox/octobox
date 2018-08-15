@@ -24,9 +24,16 @@
             <%= octicon 'keyboard', :height => 16 %>
           </div>
 
-          <%= link_to octicon('chevron-left'), @previous, class: "btn btn-sm #{@previous ? 'btn-outline-dark': 'btn-outline-light text-muted'}" %>
-
-          <%= link_to octicon('chevron-right'), @next, class: "btn btn-sm #{@next ? 'btn-outline-dark': 'btn-outline-light text-muted'}" %>
+          <% if @previous %> 
+            <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "btn btn-sm btn-outline-dark" %>
+          <% else %>
+            <%= link_to octicon('chevron-left'), notification_path(filtered_params()), class: "btn btn-sm btn-outline-light text-muted" %>
+          <% end %>
+          <% if @next %>
+            <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "btn btn-sm btn-outline-dark" %>
+          <% else %>
+            <%= link_to octicon('chevron-right'), notification_path(filtered_params()), class: "btn btn-sm btn-outline-light text-muted}" %>
+          <% end %>
           
         </div>
       </div>
