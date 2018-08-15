@@ -109,8 +109,8 @@ class NotificationsController < ApplicationController
     position = ids.index(params[:id].to_i)
 
     @notification = scope.find(params[:id])
-    @previous = scope.find(ids[position-1]) unless position-1 < 0
-    @next = scope.find(ids[position+1]) unless position+1 > ids.length
+    @previous = ids[position-1] unless position-1 < 0
+    @next = ids[position+1] unless position+1 > ids.length
   end
 
   # Return a count for the number of unread notifications
