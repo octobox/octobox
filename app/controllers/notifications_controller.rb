@@ -93,7 +93,6 @@ class NotificationsController < ApplicationController
 
   def show
     scope = notifications_for_presentation
-    @states                = scope.distinct.joins(:subject).group('subjects.state').count
     @types                 = scope.distinct.group(:subject_type).count
     @unread_notifications  = scope.distinct.group(:unread).count
     @reasons               = scope.distinct.group(:reason).count
@@ -105,10 +104,13 @@ class NotificationsController < ApplicationController
       @bot_notifications     = scope.bot_author.count
     end
 
-    scope =  current_notifications(scope)
+    scope =  current_notifications(scope).newest
+    ids = scope.map(&:id)
+    position = ids.index(params[:id].to_i)
+
     @notification = scope.find(params[:id])
-    @next = scope.where('id > ?', params[:id]).first
-    @previous = scope.where('id < ?', params[:id]).last
+    @previous = scope.find(ids[position-1]) unless position-1 < 0
+    @next = scope.find(ids[position+1]) unless position+1 > ids.length
   end
 
   # Return a count for the number of unread notifications
