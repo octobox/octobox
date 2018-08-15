@@ -22,12 +22,7 @@ function getMarkedRows(unmarked) {
 
 function getIdsFromRows(rows) {
   return $('button.select_all').hasClass('all_selected') ?
-    'all' : $.map(rows, function(row) {return $(row).find("input").val() ? $(row).find("input").val() : row })
-}
-
-//returns true if there's a notifications table on the page (else we're likely to be on a notification thread)
-function hasRows(){
-  return getDisplayedRows() > 0
+    'all' : $.map(rows, function(row) {return $(row).find("input").val()})
 }
 
 // returns true if there are any marked rows (or unmarked rows if unmarked is true)
@@ -35,12 +30,8 @@ function hasMarkedRows(unmarked) {
   return getMarkedRows(unmarked).length > 0
 }
 
-function getCurrentNotification(){
-  return [$('#notification-thread').data('id')]
-}
-
 function getCurrentRow() {
-  return hasRows() ? getDisplayedRows().has('td.js-current') : getCurrentNotification()
+  return getDisplayedRows().has('td.js-current')
 }
 
 function getMarkedOrCurrentRows() {
@@ -226,12 +217,14 @@ function checkSelectAll() {
 }
 
 function mute() {
+  if (getDisplayedRows().length === 0) return;
   if ( $(".js-table-notifications tr").length === 0 ) return;
   var ids = getIdsFromRows(getMarkedOrCurrentRows());
   $.post( "/notifications/mute_selected" + location.search, { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
 }
 
 function markReadSelected() {
+  if (getDisplayedRows().length === 0) return;
   var rows = getMarkedOrCurrentRows();
   rows.addClass('blur-action');
   $.post("/notifications/mark_read_selected" + location.search, {'id[]': getIdsFromRows(rows)}).done(function () {
@@ -249,6 +242,7 @@ function markRead(id) {
 }
 
 function toggleArchive() {
+  if (getDisplayedRows().length === 0) return;
 
   var cssClass, value;
 
@@ -273,17 +267,15 @@ function toggleSelectAll() {
 }
 
 function resetCursorAfterRowsRemoved(ids) {
-
-  if(hasRows()){
-    var current = getCurrentRow();
-    while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.next().length > 0) {
-      current = current.next();
-    }
-    while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.prev().length > 0) {
-      current = current.prev();
-    }
-    window.current_id = getIdsFromRows(current)[0];
+  var current = getCurrentRow();
+  while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.next().length > 0) {
+    current = current.next();
   }
+  while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.prev().length > 0) {
+    current = current.prev();
+  }
+
+  window.current_id = getIdsFromRows(current)[0];
   Turbolinks.visit("/"+location.search);
 }
 
@@ -350,7 +342,6 @@ function scrollToCursor() {
 }
 
 function setRowCurrent(row, add) {
-  if (hasRows() == false)  return;
   var classes = 'current js-current';
   var td = row.find('td.notification-checkbox');
   add ? td.addClass(classes) : td.removeClass(classes)
