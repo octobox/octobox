@@ -19,6 +19,8 @@ class Search
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
     res = res.unread(unread) unless unread.nil?
+    res = res.bot_author unless bot_author.nil?
+    res = res.unlabelled unless unlabelled.nil?
     res
   end
 
@@ -65,5 +67,15 @@ class Search
   def archived
     return nil unless parsed_query[:archived].present?
     parsed_query[:archived].first.downcase == "true"
+  end
+
+  def bot_author
+    return nil unless parsed_query[:bot].present?
+    parsed_query[:bot].first.downcase == "true"
+  end
+
+  def unlabelled
+    return nil unless parsed_query[:unlabelled].present?
+    parsed_query[:unlabelled].first.downcase == "true"
   end
 end
