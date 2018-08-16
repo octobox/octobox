@@ -77,7 +77,7 @@
             <%= image_tag("#{Octobox.config.github_domain}/#{@notification.subject.author}.png?s=30", width: 30) %>
             <%= @notification.subject.author %>
             <small>
-              Commented <%= @notification.subject.created_at.to_s(:short) %>
+              <%= link_to @notification.subject.created_at.to_s(:short), @notification.web_url, class: 'text-muted', target: :blank %>
             </small>
           </div>
           <div class="card-body">
@@ -91,8 +91,8 @@
             <div class="card-header">
               <%= image_tag("#{Octobox.config.github_domain}/#{comment.author}.png?s=30", width: 30) %>
               <%= comment.author %>
-              <small>
-                Commented <%= comment.created_at.to_s(:short) %>
+              <small class='text-muted'>
+                <%= link_to comment.created_at.to_s(:short), comment.web_url, class: 'text-muted', target: :blank  %>
               </small>
             </div>
             <div class="card-body">
