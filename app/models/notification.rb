@@ -32,6 +32,7 @@ class Notification < ApplicationRecord
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :unread,   ->(unread)       { where(unread: unread) }
   scope :owner,    ->(owner_name)   { where(arel_table[:repository_owner_name].matches(owner_name)) }
+  scope :author,    ->(author_name)   { joins(:subject).where('subjects.author = ?', author_name) }
 
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
   scope :author,    ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }

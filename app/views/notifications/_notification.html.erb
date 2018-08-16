@@ -46,7 +46,7 @@
     <td class='notification-subject-author'>
       <% if notification.subject %>
         <small>
-          <%= link_to notification.subject.author, notification.subject.author_url, class: 'text-muted', target: '_blank', title: 'Author', data: {toggle: 'tooltip'} %>
+          <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', title: 'Author', data: {toggle: 'tooltip'} %>
         </small>
       <% end %>
     </td>
