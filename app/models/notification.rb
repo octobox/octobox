@@ -166,6 +166,7 @@ class Notification < ApplicationRecord
       case subject_type
       when 'Issue', 'PullRequest'
         create_subject({
+          github_id: remote_subject.id,
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
           html_url: remote_subject.html_url,
@@ -174,6 +175,7 @@ class Notification < ApplicationRecord
         })
       when 'Commit', 'Release'
         create_subject({
+          github_id: remote_subject.id,
           author: remote_subject.author&.login,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
