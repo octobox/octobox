@@ -254,8 +254,7 @@ function toggleArchive() {
     value = false
   }
 
-  var ids = getIdsFromRows(getMarkedOrCurrentRows());
-
+  var ids = getDisplayedRows().length ? getIdsFromRows(getMarkedOrCurrentRows()) : getIdFromThread();
   $.post( "/notifications/archive_selected" + location.search, { 'id[]': ids, 'value': value } ).done(function() {resetCursorAfterRowsRemoved(ids)});
 }
 
@@ -267,15 +266,16 @@ function toggleSelectAll() {
 }
 
 function resetCursorAfterRowsRemoved(ids) {
-  var current = getCurrentRow();
-  while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.next().length > 0) {
-    current = current.next();
+  if(getDisplayedRows().length){
+    var current = getCurrentRow();
+    while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.next().length > 0) {
+      current = current.next();
+    }
+    while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.prev().length > 0) {
+      current = current.prev();
+    }
+    window.current_id = getIdsFromRows(current)[0];
   }
-  while ( $.inArray(getIdsFromRows(current)[0], ids) > -1 && current.prev().length > 0) {
-    current = current.prev();
-  }
-
-  window.current_id = getIdsFromRows(current)[0];
   Turbolinks.visit("/"+location.search);
 }
 
