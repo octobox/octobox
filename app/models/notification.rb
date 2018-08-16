@@ -41,8 +41,8 @@ class Notification < ApplicationRecord
   scope :label,    ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
   scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
-  scope :assigned,   ->(assignee) { joins(:subject).where("? = ANY(subjects.assignees)", assignee) }
-  scope :unassigned, -> { joins(:subject).where("subjects.assignees = '{}'") }
+  scope :assigned, ->(assignee) { joins(:subject).where("assignees LIKE ?", "%:#{assignee}:%") }
+  scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
 
   scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
   scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
@@ -162,7 +162,7 @@ class Notification < ApplicationRecord
     if subject
       case subject_type
       when 'Issue', 'PullRequest'
-        subject.assignees = remote_subject.assignees.try(:map, &:login)
+        subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
       end
@@ -176,7 +176,7 @@ class Notification < ApplicationRecord
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at,
-          assignees: remote_subject.assignees.try(:map, &:login)
+          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
         })
       when 'Commit', 'Release'
         create_subject({
