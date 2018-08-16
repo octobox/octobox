@@ -194,6 +194,7 @@ var shortcuts = {
   77:  mute,              // m
   13:  openCurrentLink,   // Enter
   79:  openCurrentLink,   // o
+  85:  backToList,        // u
   191: openModal,         // ?
   190: sync,              // .
   82:  sync,              // r
@@ -276,7 +277,11 @@ function resetCursorAfterRowsRemoved(ids) {
     }
     window.current_id = getIdsFromRows(current)[0];
   }
-  Turbolinks.visit("/"+location.search);
+  backToList();
+}
+
+function backToList() {
+  Turbolinks.visit("/"+location.search); 
 }
 
 function toggleStar() {
