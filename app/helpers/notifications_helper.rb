@@ -38,11 +38,12 @@ module NotificationsHelper
       q:        params[:q],
       state:    params[:state],
       label:    params[:label],
+      author:   params[:author]
     }
   end
 
   def inbox_selected?
-    !archive_selected? && !starred_selected?
+    !archive_selected? && !starred_selected? && !showing_search_results?
   end
 
   def archive_selected?
@@ -51,6 +52,14 @@ module NotificationsHelper
 
   def starred_selected?
     filters[:starred].present?
+  end
+
+  def showing_search_results?
+    filters[:q].present?
+  end
+
+  def show_archive_icon?
+    starred_selected? || showing_search_results?
   end
 
   def notification_param_keys

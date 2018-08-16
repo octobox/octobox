@@ -71,15 +71,15 @@ class NotificationsController < ApplicationController
   #
   def index
     scope = notifications_for_presentation
-    @types                 = scope.distinct.group(:subject_type).count
-    @unread_notifications  = scope.distinct.group(:unread).count
-    @reasons               = scope.distinct.group(:reason).count
-    @unread_repositories   = scope.distinct.group(:repository_full_name).count
+    @types                 = scope.reorder(nil).distinct.group(:subject_type).count
+    @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
+    @reasons               = scope.reorder(nil).distinct.group(:reason).count
+    @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
 
     if Octobox.config.fetch_subject
-      @states                = scope.distinct.joins(:subject).group('subjects.state').count
-      @unlabelled            = scope.unlabelled.count
-      @bot_notifications     = scope.bot_author.count
+      @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
+      @unlabelled            = scope.reorder(nil).unlabelled.count
+      @bot_notifications     = scope.reorder(nil).bot_author.count
     end
 
     scope = current_notifications(scope)
@@ -240,7 +240,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    [:repo, :reason, :type, :unread, :owner, :state].each do |sub_scope|
+    [:repo, :reason, :type, :unread, :owner, :state, :author].each do |sub_scope|
       next unless params[sub_scope].present?
       # This cast is required due to a bug in type casting
       # TODO: Rails 5.2 was supposed to fix this:
@@ -257,9 +257,7 @@ class NotificationsController < ApplicationController
     end
     scope = scope.unlabelled if params[:unlabelled].present?
     scope = scope.bot_author if params[:bot].present?
-    scope = scope.labels(params[:label]) if params[:label].present?
-    scope = scope.search_by_subject_title(params[:q]) if params[:q].present?
-    scope = scope.unscope(where: :archived)           if params[:q].present?
+    scope = scope.label(params[:label]) if params[:label].present?
     scope
   end
 
@@ -267,7 +265,9 @@ class NotificationsController < ApplicationController
     eager_load_relation = Octobox.config.fetch_subject ? {subject: [:labels, :comments]} : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
-    if params[:starred].present?
+    if params[:q].present?
+      scope = Search.new(scope: scope, query: params[:q]).results
+    elsif params[:starred].present?
       scope.starred
     elsif params[:archive].present?
       scope.archived
