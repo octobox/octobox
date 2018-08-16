@@ -201,11 +201,11 @@ var shortcuts = {
 };
 
 function previous() {
-  notifications ? moveCursor('up') : $('.btn.previous').click();
+  getDisplayedRows().length ? moveCursor('up') : $('.btn.previous')[0].click();
 }
 
 function next() {
-  notifications ? moveCursor('down') : $('.btn.next').click();
+  getDisplayedRows().length ? moveCursor('down') : $('.btn.next')[0].click();
 }
 
 function markCurrent() {
@@ -244,8 +244,6 @@ function markRead(id) {
 }
 
 function toggleArchive() {
-  if (getDisplayedRows().length === 0) return;
-
   var cssClass, value;
 
   if ( $(".archive_toggle").hasClass("archive_selected") ) {
