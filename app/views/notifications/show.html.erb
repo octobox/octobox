@@ -12,9 +12,9 @@
         <div>
           <%= link_to octicon('arrow-left', height: 18), root_path(filtered_params({})), class: 'btn btn-sm btn-outline-dark' %>
           <%= link_to octicon('star', height: 18), nil ,class: "btn btn-sm btn-outline-dark toggle-star #{@notification.starred ? 'star-active' : 'star-inactive'}", data: { id: @notification.id, toggle: 'tooltip' }, title: @notification.starred ? 'Remove star' : 'Star' %>
-          <%= archive_selected_button unless archive_selected? %>
-          <%= unarchive_selected_button unless inbox_selected? %>
-          <%= mute_selected_button %>
+          <%= archive_button unless archive_selected? %>
+          <%= unarchive_button unless inbox_selected? %>
+          <%= mute_button %>
 
         </div>
         

@@ -82,6 +82,10 @@ module NotificationsHelper
     filters.merge(override)
   end
 
+  def mute_button()
+    function_button('Mute', 'mute', "mute_selected", 'Mute notification') unless params[:archive]
+  end
+
   def mute_selected_button(hidden=false)
     function_button('Mute selected', 'mute', "mute_selected #{'hidden-button' if hidden}", 'Mute selected items') unless params[:archive]
   end
@@ -90,8 +94,16 @@ module NotificationsHelper
     function_button('Mark as read', 'eye', "mark_read_selected #{'hidden-button' if hidden}", 'Mark items as read')
   end
 
+  def archive_button()
+    function_button("Archive", 'checklist', "archive_toggle archive_selected", 'Archive')
+  end
+
   def archive_selected_button(hidden=false)
     function_button("Archive selected", 'checklist', "archive_toggle archive_selected #{'hidden-button' if hidden}", 'Archive selected items')
+  end
+
+  def unarchive_button()
+    function_button("Unarchive", 'inbox', "archive_toggle unarchive_selected", 'Unarchive notification')
   end
 
   def unarchive_selected_button(hidden=false)
