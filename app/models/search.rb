@@ -16,6 +16,7 @@ class Search
     res = res.reason(reason) if reason.present?
     res = res.label(label) if label.present?
     res = res.state(state) if state.present?
+    res = res.author(author) if author.present?
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
     res = res.unread(unread) unless unread.nil?

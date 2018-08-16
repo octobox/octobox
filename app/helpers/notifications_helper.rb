@@ -38,6 +38,7 @@ module NotificationsHelper
       q:        params[:q],
       state:    params[:state],
       label:    params[:label],
+      author:   params[:author]
     }
   end
 
