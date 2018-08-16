@@ -23,20 +23,21 @@ class Notification < ApplicationRecord
   has_many :labels, through: :subject
 
   scope :inbox,    -> { where(archived: false) }
-  scope :archived, -> { where(archived: true) }
+  scope :archived, ->(value = true) { where(archived: value) }
   scope :newest,   -> { order('notifications.updated_at DESC') }
-  scope :starred,  -> { where(starred: true) }
+  scope :starred,  ->(value = true) { where(starred: value) }
 
-  scope :repo,     ->(repo_name)    { where(repository_full_name: repo_name) }
+  scope :repo,     ->(repo_name)    { where(arel_table[:repository_full_name].matches(repo_name)) }
   scope :type,     ->(subject_type) { where(subject_type: subject_type) }
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :unread,   ->(unread)       { where(unread: unread) }
-  scope :owner,    ->(owner_name)   { where(repository_owner_name: owner_name) }
+  scope :owner,    ->(owner_name)   { where(arel_table[:repository_owner_name].matches(owner_name)) }
 
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
+  scope :author,    ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }
 
   scope :labelable,   -> { where(subject_type: ['Issue', 'PullRequest']) }
-  scope :labels,      ->(label_name) { joins(:labels).where('labels.name = ?', label_name)}
+  scope :label,    ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
   scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
   scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }

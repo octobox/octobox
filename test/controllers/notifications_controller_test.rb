@@ -426,4 +426,60 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert notification_ids.include?(notification2.id)
     refute notification_ids.include?(notification3.id)
   end
+
+  test 'search results can filter by repo' do
+    sign_in_as(@user)
+    create(:notification, user: @user, repository_full_name: 'a/b')
+    create(:notification, user: @user, repository_full_name: 'b/c')
+    get '/?q=repo%3Aa%2Fb'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by owner' do
+    sign_in_as(@user)
+    create(:notification, user: @user, repository_owner_name: 'andrew')
+    create(:notification, user: @user, repository_owner_name: 'octobox')
+    get '/?q=owner%3Aoctobox'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by type' do
+    sign_in_as(@user)
+    create(:notification, user: @user, subject_type: 'Issue')
+    create(:notification, user: @user, subject_type: 'PullRequest')
+    get '/?q=type%3Apull_request'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by reason' do
+    sign_in_as(@user)
+    create(:notification, user: @user, reason: 'assign')
+    create(:notification, user: @user, reason: 'mention')
+    get '/?q=reason%3Amention'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by starred' do
+    sign_in_as(@user)
+    create(:notification, user: @user, starred: true)
+    create(:notification, user: @user, starred: false)
+    get '/?q=starred%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by archived' do
+    sign_in_as(@user)
+    create(:notification, user: @user, archived: true)
+    create(:notification, user: @user, archived: false)
+    get '/?q=archived%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by unread' do
+    sign_in_as(@user)
+    create(:notification, user: @user, unread: true)
+    create(:notification, user: @user, unread: false)
+    get '/?q=unread%3Afalse'
+    assert_equal assigns(:notifications).length, 1
+  end
 end

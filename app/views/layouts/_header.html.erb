@@ -18,14 +18,15 @@
     </button>
   </div>
 
-  <form class="form-inline collapse navbar-collapse" id="search">
-    <%= form_tag root_path, method: :get, class: 'form-inline', enforce_utf8: false do |f| %>
-        <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
-            <%= hidden_field_tag name, value %>
-        <% end %>
-        <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 50, id: 'search-box' %>
+  <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
+    <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
+        <%= hidden_field_tag name, value %>
     <% end %>
-  </form>
+    <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 46, id: 'search-box' %>
+    <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
+      <%= octicon 'question', :height => 16 %>
+    </div>
+  <% end %>
 
   <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav">
