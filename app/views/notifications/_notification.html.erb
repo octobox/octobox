@@ -36,11 +36,11 @@
     <% end %>
   </td>
   <% unless params[:repo].present? %>
-  <td class='notification-repo'>
-    <small>
-      <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
-    </small>
-  </td>
+    <td class='notification-repo'>
+      <small>
+        <%= link_to notification.repository_full_name, root_path(filtered_params(repo: notification.repository_full_name)), class: 'text-muted' %>
+      </small>
+    </td>
   <% end %>
   <% if display_subject? %>
     <td class='notification-subject-author'>
