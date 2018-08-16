@@ -148,10 +148,10 @@ class Notification < ApplicationRecord
     nil
   end
 
-  def update_subject
+  def update_subject(force = false)
     return unless Octobox.config.fetch_subject
     # skip syncing if the notification was updated around the same time as subject
-    return if subject != nil && updated_at - subject.updated_at < 2.seconds
+    return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
     remote_subject = download_subject
     return unless remote_subject.present?
