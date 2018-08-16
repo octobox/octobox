@@ -73,7 +73,7 @@ module Octobox
         10
       end
     end
-    attr_writer :max_notifications_to_sync
+    attr_writer :max_concurrency
 
     def sidekiq_schedule_enabled?
       @sidekiq_schedule_enabled || ENV['OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED'].present?

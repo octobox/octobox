@@ -95,7 +95,6 @@ module NotificationsHelper
   end
 
   def unarchive_selected_button
-    action = params[:archive] ? 'unarchive' : 'archive'
     function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected", 'Unarchive selected items')
   end
 

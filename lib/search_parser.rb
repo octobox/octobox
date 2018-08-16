@@ -6,7 +6,7 @@ class SearchParser
 
   attr_accessor :freetext
 
-  def initialize(query, explode_comma=true)
+  def initialize(query)
     query = query.to_s
     @operators = {}
 

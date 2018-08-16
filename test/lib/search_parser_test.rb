@@ -93,7 +93,7 @@ class SearchParserTest < ActiveSupport::TestCase
 
   test 'explodes the comma' do
     query = 'user_id: 1,2,3,4'
-    search = SearchParser.new query, true
+    search = SearchParser.new query
     assert_equal search[:user_id], ['1','2','3','4']
   end
 end
