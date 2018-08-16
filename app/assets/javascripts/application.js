@@ -280,7 +280,7 @@ function resetCursorAfterRowsRemoved(ids) {
 }
 
 function toggleStar() {
-  getCurrentRow().find('.toggle-star').click();
+  getDisplayedRows().length ? getCurrentRow().find('.toggle-star').click() : $('.toggle-star')[0].click();
 }
 
 function openModal() {
