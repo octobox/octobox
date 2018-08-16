@@ -228,7 +228,6 @@ class NotificationsController < ApplicationController
       if sub_scope == :reason
         val = params[sub_scope].split(',')
       else
-        type = scope.klass.type_for_attribute(sub_scope.to_s).class
         val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
       end
       scope = scope.send(sub_scope, val)
