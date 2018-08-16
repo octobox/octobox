@@ -12,6 +12,15 @@
   <td class='notification-star'>
     <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
   </td>
+
+  <% if show_archive_icon? %>
+    <td class='notification-archived'>
+      <% if notification.archived? %>
+        <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
+      <% end %>
+    </td>
+  <% end %>
+
   <td class='notification-icon <%= notification_icon_color(notification.state) if display_subject? %>'>
     <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
   </td>
@@ -28,11 +37,11 @@
     <% end %>
   </td>
   <% unless params[:repo].present? %>
-  <td class='notification-repo'>
-    <small>
-      <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
-    </small>
-  </td>
+    <td class='notification-repo'>
+      <small>
+        <%= link_to notification.repository_full_name, root_path(filtered_params(repo: notification.repository_full_name)), class: 'text-muted' %>
+      </small>
+    </td>
   <% end %>
   <% if display_subject? %>
     <td class='notification-subject-author'>
@@ -40,7 +49,7 @@
 
         <% ([notification.subject.author] + notification.subject.comments.map(&:author)).uniq.last(5).each do |author| %>
           <% author = /\A(.*)\[bot\]\z/.match(author)[1] if /\A(.*)\[bot\]\z/.match(author) %>
-          <%= link_to image_tag("#{Octobox.config.github_domain}/#{author}.png?s=20", width: 20), "#{Octobox.config.github_domain}/#{author}", class: 'author', target: '_blank' %>
+          <%= link_to image_tag("#{Octobox.config.github_domain}/#{author}.png?s=20", width: 20), root_path(filtered_params(author: notification.subject.author)), class: 'author', target: '_blank' %>
         <% end %>
       <% end %>
     </td>

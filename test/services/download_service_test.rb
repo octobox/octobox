@@ -5,6 +5,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   include NotificationTestHelper
 
   test '#download fetches all read notification for a new user' do
+    stub_fetch_subject_enabled(value: false)
     user = create(:user, last_synced_at: nil)
     all_notifications = notifications_from_fixture('newuser_all_notifications.json')
     expected_attributes = build_expected_attributes(all_notifications)
@@ -26,6 +27,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   end
 
   test '#download fetches notifications newer than the oldest unread' do
+    stub_fetch_subject_enabled(value: false)
     user = create(:morty)
     create(:notification, last_read_at: 5.days.ago, updated_at: 30.minutes.ago, user: user)
     # one second before oldest unread notification
@@ -41,6 +43,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   end
 
   test '#download will create new notification' do
+    stub_fetch_subject_enabled(value: false)
     expected_attributes = build_expected_attributes(notifications_from_fixture('morty_notifications.json'))
     stub_notifications_request(body: file_fixture('morty_notifications.json'))
     user = create(:morty)
@@ -54,6 +57,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   end
 
   test "#download will update and unarchive a notification" do
+    stub_fetch_subject_enabled(value: false)
     expected_attributes =  build_expected_attributes(notifications_from_fixture('morty_notifications.json'))
                              .find{|n| n['github_id'] == 420}
     stub_notifications_request(body: file_fixture('morty_notifications.json'))
@@ -70,6 +74,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
   end
 
   test "#download will set the url for a Repository invitation correctly" do
+    stub_fetch_subject_enabled(value: false)
     stub_notifications_request(body: file_fixture('repository_invitation_notification.json'))
     user = create(:user)
 
