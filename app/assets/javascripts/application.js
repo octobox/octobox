@@ -20,6 +20,10 @@ function getMarkedRows(unmarked) {
   return unmarked ? getDisplayedRows().has("input:not(:checked)") : getDisplayedRows().has("input:checked")
 }
 
+function getIdFromThread() {
+  return [$('#notification-thread').data('id')]
+}
+
 function getIdsFromRows(rows) {
   return $('button.select_all').hasClass('all_selected') ?
     'all' : $.map(rows, function(row) {return $(row).find("input").val()})
@@ -181,8 +185,8 @@ function enableKeyboardShortcuts() {
 var shortcuts = {
   65:  checkSelectAll,    // a
   68:  markReadSelected,  // d
-  74:  cursorDown,        // j
-  75:  cursorUp,          // k
+  74:  previous,          // j
+  75:  next,              // k
   83:  toggleStar,        // s
   88:  markCurrent,       // x
   89:  toggleArchive,     // y
@@ -196,12 +200,12 @@ var shortcuts = {
   27:  escPressed,        // esc
 };
 
-function cursorDown() {
-  moveCursor('up')
+function previous() {
+  notifications ? moveCursor('up') : $('.btn.previous').click();
 }
 
-function cursorUp() {
-  moveCursor('down')
+function next() {
+  notifications ? moveCursor('down') : $('.btn.next').click();
 }
 
 function markCurrent() {
@@ -217,9 +221,7 @@ function checkSelectAll() {
 }
 
 function mute() {
-  if (getDisplayedRows().length === 0) return;
-  if ( $(".js-table-notifications tr").length === 0 ) return;
-  var ids = getIdsFromRows(getMarkedOrCurrentRows());
+  var ids = getDisplayedRows().length ? getIdsFromRows(getMarkedOrCurrentRows()) : getIdFromThread();
   $.post( "/notifications/mute_selected" + location.search, { 'id[]': ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
 }
 
