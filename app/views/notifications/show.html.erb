@@ -15,7 +15,6 @@
           <%= archive_selected_button unless archive_selected? %>
           <%= unarchive_selected_button unless inbox_selected? %>
           <%= mute_selected_button %>
-          <%= mark_read_selected_button %>
 
         </div>
         
@@ -25,14 +24,14 @@
           </div>
 
           <% if @previous %> 
-            <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "btn btn-sm btn-outline-dark" %>
+            <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "btn btn-sm previous btn-outline-dark" %>
           <% else %>
-            <%= link_to octicon('chevron-left'), notification_path(filtered_params()), class: "btn btn-sm btn-outline-light text-muted" %>
+            <%= link_to octicon('chevron-left'), notification_path(filtered_params()), class: "btn btn-sm previous btn-outline-light text-muted" %>
           <% end %>
           <% if @next %>
-            <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "btn btn-sm btn-outline-dark" %>
+            <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "btn btn-sm next btn-outline-dark" %>
           <% else %>
-            <%= link_to octicon('chevron-right'), notification_path(filtered_params()), class: "btn btn-sm btn-outline-light text-muted}" %>
+            <%= link_to octicon('chevron-right'), notification_path(filtered_params()), class: "btn btn-sm next btn-outline-light text-muted}" %>
           <% end %>
           
         </div>
