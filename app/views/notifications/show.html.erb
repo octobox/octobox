@@ -89,8 +89,8 @@
         </div>
 
         <% @notification.subject.comments.each do |comment| %>
-          <div class="card-comment card mb-3 ">
-            <div class="card-header clickable media d-flex align-items-center text-muted" data-toggle='collapse' data-target="#comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
+          <div id="<%= 'comment-'+comment.id.to_s %>" class="card-comment card mb-3 ">
+            <div class="card-header clickable media d-flex align-items-center text-muted" data-toggle='collapse' data-target=".comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
         
               <%= image_tag("#{Octobox.config.github_domain}/#{comment.author}.png?s=30", width: 30, class: 'mr-3 align-self-center') %>
             
@@ -99,14 +99,14 @@
                 </span>
                 
                 <% if DateTime.parse(@notification.last_read_at) > comment.created_at %>
-                  <p class='preview mb-0'>
+                  <p class='preview mb-0 <%= 'comment-'+comment.id.to_s %> collapse <%= 'show' if DateTime.parse(@notification.last_read_at) > comment.created_at%> '>
                     <%= comment.body %>
                   </p>
                 <% end %>
               </div>
 
             </div>
-            <div id="<%= 'comment-'+comment.id.to_s %>" class="card-body collapse <%= 'show' unless DateTime.parse(@notification.last_read_at) > comment.created_at%> ">
+            <div class="<%= 'comment-'+comment.id.to_s %> card-body collapse <%= 'show' unless DateTime.parse(@notification.last_read_at) > comment.created_at%> ">
               <article class="markdown-body">
                 <%== parse_markdown(comment.body) %>
               </article>
