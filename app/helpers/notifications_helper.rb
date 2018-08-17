@@ -41,7 +41,8 @@ module NotificationsHelper
       author:     params[:author],
       bot:        params[:bot],
       unlabelled: params[:unlabelled],
-      assigned:   params[:assigned]
+      assigned:   params[:assigned],
+      is_private: params[:is_private]
     }
   end
 
