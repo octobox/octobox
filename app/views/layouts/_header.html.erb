@@ -11,7 +11,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="sr-only">Toggle navigation</span>
       <% if current_user %>
-        <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, class: 'img-rounded navbar-avatar', alt: '' %>
+        <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, height:32, class: 'img-rounded navbar-avatar', alt: '' %>
       <% else %>
         <%= octicon 'three-bars', height: 16, class: 'text-muted' %>
       <% end %>
