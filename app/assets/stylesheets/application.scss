@@ -374,8 +374,8 @@ td.keys {
   }
   .notification-checkbox {
     input {
-      margin-left: 9px;
-      margin-right: 9px;
+      margin-left: 6px;
+      margin-right: 0;
       position: relative;
       top: -1px;
     }
@@ -608,6 +608,7 @@ td.keys {
 }
 
 .select-all {
+  padding-left: 6px;
   input {
     position: relative;
     left: 2px;
@@ -666,3 +667,11 @@ td.keys {
   left: -35px;
   fill: #aaa;
 }
+
+// .select-all {
+//     padding-left: 6px;
+// }
+// .notification-checkbox input {
+//     margin-left: 6px;
+//     margin-right: 0;
+// }
