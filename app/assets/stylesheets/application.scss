@@ -298,6 +298,7 @@ td.keys {
   }
   .active {
     font-weight: bold;
+    background-color: #FAFAFF;
   }
 }
 
@@ -667,11 +668,3 @@ td.keys {
   left: -35px;
   fill: #aaa;
 }
-
-// .select-all {
-//     padding-left: 6px;
-// }
-// .notification-checkbox input {
-//     margin-left: 6px;
-//     margin-right: 0;
-// }
