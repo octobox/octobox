@@ -53,8 +53,11 @@
     <% if logged_in? %>
       <%= render 'notifications/search-help' %>
     <% end %>
-    <script>
-      if (typeof ga === 'function') { ga('send', 'pageview', location.pathname+location.search) }
-    </script>
+
+    <% if Rails.env.production? && Rails.application.secrets.google_analytics_id.present? %>
+      <script>
+        if (typeof ga === 'function') { ga('send', 'pageview', location.pathname+location.search) }
+      </script>
+    <% end %>
   </body>
 </html>
