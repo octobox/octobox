@@ -17,7 +17,6 @@
           <%= mute_button %>
 
         </div>
-        
         <div>
           <div class="btn btn-sm btn-link help d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
             <%= octicon 'keyboard', :height => 16 %>
@@ -88,14 +87,18 @@
         </div>
         <% @notification.subject.comments.each do |comment| %>
           <div class="card-comment card mb-3">
-            <div class="card-header">
-              <%= image_tag("#{Octobox.config.github_domain}/#{comment.author}.png?s=30", width: 30) %>
-              <%= comment.author %>
+            <div class="card-header clickable" data-toggle='collapse' data-target="#comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
+              <div col<%= image_tag("#{Octobox.config.github_domain}/#{comment.author}.png?s=30", width: 30) %>
               <small class='text-muted'>
                 <%= link_to comment.created_at.to_s(:short), comment.web_url, class: 'text-muted', target: :blank  %>
               </small>
+              <% if DateTime.parse(@notification.last_read_at) > comment.created_at %>
+                <small class='preview'>
+                  <%= comment.body %>
+                </small>
+              <% end %>
             </div>
-            <div class="card-body">
+            <div id="<%= 'comment-'+comment.id.to_s %>" class="card-body collapse <%= 'show' unless DateTime.parse(@notification.last_read_at) > comment.created_at%> ">
               <article class="markdown-body">
                 <%== parse_markdown(comment.body) %>
               </article>
