@@ -7,7 +7,7 @@
       <% if @latest_git_sha %>
         <p class="settings-sha float-right" title="Latest Git commit SHA">
           Version:
-          <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank' %>
+          <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank', rel: "noopener" %>
 
         </p>
       <% end %>

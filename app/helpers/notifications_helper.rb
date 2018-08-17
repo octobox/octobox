@@ -27,22 +27,26 @@ module NotificationsHelper
 
   def filters
     {
-      reason:   params[:reason],
-      unread:   params[:unread],
-      repo:     params[:repo],
-      type:     params[:type],
-      archive:  params[:archive],
-      starred:  params[:starred],
-      owner:    params[:owner],
-      per_page: params[:per_page],
-      q:        params[:q],
-      state:    params[:state],
-      label:    params[:label],
+      reason:     params[:reason],
+      unread:     params[:unread],
+      repo:       params[:repo],
+      type:       params[:type],
+      archive:    params[:archive],
+      starred:    params[:starred],
+      owner:      params[:owner],
+      per_page:   params[:per_page],
+      q:          params[:q],
+      state:      params[:state],
+      label:      params[:label],
+      author:     params[:author],
+      bot:        params[:bot],
+      unlabelled: params[:unlabelled],
+      assigned:   params[:assigned]
     }
   end
 
   def inbox_selected?
-    !archive_selected? && !starred_selected?
+    !archive_selected? && !starred_selected? && !showing_search_results?
   end
 
   def archive_selected?
@@ -51,6 +55,14 @@ module NotificationsHelper
 
   def starred_selected?
     filters[:starred].present?
+  end
+
+  def showing_search_results?
+    filters[:q].present?
+  end
+
+  def show_archive_icon?
+    starred_selected? || showing_search_results?
   end
 
   def notification_param_keys
@@ -86,7 +98,6 @@ module NotificationsHelper
   end
 
   def unarchive_selected_button
-    action = params[:archive] ? 'unarchive' : 'archive'
     function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected", 'Unarchive selected items')
   end
 

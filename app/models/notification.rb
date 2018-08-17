@@ -24,23 +24,28 @@ class Notification < ApplicationRecord
   has_many :labels, through: :subject
 
   scope :inbox,    -> { where(archived: false) }
-  scope :archived, -> { where(archived: true) }
+  scope :archived, ->(value = true) { where(archived: value) }
   scope :newest,   -> { order('notifications.updated_at DESC') }
-  scope :starred,  -> { where(starred: true) }
+  scope :starred,  ->(value = true) { where(starred: value) }
 
-  scope :repo,     ->(repo_name)    { where(repository_full_name: repo_name) }
+  scope :repo,     ->(repo_name)    { where(arel_table[:repository_full_name].matches(repo_name)) }
   scope :type,     ->(subject_type) { where(subject_type: subject_type) }
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :unread,   ->(unread)       { where(unread: unread) }
-  scope :owner,    ->(owner_name)   { where(repository_owner_name: owner_name) }
+  scope :owner,    ->(owner_name)   { where(arel_table[:repository_owner_name].matches(owner_name)) }
+  scope :author,    ->(author_name)   { joins(:subject).where(Subject.arel_table[:author].matches(author_name)) }
 
   scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
 
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
+  scope :author,    ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }
 
   scope :labelable,   -> { where(subject_type: ['Issue', 'PullRequest']) }
-  scope :labels,      ->(label_name) { joins(:labels).where('labels.name = ?', label_name)}
+  scope :label,    ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
   scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
+
+  scope :assigned, ->(assignee) { joins(:subject).where("assignees LIKE ?", "%:#{assignee}:%") }
+  scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
 
   scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
   scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
@@ -150,10 +155,10 @@ class Notification < ApplicationRecord
     nil
   end
 
-  def update_subject
+  def update_subject(force = false)
     return unless Octobox.config.fetch_subject
     # skip syncing if the notification was updated around the same time as subject
-    return if subject != nil && updated_at - subject.updated_at < 2.seconds
+    return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
     remote_subject = download_subject
     return unless remote_subject.present?
@@ -161,6 +166,7 @@ class Notification < ApplicationRecord
     if subject
       case subject_type
       when 'Issue', 'PullRequest'
+        subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
       end
@@ -168,14 +174,17 @@ class Notification < ApplicationRecord
       case subject_type
       when 'Issue', 'PullRequest'
         create_subject({
+          github_id: remote_subject.id,
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
-          updated_at: remote_subject.updated_at
+          updated_at: remote_subject.updated_at,
+          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
         })
       when 'Commit', 'Release'
         create_subject({
+          github_id: remote_subject.id,
           author: remote_subject.author&.login,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
