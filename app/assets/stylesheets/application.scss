@@ -311,6 +311,16 @@ td.keys {
   }
 }
 
+.card-comment{
+  .card-header{
+    min-height: 4.2rem;
+  }
+  .preview{
+    height: 1.5rem;
+    overflow:hidden;
+  }
+}
+
 .octicon {
   vertical-align: text-bottom;
 }
