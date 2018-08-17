@@ -3,7 +3,9 @@ require 'test_helper'
 
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    stub_fetch_subject_enabled(value: false)
     stub_notifications_request
+    stub_repository_request
     @user = create(:user)
   end
 

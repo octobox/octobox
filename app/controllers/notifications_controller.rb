@@ -81,6 +81,7 @@ class NotificationsController < ApplicationController
       @unlabelled            = scope.reorder(nil).unlabelled.count
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
+      @repositories          = scope.map(&:repository).compact
     end
 
     scope = current_notifications(scope)
@@ -241,7 +242,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = Octobox.config.fetch_subject ? {subject: :labels} : nil
+    eager_load_relation = Octobox.config.fetch_subject ? [{subject: :labels}, :repository] : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
     if params[:q].present?

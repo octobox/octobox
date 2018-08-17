@@ -49,6 +49,17 @@ ActiveRecord::Schema.define(version: 2018_08_16_142404) do
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true
   end
 
+  create_table "repositories", force: :cascade do |t|
+    t.string "full_name", null: false
+    t.integer "github_id"
+    t.boolean "private"
+    t.string "owner"
+    t.datetime "last_synced_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["full_name"], name: "index_repositories_on_full_name", unique: true
+  end
+
   create_table "subjects", force: :cascade do |t|
     t.string "url"
     t.string "state"
