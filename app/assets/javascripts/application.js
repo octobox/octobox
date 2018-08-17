@@ -103,6 +103,8 @@ function updateFavicon() {
 document.addEventListener("turbolinks:load", function() {
   enableKeyboardShortcuts();
 
+  if($(".js-initial_sync").length){ sync() }
+
   if($("#help-box").length){
     $('button.archive_selected, button.unarchive_selected').click(toggleArchive);
     $('button.select_all').click(toggleSelectAll);
