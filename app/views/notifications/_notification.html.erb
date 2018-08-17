@@ -25,7 +25,7 @@
     <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
   </td>
   <td class='notification-subject'>
-    <%= link_to notification.subject_title, notification.web_url, target: '_blank', class: 'link', onclick: "markRead(#{notification.id})" %>
+    <%= link_to notification.subject_title, notification.web_url, target: '_blank', rel: "noopener", class: 'link', onclick: "markRead(#{notification.id})" %>
 
     <% if display_subject? %>
       <% if notification.subject %>
