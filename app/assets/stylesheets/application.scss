@@ -26,6 +26,10 @@ html {
   min-height: 100%;
 }
 
+.clickable{
+  cursor: pointer;
+}
+
 .flex-body {
   display: flex;
   height: 100vh;
