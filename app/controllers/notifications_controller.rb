@@ -80,6 +80,7 @@ class NotificationsController < ApplicationController
       @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
       @unlabelled            = scope.reorder(nil).unlabelled.count
       @bot_notifications     = scope.reorder(nil).bot_author.count
+      @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
     end
 
     scope = current_notifications(scope)
@@ -235,6 +236,7 @@ class NotificationsController < ApplicationController
     scope = scope.unlabelled if params[:unlabelled].present?
     scope = scope.bot_author if params[:bot].present?
     scope = scope.label(params[:label]) if params[:label].present?
+    scope = scope.assigned(params[:assigned]) if params[:assigned].present?
     scope
   end
 

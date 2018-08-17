@@ -56,12 +56,19 @@
     <% end %>
     <%= menu_separator unless @states.empty? %>
 
+    <% if @assigned > 0 %>
+      <%= filter_link :assigned, current_user.github_login, @assigned do %>
+        <%= octicon 'person', height: 16, class: 'sidebar-icon' %>
+        Assigned to you
+      <% end %>
+    <% end %>
     <% if @bot_notifications > 0 %>
       <%= filter_link :bot, true, @bot_notifications do %>
         <%= octicon 'hubot', height: 18, class: 'sidebar-icon' %>
         Bots
       <% end %>
     <% end %>
+
     <% if @unlabelled > 0 %>
       <%= filter_link :unlabelled, true, @unlabelled do %>
         <%= octicon 'tag', height: 16, class: 'sidebar-icon' %>
@@ -69,7 +76,7 @@
       <% end %>
     <% end %>
 
-    <%= menu_separator if @unlabelled > 0 || @bot_notifications > 0 %>
+    <%= menu_separator if @unlabelled > 0 || @bot_notifications > 0 || @assigned > 0 %>
   <% end %>
 
   <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>

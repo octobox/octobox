@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 2018_08_16_142404) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "html_url"
+    t.string "assignees", default: "::"
     t.integer "github_id"
     t.index ["url"], name: "index_subjects_on_url"
   end
