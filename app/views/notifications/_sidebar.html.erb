@@ -104,7 +104,7 @@
   <%= menu_separator unless @reasons.empty? %>
 
   <% @visiblity.sort_by{|visiblity, count| visiblity.to_s }.each do |visiblity, count| %>
-    <%= filter_link :type, visiblity, count do %>
+    <%= filter_link :is_private, visiblity, count do %>
       <% if visiblity %>
         <%= octicon('lock', class: 'private-repo sidebar-icon') %> Private
       <% else %>

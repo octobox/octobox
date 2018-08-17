@@ -54,6 +54,10 @@
       <%= filter_option :assigned do %>
         Assigned: <%= params[:assigned] %>
       <% end %>
+
+      <%= filter_option :is_private do %>
+        <%= (params[:is_private] === 'true'? 'Private' : 'Public') %>
+      <% end %>
     </span>
   </span>
 <% end %>
