@@ -27,19 +27,21 @@ module NotificationsHelper
 
   def filters
     {
-      reason:   params[:reason],
-      unread:   params[:unread],
-      repo:     params[:repo],
-      type:     params[:type],
-      archive:  params[:archive],
-      starred:  params[:starred],
-      owner:    params[:owner],
-      per_page: params[:per_page],
-      q:        params[:q],
-      state:    params[:state],
-      label:    params[:label],
-      author:   params[:author],
-      assigned: params[:assigned]
+      reason:     params[:reason],
+      unread:     params[:unread],
+      repo:       params[:repo],
+      type:       params[:type],
+      archive:    params[:archive],
+      starred:    params[:starred],
+      owner:      params[:owner],
+      per_page:   params[:per_page],
+      q:          params[:q],
+      state:      params[:state],
+      label:      params[:label],
+      author:     params[:author],
+      bot:        params[:bot],
+      unlabelled: params[:unlabelled],
+      assigned:   params[:assigned]
     }
   end
 
