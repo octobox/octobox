@@ -103,16 +103,18 @@
   <% end %>
   <%= menu_separator unless @reasons.empty? %>
 
-  <% @visiblity.sort_by{|visiblity, count| visiblity.to_s }.each do |visiblity, count| %>
-    <%= filter_link :is_private, visiblity, count do %>
-      <% if visiblity %>
-        <%= octicon('lock', class: 'private-repo sidebar-icon') %> Private
-      <% else %>
-        <%= octicon('repo', class: 'sidebar-icon') %> Public
+  <% if @visiblity %>
+    <% @visiblity.sort_by{|visiblity, count| visiblity.to_s }.each do |visiblity, count| %>
+      <%= filter_link :is_private, visiblity, count do %>
+        <% if visiblity %>
+          <%= octicon('lock', class: 'private-repo sidebar-icon') %> Private
+        <% else %>
+          <%= octicon('repo', class: 'sidebar-icon') %> Public
+        <% end %>
       <% end %>
     <% end %>
+    <%= menu_separator unless @visiblity.empty? %>
   <% end %>
-  <%= menu_separator unless @reasons.empty? %>
 
   <% @unread_repositories.sort_by{|repo_name, count| repo_name.downcase }.group_by{|repo_name, count| repo_name.split('/')[0] }.each do |org, repos| %>
     <%= org_filter_link :owner, org do %>
