@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Octobox</title>
     <%= csrf_meta_tags %>
@@ -7,6 +7,9 @@
     <%= render 'layouts/favicons' %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="turbolinks-cache-control" content="no-preview">
+    <meta name="Description" content="The best way to manage your GitHub Notifications">
+
+    <link rel="preconnect" href="https://api.github.com">
 
     <% if Rails.env.production? && Rails.application.secrets.google_analytics_id.present? %>
       <script>
@@ -52,8 +55,11 @@
     <% if logged_in? %>
       <%= render 'notifications/search-help' %>
     <% end %>
-    <script>
-      if (typeof ga === 'function') { ga('send', 'pageview', location.pathname+location.search) }
-    </script>
+
+    <% if Rails.env.production? && Rails.application.secrets.google_analytics_id.present? %>
+      <script>
+        if (typeof ga === 'function') { ga('send', 'pageview', location.pathname+location.search) }
+      </script>
+    <% end %>
   </body>
 </html>

@@ -80,6 +80,7 @@ class NotificationsController < ApplicationController
       @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
       @unlabelled            = scope.reorder(nil).unlabelled.count
       @bot_notifications     = scope.reorder(nil).bot_author.count
+      @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
       @repositories          = scope.map(&:repository).compact
     end
 
@@ -229,7 +230,6 @@ class NotificationsController < ApplicationController
       if sub_scope == :reason
         val = params[sub_scope].split(',')
       else
-        type = scope.klass.type_for_attribute(sub_scope.to_s).class
         val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
       end
       scope = scope.send(sub_scope, val)
@@ -237,6 +237,7 @@ class NotificationsController < ApplicationController
     scope = scope.unlabelled if params[:unlabelled].present?
     scope = scope.bot_author if params[:bot].present?
     scope = scope.label(params[:label]) if params[:label].present?
+    scope = scope.assigned(params[:assigned]) if params[:assigned].present?
     scope
   end
 
