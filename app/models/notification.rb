@@ -221,7 +221,13 @@ class Notification < ApplicationRecord
     end
 
     if repository
-      repository.update_attributes(remote_repository.to_h)
+      repository.update_attributes({
+        full_name: remote_repository.full_name,
+        private: remote_repository.private,
+        owner: remote_repository.owner[:login],
+        github_id: remote_repository.id,
+        last_synced_at: Time.current
+      })
     else
       create_repository({
         full_name: remote_repository.full_name,
