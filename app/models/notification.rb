@@ -86,7 +86,7 @@ class Notification < ApplicationRecord
             conn.patch "notifications/threads/#{n.github_id}"
         end
       end
-    rescue Octokit::Forbidden
+    rescue Octokit::Forbidden, Octokit::NotFound
       # one or more notifications are for repos the user no longer has access to
     end
     where(id: unread.map(&:id)).update_all(unread: false)
