@@ -15,6 +15,9 @@ class ApplicationController < ActionController::Base
   rescue_from Octokit::BadGateway, Octokit::ServiceUnavailable, Octokit::InternalServerError, Octokit::ServerError do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.unavailable"))
   end
+  rescue_from Octokit::AbuseDetected, Octokit::TooManyRequests do |exception|
+    handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.rate_limit"))
+  end
   rescue_from Faraday::ClientError do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.faraday.connection_failed"))
   end
