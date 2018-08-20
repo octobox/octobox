@@ -58,5 +58,21 @@
     <small class='text-muted'>
       <%= local_relative_time(notification.updated_at, type: 'time-or-date') %>
     </small>
+
+    <span class='buttons'>
+      <% if notification.archived? %>
+        <%= link_to(archive_selected_notifications_path(id: notification.id, value: false), method: :post, class: 'mr-3', 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Unarchive' ) do %>
+          <%= octicon('inbox', height: 15) %>
+        <% end %>
+      <% else %>
+        <%= link_to(archive_selected_notifications_path(id: notification.id), method: :post, class: 'mr-3', 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Archive' ) do %>
+          <%= octicon('archive', height: 15) %>
+        <% end %>
+      <% end %>
+      <%= link_to(archive_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute' ) do %>
+        <%= octicon('mute', height: 15) %>
+      <% end %>
+
+    </span>
   </td>
 </tr>

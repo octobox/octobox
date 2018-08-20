@@ -381,6 +381,24 @@ td.keys {
       top: -1px;
     }
   }
+  .notification{
+    .buttons{
+      display: none;
+      a{
+        &:hover, &:focus{
+          text-decoration: none;
+        }
+      }
+    }
+    &:hover, &:focus{
+      .notification-date small{
+        display: none;
+      }
+      .buttons{
+        display: inline;
+      }
+    }
+  }
 }
 
 @include media-breakpoint-down(sm) {
