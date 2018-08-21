@@ -28,6 +28,7 @@ in your GitHub settings for Octobox to work.
 * [Adding a custom initializer](#adding-a-custom-initializer)
 * [Downloading subjects](#downloading-subjects)
 * [API Documentation](#api-documentation)
+* [Google Analytics](#google-analytics)
 
 # Installation
 ## Database Selection
