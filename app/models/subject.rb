@@ -11,6 +11,7 @@ class Subject < ApplicationRecord
   end
 
   def update_labels(remote_labels)
+    existing_labels = labels.to_a
     remote_labels.each do |l|
       label = labels.find_by_github_id(l.id)
       if label.nil?
@@ -26,6 +27,10 @@ class Subject < ApplicationRecord
         label.save if label.changed?
       end
     end
+
+    remote_label_ids = remote_labels.map(&:id)
+    deleted_labels = existing_labels.reject{|l| remote_label_ids.include?(l.github_id) }
+    deleted_labels.each(&:destroy)
   end
 
   def sync_involved_users
