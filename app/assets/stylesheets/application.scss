@@ -674,8 +674,10 @@ td.keys {
   fill: #aaa;
 }
 
-.btn-outline-dark:hover{
-  fill: #fff;
+.btn-outline-dark{
+  &:hover, &:active {
+    fill: #fff;
+  }
 }
 
 .flex-header .dropdown-menu{
