@@ -124,6 +124,7 @@ module NotificationsHelper
   def notification_icon(subject_type, state = nil)
     state = nil unless display_subject?
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
+    return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
     SUBJECT_TYPES[subject_type]
   end
 
