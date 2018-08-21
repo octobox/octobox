@@ -87,7 +87,7 @@ module NotificationsHelper
   end
 
   def mute_selected_button
-    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items') unless params[:archive]
+    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items')
   end
 
   def mark_read_selected_button
