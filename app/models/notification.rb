@@ -76,6 +76,11 @@ class Notification < ApplicationRecord
     subject.try(:state)
   end
 
+  def self.archive(notifications, value)
+    notifications.update_all(archived: ActiveRecord::Type::Boolean.new.cast(value))
+    mark_read(notifications)
+  end
+
   def self.mark_read(notifications)
     unread = notifications.select(&:unread)
     return if unread.empty?
