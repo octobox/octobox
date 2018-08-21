@@ -56,6 +56,10 @@ html {
 .flex-container {
   padding: 15px;
   min-width: 0;
+  &.text-content{
+    max-width: 60em;
+    font-size: 16px
+  }
   .flex-main & {
     padding-left: 0;
   }

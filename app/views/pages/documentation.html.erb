@@ -1,0 +1,224 @@
+<div class='flex-content'>
+  <div class="flex-sidebar">
+    <div class="flex-container">
+      <ul id='sidebar' class="nav nav-pills flex-column pt-5">
+        <li class="nav-item">
+          <a class='nav-link active' href='#documentation'>Documentation</a>
+        </li>
+        <% unless Octobox.config.octobox_io %> 
+          <li class="nav-item">
+            <a class='nav-link active' href='#installing'>Installing Octobox</a>
+          </li>
+        <% end %>
+        <li class="nav-item">
+          <a class='nav-link' href='#accessing'>Acessing Octobox</a>
+        </li>
+        <li class="nav-item">
+          <a class='nav-link' href='#using'>Using Octobox</a>
+        </li>
+        <li class="nav-item">
+          <a class='nav-link' href='#navigating'>Navigating Octobox</a>
+        </li>
+         <li class="nav-item">
+          <a class='nav-link' href='#searching'>Searching Octobox</a>
+        </li>
+         <li class="nav-item">
+          <a class='nav-link' href='#settings'>Settings</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flex-main">
+    <div class="flex-container text-content" data-spy="scroll" data-target="#sidebar" data-offset="0">
+      <button type="button" class="d-lg-none btn btn-sm btn-outline-dark" data-toggle="offcanvas" aria-label='Toggle sidebar'>
+        <%= octicon 'three-bars', :height => 16 %>
+      </button>
+      <h1 id='documentation' class="text-left pt-5">Documentation</h1>
+      <hr>
+      <p>
+        Octobox helps you triage notifications efficiently so you can spend less time managing and more time getting things done. 
+      </p>
+      <p>
+        If you manage more than one active project on GitHub, you probably find <a href="https://github.com/notifications">GitHub Notifications</a> pretty lacking. Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers (and some GitHub staff) end up using a complex combination of filters and labels in their mail client to manage their notifications from their inbox. If, like us, you try to avoid email, then Octobox is for you.
+      </p>
+
+      <% unless Octobox.config.octobox_io %> 
+        <h2>Installing Octobox</h2>
+        <hr>
+        You can host an instance of Octobox yourself! See <a href='#todoinstallguide'>the installation guide</a> for instructions and details regarding deployment to Heroku, Docker, and more.
+      <% end %>
+      <h2 id='accessing' class='pt-5'>Accessing Octobox</h2>
+      <hr>
+      <% if Octobox.config.octobox_io %> 
+        <p>
+          This instance of Octobox is hosted by the Octobox team right here at <%= link_to 'octobox.io', root_path %>. Octobox.io has a few features intentionally disabled:
+        </p>
+        <ul>
+          <li>
+            Subject syncing (includes authorship and open/closed/merged status information) <a href='https://github.com/octobox/octobox/pull/411)'>[#411]</a>
+          </li>
+          <li>
+            Personal Access Tokens <a href='https://github.com/octobox/octobox/pull/185)'>[#185]</a>
+          </li>
+        </ul>
+        <p>
+          Features are disabled for various reasons, such as not wanting to store users' tokens at this time. Some features might never be enabled, and some just might have other prerequisite work pending completion.
+        </p>
+      <% end %>
+      <h3>OAuth scope</h3>
+      <p>
+        Octobox uses GitHub's basic OAuth <code>'notifications'</code> scope to access your notifications. This provides Octobox with access to notifications from both public <i>and</i> private repositories, but it provides very little detail about those notifications. 
+      </p>
+      <h3>Repo scope</h3>
+      <% unless Octobox.config.octobox_io %>
+        <p>
+          In order to access more detailed information about your notifications you need to enable repo scope 
+        </p>
+      <% end %>
+      <% if Octobox.config.octobox_io %>
+        <p>
+          Ohai!
+        </p>
+      <% end %>
+      <h2 id='using' class='pt-5'>Using Octobox</h2>
+      <hr>
+      <p>
+        Octobox helps you triage notifications from GitHub. If you use GitHub's own notifications dashboard you'll be familiar with some of the interface, actions etc. but there are some important differences: 
+      </p>
+      <h3>Archiving</h3>
+      <p>
+        Octobox extendes GitHub's notification model by providing an additional 'archived' status, much like Gmail's email client. Archived notifications will not appear in your inbox again unless the thread, issue or PR receives a new notification. Archiving a notification does not result in any action on GitHub. 
+      </p>
+      <h3>Starring</h3>
+      <p>
+        Octobox also adds a starred status to help you highlight important notifications with a star so you can come back and find them easily. Starred notifications are not social, they are more like bookmarks that GitHub stars. Starring a notification does not result in any action on GitHub. 
+      </p>
+      <h3>Muting</h3>
+      <p>
+        Muting a notification will mark the notification as read, move it to the archive <i>and</i> ignore all further notifications from this thread, issue or PR. Muting also sets the thread to <code>ignore:true</code> ignoring further notifications on GitHub too. 
+      </p>
+      <h3>Syncing</h3>
+      <% if Octobox.config.octobox_io %>
+        <p>
+          By default Octobox.io will syncronise every time you hit the synchronise button. You can set automatic refresh interval on the <%= link_to 'settings page', settings_path %>.
+        </p>
+      <% end %>
+      <h2>Shortcuts</h2>
+      <hr>
+      <p>
+        Octobox features a full set of keyboard shortcuts inspired by Gmail:
+      </p>
+      <%= render 'shared/keyboard_mappings' %>
+      <h2 id='navigating' class='pt-5'>Navigating Octobox</h2>
+      <hr>
+      <p>
+        The sidebar contains most of the things you'll need to navigate between views in Octobox:
+      </p>
+      <table class='table'>
+        <tr>
+          <td>Archived</td>
+          <td>Notifications that you've archived won't appear in your inbox again until Octobox recieves another notification regarding that thread, issue or PR.</td>
+        </tr>
+        <tr>
+          <td>
+            Starred
+          </td>
+          <td>
+            Notifications that you've starred are gathered together so you can come back and find them easily.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Read/unread
+          </td>
+          <td>
+            Notifications that have yet to be read or have been read, respectively. Nothing new here.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            State
+          </td>
+          <td>
+            <%= repo_scope_modal %> The state of the underlying issue or PR. i.e. open, closed, merged,
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Assignee
+          </td>
+          <td>
+            <%= repo_scope_modal %> Notifications assigned to you.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Bots
+          </td>
+          <td>
+           <%= repo_scope_modal %> Notifications created by bots.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Unlabelled 
+          </td>
+          <td>
+            <%= repo_scope_modal %> Notifications that have not been labelled.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Type
+          </td>
+          <td>
+            Notifications by type (commit, issue, pull request, release, etc)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Reason
+          </td>
+          <td>
+            Notifications by the reason you've received it (assigned, authored, commented, mentioned, review requested, state changed or subscribed).
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Visibility
+          </td>
+          <td>
+           <%= repo_scope_modal %> Notifications from public or private repositories.
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Org/repo
+          </td>
+          <td>
+            Notifications from a particular organisation and/or repo.
+          </td>
+        </tr>
+      </table>
+
+      <h2 id='searching' class='pt-5'>Searching Octobox</h2>
+      <hr>
+      Octobox's search bar supports the following filter prefixes. Combine them together and with free text searches, for example: <code>"github enterprise type:issue owner:octobox reason:assign"</code>
+      
+      <h3 class='pt-3'>Supported Prefixes</h3>
+      <%= render 'shared/search_prefixes' %>
+
+      <h2 id='settings' class='pt-5'>Settings</h2>
+      <hr>
+      <h3>Refresh interval</h3>
+      <h3>API access</h3>
+      <h3>Auth access</h3>
+      <h3>Statistics</h3>
+
+    </div>
+    <%= render 'layouts/footer'%>
+  </div>
+</div>
+
+<%= render 'shared/repo_scope_modal' %>

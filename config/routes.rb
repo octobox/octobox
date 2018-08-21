@@ -40,6 +40,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/documentation', to: 'pages#documentation'
+  get '/support', to: 'pages#support'
+
   if Octobox.config.octobox_io
     get '/privacy', to: 'pages#privacy'
     get '/terms', to: 'pages#terms'

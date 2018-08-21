@@ -1,0 +1,30 @@
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="text-center">
+      <%= link_to root_path, class: 'text-dark' do %>
+        <%= octobox_icon(80) %> Octobox
+      <% end %>
+    </h1>
+    <p class="text-center">Untangle your GitHub Notifications</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Support</h1>
+      <p>
+        Octobox.io is a small community of people supporting the service. We do not offer formal support processes. If you require formal support arrangements please <a href='mailto:support@octobox.io'>email us</a> otherwise you can try:
+      </p>
+      <ul>
+        <li>Filing an issue in our <a href='https://github.com/octobox/octobox.io/issues/new'>bug tracker</a> following the template provided.</li>
+        <li>Asking for help in our <a href='https://gitter.im/octobox/octobox'>public chat room</a>.</li>
+        <li>Email us at <%= mail_to 'support@octobox.io' %>.</li>
+        <li>Tweet us at <%= link_to '@octoboxio', 'https://twitter.com/octoboxio' %>.</li>
+      </ul>
+      <hr>
+    </div>
+  </div>
+</div>
+
+<%= render 'layouts/footer'%>
