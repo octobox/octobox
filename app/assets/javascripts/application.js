@@ -378,24 +378,24 @@ $(document).ready(function() {
   })
 });
 
-var lastCheckedNotifcation = null;
+var lastCheckedNotification = null;
 // handle shift+click multiple check
 $(document).ready(function() {
-  var notifcationCheckboxes = $('input.archive[type="checkbox"]');
-  notifcationCheckboxes.click(function(e) {
-    if(!lastCheckedNotifcation) {
-      lastCheckedNotifcation = this;
+  var notificationCheckboxes = $('input.archive[type="checkbox"]');
+  notificationCheckboxes.click(function(e) {
+    if(!lastCheckedNotification) {
+      lastCheckedNotification = this;
       return;
     }
 
     if(e.shiftKey) {
-      var start = notifcationCheckboxes.index(this);
-      var end = notifcationCheckboxes.index(lastCheckedNotifcation);
+      var start = notificationCheckboxes.index(this);
+      var end = notificationCheckboxes.index(lastCheckedNotification);
 
-      notifcationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastCheckedNotifcation.checked);
+      notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastCheckedNotification.checked);
 
     }
 
-    lastCheckedNotifcation = this;
+    lastCheckedNotification = this;
   });
 });

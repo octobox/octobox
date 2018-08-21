@@ -360,7 +360,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :service_unavailable
   end
 
-  test 'renders the inbox notifcation count in the sidebar' do
+  test 'renders the inbox notification count in the sidebar' do
     sign_in_as(@user)
     create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
