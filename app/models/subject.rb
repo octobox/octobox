@@ -6,6 +6,7 @@ class Subject < ApplicationRecord
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
   private_constant :BOT_AUTHOR_REGEX
 
+  scope :label, ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name)) }
   scope :repository, ->(full_name) { where(arel_table[:url].matches("%/repos/#{full_name}/%")) }
 
   def author_url
