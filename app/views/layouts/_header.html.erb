@@ -17,17 +17,17 @@
       <% end %>
     </button>
   </div>
-
-  <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
-    <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
-        <%= hidden_field_tag name, value %>
+  <% if @notifications %>
+    <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
+      <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
+          <%= hidden_field_tag name, value %>
+      <% end %>
+      <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 46, id: 'search-box', 'aria-label' => 'Search' %>
+      <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
+        <%= octicon 'question', :height => 16 %>
+      </div>
     <% end %>
-    <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 46, id: 'search-box', 'aria-label' => 'Search' %>
-    <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
-      <%= octicon 'question', :height => 16 %>
-    </div>
   <% end %>
-
   <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item nav-link d-none d-md-block">
