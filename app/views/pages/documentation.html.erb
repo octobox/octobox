@@ -5,13 +5,8 @@
         <li class="nav-item">
           <a class='nav-link active' href='#documentation'>Documentation</a>
         </li>
-        <% unless Octobox.config.octobox_io %> 
-          <li class="nav-item">
-            <a class='nav-link active' href='#installing'>Installing Octobox</a>
-          </li>
-        <% end %>
         <li class="nav-item">
-          <a class='nav-link' href='#accessing'>Acessing Octobox</a>
+          <a class='nav-link' href='#accessing'>Accessing Octobox</a>
         </li>
         <li class="nav-item">
           <a class='nav-link' href='#using'>Using Octobox</a>
@@ -23,7 +18,7 @@
           <a class='nav-link' href='#searching'>Searching Octobox</a>
         </li>
          <li class="nav-item">
-          <a class='nav-link' href='#settings'>Settings</a>
+          <a class='nav-link' href='#api'>API Documentation</a>
         </li>
       </ul>
     </div>
@@ -42,44 +37,52 @@
       <p>
         If you manage more than one active project on GitHub, you probably find <a href="https://github.com/notifications">GitHub Notifications</a> pretty lacking. Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers (and some GitHub staff) end up using a complex combination of filters and labels in their mail client to manage their notifications from their inbox. If, like us, you try to avoid email, then Octobox is for you.
       </p>
-
-      <% unless Octobox.config.octobox_io %> 
-        <h2>Installing Octobox</h2>
-        <hr>
-        You can host an instance of Octobox yourself! See <a href='#todoinstallguide'>the installation guide</a> for instructions and details regarding deployment to Heroku, Docker, and more.
-      <% end %>
       <h2 id='accessing' class='pt-5'>Accessing Octobox</h2>
       <hr>
       <% if Octobox.config.octobox_io %> 
         <p>
-          This instance of Octobox is hosted by the Octobox team right here at <%= link_to 'octobox.io', root_path %>. Octobox.io has a few features intentionally disabled:
+          This instance of Octobox is hosted by the Octobox.io team. To access Octobox.io you just need to sign in with your GitHub profile or install the GitHub app on the <%= link_to 'homepage', root_path %>.
+        </p>
+        <h3>Signing in with GitHub</h3>
+        <p>
+           This will give you access to basic notification information for public <i>and</i> private repositories using GitHub's <code>notification</code> scope. To access more detailed information you need to install the Octobox.io GitHub App.
+        </p>
+        <h3>Installing the GitHub App</h3>
+        <p>
+          To access more detailed information about your notifications (assignees, labels, conversations threads etc) Octobox.io needs more privileged access to your repositories. To enable this you need to install our GitHub App for your personal or organisation's account. Access to public repositories on Octobox.io is free forever, access to private repositories is a paid-for service. 
+        </p>
+        <h3>Paying for private repository access</h3>
+        <p>
+          There are two ways to pay for private repo access on Octobox.io:
         </p>
         <ul>
           <li>
-            Subject syncing (includes authorship and open/closed/merged status information) <a href='https://github.com/octobox/octobox/pull/411)'>[#411]</a>
+            By making a donation of X or more each month to the Octobox community through <a href="https://opencollective.com/octobox">Open Collective</a>
           </li>
           <li>
-            Personal Access Tokens <a href='https://github.com/octobox/octobox/pull/185)'>[#185]</a>
+            By paying X per Y through the GitHub Marketplace, which is charged monthly to your GitHub account. 
           </li>
-        </ul>
+        </ul> 
         <p>
-          Features are disabled for various reasons, such as not wanting to store users' tokens at this time. Some features might never be enabled, and some just might have other prerequisite work pending completion.
+          This may seem a little strange, but bear with us: As a social experiment in open source sustainability we are asking you to make a choice between supporting the community of maintainers and contributors, or supporting the commercial entity that operates Octobox.io. The service you'll receive will be <i>exactly the same</i> regardless of the way you pay. You can read more about why we think this is important <a href='#todo'>over on our blog</a>.
+        </p>
+        <h3>Host your own Octobox</h3>
+        <p>
+          Alternatively you can host your own instance of Octobox. See <a href='#https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md'>the installation guide</a> for instructions and details regarding deployment to Heroku, Docker, and more.
         </p>
       <% end %>
-      <h3>OAuth scope</h3>
-      <p>
-        Octobox uses GitHub's basic OAuth <code>'notifications'</code> scope to access your notifications. This provides Octobox with access to notifications from both public <i>and</i> private repositories, but it provides very little detail about those notifications. 
-      </p>
-      <h3>Repo scope</h3>
       <% unless Octobox.config.octobox_io %>
         <p>
-          In order to access more detailed information about your notifications you need to enable repo scope 
-        </p>
-      <% end %>
-      <% if Octobox.config.octobox_io %>
+          By default Octobox uses GitHub's basic OAuth <code>'notifications'</code> scope to access your notifications. This provides Octobox with access to notifications from both public <i>and</i> private repositories, but it provides very little detail about those notifications. 
+        </p>     
         <p>
-          Ohai!
+          In order to access more detailed information about your notifications Octobox needs to enable the <code>repo</code> scope on GitHub. You can do this by:
         </p>
+        <ul>
+          <li><a href='https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md#using-personal-access-tokens'>Using a personal access token</a></li>
+          <li><a href='https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md#customizing-the-scopes-on-github'>Customising the GitHub scope environment variable</a></li>
+          <li><a href='#todo'>Deploying an instance and registering your own GitHub app</a></li>
+        </ul>
       <% end %>
       <h2 id='using' class='pt-5'>Using Octobox</h2>
       <hr>
@@ -88,7 +91,7 @@
       </p>
       <h3>Archiving</h3>
       <p>
-        Octobox extendes GitHub's notification model by providing an additional 'archived' status, much like Gmail's email client. Archived notifications will not appear in your inbox again unless the thread, issue or PR receives a new notification. Archiving a notification does not result in any action on GitHub. 
+        Octobox extends GitHub's notification model by providing an additional 'archived' status, much like Gmail's email client. Archived notifications will not appear in your inbox again unless the thread, issue or PR receives a new notification. Archiving a notification does not result in any action on GitHub. 
       </p>
       <h3>Starring</h3>
       <p>
@@ -101,7 +104,7 @@
       <h3>Syncing</h3>
       <% if Octobox.config.octobox_io %>
         <p>
-          By default Octobox.io will syncronise every time you hit the synchronise button. You can set automatic refresh interval on the <%= link_to 'settings page', settings_path %>.
+          By default Octobox.io will synchronise every time you hit the synchronise button. You can set automatic refresh interval on the <%= link_to 'settings page', settings_path %>.
         </p>
       <% end %>
       <h2>Shortcuts</h2>
@@ -118,7 +121,7 @@
       <table class='table'>
         <tr>
           <td>Archived</td>
-          <td>Notifications that you've archived won't appear in your inbox again until Octobox recieves another notification regarding that thread, issue or PR.</td>
+          <td>Notifications that you've archived won't appear in your inbox again until Octobox receives another notification regarding that thread, issue or PR.</td>
         </tr>
         <tr>
           <td>
@@ -165,7 +168,7 @@
             Unlabelled 
           </td>
           <td>
-            <%= repo_scope_modal %> Notifications that have not been labelled.
+            <%= repo_scope_modal %> Notifications that have not been labeled.
           </td>
         </tr>
         <tr>
@@ -204,18 +207,16 @@
 
       <h2 id='searching' class='pt-5'>Searching Octobox</h2>
       <hr>
-      Octobox's search bar supports the following filter prefixes. Combine them together and with free text searches, for example: <code>"github enterprise type:issue owner:octobox reason:assign"</code>
-      
-      <h3 class='pt-3'>Supported Prefixes</h3>
+      <p>
+        Octobox's search bar supports the following filter prefixes. Combine them together and with free text searches, for example: <code>"github enterprise type:issue owner:octobox reason:assign"</code>: 
+      </p>
       <%= render 'shared/search_prefixes' %>
 
-      <h2 id='settings' class='pt-5'>Settings</h2>
+      <h2 class='pt-5'>API Documentation</h2>
       <hr>
-      <h3>Refresh interval</h3>
-      <h3>API access</h3>
-      <h3>Auth access</h3>
-      <h3>Statistics</h3>
-
+      <p>
+        Access to the <a href='/docs'>Octobox API</a> requires a key which you can generate and regenerate from the <%= link_to 'settings page', settings_path %>. 
+      </p>
     </div>
     <%= render 'layouts/footer'%>
   </div>
