@@ -77,11 +77,15 @@ html {
 }
 
 @include media-breakpoint-down(md) {
+  .flex-main{
+    overflow-y: hidden;
+  }
   .flex-container {
     .flex-main & {
       padding-left: 15px;
       overflow-y: hidden;
       &.text-content{
+        height: 100%;
         overflow-y: scroll;
       }
       height: 100%;
