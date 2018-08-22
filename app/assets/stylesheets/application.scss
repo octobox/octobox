@@ -57,10 +57,13 @@ html {
   padding: 15px;
   min-width: 0;
   &.text-content{
+    h1, h2{
+      padding-top: $spacer * 3
+    }
     max-width: 60em;
     font-size: 16px;
     p:last-child{
-      min-height: 35em;
+      min-height: 34em;
     }
   }
   .flex-main & {
@@ -85,6 +88,9 @@ html {
       padding-left: 15px;
       overflow-y: hidden;
       &.text-content{
+        h1, h2{
+          padding-top: inherit;
+        }
         height: 100%;
         overflow-y: scroll;
       }
