@@ -58,7 +58,10 @@ html {
   min-width: 0;
   &.text-content{
     max-width: 60em;
-    font-size: 16px
+    font-size: 16px;
+    p:last-child{
+      min-height: 35em;
+    }
   }
   .flex-main & {
     padding-left: 0;
@@ -78,6 +81,9 @@ html {
     .flex-main & {
       padding-left: 15px;
       overflow-y: hidden;
+      &.text-content{
+        overflow-y: scroll;
+      }
       height: 100%;
       > .card {
         height: 100%;

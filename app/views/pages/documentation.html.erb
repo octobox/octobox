@@ -1,31 +1,19 @@
 <div class='flex-content'>
   <div class="flex-sidebar">
     <div class="flex-container">
-      <ul id='sidebar' class="nav nav-pills flex-column pt-5">
-        <li class="nav-item">
-          <a class='nav-link active' href='#documentation'>Documentation</a>
-        </li>
-        <li class="nav-item">
-          <a class='nav-link' href='#accessing'>Accessing Octobox</a>
-        </li>
-        <li class="nav-item">
-          <a class='nav-link' href='#using'>Using Octobox</a>
-        </li>
-        <li class="nav-item">
-          <a class='nav-link' href='#navigating'>Navigating Octobox</a>
-        </li>
-         <li class="nav-item">
-          <a class='nav-link' href='#searching'>Searching Octobox</a>
-        </li>
-         <li class="nav-item">
-          <a class='nav-link' href='#api'>API Documentation</a>
-        </li>
-      </ul>
+      <div id='sidebar' class="list-group list-group-flush flex-column pt-5">
+        <a class='list-group-item list-group-item-action' href='#documentation'>Documentation</a>
+        <a class='list-group-item list-group-item-action' href='#accessing'>Accessing Octobox</a>
+        <a class='list-group-item list-group-item-action' href='#using'>Using Octobox</a>
+        <a class='list-group-item list-group-item-action' href='#navigating'>Navigating Octobox</a>
+        <a class='list-group-item list-group-item-action' href='#searching'>Searching Octobox</a>
+        <a class='list-group-item list-group-item-action' href='#api'>API Documentation</a>
+      </div>
     </div>
   </div>
 
   <div class="flex-main">
-    <div class="flex-container text-content" data-spy="scroll" data-target="#sidebar" data-offset="0">
+    <div class="flex-container text-content">
       <button type="button" class="d-lg-none btn btn-sm btn-outline-dark" data-toggle="offcanvas" aria-label='Toggle sidebar'>
         <%= octicon 'three-bars', :height => 16 %>
       </button>
@@ -102,11 +90,12 @@
         Muting a notification will mark the notification as read, move it to the archive <i>and</i> ignore all further notifications from this thread, issue or PR. Muting also sets the thread to <code>ignore:true</code> ignoring further notifications on GitHub too. 
       </p>
       <h3>Syncing</h3>
-      <% if Octobox.config.octobox_io %>
-        <p>
-          By default Octobox.io will synchronise every time you hit the synchronise button. You can set automatic refresh interval on the <%= link_to 'settings page', settings_path %>.
-        </p>
-      <% end %>
+      <p>
+        By default Octobox will synchronise every time you hit the synchronise button. 
+        <% if Octobox.config.minimum_refresh_interval %>
+          You can set automatic refresh interval on the <%= link_to 'settings page', settings_path %>.
+        <% end %>
+      </p>
       <h2>Shortcuts</h2>
       <hr>
       <p>
@@ -212,7 +201,7 @@
       </p>
       <%= render 'shared/search_prefixes' %>
 
-      <h2 class='pt-5'>API Documentation</h2>
+      <h2 id='api' class='pt-5'>API Documentation</h2>
       <hr>
       <p>
         Access to the <a href='/docs'>Octobox API</a> requires a key which you can generate and regenerate from the <%= link_to 'settings page', settings_path %>. 
