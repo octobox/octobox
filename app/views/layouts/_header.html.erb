@@ -55,15 +55,19 @@
               Sidekiq
             <% end %>
           <% end %>
-          <%= link_to "settings", class: 'dropdown-item' do %>
-            <%= octicon 'settings', height: 16, class: 'text-muted' %>
-            Settings
+          <%= link_to "documentation", class: 'dropdown-item' do %>
+            <%= octicon 'book', height: 16, class: 'text-muted' %>
+            User Documentation
           <% end %>
           <% if File.exist?(Rails.root.join('public', 'docs', 'index.html')) %>
             <%= link_to "docs/", class: 'dropdown-item' do %>
-              <%= octicon 'book', height: 16, class: 'text-muted' %>
+              <%= octicon 'code', height: 16, class: 'text-muted' %>
               API Documentation
             <% end %>
+          <% end %>
+          <%= link_to "settings", class: 'dropdown-item' do %>
+            <%= octicon 'settings', height: 16, class: 'text-muted' %>
+            Settings
           <% end %>
           <div class="dropdown-divider d-md-none"></div>
           <a class="d-md-none" href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener"><%= octicon 'gift', height: 16, class: 'text-muted' %> Donate</a>
