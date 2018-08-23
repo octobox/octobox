@@ -21,7 +21,7 @@ module ApplicationHelper
   end
 
   def repo_scope_modal
-    content_tag :span, octicon('shield'), class: 'btn btn-sm btn-link repo-scope d-inline-block', title: 'Requires repo scope', data: {toggle:'modal', target:'#repo-scope'} 
+    content_tag :span, octicon('shield'), class: 'btn btn-sm btn-link repo-scope d-inline-block', title: 'Requires repo scope', data: {toggle:'modal', target:'#repo-scope'} unless Octobox.config.fetch_subject || personal_access_tokens_enabled
   end
 
   def octobox_icon(height=16)
