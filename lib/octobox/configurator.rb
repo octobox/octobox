@@ -118,6 +118,10 @@ module Octobox
       @redis_url = ENV.fetch("REDIS_URL", "redis://localhost:6379")
     end
 
+    def app_install_url
+      @app_install_url || ENV['app_install_url'].present?
+    end
+
     def github_admin_ids
       return @github_admin_ids if defined?(@github_admin_ids)
       admin_github_ids = ENV.fetch("ADMIN_GITHUB_IDS", "").to_s
