@@ -141,9 +141,7 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def archive_selected
-    selected_notifications.update_all(
-      archived: ActiveRecord::Type::Boolean.new.cast(params[:value])
-    )
+    Notification.archive(selected_notifications, params[:value])
     head :ok
   end
 

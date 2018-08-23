@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
+  SUBJECTABLE_TYPES = ['Issue', 'PullRequest', 'Commit', 'Release'].freeze
+
   if DatabaseConfig.is_postgres?
     include PgSearch
     pg_search_scope :search_by_subject_title,
@@ -47,7 +49,7 @@ class Notification < ApplicationRecord
   scope :assigned, ->(assignee) { joins(:subject).where("assignees LIKE ?", "%:#{assignee}:%") }
   scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
 
-  scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
+  scope :subjectable, -> { where(subject_type: SUBJECTABLE_TYPES) }
   scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
   scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
 
@@ -72,6 +74,11 @@ class Notification < ApplicationRecord
   def state
     return unless Octobox.config.fetch_subject
     subject.try(:state)
+  end
+
+  def self.archive(notifications, value)
+    notifications.update_all(archived: ActiveRecord::Type::Boolean.new.cast(value))
+    mark_read(notifications)
   end
 
   def self.mark_read(notifications)
@@ -139,6 +146,10 @@ class Notification < ApplicationRecord
     update_repository
   end
 
+  def subjectable?
+    SUBJECTABLE_TYPES.include?(subject_type)
+  end
+
   private
 
   def download_subject
@@ -156,6 +167,8 @@ class Notification < ApplicationRecord
   end
 
   def update_subject(force = false)
+    return unless subjectable?
+
     return unless Octobox.config.fetch_subject
     # skip syncing if the notification was updated around the same time as subject
     return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds

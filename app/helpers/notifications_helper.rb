@@ -87,7 +87,7 @@ module NotificationsHelper
   end
 
   def mute_selected_button
-    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items') unless params[:archive]
+    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items')
   end
 
   def mark_read_selected_button
@@ -105,8 +105,8 @@ module NotificationsHelper
   def select_all_button(cur_selected, total)
     button_tag(type: 'button', class: "select_all btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': "Number of items selected") do
       octicon('check', height: 16) +
-        content_tag(:span, " #{cur_selected}", class: 'bold d-none d-md-inline-block') +
-        " |" +
+        content_tag(:span, " #{cur_selected}", class: 'bold d-none d-md-inline-block ml-1') +
+        " | " +
         content_tag(:span, " #{total}", class: 'd-none d-md-inline-block')
     end if cur_selected < total
   end
@@ -124,6 +124,7 @@ module NotificationsHelper
   def notification_icon(subject_type, state = nil)
     state = nil unless display_subject?
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
+    return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
     SUBJECT_TYPES[subject_type]
   end
 

@@ -167,6 +167,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
+    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+
     post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }
 
     assert_response :ok
@@ -181,6 +183,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
+
+    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { id: ['all'], value: true }
 
@@ -360,7 +364,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :service_unavailable
   end
 
-  test 'renders the inbox notifcation count in the sidebar' do
+  test 'renders the inbox notification count in the sidebar' do
     sign_in_as(@user)
     create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
