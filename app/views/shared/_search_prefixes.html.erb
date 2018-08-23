@@ -59,7 +59,7 @@
       <td>Search unread notifications.  Also accepts false for the inverse.</td>
     </tr>
 
-    <% if Octobox.config.fetch_subject %>
+    <% if display_subject? %>
       <tr>
         <td>
           <code>state:open</code>
