@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   end
 
   get '/documentation', to: 'pages#documentation'
-  get '/support', to: 'pages#support'
+  get '/support', to: redirect('/documentation', anchor: 'support')
 
   if Octobox.config.octobox_io
     get '/privacy', to: 'pages#privacy'
