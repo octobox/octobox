@@ -20,7 +20,7 @@ module ApplicationHelper
     nil
   end
 
-  def repo_scope_modal()
+  def repo_scope_modal
     content_tag :span, octicon('shield'), class: 'btn btn-sm btn-link repo-scope d-inline-block', title: 'Requires repo scope', data: {toggle:'modal', target:'#repo-scope'} 
   end
 

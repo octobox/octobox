@@ -119,7 +119,7 @@ module Octobox
     end
 
     def app_install_url
-      @app_install_url || ENV['app_install_url'].present?
+      @app_install_url || ENV['APP_INSTALL_URL'].present?
     end
 
     def github_admin_ids
