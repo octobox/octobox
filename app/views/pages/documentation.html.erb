@@ -35,27 +35,29 @@
         </p>
         <h3>Signing in with GitHub</h3>
         <p>
-           This will give you access to basic notification information for public <i>and</i> private repositories using GitHub's <code>notification</code> scope. To access more detailed information you need to install the Octobox.io GitHub App.
+           This will give you access to basic notification information for public <i>and</i> private repositories using GitHub's <code>notification</code> scope. <% if Octobox.config.app_install_url %> To access more detailed information you need to install the Octobox.io GitHub App. <% end %>
         </p>
-        <h3>Installing the GitHub App</h3>
-        <p>
-          To access more detailed information about your notifications (assignees, labels, conversations threads etc) Octobox.io needs more privileged access to your repositories. To enable this you need to install our GitHub App for your personal or organisation's account. Access to public repositories on Octobox.io is free forever, access to private repositories is a paid-for service. 
-        </p>
-        <h3>Paying for private repository access</h3>
-        <p>
-          There are two ways to pay for private repo access on Octobox.io:
-        </p>
-        <ul>
-          <li>
-            By making a donation of X or more each month to the Octobox community through <a href="https://opencollective.com/octobox">Open Collective</a>
-          </li>
-          <li>
-            By paying X per Y through the GitHub Marketplace, which is charged monthly to your GitHub account. 
-          </li>
-        </ul> 
-        <p>
-          This may seem a little strange, but bear with us: As a social experiment in open source sustainability we are asking you to make a choice between supporting the community of maintainers and contributors, or supporting the commercial entity that operates Octobox.io. The service you'll receive will be <i>exactly the same</i> regardless of the way you pay. You can read more about why we think this is important <a href='#todo'>over on our blog</a>.
-        </p>
+        <% if Octobox.config.app_install_url %> 
+          <h3>Installing the GitHub App</h3>
+          <p>
+            To access more detailed information about your notifications (assignees, labels, conversations threads etc) Octobox.io needs more privileged access to your repositories. To enable this you need to install our GitHub App for your personal or organisation's account. Access to public repositories on Octobox.io is free forever, access to private repositories is a paid-for service. 
+          </p>
+          <h3>Paying for private repository access</h3>
+          <p>
+            There are two ways to pay for private repo access on Octobox.io:
+          </p>
+          <ul>
+            <li>
+              By making a donation of X or more each month to the Octobox community through <a href="https://opencollective.com/octobox">Open Collective</a>
+            </li>
+            <li>
+              By paying X per Y through the GitHub Marketplace, which is charged monthly to your GitHub account. 
+            </li>
+          </ul> 
+          <p>
+            This may seem a little strange, but bear with us: As a social experiment in open source sustainability we are asking you to make a choice between supporting the community of maintainers and contributors, or supporting the commercial entity that operates Octobox.io. The service you'll receive will be <i>exactly the same</i> regardless of the way you pay. You can read more about why we think this is important <a href='#todo'>over on our blog</a>.
+          </p>
+        <% end %>
         <h3>Host your own Octobox</h3>
         <p>
           Alternatively you can host your own instance of Octobox. See <a href='#https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md'>the installation guide</a> for instructions and details regarding deployment to Heroku, Docker, and more.
@@ -71,7 +73,6 @@
         <ul>
           <li><a href='https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md#using-personal-access-tokens'>Using a personal access token</a></li>
           <li><a href='https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md#customizing-the-scopes-on-github'>Customising the GitHub scope environment variable</a></li>
-          <li><a href='#todo'>Deploying an instance and registering your own GitHub app</a></li>
         </ul>
       <% end %>
       <h2 id='using'>Using Octobox</h2>
