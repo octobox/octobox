@@ -1,0 +1,88 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 class="pt-3">Admin</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'organization', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human User.count %>
+                </h3>
+                <span>Users</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm  mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'inbox', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human Notification.count %>
+                </h3>
+                <span>Notifications</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm  mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'git-pull-request', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human Subject.count %>
+                </h3>
+                <span>Subjects</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm  mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center">
+                <%= octicon 'repo', height: 50 %>
+              </div>
+              <div class="media-body text-right">
+                <h3>
+                  <%= number_to_human Repository.count %>
+                </h3>
+                <span>Repositories</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

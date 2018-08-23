@@ -1,7 +1,10 @@
 require 'test_helper'
 
 class TasksTest < ActiveSupport::TestCase
-  setup { stub_notifications_request }
+  setup do
+    stub_notifications_request
+    stub_fetch_subject_enabled(value: false)
+  end
 
   test 'fetches notifications' do
     travel_to "2016-12-19T19:00:00Z" do

@@ -3,7 +3,9 @@ require 'test_helper'
 
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    stub_fetch_subject_enabled(value: false)
     stub_notifications_request
+    stub_repository_request
     @user = create(:user)
   end
 
@@ -165,6 +167,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
+    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+
     post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }
 
     assert_response :ok
@@ -179,6 +183,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
+
+    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { id: ['all'], value: true }
 
@@ -358,7 +364,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :service_unavailable
   end
 
-  test 'renders the inbox notifcation count in the sidebar' do
+  test 'renders the inbox notification count in the sidebar' do
     sign_in_as(@user)
     create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
@@ -425,5 +431,61 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert notification_ids.include?(notification1.id)
     assert notification_ids.include?(notification2.id)
     refute notification_ids.include?(notification3.id)
+  end
+
+  test 'search results can filter by repo' do
+    sign_in_as(@user)
+    create(:notification, user: @user, repository_full_name: 'a/b')
+    create(:notification, user: @user, repository_full_name: 'b/c')
+    get '/?q=repo%3Aa%2Fb'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by owner' do
+    sign_in_as(@user)
+    create(:notification, user: @user, repository_owner_name: 'andrew')
+    create(:notification, user: @user, repository_owner_name: 'octobox')
+    get '/?q=owner%3Aoctobox'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by type' do
+    sign_in_as(@user)
+    create(:notification, user: @user, subject_type: 'Issue')
+    create(:notification, user: @user, subject_type: 'PullRequest')
+    get '/?q=type%3Apull_request'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by reason' do
+    sign_in_as(@user)
+    create(:notification, user: @user, reason: 'assign')
+    create(:notification, user: @user, reason: 'mention')
+    get '/?q=reason%3Amention'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by starred' do
+    sign_in_as(@user)
+    create(:notification, user: @user, starred: true)
+    create(:notification, user: @user, starred: false)
+    get '/?q=starred%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by archived' do
+    sign_in_as(@user)
+    create(:notification, user: @user, archived: true)
+    create(:notification, user: @user, archived: false)
+    get '/?q=archived%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by unread' do
+    sign_in_as(@user)
+    create(:notification, user: @user, unread: true)
+    create(:notification, user: @user, unread: false)
+    get '/?q=unread%3Afalse'
+    assert_equal assigns(:notifications).length, 1
   end
 end

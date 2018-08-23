@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     namespace :admin do
       mount Sidekiq::Web => "/sidekiq"
     end
+
+    get '/admin', to: 'admin#index', as: :admin
   end
 
   get :login,  to: 'sessions#new'

@@ -38,6 +38,26 @@
       <%= filter_option :q do %>
         Search: <%= params[:q] %>
       <% end %>
+
+      <%= filter_option :bot do %>
+        <%= (params[:bot] === 'true'? 'Bot' : 'Human') %>
+      <% end %>
+
+      <%= filter_option :unlabelled do %>
+        <%= (params[:unlabelled] === 'true'? 'Unabelled' : 'Labelled') %>
+      <% end %>
+
+      <%= filter_option :author do %>
+        Author: <%= params[:author] %>
+      <% end %>
+
+      <%= filter_option :assigned do %>
+        Assigned: <%= params[:assigned] %>
+      <% end %>
+
+      <%= filter_option :is_private do %>
+        <%= (params[:is_private] === 'true'? 'Private' : 'Public') %>
+      <% end %>
     </span>
   </span>
 <% end %>

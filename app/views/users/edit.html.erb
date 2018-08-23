@@ -5,10 +5,12 @@
     </div>
     <div class="col">
       <% if @latest_git_sha %>
-        <p class="settings-sha float-right" title="Latest Git commit SHA">
+        <p class="settings-sha float-right">
           Version:
-          <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank' %>
-
+          <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank', rel: "noopener", title: "Current Git commit SHA" %>
+          <%= link_to Octobox.config.source_repo + "/compare/#{@latest_git_sha}..master", target: '_blank', rel: "noopener", title: "Compare with latest commits on master" do %>
+            <%= octicon 'git-compare', height: 16 %>
+          <% end %>
         </p>
       <% end %>
     </div>

@@ -12,11 +12,20 @@
   <td class='notification-star'>
     <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
   </td>
+
+  <% if show_archive_icon? %>
+    <td class='notification-archived'>
+      <% if notification.archived? %>
+        <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
+      <% end %>
+    </td>
+  <% end %>
+
   <td class='notification-icon <%= notification_icon_color(notification.state) if display_subject? %>'>
     <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
   </td>
   <td class='notification-subject'>
-    <%= link_to notification.subject_title, notification.web_url, target: '_blank', class: 'link', onclick: "markRead(#{notification.id})" %>
+    <%= link_to notification.subject_title, notification.web_url, target: '_blank', rel: "noopener", class: 'link', onclick: "markRead(#{notification.id})" %>
 
     <% if display_subject? %>
       <% if notification.subject %>
@@ -27,17 +36,17 @@
     <% end %>
   </td>
   <% unless params[:repo].present? %>
-  <td class='notification-repo'>
-    <small>
-      <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
-    </small>
-  </td>
+    <td class='notification-repo'>
+      <small>
+        <%= link_to notification.repository_full_name, root_path(filtered_params(repo: notification.repository_full_name)), class: 'text-muted' %>
+      </small>
+    </td>
   <% end %>
   <% if display_subject? %>
     <td class='notification-subject-author'>
       <% if notification.subject %>
         <small>
-          <%= link_to notification.subject.author, notification.subject.author_url, class: 'text-muted', target: '_blank', title: 'Author', data: {toggle: 'tooltip'} %>
+          <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', title: 'Author', data: {toggle: 'tooltip'} %>
         </small>
       <% end %>
     </td>

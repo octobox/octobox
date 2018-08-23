@@ -298,6 +298,7 @@ td.keys {
   }
   .active {
     font-weight: bold;
+    background-color: #FAFAFF;
   }
 }
 
@@ -367,14 +368,15 @@ td.keys {
 
 @include media-breakpoint-up(md) {
   .notification-star,
-  .notification-icon {
+  .notification-icon,
+  .notification-checkbox {
     width: 1%;
     text-align: center;
   }
   .notification-checkbox {
     input {
-      margin-left: 9px;
-      margin-right: 9px;
+      margin-left: 6px;
+      margin-right: 0;
       position: relative;
       top: -1px;
     }
@@ -596,6 +598,7 @@ td.keys {
 .card-notifications {
   margin-bottom: 20px;
   .card-header {
+    background-color: #f6f6f6;
     padding: 6px 8px;
     .pagination{
       margin: 6px 0px 0px;
@@ -607,6 +610,7 @@ td.keys {
 }
 
 .select-all {
+  padding-left: 6px;
   input {
     position: relative;
     left: 2px;
@@ -658,4 +662,24 @@ td.keys {
 
 .per-page .dropdown-menu{
   min-width: 4rem;
+}
+
+.private-repo{
+  fill: #dbab09;
+}
+
+.search-help{
+  position: relative;
+  left: -35px;
+  fill: #aaa;
+}
+
+.btn-outline-dark{
+  &:hover, &:active {
+    fill: #fff;
+  }
+}
+
+.flex-header .dropdown-menu{
+  z-index: 2000;
 }

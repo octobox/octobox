@@ -28,6 +28,7 @@ in your GitHub settings for Octobox to work.
 * [Adding a custom initializer](#adding-a-custom-initializer)
 * [Downloading subjects](#downloading-subjects)
 * [API Documentation](#api-documentation)
+* [Google Analytics](#google-analytics)
 
 # Installation
 ## Database Selection
@@ -56,6 +57,10 @@ Heroku will ask you to provide an OAuth client ID and secret, which you can get 
   The callback url would then be `[name of app].herokuapp.com/auth/github/callback`.
 
 For more help with setting up an OAuth application on GitHub, see below.
+
+After deploying the app to heroku, enable the `runtime-dyno-metadata` feature to enable the changelog feature:
+
+    heroku labs:enable runtime-dyno-metadata
 
 ## Deployment to OpenShift Online
 
@@ -218,8 +223,6 @@ server {
 # Configuration
 
 ## Allowing periodic notification refreshes
-
-**Note**: This is *not* enabled on the hosted version (octobox.io).
 
 You may allow users to set an auto-refresh interval that will cause a periodic sync and page reload when they are viewing notifications.  To enable this simply set the environment variable `MINIMUM_REFRESH_INTERVAL` to any integer above 0.  `MINIMUM_REFRESH_INTERVAL` is the lowest number of minutes between auto-syncs that the server will allow.
 
