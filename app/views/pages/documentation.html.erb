@@ -14,12 +14,12 @@
 
   <div class="flex-main">
     <div class='d-lg-none sticky-top w-100 p-3'>
-        <button type="button" class="btn btn-sm btn-outline-dark" data-toggle="offcanvas" aria-label='Toggle sidebar'>
+      <button type="button" class="btn btn-sm btn-outline-dark" data-toggle="offcanvas" aria-label='Toggle sidebar'>
         <%= octicon 'three-bars', :height => 16 %>
       </button>
     </div>
     <div class="flex-container text-content">
-      <h1 id='documentation' class="text-left pt-5">Documentation</h1>
+      <h1 id='documentation' class="text-left">Documentation</h1>
       <hr>
       <p>
         Octobox helps you triage notifications efficiently so you can spend less time managing and more time getting things done. 
@@ -27,7 +27,7 @@
       <p>
         If you manage more than one active project on GitHub, you probably find <a href="https://github.com/notifications">GitHub Notifications</a> pretty lacking. Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers (and some GitHub staff) end up using a complex combination of filters and labels in their mail client to manage their notifications from their inbox. If, like us, you try to avoid email, then Octobox is for you.
       </p>
-      <h2 id='accessing' class='pt-5'>Accessing Octobox</h2>
+      <h2 id='accessing'>Accessing Octobox</h2>
       <hr>
       <% if Octobox.config.octobox_io %> 
         <p>
@@ -74,7 +74,7 @@
           <li><a href='#todo'>Deploying an instance and registering your own GitHub app</a></li>
         </ul>
       <% end %>
-      <h2 id='using' class='pt-5'>Using Octobox</h2>
+      <h2 id='using'>Using Octobox</h2>
       <hr>
       <p>
         Octobox helps you triage notifications from GitHub. If you use GitHub's own notifications dashboard you'll be familiar with some of the interface, actions etc. but there are some important differences: 
@@ -104,7 +104,7 @@
         Octobox features a full set of keyboard shortcuts inspired by Gmail:
       </p>
       <%= render 'shared/keyboard_mappings' %>
-      <h2 id='navigating' class='pt-5'>Navigating Octobox</h2>
+      <h2 id='navigating'>Navigating Octobox</h2>
       <hr>
       <p>
         The sidebar contains most of the things you'll need to navigate between views in Octobox:
@@ -196,14 +196,14 @@
         </tr>
       </table>
 
-      <h2 id='searching' class='pt-5'>Searching Octobox</h2>
+      <h2 id='searching'>Searching Octobox</h2>
       <hr>
       <p>
         Octobox's search bar supports the following filter prefixes. Combine them together and with free text searches, for example: <code>"github enterprise type:issue owner:octobox reason:assign"</code>: 
       </p>
       <%= render 'shared/search_prefixes' %>
 
-      <h2 id='api' class='pt-5'>API Documentation</h2>
+      <h2 id='api'>API Documentation</h2>
       <hr>
       <p>
         Access to the <a href='/docs'>Octobox API</a> requires a key which you can generate and regenerate from the <%= link_to 'settings page', settings_path %>. 
