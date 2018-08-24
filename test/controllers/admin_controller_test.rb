@@ -6,14 +6,25 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
     stub_fetch_subject_enabled(value: false)
     stub_notifications_request
     @user = create(:user)
-    stub_env_var 'ADMIN_GITHUB_IDS'
   end
 
-  test 'render 404 if user isnt admin' do
+  test "responds with a 404 for non admins trying to reach /admin" do
+    refute_predicate @user, :admin?
+
     sign_in_as(@user)
 
     assert_raises ActionController::RoutingError do
-      get '/admin'
+      get "/admin"
+      assert_response :not_found
     end
+  end
+
+  test "responds with a 200 for admins trying to reach /admin" do
+    User.any_instance.stubs(:admin?).returns(true)
+
+    sign_in_as(@user)
+
+    get "/admin"
+    assert_response :ok
   end
 end
