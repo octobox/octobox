@@ -224,7 +224,7 @@ module NotificationsHelper
 
   def not_repo_in_active_org(param)
     return true unless param == :repo
-    !params[:owner].present?
+    params[:owner].blank?
   end
 
   def display_subject?
