@@ -46,7 +46,7 @@ class Notification < ApplicationRecord
   scope :label,    ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
   scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
-  scope :assigned, ->(assignee) { joins(:subject).where("assignees LIKE ?", "%:#{assignee}:%") }
+  scope :assigned, ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }
   scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
 
   scope :subjectable, -> { where(subject_type: SUBJECTABLE_TYPES) }
