@@ -29,8 +29,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'renders the index page if authenticated' do
     sign_in_as(@user)
-    visit '/'
-    Percy::Capybara.snapshot(page, name: '/:auth')
+
+    get '/'
     assert_response :success
     assert_template 'notifications/index', file: 'notifications/index.html.erb'
   end

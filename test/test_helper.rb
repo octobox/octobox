@@ -11,9 +11,10 @@ require 'mocha/minitest'
 require 'capybara/rails'
 require 'capybara/minitest'
 
-# allow webmock to connect to percy for local testing
-WebMock.allow_net_connect!
+
+WebMock.disable_net_connect!(allow_localhost: true, allow: [/percy.io/])
 Percy::Capybara.initialize_build
+Percy.config.default_widths = [576, 768, 992]
 MiniTest.after_run { Percy::Capybara.finalize_build }
 
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
@@ -35,18 +36,6 @@ end
 class ActionDispatch::IntegrationTest
   include SignInHelper
   include StubHelper
-
-  # Make the Capybara DSL available in all integration tests
-  include Capybara::DSL
-  # Make `assert_*` methods behave like Minitest assertions
-  include Capybara::Minitest::Assertions
-
-  # Reset sessions and driver between tests
-  # Use super wherever this method is redefined in your individual test classes
-  def teardown
-    Capybara.reset_sessions!
-    Capybara.use_default_driver
-  end
 end
 
 module NotificationTestHelper
