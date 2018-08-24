@@ -9,6 +9,9 @@ require 'rails/test_help'
 require 'webmock/minitest'
 require 'mocha/minitest'
 
+Percy::Capybara.initialize_build
+MiniTest.after_run { Percy::Capybara.finalize_build }
+
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
 
 FactoryBot.find_definitions

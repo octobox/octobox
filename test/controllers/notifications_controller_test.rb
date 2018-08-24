@@ -11,6 +11,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'will render the home page if not authenticated' do
     get '/'
+    Percy::Capybara.snapshot(page, name: '/')
     assert_response :success
     assert_template 'pages/home'
   end
@@ -31,6 +32,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
 
     get '/'
+    Percy::Capybara.snapshot(page, name: '/:auth')
     assert_response :success
     assert_template 'notifications/index', file: 'notifications/index.html.erb'
   end
