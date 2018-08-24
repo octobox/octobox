@@ -21,16 +21,6 @@ class RepositoryTest < ActiveSupport::TestCase
     refute repository.valid?
   end
 
-  test 'github_app_installed if app_installation_id present' do
-    @repository.app_installation_id = 1
-    assert @repository.github_app_installed?
-  end
-
-  test 'github_app_installed if app_installation_id missing' do
-    @repository.app_installation_id = nil
-    refute @repository.github_app_installed?
-  end
-
   test 'finds subjects by full_name' do
     subject = create(:subject, url: "https://api.github.com/repos/#{@repository.full_name}/issues/1")
     subject2 = create(:subject, url: "https://api.github.com/repos/foo/bar/issues/1")
