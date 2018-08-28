@@ -56,6 +56,16 @@ html {
 .flex-container {
   padding: 15px;
   min-width: 0;
+  &.text-content{
+    h1, h2{
+      padding-top: $spacer * 3
+    }
+    max-width: 60em;
+    font-size: 16px;
+    ul:last-child{
+      min-height: 31em;
+    }
+  }
   .flex-main & {
     padding-left: 0;
   }
@@ -70,10 +80,20 @@ html {
 }
 
 @include media-breakpoint-down(md) {
+  .flex-main{
+    overflow-y: hidden;
+  }
   .flex-container {
     .flex-main & {
       padding-left: 15px;
       overflow-y: hidden;
+      &.text-content{
+        h1, h2{
+          padding-top: inherit;
+        }
+        height: 100%;
+        overflow-y: scroll;
+      }
       height: 100%;
       > .card {
         height: 100%;

@@ -42,6 +42,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/documentation', to: 'pages#documentation'
+  get '/support', to: redirect('/documentation#support')
+
   post '/hooks/github', to: 'hooks#create'
 
   if Octobox.config.octobox_io
