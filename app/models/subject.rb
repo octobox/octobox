@@ -9,6 +9,8 @@ class Subject < ApplicationRecord
   scope :label, ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name)) }
   scope :repository, ->(full_name) { where(arel_table[:url].matches("%/repos/#{full_name}/%")) }
 
+  after_update :sync_involved_users
+
   def author_url
     "#{Octobox.config.github_domain}#{author_url_path}"
   end
@@ -37,6 +39,7 @@ class Subject < ApplicationRecord
   end
 
   def sync_involved_users
+    return unless Octobox.github_app?
     user_ids.each { |user_id| SyncNotificationsWorker.perform_async(user_id) }
   end
 

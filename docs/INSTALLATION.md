@@ -29,6 +29,7 @@ in your GitHub settings for Octobox to work.
 * [Downloading subjects](#downloading-subjects)
 * [API Documentation](#api-documentation)
 * [Google Analytics](#google-analytics)
+* [Running Octobox as a GitHub App](#api-documentation)
 
 # Installation
 ## Database Selection
@@ -359,3 +360,5 @@ This is included by default in the container build using `Dockerfile`. To includ
 To enable Google analytics tracking set the following environment variable:
 
     GA_ANALYTICS_ID=UA-XXXXXX-XX
+
+## Running Octobox as a GitHub App

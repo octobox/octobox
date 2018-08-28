@@ -108,6 +108,13 @@
         <%= octicon 'tools' %>&nbsp;
         Manage Oauth Access on GitHub
       <% end %>
+
+      <% if Octobox.github_app? && current_user.app_token.present? %>
+        <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_app_client_id}", class: 'btn btn-outline-dark' do %>
+          <%= octicon 'octoface' %>&nbsp;
+          Manage App Access on GitHub
+        <% end %>
+      <% end %>
     </div>
   </div>
 

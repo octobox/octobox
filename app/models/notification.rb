@@ -72,7 +72,7 @@ class Notification < ApplicationRecord
   end
 
   def state
-    return unless Octobox.config.fetch_subject
+    return unless display_subject?
     subject.try(:state)
   end
 
@@ -115,7 +115,7 @@ class Notification < ApplicationRecord
   end
 
   def expanded_subject_url
-    return subject_url unless Octobox.config.fetch_subject
+    return subject_url unless Octobox.config.subjects_enabled?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
   end
 
@@ -146,14 +146,22 @@ class Notification < ApplicationRecord
     update_repository
   end
 
+  def github_app_installed?
+    user.app_token.present? && repository.try(:github_app_installed?)
+  end
+
   def subjectable?
     SUBJECTABLE_TYPES.include?(subject_type)
+  end
+
+  def display_subject?
+    github_app_installed? || Octobox.config.fetch_subject
   end
 
   private
 
   def download_subject
-    user.github_client.get(subject_url)
+    user.subject_client.get(subject_url)
 
   # If permissions changed and the user hasn't accepted, we get a 401
   # We may receive a 403 Forbidden or a 403 Not Available
@@ -169,7 +177,7 @@ class Notification < ApplicationRecord
   def update_subject(force = false)
     return unless subjectable?
 
-    return unless Octobox.config.fetch_subject
+    return unless display_subject?
     # skip syncing if the notification was updated around the same time as subject
     return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
@@ -219,7 +227,7 @@ class Notification < ApplicationRecord
   end
 
   def update_repository
-    return unless Octobox.config.fetch_subject
+    return unless display_subject?
     return if repository != nil && updated_at - repository.updated_at < 2.seconds
 
     remote_repository = download_repository
