@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
+  SUBJECTABLE_TYPES = ['Issue', 'PullRequest', 'Commit', 'Release'].freeze
+
   if DatabaseConfig.is_postgres?
     include PgSearch
     pg_search_scope :search_by_subject_title,
@@ -47,7 +49,7 @@ class Notification < ApplicationRecord
   scope :assigned, ->(assignee) { joins(:subject).where("assignees LIKE ?", "%:#{assignee}:%") }
   scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
 
-  scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
+  scope :subjectable, -> { where(subject_type: SUBJECTABLE_TYPES) }
   scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
   scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
 
@@ -86,7 +88,7 @@ class Notification < ApplicationRecord
             conn.patch "notifications/threads/#{n.github_id}"
         end
       end
-    rescue Octokit::Forbidden
+    rescue Octokit::Forbidden, Octokit::NotFound
       # one or more notifications are for repos the user no longer has access to
     end
     where(id: unread.map(&:id)).update_all(unread: false)
@@ -139,6 +141,10 @@ class Notification < ApplicationRecord
     update_repository
   end
 
+  def subjectable?
+    SUBJECTABLE_TYPES.include?(subject_type)
+  end
+
   private
 
   def download_subject
@@ -156,6 +162,8 @@ class Notification < ApplicationRecord
   end
 
   def update_subject(force = false)
+    return unless subjectable?
+
     return unless Octobox.config.fetch_subject
     # skip syncing if the notification was updated around the same time as subject
     return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
@@ -221,7 +229,13 @@ class Notification < ApplicationRecord
     end
 
     if repository
-      repository.update_attributes(remote_repository.to_h)
+      repository.update_attributes({
+        full_name: remote_repository.full_name,
+        private: remote_repository.private,
+        owner: remote_repository.owner[:login],
+        github_id: remote_repository.id,
+        last_synced_at: Time.current
+      })
     else
       create_repository({
         full_name: remote_repository.full_name,

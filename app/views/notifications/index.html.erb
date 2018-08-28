@@ -33,7 +33,7 @@
           </label>
           <%= select_all_button(@cur_selected, @total) %>
           <% end %>
-          <%= link_to sync_notifications_path(filters), class: 'btn btn-sm btn-outline-secondary sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync', method: :post do %>
+          <%= link_to sync_notifications_path(filters), class: 'btn btn-sm btn-outline-secondary btn-outline-dark', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync', method: :post do %>
             <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync?}" %>
           <% end %>
           <%= archive_selected_button unless archive_selected? %>
@@ -52,12 +52,11 @@
           <% if @notifications.to_a.any? %>
             <%= render partial: 'notification', collection: @notifications %>
           <% elsif initial_sync? %>
-            <div class="blankslate blankslate-spacious blankslate-clean-background">
+            <div class="blankslate blankslate-spacious blankslate-clean-background js-initial_sync">
               <%= octicon 'cloud-download', height: 32, class: 'blankslate-icon' %>
               <h3>Syncing your notifications for the first time...</h3>
               <p>This might take a minute or two</p>
             </div>
-            <%= javascript_tag "sync()" %>
           <% elsif no_url_filter_parameters_present %>
             <div class="blankslate blankslate-spacious blankslate-clean-background">
               <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
