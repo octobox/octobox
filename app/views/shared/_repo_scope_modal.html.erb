@@ -1,4 +1,4 @@
-<% unless Octobox.config.fetch_subject || personal_access_tokens_enabled %>
+<% unless Octobox.config.fetch_subject || Octobox.personal_access_tokens_enabled? %>
   <div id="repo-scope" class="modal" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
@@ -8,7 +8,7 @@
         </div>
         <div class="modal-body">
           <p>
-            This feature requires additional permissions. 
+            This feature requires additional permissions.
             <% if Octobox.config.octobox_io %>
               We're working to enable them for Octobox.io soon.
             <% else %>
