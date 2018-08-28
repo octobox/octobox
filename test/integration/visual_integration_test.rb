@@ -21,16 +21,17 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     Capybara.use_default_driver
   end
 
-  test 'renders the index page' do
-    visit '/'
-    Percy::Capybara.snapshot(page, name: '/')
+  test 'render a blank index page' do
+    visit root_path
+    # Percy::Capybara.snapshot(page, name: '/')
     page.has_content?('Sign in')
   end
 
-  test 'renders the notifications page if authenticated' do
+  test 'render the kitchen sink for a logged in user' do
     sign_in_as(@user)
-    visit '/'
-    Percy::Capybara.snapshot(page, name: '/:auth')
+    stub_fetch_subject_enabled
+    visit login_path
+    Percy::Capybara.snapshot(page, name: '/:auth kitchen-sink')
     page.has_selector?('table tr')
   end
 
