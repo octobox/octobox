@@ -1,0 +1,81 @@
+{
+  "action": "created",
+  "installation": {
+    "id": 293804,
+    "account": {
+      "login": "andrew",
+      "id": 1060,
+      "node_id": "MDQ6VXNlcjEwNjA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1060?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/andrew",
+      "html_url": "https://github.com/andrew",
+      "followers_url": "https://api.github.com/users/andrew/followers",
+      "following_url": "https://api.github.com/users/andrew/following{/other_user}",
+      "gists_url": "https://api.github.com/users/andrew/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/andrew/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/andrew/subscriptions",
+      "organizations_url": "https://api.github.com/users/andrew/orgs",
+      "repos_url": "https://api.github.com/users/andrew/repos",
+      "events_url": "https://api.github.com/users/andrew/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/andrew/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "repository_selection": "selected",
+    "access_tokens_url": "https://api.github.com/installations/293804/access_tokens",
+    "repositories_url": "https://api.github.com/installation/repositories",
+    "html_url": "https://github.com/settings/installations/293804",
+    "app_id": 14761,
+    "target_id": 1060,
+    "target_type": "User",
+    "permissions": {
+      "issues": "read",
+      "metadata": "read",
+      "pull_requests": "read"
+    },
+    "events": [
+      "issues",
+      "issue_comment",
+      "label",
+      "milestone",
+      "public",
+      "pull_request",
+      "pull_request_review",
+      "pull_request_review_comment",
+      "repository",
+      "watch"
+    ],
+    "created_at": 1534869839,
+    "updated_at": 1534869839,
+    "single_file_name": null
+  },
+  "repositories": [
+    {
+      "id": 139431141,
+      "name": "no-rabbits",
+      "full_name": "andrew/no-rabbits",
+      "private": true
+    }
+  ],
+  "sender": {
+    "login": "andrew",
+    "id": 1060,
+    "node_id": "MDQ6VXNlcjEwNjA=",
+    "avatar_url": "https://avatars2.githubusercontent.com/u/1060?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/andrew",
+    "html_url": "https://github.com/andrew",
+    "followers_url": "https://api.github.com/users/andrew/followers",
+    "following_url": "https://api.github.com/users/andrew/following{/other_user}",
+    "gists_url": "https://api.github.com/users/andrew/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/andrew/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/andrew/subscriptions",
+    "organizations_url": "https://api.github.com/users/andrew/orgs",
+    "repos_url": "https://api.github.com/users/andrew/repos",
+    "events_url": "https://api.github.com/users/andrew/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/andrew/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+}

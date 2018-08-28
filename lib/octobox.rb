@@ -21,5 +21,9 @@ module Octobox
     def restricted_access_enabled?
       config.restricted_access_enabled
     end
+
+    def github_app?
+      config.github_app
+    end
   end
 end
