@@ -226,8 +226,4 @@ module NotificationsHelper
     return true unless param == :repo
     params[:owner].blank?
   end
-
-  def display_subject?
-    Octobox.config.fetch_subject
-  end
 end

@@ -23,11 +23,6 @@ class UserTest < ActiveSupport::TestCase
     refute user.valid?
   end
 
-  test 'must have an access_token' do
-    @user.access_token = nil
-    refute @user.valid?
-  end
-
   test 'must have a unique access_token' do
     user = User.create(github_id: 42, access_token: @user.access_token)
     refute user.valid?
