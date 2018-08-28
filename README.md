@@ -1,6 +1,6 @@
 # [Octobox](https://octobox.io) &#128238;
 
-:postbox: The best way to manage your GitHub Notifications.
+:postbox: Untangle your GitHub Notifications.
 
 ![Screenshot of  Octobox](app/assets/images/screenshot.png)
 
