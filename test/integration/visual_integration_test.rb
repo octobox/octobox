@@ -27,11 +27,20 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     page.has_content?('Sign in')
   end
 
-  test 'render the kitchen sink for a logged in user' do
+  test 'render a logged in user' do
     sign_in_as(@user)
     stub_fetch_subject_enabled
     visit login_path
-    Percy::Capybara.snapshot(page, name: '/:auth kitchen-sink')
+    Percy::Capybara.snapshot(page, name: '/:auth')
+    page.has_selector?('table tr')
+  end
+
+  test 'render some filtered stuff' do
+    sign_in_as(@user)
+    stub_fetch_subject_enabled
+    visit '/?starred=true&q=repo%3Aa%2Fb'
+    click_link('select_all')
+    Percy::Capybara.snapshot(page, name: '/?starred=true&q=repo%3Aa%2Fb select_all')
     page.has_selector?('table tr')
   end
 
