@@ -17,6 +17,7 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
   # Reset sessions and driver between tests
   # Use super wherever this method is redefined in your individual test classes
   teardown do
+    Capybara.current_session.current_window.maximize
     Capybara.reset_sessions!
     Capybara.use_default_driver
   end
