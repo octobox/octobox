@@ -31,7 +31,7 @@ gem 'bugsnag'
 
 # Supported databases
 gem 'mysql2', require: false
-gem 'pg', '1.0.0', require: false
+gem 'pg', '1.1.2', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri
