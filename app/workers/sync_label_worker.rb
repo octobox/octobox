@@ -5,9 +5,9 @@ class SyncLabelWorker
   sidekiq_options queue: :sync_subjects, unique: :until_and_while_executing
 
   def perform(payload)
-    repository = Repository.find_by_github_id(payload.repository.id)
+    repository = Repository.find_by_github_id(payload['repository']['id'])
     return if repository.nil?
-    subjects = repository.subjects.label(payload.changes.name.from)
+    subjects = repository.subjects.label(payload['changes']['name']['from'])
     subjects.each do |subject|
       n = subject.notifications.first
       n.try(:send, :update_subject, true)
