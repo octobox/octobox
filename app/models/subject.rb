@@ -43,6 +43,21 @@ class Subject < ApplicationRecord
     user_ids.each { |user_id| SyncNotificationsWorker.perform_async(user_id) }
   end
 
+  def self.sync(remote_subject)
+    subject = Subject.find_or_create_by(url: remote_subject.url)
+    subject.update({
+      github_id: remote_subject.id,
+      state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
+      author: remote_subject.user.login,
+      html_url: remote_subject.html_url,
+      created_at: remote_subject.created_at,
+      updated_at: remote_subject.updated_at,
+      assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
+    })
+    subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
+    subject.sync_involved_users
+  end
+
   private
 
   def author_url_path
