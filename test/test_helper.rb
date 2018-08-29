@@ -13,8 +13,12 @@ require 'capybara/minitest'
 
 
 WebMock.disable_net_connect!(allow_localhost: true, allow: [/percy.io/])
+
 Percy::Capybara.initialize_build
 Percy.config.default_widths = [576, 768, 992]
+
+Capybara.default_driver = :selenium
+
 MiniTest.after_run { Percy::Capybara.finalize_build }
 
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }

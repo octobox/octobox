@@ -47,6 +47,7 @@ group :test do
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
+  gem 'selenium-webdriver'
   gem 'capybara'
   gem 'percy-capybara'
 end
