@@ -16,7 +16,7 @@ class User < ApplicationRecord
   }.freeze
 
   validates :github_id,    presence: true, uniqueness: true
-  validates :encrypted_access_token, uniqueness: true
+  validates :encrypted_access_token, uniqueness: true, allow_blank: true
   validates :github_login, presence: true
   validates :refresh_interval, numericality: {
     only_integer: true,
