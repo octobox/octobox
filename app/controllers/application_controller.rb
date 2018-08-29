@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
   end
 
   def initial_sync?
-    current_user.last_synced_at.nil?
+    current_user && current_user.last_synced_at.nil?
   end
 
   def octobox_api_request?
