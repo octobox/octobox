@@ -23,7 +23,7 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
 
   test 'render a blank index page' do
     visit root_path
-    Percy::Capybara.snapshot(page, name: '/')
+    # Percy::Capybara.snapshot(page, name: '/')
     page.has_content?('Sign in')
   end
 
@@ -31,29 +31,39 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     stub_fetch_subject_enabled
     visit login_path
-    Percy::Capybara.snapshot(page, name: '/:auth')
-    click_button('sidebar_toggle')
-    Percy::Capybara.snapshot(page, name: '/:auth sidebar_toggle')
-    check('select_all')
-    Percy::Capybara.snapshot(page, name: '/:auth select_all')
+    
     page.has_selector?('table tr')
+    Percy::Capybara.snapshot(page, name: '/:auth')
+
+    Capybara.current_session.current_window.resize_to(576,800)
+    click_button('sidebar_toggle', wait: 0.25)
+    find('.flex-sidebar').visible?
+    Percy::Capybara.snapshot(page, name: '/:auth sidebar_toggle')
+    
+    check('select_all')
+    find('#select_all').visible?
   end
 
   test 'render some filtered stuff' do
     sign_in_as(@user)
     stub_fetch_subject_enabled
     visit login_path
+
     visit '/?starred=true&q=repo%3Aa%2Fb'
-    Percy::Capybara.snapshot(page, name: '/?starred=true&q=repo%3Aa%2Fb select_all')
-    page.has_selector?('table tr')
+    page.has_content?('Nothing to see here.')
+    Percy::Capybara.snapshot(page, name: '/?starred=true&q=repo%3Aa%2Fb')
   end
 
-  test 'render a the page' do
+  test 'render a docs page' do
     visit documentation_path
-    Percy::Capybara.snapshot(page, name: '/documentation')
-    click_button('sidebar_toggle')
-    Percy::Capybara.snapshot(page, name: '/documentation sidebar_toggle')
+
     page.has_content?('Documentation')
+    Percy::Capybara.snapshot(page, name: '/documentation')
+    
+    Capybara.current_session.current_window.resize_to(576,800)
+    click_button('sidebar_toggle', wait: 0.25)
+    find('.flex-sidebar').visible?
+    Percy::Capybara.snapshot(page, name: '/documentation sidebar_toggle')
   end
 
 end

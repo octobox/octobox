@@ -68,6 +68,8 @@ GEM
       rack (>= 1.6.0)
       rack-test (>= 0.6.3)
       xpath (~> 3.1)
+    childprocess (0.9.0)
+      ffi (~> 1.0, >= 1.0.11)
     codeclimate-test-reporter (1.0.8)
       simplecov (<= 0.13)
     concurrent-ruby (1.0.5)
@@ -262,6 +264,7 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
+    rubyzip (1.2.1)
     rufus-scheduler (3.5.2)
       fugit (~> 1.1, >= 1.1.5)
     safe_yaml (1.0.4)
@@ -283,6 +286,9 @@ GEM
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
+    selenium-webdriver (3.14.0)
+      childprocess (~> 0.5)
+      rubyzip (~> 1.2)
     sidekiq (5.2.1)
       connection_pool (~> 2.2, >= 2.2.2)
       rack-protection (>= 1.5.0)
@@ -387,6 +393,7 @@ DEPENDENCIES
   rgb
   rubocop
   sassc-rails
+  selenium-webdriver
   sidekiq
   sidekiq-scheduler
   sidekiq-unique-jobs
