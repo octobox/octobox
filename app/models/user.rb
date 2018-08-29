@@ -54,7 +54,7 @@ class User < ApplicationRecord
       token_field => auth_hash.dig('credentials', 'token')
     }
 
-    update_attributes(github_attributes)
+    update_attributes!(github_attributes)
   end
 
   def sync_notifications
