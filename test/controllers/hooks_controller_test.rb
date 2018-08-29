@@ -3,51 +3,36 @@ require 'test_helper'
 
 class HooksControllerTest < ActionController::TestCase
   test 'labels webhook payload' do
-    @request.headers['X-GitHub-Event'] = 'label'
-    fixture = 'label.json'
-    post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}")
-    assert_response :success
+    send_webhook 'label'
   end
 
   test 'github_app_authorization webhook payload' do
-    @request.headers['X-GitHub-Event'] = 'github_app_authorization'
-    fixture = 'github_app_authorization.json'
-    post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}")
-    assert_response :success
+    send_webhook 'github_app_authorization'
   end
 
   test 'installation_repositories webhook payload' do
-    @request.headers['X-GitHub-Event'] = 'installation_repositories'
-    fixture = 'installation_repositories.json'
-    post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}")
-    assert_response :success
+    send_webhook 'installation_repositories'
   end
 
   test 'installation webhook payload' do
-    @request.headers['X-GitHub-Event'] = 'installation'
-    fixture = 'installation.json'
-    post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}")
-    assert_response :success
+    send_webhook 'installation'
   end
 
   test 'issues webhook payload' do
-    @request.headers['X-GitHub-Event'] = 'issues'
-    fixture = 'issues.json'
-    post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}")
-    assert_response :success
+    send_webhook 'issues'
   end
 
   test 'pull_request webhook payload' do
-    @request.headers['X-GitHub-Event'] = 'pull_request'
-    fixture = 'pull_request.json'
-    post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}")
-    assert_response :success
+    send_webhook 'pull_request'
   end
 
   test 'issue_comment webhook payload' do
-    @request.headers['X-GitHub-Event'] = 'issue_comment'
-    fixture = 'issue_comment.json'
-    post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}")
-    assert_response :success
+    send_webhook 'issue_comment'
   end
+end
+
+def send_webhook(event_type)
+  @request.headers['X-GitHub-Event'] = event_type
+  post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{event_type}.json")
+  assert_response :success
 end
