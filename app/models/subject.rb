@@ -52,7 +52,7 @@ class Subject < ApplicationRecord
       html_url: remote_subject['html_url'],
       created_at: remote_subject['created_at'],
       updated_at: remote_subject['updated_at'],
-      assignees: ":#{Array(remote_subject['assignees'].try(:map, &:login)).join(':')}:"
+      assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:"
     })
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
     subject.sync_involved_users
