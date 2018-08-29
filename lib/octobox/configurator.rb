@@ -32,16 +32,25 @@ module Octobox
 
     def scopes
       default_scopes = 'notifications'
-      default_scopes += ', read:org' if Octobox.restricted_access_enabled?
-      default_scopes += ', repo'     if fetch_subject
+      default_scopes += ', read:org' if !github_app && Octobox.restricted_access_enabled?
+      default_scopes += ', repo'     if !github_app && fetch_subject
 
       ENV.fetch('GITHUB_SCOPE', default_scopes)
     end
+
+    def github_app
+      @github_app || ENV['GITHUB_APP_ID'].present?
+    end
+    attr_writer :github_app
 
     def fetch_subject
       @fetch_subject || (ENV['FETCH_SUBJECT'].try(:downcase) == "true")
     end
     attr_writer :fetch_subject
+
+    def subjects_enabled?
+      github_app || fetch_subject
+    end
 
     def personal_access_tokens_enabled
       @personal_access_tokens_enabled || ENV['PERSONAL_ACCESS_TOKENS_ENABLED'].present?
@@ -108,6 +117,21 @@ module Octobox
     end
     attr_writer :source_repo
 
+    def app_install_url
+      "#{app_url}/installations/new"
+    end
+    attr_writer :app_install_url
+
+    def app_url
+      "#{github_domain}/apps/#{app_slug}"
+    end
+    attr_writer :app_url
+
+    def app_slug
+      ENV['GITHUB_APP_SLUG']
+    end
+    attr_writer :app_slug
+
     def octobox_io
       @octobox_io || ENV['OCTOBOX_IO'].present?
     end
@@ -116,6 +140,10 @@ module Octobox
     def redis_url
       return @redis_url if defined?(@redis_url)
       @redis_url = ENV.fetch("REDIS_URL", "redis://localhost:6379")
+    end
+
+    def marketplace_url
+      ENV['MARKETPLACE_URL']
     end
 
     def github_admin_ids

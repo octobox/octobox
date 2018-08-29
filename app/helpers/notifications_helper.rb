@@ -224,10 +224,6 @@ module NotificationsHelper
 
   def not_repo_in_active_org(param)
     return true unless param == :repo
-    !params[:owner].present?
-  end
-
-  def display_subject?
-    Octobox.config.fetch_subject
+    params[:owner].blank?
   end
 end

@@ -1,6 +1,6 @@
 <nav class='navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-md'>
   <a class="navbar-brand" href="/" title='Octobox'>
-    <%= octobox_reverse_icon(28) %>
+    <%= octobox_reverse_icon(18) %>
   </a>
 
   <div>
@@ -17,17 +17,17 @@
       <% end %>
     </button>
   </div>
-
-  <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
-    <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
-        <%= hidden_field_tag name, value %>
+  <% if @notifications %>
+    <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
+      <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
+          <%= hidden_field_tag name, value %>
+      <% end %>
+      <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 46, id: 'search-box', 'aria-label' => 'Search' %>
+      <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
+        <%= octicon 'question', :height => 16 %>
+      </div>
     <% end %>
-    <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 46, id: 'search-box', 'aria-label' => 'Search' %>
-    <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
-      <%= octicon 'question', :height => 16 %>
-    </div>
   <% end %>
-
   <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item nav-link d-none d-md-block">
@@ -45,7 +45,7 @@
             <%= octicon 'mark-github', height: 16, class: 'text-muted' %>
             GitHub Dashboard
           <% end %>
-          <%= link_to "https://github.com/octobox/octobox/issues", class: 'dropdown-item', target: "_blank", rel: "noopener" do %>
+          <%= link_to documentation_path(anchor: 'support'), class: 'dropdown-item', target: "_blank", rel: "noopener" do %>
             <%= octicon 'question', height: 16, class: 'text-muted' %>
             Octobox Support
           <% end %>
@@ -59,15 +59,19 @@
               Sidekiq
             <% end %>
           <% end %>
-          <%= link_to "settings", class: 'dropdown-item' do %>
-            <%= octicon 'settings', height: 16, class: 'text-muted' %>
-            Settings
+          <%= link_to "documentation", class: 'dropdown-item' do %>
+            <%= octicon 'book', height: 16, class: 'text-muted' %>
+            User Documentation
           <% end %>
           <% if File.exist?(Rails.root.join('public', 'docs', 'index.html')) %>
             <%= link_to "docs/", class: 'dropdown-item' do %>
-              <%= octicon 'book', height: 16, class: 'text-muted' %>
+              <%= octicon 'code', height: 16, class: 'text-muted' %>
               API Documentation
             <% end %>
+          <% end %>
+          <%= link_to "settings", class: 'dropdown-item' do %>
+            <%= octicon 'settings', height: 16, class: 'text-muted' %>
+            Settings
           <% end %>
           <div class="dropdown-divider d-md-none"></div>
           <a class="d-md-none" href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener"><%= octicon 'gift', height: 16, class: 'text-muted' %> Donate</a>

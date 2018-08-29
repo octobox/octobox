@@ -1,5 +1,5 @@
 namespace :release do
-  desc "Sync Notifications"
+  desc "Generate Changelog"
   task notes: :environment do
     Octobox::Changelog.new.generate
   end

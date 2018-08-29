@@ -1,13 +1,19 @@
 <div class="jumbotron">
   <div class="container">
-    <h1 class="text-center"><%= octobox_icon(80) %> Octobox</h1>
-    <p class="text-center">The best way to manage your GitHub Notifications</p>
+    <h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
+    <p class="text-center">Untangle your GitHub Notifications</p>
     <div class="text-center">
       <%= image_tag 'screenshot.png', class: 'screenshot', alt: 'Octobox Screenshot' %>
       <p>
         <%= link_to login_path, class: 'btn btn-outline-dark btn-lg' do %>
           <%= octicon 'mark-github', height: 22 %>
           <span class='ml-1'>Sign in with GitHub</span>
+        <% end %>
+        <% if Octobox.github_app? && !Octobox.config.octobox_io %>
+          <%= link_to Octobox.config.app_install_url, class: 'btn btn-outline-dark btn-lg' do %>
+            <%= octicon 'briefcase', height: 22 %>
+            <span class='ml-1'>Install the GitHub App</span>
+          <% end %>
         <% end %>
       </p>
       <p>

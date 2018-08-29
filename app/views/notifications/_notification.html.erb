@@ -21,13 +21,13 @@
     </td>
   <% end %>
 
-  <td class='notification-icon <%= notification_icon_color(notification.state) if display_subject? %>'>
+  <td class='notification-icon <%= notification_icon_color(notification.state) if notification.display_subject? %>'>
     <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
   </td>
   <td class='notification-subject'>
     <%= link_to notification.subject_title, notification.web_url, target: '_blank', rel: "noopener", class: 'link', onclick: "markRead(#{notification.id})" %>
 
-    <% if display_subject? %>
+    <% if notification.display_subject? %>
       <% if notification.subject %>
         <% notification.subject.labels.each do |label| %>
           <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge d-sm", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
@@ -42,15 +42,15 @@
       </small>
     </td>
   <% end %>
-  <% if display_subject? %>
-    <td class='notification-subject-author'>
+  <td class='notification-subject-author'>
+    <% if notification.display_subject? %>
       <% if notification.subject %>
         <small>
           <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', title: 'Author', data: {toggle: 'tooltip'} %>
         </small>
       <% end %>
-    </td>
-  <% end %>
+    <% end %>
+  </td>
   <td class='notification-reason'>
     <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "badge badge-#{reason_label(notification.reason)}" %>
   </td>
