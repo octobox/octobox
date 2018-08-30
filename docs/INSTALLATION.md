@@ -321,6 +321,12 @@ If you have modified the Octobox code in any way, in order to comply with the AG
 can do this by setting the `SOURCE_REPO` environment variable to the url of a GitHub repo with the modified source.  For instance, if
 you run this from a fork in the 'NotOctobox' org, you would set `SOURCE_REPO=https://github.com/NotOctobox/octobox`.
 
+## Adding a link to a "native" desktop app link
+
+Some applications allow you to create "native" applications for the desktop. This includes software such as [Nativefier](https://www.npmjs.com/package/nativefier).
+
+If your installation uses this, set the environment variable `OCTOBOX_NATIVE_LINK` to add a link to the dropdown menu.
+
 ## Adding a custom initializer
 
 If you have some need to run custom Ruby code or wish to configure Octobox directly on application load, you may add a file named

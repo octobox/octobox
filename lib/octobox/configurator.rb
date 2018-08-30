@@ -111,6 +111,11 @@ module Octobox
     end
     attr_writer :github_team_id
 
+    def native_link
+      ENV['OCTOBOX_NATIVE_LINK'] || nil
+    end
+    attr_writer :native_link
+
     def source_repo
       env_value = ENV['SOURCE_REPO'].blank? ? nil : ENV['SOURCE_REPO']
       @source_repo || env_value || 'https://github.com/octobox/octobox'
