@@ -39,11 +39,6 @@ function generate_png {
     local SIZE=$3
     local DIR=$4
 
-    if [ ! -z "$DIR" ]
-    then 
-        DIR="$DIR/"
-    fi
-
     if [ ! -f "$SOURCE" ];
     then
         echo "Could not find the source image $SOURCE"
@@ -59,8 +54,14 @@ function generate_png {
         HEIGHT=$SIZE
     fi
 
-    echo "$DIR$NAME-${SIZE}.png"
-    $CONVERT_CMD "$SOURCE" -resize ${WIDTH}x${HEIGHT}! -crop ${WIDTH}x${HEIGHT}+0+0 -alpha on "$PWD/$DIR$NAME-${SIZE}.png"
+    if [ ! -z "$DIR" ]
+    then 
+        echo "$DIR/$NAME.${SIZE}.png"
+        $CONVERT_CMD "$SOURCE" -resize ${WIDTH}x${HEIGHT}! -crop ${WIDTH}x${HEIGHT}+0+0 -alpha on "$PWD/$DIR/$NAME.${SIZE}.png"
+    else
+        echo "$NAME-${SIZE}x${SIZE}.png"
+        $CONVERT_CMD "$SOURCE" -resize ${WIDTH}x${HEIGHT}! -crop ${WIDTH}x${HEIGHT}+0+0 -alpha on "$PWD/$NAME-${SIZE}x${SIZE}.png"
+    fi
 } 
 
 echo "Generating icons"
@@ -80,9 +81,9 @@ for size in "${APPLE_SIZES[@]}"
 do
    generate_png "apple-icon" $SRC_IMAGE $size 
 done
-echo "$PWD/apple-icon-precomposed.png"
+echo "apple-icon-precomposed.png"
 $CONVERT_CMD "$SRC_IMAGE" -resize ${APPLE_PROCOMPOSED}x${APPLE_PROCOMPOSED}! -crop ${APPLE_PROCOMPOSED}x${APPLE_PROCOMPOSED}+0+0 -alpha on "$PWD/apple-icon-precomposed.png"
-echo "$PWD/apple-icon.png"
+echo "apple-icon.png"
 $CONVERT_CMD "$SRC_IMAGE" -resize ${APPLE_ICON}x${APPLE_ICON}! -crop ${APPLE_ICON}x${APPLE_ICON}+0+0 -alpha on "$PWD/apple-icon.png"
 
 echo "Generating android icons"
@@ -102,5 +103,5 @@ for size in "${FAVICON_SIZES[@]}"
 do
    generate_png "favicon" $SRC_IMAGE $size 
 done
-echo "$PWD/favicon.ico"
+echo "favicon.ico"
 $CONVERT_CMD "$SRC_IMAGE" -resize 16x16! -crop 16x16+0+0 -background $TRANSPARENT_COLOUR -alpha remove "$PWD/favicon.ico"
