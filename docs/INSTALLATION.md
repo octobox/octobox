@@ -340,7 +340,7 @@ Experimental feature for downloading extra information about the subject of each
 
 - Author for Issues, Pull Requests, Commit Comments and Releases
 - State (open/closed/merged) for Issues, Pull Requests
-- Labels
+- Labels and Assignees for Issues, Pull Requests
 
 To enable this feature set the following environment variable:
 
