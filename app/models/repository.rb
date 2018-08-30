@@ -1,5 +1,6 @@
 class Repository < ApplicationRecord
   has_many :notifications, foreign_key: :repository_full_name, primary_key: :full_name
+  has_many :users, -> { distinct }, through: :notifications
   has_many :subjects, foreign_key: :repository_full_name, primary_key: :full_name
   belongs_to :app_installation
 
