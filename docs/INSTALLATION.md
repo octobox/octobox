@@ -362,3 +362,38 @@ To enable Google analytics tracking set the following environment variable:
     GA_ANALYTICS_ID=UA-XXXXXX-XX
 
 ## Running Octobox as a GitHub App
+
+Octobox can be configured to run as a [GitHub App](https://developer.github.com/apps/), which allows it to access private repository issue and pull request data without requiring `repo` scope.
+
+Due to a restriction in the GitHub App API, you'll need to create both an [Oauth App](https://github.com/settings/applications/new) and a [GitHub App](https://github.com/settings/apps/new), first follow the setup instructions for [Local installation](#local-installation).
+
+Then create a new GitHub App, <https://github.com/settings/apps/new>, with the following settings:
+
+- Homepage URL: the domain you plan to run the app on (or http://localhost:3000)
+- User authorization callback URL: The domain plus `/auth/githubapp`, i.e. http://myoctoboxdomain.com/auth/githubapp
+- Setup URL: Same as the User authorization callback URL i.e. http://myoctoboxdomain.com/auth/githubapp
+- Redirect on update: ✔
+- Webhook URL: The domain plus `/hooks/github`, i.e. http://myoctoboxdomain.com/hooks/github
+- Webhook secret: generate a password and paste it in here and save for later
+- Permissions:
+  - Repository metadata: Read-only
+  - Issues: Read-only
+  - Pull Requests: Read-only
+- Subscribe to events: check all available options
+- Where can this GitHub App be installed: Any account if you want to be able to install it on multiple orgs
+
+Then add the following ENV variables to `.env` (or `heroku config:add` if you're hosting heroku)
+
+- `GITHUB_APP_CLIENT_ID` - From the GitHub App "OAuth credentials" section labelled `Client ID`
+- `GITHUB_APP_CLIENT_SECRET` - From the GitHub App "OAuth credentials" section labelled `Client secret`
+- `GITHUB_APP_ID` - From the GitHub App "About" section labelled `ID`
+- `GITHUB_APP_SLUG`-  - From the GitHub App "About" section labelled `Public link`, the last section of the url, i.e https://github.com/apps/my-octobox -> `my-octobox`
+- `GITHUB_WEBHOOK_SECRET` - The Webhook secret if you generated one earlier
+
+Then start the rails app and visit <https://github.com/apps/my-octobox/installations/new> to install it on the orgs/repos you wish, it should log you into Octobox on completion of the install.
+
+n.b. you will be required to log into the oauth app (to allow access to the notifications scope), followed by the github app (to allow access to installed app data).
+
+To process events recieved from the webhook, ensure you have a sidekiq worker running as well as the rails server: `$ bundle exec sidekiq -C config/sidekiq.yml`
+
+If you wish to run the GitHub app locally and still recieve webhook events, use a service like <https://ngrok.com> to create a public url (`https://my-octobx.ngrok.com`) and use instead of http://localhost:3000 for all oauth and GitHub app config urls.
