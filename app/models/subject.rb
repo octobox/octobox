@@ -2,6 +2,7 @@ class Subject < ApplicationRecord
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
   has_many :labels, dependent: :delete_all
   has_many :users, through: :notifications
+  belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
 
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
   private_constant :BOT_AUTHOR_REGEX
@@ -46,6 +47,7 @@ class Subject < ApplicationRecord
   def self.sync(remote_subject)
     subject = Subject.find_or_create_by(url: remote_subject['url'])
     subject.update({
+      repository_full_name: remote_subject['repository']['full_name'],
       github_id: remote_subject['id'],
       state: remote_subject['merged_at'].present? ? 'merged' : remote_subject['state'],
       author: remote_subject['user']['login'],
