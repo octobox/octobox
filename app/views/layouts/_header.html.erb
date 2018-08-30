@@ -63,6 +63,12 @@
             <%= octicon 'book', height: 16, class: 'text-muted' %>
             User Documentation
           <% end %>
+           <% if Octobox.config.native_link %>
+              <%= link_to Octobox.config.native_link, class: 'dropdown-item' do %>
+                <%= octicon 'desktop-download', height: 16, class: 'text-muted' %>
+                Download Desktop App
+              <% end %>
+          <% end %>
           <% if File.exist?(Rails.root.join('public', 'docs', 'index.html')) %>
             <%= link_to "docs/", class: 'dropdown-item' do %>
               <%= octicon 'code', height: 16, class: 'text-muted' %>
