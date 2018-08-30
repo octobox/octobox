@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SyncNotificationsWorkerTest < ActiveSupport::TestCase
   setup do
+    stub_repository_request
     @user = create(:user)
     @stubbed_user_notification_sync = stub_notifications_request(extra_headers: {
       'Authorization' => "token #{@user.access_token}"

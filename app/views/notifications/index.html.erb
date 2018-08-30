@@ -7,7 +7,7 @@
   <div class="flex-main">
     <div class="flex-container">
       <div class="card card-notifications justify-content-between">
-        <div class="card-header">
+        <div class="card-header sticky-top">
           <% if @notifications.to_a.any? %>
             <div class="per-page btn-group float-right d-none d-md-block" data-toggle="tooltip" data-placement="left" title="Notifications per page">
               <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -24,19 +24,20 @@
           <div class="btn btn-sm btn-link help float-right d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
             <%= octicon 'keyboard', :height => 16 %>
           </div>
-          <button type="button" class="d-inline-block d-lg-none btn btn-sm btn-outline-dark" data-toggle="offcanvas">
+          <button type="button" class="d-inline-block d-lg-none btn btn-sm btn-outline-dark" data-toggle="offcanvas" aria-label='Toggle sidebar'>
             <%= octicon 'three-bars', :height => 16 %>
           </button>
           <% if @notifications.to_a.any? %>
           <label class="btn btn-outline-light select-all mb-0" for="select_all">
-            <input id="select_all" type="checkbox" class='js-select_all'>
+            <input id="select_all" type="checkbox" class='js-select_all' aria-label='Select All'>
           </label>
           <%= select_all_button(@cur_selected, @total) %>
           <% end %>
-          <%= link_to sync_notifications_path(filters), class: 'btn btn-sm btn-outline-secondary sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Refresh list', method: :post do %>
+          <%= link_to sync_notifications_path(filters), class: 'btn btn-sm btn-outline-secondary btn-outline-dark js-sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync', method: :post do %>
             <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync?}" %>
           <% end %>
-          <%= archive_selected_button %>
+          <%= archive_selected_button unless archive_selected? %>
+          <%= unarchive_selected_button unless inbox_selected? %>
           <%= mute_selected_button %>
           <%= mark_read_selected_button %>
           <%= render 'filter-list' %>
@@ -51,35 +52,44 @@
           <% if @notifications.to_a.any? %>
             <%= render partial: 'notification', collection: @notifications %>
           <% elsif initial_sync? %>
-            <div class="blankslate blankslate-spacious blankslate-clean-background">
+            <div class="blankslate blankslate-spacious blankslate-clean-background js-initial_sync">
               <%= octicon 'cloud-download', height: 32, class: 'blankslate-icon' %>
               <h3>Syncing your notifications for the first time...</h3>
               <p>This might take a minute or two</p>
             </div>
-            <%= javascript_tag "sync()" %>
           <% elsif no_url_filter_parameters_present %>
             <div class="blankslate blankslate-spacious blankslate-clean-background">
               <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
               <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
               <h3>You're in the clear!</h3>
               <p>There are no notifications that need your attention.</p>
-              <p><i>Expecting notifications? Make sure <a href="https://github.com/settings/notifications">Web Notifications</a> are enabled on your GitHub account.</i></p>
+              <p>
+                <%= link_to sync_notifications_path(filters), method: :post, class: 'btn btn-outline-secondary sync' do %>
+                  <%= octicon 'sync', height: 18 %>
+                  <span class='ml-1'>Refresh</span>
+                <% end %>
+              </p>
+              <% unless current_user.notifications.any? %>
+                <p><i>Expecting notifications? Make sure <a href="<%= Octobox.config.github_domain %>/settings/notifications">Web Notifications</a> are enabled on your GitHub account.</i></p>
+              <% end %>
               <% if current_user.last_synced_at %>
                 <p class='text-muted'>
-                <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+                  <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
                 </p>
               <% end %>
             </div>
           <% else %>
             <div class="blankslate blankslate-spacious blankslate-clean-background">
-              <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
-              <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
+              <%= octicon 'search', height: 32, class: 'blankslate-icon' %>
+              <%= octicon 'gist-secret', height: 32, class: 'blankslate-icon' %>
               <h3>Nothing to see here.</h3>
-              <p>You can always try <%= link_to 'refreshing', sync_notifications_path(filters), method: :post %>.</p>
-              <p><i>Expecting notifications? Make sure <a href="https://github.com/settings/notifications">Web Notifications</a> are enabled on your GitHub account.</i></p>
+              <p>You can always try <%= link_to 'refreshing', sync_notifications_path(filters), method: :post %> or <%= link_to 'removing filters', root_path %>.</p>
+              <% unless current_user.notifications.any? %>
+                <p><i>Expecting notifications? Make sure <a href="<%= Octobox.config.github_domain %>/settings/notifications">Web Notifications</a> are enabled on your GitHub account.</i></p>
+              <% end %>
               <% if current_user.last_synced_at %>
                 <p class='text-muted'>
-                <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+                  <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
                 </p>
               <% end %>
             </div>

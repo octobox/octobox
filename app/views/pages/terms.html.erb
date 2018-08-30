@@ -2,34 +2,31 @@
   <div class="row">
     <div class="col-md-12">
       <h1>Terms and Conditions</h1>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-8">
+      <hr>
       <p>
         Thank you for using Octobox.io!
       </p>
       <p>
-        Octobox.io is owned and operated operated by Andrew Nesbitt ("Octobox.io").
+        Octobox.io is owned and operated operated by Octobox Ltd. ("Octobox.io"), company number 11469796 registered in England and Wales.
       </p>
-      <h3 id='acceptance'>Acceptance (How To Accept These Things)</h3>
+      <h4 id='acceptance'>Acceptance (How To Accept These Things)</h4>
       <p>
         By using the Octobox.io web site ("Service") you are agreeing to the terms and conditions ("Terms of Service") presented below.
       </p>
 
-      <h3 id='account'>Account Terms</h3>
+      <h4 id='account'>Account Terms</h4>
         You may not enter into this agreement if you are not of legal age to do so, you are legally prohibited from doing so or you are not a human.
       </p>
       <p>
         If you are using the Service on behalf of a legal entity you are representing that you have authority to bind that entity to these terms. By accepting these terms you are doing so on behalf of that entity and all references to 'you' and 'your' refer to that entity from here on.
       </p>
 
-      <h3 id='termination'>Cancellation and Termination (How To Cancel This Agreement)</h3>
+      <h4 id='termination'>Cancellation and Termination (How To Cancel This Agreement)</h4>
       <p>
         You may stop using the Service without notice. If you do not use the Service for thirty (30) calendar days we will consider your agreement under these terms terminated. You may also give prior notice of termination by emailing <%= mail_to 'andrew@octobox.io', 'andrew@octobox.io', subject: 'Termination of agreement' %>.
       </p>
 
-      <h3 id='modifications'>Modifications (Things We May Change)</h3>
+      <h4 id='modifications'>Modifications (Things We May Change)</h4>
       <p>
         Octobox.io reserves the right at any time and from time to time to modify or discontinue, temporarily or permanently, the Service (or any part thereof) with or without notice.
       </p>
@@ -43,7 +40,7 @@
         Octobox.io shall not be liable to you or to any third party for any modification, price change, suspension or discontinuance of the Service.
       </p>
 
-      <h3 id='copyrights'>Copyrights and Content Ownership</h3>
+      <h4 id='copyrights'>Copyrights and Content Ownership</h4>
       <p>
         We claim no intellectual property rights over the material you provide to the Service.
       </p>
@@ -51,19 +48,19 @@
         The name and logos for Octobox.io are property of Octobox.io. All rights reserved. You may not use the Octobox.io name without written permission from Octobox.io.
       </p>
 
-      <h3 id='agreements'>Agreements (Things You Agree To)</h3>
+      <h4 id='agreements'>Agreements (Things You Agree To)</h4>
       <ul>
         <li>Your use of the Service is at your sole risk. The Service is provided on an “as is” and “as available” basis.</li>
         <li>You understand that Octobox.io uses third party vendors and hosting partners to provide the necessary hardware, software, networking, storage, and related technology required to run the Service.</li>
         <li>You agree to the terms of our <a href='/privacy'>Privacy Policy</a></li>
       </ul>
 
-      <h3 id='provisions'>Provisions (Things You Must Do)</h3>
+      <h4 id='provisions'>Provisions (Things You Must Do)</h4>
       <ul>
         <li>You must Comply with the terms of service.</li>
       </ul>
 
-      <h3 id='restrictions'>Restrictions (Things You Must Not Do)</h3>
+      <h4 id='restrictions'>Restrictions (Things You Must Not Do)</h4>
       <ul>
         <li>You must not perform any action with the intent to introduce errors within or otherwise disrupt or interfere with the provision of the service.</li>
         <li>You must not make representations regarding ownership, partnership, sponsorship or any other type of endorsement between you and Octobox.io.</li>
@@ -71,7 +68,7 @@
         <li>You must not, in the use of the Service, violate any laws in your jurisdiction (including but not limited to copyright laws).</li>
       </ul>
 
-      <h3 id='limitations'>Limitations (Things We Cannot Promise)</h3>
+      <h4 id='limitations'>Limitations (Things We Cannot Promise)</h4>
       <p>
         Octobox.io does not warrant that (i) the Service will meet your specific requirements, (ii) the Service will be uninterrupted, timely, secure, or error-free, (iii) the results that may be obtained from the use of the Service will be accurate or reliable, (iv) the quality of any products, services, information, or other material purchased or obtained by you through the Service will meet your expectations, and (v) any errors in the Service will be corrected.
       </p>
@@ -85,19 +82,24 @@
         The failure of Octobox.io to exercise or enforce any right or provision of the Terms of Service shall not constitute a waiver of such right or provision. The Terms of Service constitutes the entire agreement between you and Octobox.io and govern your use of the Service, superceding any prior agreements between you and Octobox.io (including, but not limited to, any prior versions of the Terms of Service).
       </p>
 
-      <h3 id='bugs'>Bugs, Errors and Issues</h4>
+      <h4 id='bugs'>Bugs, Errors and Issues</h4>
       <p>
         If you find a bug or error in the operation or content of the service please file an issue in our <a href='https://github.com/octobox/octobox/issues/new'>bug tracker</a>.
       </p>
 
-      <h3 id='support'>Support</h4>
+      <h4 id='support'>Support</h4>
       <p>
-        Octobox.io is a small community of people building a free, utility service. We do not offer formal support processes. If you require support you can try:
+        Octobox.io is a small community of people supporting the service. We do not offer formal support processes. If you require mroe formal support arrangements please <a href='mailto:support@octobox.io'>email us</a> otherwise you can try:
       </p>
       <ul>
         <li>Filing an issue in our <a href='https://github.com/octobox/octobox.io/issues/new'>bug tracker</a> following the template provided.</li>
         <li>Asking for help in our <a href='https://gitter.im/octobox/octobox'>public chat room</a>.</li>
+        <li>Email us at <%= mail_to 'support@octobox.io' %>.</li>
+        <li>Tweet us at <%= link_to '@octoboxio', 'https://twitter.com/octoboxio' %>.</li>
       </ul>
+      <hr>
     </div>
   </div>
 </div>
+
+<%= render 'layouts/footer'%>

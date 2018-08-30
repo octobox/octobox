@@ -1,6 +1,6 @@
 # [Octobox](https://octobox.io) &#128238;
 
-:postbox: The best way to manage your GitHub Notifications.
+:postbox: Untangle your GitHub Notifications.
 
 ![Screenshot of  Octobox](app/assets/images/screenshot.png)
 
@@ -46,7 +46,6 @@ You can use Octobox right now at [octobox.io](https://octobox.io), a shared inst
 **Note:** octobox.io has a few features intentionally disabled:
 
 * Subject syncing (includes authorship and open/closed/merged status information) ([#411](https://github.com/octobox/octobox/pull/411))
-* Auto refreshing of notifications page ([#200](https://github.com/octobox/octobox/pull/200))
 * Personal Access Tokens ([#185](https://github.com/octobox/octobox/pull/185))
 
 Features are disabled for various reasons, such as not wanting to store users' tokens at this time.
