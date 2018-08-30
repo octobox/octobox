@@ -1,5 +1,5 @@
 <% if current_user.syncing? %>
-  <span class="js-syncing"><!-- This causes the sync icon to spin --></span>
+  <span class="js-is_syncing"><!-- This causes the sync icon to spin --></span>
 <% end %>
 
 <div class="flex-content">
@@ -37,7 +37,7 @@
           </label>
           <%= select_all_button(@cur_selected, @total) %>
           <% end %>
-          <%= link_to sync_notifications_path(filters.merge(async: true)), class: 'btn btn-sm btn-outline-secondary btn-outline-dark js-sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync', method: :post do %>
+          <%= link_to sync_notifications_path(filters.merge(async: Octobox.config.background_jobs_enabled?)), class: 'btn btn-sm btn-outline-secondary btn-outline-dark js-sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync', method: :post do %>
             <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync? || current_user.syncing?}" %>
           <% end %>
           <%= archive_selected_button unless archive_selected? %>
@@ -62,7 +62,7 @@
               <p>This might take a minute or two</p>
             </div>
             <% unless current_user.syncing? %>
-              <span class="js-sync"><!-- This causes a sync to occur --></span>
+              <span class="js-start_sync"><!-- This causes a sync to occur --></span>
             <% end %>
           <% elsif no_url_filter_parameters_present %>
             <div class="blankslate blankslate-spacious blankslate-clean-background">

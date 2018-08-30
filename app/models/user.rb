@@ -63,15 +63,9 @@ class User < ApplicationRecord
     [:queued, :working].include?(Sidekiq::Status.status(sync_job_id))
   end
 
-  def sync_notifications(priority: true)
+  def sync_notifications
     return true if syncing?
-
-    # If the call declares it is priority, then we will override it and put it on the priority queue
-    # This is useful for an initial sync or user-invoked sync, otherwise those could be stuck behind scheduled background syncs
-    args_override = {}
-    args_override[:queue] = :priority_sync_notifications if priority
-
-    job_id = SyncNotificationsWorker.set(args_override).perform_async(self.id)
+    job_id = SyncNotificationsWorker.perform_async_if_configured(self.id)
     update(sync_job_id: job_id)
   end
 

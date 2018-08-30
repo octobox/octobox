@@ -201,8 +201,8 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def sync
-    if params[:async]
-      current_user.sync_notifications(priority: true)
+    if Octobox.config.background_jobs_enabled? && params[:async]
+      current_user.sync_notifications
       flash[:notice] = "Syncing notifications in the background. The page will refresh automatically"
     else
       current_user.sync_notifications_in_foreground

@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
 
     cookies.permanent.signed[:user_id] = {value: user.id, httponly: true}
 
-    user.sync_notifications(priority: true) unless initial_sync?
+    user.sync_notifications unless initial_sync?
     redirect_to root_path
   end
 

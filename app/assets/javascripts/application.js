@@ -315,7 +315,7 @@ function refreshOnSync() {
 
 function notify(message, type) {
   var alert_html = [
-    "<div class='alert alert-" + type + " fade in'>",
+    "<div class='alert alert-" + type + " fade show'>",
     "   <button class='close' data-dismiss='alert'>x</button>",
     message,
     "</div>"
@@ -409,8 +409,8 @@ $(document).ready(function() {
 
 // Sync Handling
 $(document).ready(function() {
-  if($(".js-syncing").length){ refreshOnSync() }
-  if($(".js-sync").length){ sync() }
+  if($(".js-is_syncing").length){ refreshOnSync() }
+  if($(".js-start_sync").length){ sync() }
 });
 
 var lastCheckedNotification = null;
