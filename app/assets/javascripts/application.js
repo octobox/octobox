@@ -107,6 +107,8 @@ function updateFavicon() {
 document.addEventListener("turbolinks:load", function() {
   enableKeyboardShortcuts();
 
+  if($(".js-initial_sync").length){ sync() }
+
   if($("#help-box").length){
     $('button.archive_selected, button.unarchive_selected').click(toggleArchive);
     $('button.select_all').click(toggleSelectAll);
@@ -139,8 +141,8 @@ document.addEventListener("turbolinks:load", function() {
       $(this).toggleClass("star-active star-inactive");
       $.post('/notifications/'+$(this).data('id')+'/star')
     });
-    $('a.sync').on('click', function() {
-      $('.sync .octicon').toggleClass('spinning')
+    $('a.js-sync').on('click', function() {
+      $('.js-sync .octicon').toggleClass('spinning')
     });
     recoverPreviousCursorPosition();
 
@@ -298,7 +300,7 @@ function openCurrentLink(e) {
 }
 
 function sync() {
-  $("a.sync").click();
+  $("a.js-sync").click();
 }
 
 function autoSync() {
@@ -381,24 +383,24 @@ $(document).ready(function() {
   })
 });
 
-var lastCheckedNotifcation = null;
+var lastCheckedNotification = null;
 // handle shift+click multiple check
 $(document).ready(function() {
-  var notifcationCheckboxes = $('input.archive[type="checkbox"]');
-  notifcationCheckboxes.click(function(e) {
-    if(!lastCheckedNotifcation) {
-      lastCheckedNotifcation = this;
+  var notificationCheckboxes = $('input.archive[type="checkbox"]');
+  notificationCheckboxes.click(function(e) {
+    if(!lastCheckedNotification) {
+      lastCheckedNotification = this;
       return;
     }
 
     if(e.shiftKey) {
-      var start = notifcationCheckboxes.index(this);
-      var end = notifcationCheckboxes.index(lastCheckedNotifcation);
+      var start = notificationCheckboxes.index(this);
+      var end = notificationCheckboxes.index(lastCheckedNotification);
 
-      notifcationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastCheckedNotifcation.checked);
+      notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastCheckedNotification.checked);
 
     }
 
-    lastCheckedNotifcation = this;
+    lastCheckedNotification = this;
   });
 });

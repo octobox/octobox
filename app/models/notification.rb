@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
+  SUBJECTABLE_TYPES = ['Issue', 'PullRequest', 'Commit', 'Release'].freeze
+
   if DatabaseConfig.is_postgres?
     include PgSearch
     pg_search_scope :search_by_subject_title,
@@ -20,6 +22,7 @@ class Notification < ApplicationRecord
 
   belongs_to :user
   belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true
+  belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_many :labels, through: :subject
 
   scope :inbox,    -> { where(archived: false) }
@@ -34,6 +37,8 @@ class Notification < ApplicationRecord
   scope :owner,    ->(owner_name)   { where(arel_table[:repository_owner_name].matches(owner_name)) }
   scope :author,    ->(author_name)   { joins(:subject).where(Subject.arel_table[:author].matches(author_name)) }
 
+  scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
+
   scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
   scope :author,    ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }
 
@@ -41,7 +46,10 @@ class Notification < ApplicationRecord
   scope :label,    ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
   scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
-  scope :subjectable, -> { where(subject_type: ['Issue', 'PullRequest', 'Commit', 'Release']) }
+  scope :assigned, ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }
+  scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
+
+  scope :subjectable, -> { where(subject_type: SUBJECTABLE_TYPES) }
   scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
   scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
 
@@ -64,8 +72,13 @@ class Notification < ApplicationRecord
   end
 
   def state
-    return unless Octobox.config.fetch_subject
+    return unless display_subject?
     subject.try(:state)
+  end
+
+  def self.archive(notifications, value)
+    notifications.update_all(archived: ActiveRecord::Type::Boolean.new.cast(value))
+    mark_read(notifications)
   end
 
   def self.mark_read(notifications)
@@ -80,7 +93,7 @@ class Notification < ApplicationRecord
             conn.patch "notifications/threads/#{n.github_id}"
         end
       end
-    rescue Octokit::Forbidden
+    rescue Octokit::Forbidden, Octokit::NotFound
       # one or more notifications are for repos the user no longer has access to
     end
     where(id: unread.map(&:id)).update_all(unread: false)
@@ -102,7 +115,7 @@ class Notification < ApplicationRecord
   end
 
   def expanded_subject_url
-    return subject_url unless Octobox.config.fetch_subject
+    return subject_url unless Octobox.config.subjects_enabled?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
   end
 
@@ -130,12 +143,25 @@ class Notification < ApplicationRecord
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
     update_subject
+    update_repository
+  end
+
+  def github_app_installed?
+    user.app_token.present? && repository.try(:github_app_installed?)
+  end
+
+  def subjectable?
+    SUBJECTABLE_TYPES.include?(subject_type)
+  end
+
+  def display_subject?
+    github_app_installed? || Octobox.config.fetch_subject
   end
 
   private
 
   def download_subject
-    user.github_client.get(subject_url)
+    user.subject_client.get(subject_url)
 
   # If permissions changed and the user hasn't accepted, we get a 401
   # We may receive a 403 Forbidden or a 403 Not Available
@@ -163,7 +189,9 @@ class Notification < ApplicationRecord
   end
 
   def update_subject(force = false)
-    return unless Octobox.config.fetch_subject
+    return unless subjectable?
+
+    return unless display_subject?
     # skip syncing if the notification was updated around the same time as subject
     return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
@@ -173,6 +201,7 @@ class Notification < ApplicationRecord
     if subject
       case subject_type
       when 'Issue', 'PullRequest'
+        subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
       end
@@ -180,15 +209,18 @@ class Notification < ApplicationRecord
       case subject_type
       when 'Issue', 'PullRequest'
         create_subject({
+          github_id: remote_subject.id,
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
           body: remote_subject.body,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
-          updated_at: remote_subject.updated_at
+          updated_at: remote_subject.updated_at,
+          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
         })
       when 'Commit', 'Release'
         create_subject({
+          github_id: remote_subject.id,
           author: remote_subject.author&.login,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
@@ -216,6 +248,46 @@ class Notification < ApplicationRecord
         comment.created_at = remote_comment.created_at
         comment.save
       end
+    end
+  end
+
+  def download_repository
+    user.github_client.repository(repository_full_name)
+  rescue Octokit::ClientError => e
+    nil
+  end
+
+  def update_repository
+    return unless display_subject?
+    return if repository != nil && updated_at - repository.updated_at < 2.seconds
+
+    remote_repository = download_repository
+
+    if remote_repository.nil?
+      # if we can't access the repository, assume that it's private
+      remote_repository = OpenStruct.new({
+        full_name: repository_full_name,
+        private: true,
+        owner: {login: repository_owner_name}
+      })
+    end
+
+    if repository
+      repository.update_attributes({
+        full_name: remote_repository.full_name,
+        private: remote_repository.private,
+        owner: remote_repository.owner[:login],
+        github_id: remote_repository.id,
+        last_synced_at: Time.current
+      })
+    else
+      create_repository({
+        full_name: remote_repository.full_name,
+        private: remote_repository.private,
+        owner: remote_repository.owner[:login],
+        github_id: remote_repository.id,
+        last_synced_at: Time.current
+      })
     end
   end
 end

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Octobox</title>
     <%= csrf_meta_tags %>
@@ -7,6 +7,9 @@
     <%= render 'layouts/favicons' %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="turbolinks-cache-control" content="no-preview">
+    <meta name="Description" content="Untangle your GitHub Notifications">
+
+    <link rel="preconnect" href="https://api.github.com">
 
     <% if Rails.env.production? && Rails.application.secrets.google_analytics_id.present? %>
       <script>
@@ -24,10 +27,10 @@
     <% end %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
 
     <meta property="og:title" content="Octobox">
-    <meta property="og:description" content="The best way to manage your GitHub Notifications">
+    <meta property="og:description" content="Untangle your GitHub Notifications">
     <meta property="og:image" content="<%= asset_url 'app-icon.png' %>">
     <meta property="og:url" content="<%= root_url %>">
     <meta property="og:type" content="article" />
@@ -42,6 +45,19 @@
       <div class="flex-header">
         <%= render 'layouts/header' %>
       </div>
+    <% elsif !current_page?('/') %>
+
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="text-center">
+            <%= link_to root_path, class: 'text-dark' do %>
+              <%= octobox_round(80) %> Octobox
+            <% end %>
+          </h1>
+          <p class="text-center">Untangle your GitHub Notifications</p>
+        </div>
+      </div>
+
     <% end %>
     <div class="flex-header header-flash-messages">
       <%= flash_messages %>
@@ -52,8 +68,11 @@
     <% if logged_in? %>
       <%= render 'notifications/search-help' %>
     <% end %>
-    <script>
-      if (typeof ga === 'function') { ga('send', 'pageview', location.pathname+location.search) }
-    </script>
+
+    <% if Rails.env.production? && Rails.application.secrets.google_analytics_id.present? %>
+      <script>
+        if (typeof ga === 'function') { ga('send', 'pageview', location.pathname+location.search) }
+      </script>
+    <% end %>
   </body>
 </html>

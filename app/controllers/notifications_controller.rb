@@ -76,10 +76,13 @@ class NotificationsController < ApplicationController
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
     @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
 
-    if Octobox.config.fetch_subject
+    if display_subject?
       @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
       @unlabelled            = scope.reorder(nil).unlabelled.count
       @bot_notifications     = scope.reorder(nil).bot_author.count
+      @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
+      @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
+      @repositories          = scope.map(&:repository).compact
     end
 
     scope = current_notifications(scope)
@@ -160,9 +163,7 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def archive_selected
-    selected_notifications.update_all(
-      archived: ActiveRecord::Type::Boolean.new.cast(params[:value])
-    )
+    Notification.archive(selected_notifications, params[:value])
     head :ok
   end
 
@@ -240,7 +241,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    [:repo, :reason, :type, :unread, :owner, :state, :author].each do |sub_scope|
+    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private].each do |sub_scope|
       next unless params[sub_scope].present?
       # This cast is required due to a bug in type casting
       # TODO: Rails 5.2 was supposed to fix this:
@@ -250,7 +251,6 @@ class NotificationsController < ApplicationController
       if sub_scope == :reason
         val = params[sub_scope].split(',')
       else
-        type = scope.klass.type_for_attribute(sub_scope.to_s).class
         val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
       end
       scope = scope.send(sub_scope, val)
@@ -258,11 +258,12 @@ class NotificationsController < ApplicationController
     scope = scope.unlabelled if params[:unlabelled].present?
     scope = scope.bot_author if params[:bot].present?
     scope = scope.label(params[:label]) if params[:label].present?
+    scope = scope.assigned(params[:assigned]) if params[:assigned].present?
     scope
   end
 
   def notifications_for_presentation
-    eager_load_relation = Octobox.config.fetch_subject ? {subject: [:labels, :comments]} : nil
+    eager_load_relation = display_subject? ? [{subject: [:labels, :comments]}, :repository] : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
     if params[:q].present?

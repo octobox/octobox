@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     namespace :admin do
       mount Sidekiq::Web => "/sidekiq"
     end
+
+    get '/admin', to: 'admin#index', as: :admin
   end
 
   get :login,  to: 'sessions#new'
@@ -40,6 +42,11 @@ Rails.application.routes.draw do
       post :mark_read
     end
   end
+
+  get '/documentation', to: 'pages#documentation'
+  get '/support', to: redirect('/documentation#support')
+
+  post '/hooks/github', to: 'hooks#create'
 
   if Octobox.config.octobox_io
     get '/privacy', to: 'pages#privacy'

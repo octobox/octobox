@@ -56,12 +56,19 @@
     <% end %>
     <%= menu_separator unless @states.empty? %>
 
+    <% if @assigned > 0 %>
+      <%= filter_link :assigned, current_user.github_login, @assigned do %>
+        <%= octicon 'person', height: 16, class: 'sidebar-icon' %>
+        Assigned to you
+      <% end %>
+    <% end %>
     <% if @bot_notifications > 0 %>
       <%= filter_link :bot, true, @bot_notifications do %>
         <%= octicon 'hubot', height: 18, class: 'sidebar-icon' %>
         Bots
       <% end %>
     <% end %>
+
     <% if @unlabelled > 0 %>
       <%= filter_link :unlabelled, true, @unlabelled do %>
         <%= octicon 'tag', height: 16, class: 'sidebar-icon' %>
@@ -69,7 +76,7 @@
       <% end %>
     <% end %>
 
-    <%= menu_separator if @unlabelled > 0 || @bot_notifications > 0 %>
+    <%= menu_separator if @unlabelled > 0 || @bot_notifications > 0 || @assigned > 0 %>
   <% end %>
 
   <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
@@ -96,9 +103,22 @@
   <% end %>
   <%= menu_separator unless @reasons.empty? %>
 
+  <% if @visiblity %>
+    <% @visiblity.sort_by{|visiblity, count| visiblity.to_s }.each do |visiblity, count| %>
+      <%= filter_link :is_private, visiblity, count do %>
+        <% if visiblity %>
+          <%= octicon('lock', class: 'private-repo sidebar-icon') %> Private
+        <% else %>
+          <%= octicon('repo', class: 'sidebar-icon') %> Public
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= menu_separator unless @visiblity.empty? %>
+  <% end %>
+
   <% @unread_repositories.sort_by{|repo_name, count| repo_name.downcase }.group_by{|repo_name, count| repo_name.split('/')[0] }.each do |org, repos| %>
     <%= org_filter_link :owner, org do %>
-      <%= image_tag "#{Octobox.config.github_domain}/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar' %>
+      <%= image_tag "#{Octobox.config.github_domain}/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar', alt: org %>
       <%= org %>
     <% end %>
 
@@ -106,7 +126,11 @@
       <% repo_owner, repo_label = repo_name.split('/') %>
 
       <%= repo_filter_link :repo, repo_name, count do %>
-        <%= octicon('repo', size: 20) %>
+        <% if @repositories && @repositories.find{|r| r.full_name == repo_name }.try(:private?) %>
+          <%= octicon('lock', class: 'private-repo') %>
+        <% else %>
+          <%= octicon('repo') %>
+        <% end %>
         <%= repo_label %>
       <% end %>
      </li>

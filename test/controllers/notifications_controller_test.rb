@@ -3,7 +3,10 @@ require 'test_helper'
 
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    Octobox.config.stubs(:github_app).returns(false)
+    stub_fetch_subject_enabled(value: false)
     stub_notifications_request
+    stub_repository_request
     @user = create(:user)
   end
 
@@ -110,6 +113,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'renders notifications filtered by label' do
     stub_fetch_subject_enabled
+    Octobox.config.stubs(:github_app).returns(false)
     sign_in_as(@user)
 
     get '/'
@@ -165,6 +169,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
+    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+
     post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }
 
     assert_response :ok
@@ -179,6 +185,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
+
+    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { id: ['all'], value: true }
 
@@ -358,7 +366,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :service_unavailable
   end
 
-  test 'renders the inbox notifcation count in the sidebar' do
+  test 'renders the inbox notification count in the sidebar' do
     sign_in_as(@user)
     create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)

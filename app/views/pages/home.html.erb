@@ -1,14 +1,20 @@
 <div class="jumbotron">
   <div class="container">
-    <h1 class="text-center"><%= octobox_icon(80) %> Octobox</h1>
-    <p class="text-center">The best way to manage your GitHub Notifications</p>
+    <h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
+    <p class="text-center">Untangle your GitHub Notifications</p>
     <div class="text-center">
-      <%= image_tag 'screenshot.png', class: 'screenshot' %>
+      <%= image_tag 'screenshot.png', class: 'screenshot', alt: 'Octobox Screenshot' %>
       <p>
-      <%= link_to login_path, class: 'btn btn-outline-dark btn-lg' do %>
-        <%= octicon 'mark-github', height: 22 %>
-        Sign in with GitHub
-      <% end %>
+        <%= link_to login_path, class: 'btn btn-outline-dark btn-lg' do %>
+          <%= octicon 'mark-github', height: 22 %>
+          <span class='ml-1'>Sign in with GitHub</span>
+        <% end %>
+        <% if Octobox.github_app? && !Octobox.config.octobox_io %>
+          <%= link_to Octobox.config.app_install_url, class: 'btn btn-outline-dark btn-lg' do %>
+            <%= octicon 'briefcase', height: 22 %>
+            <span class='ml-1'>Install the GitHub App</span>
+          <% end %>
+        <% end %>
       </p>
       <p>
         <a class="github-button" href="https://github.com/octobox/octobox" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star octobox/octobox on GitHub">Star</a>
@@ -20,7 +26,7 @@
       <div class="col-lg-8">
         <h3>Why is this a thing?</h3>
         <p>
-          Octobox helps you triage notifications efficiently so you can spend less time managing and more time getting things done. 
+          Octobox helps you triage notifications efficiently so you can spend less time managing and more time getting things done.
         </p>
         <p>
           If you manage more than one active project on GitHub, you probably find <a href="https://github.com/notifications">GitHub Notifications</a> pretty lacking. Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.

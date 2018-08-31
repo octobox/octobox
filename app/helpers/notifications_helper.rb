@@ -27,18 +27,22 @@ module NotificationsHelper
 
   def filters
     {
-      reason:   params[:reason],
-      unread:   params[:unread],
-      repo:     params[:repo],
-      type:     params[:type],
-      archive:  params[:archive],
-      starred:  params[:starred],
-      owner:    params[:owner],
-      per_page: params[:per_page],
-      q:        params[:q],
-      state:    params[:state],
-      label:    params[:label],
-      author:   params[:author]
+      reason:     params[:reason],
+      unread:     params[:unread],
+      repo:       params[:repo],
+      type:       params[:type],
+      archive:    params[:archive],
+      starred:    params[:starred],
+      owner:      params[:owner],
+      per_page:   params[:per_page],
+      q:          params[:q],
+      state:      params[:state],
+      label:      params[:label],
+      author:     params[:author],
+      bot:        params[:bot],
+      unlabelled: params[:unlabelled],
+      assigned:   params[:assigned],
+      is_private: params[:is_private]
     }
   end
 
@@ -82,8 +86,8 @@ module NotificationsHelper
     filters.merge(override)
   end
 
-  def mute_button()
-    function_button('Mute', 'mute', "mute_selected", 'Mute notification') unless params[:archive]
+  def mute_button
+    function_button('Mute', 'mute', "mute_selected", 'Mute notification')
   end
 
   def mute_selected_button(hidden=false)
@@ -94,7 +98,7 @@ module NotificationsHelper
     function_button('Mark as read', 'eye', "mark_read_selected #{'hidden-button' if hidden}", 'Mark items as read')
   end
 
-  def archive_button()
+  def archive_button
     function_button("Archive", 'checklist', "archive_toggle archive_selected", 'Archive')
   end
 
@@ -102,7 +106,7 @@ module NotificationsHelper
     function_button("Archive selected", 'checklist', "archive_toggle archive_selected #{'hidden-button' if hidden}", 'Archive selected items')
   end
 
-  def unarchive_button()
+  def unarchive_button
     function_button("Unarchive", 'inbox', "archive_toggle unarchive_selected", 'Unarchive notification')
   end
 
@@ -113,8 +117,8 @@ module NotificationsHelper
   def select_all_button(cur_selected, total)
     button_tag(type: 'button', class: "select_all btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': "Number of items selected") do
       octicon('check', height: 16) +
-        content_tag(:span, " #{cur_selected}", class: 'bold d-none d-md-inline-block') +
-        " |" +
+        content_tag(:span, " #{cur_selected}", class: 'bold d-none d-md-inline-block ml-1') +
+        " | " +
         content_tag(:span, " #{total}", class: 'd-none d-md-inline-block')
     end if cur_selected < total
   end
@@ -151,6 +155,7 @@ module NotificationsHelper
   def notification_icon(subject_type, state = nil)
     state = nil unless display_subject?
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
+    return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
     SUBJECT_TYPES[subject_type]
   end
 
@@ -250,11 +255,7 @@ module NotificationsHelper
 
   def not_repo_in_active_org(param)
     return true unless param == :repo
-    !params[:owner].present?
-  end
-
-  def display_subject?
-    Octobox.config.fetch_subject
+    params[:owner].blank?
   end
 
   def parse_markdown(str)

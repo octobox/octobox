@@ -2,8 +2,9 @@ require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = create(:user)
+    stub_fetch_subject_enabled(value: false)
     stub_notifications_request
+    @user = create(:user)
   end
 
   def create_token_user

@@ -28,5 +28,17 @@ en:
     octokit:
       unauthorized: 'Your GitHub token seems to be invalid'
       unavailable: 'Having issues connecting to GitHub'
+      rate_limit: 'GitHub rate limit exceeded, try again in a few minutes'
     faraday:
       connection_failed: 'You seem to be offline'
+  number:
+    human:
+      decimal_units:
+        format: "%n%u"
+        units:
+          unit: ""
+          thousand: K
+          million: M
+          billion: B
+          trillion: T
+          quadrillion: Q

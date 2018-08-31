@@ -44,7 +44,7 @@ module Octobox
     end
 
     def previous_release
-      @previous_release ||= `git tag 2> /dev/null`.split("\n").last.chomp
+      @previous_release ||= `git tag --sort=committerdate 2> /dev/null`.split("\n").last.chomp
     end
 
     def actual_sha
@@ -76,11 +76,11 @@ module Octobox
       final_message = <<~EOF
       Dependency Updates
       ---
-      #{deps.join("\n")}
+      - #{deps.join("\n- ")}
 
       Other
       ---
-      #{changes[:other].join("\n")}
+      - #{changes[:other].join("\n- ")}
 
       ---
 

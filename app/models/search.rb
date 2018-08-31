@@ -22,6 +22,7 @@ class Search
     res = res.unread(unread) unless unread.nil?
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
+    res = res.is_private(is_private) unless is_private.nil?
     res
   end
 
@@ -78,5 +79,10 @@ class Search
   def unlabelled
     return nil unless parsed_query[:unlabelled].present?
     parsed_query[:unlabelled].first.downcase == "true"
+  end
+
+  def is_private
+    return nil unless parsed_query[:private].present?
+    parsed_query[:private].first.downcase == "true"
   end
 end
