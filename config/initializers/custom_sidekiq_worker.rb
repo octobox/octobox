@@ -4,7 +4,12 @@ module Sidekiq::Worker
       if Octobox.config.background_jobs_enabled?
         perform_async(*args)
       else
-        perform(*args)
+        worker = new
+        if worker.method(:perform).arity != 0
+          worker.perform(*args)
+        else
+          worker.perform
+        end
       end
     end
   end
