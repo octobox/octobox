@@ -1,4 +1,6 @@
 require 'sidekiq/testing'
+require 'sidekiq_unique_jobs/testing'
+
 Sidekiq::Testing.fake!
 Sidekiq::Logging.logger = nil
 

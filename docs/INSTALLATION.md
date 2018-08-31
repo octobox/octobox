@@ -285,6 +285,14 @@ GITHUB_DOMAIN=https://github.foobar.com
 
 And that's it :sparkles:
 
+## Background Jobs
+
+Octobox uses Sidekiq for background jobs. However, they are not enabled by default.
+
+To make use of background jobs, set the `OCTOBOX_BACKGROUND_JOBS_ENABLED` variable.
+
+If this is not set, all jobs will be run inline.
+
 ## Using Personal Access Tokens
 Octobox can optionally allow you to set a personal access token to use when querying for notifications.  This must be enabled
 at the server level.  In order to enable it, add the environment variable `PERSONAL_ACCESS_TOKENS_ENABLED` to the `.env` file / deployed environment.

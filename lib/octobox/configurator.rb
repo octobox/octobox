@@ -84,6 +84,11 @@ module Octobox
     end
     attr_writer :max_concurrency
 
+    def background_jobs_enabled?
+      @background_jobs_enabled || ENV['OCTOBOX_BACKGROUND_JOBS_ENABLED'].present?
+    end
+    attr_writer :background_jobs_enabled
+
     def sidekiq_schedule_enabled?
       @sidekiq_schedule_enabled || ENV['OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED'].present?
     end

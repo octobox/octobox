@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-require 'sidekiq/web'
-if Octobox.config.sidekiq_schedule_enabled?
-  require 'sidekiq-scheduler/web'
+if Octobox.config.background_jobs_enabled?
+  require 'sidekiq/web'
+  if Octobox.config.sidekiq_schedule_enabled?
+    require 'sidekiq-scheduler/web'
+  end
 end
 require 'admin_constraint'
 
