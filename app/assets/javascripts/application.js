@@ -155,9 +155,18 @@ document.addEventListener("turbolinks:load", function() {
       $('[data-toggle="tooltip"]').tooltip()
     }
 
+    window.onpopstate = function(event) {
+      if(event.state.thread){
+        $.get(event.state.thread, function(data){
+          $('#thread').html(data)
+        });
+      }
+    };
+
     updateFavicon()
   }
 });
+
 
 
 document.addEventListener("turbolinks:before-cache", function() {
@@ -166,6 +175,14 @@ document.addEventListener("turbolinks:before-cache", function() {
 
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.flex-content').toggleClass('active')
+});
+
+$(document).on('click', '.js-link', function () {
+  history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
+  $.get($(this).attr('href'), function(data){
+    $('#thread').html(data)
+  });
+  return false;
 });
 
 function enableKeyboardShortcuts() {
@@ -283,7 +300,7 @@ function resetCursorAfterRowsRemoved(ids) {
 }
 
 function backToList() {
-  Turbolinks.visit("/"+location.search); 
+  Turbolinks.visit("/"+location.search);
 }
 
 function toggleStar() {
