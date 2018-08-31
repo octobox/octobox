@@ -40,7 +40,9 @@ class Subject < ApplicationRecord
 
   def sync_involved_users
     return unless Octobox.github_app?
-    user_ids.each { |user_id| SyncNotificationsWorker.perform_async(user_id) }
+    user_ids.each do |user_id|
+      SyncNotificationsWorker.perform_async_if_configured(user_id)
+    end
   end
 
   def self.sync(remote_subject)
