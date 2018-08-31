@@ -201,10 +201,36 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def sync
-    current_user.sync_notifications
+    if Octobox.config.background_jobs_enabled? && params[:async]
+      current_user.sync_notifications
+      flash[:notice] = "Syncing notifications in the background. The page will refresh automatically"
+    else
+      current_user.sync_notifications_in_foreground
+    end
+
     respond_to do |format|
-      format.html { redirect_back fallback_location: root_path }
+      format.html do
+        redirect_back fallback_location: root_path
+      end
       format.json { head :ok }
+    end
+  end
+
+  # Check if user is synchronizing notifications with GitHub
+  #
+  # ==== Example
+  #
+  # <code>POST notifications/syncing.json</code>
+  #   {} 204 (ok)
+  #
+  # <code>POST notifications/syncing.json</code>
+  #   {} 423 (locked)
+  #
+  def syncing
+    if current_user.syncing?
+      render json: {}, status: :locked
+    else
+      render json: { error: Sidekiq::Status::get(current_user.sync_job_id, :exception) }, status: :ok
     end
   end
 

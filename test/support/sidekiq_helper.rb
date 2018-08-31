@@ -5,6 +5,13 @@ Sidekiq::Testing.fake!
 Sidekiq::Logging.logger = nil
 Octobox.config.background_jobs_enabled = true
 
+def inline_sidekiq_status
+  Sidekiq::Status.stubs(:status).returns(:complete)
+  yield
+ensure
+  Sidekiq::Status.unstub(:status)
+end
+
 module SidekiqMinitestSupport
   def after_teardown
     Sidekiq::Worker.clear_all

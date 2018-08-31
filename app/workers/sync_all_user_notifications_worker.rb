@@ -5,8 +5,6 @@ class SyncAllUserNotificationsWorker
   sidekiq_options queue: :sync_notifications, unique: :until_and_while_executing
 
   def perform
-    User.find_each do |user|
-      SyncNotificationsWorker.perform_async_if_configured(user.id)
-    end
+    User.find_each(&:sync_notifications)
   end
 end
