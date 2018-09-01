@@ -29,17 +29,14 @@
 
   <%= menu_separator %>
 
-  <% @unread_notifications.each do |unread_notification, count| %>
-    <%= filter_link :unread, unread_notification, count do %>
-      <% if unread_notification %>
-        <%= octicon 'mail', height: 16, class: 'sidebar-icon star-active' %>
-        Unread
-      <% else %>
-        <%= octicon 'mail-read', height: 16, class: 'sidebar-icon star-active' %>
-        Read
-      <% end %>
+  <%= filter_link :unread, false, @unread_notifications[false] do %>
+      <%= octicon 'mail-read', height: 16, class: 'sidebar-icon star-active' %>
+      Read
+  <% end %>
 
-    <% end %>
+  <%= filter_link :unread, true, @unread_notifications[true] do %>
+      <%= octicon 'mail', height: 16, class: 'sidebar-icon star-active' %>
+      Unread
   <% end %>
   <%= menu_separator unless @unread_notifications.empty? %>
 
