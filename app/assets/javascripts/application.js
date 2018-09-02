@@ -294,6 +294,35 @@ function openCurrentLink(e) {
   getCurrentRow().find('td.notification-subject .link')[0].click();
 }
 
+function refreshOnSync() {
+  if(!$(".sync .octicon").hasClass("spinning")){
+    $(".sync .octicon").addClass("spinning");
+  }
+
+  jQuery.ajax({'url': "/notifications/syncing.json", data: {}, error: function(xhr, status) {
+      setTimeout(refreshOnSync, 2000)
+    }, success: function(data, status, xhr) {
+      if (data['error'] != null) {
+        $(".sync .octicon").removeClass("spinning");
+        $(".header-flash-messages").empty();
+        notify(data['error'], 'danger')
+      } else {
+        location.reload();
+      }
+    }
+  });
+}
+
+function notify(message, type) {
+  var alert_html = [
+    "<div class='alert alert-" + type + " fade show'>",
+    "   <button class='close' data-dismiss='alert'>x</button>",
+    message,
+    "</div>"
+  ].join("\n");
+  $(".header-flash-messages").append(alert_html);
+}
+
 function sync() {
   $("a.js-sync").click();
 }
@@ -376,6 +405,12 @@ $(document).ready(function() {
     $(".current.js-current").removeClass("current js-current");
     $( this ).find("td").first().addClass("current js-current");
   })
+});
+
+// Sync Handling
+$(document).ready(function() {
+  if($(".js-is_syncing").length){ refreshOnSync() }
+  if($(".js-start_sync").length){ sync() }
 });
 
 var lastCheckedNotification = null;

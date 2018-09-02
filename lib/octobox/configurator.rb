@@ -84,6 +84,11 @@ module Octobox
     end
     attr_writer :max_concurrency
 
+    def background_jobs_enabled?
+      @background_jobs_enabled || sidekiq_schedule_enabled? || ENV['OCTOBOX_BACKGROUND_JOBS_ENABLED'].present?
+    end
+    attr_writer :background_jobs_enabled
+
     def sidekiq_schedule_enabled?
       @sidekiq_schedule_enabled || ENV['OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED'].present?
     end
@@ -110,6 +115,11 @@ module Octobox
       return id.to_i if id.present?
     end
     attr_writer :github_team_id
+
+    def native_link
+      ENV['OCTOBOX_NATIVE_LINK'] || nil
+    end
+    attr_writer :native_link
 
     def source_repo
       env_value = ENV['SOURCE_REPO'].blank? ? nil : ENV['SOURCE_REPO']

@@ -54,14 +54,22 @@
               <%= octicon 'gist-secret', height: 16, class: 'text-muted' %>
               Admin
             <% end %>
-            <%= link_to admin_sidekiq_web_path, class: 'dropdown-item' do %>
-              <%= octicon 'graph', height: 16, class: 'text-muted' %>
-              Sidekiq
+            <% if Octobox.config.background_jobs_enabled? %>
+              <%= link_to admin_sidekiq_web_path, class: 'dropdown-item' do %>
+                <%= octicon 'graph', height: 16, class: 'text-muted' %>
+                Sidekiq
+              <% end %>
             <% end %>
           <% end %>
           <%= link_to "documentation", class: 'dropdown-item' do %>
             <%= octicon 'book', height: 16, class: 'text-muted' %>
             User Documentation
+          <% end %>
+           <% if Octobox.config.native_link %>
+              <%= link_to Octobox.config.native_link, class: 'dropdown-item' do %>
+                <%= octicon 'desktop-download', height: 16, class: 'text-muted' %>
+                Download Desktop App
+              <% end %>
           <% end %>
           <% if File.exist?(Rails.root.join('public', 'docs', 'index.html')) %>
             <%= link_to "docs/", class: 'dropdown-item' do %>
