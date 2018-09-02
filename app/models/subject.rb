@@ -46,8 +46,16 @@ class Subject < ApplicationRecord
 
   def self.sync(remote_subject)
     subject = Subject.find_or_create_by(url: remote_subject['url'])
+
+    # webhook payloads don't always have 'repository' info
+    if remote_subject['repository']
+      full_name = remote_subject['repository']['full_name']
+    else
+      full_name = extract_full_name(remote_subject['url'])
+    end
+
     subject.update({
-      repository_full_name: remote_subject['repository']['full_name'],
+      repository_full_name: full_name,
       github_id: remote_subject['id'],
       state: remote_subject['merged_at'].present? ? 'merged' : remote_subject['state'],
       author: remote_subject['user']['login'],
@@ -61,6 +69,10 @@ class Subject < ApplicationRecord
   end
 
   private
+
+  def self.extract_full_name(url)
+    url.match(/\/repos\/([\w.-]+\/[\w.-]+)\//)[1]
+  end
 
   def involved_user_ids
     (user_ids + Array(repository.try(:user_ids))).uniq
