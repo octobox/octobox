@@ -305,7 +305,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 1, SyncNotificationsWorker.jobs.size
       assert_not_equal job_id, @user.sync_job_id
       assert_not_nil @user.sync_job_id, 'Sync job id was nil'
-      assert_equal "Syncing notifications in the background. The page will refresh automatically", flash[:notice]
     end
   end
 
