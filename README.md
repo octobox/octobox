@@ -4,7 +4,7 @@ Octobox helps you manage your GitHub notifications efficiently so you can spend 
 
 - **Don't lose track** - Octobox adds an extra "archived" state to each notification so you can mark it as "done". If anything happens on an archived thread, issue or PR, Octobox will move it back into your inbox.
 
-- **Starred notifications** - Let's be honest, you probably don't have a 'favourite' issue. Octobox lets you highlight important notifications with a star so you can come back and find them easily.
+- **Starred notifications** - Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
 
 - **Filter all the things** - Filter notifications by notification type, action, state and reason and keep notifications from bots alongside your regular label, author and assignees.
 
