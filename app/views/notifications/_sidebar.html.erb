@@ -51,7 +51,7 @@
 
       <% end %>
     <% end %>
-    <%= menu_separator unless @states.empty? %>
+    <%= menu_separator unless @states.keys.compact.empty? %>
 
     <% if @assigned > 0 %>
       <%= filter_link :assigned, current_user.github_login, @assigned do %>
