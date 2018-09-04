@@ -39,4 +39,10 @@ module ApplicationHelper
   def menu_separator(custom_class=nil)
     "<li class='divider #{custom_class}'></li>".html_safe
   end
+
+  def used_by_orgs
+    %w(kubernetes facebook nodejs angular Microsoft dotnet
+       elastic src-d alphagov vuejs rails algolia
+       shopify WordPress golang)
+  end
 end
