@@ -11,7 +11,7 @@ module Octobox
     end
 
     def refresh_interval_enabled?
-      config.minimum_refresh_interval > 0
+      config.minimum_refresh_interval && config.minimum_refresh_interval > 0
     end
 
     def personal_access_tokens_enabled?
