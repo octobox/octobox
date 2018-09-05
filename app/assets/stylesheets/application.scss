@@ -372,11 +372,11 @@ td.keys {
 
 .nav-filters {
   .divider {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $nav-divider-color;
     height: 1px;
     margin: 5px 0;
     &.double {
-      border-top: 3px double #ddd;
+      border-top: 3px double $nav-divider-color;
     }
   }
   > li > a {
