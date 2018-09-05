@@ -21,6 +21,14 @@ $label-team_mention-text-color: #fff;
 $label-security_alert-color: #800000;
 $label-security_alert-text-color: #fff;
 
+$icon-private-repo-color: #dbab09;
+$icon-star-fill: none;
+$icon-star-stroke: #aaa;
+$icon-star-hover-fill: $icon-star-stroke;
+$icon-star-hover-stroke: $icon-star-stroke;
+$icon-star-active-fill: #f0ad4e;
+$icon-star-active-stroke: $icon-star-active-fill;
+
 @import 'bootstrap-custom';
 @import "patterns/blankslate";
 @import "themes/default/variables";
@@ -639,15 +647,15 @@ td.keys {
 }
 
 .octicon-star {
-  fill: none;
-  stroke: #aaa;
+  fill: $icon-star-fill;
+  stroke: $icon-star-stroke;
   cursor: pointer;
   &:hover {
-    fill: #aaa;
+    fill: $icon-star-hover-fill;
   }
   &.star-active {
-    fill: #f0ad4e;
-    stroke: #f0ad4e;
+    fill: $icon-star-active-fill;
+    stroke: $icon-star-active-stroke;
   }
 }
 
@@ -699,14 +707,12 @@ td.keys {
   }
 }
 .notification-open{
-  fill: #5cb85c;
+  fill: $notification-open;
 }
 .notification-closed{
-  fill: #d9534f;
+  fill: $notification-closed;
 }
-.octicon.inverse{
-  fill: #fff;
-}
+
 .hidden-button {
   display: none;
 }
@@ -725,7 +731,7 @@ td.keys {
 }
 
 .private-repo{
-  fill: #dbab09;
+  fill: icon-private-repo-color;
 }
 
 .search-help{
