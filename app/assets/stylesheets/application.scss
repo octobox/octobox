@@ -239,30 +239,30 @@ html {
         }
       }
     }
-    &.bg-dark > .navbar-collapse .dropdown .dropdown-menu{
+    &.navbar-dark .dropdown-menu{
       > a{
-        color: #ddd;
+        color: $navbar-dark-color;
         &:hover,
         &:focus {
-          color: #fff;
+          color: $navbar-dark-hover-color;
           background-color: transparent;
         }
       }
       > .dropdown-divider {
-        border-top-color: #444;
+        border-top-color: $navbar-dark-color;
       }
     }
-    &.bg-light > .navbar-collapse .dropdown .dropdown-menu{
+    &.navbar-light .dropdown-menu{
       > a{
-        color: #666;
+        color: $navbar-light-color;
         &:hover,
         &:focus {
-          color: #333;
+          color: $navbar-light-hover-color;
           background-color: transparent;
         }
       }
       > .dropdown-divider {
-        border-top-color: #444;
+        border-top-color: $navbar-light-color;
       }
     }
   }
