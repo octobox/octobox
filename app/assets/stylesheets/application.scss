@@ -164,16 +164,15 @@ html {
 .navbar-main {
   margin-bottom: 0;
 }
-.navbar.bg-light{
+.navbar{
   .octobox-icon {
-    fill: color-yiq($navbar-light-color);
     margin-right: 3px;
   }
-}
-.navbar.bg-light{
-  .octobox-icon {
-    fill: color-yiq($navbar-dark-color);
-    margin-right: 3px;
+  &.bg-light .opencollective, .search-help{
+    fill: $navbar-light-color;
+  }
+  &.bg-dark .opencollective, .search-help{
+    fill: $navbar-dark-color;
   }
 }
 
