@@ -311,15 +311,20 @@ class NotificationsController < ApplicationController
   DEFAULT_PER_PAGE = 20
 
   def restrict_per_page
-    if params[:per_page]
-      per_page = Integer(params[:per_page]) rescue DEFAULT_PER_PAGE
-      per_page = DEFAULT_PER_PAGE if per_page < 1
-      raise ActiveRecord::RecordNotFound if per_page > 100
-      cookies[:per_page] = per_page
-    elsif cookies[:per_page]
-      Integer(cookies[:per_page]) rescue DEFAULT_PER_PAGE
-    else
-      DEFAULT_PER_PAGE
-    end
+    per_page = per_page_param || per_page_cookie || DEFAULT_PER_PAGE
+
+    return DEFAULT_PER_PAGE if per_page < 1
+    raise ActiveRecord::RecordNotFound if per_page > 100
+    cookies[:per_page] = per_page
+
+    per_page
+  end
+
+  def per_page_param
+    Integer(params[:per_page]) rescue nil
+  end
+
+  def per_page_cookie
+    Integer(cookies[:per_page]) rescue nil
   end
 end
