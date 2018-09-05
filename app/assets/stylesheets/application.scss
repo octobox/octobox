@@ -204,48 +204,68 @@ html {
 }
 
 @include media-breakpoint-down(sm) {
-  .navbar-nav .dropdown .dropdown-menu {
-    display: block;
-    position: static;
-    float: none;
-    width: auto;
-    margin-top: 0;
-    background-color: transparent;
-    border: 0;
-    box-shadow: none;
-    > a {
-      color: #ddd;
-      line-height: 20px;
-      padding: 5px 15px 5px 25px;
-      &:hover,
-      &:focus {
-        color: #fff;
-        background-color: transparent;
+  .navbar{
+    form {
+      border-top: none;
+      border-bottom: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      .form-control{
+        width: 100%;
       }
     }
-    > a,
-    .dropdown-header {
-      padding: 5px 15px 5px 25px;
+    > .navbar-collapse{
+      &.show{
+        border-top: solid 1px #444;
+      }
+      .dropdown .dropdown-menu {
+        display: block;
+        position: static;
+        float: none;
+        width: auto;
+        margin-top: 0;
+        background-color: transparent;
+        border: 0;
+        box-shadow: none;
+        > a {
+          line-height: 20px;
+          padding: 5px 15px 5px 25px;
+        }
+        > a,
+        .dropdown-header {
+          padding: 5px 15px 5px 25px;
+        }
+      }
     }
-    .dropdown-divider {
-      border-top-color: #444;
+    &.bg-dark > .navbar-collapse .dropdown .dropdown-menu{
+      > a{
+        color: #ddd;
+        &:hover,
+        &:focus {
+          color: #fff;
+          background-color: transparent;
+        }
+      }
+      > .dropdown-divider {
+        border-top-color: #444;
+      }
+    }
+    &.bg-light > .navbar-collapse .dropdown .dropdown-menu{
+      > a{
+        color: #666;
+        &:hover,
+        &:focus {
+          color: #333;
+          background-color: transparent;
+        }
+      }
+      > .dropdown-divider {
+        border-top-color: #444;
+      }
     }
   }
-  .navbar form {
-    border-top: none;
-    border-bottom: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    .form-control{
-      width: 100%;
-    }
-  }
-}
-
-.navbar-collapse.show{
-  border-top: solid 1px #444;
 }
 
 .table > tbody > tr:first-child > td {
@@ -481,6 +501,7 @@ td.keys {
       right: 10px;
     }
   }
+
 }
 
 @include media-breakpoint-down(md) {
