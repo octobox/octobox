@@ -309,9 +309,15 @@ class NotificationsController < ApplicationController
   end
 
   def restrict_per_page
-    per_page = params[:per_page].to_i rescue 20
-    per_page = 20 if per_page < 1
-    raise ActiveRecord::RecordNotFound if per_page > 100
-    per_page
+    if params[:per_page]
+      per_page = params[:per_page].to_i rescue 20
+      per_page = 20 if per_page < 1
+      raise ActiveRecord::RecordNotFound if per_page > 100
+      cookies[:per_page] = per_page
+    elsif cookies[:per_page]
+      cookies[:per_page].to_i
+    else
+      20
+    end
   end
 end
