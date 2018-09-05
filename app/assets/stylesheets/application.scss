@@ -1,13 +1,23 @@
-// colours
+//Theme collors
 $table-bg-active: #fafafa;
 $jumbotron-bg: #fff;
-$subscribed-color: #a128ca;
-$subscribed-text-color: #fff;
-$team_mention-color: #5d477e;
-$team_mention-text-color: #fff;
-$text-color: #333;
-$security_alert-color: #800000;
-$security_alert-text-color: #fff;
+
+// custom colors
+$search-bg: rgba(#fff, 0.125);
+$search-color: #fff;
+
+$notifications-header-bg: #f6f6f6;
+
+$notification-open: #5cb85c;
+$notification-closed: #d9534f;
+$notification-merged: #a128ca;
+
+$label-subscribed-color: #a128ca;
+$label-subscribed-text-color: #fff;
+$label-team_mention-color: #5d477e;
+$label-team_mention-text-color: #fff;
+$label-security_alert-color: #800000;
+$label-security_alert-text-color: #fff;
 
 @import 'bootstrap-custom';
 @import "patterns/blankslate";
@@ -74,9 +84,9 @@ html {
 
 .footer {
   text-align: center;
-  color: #999;
+  color: $text-muted;
   a{
-    color: #666;
+    color: $yiq-text-dark;
   }
 }
 
@@ -126,8 +136,8 @@ html {
 
 .turbolinks-progress-bar {
   height: 2px !important;
-  background-color: #77b6ff !important;
-  box-shadow: 0 0 10px rgba(#77b6ff, 0.7) !important;
+  background-color: theme-color("primary") !important;
+  box-shadow: 0 0 10px rgba(theme-color("primary"), 0.7) !important;
 }
 
 .octobox-icon {
@@ -144,15 +154,16 @@ html {
 .navbar-main {
   margin-bottom: 0;
 }
-.navbar-brand {
+.navbar.bg-light{
   .octobox-icon {
-    fill: #fff;
+    fill: color-yiq($navbar-light-color);
     margin-right: 3px;
   }
-  &:hover {
-    .octobox-icon {
-      fill: #fff;
-    }
+}
+.navbar.bg-light{
+  .octobox-icon {
+    fill: color-yiq($navbar-dark-color);
+    margin-right: 3px;
   }
 }
 
@@ -185,10 +196,10 @@ html {
 }
 #search {
   input {
-    background: rgba(255,255,255,0.125);
+    background: $search-bg;
     border: none;
     box-shadow: none;
-    color: #fff;
+    color: $search-color;
   }
 }
 
@@ -271,7 +282,7 @@ html {
     border-left: 2px solid #ededed;
   }
   td.current {
-    border-left: 2px solid #64beff !important;
+    border-left: 2px solid theme-color("primary") !important;
   }
 }
 
@@ -542,60 +553,60 @@ td.keys {
 
 
 .text-default {
-  fill: $text-color;
+  fill: $body-color;
   &.sidebar-icon {
     fill: $text-muted;
   }
 }
 
 .badge-subscribed{
-  background-color: $subscribed-color;
-  color: $subscribed-text-color;
+  background-color: $label-subscribed-color;
+  color: $label-subscribed-text-color;
   &[href]:hover, &[href]:focus {
-    color: $subscribed-text-color;
+    color: $label-subscribed-text-color;
     text-decoration: none;
-    background-color: darken( $subscribed-color, 10% );
+    background-color: darken( $label-subscribed-color, 10% );
   }
 }
 
 .text-subscribed{
-  fill: $subscribed-color;
+  fill: $label-subscribed-color;
   &.sidebar-icon {
-    fill: $text-muted;
+    fill: color-yiq($label-subscribed-color);
   }
 }
 
 .badge-team_mention{
-  background-color: $team_mention-color;
-  color: $team_mention-text-color;
+  background-color: $label-team_mention-color;
+  color: $label-team_mention-text-color;
   &[href]:hover, &[href]:focus {
-    color: $team_mention-text-color;
+    color: $label-team_mention-text-color;
     text-decoration: none;
-    background-color: darken( $team_mention-color, 10% );
+    background-color: darken( $label-team_mention-color, 10% );
   }
 }
 
 .text-team_mention{
-  fill: $team_mention-color;
+  fill: $label-team_mention-color;
   &.sidebar-icon {
-    fill: $text-muted;
+    fill: color-yiq($label-team_mention-color);
   }
 }
 
 .badge-security_alert{
-  background-color: $security_alert-color;
-  color: $security_alert-text-color;
+  background-color: $label-security_alert-color;
+  color: $label-security_alert-text-color;
   &[href]:hover, &[href]:focus {
-    color: $security_alert-text-color;
+    color: $label-security_alert-text-color;
     text-decoration: none;
-    background-color: darken( $security_alert-color, 10% );
+    background-color: darken($label-security_alert-color, 10% );
   }
 }
 
 .text-security_alert{
-  fill: $security_alert-color;
+  fill: $label-security_alert-color;
   &.sidebar-icon {
-    fill: $text-muted;
+    fill: color-yiq($label-security_alert-color);
   }
 }
 
@@ -619,7 +630,7 @@ td.keys {
 .card-notifications {
   margin-bottom: 20px;
   .card-header {
-    background-color: #f6f6f6;
+    background-color: $notifications-header-bg;
     padding: 6px 8px;
     .pagination{
       margin: 6px 0px 0px;
