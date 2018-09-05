@@ -12,6 +12,8 @@ $notification-open: #5cb85c;
 $notification-closed: #d9534f;
 $notification-merged: #a128ca;
 
+$label-default-color: #333;
+$label-muted-color: #ccc;
 $label-subscribed-color: #a128ca;
 $label-subscribed-text-color: #fff;
 $label-team_mention-color: #5d477e;
@@ -55,7 +57,7 @@ html {
   .nav-item{
     max-width: 100%;
     &:hover{
-      background-color: #eee;
+      background-color: $list-group-hover-bg;
     }
   }
 }
@@ -216,53 +218,58 @@ html {
         width: 100%;
       }
     }
-    > .navbar-collapse{
-      &.show{
-        border-top: solid 1px #444;
+    > .navbar-collapse .dropdown-menu {
+      display: block;
+      position: static;
+      float: none;
+      width: auto;
+      margin-top: 0;
+      background-color: transparent;
+      border: 0;
+      box-shadow: none;
+      > a {
+        line-height: 20px;
+        padding: 5px 15px 5px 25px;
       }
-      .dropdown .dropdown-menu {
-        display: block;
-        position: static;
-        float: none;
-        width: auto;
-        margin-top: 0;
-        background-color: transparent;
-        border: 0;
-        box-shadow: none;
-        > a {
-          line-height: 20px;
-          padding: 5px 15px 5px 25px;
+      > a,
+      .dropdown-header {
+        padding: 5px 15px 5px 25px;
+      }
+    }
+    &.navbar-dark{
+      .navbar-collapse.show{
+        border-top: solid 1px $navbar-dark-color;
+      }
+      .dropdown-menu{
+        > a{
+          color: $navbar-dark-color;
+          &:hover,
+          &:focus {
+            color: $navbar-dark-hover-color;
+            background-color: transparent;
+          }
         }
-        > a,
-        .dropdown-header {
-          padding: 5px 15px 5px 25px;
+        > .dropdown-divider {
+          border-top-color: $navbar-dark-color;
         }
       }
     }
-    &.navbar-dark .dropdown-menu{
-      > a{
-        color: $navbar-dark-color;
-        &:hover,
-        &:focus {
-          color: $navbar-dark-hover-color;
-          background-color: transparent;
+    &.navbar-light{
+      .navbar-collapse.show{
+        border-top: solid 1px $navbar-light-color;
+      }
+      .dropdown-menu{
+        > a{
+          color: $navbar-light-color;
+          &:hover,
+          &:focus {
+            color: $navbar-light-hover-color;
+            background-color: transparent;
+          }
         }
-      }
-      > .dropdown-divider {
-        border-top-color: $navbar-dark-color;
-      }
-    }
-    &.navbar-light .dropdown-menu{
-      > a{
-        color: $navbar-light-color;
-        &:hover,
-        &:focus {
-          color: $navbar-light-hover-color;
-          background-color: transparent;
+        > .dropdown-divider {
+          border-top-color: $navbar-light-color;
         }
-      }
-      > .dropdown-divider {
-        border-top-color: $navbar-light-color;
       }
     }
   }
@@ -273,11 +280,11 @@ html {
 }
 
 .label-muted {
-  background-color: #ccc;
+  background-color: $label-muted-color;
 }
 
 .label-default {
-  background-color: #333;
+  background-color: $label-default-color;
 }
 
 .table-responsive {
