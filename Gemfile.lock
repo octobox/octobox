@@ -63,8 +63,6 @@ GEM
     byebug (10.0.2)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
-    codeclimate-test-reporter (1.0.8)
-      simplecov (<= 0.13)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.2)
     crack (0.4.3)
@@ -345,7 +343,6 @@ DEPENDENCIES
   bootstrap
   bugsnag
   byebug
-  codeclimate-test-reporter
   dotenv-rails
   factory_bot
   faraday_middleware

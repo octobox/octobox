@@ -44,7 +44,6 @@ end
 group :test do
   gem 'factory_bot'
   gem 'simplecov'
-  gem 'codeclimate-test-reporter'
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
