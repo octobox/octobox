@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   private
 
   def display_subject?
-    return true if Octobox.config.fetch_subject
+    return true if Octobox.fetch_subject?
     Octobox.config.github_app && current_user && current_user.app_token.present?
   end
 

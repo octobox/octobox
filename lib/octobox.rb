@@ -25,5 +25,17 @@ module Octobox
     def github_app?
       config.github_app
     end
+
+    def octobox_io?
+      config.octobox_io
+    end
+
+    def fetch_subject?
+      config.fetch_subject
+    end
+
+    def background_jobs_enabled?
+      config.background_jobs_enabled
+    end
   end
 end

@@ -37,7 +37,7 @@
           </label>
           <%= select_all_button(@cur_selected, @total) %>
           <% end %>
-          <%= link_to sync_notifications_path(filters.merge(async: Octobox.config.background_jobs_enabled?)), class: 'btn btn-sm btn-outline-secondary btn-outline-dark js-sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync', method: :post do %>
+          <%= link_to sync_notifications_path(filters.merge(async: Octobox.background_jobs_enabled?)), class: 'btn btn-sm btn-outline-secondary btn-outline-dark js-sync', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync', method: :post do %>
             <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync? || current_user.syncing?}" %>
           <% end %>
           <%= archive_selected_button unless archive_selected? %>

@@ -49,7 +49,7 @@ Rails.application.routes.draw do
 
   post '/hooks/github', to: 'hooks#create'
 
-  if Octobox.config.octobox_io
+  if Octobox.octobox_io?
     get '/privacy', to: 'pages#privacy'
     get '/terms', to: 'pages#terms'
   end

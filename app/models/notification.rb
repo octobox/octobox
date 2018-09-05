@@ -155,7 +155,7 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    github_app_installed? || Octobox.config.fetch_subject
+    github_app_installed? || Octobox.fetch_subject?
   end
 
   private

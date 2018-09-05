@@ -201,7 +201,7 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def sync
-    if Octobox.config.background_jobs_enabled? && params[:async]
+    if Octobox.background_jobs_enabled? && params[:async]
       current_user.sync_notifications
     else
       current_user.sync_notifications_in_foreground

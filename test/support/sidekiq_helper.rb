@@ -19,7 +19,7 @@ module SidekiqMinitestSupport
   end
 
   def with_background_jobs_enabled(enabled: true)
-    original = Octobox.config.background_jobs_enabled?
+    original = Octobox.background_jobs_enabled?
     Octobox.config.background_jobs_enabled = enabled
     yield
   ensure
