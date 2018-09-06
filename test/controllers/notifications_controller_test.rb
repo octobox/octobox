@@ -522,4 +522,17 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?q=unread%3Afalse'
     assert_equal assigns(:notifications).length, 1
   end
+
+  test 'sets the per_page cookie' do
+    sign_in_as(@user)
+    get '/?per_page=100'
+    assert_equal '100', cookies[:per_page]
+  end
+
+  test 'uses the per_page cookie' do
+    sign_in_as(@user)
+    get '/?per_page=100'
+    get '/'
+    assert_equal assigns(:per_page), 100
+  end
 end
