@@ -57,6 +57,7 @@ GEM
       autoprefixer-rails (>= 6.0.3)
       popper_js (>= 1.12.9, < 2)
       sass (>= 3.5.2)
+    brakeman (4.3.1)
     bugsnag (6.8.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
@@ -341,6 +342,7 @@ DEPENDENCIES
   attr_encrypted (~> 3.1.0)
   bootsnap
   bootstrap
+  brakeman
   bugsnag
   byebug
   dotenv-rails

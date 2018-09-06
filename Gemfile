@@ -55,6 +55,7 @@ group :development do
   gem 'rubocop', require: false
   gem 'spring'
   gem 'spring-watcher-listen'
+  gem 'brakeman'
 end
 
 group :production do
