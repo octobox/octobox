@@ -1,7 +1,3 @@
-// New theme elements
-$search-bg: rgba(#fff, 0.125) !default;
-$search-color: #fff !default;
-
 @import 'themes/default/variables';
 @import 'variables';
 @import 'bootstrap-custom';
@@ -142,11 +138,23 @@ html {
   .octobox-icon {
     margin-right: 3px;
   }
-  &.bg-light .opencollective, .search-help{
-    fill: $navbar-light-color;
-  }
-  &.bg-dark .opencollective, .search-help{
-    fill: $navbar-dark-color;
+  &.navbar-light, &.bg-light{
+    #search input{
+      background: rgba($navbar-light-color,0.125);
+      color: $navbar-light-color
+    }
+    .opencollective, .search-help, .octobox-icon{
+      fill: $navbar-light-color;
+    }
+  } 
+  &.navbar-dark, &.bg-dark {
+    #search input{
+      background: rgba($navbar-dark-color,0.125);
+      color: $navbar-dark-color
+    }
+    .opencollective, .search-help, .octobox-icon{
+      fill: $navbar-dark-color;
+    }
   }
 }
 
@@ -179,10 +187,8 @@ html {
 }
 #search {
   input {
-    background: $search-bg;
     border: none;
     box-shadow: none;
-    color: $search-color;
   }
 }
 
