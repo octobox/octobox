@@ -15,6 +15,7 @@
           <% if @notifications.to_a.any? %>
             <div class="per-page btn-group float-right d-none d-md-block" data-toggle="tooltip" data-placement="left" title="Notifications per page">
               <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= @per_page %>
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu dropdown-menu-right text-right">
