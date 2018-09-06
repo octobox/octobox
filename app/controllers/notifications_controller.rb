@@ -211,7 +211,7 @@ class NotificationsController < ApplicationController
       format.html do
         redirect_back fallback_location: root_path
       end
-      format.json { head :ok }
+      format.json { {} }
     end
   end
 

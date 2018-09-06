@@ -312,7 +312,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
 
     post "/notifications/sync.json"
-    assert_response :ok
+    assert_response :no_content
   end
 
   test 'get to syncs redirects' do
