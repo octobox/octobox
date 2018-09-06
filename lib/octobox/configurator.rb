@@ -149,7 +149,7 @@ module Octobox
     private
 
     def env_boolean(env_var_name)
-      ENV[env_var_name].try(:downcase) == 'true'
+      %w(true 1).include?(ENV[env_var_name].try(:downcase))
     end
 
     def env_integer(env_var_name, default = nil)

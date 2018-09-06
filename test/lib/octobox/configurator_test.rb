@@ -30,6 +30,16 @@ class ConfiguratorTest < ActiveSupport::TestCase
     assert_equal true, Octobox.config.fetch_subject
   end
 
+  test "when ENV['FETCH_SUBJECT'] is 1, config.fetch_subject is true" do
+    stub_env_var('FETCH_SUBJECT', '1')
+    assert_equal true, Octobox.config.fetch_subject
+  end
+
+  test "when ENV['FETCH_SUBJECT'] is 0, config.fetch_subject is false" do
+    stub_env_var('FETCH_SUBJECT', '0')
+    assert_equal false, Octobox.config.fetch_subject
+  end
+
   test "when ENV['PERSONAL_ACCESS_TOKENS_ENABLED'] is false, config.personal_access_tokens_enabled is false" do
     stub_env_var('PERSONAL_ACCESS_TOKENS_ENABLED', 'false')
     assert_equal false, Octobox.config.personal_access_tokens_enabled
