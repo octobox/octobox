@@ -1,37 +1,11 @@
-//Theme overrides
-$table-bg-active: #fafafa;
-$jumbotron-bg: #fff;
-
 // New theme elements
-$search-bg: rgba(#fff, 0.125);
-$search-color: #fff;
+$search-bg: rgba(#fff, 0.125) !default;
+$search-color: #fff !default;
 
-$notifications-header-bg: #f6f6f6;
-
-$notification-open: #5cb85c;
-$notification-closed: #d9534f;
-$notification-merged: #a128ca;
-
-$label-default-color: #333;
-$label-muted-color: #ccc;
-$label-subscribed-color: #a128ca;
-$label-subscribed-text-color: #fff;
-$label-team_mention-color: #5d477e;
-$label-team_mention-text-color: #fff;
-$label-security_alert-color: #800000;
-$label-security_alert-text-color: #fff;
-
-$icon-private-repo-color: #dbab09;
-$icon-star-fill: none;
-$icon-star-stroke: #aaa;
-$icon-star-hover-fill: $icon-star-stroke;
-$icon-star-hover-stroke: $icon-star-stroke;
-$icon-star-active-fill: #f0ad4e;
-$icon-star-active-stroke: $icon-star-active-fill;
-
+@import 'themes/default/variables';
+@import 'variables';
 @import 'bootstrap-custom';
 @import "patterns/blankslate";
-@import "themes/default/variables";
 
 html, body {
   overflow-x: hidden;
@@ -662,7 +636,6 @@ td.keys {
 .card-notifications {
   margin-bottom: 20px;
   .card-header {
-    background-color: $notifications-header-bg;
     padding: 6px 8px;
     .pagination{
       margin: 6px 0px 0px;
