@@ -10,7 +10,7 @@ class SyncLabelWorker
     subjects = repository.subjects.label(payload['changes']['name']['from'])
     subjects.each do |subject|
       n = subject.notifications.first
-      n.try(:send, :update_subject, true)
+      n.try(:update_subject, true)
     end
   end
 end
