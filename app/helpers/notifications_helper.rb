@@ -42,12 +42,13 @@ module NotificationsHelper
       bot:        params[:bot],
       unlabelled: params[:unlabelled],
       assigned:   params[:assigned],
-      is_private: params[:is_private]
+      is_private: params[:is_private],
+      triage:     params[:triage]
     }
   end
 
   def inbox_selected?
-    !archive_selected? && !starred_selected? && !showing_search_results?
+    !archive_selected? && !starred_selected? && !showing_search_results? && !triage_selected?
   end
 
   def archive_selected?
@@ -62,6 +63,10 @@ module NotificationsHelper
     filters[:q].present?
   end
 
+  def triage_selected?
+    filters[:triage].present?
+  end
+
   def show_archive_icon?
     starred_selected? || showing_search_results?
   end
@@ -71,7 +76,7 @@ module NotificationsHelper
   end
 
   def bucket_param_keys
-    [:archive, :starred]
+    [:archive, :starred, :triage]
   end
 
   def filter_param_keys
