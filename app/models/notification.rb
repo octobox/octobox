@@ -158,23 +158,11 @@ class Notification < ApplicationRecord
     github_app_installed? || Octobox.fetch_subject?
   end
 
-  private
-
-  def download_subject
-    user.subject_client.get(subject_url)
-
-  # If permissions changed and the user hasn't accepted, we get a 401
-  # We may receive a 403 Forbidden or a 403 Not Available
-  # We may be rate limited and get a 403 as well
-  # We may also get blocked by legal reasons (451)
-  # Regardless of the reason, any client error should be rescued and warned so we don't
-  # end up blocking other syncs
-  rescue Octokit::ClientError => e
-    Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
-    nil
+  def update_subject(force = false)
+    UpdateSubjectWorker.perform_async_if_configured(self.id, force)
   end
 
-  def update_subject(force = false)
+  def update_subject_in_foreground(force = false)
     return unless subjectable?
 
     return unless display_subject?
@@ -221,6 +209,22 @@ class Notification < ApplicationRecord
     when 'Issue', 'PullRequest'
       subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
     end
+  end
+
+  private
+
+  def download_subject
+    user.subject_client.get(subject_url)
+
+  # If permissions changed and the user hasn't accepted, we get a 401
+  # We may receive a 403 Forbidden or a 403 Not Available
+  # We may be rate limited and get a 403 as well
+  # We may also get blocked by legal reasons (451)
+  # Regardless of the reason, any client error should be rescued and warned so we don't
+  # end up blocking other syncs
+  rescue Octokit::ClientError => e
+    Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
+    nil
   end
 
   def download_repository
