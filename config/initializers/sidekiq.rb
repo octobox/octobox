@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if Octobox.config.background_jobs_enabled?
+if Octobox.background_jobs_enabled?
   require 'sidekiq-scheduler'
   require 'sidekiq-status'
 

@@ -54,7 +54,7 @@
               <%= octicon 'gist-secret', height: 16, class: 'text-muted' %>
               Admin
             <% end %>
-            <% if Octobox.config.background_jobs_enabled? %>
+            <% if Octobox.background_jobs_enabled? %>
               <%= link_to admin_sidekiq_web_path, class: 'dropdown-item' do %>
                 <%= octicon 'graph', height: 16, class: 'text-muted' %>
                 Sidekiq
