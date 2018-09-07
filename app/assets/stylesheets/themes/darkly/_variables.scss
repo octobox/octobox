@@ -57,6 +57,7 @@ $font-size-base:              0.9375rem !default;
 $h1-font-size:                3rem !default;
 $h2-font-size:                2.5rem !default;
 $h3-font-size:                2rem !default;
+$text-muted:				  $gray-300 !default;
 
 // Tables
 
@@ -161,7 +162,7 @@ $progress-bg:                       $gray-700 !default;
 
 $list-group-bg:                     $gray-800 !default;
 $list-group-border-color:           $gray-700 !default;
-
+$list-group-action-active-bg:		$gray-700 !default;
 $list-group-hover-bg:               $gray-700 !default;
 
 // Breadcrumbs

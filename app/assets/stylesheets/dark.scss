@@ -2,8 +2,6 @@
 @import "application";
 @import "themes/darkly/bootswatch";
 
-// Override the light-dark navbars because the defaul mixings inverts $bg-color
-
 // Dark links against a light background
 .navbar-light {
 	background: #adb5bd !important;

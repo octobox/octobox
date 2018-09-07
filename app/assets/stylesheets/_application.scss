@@ -65,7 +65,7 @@ html {
   text-align: center;
   color: $text-muted;
   a{
-    color: $yiq-text-dark;
+    color: color-yiq($body-bg);
   }
 }
 
@@ -713,7 +713,7 @@ td.keys {
 
 .btn-outline-dark{
   &:hover, &:active {
-    fill: #fff;
+    fill: $body-color;
   }
 }
 
