@@ -29,7 +29,7 @@ in your GitHub settings for Octobox to work.
 * [Downloading subjects](#downloading-subjects)
 * [API Documentation](#api-documentation)
 * [Google Analytics](#google-analytics)
-* [Running Octobox as a GitHub App](#api-documentation)
+* [Running Octobox as a GitHub App](#running-octobox-as-a-github-app)
 * [Open links in the same tab](#open-links-in-the-same-tab)
 
 # Installation
