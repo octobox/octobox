@@ -23,11 +23,6 @@ class UserTest < ActiveSupport::TestCase
     refute user.valid?
   end
 
-  test 'must have an access_token' do
-    @user.access_token = nil
-    refute @user.valid?
-  end
-
   test 'must have a unique access_token' do
     user = User.create(github_id: 42, access_token: @user.access_token)
     refute user.valid?
@@ -149,6 +144,13 @@ class UserTest < ActiveSupport::TestCase
     @user.refresh_interval = 60_000
     @user.save
     assert_equal 60_000, @user.refresh_interval
+  end
+
+  test 'sync_notifications sets job id and enqueues job' do
+    @user.sync_notifications
+    @user.reload
+    assert_not_nil @user.sync_job_id
+    assert_equal 1, SyncNotificationsWorker.jobs.size
   end
 
   [{refresh_interval: 90_000, minimum_refresh_interval: 0, expected_result: nil},

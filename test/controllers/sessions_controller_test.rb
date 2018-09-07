@@ -3,6 +3,7 @@ require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    Octobox.config.stubs(:github_app).returns(false)
     @notifications_request = stub_notifications_request(body: '[]')
     @user = create(:user)
   end
@@ -13,7 +14,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     @user.save(validate: false) # Requires access token
 
     get '/settings'
-    assert_redirected_to root_path
+    assert_redirected_to login_path
   end
 
   test 'GET #new redirects to /auth/github' do
@@ -39,7 +40,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github].uid = @user.github_id
 
     post '/auth/github/callback'
-    assert_requested @notifications_request
+    assert_equal 1, SyncNotificationsWorker.jobs.size
   end
 
   test 'POST #create redirects to the root_path with an error message if they are not an org member' do

@@ -1,6 +1,6 @@
 {
   "name": "Octobox",
-  "description": "The best way to manage your GitHub Notifications",
+  "description": "Untangle your GitHub Notifications",
   "repository": "https://github.com/octobox/octobox",
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate"

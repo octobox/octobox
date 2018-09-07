@@ -56,6 +56,16 @@ html {
 .flex-container {
   padding: 15px;
   min-width: 0;
+  &.text-content{
+    h1, h2{
+      padding-top: $spacer * 3
+    }
+    max-width: 60em;
+    font-size: 16px;
+    ul:last-child{
+      min-height: 31em;
+    }
+  }
   .flex-main & {
     padding-left: 0;
   }
@@ -70,10 +80,20 @@ html {
 }
 
 @include media-breakpoint-down(md) {
+  .flex-main{
+    overflow-y: hidden;
+  }
   .flex-container {
     .flex-main & {
       padding-left: 15px;
       overflow-y: hidden;
+      &.text-content{
+        h1, h2{
+          padding-top: inherit;
+        }
+        height: 100%;
+        overflow-y: scroll;
+      }
       height: 100%;
       > .card {
         height: 100%;
@@ -578,16 +598,18 @@ td.keys {
   }
 }
 
-.octicon-star {
-  fill: none;
-  stroke: #aaa;
-  cursor: pointer;
-  &:hover {
-    fill: #aaa;
-  }
-  &.star-active {
-    fill: #f0ad4e;
-    stroke: #f0ad4e;
+.flex-content{
+  .octicon-star {
+    fill: none;
+    stroke: #aaa;
+    cursor: pointer;
+    &:hover {
+      fill: #aaa;
+    }
+    &.star-active {
+      fill: #f0ad4e;
+      stroke: #f0ad4e;
+    }
   }
 }
 
@@ -636,6 +658,7 @@ td.keys {
   fill: white;
   &.octicon-star{
     stroke: white;
+    fill: white;
   }
 }
 .notification-open{
@@ -682,4 +705,8 @@ td.keys {
 
 .flex-header .dropdown-menu{
   z-index: 2000;
+}
+
+.text-large{
+  font-size: 16px;
 }

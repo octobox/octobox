@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   API_HEADER = 'X-Octobox-API'
 
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
-  helper_method :current_user, :logged_in?, :initial_sync?
+  helper_method :current_user, :logged_in?, :initial_sync?, :display_subject?
   before_action :authenticate_user!
   before_action :check_access_token_present
 
@@ -23,6 +23,11 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def display_subject?
+    return true if Octobox.fetch_subject?
+    Octobox.config.github_app && current_user && current_user.app_token.present?
+  end
 
   def add_user_info_to_bugsnag(notification)
     return unless logged_in?
@@ -53,12 +58,12 @@ class ApplicationController < ActionController::Base
   def check_access_token_present
     if current_user && current_user.access_token.nil?
       cookies.delete(:user_id)
-      redirect_to root_url
+      redirect_to login_path
     end
   end
 
   def initial_sync?
-    current_user.last_synced_at.nil?
+    current_user && current_user.last_synced_at.nil?
   end
 
   def octobox_api_request?

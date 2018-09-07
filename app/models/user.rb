@@ -2,6 +2,7 @@
 class User < ApplicationRecord
   attr_encrypted :access_token, key: Octobox.config.attr_encyrption_key
   attr_encrypted :personal_access_token, key: Octobox.config.attr_encyrption_key
+  attr_encrypted :app_token, key: Octobox.config.attr_encyrption_key
 
   has_secure_token :api_token
   has_many :notifications, dependent: :delete_all
@@ -15,7 +16,7 @@ class User < ApplicationRecord
   }.freeze
 
   validates :github_id,    presence: true, uniqueness: true
-  validates :encrypted_access_token, presence: true, uniqueness: true
+  validates :encrypted_access_token, uniqueness: true, allow_blank: true
   validates :github_login, presence: true
   validates :refresh_interval, numericality: {
     only_integer: true,
@@ -45,17 +46,30 @@ class User < ApplicationRecord
     User.find_by(github_id: auth_hash['uid'])
   end
 
-  def assign_from_auth_hash(auth_hash)
+  def assign_from_auth_hash(auth_hash, app = 'github')
+    token_field = app == 'github' ? :access_token : :app_token
     github_attributes = {
       github_id: auth_hash['uid'],
       github_login: auth_hash['info']['nickname'],
-      access_token: auth_hash.dig('credentials', 'token')
+      token_field => auth_hash.dig('credentials', 'token')
     }
 
-    update_attributes(github_attributes)
+    update_attributes!(github_attributes)
+  end
+
+  def syncing?
+    return false unless Octobox.background_jobs_enabled? && sync_job_id
+    # We are syncing if we are queued or working, all other states mean we are not working
+    [:queued, :working].include?(Sidekiq::Status.status(sync_job_id))
   end
 
   def sync_notifications
+    return true if syncing?
+    job_id = SyncNotificationsWorker.perform_async_if_configured(self.id)
+    update(sync_job_id: job_id)
+  end
+
+  def sync_notifications_in_foreground
     download_service.download
     Rails.logger.info("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} synced their notifications\033[0m\n\n")
   rescue Octokit::Unauthorized => e
@@ -71,6 +85,14 @@ class User < ApplicationRecord
       @github_client = Octokit::Client.new(access_token: effective_access_token, auto_paginate: true)
     end
     @github_client
+  end
+
+  def subject_client
+    Octokit::Client.new(access_token: subject_token, auto_paginate: true)
+  end
+
+  def subject_token
+    app_token || effective_access_token
   end
 
   def github_avatar_url

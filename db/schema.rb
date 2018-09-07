@@ -10,11 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_17_172203) do
+ActiveRecord::Schema.define(version: 2018_08_30_145149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
+
+  create_table "app_installations", force: :cascade do |t|
+    t.integer "github_id"
+    t.integer "app_id"
+    t.string "account_login"
+    t.integer "account_id"
+    t.string "account_type"
+    t.string "target_type"
+    t.integer "target_id"
+    t.string "permission_pull_requests"
+    t.string "permission_issues"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "labels", force: :cascade do |t|
     t.string "name"
@@ -58,6 +72,7 @@ ActiveRecord::Schema.define(version: 2018_08_17_172203) do
     t.datetime "last_synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "app_installation_id"
     t.index ["full_name"], name: "index_repositories_on_full_name", unique: true
   end
 
@@ -70,6 +85,7 @@ ActiveRecord::Schema.define(version: 2018_08_17_172203) do
     t.string "html_url"
     t.string "assignees", default: "::"
     t.integer "github_id"
+    t.string "repository_full_name"
     t.index ["url"], name: "index_subjects_on_url"
   end
 
@@ -85,6 +101,9 @@ ActiveRecord::Schema.define(version: 2018_08_17_172203) do
     t.string "encrypted_access_token_iv"
     t.string "encrypted_personal_access_token"
     t.string "encrypted_personal_access_token_iv"
+    t.string "encrypted_app_token"
+    t.string "encrypted_app_token_iv"
+    t.string "sync_job_id"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end

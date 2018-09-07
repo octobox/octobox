@@ -17,6 +17,7 @@ class Search
     res = res.label(label) if label.present?
     res = res.state(state) if state.present?
     res = res.author(author) if author.present?
+    res = res.assigned(assignee) if assignee.present?
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
     res = res.unread(unread) unless unread.nil?
@@ -59,6 +60,10 @@ class Search
 
   def label
     parsed_query[:label].first
+  end
+
+  def assignee
+    parsed_query[:assignee].first
   end
 
   def starred
