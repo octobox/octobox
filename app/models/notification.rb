@@ -141,9 +141,9 @@ class Notification < ApplicationRecord
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
     unarchive_if_updated if unarchive
-    self
     update_subject
     update_repository
+    self
   end
 
   def github_app_installed?
