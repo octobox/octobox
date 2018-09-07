@@ -20,4 +20,8 @@ if Octobox.background_jobs_enabled?
     config.redis = { url: Octobox.config.redis_url }
     Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
   end
+
+  if Rails.env.production?
+    Sidekiq::Logging.logger.level = Logger::WARN
+  end
 end
