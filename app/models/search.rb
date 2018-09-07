@@ -24,10 +24,28 @@ class Search
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
+    res = apply_sort(res)
     res
   end
 
   private
+
+  def apply_sort(scope)
+    case sort_order
+    when 'subject'
+      scope.order('upper(subject_title) ASC')
+    when 'created'
+      scope.order(created_at: :desc)
+    when 'last_read'
+      scope.order(last_read_at: :desc)
+    else
+      scope.newest
+    end
+  end
+
+  def sort_order
+    parsed_query[:sort].first
+  end
 
   def repo
     parsed_query[:repo].first
