@@ -9,7 +9,7 @@
           Version:
           <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank', rel: "noopener", title: "Current Git commit SHA" %>
           <%= link_to Octobox.config.source_repo + "/compare/#{@latest_git_sha}..master", target: '_blank', rel: "noopener", title: "Compare with latest commits on master" do %>
-            <%= octicon 'git-compare', height: 16 %>
+            <%= octicon 'git-compare', height: 16, class:'text-default' %>
           <% end %>
         </p>
       <% end %>

@@ -544,6 +544,16 @@ td.keys {
 }
 
 // SVG text classes
+.btn {
+  fill: $body-color;
+}
+
+.text-default {
+  fill: $body-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
+}
 
 .text-muted {
   fill: $text-muted;
@@ -572,24 +582,6 @@ td.keys {
   fill: theme-color("secondary");
 }
 
-
-.text-default {
-  fill: $body-color;
-  &.sidebar-icon {
-    fill: $text-muted;
-  }
-}
-
-.badge-subscribed{
-  background-color: $label-subscribed-color;
-  color: $label-subscribed-text-color;
-  &[href]:hover, &[href]:focus {
-    color: $label-subscribed-text-color;
-    text-decoration: none;
-    background-color: darken( $label-subscribed-color, 10% );
-  }
-}
-
 .text-subscribed{
   fill: $label-subscribed-color;
   &.sidebar-icon {
@@ -597,30 +589,10 @@ td.keys {
   }
 }
 
-.badge-team_mention{
-  background-color: $label-team_mention-color;
-  color: $label-team_mention-text-color;
-  &[href]:hover, &[href]:focus {
-    color: $label-team_mention-text-color;
-    text-decoration: none;
-    background-color: darken( $label-team_mention-color, 10% );
-  }
-}
-
 .text-team_mention{
   fill: $label-team_mention-color;
   &.sidebar-icon {
     fill: color-yiq($label-team_mention-color);
-  }
-}
-
-.badge-security_alert{
-  background-color: $label-security_alert-color;
-  color: $label-security_alert-text-color;
-  &[href]:hover, &[href]:focus {
-    color: $label-security_alert-text-color;
-    text-decoration: none;
-    background-color: darken($label-security_alert-color, 10% );
   }
 }
 
@@ -641,6 +613,38 @@ td.keys {
   &.star-active {
     fill: $icon-star-active-fill;
     stroke: $icon-star-active-stroke;
+  }
+}
+
+// badges
+
+.badge-subscribed{
+  background-color: $label-subscribed-color;
+  color: $label-subscribed-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $label-subscribed-text-color;
+    text-decoration: none;
+    background-color: darken( $label-subscribed-color, 10% );
+  }
+}
+
+.badge-team_mention{
+  background-color: $label-team_mention-color;
+  color: $label-team_mention-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $label-team_mention-text-color;
+    text-decoration: none;
+    background-color: darken( $label-team_mention-color, 10% );
+  }
+}
+
+.badge-security_alert{
+  background-color: $label-security_alert-color;
+  color: $label-security_alert-text-color;
+  &[href]:hover, &[href]:focus {
+    color: $label-security_alert-text-color;
+    text-decoration: none;
+    background-color: darken($label-security_alert-color, 10% );
   }
 }
 
