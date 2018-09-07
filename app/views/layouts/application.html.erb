@@ -26,7 +26,7 @@
       <script>window.bugsnagClient = bugsnag({ apiKey: '<%= Rails.application.secrets.bugsnag_js_api_key %>', releaseStage: '<%= ENV["RAILS_ENV"] %>' })</script>
     <% end %>
 
-    <%= stylesheet_link_tag    current_theme, media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag  current_theme ? current_theme : 'light' , media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
 
     <meta property="og:title" content="Octobox">
