@@ -81,9 +81,9 @@ $custom-file-border-color:          $gray-700 !default;
 
 // Dropdowns
 
-$dropdown-bg:                       $gray-900 !default;
-$dropdown-border-color:             $gray-700 !default;
-$dropdown-divider-bg:               $gray-700 !default;
+$dropdown-bg:                       mix($body-bg, $white, 95%) !default;
+$dropdown-border-color:             mix($body-bg, $white, 80%) !default;
+$dropdown-divider-bg:               mix($body-bg, $white, 80%) !default;
 
 $dropdown-link-color:               $white !default;
 $dropdown-link-hover-color:         $white !default;
@@ -91,7 +91,7 @@ $dropdown-link-hover-bg:            $primary !default;
 
 // Navs
 
-$nav-link-padding-x:                2rem !default;
+$nav-link-padding-x:                1rem !default;
 $nav-link-disabled-color:           $gray-500 !default;
 $nav-divider-color:					$gray-700 !default;
 $nav-tabs-border-color:             $gray-700 !default;
@@ -115,29 +115,29 @@ $navbar-light-toggler-border-color: rgba($white,.1) !default;
 // Pagination
 
 $pagination-color:                  $white !default;
-$pagination-bg:                     $success !default;
+$pagination-bg:                     lighten($body-bg, 5%) !default;
 $pagination-border-width:           0 !default;
-$pagination-border-color:           transparent !default;
+$pagination-border-color:           mix($body-bg, $white, 80%) !default;
 
 $pagination-hover-color:            $white !default;
-$pagination-hover-bg:               lighten($success, 10%) !default;
-$pagination-hover-border-color:     transparent !default;
+$pagination-hover-bg:               lighten($body-bg, 15%) !default;
+$pagination-hover-border-color:     mix($body-bg, $white, 80%) !default;
 
 $pagination-active-bg:              $pagination-hover-bg !default;
-$pagination-active-border-color:    transparent !default;
+$pagination-active-border-color:    $pagination-hover-border-color !default;
 
 $pagination-disabled-color:         $white !default;
-$pagination-disabled-bg:            darken($success, 15%) !default;
-$pagination-disabled-border-color:  transparent !default;
+$pagination-disabled-bg:            darken($body-bg, 3%) !default;
+$pagination-disabled-border-color:  darken($pagination-active-border-color, 3%) !default;
 
 // Jumbotron
 
-$jumbotron-bg:                      $gray-800 !default;
+$jumbotron-bg:                      $body-bg !default;
 
 // Cards
 
-$card-cap-bg:                       $gray-700 !default;
-$card-bg:                           $gray-800 !default;
+$card-cap-bg:                       lighten($body-bg, 5%) !default;
+$card-bg:                           lighten($body-bg, 1%) !default;
 
 // Popovers
 
@@ -147,10 +147,10 @@ $popover-header-bg:                 $gray-700 !default;
 
 // Modals
 
-$modal-content-bg:                  $gray-800 !default;
-$modal-content-border-color:        $gray-700 !default;
+$modal-content-bg:                  mix($body-bg, $white, 95%) !default;
+$modal-content-border-color:        mix($body-bg, $white, 80%) !default;
 
-$modal-header-border-color:         $gray-700 !default;
+$modal-header-border-color:         mix($body-bg, $white, 80%) !default;
 
 // Progress bars
 
@@ -160,10 +160,10 @@ $progress-bg:                       $gray-700 !default;
 
 // List group
 
-$list-group-bg:                     $gray-800 !default;
-$list-group-border-color:           $gray-700 !default;
-$list-group-action-active-bg:		$gray-700 !default;
-$list-group-hover-bg:               $gray-700 !default;
+$list-group-bg:                     $card-bg !default;
+$list-group-border-color:           lighten($body-bg, 20%) !default;
+$list-group-action-active-bg:		lighten($body-bg, 3%) !default;
+$list-group-hover-bg:               lighten($body-bg, 5%) !default;
 
 // Breadcrumbs
 

@@ -1,5 +1,6 @@
-// remove random things from standard darkly theme
-$nav-link-padding-x: 1rem;
+//let's blue some things up
+$body-bg: #222233;
+$link-color: #AACCFF;
 
 @import "themes/darkly/variables";
 @import "application";
@@ -7,7 +8,7 @@ $nav-link-padding-x: 1rem;
 
 // Dark links against a light background
 .navbar-light {
-	background: #adb5bd !important;
+	background: mix($body-bg, $black, 95%) !important;
   .navbar-brand {
     color: $navbar-dark-active-color;
 
@@ -60,7 +61,7 @@ $nav-link-padding-x: 1rem;
 
 // White links against a dark background
 .navbar-dark {
-	background: #303030 !important;
+	background: mix($body-bg, $white, 95%) !important;
   .navbar-brand {
     color: $navbar-light-active-color;
 
