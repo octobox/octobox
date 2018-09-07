@@ -61,6 +61,16 @@ html {
   }
 }
 
+.nav-link{
+  fill: $body-color;
+  &.active svg{
+    fill: $nav-pills-link-active-color;
+    &.octicon-star{
+      stroke: $nav-pills-link-active-color;
+    }
+  }
+}
+
 .footer {
   text-align: center;
   color: $text-muted;
@@ -671,12 +681,6 @@ td.keys {
   max-width: 100%;
 }
 
-.nav-link.active svg{
-  fill: $nav-pills-link-active-color;
-  &.octicon-star{
-    stroke: $nav-pills-link-active-color;
-  }
-}
 .notification-open{
   fill: $notification-open;
 }
