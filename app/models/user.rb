@@ -58,7 +58,7 @@ class User < ApplicationRecord
   end
 
   def syncing?
-    return false unless Octobox.config.background_jobs_enabled? && sync_job_id
+    return false unless Octobox.background_jobs_enabled? && sync_job_id
     # We are syncing if we are queued or working, all other states mean we are not working
     [:queued, :working].include?(Sidekiq::Status.status(sync_job_id))
   end

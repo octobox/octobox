@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if Octobox.config.background_jobs_enabled?
+if Octobox.background_jobs_enabled?
   require 'sidekiq-scheduler'
   require 'sidekiq-status'
 
@@ -19,5 +19,9 @@ if Octobox.config.background_jobs_enabled?
   Sidekiq.configure_client do |config|
     config.redis = { url: Octobox.config.redis_url }
     Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
+  end
+
+  if Rails.env.production?
+    Sidekiq::Logging.logger.level = Logger::WARN
   end
 end

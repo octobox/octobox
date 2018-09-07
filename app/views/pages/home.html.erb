@@ -12,7 +12,7 @@
           <%= octicon 'mark-github', height: 22 %>
           <span class='ml-1'>Sign in with GitHub</span>
         <% end %>
-        <% if Octobox.github_app? && !Octobox.config.octobox_io %>
+        <% if Octobox.github_app? && !Octobox.octobox_io? %>
           <%= link_to Octobox.config.app_install_url, class: 'btn btn-outline-dark btn-lg' do %>
             <%= octicon 'briefcase', height: 22 %>
             <span class='ml-1'>Install the GitHub App</span>

@@ -29,7 +29,8 @@ in your GitHub settings for Octobox to work.
 * [Downloading subjects](#downloading-subjects)
 * [API Documentation](#api-documentation)
 * [Google Analytics](#google-analytics)
-* [Running Octobox as a GitHub App](#api-documentation)
+* [Running Octobox as a GitHub App](#running-octobox-as-a-github-app)
+* [Open links in the same tab](#open-links-in-the-same-tab)
 
 # Installation
 ## Database Selection
@@ -411,3 +412,9 @@ n.b. you will be required to log into the oauth app (to allow access to the noti
 To process events recieved from the webhook, ensure you have a sidekiq worker running as well as the rails server: `$ bundle exec sidekiq -C config/sidekiq.yml`
 
 If you wish to run the GitHub app locally and still recieve webhook events, use a service like <https://ngrok.com> to create a public url (`https://my-octobx.ngrok.com`) and use instead of http://localhost:3000 for all oauth and GitHub app config urls.
+
+## Open links in the same tab
+
+If you use Octobox inside of [Wavebox](https://wavebox.io/), [Franz](https://meetfranz.com/) or [Station](https://getstation.com/), you may find the default behaviour of opening notification links in new tabs annoying.
+
+You can set the `OPEN_IN_SAME_TAB` environment variable, which will force all notification links to open in the same tab rather than new ones.

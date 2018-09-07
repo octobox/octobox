@@ -201,7 +201,7 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def sync
-    if Octobox.config.background_jobs_enabled? && params[:async]
+    if Octobox.background_jobs_enabled? && params[:async]
       current_user.sync_notifications
     else
       current_user.sync_notifications_in_foreground
@@ -211,7 +211,7 @@ class NotificationsController < ApplicationController
       format.html do
         redirect_back fallback_location: root_path
       end
-      format.json { head :ok }
+      format.json { {} }
     end
   end
 
@@ -308,10 +308,23 @@ class NotificationsController < ApplicationController
     @per_page ||= restrict_per_page
   end
 
+  DEFAULT_PER_PAGE = 20
+
   def restrict_per_page
-    per_page = params[:per_page].to_i rescue 20
-    per_page = 20 if per_page < 1
+    per_page = per_page_param || per_page_cookie || DEFAULT_PER_PAGE
+
+    return DEFAULT_PER_PAGE if per_page < 1
     raise ActiveRecord::RecordNotFound if per_page > 100
+    cookies[:per_page] = per_page
+
     per_page
+  end
+
+  def per_page_param
+    Integer(params[:per_page]) rescue nil
+  end
+
+  def per_page_cookie
+    Integer(cookies[:per_page]) rescue nil
   end
 end

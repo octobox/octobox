@@ -9,7 +9,7 @@
     <%= link_to 'Source', Octobox.config.source_repo, target: '_blank', rel: "noopener" %>
     available under
     <%= link_to 'AGPL 3.0', "#{Octobox.config.source_repo}/blob/master/LICENSE.txt", target: '_blank', rel: "noopener" %>
-    <% if Octobox.config.octobox_io %>
+    <% if Octobox.octobox_io? %>
       &mdash; <a href='/terms' target="_blank" rel="noopener">Terms</a> &amp; <a href='/privacy' target="_blank" rel="noopener">Privacy Policy</a>
     <% end %>
   </p>

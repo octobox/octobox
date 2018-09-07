@@ -312,7 +312,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
 
     post "/notifications/sync.json"
-    assert_response :ok
+    assert_response :no_content
   end
 
   test 'get to syncs redirects' do
@@ -521,5 +521,18 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     create(:notification, user: @user, unread: false)
     get '/?q=unread%3Afalse'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'sets the per_page cookie' do
+    sign_in_as(@user)
+    get '/?per_page=100'
+    assert_equal '100', cookies[:per_page]
+  end
+
+  test 'uses the per_page cookie' do
+    sign_in_as(@user)
+    get '/?per_page=100'
+    get '/'
+    assert_equal assigns(:per_page), 100
   end
 end
