@@ -90,7 +90,7 @@ class NotificationsController < ApplicationController
 
     @total = scope.count
 
-    @notifications = scope.newest.page(page).per(per_page)
+    @notifications = scope.page(page).per(per_page)
     @cur_selected = [per_page, @total].min
   end
 
@@ -272,11 +272,11 @@ class NotificationsController < ApplicationController
     if params[:q].present?
       scope = Search.new(scope: scope, query: params[:q]).results
     elsif params[:starred].present?
-      scope.starred
+      scope.starred.newest
     elsif params[:archive].present?
-      scope.archived
+      scope.archived.newest
     else
-      scope.inbox
+      scope.inbox.newest
     end
   end
 
