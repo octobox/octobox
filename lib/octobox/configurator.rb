@@ -146,6 +146,11 @@ module Octobox
       @github_admin_ids = admin_github_ids.split(',')
     end
 
+    def open_in_same_tab
+      @open_in_same_tab || env_boolean('OPEN_IN_SAME_TAB')
+    end
+    attr_writer :open_in_same_tab
+
     private
 
     def env_boolean(env_var_name)
