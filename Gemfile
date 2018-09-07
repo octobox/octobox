@@ -25,13 +25,14 @@ gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler'
 gem 'rack-canonical-host'
+gem 'sidekiq-status'
 gem 'gemoji'
 gem 'bootsnap', require: false
 gem 'bugsnag'
 
 # Supported databases
 gem 'mysql2', require: false
-gem 'pg', '1.1.2', require: false
+gem 'pg', '1.1.3', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -43,7 +44,6 @@ end
 group :test do
   gem 'factory_bot'
   gem 'simplecov'
-  gem 'codeclimate-test-reporter'
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
@@ -55,6 +55,7 @@ group :development do
   gem 'rubocop', require: false
   gem 'spring'
   gem 'spring-watcher-listen'
+  gem 'brakeman'
 end
 
 group :production do

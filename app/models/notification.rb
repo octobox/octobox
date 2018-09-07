@@ -155,7 +155,62 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    github_app_installed? || Octobox.config.fetch_subject
+    github_app_installed? || Octobox.fetch_subject?
+  end
+
+  def update_subject(force = false)
+    return unless subjectable?
+    return unless display_subject?
+
+    UpdateSubjectWorker.perform_async_if_configured(self.id, force)
+  end
+
+  def update_subject_in_foreground(force = false)
+    return unless subjectable?
+    return unless display_subject?
+    # skip syncing if the notification was updated around the same time as subject
+    return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
+
+    remote_subject = download_subject
+    return unless remote_subject.present?
+
+    if subject
+      case subject_type
+      when 'Issue', 'PullRequest'
+        subject.repository_full_name = repository_full_name
+        subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
+        subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
+        subject.save(touch: false) if subject.changed?
+      end
+    else
+      case subject_type
+      when 'Issue', 'PullRequest'
+        create_subject({
+          repository_full_name: repository_full_name,
+          github_id: remote_subject.id,
+          state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
+          author: remote_subject.user.login,
+          html_url: remote_subject.html_url,
+          created_at: remote_subject.created_at,
+          updated_at: remote_subject.updated_at,
+          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
+        })
+      when 'Commit', 'Release'
+        create_subject({
+          repository_full_name: repository_full_name,
+          github_id: remote_subject.id,
+          author: remote_subject.author&.login,
+          html_url: remote_subject.html_url,
+          created_at: remote_subject.created_at,
+          updated_at: remote_subject.updated_at
+        })
+      end
+    end
+
+    case subject_type
+    when 'Issue', 'PullRequest'
+      subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
+    end
   end
 
   private
@@ -172,52 +227,6 @@ class Notification < ApplicationRecord
   rescue Octokit::ClientError => e
     Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
     nil
-  end
-
-  def update_subject(force = false)
-    return unless subjectable?
-
-    return unless display_subject?
-    # skip syncing if the notification was updated around the same time as subject
-    return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
-
-    remote_subject = download_subject
-    return unless remote_subject.present?
-
-    if subject
-      case subject_type
-      when 'Issue', 'PullRequest'
-        subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
-        subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
-        subject.save(touch: false) if subject.changed?
-      end
-    else
-      case subject_type
-      when 'Issue', 'PullRequest'
-        create_subject({
-          github_id: remote_subject.id,
-          state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
-          author: remote_subject.user.login,
-          html_url: remote_subject.html_url,
-          created_at: remote_subject.created_at,
-          updated_at: remote_subject.updated_at,
-          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
-        })
-      when 'Commit', 'Release'
-        create_subject({
-          github_id: remote_subject.id,
-          author: remote_subject.author&.login,
-          html_url: remote_subject.html_url,
-          created_at: remote_subject.created_at,
-          updated_at: remote_subject.updated_at
-        })
-      end
-    end
-
-    case subject_type
-    when 'Issue', 'PullRequest'
-      subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
-    end
   end
 
   def download_repository

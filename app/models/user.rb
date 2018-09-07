@@ -57,7 +57,19 @@ class User < ApplicationRecord
     update_attributes!(github_attributes)
   end
 
+  def syncing?
+    return false unless Octobox.background_jobs_enabled? && sync_job_id
+    # We are syncing if we are queued or working, all other states mean we are not working
+    [:queued, :working].include?(Sidekiq::Status.status(sync_job_id))
+  end
+
   def sync_notifications
+    return true if syncing?
+    job_id = SyncNotificationsWorker.perform_async_if_configured(self.id)
+    update(sync_job_id: job_id)
+  end
+
+  def sync_notifications_in_foreground
     download_service.download
     Rails.logger.info("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} synced their notifications\033[0m\n\n")
   rescue Octokit::Unauthorized => e

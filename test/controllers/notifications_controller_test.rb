@@ -292,11 +292,27 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  test 'syncs users notifications async' do
+    # Initial sync means we won't enqueue a sync immediately on login
+    sign_in_as(@user, initial_sync: true)
+    job_id = @user.sync_job_id
+
+    inline_sidekiq_status do
+      post "/notifications/sync?async=true"
+      @user.reload
+
+      assert_response :redirect
+      assert_equal 1, SyncNotificationsWorker.jobs.size
+      assert_not_equal job_id, @user.sync_job_id
+      assert_not_nil @user.sync_job_id, 'Sync job id was nil'
+    end
+  end
+
   test 'syncs users notifications as json' do
     sign_in_as(@user)
 
     post "/notifications/sync.json"
-    assert_response :ok
+    assert_response :no_content
   end
 
   test 'get to syncs redirects' do
@@ -308,7 +324,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'gracefully handles failed user notification syncs' do
     sign_in_as(@user)
-    User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
+    User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::BadGateway)
 
     post "/notifications/sync"
     assert_response :redirect
@@ -317,7 +333,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'gracefully handles failed user notification syncs as json' do
     sign_in_as(@user)
-    User.any_instance.stubs(:sync_notifications).raises(Octokit::BadGateway)
+    User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::BadGateway)
 
     post "/notifications/sync.json"
     assert_response :service_unavailable
@@ -325,7 +341,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'gracefully handles failed user notification syncs with wrong token' do
     sign_in_as(@user)
-    User.any_instance.stubs(:sync_notifications).raises(Octokit::Unauthorized)
+    User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::Unauthorized)
 
     post "/notifications/sync"
     assert_response :redirect
@@ -334,7 +350,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'gracefully handles forbidden user notification syncs' do
     sign_in_as(@user)
-    User.any_instance.stubs(:sync_notifications).raises(Octokit::Forbidden)
+    User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::Forbidden)
 
     post "/notifications/sync"
     assert_response :redirect
@@ -343,7 +359,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'gracefully handles failed user notification syncs with bad token as json' do
     sign_in_as(@user)
-    User.any_instance.stubs(:sync_notifications).raises(Octokit::Unauthorized)
+    User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::Unauthorized)
 
     post "/notifications/sync.json"
     assert_response :service_unavailable
@@ -351,7 +367,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'gracefully handles failed user notification syncs when user is offline' do
     sign_in_as(@user)
-    User.any_instance.stubs(:sync_notifications).raises(Faraday::ConnectionFailed.new('offline error'))
+    User.any_instance.stubs(:sync_notifications_in_foreground).raises(Faraday::ConnectionFailed.new('offline error'))
 
     post "/notifications/sync"
     assert_response :redirect
@@ -360,10 +376,26 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'gracefully handles failed user notification syncs when user is offline as json' do
     sign_in_as(@user)
-    User.any_instance.stubs(:sync_notifications).raises(Faraday::ConnectionFailed.new('offline error'))
+    User.any_instance.stubs(:sync_notifications_in_foreground).raises(Faraday::ConnectionFailed.new('offline error'))
 
     post "/notifications/sync.json"
     assert_response :service_unavailable
+  end
+
+  test 'syncing returns ok when not syncing' do
+    sign_in_as(@user)
+
+    User.any_instance.expects(:syncing?).returns(false)
+    get "/notifications/syncing.json"
+    assert_response :ok
+  end
+
+  test 'syncing returns locked when not syncing' do
+    sign_in_as(@user)
+
+    User.any_instance.expects(:syncing?).returns(true)
+    get "/notifications/syncing.json"
+    assert_response :locked
   end
 
   test 'renders the inbox notification count in the sidebar' do
@@ -489,5 +521,18 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     create(:notification, user: @user, unread: false)
     get '/?q=unread%3Afalse'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'sets the per_page cookie' do
+    sign_in_as(@user)
+    get '/?per_page=100'
+    assert_equal '100', cookies[:per_page]
+  end
+
+  test 'uses the per_page cookie' do
+    sign_in_as(@user)
+    get '/?per_page=100'
+    get '/'
+    assert_equal assigns(:per_page), 100
   end
 end
