@@ -85,6 +85,31 @@ class ConfiguratorTest < ActiveSupport::TestCase
     assert_equal true, Octobox.config.restricted_access_enabled
   end
 
+  test "when ENV['OPEN_IN_SAME_TAB'] is false, config.open_in_same_tab is false" do
+    stub_env_var('OPEN_IN_SAME_TAB', 'false')
+    assert_equal false, Octobox.config.open_in_same_tab
+  end
+
+  test "when ENV['OPEN_IN_SAME_TAB'] is nil, config.open_in_same_tab is false" do
+    stub_env_var('OPEN_IN_SAME_TAB', '')
+    assert_equal false, Octobox.config.open_in_same_tab
+  end
+
+  test "when ENV['OPEN_IN_SAME_TAB'] is true, config.open_in_same_tab is true" do
+    stub_env_var('OPEN_IN_SAME_TAB', 'true')
+    assert_equal true, Octobox.config.open_in_same_tab
+  end
+
+  test "when ENV['OPEN_IN_SAME_TAB'] is 1, config.open_in_same_tab is true" do
+    stub_env_var('OPEN_IN_SAME_TAB', '1')
+    assert_equal true, Octobox.config.open_in_same_tab
+  end
+
+  test "when ENV['OPEN_IN_SAME_TAB'] is 0, config.open_in_same_tab is false" do
+    stub_env_var('OPEN_IN_SAME_TAB', '0')
+    assert_equal false, Octobox.config.open_in_same_tab
+  end
+
   test "when ENV['OCTOBOX_IO'] is false, config.octobox_io is false" do
     stub_env_var('OCTOBOX_IO', 'false')
     assert_equal false, Octobox.config.octobox_io
