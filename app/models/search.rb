@@ -34,8 +34,8 @@ class Search
     case sort_by
     when 'subject'
       scope.order("upper(subject_title) #{sort_order}")
-    when 'created'
-      scope.order(created_at: sort_order)
+    when 'updated'
+      scope.order(updated_at: sort_order)
     when 'last_read'
       scope.order(last_read_at: sort_order)
     else
