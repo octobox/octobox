@@ -31,7 +31,7 @@ class Search
   private
 
   def apply_sort(scope)
-    case sort_order
+    case sort_by
     when 'subject'
       scope.order('upper(subject_title) ASC')
     when 'created'
@@ -43,7 +43,7 @@ class Search
     end
   end
 
-  def sort_order
+  def sort_by
     parsed_query[:sort].first
   end
 
