@@ -36,7 +36,7 @@ class Search
       scope.order("upper(subject_title) #{sort_order}")
     when 'updated'
       scope.order(updated_at: sort_order)
-    when 'last_read'
+    when 'read'
       scope.order(last_read_at: sort_order)
     else
       scope.newest
