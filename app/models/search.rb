@@ -33,11 +33,11 @@ class Search
   def apply_sort(scope)
     case sort_by
     when 'subject'
-      scope.order('upper(subject_title) ASC')
+      scope.order("upper(subject_title) #{sort_order}")
     when 'created'
-      scope.order(created_at: :desc)
+      scope.order(created_at: sort_order)
     when 'last_read'
-      scope.order(last_read_at: :desc)
+      scope.order(last_read_at: sort_order)
     else
       scope.newest
     end
@@ -45,6 +45,27 @@ class Search
 
   def sort_by
     parsed_query[:sort].first
+  end
+
+  def sort_order
+    order = parsed_query[:order].first
+    case order
+    when 'asc'
+      :asc
+    when 'desc'
+      :desc
+    else
+      default_sort_order
+    end
+  end
+
+  def default_sort_order
+    case sort_by
+    when 'subject'
+      :asc
+    else
+      :desc
+    end
   end
 
   def repo
