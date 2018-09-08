@@ -70,7 +70,7 @@ class NotificationsController < ApplicationController
   #   }
   #
   def index
-    scope = notifications_for_presentation
+    scope = notifications_for_presentation.newest
     @types                 = scope.reorder(nil).distinct.group(:subject_type).count
     @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
@@ -272,11 +272,11 @@ class NotificationsController < ApplicationController
     if params[:q].present?
       scope = Search.new(scope: scope, query: params[:q]).results
     elsif params[:starred].present?
-      scope.starred.newest
+      scope.starred
     elsif params[:archive].present?
-      scope.archived.newest
+      scope.archived
     else
-      scope.inbox.newest
+      scope.inbox
     end
   end
 

@@ -33,11 +33,11 @@ class Search
   def apply_sort(scope)
     case sort_by
     when 'subject'
-      scope.order("upper(notifications.subject_title) #{sort_order}")
+      scope.reorder("upper(notifications.subject_title) #{sort_order}")
     when 'updated'
-      scope.order(updated_at: sort_order)
+      scope.reorder(updated_at: sort_order)
     when 'read'
-      scope.order(last_read_at: sort_order)
+      scope.reorder(last_read_at: sort_order)
     else
       scope.newest
     end
