@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 
   def display_subject?
     return true if Octobox.fetch_subject?
-    Octobox.config.github_app && current_user && current_user.app_token.present?
+    Octobox.config.github_app && current_user && current_user.github_app_authorized?
   end
 
   def add_user_info_to_bugsnag(notification)
