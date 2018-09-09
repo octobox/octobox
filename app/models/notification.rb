@@ -147,7 +147,7 @@ class Notification < ApplicationRecord
   end
 
   def github_app_installed?
-    user.github_app_authorized? && repository.try(:github_app_installed?)
+    Octobox.github_app? && user.github_app_authorized? && repository.try(:github_app_installed?)
   end
 
   def subjectable?
@@ -155,7 +155,7 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    github_app_installed? || Octobox.fetch_subject?
+    Octobox.fetch_subject? || github_app_installed?
   end
 
   def update_subject(force = false)
