@@ -147,7 +147,7 @@ class Notification < ApplicationRecord
   end
 
   def github_app_installed?
-    user.app_token.present? && repository.try(:github_app_installed?)
+    user.github_app_authorized? && repository.try(:github_app_installed?)
   end
 
   def subjectable?

@@ -31,6 +31,10 @@ class User < ApplicationRecord
     Octobox.config.github_admin_ids.include?(github_id.to_s)
   end
 
+  def github_app_authorized?
+    encrypted_app_token.present?
+  end
+
   def refresh_interval=(val)
     val = nil if 0 == val
     super(val)
