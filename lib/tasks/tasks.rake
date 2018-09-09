@@ -17,6 +17,6 @@ namespace :tasks do
 
   desc "Sync repositories"
   task sync_repos: :environment do
-    Notification.find_each{|n| n.send(:update_repository); print '.' }
+    Notification.find_each{|n| n.update_repository(true); print '.' }
   end
 end
