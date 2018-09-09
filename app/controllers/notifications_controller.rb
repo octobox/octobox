@@ -82,7 +82,7 @@ class NotificationsController < ApplicationController
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
       @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = scope.map(&:repository).compact
+      @repositories          = Repository.where(full_name: scope.distinct.pluck(:repository_full_name))
     end
 
     scope = current_notifications(scope)
@@ -266,7 +266,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = display_subject? ? [{subject: :labels}, :repository] : nil
+    eager_load_relation = display_subject? ? [{subject: :labels}] : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
     if params[:q].present?
