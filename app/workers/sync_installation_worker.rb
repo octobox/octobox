@@ -17,19 +17,6 @@ class SyncInstallationWorker
       permission_issues: payload['installation']['permissions']['issues']
     })
 
-    payload['repositories'].each do |remote_repository|
-      repository = Repository.find_or_create_by(github_id: remote_repository['id'])
-
-      repository.update_attributes({
-        full_name: remote_repository['full_name'],
-        private: remote_repository['private'],
-        owner: remote_repository['full_name'].split('/').first,
-        github_id: remote_repository['id'],
-        last_synced_at: Time.current,
-        app_installation_id: app_installation['id']
-      })
-
-      repository.notifications.includes(:user).find_each{|n| n.update_subject(true) }
-    end
+    app_installation.add_repositories(payload['repositories'])
   end
 end
