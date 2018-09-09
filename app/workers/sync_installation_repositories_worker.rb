@@ -19,7 +19,7 @@ class SyncInstallationRepositoriesWorker
         app_installation_id: app_installation['id']
       })
 
-      repository.notifications.find_each{|n| n.update_subject(true) }
+      repository.notifications.includes(:user).find_each{|n| n.update_subject(true) }
     end
 
     payload['repositories_removed'].each do |remote_repository|

@@ -29,7 +29,7 @@ class SyncInstallationWorker
         app_installation_id: app_installation['id']
       })
 
-      repository.notifications.find_each{|n| n.update_subject(true) }
+      repository.notifications.includes(:user).find_each{|n| n.update_subject(true) }
     end
   end
 end
