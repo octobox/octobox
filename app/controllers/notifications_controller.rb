@@ -82,7 +82,7 @@ class NotificationsController < ApplicationController
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
       @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = Repository.where(full_name: scope.distinct.pluck(:repository_full_name))
+      @repositories          = Repository.where(full_name: scope.distinct.pluck(:repository_full_name)).select('full_name,private')
     end
 
     scope = current_notifications(scope)
