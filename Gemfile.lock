@@ -178,7 +178,6 @@ GEM
     omniauth-oauth2 (1.5.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
-    openssl (2.1.1)
     parallel (1.12.1)
     parser (2.5.1.2)
       ast (~> 2.4.0)
@@ -364,7 +363,6 @@ DEPENDENCIES
   octicons_helper
   octokit
   omniauth-github
-  openssl
   pg (= 1.1.3)
   pg_search
   puma
