@@ -67,6 +67,7 @@ class Notification < ApplicationRecord
       if "RepositoryInvitation" == api_response.subject.type
         attrs[:subject_url] = "#{api_response.repository.html_url}/invitations"
       end
+      attrs[:updated_at] = Time.current if api_response.updated_at.nil?
       attrs
     end
   end
