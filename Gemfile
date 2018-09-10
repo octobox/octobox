@@ -29,6 +29,7 @@ gem 'sidekiq-status'
 gem 'gemoji'
 gem 'bootsnap', require: false
 gem 'bugsnag'
+gem 'jwt'
 
 # Supported databases
 gem 'mysql2', require: false

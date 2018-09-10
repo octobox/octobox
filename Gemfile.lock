@@ -352,6 +352,7 @@ DEPENDENCIES
   git
   jbuilder
   jquery-rails
+  jwt
   kaminari
   listen
   local_time
