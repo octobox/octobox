@@ -151,6 +151,11 @@ module Octobox
     end
     attr_writer :open_in_same_tab
 
+    def github_app_jwt
+      @github_app_jwt || ENV['GITHUB_APP_JWT']
+    end
+    attr_writer :github_app_jwt
+
     private
 
     def env_boolean(env_var_name)
