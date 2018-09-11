@@ -136,17 +136,12 @@
             <tbody>
               <% current_user.app_installations.each do |app_installation| %>
                 <tr>
-                  <td>
+                  <td class="align-middle">
+                    <%= image_tag app_installation.github_avatar_url+ "?size=50", width: 25, height: 25, class: 'pull-left mr-1' %>
                     <%= app_installation.account_login %>
                   </td>
-                  <td>
-                    <ul class='list-unstyled'>
-                      <% app_installation.repositories.github_app_installed.each do |repo| %>
-                        <li>
-                          <%= repo.full_name %>
-                        </li>
-                      <% end %>
-                    </ul>
+                  <td class="align-middle">
+                    <%= pluralize app_installation.repositories.github_app_installed.count + 1, 'repository' %>
                   </td>
                   <td>
                     <% unless app_installation.account_type == 'User' && app_installation.account_login != current_user.github_login %>

@@ -36,4 +36,8 @@ class AppInstallation < ApplicationRecord
     org_segment = account_type == 'Organization' ? "/organizations/#{account_login}" : ''
     "#{Octobox.config.github_domain}#{org_segment}/settings/installations/#{github_id}"
   end
+
+  def github_avatar_url
+    "#{Octobox.config.github_domain}/#{account_login}.png"
+  end
 end
