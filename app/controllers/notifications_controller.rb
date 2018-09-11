@@ -70,7 +70,7 @@ class NotificationsController < ApplicationController
   #   }
   #
   def index
-    scope = notifications_for_presentation.newest
+    scope = notifications_for_presentation
     @types                 = scope.reorder(nil).distinct.group(:subject_type).count
     @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
@@ -90,7 +90,7 @@ class NotificationsController < ApplicationController
 
     @total = scope.count
 
-    @notifications = scope.page(page).per(per_page)
+    @notifications = scope.newest.page(page).per(per_page)
     @cur_selected = [per_page, @total].min
   end
 
