@@ -118,6 +118,60 @@
     </div>
   </div>
 
+  <% if Octobox.github_app? && current_user.github_app_authorized? %>
+    <div class="card mb-3">
+      <h5 class="card-header">
+        GitHub App Installations
+      </h5>
+      <div class="card-body">
+        <% if current_user.app_installations.any? %>
+          <table class='table'>
+            <thead>
+              <tr>
+                <th class='border-top-0'>Account</th>
+                <th class='border-top-0'>Repositories</th>
+                <th class='border-top-0'>Settings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% current_user.app_installations.each do |app_installation| %>
+                <tr>
+                  <td>
+                    <%= app_installation.account_login %>
+                  </td>
+                  <td>
+                    <ul class='list-unstyled'>
+                      <% app_installation.repositories.github_app_installed.each do |repo| %>
+                        <li>
+                          <%= repo.full_name %>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </td>
+                  <td>
+                    <% unless app_installation.account_type == 'User' && app_installation.account_login != current_user.github_login %>
+                      <%= link_to 'Manage', app_installation.settings_url, class: 'btn btn-secondary btn-sm', target: '_blank', rel: 'noopener' %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <hr>
+        <% end %>
+        <p>
+          The Octobox GitHub App enables extra features and data for repositories that have it installed:
+        </p>
+        <ul>
+          <li>Pull in status, labels, authors and assignees on issues and pull requests</li>
+          <li>Full support for private repositories</li>
+          <li>Sync new and updated notifications automatically</li>
+        </ul>
+        <%= link_to 'Install GitHub App on another Organisation', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="card mb-3">
     <h5 class="card-header">
       Statistics
