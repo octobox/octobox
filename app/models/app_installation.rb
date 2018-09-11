@@ -1,5 +1,7 @@
 class AppInstallation < ApplicationRecord
   has_many :repositories, dependent: :destroy
+  has_many :app_installation_permissions, dependent: :delete_all
+  has_many :users, through: :app_installation_permissions
 
   validates :github_id, presence: true, uniqueness: true
   validates :account_login, presence: true
