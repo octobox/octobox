@@ -70,7 +70,7 @@ class NotificationsController < ApplicationController
   #   }
   #
   def index
-    scope = notifications_for_presentation
+    scope = notifications_for_presentation.newest
     @types                 = scope.reorder(nil).distinct.group(:subject_type).count
     @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
@@ -82,7 +82,7 @@ class NotificationsController < ApplicationController
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
       @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = Repository.where(full_name: scope.distinct.pluck(:repository_full_name)).select('full_name,private')
+      @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
     end
 
     scope = current_notifications(scope)
@@ -90,7 +90,7 @@ class NotificationsController < ApplicationController
 
     @total = scope.count
 
-    @notifications = scope.newest.page(page).per(per_page)
+    @notifications = scope.page(page).per(per_page)
     @cur_selected = [per_page, @total].min
   end
 
