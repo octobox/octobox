@@ -73,6 +73,7 @@ class User < ApplicationRecord
     return true if syncing?
     job_id = SyncNotificationsWorker.perform_async_if_configured(self.id)
     update(sync_job_id: job_id)
+    SyncInstallationPermissionsWorker.perform_async_if_configured(self.id) if github_app_authorized?
   end
 
   def sync_notifications_in_foreground
