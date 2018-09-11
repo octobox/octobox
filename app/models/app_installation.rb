@@ -31,4 +31,9 @@ class AppInstallation < ApplicationRecord
       repository.destroy
     end
   end
+
+  def settings_url
+    org_segment = account_type == 'Organization' ? "/organizations/#{account_login}" : ''
+    "#{Octobox.config.github_domain}#{org_segment}/settings/installations/#{github_id}"
+  end
 end
