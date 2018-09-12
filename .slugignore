@@ -5,6 +5,7 @@ log
 tmp
 openshift/
 coverage/
+docs/
 .bundle
 .ruby-version
 
