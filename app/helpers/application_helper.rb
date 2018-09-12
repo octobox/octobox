@@ -46,8 +46,8 @@ module ApplicationHelper
        shopify WordPress golang)
   end
 
- 	def current_theme
-    current_user.try(:theme)
+  def current_theme 
+    current_user.try(:theme) || 'light'
   end
 
 end

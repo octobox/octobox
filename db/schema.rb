@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 2018_09_10_161047) do
     t.string "encrypted_app_token"
     t.string "encrypted_app_token_iv"
     t.string "sync_job_id"
-	t.string "theme", default: "light"
+    t.string "theme", default: "light"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end
