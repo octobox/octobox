@@ -43,7 +43,8 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 - [Requirements](#requirements)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Alternatives](#alternatives)
-- [Development](#development)
+- [Contribute](#contribute)
+	- [Vulnerability disclosure](#vulnerability-disclosure)
 	- [Note on Patches/Pull Requests](#note-on-patchespull-requests)
 - [Contribute](#contribute)
 	- [Code of Conduct](#code-of-conduct)
@@ -144,6 +145,10 @@ For other updates, follow the project on Twitter: [@octoboxio](https://twitter.c
  * Make your feature addition or bug fix.
  * Add tests for it. This is important so we don't break it in a future version unintentionally.
  * Send a pull request. Bonus points for topic branches.
+
+### Vulnerability disclosure
+
+We support and encourage security research on Octobox under the terms of our [vulnerability disclosure policy](docs/VULNERABILITY_DISCLOSURE_POLICY.md). 
 
 ### Code of Conduct
 

@@ -1,5 +1,7 @@
 class AppInstallation < ApplicationRecord
   has_many :repositories, dependent: :destroy
+  has_many :app_installation_permissions, dependent: :delete_all
+  has_many :users, through: :app_installation_permissions
 
   validates :github_id, presence: true, uniqueness: true
   validates :account_login, presence: true
@@ -28,5 +30,14 @@ class AppInstallation < ApplicationRecord
       repository.subjects.each(&:destroy)
       repository.destroy
     end
+  end
+
+  def settings_url
+    org_segment = account_type == 'Organization' ? "/organizations/#{account_login}" : ''
+    "#{Octobox.config.github_domain}#{org_segment}/settings/installations/#{github_id}"
+  end
+
+  def github_avatar_url
+    "#{Octobox.config.github_domain}/#{account_login}.png"
   end
 end

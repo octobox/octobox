@@ -167,7 +167,7 @@ GEM
     octicons_helper (8.1.0)
       octicons (= 8.1.0)
       rails
-    octokit (4.11.0)
+    octokit (4.12.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     omniauth (1.8.1)
       hashie (>= 3.4.6, < 3.6.0)
@@ -319,7 +319,7 @@ GEM
       ethon (>= 0.9.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.18)
+    uglifier (4.1.19)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.4.0)
     web-console (3.7.0)
