@@ -30,7 +30,12 @@ class Notification < ApplicationRecord
   scope :newest,   -> { order('notifications.updated_at DESC') }
   scope :starred,  ->(value = true) { where(starred: value) }
 
-  scope :repo,     ->(repo_name)    { where(arel_table[:repository_full_name].matches(repo_name)) }
+  scope :repo, lambda { |repo_names|
+    repo_names = [repo_names] if repo_names.is_a?(String)
+    where(
+      repo_names.map { |repo_name| arel_table[:repository_full_name].matches(repo_name) }.reduce(:or)
+    )
+  }
   scope :type,     ->(subject_type) { where(subject_type: subject_type) }
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :unread,   ->(unread)       { where(unread: unread) }

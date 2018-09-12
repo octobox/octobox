@@ -69,7 +69,7 @@ class Search
   end
 
   def repo
-    parsed_query[:repo].first
+    parsed_query[:repo]
   end
 
   def owner
