@@ -152,7 +152,7 @@ html {
       background: rgba($navbar-light-color,0.125);
       color: $navbar-light-color
     }
-    .opencollective, .search-help, .octobox-icon{
+    .opencollective svg, .search-help svg, .octobox-icon svg{
       fill: $navbar-light-color;
     }
   } 
@@ -161,7 +161,7 @@ html {
       background: rgba($navbar-dark-color,0.125);
       color: $navbar-dark-color
     }
-    .opencollective, .search-help, .octobox-icon{
+    .opencollective svg, .search-help svg, .octobox-icon svg{
       fill: $navbar-dark-color;
     }
   }
@@ -544,7 +544,7 @@ td.keys {
 }
 
 // SVG text classes
-.btn {
+svg{
   fill: $body-color;
 }
 
@@ -559,48 +559,39 @@ td.keys {
   fill: $text-muted;
 }
 
-.text-primary {
+.text-primary svg{
   fill: theme-color("primary");
 }
 
-.text-success {
+.text-success svg{
   fill: theme-color("success");
 }
 
-.text-info {
+.text-info svg{
   fill: theme-color("info");
 }
 
-.text-warning {
+.text-warning svg{
   fill: theme-color("warning");
 }
 
-.text-danger {
+.text-danger svg{
   fill: theme-color("danger");
 }
-.text-secondary {
+.text-secondary svg{
   fill: theme-color("secondary");
 }
 
-.text-subscribed{
+.text-subscribed svg{
   fill: $label-subscribed-color;
-  &.sidebar-icon {
-    fill: color-yiq($label-subscribed-color);
-  }
 }
 
-.text-team_mention{
+.text-team_mention svg{
   fill: $label-team_mention-color;
-  &.sidebar-icon {
-    fill: color-yiq($label-team_mention-color);
-  }
 }
 
-.text-security_alert{
+.text-security_alert svg{
   fill: $label-security_alert-color;
-  &.sidebar-icon {
-    fill: color-yiq($label-security_alert-color);
-  }
 }
 
 .octicon-star {
