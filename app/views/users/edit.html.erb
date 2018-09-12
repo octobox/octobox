@@ -135,18 +135,17 @@
             </thead>
             <tbody>
               <% current_user.app_installations.each do |app_installation| %>
+                <% next if app_installation.account_type == 'User' && app_installation.account_login != current_user.github_login %>
                 <tr>
                   <td class="align-middle">
                     <%= image_tag app_installation.github_avatar_url+ "?size=50", width: 25, height: 25, class: 'pull-left mr-1' %>
                     <%= app_installation.account_login %>
                   </td>
                   <td class="align-middle">
-                    <%= pluralize app_installation.repositories.github_app_installed.count + 1, 'repository' %>
+                    <%= pluralize app_installation.repositories.github_app_installed.count, 'repository' %>
                   </td>
                   <td>
-                    <% unless app_installation.account_type == 'User' && app_installation.account_login != current_user.github_login %>
-                      <%= link_to 'Manage', app_installation.settings_url, class: 'btn btn-secondary btn-sm', target: '_blank', rel: 'noopener' %>
-                    <% end %>
+                    <%= link_to 'Manage', app_installation.settings_url, class: 'btn btn-secondary btn-sm', target: '_blank', rel: 'noopener' %>
                   </td>
                 </tr>
               <% end %>
@@ -162,7 +161,7 @@
           <li>Full support for private repositories</li>
           <li>Sync new and updated notifications automatically</li>
         </ul>
-        <%= link_to 'Install GitHub App on another Organisation', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
+        <%= link_to 'Install GitHub App', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
       </div>
     </div>
   <% end %>
