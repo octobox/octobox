@@ -1,6 +1,18 @@
-# [Octobox](https://octobox.io) &#128238;
+# [Octobox](https://octobox.io) &#128238; <small>Untangle your GitHub Notifications.<small>
 
-:postbox: The best way to manage your GitHub Notifications.
+Octobox helps you manage your GitHub notifications efficiently so you can spend less time managing and more time getting things done.
+
+- **Don't lose track** - Octobox adds an extra "archived" state to each notification so you can mark it as "done". If anything happens on an archived thread, issue or PR, Octobox will move it back into your inbox.
+
+- **Starred notifications** - Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
+
+- **Filter all the things** - Filter notifications by notification type, action, state and reason and keep notifications from bots alongside your regular label, author and assignees.
+
+- **Search with prefix filters** - No more Jedi mind tricks. Combine a wide range of powerful search filters help you get straight to the notification you're looking for and focus on just what you need.
+
+- **Built for keyboard warriors** - Navigate, triage and manage your notifications like a pro using Gmail-inspired keyboard shortcuts for every function, no mouse required.
+
+- **Open for everyone** - Octobox developers use Octobox to develop Octobox. 100% developed and managed in the open on GitHub under a FLOSS license.
 
 ![Screenshot of  Octobox](app/assets/images/screenshot.png)
 
@@ -15,7 +27,7 @@
 
 ## Why is this a thing?
 
-If you manage more than one active project on GitHub, you probably find [GitHub Notifications](https://github.com/notifications) pretty lacking.
+If you manage any active projects on GitHub, you probably find [GitHub Notifications](https://github.com/notifications) pretty lacking.
 
 Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
 
@@ -31,7 +43,8 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 - [Requirements](#requirements)
 - [Keyboard shortcuts](#keyboard-shortcuts)
 - [Alternatives](#alternatives)
-- [Development](#development)
+- [Contribute](#contribute)
+	- [Vulnerability disclosure](#vulnerability-disclosure)
 	- [Note on Patches/Pull Requests](#note-on-patchespull-requests)
 - [Contribute](#contribute)
 	- [Code of Conduct](#code-of-conduct)
@@ -132,6 +145,10 @@ For other updates, follow the project on Twitter: [@octoboxio](https://twitter.c
  * Make your feature addition or bug fix.
  * Add tests for it. This is important so we don't break it in a future version unintentionally.
  * Send a pull request. Bonus points for topic branches.
+
+### Vulnerability disclosure
+
+We support and encourage security research on Octobox under the terms of our [vulnerability disclosure policy](docs/VULNERABILITY_DISCLOSURE_POLICY.md). 
 
 ### Code of Conduct
 

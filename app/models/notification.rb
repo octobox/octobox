@@ -30,7 +30,12 @@ class Notification < ApplicationRecord
   scope :newest,   -> { order('notifications.updated_at DESC') }
   scope :starred,  ->(value = true) { where(starred: value) }
 
-  scope :repo,     ->(repo_name)    { where(arel_table[:repository_full_name].matches(repo_name)) }
+  scope :repo, lambda { |repo_names|
+    repo_names = [repo_names] if repo_names.is_a?(String)
+    where(
+      repo_names.map { |repo_name| arel_table[:repository_full_name].matches(repo_name) }.reduce(:or)
+    )
+  }
   scope :type,     ->(subject_type) { where(subject_type: subject_type) }
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :unread,   ->(unread)       { where(unread: unread) }
@@ -46,7 +51,7 @@ class Notification < ApplicationRecord
   scope :label,    ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
   scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
-  scope :assigned, ->(assignee) { joins(:subject).where("assignees LIKE ?", "%:#{assignee}:%") }
+  scope :assigned, ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }
   scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
 
   scope :subjectable, -> { where(subject_type: SUBJECTABLE_TYPES) }
@@ -67,13 +72,19 @@ class Notification < ApplicationRecord
       if "RepositoryInvitation" == api_response.subject.type
         attrs[:subject_url] = "#{api_response.repository.html_url}/invitations"
       end
+      attrs[:updated_at] = Time.current if api_response.updated_at.nil?
       attrs
     end
   end
 
   def state
-    return unless Octobox.config.fetch_subject
+    return unless display_subject?
     subject.try(:state)
+  end
+
+  def self.archive(notifications, value)
+    notifications.update_all(archived: ActiveRecord::Type::Boolean.new.cast(value))
+    mark_read(notifications)
   end
 
   def self.mark_read(notifications)
@@ -110,7 +121,7 @@ class Notification < ApplicationRecord
   end
 
   def expanded_subject_url
-    return subject_url unless Octobox.config.fetch_subject
+    return subject_url unless Octobox.config.subjects_enabled?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
   end
 
@@ -141,30 +152,28 @@ class Notification < ApplicationRecord
     update_repository
   end
 
+  def github_app_installed?
+    Octobox.github_app? && user.github_app_authorized? && repository.try(:github_app_installed?)
+  end
+
   def subjectable?
     SUBJECTABLE_TYPES.include?(subject_type)
   end
 
-  private
-
-  def download_subject
-    user.github_client.get(subject_url)
-
-  # If permissions changed and the user hasn't accepted, we get a 401
-  # We may receive a 403 Forbidden or a 403 Not Available
-  # We may be rate limited and get a 403 as well
-  # We may also get blocked by legal reasons (451)
-  # Regardless of the reason, any client error should be rescued and warned so we don't
-  # end up blocking other syncs
-  rescue Octokit::ClientError => e
-    Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
-    nil
+  def display_subject?
+    Octobox.fetch_subject? || github_app_installed?
   end
 
   def update_subject(force = false)
     return unless subjectable?
+    return unless display_subject?
 
-    return unless Octobox.config.fetch_subject
+    UpdateSubjectWorker.perform_async_if_configured(self.id, force)
+  end
+
+  def update_subject_in_foreground(force = false)
+    return unless subjectable?
+    return unless display_subject?
     # skip syncing if the notification was updated around the same time as subject
     return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
@@ -174,6 +183,7 @@ class Notification < ApplicationRecord
     if subject
       case subject_type
       when 'Issue', 'PullRequest'
+        subject.repository_full_name = repository_full_name
         subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
@@ -182,6 +192,7 @@ class Notification < ApplicationRecord
       case subject_type
       when 'Issue', 'PullRequest'
         create_subject({
+          repository_full_name: repository_full_name,
           github_id: remote_subject.id,
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
@@ -192,6 +203,7 @@ class Notification < ApplicationRecord
         })
       when 'Commit', 'Release'
         create_subject({
+          repository_full_name: repository_full_name,
           github_id: remote_subject.id,
           author: remote_subject.author&.login,
           html_url: remote_subject.html_url,
@@ -207,14 +219,14 @@ class Notification < ApplicationRecord
     end
   end
 
-  def download_repository
-    user.github_client.repository(repository_full_name)
-  rescue Octokit::ClientError => e
-    nil
+  def update_repository(force = false)
+    return unless display_subject?
+
+    UpdateRepositoryWorker.perform_async_if_configured(self.id, force)
   end
 
-  def update_repository
-    return unless Octobox.config.fetch_subject
+  def update_repository_in_foreground(force = false)
+    return unless display_subject?
     return if repository != nil && updated_at - repository.updated_at < 2.seconds
 
     remote_repository = download_repository
@@ -245,5 +257,27 @@ class Notification < ApplicationRecord
         last_synced_at: Time.current
       })
     end
+  end
+
+  private
+
+  def download_subject
+    user.subject_client.get(subject_url)
+
+  # If permissions changed and the user hasn't accepted, we get a 401
+  # We may receive a 403 Forbidden or a 403 Not Available
+  # We may be rate limited and get a 403 as well
+  # We may also get blocked by legal reasons (451)
+  # Regardless of the reason, any client error should be rescued and warned so we don't
+  # end up blocking other syncs
+  rescue Octokit::ClientError => e
+    Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
+    nil
+  end
+
+  def download_repository
+    user.github_client.repository(repository_full_name)
+  rescue Octokit::ClientError => e
+    nil
   end
 end

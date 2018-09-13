@@ -87,7 +87,7 @@ module NotificationsHelper
   end
 
   def mute_selected_button
-    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items') unless params[:archive]
+    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items')
   end
 
   def mark_read_selected_button
@@ -124,6 +124,7 @@ module NotificationsHelper
   def notification_icon(subject_type, state = nil)
     state = nil unless display_subject?
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
+    return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
     SUBJECT_TYPES[subject_type]
   end
 
@@ -197,9 +198,9 @@ module NotificationsHelper
       link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
         yield
         if active && not_repo_in_active_org(param)
-          concat content_tag(:span, octicon('x', :height => 16), class: 'badge')
+          concat content_tag(:span, octicon('x', :height => 16), class: 'badge badge-light')
         elsif count.present?
-          concat content_tag(:span, count, class: 'badge')
+          concat content_tag(:span, count, class: 'badge badge-light')
         end
       end
     end
@@ -223,10 +224,6 @@ module NotificationsHelper
 
   def not_repo_in_active_org(param)
     return true unless param == :repo
-    !params[:owner].present?
-  end
-
-  def display_subject?
-    Octobox.config.fetch_subject
+    params[:owner].blank?
   end
 end

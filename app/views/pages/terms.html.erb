@@ -1,14 +1,3 @@
-<div class="jumbotron">
-  <div class="container">
-    <h1 class="text-center">
-      <%= link_to root_path, class: 'text-dark' do %>
-        <%= octobox_icon(80) %> Octobox
-      <% end %>
-    </h1>
-    <p class="text-center">The best way to manage your GitHub Notifications</p>
-  </div>
-</div>
-
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -63,7 +52,8 @@
       <ul>
         <li>Your use of the Service is at your sole risk. The Service is provided on an “as is” and “as available” basis.</li>
         <li>You understand that Octobox.io uses third party vendors and hosting partners to provide the necessary hardware, software, networking, storage, and related technology required to run the Service.</li>
-        <li>You agree to the terms of our <a href='/privacy'>Privacy Policy</a></li>
+        <li>You agree to the terms of our <a href='/privacy'>Privacy Policy</a>.</li>
+        <li>If you are conducting security research you also agree to the terms of our <a href='https://github.com/octobox/octobox/blob/master/docs/RESPONSIBLE_DISCLOSURE_POLICY.md'>responsible disclosure policy</a>.</li>
       </ul>
 
       <h4 id='provisions'>Provisions (Things You Must Do)</h4>
@@ -103,7 +93,7 @@
         Octobox.io is a small community of people supporting the service. We do not offer formal support processes. If you require mroe formal support arrangements please <a href='mailto:support@octobox.io'>email us</a> otherwise you can try:
       </p>
       <ul>
-        <li>Filing an issue in our <a href='https://github.com/octobox/octobox.io/issues/new'>bug tracker</a> following the template provided.</li>
+        <li>Filing an issue in our <a href='https://github.com/octobox/octobox/issues/new'>bug tracker</a> following the template provided.</li>
         <li>Asking for help in our <a href='https://gitter.im/octobox/octobox'>public chat room</a>.</li>
         <li>Email us at <%= mail_to 'support@octobox.io' %>.</li>
         <li>Tweet us at <%= link_to '@octoboxio', 'https://twitter.com/octoboxio' %>.</li>

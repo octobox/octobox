@@ -137,24 +137,19 @@ document.addEventListener("turbolinks:load", function() {
       $(this).toggleClass("star-active star-inactive");
       $.post('/notifications/'+$(this).data('id')+'/star')
     });
-    $('a.sync').on('click', function() {
-      $('.sync .octicon').toggleClass('spinning')
-    });
     recoverPreviousCursorPosition();
 
     $('.js-select_all').change(function() {
       checkAll($(".js-select_all").prop('checked'))
     })
 
-    if(!('ontouchstart' in window))
-    {
-      $('[data-toggle="tooltip"]').tooltip()
-    }
+    enableTooltips();
 
-    updateFavicon()
+    updateFavicon();
   }
 });
 
+$(document).ready(enableTooltips);
 
 document.addEventListener("turbolinks:before-cache", function() {
   $('td.js-current').removeClass("current js-current");
@@ -163,6 +158,18 @@ document.addEventListener("turbolinks:before-cache", function() {
 $(document).on('click', '[data-toggle="offcanvas"]', function () {
   $('.flex-content').toggleClass('active')
 });
+
+$(document).on('click', 'a.js-sync', function(e) {
+  e.preventDefault(e);
+  sync()
+});
+
+function enableTooltips() {
+  if(!('ontouchstart' in window))
+  {
+    $('[data-toggle="tooltip"]').tooltip()
+  }
+}
 
 function enableKeyboardShortcuts() {
   // Add shortcut events only once
@@ -294,8 +301,41 @@ function openCurrentLink(e) {
   getCurrentRow().find('td.notification-subject .link')[0].click();
 }
 
+function refreshOnSync() {
+  if(!$(".js-sync .octicon").hasClass("spinning")){
+    $(".js-sync .octicon").addClass("spinning");
+  }
+
+  jQuery.ajax({'url': "/notifications/syncing.json", data: {}, error: function(xhr, status) {
+      setTimeout(refreshOnSync, 2000)
+    }, success: function(data, status, xhr) {
+      if (data['error'] != null) {
+        $(".sync .octicon").removeClass("spinning");
+        $(".header-flash-messages").empty();
+        notify(data['error'], 'danger')
+      } else {
+        Turbolinks.visit("/"+location.search);
+      }
+    }
+  });
+}
+
+function notify(message, type) {
+  var alert_html = [
+    "<div class='alert alert-" + type + " fade show'>",
+    "   <button class='close' data-dismiss='alert'>x</button>",
+    message,
+    "</div>"
+  ].join("\n");
+  $(".header-flash-messages").append(alert_html);
+}
+
 function sync() {
-  $("a.sync").click();
+  if($("a.js-sync.js-async").length) {
+    $.get('/notifications/sync.json?async=true', refreshOnSync);
+  } else {
+    Turbolinks.visit($("a.js-sync").attr('href'))
+  }
 }
 
 function autoSync() {
@@ -378,24 +418,30 @@ $(document).ready(function() {
   })
 });
 
-var lastCheckedNotifcation = null;
+// Sync Handling
+$(document).ready(function() {
+  if($(".js-is_syncing").length){ refreshOnSync() }
+  if($(".js-start_sync").length){ sync() }
+});
+
+var lastCheckedNotification = null;
 // handle shift+click multiple check
 $(document).ready(function() {
-  var notifcationCheckboxes = $('input.archive[type="checkbox"]');
-  notifcationCheckboxes.click(function(e) {
-    if(!lastCheckedNotifcation) {
-      lastCheckedNotifcation = this;
+  var notificationCheckboxes = $('input.archive[type="checkbox"]');
+  notificationCheckboxes.click(function(e) {
+    if(!lastCheckedNotification) {
+      lastCheckedNotification = this;
       return;
     }
 
     if(e.shiftKey) {
-      var start = notifcationCheckboxes.index(this);
-      var end = notifcationCheckboxes.index(lastCheckedNotifcation);
+      var start = notificationCheckboxes.index(this);
+      var end = notificationCheckboxes.index(lastCheckedNotification);
 
-      notifcationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastCheckedNotifcation.checked);
+      notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastCheckedNotification.checked);
 
     }
 
-    lastCheckedNotifcation = this;
+    lastCheckedNotification = this;
   });
 });

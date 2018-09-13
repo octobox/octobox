@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class SessionsController < ApplicationController
   skip_before_action :authenticate_user!
+  skip_before_action :check_access_token_present
   before_action :authorize_access!, only: :create
 
   def new
@@ -9,7 +10,7 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by_auth_hash(auth_hash) || User.new
-    user.assign_from_auth_hash(auth_hash)
+    user.assign_from_auth_hash(auth_hash, params[:provider])
 
     cookies.permanent.signed[:user_id] = {value: user.id, httponly: true}
 
