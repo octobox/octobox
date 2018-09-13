@@ -155,7 +155,7 @@ html {
     .opencollective svg, .search-help svg, .octobox-icon svg{
       fill: $navbar-light-color;
     }
-  } 
+  }
   &.navbar-dark, &.bg-dark {
     #search input{
       background: rgba($navbar-dark-color,0.125);
@@ -434,6 +434,9 @@ td.keys {
     }
   }
   .notification{
+    .notification-date{
+      min-width: 5em;
+    }
     .buttons{
       display: none;
       a{
