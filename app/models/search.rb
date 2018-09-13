@@ -24,6 +24,7 @@ class Search
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
+    res = res.locked unless is_locked.nil? || !is_locked
     res = apply_sort(res)
     res
   end
@@ -128,5 +129,10 @@ class Search
   def is_private
     return nil unless parsed_query[:private].present?
     parsed_query[:private].first.downcase == "true"
+  end
+
+  def is_locked
+    return nil unless parsed_query[:locked].present?
+    parsed_query[:locked].first.try(:downcase) == "true"
   end
 end

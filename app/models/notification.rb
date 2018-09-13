@@ -40,21 +40,22 @@ class Notification < ApplicationRecord
   scope :reason,   ->(reason)       { where(reason: reason) }
   scope :unread,   ->(unread)       { where(unread: unread) }
   scope :owner,    ->(owner_name)   { where(arel_table[:repository_owner_name].matches(owner_name)) }
-  scope :author,    ->(author_name)   { joins(:subject).where(Subject.arel_table[:author].matches(author_name)) }
+  scope :author,   ->(author_name)  { joins(:subject).where(Subject.arel_table[:author].matches(author_name)) }
 
   scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
 
-  scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
-  scope :author,    ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }
+  scope :state,      ->(state)  { joins(:subject).where('subjects.state = ?', state) }
+  scope :author,     ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }
 
-  scope :labelable,   -> { where(subject_type: ['Issue', 'PullRequest']) }
-  scope :label,    ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
-  scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
+  scope :labelable,  -> { where(subject_type: ['Issue', 'PullRequest']) }
+  scope :label,      ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
+  scope :unlabelled, -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
-  scope :assigned, ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }
+  scope :assigned,   ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }
   scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
+  scope :locked,     -> { joins(:subject).where(subjects: { locked: true }) }
 
-  scope :subjectable, -> { where(subject_type: SUBJECTABLE_TYPES) }
+  scope :subjectable, ->  { where(subject_type: SUBJECTABLE_TYPES) }
   scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
   scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
 
@@ -199,7 +200,8 @@ class Notification < ApplicationRecord
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at,
-          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
+          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:",
+          locked: remote_subject.locked,
         })
       when 'Commit', 'Release'
         create_subject({
@@ -208,7 +210,8 @@ class Notification < ApplicationRecord
           author: remote_subject.author&.login,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
-          updated_at: remote_subject.updated_at
+          updated_at: remote_subject.updated_at,
+          locked: remote_subject.locked
         })
       end
     end
