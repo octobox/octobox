@@ -74,6 +74,12 @@ class DownloadService
     end
 
     Notification.import updates, on_duplicate_key_update: API_ATTRIBUTE_MAP.keys
+
+    updated_notifications = user.notifications.where(github_id: updates.map(&:github_id)).includes(:user)
+    updated_notifications.find_each do |notification|
+      notification.update_subject
+      notification.update_repository
+    end
   end
 
   def new_user_fetch
