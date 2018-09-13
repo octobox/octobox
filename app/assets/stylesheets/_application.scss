@@ -485,6 +485,9 @@ td.keys {
       &:first-child {
         border-top: none;
       }
+      .buttons{
+        display: none;
+      }
     }
     .notification-checkbox,
     .notification-star,
