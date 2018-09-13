@@ -58,7 +58,18 @@
       </td>
       <td>Search unread notifications.  Also accepts false for the inverse.</td>
     </tr>
-
+    <tr>
+      <td>
+        <code>sort:updated</code>
+      </td>
+      <td>Sort notifications by <code>updated</code>, <code>read</code> or <code>subject</code>.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>order:asc</code>
+      </td>
+      <td>Sort notifications in ascending (<code>asc</code>) or descending (<code>desc</code>) order. Use with <code>sort</code>.</td>
+    </tr>
     <% if display_subject? %>
       <tr>
         <td>
@@ -98,6 +109,12 @@
           <code>private:true</code>
         </td>
         <td>Search notifications from private repositories. Also accepts false for the inverse.</td>
+      </tr>
+      <tr>
+        <td>
+          <code>assignee:andrew</code>
+        </td>
+        <td>Filter by notifications from issue or pull requests that are assigned to '<code>andrew</code>'.</td>
       </tr>
     <% end %>
   </tbody>

@@ -70,7 +70,7 @@ class NotificationsController < ApplicationController
   #   }
   #
   def index
-    scope = notifications_for_presentation
+    scope = notifications_for_presentation.newest
     @types                 = scope.reorder(nil).distinct.group(:subject_type).count
     @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
@@ -82,7 +82,7 @@ class NotificationsController < ApplicationController
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
       @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = scope.map(&:repository).compact
+      @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
     end
 
     scope = current_notifications(scope)
@@ -90,7 +90,7 @@ class NotificationsController < ApplicationController
 
     @total = scope.count
 
-    @notifications = scope.newest.page(page).per(per_page)
+    @notifications = scope.page(page).per(per_page)
     @cur_selected = [per_page, @total].min
   end
 
@@ -124,7 +124,11 @@ class NotificationsController < ApplicationController
   #
   def mute_selected
     Notification.mute(selected_notifications)
-    head :ok
+    if request.xhr?
+      head :ok
+    else
+      redirect_back fallback_location: root_path
+    end
   end
 
   # Archive selected notifications
@@ -142,7 +146,11 @@ class NotificationsController < ApplicationController
   #
   def archive_selected
     Notification.archive(selected_notifications, params[:value])
-    head :ok
+    if request.xhr?
+      head :ok
+    else
+      redirect_back fallback_location: root_path
+    end
   end
 
   # Mark selected notifications as read
@@ -201,10 +209,35 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def sync
-    current_user.sync_notifications
+    if Octobox.background_jobs_enabled? && params[:async]
+      current_user.sync_notifications
+    else
+      current_user.sync_notifications_in_foreground
+    end
+
     respond_to do |format|
-      format.html { redirect_back fallback_location: root_path }
-      format.json { head :ok }
+      format.html do
+        redirect_back fallback_location: root_path
+      end
+      format.json { {} }
+    end
+  end
+
+  # Check if user is synchronizing notifications with GitHub
+  #
+  # ==== Example
+  #
+  # <code>POST notifications/syncing.json</code>
+  #   {} 204 (ok)
+  #
+  # <code>POST notifications/syncing.json</code>
+  #   {} 423 (locked)
+  #
+  def syncing
+    if current_user.syncing?
+      render json: {}, status: :locked
+    else
+      render json: { error: Sidekiq::Status::get(current_user.sync_job_id, :exception) }, status: :ok
     end
   end
 
@@ -241,7 +274,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = display_subject? ? [{subject: :labels}, :repository] : nil
+    eager_load_relation = display_subject? ? [{subject: :labels}] : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
     if params[:q].present?
@@ -283,10 +316,23 @@ class NotificationsController < ApplicationController
     @per_page ||= restrict_per_page
   end
 
+  DEFAULT_PER_PAGE = 20
+
   def restrict_per_page
-    per_page = params[:per_page].to_i rescue 20
-    per_page = 20 if per_page < 1
+    per_page = per_page_param || per_page_cookie || DEFAULT_PER_PAGE
+
+    return DEFAULT_PER_PAGE if per_page < 1
     raise ActiveRecord::RecordNotFound if per_page > 100
+    cookies[:per_page] = per_page
+
     per_page
+  end
+
+  def per_page_param
+    Integer(params[:per_page]) rescue nil
+  end
+
+  def per_page_cookie
+    Integer(cookies[:per_page]) rescue nil
   end
 end

@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   has_secure_token :api_token
   has_many :notifications, dependent: :delete_all
+  has_many :app_installation_permissions, dependent: :delete_all
+  has_many :app_installations, through: :app_installation_permissions
 
   ERRORS = {
     invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
@@ -16,7 +18,7 @@ class User < ApplicationRecord
   }.freeze
 
   validates :github_id,    presence: true, uniqueness: true
-  validates :encrypted_access_token, uniqueness: true
+  validates :encrypted_access_token, uniqueness: true, allow_blank: true
   validates :github_login, presence: true
   validates :refresh_interval, numericality: {
     only_integer: true,
@@ -29,6 +31,10 @@ class User < ApplicationRecord
 
   def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)
+  end
+
+  def github_app_authorized?
+    encrypted_app_token.present?
   end
 
   def refresh_interval=(val)
@@ -54,10 +60,23 @@ class User < ApplicationRecord
       token_field => auth_hash.dig('credentials', 'token')
     }
 
-    update_attributes(github_attributes)
+    update_attributes!(github_attributes)
+  end
+
+  def syncing?
+    return false unless Octobox.background_jobs_enabled? && sync_job_id
+    # We are syncing if we are queued or working, all other states mean we are not working
+    [:queued, :working].include?(Sidekiq::Status.status(sync_job_id))
   end
 
   def sync_notifications
+    return true if syncing?
+    job_id = SyncNotificationsWorker.perform_async_if_configured(self.id)
+    update(sync_job_id: job_id)
+    SyncInstallationPermissionsWorker.perform_async_if_configured(self.id) if github_app_authorized?
+  end
+
+  def sync_notifications_in_foreground
     download_service.download
     Rails.logger.info("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} synced their notifications\033[0m\n\n")
   rescue Octokit::Unauthorized => e
@@ -125,4 +144,15 @@ class User < ApplicationRecord
     "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
   end
 
+  def sync_app_installation_access
+    return unless github_app_authorized?
+    remote_installs = subject_client.find_user_installations(accept: 'application/vnd.github.machine-man-preview+json')
+    app_installations = AppInstallation.where(github_id: remote_installs[:installations].map(&:id))
+    app_installations.each do |app_installation|
+      app_installation_permissions.find_or_create_by(app_installation_id: app_installation.id)
+    end
+    app_installation_ids = app_installations.map(&:id)
+    removed_permissions = app_installation_permissions.reject{|ep| app_installation_ids.include?(ep.app_installation_id) }
+    removed_permissions.each(&:destroy)
+  end
 end

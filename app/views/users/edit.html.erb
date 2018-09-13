@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container user-settings">
   <div class="row">
     <div class="col">
       <h1 class="pt-3">Settings</h1>
@@ -9,7 +9,7 @@
           Version:
           <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank', rel: "noopener", title: "Current Git commit SHA" %>
           <%= link_to Octobox.config.source_repo + "/compare/#{@latest_git_sha}..master", target: '_blank', rel: "noopener", title: "Compare with latest commits on master" do %>
-            <%= octicon 'git-compare', height: 16 %>
+            <%= octicon 'git-compare', height: 16, class:'text-default' %>
           <% end %>
         </p>
       <% end %>
@@ -17,9 +17,8 @@
   </div>
   <hr>
 
-  <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
-
-    <%= form_for current_user do |f| %>
+  <%= form_for current_user do |f| %>
+    <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
       <% if Octobox.refresh_interval_enabled? %>
         <div class="card mb-3">
           <h5 class="card-header">
@@ -39,7 +38,6 @@
             </div>
           </div>
         </div>
-
       <% end %>
 
       <% if Octobox.personal_access_tokens_enabled? %>
@@ -67,9 +65,21 @@
           </div>
         </div>
       <% end %>
-
-
     <% end %>
+
+    <div class="card mb-3">
+      <h5 class="card-header">
+        Theme
+      </h5>
+      <div class="card-body">
+        <div class="form-group">
+          <%= f.select :theme, [['Light', 'light'], ['Dark', 'dark']], {}, class: 'form-control  w-25' %>
+        </div>
+
+        <%= submit_tag 'Save', class: 'btn btn-primary' %>
+        <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+      </div>
+    </div>
   <% end %>
 
   <div class="card mb-3">
@@ -109,7 +119,7 @@
         Manage Oauth Access on GitHub
       <% end %>
 
-      <% if Octobox.github_app? && current_user.app_token.present? %>
+      <% if Octobox.github_app? && current_user.github_app_authorized? %>
         <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_app_client_id}", class: 'btn btn-outline-dark' do %>
           <%= octicon 'octoface' %>&nbsp;
           Manage App Access on GitHub
@@ -117,6 +127,54 @@
       <% end %>
     </div>
   </div>
+
+  <% if Octobox.github_app? && current_user.github_app_authorized? %>
+    <div class="card mb-3">
+      <h5 class="card-header">
+        GitHub App Installations
+      </h5>
+      <div class="card-body">
+        <% if current_user.app_installations.any? %>
+          <table class='table'>
+            <thead>
+              <tr>
+                <th class='border-top-0'>Account</th>
+                <th class='border-top-0'>Repositories</th>
+                <th class='border-top-0'>Settings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% current_user.app_installations.each do |app_installation| %>
+                <% next if app_installation.account_type == 'User' && app_installation.account_login != current_user.github_login %>
+                <tr>
+                  <td class="align-middle">
+                    <%= image_tag app_installation.github_avatar_url+ "?size=50", width: 25, height: 25, class: 'pull-left mr-1' %>
+                    <%= app_installation.account_login %>
+                  </td>
+                  <td class="align-middle">
+                    <%= pluralize app_installation.repositories.github_app_installed.count, 'repository' %>
+                  </td>
+                  <td>
+                    <%= link_to 'Manage', app_installation.settings_url, class: 'btn btn-secondary btn-sm', target: '_blank', rel: 'noopener' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <hr>
+        <% end %>
+        <p>
+          The Octobox GitHub App enables extra features and data for repositories that have it installed:
+        </p>
+        <ul>
+          <li>Pull in status, labels, authors and assignees on issues and pull requests</li>
+          <li>Full support for private repositories</li>
+          <li>Sync new and updated notifications automatically</li>
+        </ul>
+        <%= link_to 'Install GitHub App', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
+      </div>
+    </div>
+  <% end %>
 
   <div class="card mb-3">
     <h5 class="card-header">

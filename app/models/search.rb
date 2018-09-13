@@ -17,19 +17,59 @@ class Search
     res = res.label(label) if label.present?
     res = res.state(state) if state.present?
     res = res.author(author) if author.present?
+    res = res.assigned(assignee) if assignee.present?
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
     res = res.unread(unread) unless unread.nil?
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
+    res = apply_sort(res)
     res
   end
 
   private
 
+  def apply_sort(scope)
+    case sort_by
+    when 'subject'
+      scope.reorder("upper(notifications.subject_title) #{sort_order}")
+    when 'updated'
+      scope.reorder(updated_at: sort_order)
+    when 'read'
+      scope.reorder(last_read_at: sort_order)
+    else
+      scope.newest
+    end
+  end
+
+  def sort_by
+    parsed_query[:sort].first
+  end
+
+  def sort_order
+    order = parsed_query[:order].first
+    case order
+    when 'asc'
+      :asc
+    when 'desc'
+      :desc
+    else
+      default_sort_order
+    end
+  end
+
+  def default_sort_order
+    case sort_by
+    when 'subject'
+      :asc
+    else
+      :desc
+    end
+  end
+
   def repo
-    parsed_query[:repo].first
+    parsed_query[:repo]
   end
 
   def owner
@@ -59,6 +99,10 @@ class Search
 
   def label
     parsed_query[:label].first
+  end
+
+  def assignee
+    parsed_query[:assignee].first
   end
 
   def starred

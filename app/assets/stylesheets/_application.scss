@@ -1,14 +1,4 @@
-$table-bg-active: #fafafa;
-$font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-$jumbotron-bg: #fff;
-$subscribed-color: #a128ca;
-$subscribed-text-color: #fff;
-$team_mention-color: #5d477e;
-$team_mention-text-color: #fff;
-$text-color: #333;
-$security_alert-color: #800000;
-$security_alert-text-color: #fff;
-
+@import 'variables';
 @import 'bootstrap-custom';
 @import "patterns/blankslate";
 
@@ -44,7 +34,7 @@ html {
   .nav-item{
     max-width: 100%;
     &:hover{
-      background-color: #eee;
+      background-color: $list-group-hover-bg;
     }
   }
 }
@@ -71,11 +61,21 @@ html {
   }
 }
 
+.nav-link{
+  fill: $body-color;
+  &.active svg{
+    fill: $nav-pills-link-active-color;
+    &.octicon-star{
+      stroke: $nav-pills-link-active-color;
+    }
+  }
+}
+
 .footer {
   text-align: center;
-  color: #999;
+  color: $text-muted;
   a{
-    color: #666;
+    color: color-yiq($body-bg);
   }
 }
 
@@ -125,8 +125,8 @@ html {
 
 .turbolinks-progress-bar {
   height: 2px !important;
-  background-color: #77b6ff !important;
-  box-shadow: 0 0 10px rgba(#77b6ff, 0.7) !important;
+  background-color: theme-color("primary") !important;
+  box-shadow: 0 0 10px rgba(theme-color("primary"), 0.7) !important;
 }
 
 .octobox-icon {
@@ -143,14 +143,26 @@ html {
 .navbar-main {
   margin-bottom: 0;
 }
-.navbar-brand {
+.navbar{
   .octobox-icon {
-    fill: #fff;
     margin-right: 3px;
   }
-  &:hover {
-    .octobox-icon {
-      fill: #fff;
+  &.navbar-light, &.bg-light{
+    #search input{
+      background: rgba($navbar-light-color,0.125);
+      color: $navbar-light-color
+    }
+    .opencollective svg, .search-help svg, .octobox-icon svg{
+      fill: $navbar-light-color;
+    }
+  }
+  &.navbar-dark, &.bg-dark {
+    #search input{
+      background: rgba($navbar-dark-color,0.125);
+      color: $navbar-dark-color
+    }
+    .opencollective svg, .search-help svg, .octobox-icon svg{
+      fill: $navbar-dark-color;
     }
   }
 }
@@ -184,56 +196,79 @@ html {
 }
 #search {
   input {
-    background: rgba(255,255,255,0.125);
     border: none;
     box-shadow: none;
-    color: #fff;
   }
 }
 
 @include media-breakpoint-down(sm) {
-  .navbar-nav .dropdown .dropdown-menu {
-    display: block;
-    position: static;
-    float: none;
-    width: auto;
-    margin-top: 0;
-    background-color: transparent;
-    border: 0;
-    box-shadow: none;
-    > a {
-      color: #ddd;
-      line-height: 20px;
-      padding: 5px 15px 5px 25px;
-      &:hover,
-      &:focus {
-        color: #fff;
-        background-color: transparent;
+  .navbar{
+    form {
+      border-top: none;
+      border-bottom: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      .form-control{
+        width: 100%;
       }
     }
-    > a,
-    .dropdown-header {
-      padding: 5px 15px 5px 25px;
+    > .navbar-collapse .dropdown-menu {
+      display: block;
+      position: static;
+      float: none;
+      width: auto;
+      margin-top: 0;
+      background-color: transparent;
+      border: 0;
+      box-shadow: none;
+      > a {
+        line-height: 20px;
+        padding: 5px 15px 5px 25px;
+      }
+      > a,
+      .dropdown-header {
+        padding: 5px 15px 5px 25px;
+      }
     }
-    .dropdown-divider {
-      border-top-color: #444;
+    &.navbar-dark{
+      .navbar-collapse.show{
+        border-top: solid 1px $navbar-dark-color;
+      }
+      .dropdown-menu{
+        > a{
+          color: $navbar-dark-color;
+          &:hover,
+          &:focus {
+            color: $navbar-dark-hover-color;
+            background-color: transparent;
+          }
+        }
+        > .dropdown-divider {
+          border-top-color: $navbar-dark-color;
+        }
+      }
+    }
+    &.navbar-light{
+      .navbar-collapse.show{
+        border-top: solid 1px $navbar-light-color;
+      }
+      .dropdown-menu{
+        > a{
+          color: $navbar-light-color;
+          &:hover,
+          &:focus {
+            color: $navbar-light-hover-color;
+            background-color: transparent;
+          }
+        }
+        > .dropdown-divider {
+          border-top-color: $navbar-light-color;
+        }
+      }
     }
   }
-  .navbar form {
-    border-top: none;
-    border-bottom: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    .form-control{
-      width: 100%;
-    }
-  }
-}
-
-.navbar-collapse.show{
-  border-top: solid 1px #444;
 }
 
 .table > tbody > tr:first-child > td {
@@ -241,11 +276,11 @@ html {
 }
 
 .label-muted {
-  background-color: #ccc;
+  background-color: $label-muted-color;
 }
 
 .label-default {
-  background-color: #333;
+  background-color: $label-default-color;
 }
 
 .table-responsive {
@@ -256,27 +291,36 @@ html {
   cursor: pointer;
 }
 
+.table-notifications {
+  td{
+    padding: 0.6rem;
+  }
+  .active {
+    font-weight: bold;
+    background-color: $list-group-action-active-bg;
+  }
+}
+
 @include media-breakpoint-up(md) {
   .table-notifications tr td:first-child {
-    border-left: 2px solid #fff;
+    border-left: 2px solid $list-group-bg;
   }
   .table-notifications tr:hover td:first-child {
-    border-left: 2px solid $table-hover-bg;
+    border-left: 2px solid $list-group-action-hover-color;
   }
   .table-notifications tr.active td:first-child {
-    border-left: 2px solid $table-bg-active;
+    border-left: 2px solid $list-group-action-active-bg;
   }
   .table-notifications tr.active:hover td:first-child {
-    border-left: 2px solid #ededed;
+    border-left: 2px solid $list-group-action-hover-color;
   }
   td.current {
-    border-left: 2px solid #64beff !important;
+    border-left: 2px solid $list-group-active-border-color !important;
   }
 }
 
 table.keyboard-mappings {
   font-size: 12px;
-  color: #555;
 }
 
 table.keyboard-mappings tr > td {
@@ -285,7 +329,6 @@ table.keyboard-mappings tr > td {
 
 td.keys {
   padding-right: 10px;
-  color: #767676;
   text-align: right;
   white-space: nowrap;
 }
@@ -295,13 +338,12 @@ td.keys {
   padding: 3px 5px;
   font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
   line-height: 10px;
-  color: #555;
   vertical-align: middle;
-  background-color: #fcfcfc;
-  border: solid 1px #ccc;
-  border-bottom-color: #bbb;
+  background-color: rgba($body-color,0.1);
+  border: solid 1px rgba($body-color,0.2);
+  border-bottom-color: rgba($body-color,0.3);
   border-radius: 3px;
-  box-shadow: inset 0 -1px 0 #bbb;
+  box-shadow: inset 0 -1px 0 rgba($body-color,0.4);
 }
 
 .sync{
@@ -312,27 +354,17 @@ td.keys {
   border-radius: 3px;
 }
 
-.table-notifications {
-  td{
-    padding: 0.6rem;
-  }
-  .active {
-    font-weight: bold;
-    background-color: #FAFAFF;
-  }
-}
-
 .octicon {
   vertical-align: text-bottom;
 }
 
 .nav-filters {
   .divider {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $nav-divider-color;
     height: 1px;
     margin: 5px 0;
     &.double {
-      border-top: 3px double #ddd;
+      border-top: 3px double $nav-divider-color;
     }
   }
   > li > a {
@@ -401,6 +433,27 @@ td.keys {
       top: -1px;
     }
   }
+  .notification{
+    .notification-date{
+      min-width: 5em;
+    }
+    .buttons{
+      display: none;
+      a{
+        &:hover, &:focus{
+          text-decoration: none;
+        }
+      }
+    }
+    &:hover, &:focus{
+      .notification-date small{
+        display: none;
+      }
+      .buttons{
+        display: inline;
+      }
+    }
+  }
 }
 
 @include media-breakpoint-down(sm) {
@@ -415,9 +468,9 @@ td.keys {
       display: block;
     }
     &.table > tbody > tr.active {
-      background: #fafafa;
+      background: $list-group-action-active-bg;
       &:hover {
-        background: #ededed;
+        background: $list-group-action-active-bg;
       }
 
     }
@@ -426,11 +479,14 @@ td.keys {
       padding: 0;
     }
     .notification {
-      border-top: 1px solid #ddd;
+      border-top: 1px solid $list-group-border-color;
       position: relative;
       padding: 10px 10px 10px 40px;
       &:first-child {
         border-top: none;
+      }
+      .buttons{
+        display: none;
       }
     }
     .notification-checkbox,
@@ -469,6 +525,7 @@ td.keys {
       right: 10px;
     }
   }
+
 }
 
 @include media-breakpoint-down(md) {
@@ -511,103 +568,98 @@ td.keys {
 }
 
 // SVG text classes
+svg{
+  fill: $body-color;
+}
+
+.text-default {
+  fill: $body-color;
+  &.sidebar-icon {
+    fill: $text-muted;
+  }
+}
 
 .text-muted {
   fill: $text-muted;
 }
 
-.text-primary {
+.text-primary, .text-primary svg{
   fill: theme-color("primary");
 }
 
-.text-success {
+.text-success, .text-success svg{
   fill: theme-color("success");
 }
 
-.text-info {
+.text-info, .text-info svg{
   fill: theme-color("info");
 }
 
-.text-warning {
+.text-warning, .text-warning svg{
   fill: theme-color("warning");
 }
 
-.text-danger {
+.text-danger, .text-danger svg{
   fill: theme-color("danger");
 }
-.text-secondary {
+.text-secondary, .text-secondary svg{
   fill: theme-color("secondary");
 }
 
+.text-subscribed, .text-subscribed svg{
+  fill: $label-subscribed-color;
+}
 
-.text-default {
-  fill: $text-color;
-  &.sidebar-icon {
-    fill: $text-muted;
+.text-team_mention, .text-team_mention svg{
+  fill: $label-team_mention-color;
+}
+
+.text-security_alert, .text-security_alert svg{
+  fill: $label-security_alert-color;
+}
+
+.octicon-star {
+  fill: $icon-star-fill;
+  stroke: $icon-star-stroke;
+  cursor: pointer;
+  &:hover {
+    fill: $icon-star-hover-fill;
+  }
+  &.star-active {
+    fill: $icon-star-active-fill;
+    stroke: $icon-star-active-stroke;
   }
 }
+
+// badges
 
 .badge-subscribed{
-  background-color: $subscribed-color;
-  color: $subscribed-text-color;
+  background-color: $label-subscribed-color;
+  color: $label-subscribed-text-color;
   &[href]:hover, &[href]:focus {
-    color: $subscribed-text-color;
+    color: $label-subscribed-text-color;
     text-decoration: none;
-    background-color: darken( $subscribed-color, 10% );
-  }
-}
-
-.text-subscribed{
-  fill: $subscribed-color;
-  &.sidebar-icon {
-    fill: $text-muted;
+    background-color: darken( $label-subscribed-color, 10% );
   }
 }
 
 .badge-team_mention{
-  background-color: $team_mention-color;
-  color: $team_mention-text-color;
+  background-color: $label-team_mention-color;
+  color: $label-team_mention-text-color;
   &[href]:hover, &[href]:focus {
-    color: $team_mention-text-color;
+    color: $label-team_mention-text-color;
     text-decoration: none;
-    background-color: darken( $team_mention-color, 10% );
-  }
-}
-
-.text-team_mention{
-  fill: $team_mention-color;
-  &.sidebar-icon {
-    fill: $text-muted;
+    background-color: darken( $label-team_mention-color, 10% );
   }
 }
 
 .badge-security_alert{
-  background-color: $security_alert-color;
-  color: $security_alert-text-color;
+  background-color: $label-security_alert-color;
+  color: $label-security_alert-text-color;
   &[href]:hover, &[href]:focus {
-    color: $security_alert-text-color;
+    color: $label-security_alert-text-color;
     text-decoration: none;
-    background-color: darken( $security_alert-color, 10% );
-  }
-}
-
-.text-security_alert{
-  fill: $security_alert-color;
-  &.sidebar-icon {
-    fill: $text-muted;
-  }
-}
-
-.octicon-star {
-  fill: none;
-  stroke: #aaa;
-  cursor: pointer;
-  &:hover {
-    fill: #aaa;
-  }
-  &.star-active {
-    fill: #f0ad4e;
-    stroke: #f0ad4e;
+    background-color: darken($label-security_alert-color, 10% );
   }
 }
 
@@ -618,7 +670,7 @@ td.keys {
 .card-notifications {
   margin-bottom: 20px;
   .card-header {
-    background-color: #f6f6f6;
+    background: mix($black, $card-bg, 3%);
     padding: 6px 8px;
     .pagination{
       margin: 6px 0px 0px;
@@ -649,24 +701,13 @@ td.keys {
   max-width: 100%;
 }
 
-.opencollective{
-  fill: #ddd;
-}
-.nav-link.active svg{
-  fill: white;
-  &.octicon-star{
-    stroke: white;
-  }
-}
 .notification-open{
-  fill: #5cb85c;
+  fill: $notification-open;
 }
 .notification-closed{
-  fill: #d9534f;
+  fill: $notification-closed;
 }
-.octicon.inverse{
-  fill: #fff;
-}
+
 .hidden-button {
   display: none;
 }
@@ -685,21 +726,25 @@ td.keys {
 }
 
 .private-repo{
-  fill: #dbab09;
+  fill: icon-private-repo-color;
 }
 
 .search-help{
   position: relative;
   left: -35px;
-  fill: #aaa;
+  fill: $body-color;
 }
 
 .btn-outline-dark{
   &:hover, &:active {
-    fill: #fff;
+    fill: $body-color;
   }
 }
 
 .flex-header .dropdown-menu{
   z-index: 2000;
+}
+
+.text-large{
+  font-size: 16px;
 }
