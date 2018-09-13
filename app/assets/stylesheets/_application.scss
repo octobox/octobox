@@ -646,7 +646,7 @@ svg{
 .card-notifications {
   margin-bottom: 20px;
   .card-header {
-    background: $card-bg;
+    background: mix($black, $card-bg, 3%);
     padding: 6px 8px;
     .pagination{
       margin: 6px 0px 0px;
