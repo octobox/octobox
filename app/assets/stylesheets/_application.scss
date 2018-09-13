@@ -730,8 +730,8 @@ svg{
 }
 
 .btn-outline-dark{
-  &:hover, &:active {
-    fill: $body-color;
+  &:hover svg, &:active svg{
+    fill: color-yiq($body-color);
   }
 }
 
