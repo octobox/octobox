@@ -104,7 +104,7 @@ class NotificationsController < ApplicationController
   #   { "count" : 1 }
   #
   def unread_count
-    scope = current_user.notifications.unmuted
+    scope = current_user.notifications
     count = scope.inbox.distinct.group(:unread).count.fetch(true){ 0 }
     render json: { 'count' => count }
   end
@@ -247,7 +247,7 @@ class NotificationsController < ApplicationController
     if params[:id] == ['all']
       current_notifications
     else
-      current_user.notifications.unmuted.where(id: params[:id])
+      current_user.notifications.where(id: params[:id])
     end
   end
 

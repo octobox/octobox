@@ -24,7 +24,7 @@ class Search
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
-    res = muted ? res.muted : res.unmuted
+    res = res.muted unless is_muted.nil? || !is_muted
     res = apply_sort(res)
     res
   end
@@ -131,8 +131,8 @@ class Search
     parsed_query[:private].first.downcase == "true"
   end
 
-  def muted
-    return false unless parsed_query[:muted].present?
+  def is_muted
+    return nil unless parsed_query[:muted].present?
     parsed_query[:muted].first.try(:downcase) == "true"
   end
 end
