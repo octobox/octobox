@@ -6,6 +6,8 @@ class User < ApplicationRecord
 
   has_secure_token :api_token
   has_many :notifications, dependent: :delete_all
+  has_many :app_installation_permissions, dependent: :delete_all
+  has_many :app_installations, through: :app_installation_permissions
 
   ERRORS = {
     invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
@@ -29,6 +31,10 @@ class User < ApplicationRecord
 
   def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)
+  end
+
+  def github_app_authorized?
+    encrypted_app_token.present?
   end
 
   def refresh_interval=(val)
@@ -67,6 +73,7 @@ class User < ApplicationRecord
     return true if syncing?
     job_id = SyncNotificationsWorker.perform_async_if_configured(self.id)
     update(sync_job_id: job_id)
+    SyncInstallationPermissionsWorker.perform_async_if_configured(self.id) if github_app_authorized?
   end
 
   def sync_notifications_in_foreground
@@ -137,4 +144,15 @@ class User < ApplicationRecord
     "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
   end
 
+  def sync_app_installation_access
+    return unless github_app_authorized?
+    remote_installs = subject_client.find_user_installations(accept: 'application/vnd.github.machine-man-preview+json')
+    app_installations = AppInstallation.where(github_id: remote_installs[:installations].map(&:id))
+    app_installations.each do |app_installation|
+      app_installation_permissions.find_or_create_by(app_installation_id: app_installation.id)
+    end
+    app_installation_ids = app_installations.map(&:id)
+    removed_permissions = app_installation_permissions.reject{|ep| app_installation_ids.include?(ep.app_installation_id) }
+    removed_permissions.each(&:destroy)
+  end
 end

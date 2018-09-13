@@ -70,7 +70,7 @@ class NotificationsController < ApplicationController
   #   }
   #
   def index
-    scope = notifications_for_presentation
+    scope = notifications_for_presentation.newest
     @types                 = scope.reorder(nil).distinct.group(:subject_type).count
     @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
@@ -82,7 +82,7 @@ class NotificationsController < ApplicationController
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
       @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = scope.map(&:repository).compact
+      @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
     end
 
     scope = current_notifications(scope)
@@ -90,7 +90,7 @@ class NotificationsController < ApplicationController
 
     @total = scope.count
 
-    @notifications = scope.newest.page(page).per(per_page)
+    @notifications = scope.page(page).per(per_page)
     @cur_selected = [per_page, @total].min
   end
 
@@ -124,7 +124,11 @@ class NotificationsController < ApplicationController
   #
   def mute_selected
     Notification.mute(selected_notifications)
-    head :ok
+    if request.xhr?
+      head :ok
+    else
+      redirect_back fallback_location: root_path
+    end
   end
 
   # Archive selected notifications
@@ -142,7 +146,11 @@ class NotificationsController < ApplicationController
   #
   def archive_selected
     Notification.archive(selected_notifications, params[:value])
-    head :ok
+    if request.xhr?
+      head :ok
+    else
+      redirect_back fallback_location: root_path
+    end
   end
 
   # Mark selected notifications as read
@@ -266,7 +274,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = display_subject? ? [{subject: :labels}, :repository] : nil
+    eager_load_relation = display_subject? ? [{subject: :labels}] : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
     if params[:q].present?

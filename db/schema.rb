@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_30_145149) do
+ActiveRecord::Schema.define(version: 2018_09_11_133519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
+
+  create_table "app_installation_permissions", force: :cascade do |t|
+    t.integer "app_installation_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "app_installations", force: :cascade do |t|
     t.integer "github_id"
@@ -59,6 +66,7 @@ ActiveRecord::Schema.define(version: 2018_08_30_145149) do
     t.boolean "starred", default: false
     t.string "repository_owner_name", default: ""
     t.string "latest_comment_url"
+    t.index ["repository_full_name"], name: "index_notifications_on_repository_full_name"
     t.index ["subject_url"], name: "index_notifications_on_subject_url"
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at"
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true
@@ -104,6 +112,7 @@ ActiveRecord::Schema.define(version: 2018_08_30_145149) do
     t.string "encrypted_app_token"
     t.string "encrypted_app_token_iv"
     t.string "sync_job_id"
+    t.string "theme", default: "light"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end

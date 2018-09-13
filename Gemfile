@@ -3,7 +3,7 @@ ruby '2.5.1'
 
 gem 'rails', '~> 5.2'
 gem 'bootstrap'
-gem "attr_encrypted", "~> 3.1.0"
+gem 'attr_encrypted'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'local_time'
@@ -30,6 +30,7 @@ gem 'sidekiq-status'
 gem 'gemoji'
 gem 'bootsnap', require: false
 gem 'bugsnag'
+gem 'jwt'
 
 # Supported databases
 gem 'mysql2', require: false

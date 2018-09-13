@@ -171,7 +171,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
-    post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }
+    post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }, xhr: true
 
     assert_response :ok
 
@@ -188,7 +188,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
-    post '/notifications/archive_selected', params: { id: ['all'], value: true }
+    post '/notifications/archive_selected', params: { id: ['all'], value: true }, xhr: true
 
     assert_response :ok
 
@@ -203,7 +203,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: true }
+    post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: true }, xhr: true
 
     assert_response :ok
 
@@ -221,7 +221,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     Notification.expects(:mute).with([notification1, notification2])
 
-    post '/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }
+    post '/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }, xhr: true
     assert_response :ok
   end
 
@@ -234,7 +234,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     Notification.expects(:mute).with([notification1, notification2, notification3])
 
-    post '/notifications/mute_selected', params: { id: ['all'] }
+    post '/notifications/mute_selected', params: { id: ['all'] }, xhr: true
     assert_response :ok
   end
 
@@ -473,6 +473,14 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     create(:notification, user: @user, repository_full_name: 'b/c')
     get '/?q=repo%3Aa%2Fb'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple repo' do
+    sign_in_as(@user)
+    create(:notification, user: @user, repository_full_name: 'a/b')
+    create(:notification, user: @user, repository_full_name: 'b/c')
+    get '/?q=repo%3Aa%2Fb%2Cb%2Fc'
+    assert_equal assigns(:notifications).length, 2
   end
 
   test 'search results can filter by owner' do
