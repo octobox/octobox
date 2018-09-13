@@ -171,7 +171,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
-    post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }
+    post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }, xhr: true
 
     assert_response :ok
 
@@ -188,7 +188,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
-    post '/notifications/archive_selected', params: { id: ['all'], value: true }
+    post '/notifications/archive_selected', params: { id: ['all'], value: true }, xhr: true
 
     assert_response :ok
 
@@ -203,7 +203,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: true }
+    post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: true }, xhr: true
 
     assert_response :ok
 
@@ -221,7 +221,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     Notification.expects(:mute).with([notification1, notification2])
 
-    post '/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }
+    post '/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }, xhr: true
     assert_response :ok
   end
 
@@ -234,7 +234,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     Notification.expects(:mute).with([notification1, notification2, notification3])
 
-    post '/notifications/mute_selected', params: { id: ['all'] }
+    post '/notifications/mute_selected', params: { id: ['all'] }, xhr: true
     assert_response :ok
   end
 
