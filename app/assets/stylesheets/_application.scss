@@ -155,7 +155,7 @@ html {
     .opencollective svg, .search-help svg, .octobox-icon svg{
       fill: $navbar-light-color;
     }
-  } 
+  }
   &.navbar-dark, &.bg-dark {
     #search input{
       background: rgba($navbar-dark-color,0.125);
@@ -433,6 +433,27 @@ td.keys {
       top: -1px;
     }
   }
+  .notification{
+    .notification-date{
+      min-width: 5em;
+    }
+    .buttons{
+      display: none;
+      a{
+        &:hover, &:focus{
+          text-decoration: none;
+        }
+      }
+    }
+    &:hover, &:focus{
+      .notification-date small{
+        display: none;
+      }
+      .buttons{
+        display: inline;
+      }
+    }
+  }
 }
 
 @include media-breakpoint-down(sm) {
@@ -463,6 +484,9 @@ td.keys {
       padding: 10px 10px 10px 40px;
       &:first-child {
         border-top: none;
+      }
+      .buttons{
+        display: none;
       }
     }
     .notification-checkbox,
