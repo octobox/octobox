@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_11_133519) do
+ActiveRecord::Schema.define(version: 2018_09_13_142522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 2018_09_11_133519) do
     t.boolean "starred", default: false
     t.string "repository_owner_name", default: ""
     t.string "latest_comment_url"
+    t.datetime "muted_at"
+    t.index ["muted_at"], name: "index_notifications_on_muted_at"
     t.index ["repository_full_name"], name: "index_notifications_on_repository_full_name"
     t.index ["subject_url"], name: "index_notifications_on_subject_url"
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at"
@@ -94,6 +96,7 @@ ActiveRecord::Schema.define(version: 2018_09_11_133519) do
     t.string "assignees", default: "::"
     t.integer "github_id"
     t.string "repository_full_name"
+    t.boolean "locked"
     t.index ["url"], name: "index_subjects_on_url"
   end
 
@@ -105,13 +108,13 @@ ActiveRecord::Schema.define(version: 2018_09_11_133519) do
     t.datetime "last_synced_at"
     t.integer "refresh_interval", default: 0
     t.string "api_token"
+    t.string "sync_job_id"
     t.string "encrypted_access_token"
     t.string "encrypted_access_token_iv"
     t.string "encrypted_personal_access_token"
     t.string "encrypted_personal_access_token_iv"
     t.string "encrypted_app_token"
     t.string "encrypted_app_token_iv"
-    t.string "sync_job_id"
     t.string "theme", default: "light"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true

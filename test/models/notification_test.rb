@@ -44,8 +44,8 @@ class NotificationTest < ActiveSupport::TestCase
 
     Notification.mute([notification1, notification2])
 
-    assert notification1.reload.archived?
-    assert notification2.reload.archived?
+    assert notification1.reload.archived? && notification1.muted_at?
+    assert notification2.reload.archived? && notification2.muted_at?
   end
 
   test '#mute doesnt fail if there is no notifications given' do
