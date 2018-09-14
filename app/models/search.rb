@@ -24,12 +24,17 @@ class Search
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
-    res = res.muted unless is_muted.nil? || !is_muted
+    res = mute_conditionally(res)
     res = apply_sort(res)
     res
   end
 
   private
+
+  def mute_conditionally(scope)
+    return scope if is_muted.nil?
+    return scope.muted if is_muted else scope.unmuted
+  end
 
   def apply_sort(scope)
     case sort_by
