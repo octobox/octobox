@@ -4,25 +4,14 @@ require "simplecov"
 SimpleCov.start 'rails'
 
 ENV['RAILS_ENV'] ||= 'test'
+
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'webmock/minitest'
 require 'mocha/minitest'
-require 'capybara/rails'
-require 'capybara/minitest'
-
-
-WebMock.disable_net_connect!(allow_localhost: true, allow: [/percy.io/])
-
-Percy::Capybara.initialize_build
-Percy.config.default_widths = [576, 768, 992]
-
-Capybara.default_driver = :selenium
-
-MiniTest.after_run { Percy::Capybara.finalize_build }
-
 require 'sidekiq_unique_jobs/testing'
 require 'sidekiq/testing'
+
 Sidekiq::Testing.fake!
 
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }

@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'visual_test_helper'
 
 class VisualIntegrationTest < ActionDispatch::IntegrationTest
 
@@ -24,8 +25,8 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
 
   test 'render a blank index page' do
     visit root_path
-    # Percy::Capybara.snapshot(page, name: '/')
     page.has_content?('Sign in')
+    Percy::Capybara.snapshot(page, name: '/') if Octobox.config.percy_configured?
   end
 
   test 'render a logged in user' do
@@ -34,12 +35,12 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     visit login_path
     
     page.has_selector?('table tr')
-    Percy::Capybara.snapshot(page, name: '/:auth')
+    Percy::Capybara.snapshot(page, name: '/:auth') if Octobox.config.percy_configured?
 
     Capybara.current_session.current_window.resize_to(576,800)
     click_button('sidebar_toggle', wait: 0.25)
     find('.flex-sidebar').visible?
-    Percy::Capybara.snapshot(page, name: '/:auth sidebar_toggle')
+    Percy::Capybara.snapshot(page, name: '/:auth sidebar_toggle') if Octobox.config.percy_configured?
     
     check('select_all')
     find('#select_all').visible?
@@ -52,19 +53,19 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
 
     visit '/?starred=true&q=repo%3Aa%2Fb'
     page.has_content?('Nothing to see here.')
-    Percy::Capybara.snapshot(page, name: '/?starred=true&q=repo%3Aa%2Fb')
+    Percy::Capybara.snapshot(page, name: '/?starred=true&q=repo%3Aa%2Fb') if Octobox.config.percy_configured?
   end
 
   test 'render a docs page' do
     visit documentation_path
 
     page.has_content?('Documentation')
-    Percy::Capybara.snapshot(page, name: '/documentation')
+    Percy::Capybara.snapshot(page, name: '/documentation') if Octobox.config.percy_configured?
     
     Capybara.current_session.current_window.resize_to(576,800)
     click_button('sidebar_toggle', wait: 0.25)
     find('.flex-sidebar').visible?
-    Percy::Capybara.snapshot(page, name: '/documentation sidebar_toggle')
+    Percy::Capybara.snapshot(page, name: '/documentation sidebar_toggle') if Octobox.config.percy_configured?
   end
 
 end
