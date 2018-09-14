@@ -24,11 +24,23 @@ class Search
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
+    res = lock_conditionally(res)
+    res = mute_conditionally(res)
     res = apply_sort(res)
     res
   end
 
   private
+
+  def lock_conditionally(scope)
+    return scope if is_locked.nil?
+    return scope.locked if is_locked else scope.not_locked
+  end
+  
+  def mute_conditionally(scope)
+    return scope if is_muted.nil?
+    return scope.muted if is_muted else scope.unmuted
+  end
 
   def apply_sort(scope)
     case sort_by
@@ -128,5 +140,15 @@ class Search
   def is_private
     return nil unless parsed_query[:private].present?
     parsed_query[:private].first.downcase == "true"
+  end
+
+  def is_locked
+    return nil unless parsed_query[:locked].present?
+    parsed_query[:locked].first.try(:downcase) == "true"
+  end
+ 
+  def is_muted
+    return nil unless parsed_query[:muted].present?
+    parsed_query[:muted].first.try(:downcase) == "true"
   end
 end

@@ -10,6 +10,8 @@ class Subject < ApplicationRecord
   scope :label, ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name)) }
   scope :repository, ->(full_name) { where(arel_table[:url].matches("%/repos/#{full_name}/%")) }
 
+  validates :url, presence: true, uniqueness: true
+
   after_update :sync_involved_users
 
   def author_url
@@ -62,7 +64,8 @@ class Subject < ApplicationRecord
       html_url: remote_subject['html_url'],
       created_at: remote_subject['created_at'],
       updated_at: remote_subject['updated_at'],
-      assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:"
+      assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
+      locked: remote_subject['locked']
     })
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
     subject.sync_involved_users
