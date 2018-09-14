@@ -562,7 +562,7 @@ svg{
   fill: $body-color;
 }
 
-.text-default {
+.text-default, .text-default svg{
   fill: $body-color;
   &.sidebar-icon {
     fill: $text-muted;
