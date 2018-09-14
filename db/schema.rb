@@ -10,7 +10,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema.define(version: 2018_09_13_142522) do
 
   # These are extensions that must be enabled in order to support this database
@@ -67,6 +66,8 @@ ActiveRecord::Schema.define(version: 2018_09_13_142522) do
     t.boolean "starred", default: false
     t.string "repository_owner_name", default: ""
     t.string "latest_comment_url"
+    t.datetime "muted_at"
+    t.index ["muted_at"], name: "index_notifications_on_muted_at"
     t.index ["repository_full_name"], name: "index_notifications_on_repository_full_name"
     t.index ["subject_url"], name: "index_notifications_on_subject_url"
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at"
