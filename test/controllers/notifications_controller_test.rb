@@ -531,6 +531,26 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter by locked:true' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], locked: true)
+    create(:subject, notifications: [notification2], locked: true)
+    get '/?q=locked%3Atrue'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter by locked:false' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], locked: false)
+    create(:subject, notifications: [notification2], locked: true)
+    get '/?q=locked%3Afalse'
+    assert_equal assigns(:notifications).length, 1
+  end
+
   test 'search results can filter by muted:true' do
     sign_in_as(@user)
     create(:notification, user: @user, muted_at: Time.current)
