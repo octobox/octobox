@@ -34,12 +34,12 @@ class Search
 
   def lock_conditionally(scope)
     return scope if is_locked.nil?
-    return scope.locked if is_locked else scope.not_locked
+    is_locked ? scope.locked : scope.not_locked
   end
-  
+
   def mute_conditionally(scope)
     return scope if is_muted.nil?
-    return scope.muted if is_muted else scope.unmuted
+    is_muted ? scope.muted : scope.unmuted
   end
 
   def apply_sort(scope)
@@ -93,8 +93,7 @@ class Search
   end
 
   def unread
-    return nil unless parsed_query[:unread].present?
-    parsed_query[:unread].first.downcase == "true"
+    boolean_prefix(:unread)
   end
 
   def type
@@ -118,37 +117,37 @@ class Search
   end
 
   def starred
-    return nil unless parsed_query[:starred].present?
-    parsed_query[:starred].first.try(:downcase) == "true"
+    boolean_prefix(:starred)
   end
 
   def archived
-    return nil unless parsed_query[:archived].present?
-    parsed_query[:archived].first.downcase == "true"
+    boolean_prefix(:archived)
   end
 
   def bot_author
-    return nil unless parsed_query[:bot].present?
-    parsed_query[:bot].first.downcase == "true"
+    boolean_prefix(:bot)
   end
 
   def unlabelled
-    return nil unless parsed_query[:unlabelled].present?
-    parsed_query[:unlabelled].first.downcase == "true"
+    boolean_prefix(:unlabelled)
   end
 
   def is_private
-    return nil unless parsed_query[:private].present?
-    parsed_query[:private].first.downcase == "true"
+    boolean_prefix(:private)
   end
 
   def is_locked
-    return nil unless parsed_query[:locked].present?
-    parsed_query[:locked].first.try(:downcase) == "true"
+    boolean_prefix(:locked)
   end
- 
+
   def is_muted
-    return nil unless parsed_query[:muted].present?
-    parsed_query[:muted].first.try(:downcase) == "true"
+    boolean_prefix(:muted)
+  end
+
+  private
+
+  def boolean_prefix(name)
+    return nil unless parsed_query[name].present?
+    parsed_query[name].first.try(:downcase) == "true"
   end
 end
