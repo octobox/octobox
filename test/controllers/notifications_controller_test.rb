@@ -542,10 +542,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   test 'search results can filter by muted:false' do
     sign_in_as(@user)
     Notification.destroy_all
-    create(:notification, user: @user)
+    create(:notification, user: @user, muted_at: Time.current)
     create(:notification, user: @user)
     get '/?q=muted%3Afalse'
-    assert_equal assigns(:notifications).length, 2
+    assert_equal assigns(:notifications).length, 1
   end
 
   test 'sets the per_page cookie' do
