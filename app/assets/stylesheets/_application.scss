@@ -61,16 +61,6 @@ html {
   }
 }
 
-.nav-link{
-  fill: $body-color;
-  &.active svg{
-    fill: $nav-pills-link-active-color;
-    &.octicon-star{
-      stroke: $nav-pills-link-active-color;
-    }
-  }
-}
-
 .footer {
   text-align: center;
   color: $text-muted;
@@ -572,7 +562,7 @@ svg{
   fill: $body-color;
 }
 
-.text-default {
+.text-default, .text-default svg{
   fill: $body-color;
   &.sidebar-icon {
     fill: $text-muted;
@@ -585,6 +575,10 @@ svg{
 
 .text-primary, .text-primary svg{
   fill: theme-color("primary");
+}
+
+.nav-link.active .text-primary{
+    fill: $nav-pills-link-active-color;
 }
 
 .text-success, .text-success svg{
@@ -736,8 +730,8 @@ svg{
 }
 
 .btn-outline-dark{
-  &:hover, &:active {
-    fill: $body-color;
+  &:hover svg, &:active svg{
+    fill: color-yiq($body-color);
   }
 }
 
