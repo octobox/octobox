@@ -541,6 +541,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 2
   end
 
+  test 'search results can filter by locked:false' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], locked: false)
+    create(:subject, notifications: [notification2], locked: true)
+    get '/?q=locked%3Afalse'
+    assert_equal assigns(:notifications).length, 1
+  end
+
   test 'sets the per_page cookie' do
     sign_in_as(@user)
     get '/?per_page=100'

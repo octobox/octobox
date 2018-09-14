@@ -54,6 +54,7 @@ class Notification < ApplicationRecord
   scope :assigned,   ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }
   scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
   scope :locked,     -> { joins(:subject).where(subjects: { locked: true }) }
+  scope :not_locked,     -> { joins(:subject).where(subjects: { locked: false }) }
 
   scope :subjectable, ->  { where(subject_type: SUBJECTABLE_TYPES) }
   scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
