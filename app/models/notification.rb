@@ -25,6 +25,8 @@ class Notification < ApplicationRecord
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_many :labels, through: :subject
 
+  scope :unmuted,  -> { where("muted_at IS NULL") }
+  scope :muted,    -> { where("muted_at IS NOT NULL") }
   scope :inbox,    -> { where(archived: false) }
   scope :archived, ->(value = true) { where(archived: value) }
   scope :newest,   -> { order('notifications.updated_at DESC') }
@@ -117,7 +119,7 @@ class Notification < ApplicationRecord
       end
     end
 
-    where(id: notifications.map(&:id)).update_all(archived: true, unread: false)
+    where(id: notifications.map(&:id)).update_all(archived: true, unread: false, muted_at: Time.current)
   end
 
   def expanded_subject_url
