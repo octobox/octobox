@@ -34,12 +34,12 @@ class Search
 
   def lock_conditionally(scope)
     return scope if is_locked.nil?
-    return scope.locked if is_locked else scope.not_locked
+    is_locked ? scope.locked : scope.not_locked
   end
 
   def mute_conditionally(scope)
     return scope if is_muted.nil?
-    return scope.muted if is_muted else scope.unmuted
+    is_muted ? scope.muted : scope.unmuted
   end
 
   def apply_sort(scope)
