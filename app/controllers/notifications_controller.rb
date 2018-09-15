@@ -88,9 +88,9 @@ class NotificationsController < ApplicationController
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
 
-    @total = scope.count
-
     @notifications = scope.page(page).per(per_page)
+    @total = @notifications.total_count
+
     @cur_selected = [per_page, @total].min
   end
 
