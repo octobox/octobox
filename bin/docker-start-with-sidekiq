@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+db_host=${OCTOBOX_DATABASE_HOST:-database.service.octobox.internal}
+while ! nc -z $db_host 5432; do
+  echo "Waiting for database to be available..."
+  sleep 1
+done
+
+bundle exec rake db:migrate
+rm -rf tmp/pids
+
+exec foreman start -f config/Procfile.foreman -d .
