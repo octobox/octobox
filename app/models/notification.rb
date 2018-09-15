@@ -125,7 +125,7 @@ class Notification < ApplicationRecord
   end
 
   def expanded_subject_url
-    return subject_url unless Octobox.config.subjects_enabled?
+    return subject_url unless display_subject?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
   end
 
