@@ -25,4 +25,7 @@ RUN RAILS_ENV=development bin/rails api_docs:generate
 RUN chgrp -R 0 /usr/src/app \
  && chmod -R g=u /usr/src/app
 
+# Install Foreman
+RUN gem install foreman
+
 CMD ["bin/docker-start"]

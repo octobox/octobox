@@ -10,4 +10,8 @@ done
 bundle exec rake db:migrate
 rm -rf tmp/pids
 
-exec rails s -b 0.0.0.0
+if [ "${OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED}" == "true" ]; then
+  exec foreman start -f config/Procfile.foreman -d .
+else
+  exec rails s -b 0.0.0.0
+fi
