@@ -83,5 +83,5 @@ Rails.application.configure do
 
   config.lograge.enabled = true
 
-  config.skylight.probes += %w(redis faraday) if ENV['SKYLIGHT_AUTHENTICATION'].present?
+  config.skylight.probes += %w(redis) if ENV['SKYLIGHT_AUTHENTICATION'].present?
 end
