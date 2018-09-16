@@ -88,9 +88,9 @@ class NotificationsController < ApplicationController
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
 
-    @total = scope.count
-
     @notifications = scope.page(page).per(per_page)
+    @total = @notifications.total_count
+
     @cur_selected = [per_page, @total].min
   end
 
@@ -274,7 +274,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = display_subject? ? [{subject: :labels}] : nil
+    eager_load_relation = display_subject? ? [{subject: :labels}, :repository] : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
     if params[:q].present?

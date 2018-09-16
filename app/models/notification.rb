@@ -125,7 +125,7 @@ class Notification < ApplicationRecord
   end
 
   def expanded_subject_url
-    return subject_url unless Octobox.config.subjects_enabled?
+    return subject_url unless display_subject?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
   end
 
@@ -165,18 +165,16 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    Octobox.fetch_subject? || github_app_installed?
+    @display_subject ||= subjectable? && (Octobox.fetch_subject? || github_app_installed?)
   end
 
   def update_subject(force = false)
-    return unless subjectable?
     return unless display_subject?
 
     UpdateSubjectWorker.perform_async_if_configured(self.id, force)
   end
 
   def update_subject_in_foreground(force = false)
-    return unless subjectable?
     return unless display_subject?
     # skip syncing if the notification was updated around the same time as subject
     return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
