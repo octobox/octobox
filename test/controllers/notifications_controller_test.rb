@@ -523,6 +523,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter by inbox' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    notification1 = create(:notification, user: @user, archived: true)
+    notification2 = create(:notification, user: @user, archived: false)
+    get '/?q=inbox%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).to_a, [notification2]
+  end
+
   test 'search results can filter by unread' do
     sign_in_as(@user)
     create(:notification, user: @user, unread: true)
