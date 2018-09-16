@@ -1,3 +1,5 @@
+require 'emoji'
+
 module EmojiHelper
   def emojify(content)
     html_escape_once(content).to_str.gsub(/:([\w+-]+):/) do |match|
