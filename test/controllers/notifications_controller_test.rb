@@ -491,6 +491,15 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter by multiple owners' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, repository_owner_name: 'andrew')
+    create(:notification, user: @user, repository_owner_name: 'octobox')
+    get '/?q=owner%3Aoctobox%2Candrew'
+    assert_equal assigns(:notifications).length, 2
+  end
+
   test 'search results can filter by type' do
     sign_in_as(@user)
     create(:notification, user: @user, subject_type: 'Issue')

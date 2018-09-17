@@ -86,7 +86,7 @@ class Search
   end
 
   def owner
-    parsed_query[:owner].first
+    parsed_query[:owner]
   end
 
   def author
