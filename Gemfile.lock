@@ -191,10 +191,10 @@ GEM
     parallel (1.12.1)
     parser (2.5.1.2)
       ast (~> 2.4.0)
-    percy-capybara (3.1.2)
+    percy-capybara (3.2.0)
       addressable (~> 2)
-      percy-client (~> 1.13)
-    percy-client (1.15.0)
+      percy-client (~> 2.0)
+    percy-client (2.0.0)
       addressable
       excon
       faraday (>= 0.9)
@@ -266,11 +266,11 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     rufus-scheduler (3.5.2)
       fugit (~> 1.1, >= 1.1.5)
     safe_yaml (1.0.4)
-    sass (3.5.7)
+    sass (3.6.0)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -291,7 +291,7 @@ GEM
     selenium-webdriver (3.14.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
-    sidekiq (5.2.1)
+    sidekiq (5.2.2)
       connection_pool (~> 2.2, >= 2.2.2)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
@@ -419,4 +419,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.3
+   1.16.5
