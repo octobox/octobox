@@ -32,25 +32,41 @@ parameters:
   value: latest
   required: true
 - name: MINIMUM_REFRESH_INTERVAL
-  description: Interval for autorefresh. Set to 0 for disabling it
+  description: Interval for auto refresh. Set to 0 for disabling it
   value: "5"
   required: true
 - name: FETCH_SUBJECT
   description: Set to 'true' for switching on fetching of extra information
   value: "false"
   required: true
+- name: OPEN_IN_SAME_TAB
+  description: Set to 'true' to open GitHub links in the same window instead of a new tab
+  value: "false"
+  required: true
+- name: OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED
+  description: Set to 'true' for enabling periodic background polling of notifications
+  value: "false"
+  required: true
+- name: RAILS_MAX_THREADS
+  description: Number of background threads when fetching notifications
+  value: "5"
+  required: true
+- name: RAILS_ENV
+  description: Environment mode, either "development" or "production"
+  value: "development"
+  required: true
 - name: MEMORY_LIMIT_OCTOBOX
   description: Memory limit used for the Octobox Rails backend
   value: "600Mi"
-  required:
+  required: true
 - name: MEMORY_LIMIT_REDIS
   description: Memory limit for the internal Redis session cache
   value: "200Mi"
-  required:
+  required: true
 - name: MEMORY_LIMIT_POSTGRES
   description: Memory limit for the Postgres database
   value: "200Mi"
-  required:
+  required: true
 - name: POSTGRES_PASSWORD
   description: Password for the PostgreSQL connection user.
   displayName: PostgreSQL Connection Password
@@ -118,25 +134,33 @@ objects:
           imagePullPolicy: IfNotPresent
           env:
           - name: RAILS_ENV
-            value: development
+            value: "${RAILS_ENV}"
           - name: GITHUB_CLIENT_ID
-            value: ${GITHUB_CLIENT_ID}
+            value: "${GITHUB_CLIENT_ID}"
           - name: GITHUB_CLIENT_SECRET
-            value: ${GITHUB_CLIENT_SECRET}
+            value: "${GITHUB_CLIENT_SECRET}"
           - name: OCTOBOX_DATABASE_NAME
-            value: postgres
+            value: "postgres"
           - name: OCTOBOX_DATABASE_USERNAME
-            value: postgres
+            value: "postgres"
           - name: OCTOBOX_DATABASE_PASSWORD
-            value: ${POSTGRES_PASSWORD}
+            value: "${POSTGRES_PASSWORD}"
           - name: OCTOBOX_DATABASE_HOST
             value: octobox-db
           - name: REDIS_URL
-            value: localhost
+            value: redis://localhost
           - name: MINIMUM_REFRESH_INTERVAL
-            value: ${MINIMUM_REFRESH_INTERVAL}
+            value: "${MINIMUM_REFRESH_INTERVAL}"
           - name: FETCH_SUBJECT
-            value: ${FETCH_SUBJECT}
+            value: "${FETCH_SUBJECT}"
+          - name: OPEN_IN_SAME_TAB
+            value: "${OPEN_IN_SAME_TAB}"
+          - name: OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED
+            value: "${OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED}"
+          - name: RAILS_MAX_THREADS
+            value: "${RAILS_MAX_THREADS}"
+          - name: PORT
+            value: "3000"
           resources:
             limits:
               memory: ${MEMORY_LIMIT_OCTOBOX}
