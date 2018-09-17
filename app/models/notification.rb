@@ -57,7 +57,6 @@ class Notification < ApplicationRecord
   scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
 
   scope :state,      ->(state)  { joins(:subject).where('subjects.state = ?', state) }
-  scope :author,     ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }
 
   scope :labelable,  -> { where(subject_type: ['Issue', 'PullRequest']) }
   scope :label,      ->(label_names) {
