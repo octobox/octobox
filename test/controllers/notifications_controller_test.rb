@@ -594,6 +594,26 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 2
   end
 
+  test 'search results can filter by assignee' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], assignees: ":andrew:")
+    create(:subject, notifications: [notification2], assignees: ":benjam:")
+    get '/?q=assignee%3Aandrew'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple assignees' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], assignees: ":andrew:")
+    create(:subject, notifications: [notification2], assignees: ":benjam:")
+    get '/?q=assignee%3Aandrew%2Cbenjam'
+    assert_equal assigns(:notifications).length, 2
+  end
+
   test 'search results can filter by locked:true' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, subject_type: 'Issue')

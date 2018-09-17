@@ -114,7 +114,7 @@ class Search
   end
 
   def assignee
-    parsed_query[:assignee].first
+    parsed_query[:assignee]
   end
 
   def starred

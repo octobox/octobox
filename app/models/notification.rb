@@ -70,7 +70,12 @@ class Notification < ApplicationRecord
   }
   scope :unlabelled, -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
-  scope :assigned,   ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }
+  scope :assigned,   ->(assignees) {
+    assignees = [assignees] if assignees.is_a?(String)
+    joins(:subject).where(
+      assignees.map { |assignee| Subject.arel_table[:assignees].matches("%:#{assignee}:%") }.reduce(:or)
+    )
+  }
   scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
   scope :locked,     -> { joins(:subject).where(subjects: { locked: true }) }
   scope :not_locked,     -> { joins(:subject).where(subjects: { locked: false }) }
