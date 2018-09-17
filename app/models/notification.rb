@@ -50,7 +50,7 @@ class Notification < ApplicationRecord
   scope :author, ->(author_names)  {
     author_names = [author_names] if author_names.is_a?(String)
     joins(:subject).where(
-      author_names.map { |owner_name| Subject.arel_table[:author].matches(author_name) }.reduce(:or)
+      author_names.map { |author_name| Subject.arel_table[:author].matches(author_name) }.reduce(:or)
     )
   }
 
@@ -60,7 +60,14 @@ class Notification < ApplicationRecord
   scope :author,     ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }
 
   scope :labelable,  -> { where(subject_type: ['Issue', 'PullRequest']) }
-  scope :label,      ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
+  scope :label,      ->(label_names) {
+    label_names = [label_names] if label_names.is_a?(String)
+
+    joins(:labels).where(
+      label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
+    )
+
+  }
   scope :unlabelled, -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
 
   scope :assigned,   ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }

@@ -110,7 +110,7 @@ class Search
   end
 
   def label
-    parsed_query[:label].first
+    parsed_query[:label]
   end
 
   def assignee
