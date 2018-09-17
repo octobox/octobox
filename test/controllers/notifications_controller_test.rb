@@ -560,6 +560,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter by multiple authors' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew')
+    create(:subject, notifications: [notification2], author: 'benjam')
+    get '/?q=author%3Aandrew%2Cbenjam'
+    assert_equal assigns(:notifications).length, 2
+  end
+
   test 'search results can filter by locked:true' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, subject_type: 'Issue')

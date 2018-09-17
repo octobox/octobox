@@ -90,7 +90,7 @@ class Search
   end
 
   def author
-    parsed_query[:author].first
+    parsed_query[:author]
   end
 
   def unread

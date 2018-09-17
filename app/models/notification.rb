@@ -47,7 +47,12 @@ class Notification < ApplicationRecord
       owner_names.map { |owner_name| arel_table[:repository_owner_name].matches(owner_name) }.reduce(:or)
     )
   }
-  scope :author,   ->(author_name)  { joins(:subject).where(Subject.arel_table[:author].matches(author_name)) }
+  scope :author, ->(author_names)  {
+    author_names = [author_names] if author_names.is_a?(String)
+    joins(:subject).where(
+      author_names.map { |owner_name| Subject.arel_table[:author].matches(author_name) }.reduce(:or)
+    )
+  }
 
   scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
 
