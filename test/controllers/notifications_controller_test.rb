@@ -491,6 +491,15 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter by multiple owners' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, repository_owner_name: 'andrew')
+    create(:notification, user: @user, repository_owner_name: 'octobox')
+    get '/?q=owner%3Aoctobox%2Candrew'
+    assert_equal assigns(:notifications).length, 2
+  end
+
   test 'search results can filter by type' do
     sign_in_as(@user)
     create(:notification, user: @user, subject_type: 'Issue')
@@ -539,6 +548,70 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     create(:notification, user: @user, unread: false)
     get '/?q=unread%3Afalse'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by author' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew')
+    create(:subject, notifications: [notification2], author: 'benjam')
+    get '/?q=author%3Aandrew'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple authors' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew')
+    create(:subject, notifications: [notification2], author: 'benjam')
+    get '/?q=author%3Aandrew%2Cbenjam'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter by label' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    subject1 = create(:subject, notifications: [notification1])
+    subject2 = create(:subject, notifications: [notification2])
+    create(:label, subject: subject1, name: 'bug')
+    create(:label, subject: subject2, name: 'feature')
+    get '/?q=label%3Abug'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple labels' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    subject1 = create(:subject, notifications: [notification1])
+    subject2 = create(:subject, notifications: [notification2])
+    create(:label, subject: subject1, name: 'bug')
+    create(:label, subject: subject2, name: 'feature')
+    get '/?q=label%3Abug%2Cfeature'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter by assignee' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], assignees: ":andrew:")
+    create(:subject, notifications: [notification2], assignees: ":benjam:")
+    get '/?q=assignee%3Aandrew'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple assignees' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], assignees: ":andrew:")
+    create(:subject, notifications: [notification2], assignees: ":benjam:")
+    get '/?q=assignee%3Aandrew%2Cbenjam'
+    assert_equal assigns(:notifications).length, 2
   end
 
   test 'search results can filter by locked:true' do
