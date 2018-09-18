@@ -776,7 +776,7 @@ svg{
   padding: 0px;
   min-width: 485px;
   max-height: 300px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .search-divider-item {
@@ -796,7 +796,7 @@ svg{
 }
 
 .search-remove-btn, search-remove-btn:hover {
-  font-weight: 100;
+  font-weight: 400;
   font-size: 12px;
   text-decoration: none !important;
   color: #000 !important;
