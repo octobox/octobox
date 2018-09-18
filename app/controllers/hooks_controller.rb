@@ -22,6 +22,8 @@ class HooksController < ApplicationController
       SyncInstallationRepositoriesWorker.perform_async_if_configured(payload)
     when 'github_app_authorization'
       SyncGithubAppAuthorizationWorker.perform_async_if_configured(payload['sender']['id'])
+    when 'marketplace_purchase'
+      MarketplacePurchaseWorker.perform_async_if_configured(payload)
     end
 
     head :no_content
