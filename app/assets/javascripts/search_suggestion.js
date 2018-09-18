@@ -96,7 +96,7 @@ function createSuggestionListElement(suggestion) {
 
 function addQueryToSearchBox(event) {
   var queryString = event.target.getAttribute('aria-label');
-  if(queryString != null || queryString != '') {
+  if(queryString) {
     if ($("#search-box").val().length > 0) {
       var search_value = $("#search-box").val() + "," + queryString;
       $("#search-box").val(search_value);
@@ -124,36 +124,13 @@ function createDeleteButtonElement(suggestion) {
   return deleteButton;
 }
 
-function isMaxLimitReached(objectStore) {
-  var countRequest = objectStore.count();
-  countRequest.onsuccess = function() {
-    if (countRequest.result >= maxLimit);
-    return true;
-  }
-
-  return false;
-}
-
-function isPresentSearchQuery(objectStore, searchQuery) {
-  var getRequest = objectStore.get(searchQuery)
-  getRequest.onsuccess = function(event) {
-    if (event.target.result === searchQuery) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 function addQueryString(searchQuery) {
   if (!window.indexedDB) {
     return;
   }
-
   if (searchQuery == null || searchQuery == '') {
     return;
   }
-
   // open a read/write db transaction, ready for adding the data
   var transaction = db.transaction(["SearchSuggestionList"], "readwrite");
   transaction.onerror = function() {
@@ -162,17 +139,24 @@ function addQueryString(searchQuery) {
 
   // call an object store that's already been added to the database
   var objectStore = transaction.objectStore("SearchSuggestionList");
+  var countRequest = objectStore.count();
+  countRequest.onsuccess = function() {
+    if (countRequest.result > maxLimit) {
+      return;
+    }
 
-  if (isMaxLimitReached(objectStore)) {
-    console.log("Max Limit Reached for Storing Query String");
-    return;
+    var getRequest = objectStore.get(searchQuery);
+    getRequest.onsuccess = function(event) {
+      if (event.result === searchQuery) {
+        return;
+      }
+      // Make a request to add our newItem object to the object store
+      var objectStoreRequest = objectStore.add({queryString: searchQuery, timestamp: Date.now()});
+      objectStoreRequest.onsuccess = function(event) {
+        console.log('Search Suggestion to Added IndexedDB :: ' + searchQuery);
+      };
+    }
   }
-
-  // Make a request to add our newItem object to the object store
-  var objectStoreRequest = objectStore.add({queryString: searchQuery, timestamp: Date.now()});
-  objectStoreRequest.onsuccess = function(event) {
-    console.log('Search Suggestion to Added IndexedDB :: ' + searchQuery);
-  };
 };
 
 function deleteQueryString(event) {
