@@ -12,4 +12,13 @@ class Repository < ApplicationRecord
   def github_app_installed?
     app_installation_id.present?
   end
+
+  def display_subject?
+    github_app_installed? && required_plan_available?
+  end
+
+  def required_plan_available?
+    return true unless Octobox.config.marketplace_url
+    private? ? app_installation.private_repositories_enabled? : true
+  end
 end

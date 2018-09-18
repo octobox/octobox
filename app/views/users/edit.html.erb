@@ -140,6 +140,9 @@
               <tr>
                 <th class='border-top-0'>Account</th>
                 <th class='border-top-0'>Repositories</th>
+                <% if Octobox.config.marketplace_url.present? %>
+                  <th class='border-top-0' colspan='2'>Billing</th>
+                <% end %>
                 <th class='border-top-0'>Settings</th>
               </tr>
             </thead>
@@ -153,8 +156,42 @@
                   </td>
                   <td class="align-middle">
                     <%= pluralize app_installation.repositories.github_app_installed.count, 'repository' %>
-                  </td>
-                  <td>
+                  </td >
+                  <% if Octobox.config.marketplace_url.present? %>
+                    <td class="align-middle">
+                      <% if app_installation.subscription_purchase %>
+                        <% if app_installation.subscription_purchase.active? %>
+                          <strong>
+                            <%= app_installation.subscription_purchase.subscription_plan.name %>
+                          </strong> -
+                          <% if app_installation.subscription_purchase.billing_cycle == 'monthly' %>
+                            <%= number_to_currency app_installation.subscription_purchase.subscription_plan.monthly_price_in_cents/100 %>
+                          <% else %>
+                            <%= number_to_currency app_installation.subscription_purchase.subscription_plan.yearly_price_in_cents/100 %>
+                          <% end %>
+                          <%= app_installation.subscription_purchase.billing_cycle %>
+
+                          <% if app_installation.subscription_purchase.on_free_trial? %>
+                            <i class='text-muted'>
+                              (Free Trail ends in <%= distance_of_time_in_words_to_now app_installation.subscription_purchase.free_trial_ends_on %>)
+                            </i>
+                          <% end %>
+                        <% else %>
+                          Cancelled Plan
+                        <% end %>
+                      <% else %>
+                        No Plan
+                      <% end %>
+                    </td>
+                    <td>
+                      <% if app_installation.subscription_purchase.try(:active?) %>
+                        <%= link_to 'Edit Plan', Octobox.config.marketplace_url, class: 'btn btn-primary btn-sm', target: '_blank', rel: 'noopener' %>
+                      <% else %>
+                        <%= link_to 'Start a Plan', Octobox.config.marketplace_url, class: 'btn btn-primary btn-sm', target: '_blank', rel: 'noopener' %>
+                      <% end %>
+                    </td>
+                  <% end %>
+                  <td class="align-middle">
                     <%= link_to 'Manage', app_installation.settings_url, class: 'btn btn-secondary btn-sm', target: '_blank', rel: 'noopener' %>
                   </td>
                 </tr>
@@ -171,7 +208,11 @@
           <li>Full support for private repositories</li>
           <li>Sync new and updated notifications automatically</li>
         </ul>
-        <%= link_to 'Install GitHub App', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
+        <% if Octobox.config.marketplace_url.present? %>
+          <%= link_to 'Install GitHub App', Octobox.config.marketplace_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
+        <% else %>
+          <%= link_to 'Install GitHub App', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
+        <% end %>
       </div>
     </div>
   <% end %>
