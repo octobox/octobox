@@ -40,6 +40,9 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
+  gem 'active_record_query_trace'
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 group :test do

@@ -1,4 +1,4 @@
-if defined?(Bullet) && Rails.env.development?
+if defined?(Bullet) && ENV["BULLET"].present?
   Bullet.enable = true
   # Bullet.sentry = true
   Bullet.alert = false
