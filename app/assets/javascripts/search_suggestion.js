@@ -88,7 +88,24 @@ function createSuggestionListElement(suggestion) {
   listItem.appendChild(
     createDeleteButtonElement(suggestion)
   );
+
+  listItem.onclick = function(event) {
+    addQueryToSearchBox(event);
+  }
+
   return listItem;
+}
+
+function addQueryToSearchBox(event) {
+  var searchQuery = event.target.getAttribute('aria-label');
+  if ($("#search-box").val().length > 0) {
+    var search_value = $("#search-box").val() + "," + searchQuery;
+    $("#search-box").val(search_value);
+  }
+  else {
+   $("#search-box").val(searchQuery);
+  }
+  $("#search-sugguestion-list").removeClass('d-block');
 }
 
 // create a delete button inside each list item, giving it an event handler

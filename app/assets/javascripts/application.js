@@ -425,15 +425,15 @@ $(document).ready(function() {
     displaySearchSuggestions();
   });
 
-  $(".search-dropdown-item").on("click", function() {
-    if ($("#search-box").val().length > 0) {
-      var search_value = $("#search-box").val() + "," + this.text();
-      $("#search-box").val(search_value);
-    }
-    else {
-     $("#search-box").val(this.text());
-    }
-  });
+  // $(".search-dropdown-item").on("click", function() {
+  //   if ($("#search-box").val().length > 0) {
+  //     var search_value = $("#search-box").val() + "," + this.text();
+  //     $("#search-box").val(search_value);
+  //   }
+  //   else {
+  //    $("#search-box").val(this.text());
+  //   }
+  // });
 
 });
 
