@@ -85,6 +85,9 @@ function createSuggestionListElement(suggestion) {
   listItem.setAttribute('aria-selected', 'false');
   listItem.setAttribute('aria-label', suggestion);
   listItem.innerHTML = suggestion;
+  listItem.appendChild(
+    createDeleteButtonElement(suggestion)
+  );
   return listItem;
 }
 
@@ -92,6 +95,7 @@ function createSuggestionListElement(suggestion) {
 // so that it runs the deleteButton() function when clicked
 function createDeleteButtonElement(suggestion) {
   var deleteButton = document.createElement('button');
+  deleteButton.className += 'search-remove-btn btn btn-link'
   deleteButton.innerHTML = 'X';
   deleteButton.setAttribute('data-suggestion', suggestion);
 
@@ -166,6 +170,7 @@ function deleteQueryString(event) {
 
   // report that the data item has been deleted
   transaction.oncomplete = function() {
+    displaySearchSuggestions();
     console.log('Search Suggestion deleted.')
   };
 };

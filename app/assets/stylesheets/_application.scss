@@ -784,3 +784,11 @@ svg{
 .search-dropdown-item {
   padding: 6px 1.5rem;
 }
+
+.search-remove-btn, search-remove-btn:hover {
+  font-weight: 100;
+  font-size: 12px;
+  text-decoration: none !important;
+  color: #000 !important;
+}
+
