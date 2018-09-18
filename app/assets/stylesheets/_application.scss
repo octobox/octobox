@@ -766,55 +766,21 @@ svg{
   font-size: 16px;
 }
 
-.jump-to-suggestions-results-container {
-  border-bottom: 1px solid #e1e4e8;
+.d-block {
+  display: block !important;
 }
 
-.d-flex {
-  display: flex !important;
+.search-dropdown {
+  top: 15px;
+  font-size: 14px;
+  padding: 0px;
+  min-width: 485px;
 }
 
-.f5 {
-  font-size: 14px !important;
+.search-divider-item {
+  margin: 0;
 }
 
-.p-0 {
-  padding: 0 !important;
-}
-
-.flex-items-center {
-  align-items: center !important;
-}
-
-.flex-justify-start {
-  justify-content: flex-start !important;
-}
-
-.jump-to-suggestions-path .jump-to-suggestion-name {
-    max-width: none;
-}
-
-.css-truncate.css-truncate-target, .css-truncate .css-truncate-target {
-    display: inline-block;
-    max-width: 125px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    vertical-align: top;
-}
-
-.no-wrap {
-  white-space: nowrap !important;
-}
-
-.text-left {
-  text-align: left !important;
-}
-
-.overflow-hidden {
-  overflow: hidden !important;
-}
-
-.flex-auto {
-  flex: 1 1 auto !important;
+.search-dropdown-item {
+  padding: 6px 1.5rem;
 }

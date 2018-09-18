@@ -2,20 +2,23 @@
   <a class="navbar-brand" href="/" title='Octobox'>
     <%= octobox_reverse_icon(18) %>
   </a>
-
-  <div>
-    <button class="btn btn-dark navbar-toggler search-toggler" type="button" data-toggle="collapse" data-target="#search" aria-controls="search" aria-expanded="false" aria-label="Toggle search">
-      <span class="sr-only">Toggle search</span>
-      <%= octicon 'search', height: 16, class: 'text-muted' %>
-    </button>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="sr-only">Toggle navigation</span>
-      <% if current_user %>
-        <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, height:32, class: 'img-rounded navbar-avatar', alt: '' %>
-      <% else %>
-        <%= octicon 'three-bars', height: 16, class: 'text-muted' %>
-      <% end %>
-    </button>
+  <div class="position-relative dropdown">
+    <div>
+      <button class="btn btn-dark navbar-toggler search-toggler" type="button" data-toggle="collapse" data-target="#search" aria-controls="search" aria-expanded="false" aria-label="Toggle search">
+        <span class="sr-only">Toggle search</span>
+        <%= octicon 'search', height: 16, class: 'text-muted' %>
+      </button>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <% if current_user %>
+          <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, height:32, class: 'img-rounded navbar-avatar', alt: '' %>
+        <% else %>
+          <%= octicon 'three-bars', height: 16, class: 'text-muted' %>
+        <% end %>
+      </button>
+    </div>
+    <div id="search-sugguestion-list" class="dropdown-menu search-dropdown">
+    </div>
   </div>
   <% if @notifications %>
     <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>

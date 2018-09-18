@@ -416,6 +416,25 @@ $(document).ready(function() {
     $(".current.js-current").removeClass("current js-current");
     $( this ).find("td").first().addClass("current js-current");
   })
+
+  $("#search").on("submit", function() {
+    addQueryString($("#search-box").val());
+  });
+
+  $("#search-box").on("click", function() {
+    displaySearchSuggestions();
+  });
+
+  $(".search-dropdown-item").on("click", function() {
+    if ($("#search-box").val().length > 0) {
+      var search_value = $("#search-box").val() + "," + this.text();
+      $("#search-box").val(search_value);
+    }
+    else {
+     $("#search-box").val(this.text());
+    }
+  });
+
 });
 
 // Sync Handling
