@@ -775,6 +775,8 @@ svg{
   font-size: 14px;
   padding: 0px;
   min-width: 485px;
+  max-height: 300px;
+  overflow-y: scroll;
 }
 
 .search-divider-item {
