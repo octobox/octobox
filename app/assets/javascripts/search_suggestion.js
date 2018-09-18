@@ -20,18 +20,18 @@ window.onload = function() {
   window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
   // Let us open our database
-  var DBOpenRequest = window.indexedDB.open("SearchSuggestionList", 2);
+  var dbOpenRequest = window.indexedDB.open("SearchSuggestionList", 2);
 
   // these two event handlers act on the database being opened successfully, or not
-  DBOpenRequest.onerror = function(event) {
+  dbOpenRequest.onerror = function(event) {
     console.log("Error loading database.");
   };
 
-  DBOpenRequest.onsuccess = function(event) {
-    db = DBOpenRequest.result;
+  dbOpenRequest.onsuccess = function(event) {
+    db = dbOpenRequest.result;
   };
 
-  DBOpenRequest.onupgradeneeded = function(event) {
+  dbOpenRequest.onupgradeneeded = function(event) {
     var db = event.target.result;
 
     db.onerror = function(event) {
@@ -82,7 +82,7 @@ function createDividerElement() {
 function createSuggestionListElement(suggestion) {
   var listItem = document.createElement('li');
   listItem.className += 'dropdown-item search-dropdown-item';
-  listItem.setAttribute('aria-selected', 'false');
+  listItem.setAttribute('aria-label', suggestion);
 
   var divtem = document.createElement('div');
   divtem.setAttribute('aria-label', suggestion);
@@ -95,14 +95,17 @@ function createSuggestionListElement(suggestion) {
 }
 
 function addQueryToSearchBox(event) {
-  var searchQuery = event.target.getAttribute('aria-label');
-  if ($("#search-box").val().length > 0) {
-    var search_value = $("#search-box").val() + "," + searchQuery;
-    $("#search-box").val(search_value);
+  var queryString = event.target.getAttribute('aria-label');
+  if(queryString != null || queryString != '') {
+    if ($("#search-box").val().length > 0) {
+      var search_value = $("#search-box").val() + "," + queryString;
+      $("#search-box").val(search_value);
+    }
+    else {
+     $("#search-box").val(queryString);
+    }
   }
-  else {
-   $("#search-box").val(searchQuery);
-  }
+
   $("#search-sugguestion-list").removeClass('d-block');
 }
 
@@ -189,3 +192,12 @@ function deleteQueryString(event) {
     console.log('Search Suggestion deleted.')
   };
 };
+
+function hideSearchSuggestion() {
+  $(document).mouseup(function(e) {
+    var container = $("#search-sugguestion-list");
+    if (!container.is(e.target) && container.has(e.target).length === 0) {
+      container.removeClass('d-block');
+    }
+  });
+}
