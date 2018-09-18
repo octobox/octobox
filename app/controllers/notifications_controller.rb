@@ -274,7 +274,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = display_subject? ? [{subject: :labels}, :repository] : nil
+    eager_load_relation = display_subject? ? [{subject: :labels}, {repository: {app_installation: {subscription_purchase: :subscription_plan}}}] : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
     if params[:q].present?

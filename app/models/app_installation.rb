@@ -2,6 +2,7 @@ class AppInstallation < ApplicationRecord
   has_many :repositories, dependent: :destroy
   has_many :app_installation_permissions, dependent: :delete_all
   has_many :users, through: :app_installation_permissions
+  has_one :subscription_purchase, foreign_key: :account_id, primary_key: :account_id
 
   validates :github_id, presence: true, uniqueness: true
   validates :account_login, presence: true
@@ -39,5 +40,10 @@ class AppInstallation < ApplicationRecord
 
   def github_avatar_url
     "#{Octobox.config.github_domain}/#{account_login}.png"
+  end
+
+  def private_repositories_enabled?
+    return true unless Octobox.config.marketplace_url
+    subscription_purchase.try(:private_repositories_enabled?)
   end
 end
