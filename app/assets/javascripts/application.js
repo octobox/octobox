@@ -425,15 +425,18 @@ $(document).ready(function() {
     displaySearchSuggestions();
   });
 
-  // $(".search-dropdown-item").on("click", function() {
-  //   if ($("#search-box").val().length > 0) {
-  //     var search_value = $("#search-box").val() + "," + this.text();
-  //     $("#search-box").val(search_value);
-  //   }
-  //   else {
-  //    $("#search-box").val(this.text());
-  //   }
-  // });
+  $("#search-sugguestion-list").on("click", function(event) {
+    var queryString = event.target.getAttribute('aria-label');
+    if(queryString != null || queryString != '') {
+      if ($("#search-box").val().length > 0) {
+        var search_value = $("#search-box").val() + "," + queryString;
+        $("#search-box").val(search_value);
+      }
+      else {
+       $("#search-box").val(queryString);
+      }
+    }
+  });
 
 });
 

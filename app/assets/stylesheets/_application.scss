@@ -783,6 +783,14 @@ svg{
 
 .search-dropdown-item {
   padding: 6px 1.5rem;
+  display: flex;
+  align-items: center;
+  > div {
+    flex-grow: 1;
+  }
+  > button {
+    flex-grow: 0;
+  }
 }
 
 .search-remove-btn, search-remove-btn:hover {

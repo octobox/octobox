@@ -83,15 +83,13 @@ function createSuggestionListElement(suggestion) {
   var listItem = document.createElement('li');
   listItem.className += 'dropdown-item search-dropdown-item';
   listItem.setAttribute('aria-selected', 'false');
-  listItem.setAttribute('aria-label', suggestion);
-  listItem.innerHTML = suggestion;
-  listItem.appendChild(
-    createDeleteButtonElement(suggestion)
-  );
 
-  listItem.onclick = function(event) {
-    addQueryToSearchBox(event);
-  }
+  var divtem = document.createElement('div');
+  divtem.setAttribute('aria-label', suggestion);
+  divtem.innerHTML = suggestion;
+
+  listItem.appendChild(divtem);
+  listItem.appendChild(createDeleteButtonElement(suggestion));
 
   return listItem;
 }
