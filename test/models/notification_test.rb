@@ -142,6 +142,8 @@ class NotificationTest < ActiveSupport::TestCase
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
     notification.update_from_api_response(api_response, unarchive: true)
 
+    notification.reload
+
     refute_nil notification.subject
     assert_equal url, notification.subject.url
     assert_equal "open", notification.subject.state
