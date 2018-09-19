@@ -332,7 +332,7 @@ function notify(message, type) {
 
 function sync() {
   if($("a.js-sync.js-async").length) {
-    $.get('/notifications/sync.json?async=true', refreshOnSync);
+    $.get('/notifications/sync.json', refreshOnSync);
   } else {
     Turbolinks.visit($("a.js-sync").attr('href'))
   }
