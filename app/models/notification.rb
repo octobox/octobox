@@ -196,49 +196,6 @@ class Notification < ApplicationRecord
     UpdateSubjectWorker.perform_async_if_configured(self.id, force)
   end
 
-  def update_repository(force = false)
-    return unless Octobox.config.subjects_enabled?
-    return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
-
-    UpdateRepositoryWorker.perform_async_if_configured(self.id, force)
-  end
-
-  private
-
-  def update_repository_in_foreground(force = false)
-    return unless Octobox.config.subjects_enabled?
-    return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
-
-    remote_repository = download_repository
-
-    if remote_repository.nil?
-      # if we can't access the repository, assume that it's private
-      remote_repository = OpenStruct.new({
-        full_name: repository_full_name,
-        private: true,
-        owner: {login: repository_owner_name}
-      })
-    end
-
-    if repository
-      repository.update_attributes({
-        full_name: remote_repository.full_name,
-        private: remote_repository.private,
-        owner: remote_repository.owner[:login],
-        github_id: remote_repository.id,
-        last_synced_at: Time.current
-      })
-    else
-      create_repository({
-        full_name: remote_repository.full_name,
-        private: remote_repository.private,
-        owner: remote_repository.owner[:login],
-        github_id: remote_repository.id,
-        last_synced_at: Time.current
-      })
-    end
-  end
-
   def update_subject_in_foreground(force = false)
     return unless display_subject?
     # skip syncing if the notification was updated around the same time as subject
@@ -287,6 +244,49 @@ class Notification < ApplicationRecord
       subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
     end
   end
+
+  def update_repository(force = false)
+    return unless Octobox.config.subjects_enabled?
+    return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
+
+    UpdateRepositoryWorker.perform_async_if_configured(self.id, force)
+  end
+
+  def update_repository_in_foreground(force = false)
+    return unless Octobox.config.subjects_enabled?
+    return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
+
+    remote_repository = download_repository
+
+    if remote_repository.nil?
+      # if we can't access the repository, assume that it's private
+      remote_repository = OpenStruct.new({
+        full_name: repository_full_name,
+        private: true,
+        owner: {login: repository_owner_name}
+      })
+    end
+
+    if repository
+      repository.update_attributes({
+        full_name: remote_repository.full_name,
+        private: remote_repository.private,
+        owner: remote_repository.owner[:login],
+        github_id: remote_repository.id,
+        last_synced_at: Time.current
+      })
+    else
+      create_repository({
+        full_name: remote_repository.full_name,
+        private: remote_repository.private,
+        owner: remote_repository.owner[:login],
+        github_id: remote_repository.id,
+        last_synced_at: Time.current
+      })
+    end
+  end
+
+  private
 
   def download_subject
     user.subject_client.get(subject_url)
