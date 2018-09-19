@@ -78,7 +78,9 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    (user_ids + Array(repository.try(:user_ids))).uniq
+    ids = users.pluck(:id)
+    ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
+    ids.uniq
   end
 
   def author_url_path
