@@ -140,16 +140,23 @@ class Notification < ApplicationRecord
   def self.mute(notifications)
     return if notifications.empty?
     user = notifications.to_a.first.user
+    MuteNotificationsWorker.perform_async_if_configured(user.id, notifications.map(&:github_id))
+    where(id: notifications.map(&:id)).update_all(archived: true, unread: false, muted_at: Time.current)
+  end
+
+  def self.mute_on_github(user, notification_ids)
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
-    conn.in_parallel(manager) do
-      notifications.each do |n|
-        conn.patch "notifications/threads/#{n.github_id}"
-        conn.put "notifications/threads/#{n.github_id}/subscription", {ignored: true}.to_json
+    begin
+      conn.in_parallel(manager) do
+        notification_ids.each do |id|
+          conn.patch "notifications/threads/#{id}"
+          conn.put "notifications/threads/#{id}/subscription", {ignored: true}.to_json
+        end
       end
+    rescue Octokit::Forbidden, Octokit::NotFound
+      # one or more notifications are for repos the user no longer has access to
     end
-
-    where(id: notifications.map(&:id)).update_all(archived: true, unread: false, muted_at: Time.current)
   end
 
   def expanded_subject_url
