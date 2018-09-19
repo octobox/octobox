@@ -40,6 +40,7 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
+  gem 'active_record_query_trace'
 end
 
 group :test do
@@ -60,6 +61,9 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'brakeman'
+  gem 'bullet'
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 group :production do
