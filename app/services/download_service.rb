@@ -68,7 +68,7 @@ class DownloadService
     existing_notifications = user.notifications.includes(eager_load_relation).where(github_id: notifications.map(&:id))
     notifications.reject{|n| !unarchive && n.unread }.each do |notification|
       n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
-      n = user.notifications.new(github_id: notification.id) if n.nil?
+      n = user.notifications.new(github_id: notification.id, archived: false) if n.nil?
       next unless n
       begin
         n.update_from_api_response(notification, unarchive: unarchive)
