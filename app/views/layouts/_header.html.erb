@@ -17,17 +17,21 @@
         <% end %>
       </button>
     </div>
-    <div id="search-sugguestion-list" class="dropdown-menu search-dropdown">
-    </div>
   </div>
   <% if @notifications %>
     <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
-      <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
-          <%= hidden_field_tag name, value %>
-      <% end %>
-      <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 46, id: 'search-box', 'aria-label' => 'Search' %>
-      <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
-        <%= octicon 'question', :height => 16 %>
+      <div class="form-inline__item">
+        <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
+            <%= hidden_field_tag name, value %>
+        <% end %>
+        <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 46, id: 'search-box', 'aria-label' => 'Search' %>
+        <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
+          <%= octicon 'question', :height => 16 %>
+        </div>
+      </div>
+      <div class="form-inline__item">
+        <div id="search-sugguestion-list" class="form-inline__section search-dropdown d-none">
+        </div>
       </div>
     <% end %>
   <% end %>

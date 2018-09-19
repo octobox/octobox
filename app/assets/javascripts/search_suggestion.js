@@ -64,21 +64,11 @@ function displaySearchSuggestions() {
       searchQueryList.appendChild(
         createSuggestionListElement(cursor.value.queryString)
       );                                      // put the item item inside the task list
-      searchQueryList.appendChild(
-        createDividerElement()
-      );
       cursor.continue();                     // continue on to the next item in the cursor
     }
   }
-  searchQueryList.classList.add("d-block");
+  searchQueryList.classList.add("d-flex");
 }
-
-function createDividerElement() {
-  var dividerItem = document.createElement('div');
-  dividerItem.className += 'dropdown-divider search-divider-item';
-  return dividerItem;
-}
-
 function createSuggestionListElement(suggestion) {
   var listItem = document.createElement('li');
   listItem.className += 'dropdown-item search-dropdown-item';
@@ -181,7 +171,7 @@ function hideSearchSuggestion() {
   $(document).mouseup(function(e) {
     var container = $("#search-sugguestion-list");
     if (!container.is(e.target) && container.has(e.target).length === 0) {
-      container.removeClass('d-block');
+      container.removeClass('d-flex');
     }
   });
 }
