@@ -119,18 +119,22 @@ class Notification < ApplicationRecord
     unread = notifications.select(&:unread)
     return if unread.empty?
     user = unread.first.user
+    MarkReadWorker.perform_async_if_configured(user.id, unread.map(&:github_id))
+    where(id: unread.map(&:id)).update_all(unread: false)
+  end
+
+  def self.mark_read_on_github(user, notification_ids)
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
     begin
       conn.in_parallel(manager) do
-        unread.each do |n|
-            conn.patch "notifications/threads/#{n.github_id}"
+        notification_ids.each do |id|
+            conn.patch "notifications/threads/#{id}"
         end
       end
     rescue Octokit::Forbidden, Octokit::NotFound
       # one or more notifications are for repos the user no longer has access to
     end
-    where(id: unread.map(&:id)).update_all(unread: false)
   end
 
   def self.mute(notifications)
