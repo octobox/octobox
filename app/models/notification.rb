@@ -25,9 +25,12 @@ class Notification < ApplicationRecord
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_many :labels, through: :subject
 
+  validates :subject_url, presence: true
+  validates :archived, inclusion: [true, false]
+
   scope :unmuted,  -> { where("muted_at IS NULL") }
   scope :muted,    -> { where("muted_at IS NOT NULL") }
-  scope :inbox,    -> { where(archived: false) }
+  scope :inbox,    -> { where.not(archived: true) }
   scope :archived, ->(value = true) { where(archived: value) }
   scope :newest,   -> { order('notifications.updated_at DESC') }
   scope :starred,  ->(value = true) { where(starred: value) }
@@ -171,6 +174,7 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
+    archived = false if archived.nil? # fixup existing records where archived is nil
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
     update_subject
