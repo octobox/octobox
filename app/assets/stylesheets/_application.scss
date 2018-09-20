@@ -766,10 +766,6 @@ svg{
   font-size: 16px;
 }
 
-.d-flex {
-  display: flex !important;
-}
-
 .search-dropdown {
   top: 40px;
   font-size: 14px;
@@ -804,10 +800,4 @@ svg{
   font-size: 12px;
   text-decoration: none !important;
   color: #000 !important;
-}
-
-.form-inline__item {
-  align-items: center;
-  justify-content: space-between;
-  display: inline-flex;
 }

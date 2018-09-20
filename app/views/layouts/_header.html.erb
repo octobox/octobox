@@ -20,7 +20,7 @@
   </div>
   <% if @notifications %>
     <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
-      <div class="form-inline__item">
+      <div class="d-inline-flex justify-content-between align-items-center">
         <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
             <%= hidden_field_tag name, value %>
         <% end %>
@@ -29,7 +29,7 @@
           <%= octicon 'question', :height => 16 %>
         </div>
       </div>
-      <div class="form-inline__item">
+      <div class="d-inline-flex justify-content-between align-items-center">
         <div id="search-sugguestion-list" class="form-inline__section search-dropdown d-none">
         </div>
       </div>

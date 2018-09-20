@@ -412,24 +412,25 @@ function recoverPreviousCursorPosition() {
 
 // Clicking a row marks it current
 $(document).ready(function() {
+
   $("tr.notification").click(function() {
     $(".current.js-current").removeClass("current js-current");
     $( this ).find("td").first().addClass("current js-current");
   })
 
   $("#search").on("submit", function() {
-    addQueryString($("#search-box").val());
+    SearchSuggestion.addSearchString($("#search-box").val());
   });
 
   $("#search-box").on("click", function() {
-    displaySearchSuggestions();
+    SearchSuggestion.displaySearchSuggestions();
   });
 
   $("#search-sugguestion-list").on("click", function(event) {
-    addQueryToSearchBox(event);
+    SearchSuggestion.addToSearchBox(event);
   });
 
-  hideSearchSuggestion();
+  SearchSuggestion.hideSearchSuggestion();
 
 });
 
