@@ -43,7 +43,7 @@ class RepositoryTest < ActiveSupport::TestCase
       :notification,
       repository_id: @repository.github_id,
       repository_full_name: @repository.full_name,
-      repository_full_name: @repository.owner,
+      repository_owner_name: @repository.owner,
       subject_url: "https://api.github.com/repos/#{@repository.full_name}/issues/1",
       archived: false
     )
