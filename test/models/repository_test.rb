@@ -37,4 +37,25 @@ class RepositoryTest < ActiveSupport::TestCase
     assert_equal @repository.subjects.length, 1
     assert_equal @repository.subjects.first, subject
   end
+
+  test 'updates full_name and ower_name of notifications of repository if full_name is updated' do
+    notification = create(
+      :notification,
+      repository_id: @repository.github_id,
+      repository_full_name: @repository.full_name,
+      repository_full_name: @repository.owner,
+      subject_url: "https://api.github.com/repos/#{@repository.full_name}/issues/1",
+      archived: false
+    )
+
+    @repository.full_name = "octobox_hq/octobox"
+    @repository.owner = "octobox_hq"
+    @repository.save
+
+    notification.reload
+
+    assert_equal notification.repository_owner_name, @repository.owner
+    assert_equal notification.repository_full_name, @repository.full_name
+  end
+
 end
