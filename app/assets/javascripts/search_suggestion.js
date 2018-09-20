@@ -90,15 +90,10 @@ SearchSuggestion = {
   // create a delete button inside each list item, giving it an event handler
   // so that it runs the deleteButton()  when clicked
   createDeleteButtonElement: function(suggestion) {
-    var deleteButton = document.createElement('button');
-    deleteButton.className += 'search-remove-btn btn btn-link'
+    var deleteButton = document.createElement('div');
+    deleteButton.className += 'search-remove-btn btn'
     deleteButton.innerHTML = 'X';
     deleteButton.setAttribute('data-suggestion', suggestion);
-
-    deleteButton.onclick = function(event) {
-      SearchSuggestion.deleteSearchString(event);
-    }
-
     return deleteButton;
   },
 

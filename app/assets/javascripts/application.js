@@ -424,17 +424,15 @@ $(document).ready(function() {
     $( this ).find("td").first().addClass("current js-current");
   })
 
-  $("#search").on("submit", function() {
+  $(document).on("submit", "#search", function(event) {
     SearchSuggestion.addSearchString($("#search-box").val());
   });
 
-  $("#search-box").on("click", function() {
-    SearchSuggestion.displaySearchSuggestions();
-  });
+  $(document).on("click", ".search-remove-btn", SearchSuggestion.deleteSearchString);
 
-  $("#search-sugguestion-list").on("click", function(event) {
-    SearchSuggestion.addToSearchBox(event);
-  });
+  $(document).on("click", "#search-box", SearchSuggestion.displaySearchSuggestions);
+
+  $(document).on("click", "#search-sugguestion-list", SearchSuggestion.addToSearchBox);
 
   SearchSuggestion.hideSearchSuggestion();
 

@@ -802,6 +802,7 @@ svg{
 }
 
 .search-remove-btn, search-remove-btn:hover {
+  flex-grow: 0 !important;
   font-weight: 400;
   font-size: 12px;
   text-decoration: none !important;
