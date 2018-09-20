@@ -1,43 +1,41 @@
-var db;
+SearchSuggestion = {
 
-window.onload = function() {
-  window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+  init: function() {
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 
-  if (!window.indexedDB) {
-    return;
-  }
-  // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
-  window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-  window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+    if (!window.indexedDB) {
+      return;
+    }
+    // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
+    window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+    window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
-  // Let us open our database
-  var dbOpenRequest = window.indexedDB.open("SearchSuggestionList", 2);
+    // Let us open our database
+    var dbOpenRequest = window.indexedDB.open("SearchSuggestionList", 2);
 
-  // these two event handlers act on the database being opened successfully, or not
-  dbOpenRequest.onerror = function(event) {
-    console.log("Error loading database.");
-  };
-
-  dbOpenRequest.onsuccess = function(event) {
-    console.log('Database Loaded successfully');
-    db = dbOpenRequest.result;
-  };
-
-  dbOpenRequest.onupgradeneeded = function(event) {
-    var db = event.target.result;
-
-    db.onerror = function(event) {
-      console.log('Error loading database');
+    // these two event handlers act on the database being opened successfully, or not
+    dbOpenRequest.onerror = function(event) {
+      console.log("Error loading database.");
     };
 
-    // Create an objectStore for this database
-    var objectStore = db.createObjectStore("SearchSuggestionList", { keyPath: "queryString" });
-    objectStore.createIndex("timestamp", "timestamp", { unique: false });
-    console.log("Object store created.");
-  }
-}
+    dbOpenRequest.onsuccess = function(event) {
+      console.log('Database Loaded successfully');
+      db = dbOpenRequest.result;
+    };
 
-SearchSuggestion = {
+    dbOpenRequest.onupgradeneeded = function(event) {
+      var db = event.target.result;
+
+      db.onerror = function(event) {
+        console.log('Error loading database');
+      };
+
+      // Create an objectStore for this database
+      var objectStore = db.createObjectStore("SearchSuggestionList", { keyPath: "queryString" });
+      objectStore.createIndex("timestamp", "timestamp", { unique: false });
+      console.log("Object store created.");
+    }
+  },
 
   getTimestamp: function() {
     if (!Date.now) {

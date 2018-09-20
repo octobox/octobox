@@ -11,6 +11,12 @@
 //= require bootstrap/modal
 //= require_tree .
 
+var db;
+
+window.onload = function() {
+  SearchSuggestion.init()
+}
+
 function getDisplayedRows() {
   return $(".js-table-notifications tr.notification")
 }
