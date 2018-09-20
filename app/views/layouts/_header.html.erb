@@ -20,16 +20,16 @@
   </div>
   <% if @notifications %>
     <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
-      <div class="d-inline-flex justify-content-between align-items-center">
+      <div class="search-sugguestion-section d-inline-flex justify-content-between align-items-center">
         <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
             <%= hidden_field_tag name, value %>
         <% end %>
-        <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'form-control', size: 46, id: 'search-box', 'aria-label' => 'Search' %>
+        <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'custom-input form-control', id: 'search-box', 'aria-label' => 'Search' %>
         <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
           <%= octicon 'question', :height => 16 %>
         </div>
       </div>
-      <div class="d-inline-flex justify-content-between align-items-center">
+      <div class="search-sugguestion-section d-inline-flex justify-content-between align-items-center">
         <div id="search-sugguestion-list" class="form-inline__section search-dropdown d-none">
         </div>
       </div>

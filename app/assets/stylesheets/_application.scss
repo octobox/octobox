@@ -145,6 +145,7 @@ html {
   margin-bottom: 0;
 }
 .navbar{
+  padding: .5rem 1rem !important;
   .octobox-icon {
     margin-right: 3px;
   }
@@ -774,13 +775,18 @@ svg{
   max-height: 300px;
   overflow-y: auto;
   flex-flow: column;
-  background: #fff;
   position: absolute;
   z-index: 1035;
   border-radius: 4px;
   border: 1px solid #CAD0D2;
   width: 100%;
-  max-width: 485px;
+  max-width: 458px;
+  background: $body-bg;
+  color: rgba($body-color,0.1);
+}
+
+.search-sugguestion-section {
+  flex: 10000 1 auto;
 }
 
 .search-dropdown-item {
@@ -799,5 +805,10 @@ svg{
   font-weight: 400;
   font-size: 12px;
   text-decoration: none !important;
-  color: #000 !important;
+  color: rgba($body-color,0.1);
+}
+
+.custom-input {
+  width: 100% !important;
+  max-width: 458px;
 }
