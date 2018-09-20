@@ -103,12 +103,12 @@ module Octobox
     attr_writer :github_team_id
 
     def percy_token
-      ENV['PERCY_TOKEN'].blank? ? nil : ENV['PERCY_TOKEN']
+      @percy_token || ENV['PERCY_TOKEN'].presence
     end
     attr_writer :percy_token
 
     def percy_project
-      ENV['PERCY_PROJECT'].blank? ? nil : ENV['PERCY_PROJECT']
+      @percy_project || ENV['PERCY_PROJECT'].presence
     end
     attr_writer :percy_project
 
