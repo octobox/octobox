@@ -34,8 +34,6 @@ GEM
       activemodel (= 5.2.1)
       activesupport (= 5.2.1)
       arel (>= 9.0)
-    activerecord-import (0.25.0)
-      activerecord (>= 3.2)
     activestorage (5.2.1)
       actionpack (= 5.2.1)
       activerecord (= 5.2.1)
@@ -355,7 +353,6 @@ PLATFORMS
 
 DEPENDENCIES
   active_record_query_trace
-  activerecord-import
   attr_encrypted
   better_errors
   binding_of_caller

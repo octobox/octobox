@@ -30,7 +30,6 @@ gem 'gemoji', require: false
 gem 'bootsnap', require: false
 gem 'bugsnag'
 gem 'jwt'
-gem 'activerecord-import'
 
 # Supported databases
 gem 'mysql2', require: false
