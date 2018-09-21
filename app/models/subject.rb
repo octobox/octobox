@@ -1,12 +1,8 @@
 class Subject < ApplicationRecord
 
-  include Octobox::Subjects::SyncSybjectLabels
+  include Octobox::Subjects::SyncSubjectLabels
 
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
-
-  has_many :subject_labels, :dependent => :destroy
-  has_many :labels, :through => :subject_labels
-
   has_many :users, through: :notifications
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
 
