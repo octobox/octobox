@@ -11,13 +11,21 @@ class Search
     res = scope
     res = scope.search_by_subject_title(parsed_query.freetext) if parsed_query.freetext.present?
     res = res.repo(repo) if repo.present?
+    res = res.exclude_repo(exclude_repo) if exclude_repo.present?
     res = res.owner(owner) if owner.present?
+    res = res.exclude_owner(exclude_owner) if exclude_owner.present?
     res = res.type(type) if type.present?
+    res = res.exclude_type(exclude_type) if exclude_type.present?
     res = res.reason(reason) if reason.present?
+    res = res.exclude_reason(exclude_reason) if exclude_reason.present?
     res = res.label(label) if label.present?
+    res = res.exclude_label(exclude_label) if exclude_label.present?
     res = res.state(state) if state.present?
+    res = res.exclude_state(exclude_state) if exclude_state.present?
     res = res.author(author) if author.present?
+    res = res.exclude_author(exclude_author) if exclude_author.present?
     res = res.assigned(assignee) if assignee.present?
+    res = res.exclude_assigned(exclude_assignee) if exclude_assignee.present?
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
     res = res.archived(!inbox) unless inbox.nil?
@@ -85,12 +93,24 @@ class Search
     parsed_query[:repo]
   end
 
+  def exclude_repo
+    parsed_query[:'-repo']
+  end
+
   def owner
     parsed_query[:owner]
   end
 
+  def exclude_owner
+    parsed_query[:'-owner']
+  end
+
   def author
     parsed_query[:author]
+  end
+
+  def exclude_author
+    parsed_query[:'-author']
   end
 
   def unread
@@ -101,20 +121,40 @@ class Search
     parsed_query[:type].map(&:classify)
   end
 
+  def exclude_type
+    parsed_query[:'-type'].map(&:classify)
+  end
+
   def reason
     parsed_query[:reason].map{|r| r.downcase.gsub(' ', '_') }
+  end
+
+  def exclude_reason
+    parsed_query[:'-reason'].map{|r| r.downcase.gsub(' ', '_') }
   end
 
   def state
     parsed_query[:state].map(&:downcase)
   end
 
+  def exclude_state
+    parsed_query[:'-state'].map(&:downcase)
+  end
+
   def label
     parsed_query[:label]
   end
 
+  def exclude_label
+    parsed_query[:'-label']
+  end
+
   def assignee
     parsed_query[:assignee]
+  end
+
+  def exclude_assignee
+    parsed_query[:'-assignee']
   end
 
   def starred

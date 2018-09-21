@@ -29,4 +29,22 @@ namespace :tasks do
       duplicate_subjects[1..-1].each(&:destroy)
     end
   end
+
+  desc "Update repository names"
+  task update_repository_names: :environment do
+    Repository.all.find_each do |repository|
+      count = Notification.where(repository_id: repository.github_id).
+                           where.not(repository_full_name: repository.full_name).
+                           where.not(repository_owner_name: repository.owner).count
+      if count > 0
+        Notification.where(repository_id: repository.github_id).
+                     where.not(repository_full_name: repository.full_name).
+                     where.not(repository_owner_name: repository.owner).
+                     update_all({
+                      repository_full_name: repository.full_name,
+                      repository_owner_name:  repository.owner
+                    })
+      end
+    end
+  end
 end

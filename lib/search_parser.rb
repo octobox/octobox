@@ -2,7 +2,7 @@
 # Simplified version of https://github.com/marcelocf/searrrch/blob/f2825e26/lib/searrrch.rb
 
 class SearchParser
-  OPERATOR_EXPRESSION = /(\w+):[\ 　]?([\w\p{Han}\p{Katakana}\p{Hiragana}\p{Hangul}ー\.\-,\/]+|(["'])(\\?.)*?\3)/
+  OPERATOR_EXPRESSION = /(\-?\w+):[\ 　]?([\w\p{Han}\p{Katakana}\p{Hiragana}\p{Hangul}ー\.\-,\/]+|(["'])(\\?.)*?\3)/
 
   attr_accessor :freetext
 
