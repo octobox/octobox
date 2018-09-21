@@ -1,5 +1,9 @@
-# frozen_string_literal: true
+
 class Notification < ApplicationRecord
+
+  include Octobox::Notifications::InclusiveScope
+  include Octobox::Notifications::ExclusiveScope
+
   SUBJECTABLE_TYPES = ['Issue', 'PullRequest', 'Commit', 'Release'].freeze
 
   if DatabaseConfig.is_postgres?
@@ -27,113 +31,6 @@ class Notification < ApplicationRecord
 
   validates :subject_url, presence: true
   validates :archived, inclusion: [true, false]
-
-  scope :unmuted,  -> { where("muted_at IS NULL") }
-  scope :muted,    -> { where("muted_at IS NOT NULL") }
-  scope :inbox,    -> { where.not(archived: true) }
-  scope :archived, ->(value = true) { where(archived: value) }
-  scope :newest,   -> { order('notifications.updated_at DESC') }
-  scope :starred,  ->(value = true) { where(starred: value) }
-
-  scope :repo, lambda { |repo_names|
-    repo_names = [repo_names] if repo_names.is_a?(String)
-    where(
-      repo_names.map { |repo_name| arel_table[:repository_full_name].matches(repo_name) }.reduce(:or)
-    )
-  }
-  scope :exclude_repo, lambda { |repo_names|
-    repo_names = [repo_names] if repo_names.is_a?(String)
-    where.not(
-      repo_names.map { |repo_name| arel_table[:repository_full_name].matches(repo_name) }.reduce(:or)
-    )
-  }
-
-  scope :type,           ->(subject_type) { where(subject_type: subject_type) }
-  scope :exclude_type,   ->(subject_type) { where.not(subject_type: subject_type) }
-  scope :reason,         ->(reason)       { where(reason: reason) }
-  scope :exclude_reason, ->(reason)       { where.not(reason: reason) }
-  scope :unread,   ->(unread)       { where(unread: unread) }
-  scope :owner,    ->(owner_names)   {
-    owner_names = [owner_names] if owner_names.is_a?(String)
-    where(
-      owner_names.map { |owner_name| arel_table[:repository_owner_name].matches(owner_name) }.reduce(:or)
-    )
-  }
-  scope :exclude_owner, ->(owner_names)   {
-    owner_names = [owner_names] if owner_names.is_a?(String)
-    where.not(
-      owner_names.map { |owner_name| arel_table[:repository_owner_name].matches(owner_name) }.reduce(:or)
-    )
-  }
-  scope :author, ->(author_names)  {
-    author_names = [author_names] if author_names.is_a?(String)
-    joins(:subject).where(
-      author_names.map { |author_name| Subject.arel_table[:author].matches(author_name) }.reduce(:or)
-    )
-  }
-  scope :exclude_author, ->(author_names)  {
-    author_names = [author_names] if author_names.is_a?(String)
-    joins(:subject).where.not(
-      author_names.map { |author_name| Subject.arel_table[:author].matches(author_name) }.reduce(:or)
-    )
-  }
-
-  scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
-
-  scope :state, ->(states)  {
-    states = [states] if states.is_a?(String)
-    joins(:subject).where(
-      states.map { |state| Subject.arel_table[:state].matches(state) }.reduce(:or)
-    )
-  }
-  scope :exclude_state, ->(states)  {
-    states = [states] if states.is_a?(String)
-    joins(:subject).where.not(
-      states.map { |state| Subject.arel_table[:state].matches(state) }.reduce(:or)
-    )
-  }
-
-  scope :labelable,  -> { where(subject_type: ['Issue', 'PullRequest']) }
-  scope :label,      ->(label_names) {
-    label_names = [label_names] if label_names.is_a?(String)
-
-    joins(:labels).where(
-      label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
-    )
-
-  }
-  scope :exclude_label,      ->(label_names) {
-    label_names = [label_names] if label_names.is_a?(String)
-
-    joins(:labels).where.not(
-      label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
-    )
-
-  }
-  scope :unlabelled, -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
-
-  scope :assigned,   ->(assignees) {
-    assignees = [assignees] if assignees.is_a?(String)
-    joins(:subject).where(
-      assignees.map { |assignee| Subject.arel_table[:assignees].matches("%:#{assignee}:%") }.reduce(:or)
-    )
-  }
-  scope :exclude_assigned,   ->(assignees) {
-    assignees = [assignees] if assignees.is_a?(String)
-    joins(:subject).where.not(
-      assignees.map { |assignee| Subject.arel_table[:assignees].matches("%:#{assignee}:%") }.reduce(:or)
-    )
-  }
-
-  scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
-  scope :locked,     -> { joins(:subject).where(subjects: { locked: true }) }
-  scope :not_locked,     -> { joins(:subject).where(subjects: { locked: false }) }
-
-  scope :subjectable, ->  { where(subject_type: SUBJECTABLE_TYPES) }
-  scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
-  scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
-
-  scope :bot_author, -> { joins(:subject).where('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot') }
 
   paginates_per 20
 
