@@ -1,4 +1,7 @@
 class Subject < ApplicationRecord
+
+  include Octobox::Subjects::SyncSybjectLabels
+
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
 
   has_many :subject_labels, :dependent => :destroy
@@ -19,23 +22,6 @@ class Subject < ApplicationRecord
 
   def author_url
     "#{Octobox.config.github_domain}#{author_url_path}"
-  end
-
-  def update_labels(remote_labels)
-    existing_labels = Label.select('repository_id, github_id').where(
-      'github_id in (?) and repository_id = ?', remote_labels.map{|l| l['id'] }, repository.id
-    )
-
-    new_labels = remote_labels.select{ |l| existing_labels.collect(&:github_id).exclude?(l['id']) }
-    updated_labels = (remote_labels-new_labels).each do |label|
-      if matching_label = existing_labels.select { |l| l.github_id == label['id'] }
-        label['db_id'] = matching_label.id
-      end
-    end
-
-    add_labels_to_repository(new_labels)
-    modify_labels(updated_labels)
-    detach_removed_subject_labels(remote_labels.map{|l| l['id'] })
   end
 
   def sync_involved_users
@@ -64,37 +50,11 @@ class Subject < ApplicationRecord
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked']
     })
-    subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
+    subject.sync_labels(remote_subject['labels']) if remote_subject['labels'].present?
     subject.sync_involved_users
   end
 
   private
-
-  def add_labels_to_repository(labels_to_be_added)
-    labels_to_be_added.map! {
-      |l| Label.new(github_id: l['id'], color: l['color'], name: l['name'], repository: repository)
-    }
-    Label.import labels_to_be_added
-    attach_label_to_subject(labels_to_be_added.select{|label| label['id']})
-  end
-
-  def modify_labels(labels_to_be_updated)
-    labels_to_be_updated.map! { |l|
-      Label.new(id: l['db_id'], github_id: l['id'], color: l['color'], name: l['name'], repository: repository)
-    }
-    Label.import labels_to_be_updated, on_duplicate_key_update: [:color, :github_id, :name]
-  end
-
-  def attach_label_to_subject(label_github_ids)
-    labels = Label.select('id').where('github_id in (?)', label_github_ids)
-    labels.map!{ |label_id| SubjectLabel.new(subject_id: self.id, label: label_id) }
-    SubjectLabel.import labels
-  end
-
-  def detach_removed_subject_labels(remote_label_ids)
-    labels_to_be_deleted = subject_labels.to_a.reject{ |l| remote_label_ids.include?(l.github_id) }
-    labels_to_be_deleted.destroy_all
-  end
 
   def self.extract_full_name(url)
     url.match(/\/repos\/([\w.-]+\/[\w.-]+)\//)[1]
