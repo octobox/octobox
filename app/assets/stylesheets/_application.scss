@@ -83,6 +83,7 @@ html {
         }
         height: 100%;
         overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
       }
       height: 100%;
       > .card {
@@ -223,9 +224,6 @@ html {
       }
     }
     &.navbar-dark{
-      .navbar-collapse.show{
-        border-top: solid 1px $navbar-dark-color;
-      }
       .dropdown-menu{
         > a{
           color: $navbar-dark-color;
@@ -241,9 +239,6 @@ html {
       }
     }
     &.navbar-light{
-      .navbar-collapse.show{
-        border-top: solid 1px $navbar-light-color;
-      }
       .dropdown-menu{
         > a{
           color: $navbar-light-color;
