@@ -27,6 +27,9 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     visit root_path
     page.has_content?('Sign in')
     Percy::Capybara.snapshot(page, name: '/') if Octobox.config.percy_configured?
+
+    Capybara.current_session.current_window.resize_to(576,800)
+    Percy::Capybara.snapshot(page, name: '/') if Octobox.config.percy_configured?    
   end
 
   test 'render a logged in user' do
@@ -66,6 +69,18 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     click_button('sidebar_toggle', wait: 0.25)
     find('.flex-sidebar').visible?
     Percy::Capybara.snapshot(page, name: '/documentation sidebar_toggle') if Octobox.config.percy_configured?
+  end
+
+  test 'Render a dark theme page' do
+    sign_in_as(@user)
+    set_dark_theme(@user)
+    stub_fetch_subject_enabled
+    visit login_path
+
+    check('select_all')
+    find('#select_all').visible?
+  
+    Percy::Capybara.snapshot(page, name: '/:auth (dark)') if Octobox.config.percy_configured?
   end
 
 end

@@ -12,3 +12,7 @@ end
 Capybara.default_driver = :selenium
 
 MiniTest.after_run { Percy::Capybara.finalize_build }
+
+def set_dark_theme(user)
+	user.theme = 'dark'
+end
