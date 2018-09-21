@@ -127,7 +127,7 @@ $jumbotron-bg:                      $body-bg !default;
 // Cards
 
 $card-cap-bg:                       lighten($body-bg, 5%) !default;
-$card-bg:                           lighten($body-bg, 1%) !default;
+$card-bg:                           lighten($body-bg, 5%) !default;
 
 // Popovers
 
@@ -149,9 +149,9 @@ $progress-bg:                       $gray-700 !default;
 // List group
 
 $list-group-bg:                     $card-bg !default;
-$list-group-border-color:           lighten($body-bg, 20%) !default;
-$list-group-action-active-bg:		lighten($body-bg, 3%) !default;
-$list-group-hover-bg:               lighten($body-bg, 5%) !default;
+$list-group-border-color:           lighten($body-bg, 15%) !default;
+$list-group-action-active-bg:		lighten($body-bg, 10%) !default;
+$list-group-hover-bg:               lighten($body-bg, 20%) !default;
 
 // Breadcrumbs
 
