@@ -1,4 +1,4 @@
-# [Octobox](https://octobox.io) &#128238; <small>Untangle your GitHub Notifications.<small>
+# [Octobox](https://octobox.io) &#128238; Untangle your GitHub Notifications.
 
 Octobox helps you manage your GitHub notifications efficiently so you can spend less time managing and more time getting things done.
 
