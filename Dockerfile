@@ -20,6 +20,7 @@ RUN apk add --update \
     mysql-dev \
     tzdata \
     curl-dev \
+    libidn-dev \
  && rm -rf /var/cache/apk/* \
  && bundle config --global frozen 1 \
  && bundle install --without test production --jobs 2 \
