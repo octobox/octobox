@@ -429,11 +429,18 @@ td.keys {
     text-align: center;
   }
   .notification-checkbox {
+    .custom-control {
+      padding-left: unset;
+    }
     input {
       margin-left: 6px;
       margin-right: 0;
       position: relative;
       top: -1px;
+      opacity: 1;
+      z-index: 1;
+      background: $body-bg;
+      color: rgba($body-color,0.1);
     }
   }
   .notification{
@@ -694,10 +701,15 @@ svg{
 }
 
 .select-all {
-  padding-left: 6px;
+  padding-left: 8px;
+  padding-right: 12px;
   input {
     position: relative;
     left: 2px;
+    opacity: 1;
+    z-index: 1;
+    background: $body-bg;
+    color: rgba($body-color,0.1);
   }
 }
 

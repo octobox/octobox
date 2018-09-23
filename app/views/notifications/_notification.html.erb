@@ -1,13 +1,16 @@
 <tr id='notification-<%= notification.id %>' class='notification <%= notification.unread ? 'active' : '' %>'>
+
   <td class='notification-checkbox'>
-    <%= check_box_tag(
-        '',
-        notification.id,
-        false,
-        title: (notification.archived ? 'Unarchive' : 'Archive'),
-        class: (notification.archived ? 'unarchive' : 'archive')
-      )
-    %>
+    <div class="custom-control custom-checkbox">
+      <%= check_box_tag(
+          '',
+          notification.id,
+          false,
+          title: (notification.archived ? 'Unarchive' : 'Archive'),
+          class: (notification.archived ? 'custom-control-input unarchive' : 'custom-control-input archive')
+        )
+      %>
+    </div>
   </td>
   <td class='notification-star'>
     <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
