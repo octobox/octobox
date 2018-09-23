@@ -180,7 +180,7 @@ function enableKeyboardShortcuts() {
 
   $(document).keydown(function(e) {
     // disable shortcuts for the seach box
-    if (e.target.id !== 'search-box') {
+    if (e.target.id !== 'search-box' && !e.ctrlKey && !e.altKey  && !e.shiftKey && !e.metaKey) {
       var shortcutFunction = shortcuts[e.which];
       if (shortcutFunction) { shortcutFunction(e) }
     }

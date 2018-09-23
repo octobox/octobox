@@ -52,7 +52,7 @@ class HooksController < ApplicationController
   end
 
   def payload
-    @payload ||= JSON.parse(request_body)
+    @payload ||= Oj.load(request_body)
   end
 
   def signature_header
