@@ -56,7 +56,7 @@
           <% if @notifications.to_a.any? %>
             <%= render partial: 'notification', collection: @notifications %>
           <% elsif initial_sync? %>
-            <div class="blankslate blankslate-spacious blankslate-clean-background js-initial_sync">
+            <div class="py-5 text-center js-initial_sync">
               <%= octicon 'cloud-download', height: 32, class: 'blankslate-icon' %>
               <h3>Syncing your notifications for the first time...</h3>
               <p>This might take a minute or two</p>
@@ -65,8 +65,7 @@
               <span class="js-start_sync"><!-- This causes a sync to occur --></span>
             <% end %>
           <% elsif no_url_filter_parameters_present %>
-            <div class="blankslate blankslate-spacious blankslate-clean-background">
-              <%= octicon 'mail-read', height: 32, class: 'blankslate-icon' %>
+            <div class="py-5 text-center">
               <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
               <h3>You're in the clear!</h3>
               <p>There are no notifications that need your attention.</p>
@@ -86,9 +85,8 @@
               <% end %>
             </div>
           <% else %>
-            <div class="blankslate blankslate-spacious blankslate-clean-background">
+            <div class="py-5 text-center">
               <%= octicon 'search', height: 32, class: 'blankslate-icon' %>
-              <%= octicon 'gist-secret', height: 32, class: 'blankslate-icon' %>
               <h3>Nothing to see here.</h3>
               <p>You can always try <%= link_to 'refreshing', sync_notifications_path(filters), method: :post %> or <%= link_to 'removing filters', root_path %>.</p>
               <% unless current_user.notifications.any? %>
