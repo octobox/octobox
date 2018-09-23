@@ -377,17 +377,12 @@ td.keys {
     }
     &.filter {
       padding: 5px 15px;
-
       &.repo-label {
         padding-left: 42px;
-
-        .octicon {
-          margin-right: 5px;
-        }
       }
-
       .badge {
         top: 6px;
+        padding: 2px 6px;
       }
     }
   }
