@@ -125,6 +125,8 @@ The other parameters should be more or less self explaining:
 * `VERSION` : Docker image version to use. "latest" by default
 * `MINIMUM_REFRESH_INTERVAL` the minimal refresh value to allow (5 by default). Set it to 0 to not allow automatic refreshes.
 * `FETCH_SUBJECT` : Set to `true` if you want to fetch additional information like labels (experimental). It's `false` by default.
+* `OPEN_IN_SAME_TAB`: Set to `true` if you want GitHub links to be opened in same tab as Octoxbox. By default links are opened in a new tab but it might be useful to reuse the existing tab when Octobox is used within integrated platform like Wavebox.
+* `OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED`: Set to `true` to allow background fechting of notifications. This considerably speeds up the overall performance but needs more resources. Disabled by default.
 - `MEMORY_LIMIT_OCTOBOX`, `MEMORY_LIMIT_REDIS`, `MEMORY_LIMIT_POSTGRES` : Memory limit for the various application parts. Don't change this when running on the starter plan.
 
 If everything goes well you should end up with
