@@ -47,8 +47,7 @@
       </div>
     <% elsif !current_page?('/') %>
 
-      <div class="jumbotron">
-        <div class="container">
+        <div class="container my-5">
           <h1 class="text-center">
             <%= link_to root_path, class: 'text-dark' do %>
               <%= octobox_round(80) %> Octobox
@@ -56,7 +55,6 @@
           </h1>
           <p class="text-center">Untangle your GitHub Notifications</p>
         </div>
-      </div>
 
     <% end %>
     <div class="flex-header header-flash-messages">
