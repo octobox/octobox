@@ -426,7 +426,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get notifications_path(format: :json)
 
     assert_response :success
-    json = JSON.parse(response.body)
+    json = Oj.load(response.body)
     notification_count = Notification.inbox.where(user: @user).count
     assert_equal notification_count, json["pagination"]["total_notifications"]
     assert_equal 0, json["pagination"]["page"]
@@ -441,7 +441,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get notifications_path(format: :json)
 
     assert_response :success
-    json = JSON.parse(response.body)
+    json = Oj.load(response.body)
     assert_equal 0, json["pagination"]["total_notifications"]
     assert_equal 0, json["pagination"]["page"]
     assert_equal 0, json["pagination"]["total_pages"]
@@ -460,7 +460,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    json = JSON.parse(response.body)
+    json = Oj.load(response.body)
     notification_ids = json["notifications"].map { |n| n["id"] }
 
     assert notification_ids.include?(notification1.id)

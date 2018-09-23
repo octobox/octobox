@@ -31,6 +31,7 @@ gem 'gemoji', require: false
 gem 'bootsnap', require: false
 gem 'bugsnag'
 gem 'jwt'
+gem 'oj'
 
 # Supported databases
 gem 'mysql2', require: false
