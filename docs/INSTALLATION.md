@@ -103,18 +103,6 @@ On Debian-based Linux distributions you can use apt-get to install Postgres:
 sudo apt-get install postgresql postgresql-contrib libpq-dev
 ```
 
-You'll also need to install libidn, on OSX with home:
-
-```bash
-brew install libidn
-```
-
-On Debian-based Linux distributions:
-
-```bash
-sudo apt-get install libidn11-dev
-```
-
 Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other
 languages):
 
