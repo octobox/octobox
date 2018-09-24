@@ -37,8 +37,7 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle d-none d-md-block" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar', alt: '' %>
-          <%= current_user.github_login %>
+          <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar', alt: '', title: "Logged in as #{current_user.github_login}" %>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
           <%= link_to "#{Octobox.config.github_domain}", class: 'dropdown-item', target: "_blank", rel: "noopener" do %>
