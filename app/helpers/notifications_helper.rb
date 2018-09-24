@@ -102,6 +102,10 @@ module NotificationsHelper
     function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected", 'Unarchive selected items')
   end
 
+  def delete_selected_button
+    function_button("Delete selected", 'trashcan', "delete_selected", 'Delete selected items')
+  end
+
   def select_all_button(cur_selected, total)
     button_tag(type: 'button', class: "select_all btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': "Number of items selected") do
       octicon('check', height: 16) +

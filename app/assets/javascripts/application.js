@@ -20,6 +20,7 @@ $(document).on('change', '.js-select_all', Octobox.checkAll);
 $(document).on('click', 'button.select_all', Octobox.toggleSelectAll);
 $(document).on('click', 'button.archive_selected, button.unarchive_selected', Octobox.toggleArchive);
 $(document).on('click', 'button.mute_selected', Octobox.mute);
+$(document).on('click', 'button.delete_selected', Octobox.deleteSelected);
 $(document).on('click', 'button.mark_read_selected', Octobox.markReadSelected);
 $(document).on('click', 'tr.notification', Octobox.moveCursorToClickedRow);
 $(document).on('click', '[data-toggle="offcanvas"]', Octobox.toggleOffCanvas);
