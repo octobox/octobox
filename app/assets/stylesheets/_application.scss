@@ -781,6 +781,11 @@ svg{
   color: rgba($body-color,0.1);
 }
 
+.search-dropdown:first-child {
+  border-top: none;
+  border-bottom: none;
+}
+
 .search-sugguestion-section {
   flex: 10000 1 auto;
 }
@@ -802,7 +807,7 @@ svg{
   font-weight: 400;
   font-size: 12px;
   text-decoration: none !important;
-  color: rgba($body-color,0.1);
+  color: rgba($body-color, 0.9);
 }
 
 .custom-input {
