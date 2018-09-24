@@ -212,6 +212,18 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert notification3.reload.archived?
   end
 
+  test 'archives defaults value to true' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, archived: false)
+    notification2 = create(:notification, user: @user, archived: false)
+
+    post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: nil }, xhr: true
+
+    assert_response :ok
+
+    assert notification1.reload.archived?
+    assert notification2.reload.archived?
+  end
 
   test 'mutes multiple notifications' do
     sign_in_as(@user)
