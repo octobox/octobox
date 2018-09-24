@@ -31,6 +31,7 @@ gem 'bootsnap', require: false
 gem 'bugsnag'
 gem 'jwt'
 gem 'oj'
+gem "activerecord-import", "~> 0.25.0"
 
 # Supported databases
 gem 'mysql2', require: false

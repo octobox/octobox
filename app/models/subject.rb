@@ -1,6 +1,8 @@
 class Subject < ApplicationRecord
+
+  include Octobox::Subjects::SyncSubjectLabels
+
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
-  has_many :labels, dependent: :delete_all
   has_many :users, through: :notifications
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
 
@@ -16,29 +18,6 @@ class Subject < ApplicationRecord
 
   def author_url
     "#{Octobox.config.github_domain}#{author_url_path}"
-  end
-
-  def update_labels(remote_labels)
-    existing_labels = labels.to_a
-    remote_labels.each do |l|
-      label = labels.find_by_github_id(l['id'])
-      if label.nil?
-        labels.create({
-          github_id: l['id'],
-          color: l['color'],
-          name: l['name'],
-        })
-      else
-        label.github_id = l['id'] # smoothly migrate legacy labels
-        label.color = l['color']
-        label.name = l['name']
-        label.save if label.changed?
-      end
-    end
-
-    remote_label_ids = remote_labels.map{|l| l['id'] }
-    deleted_labels = existing_labels.reject{|l| remote_label_ids.include?(l.github_id) }
-    deleted_labels.each(&:destroy)
   end
 
   def sync_involved_users
@@ -67,7 +46,7 @@ class Subject < ApplicationRecord
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked']
     })
-    subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
+    subject.sync_labels(remote_subject['labels']) if remote_subject['labels'].present?
     subject.sync_involved_users
   end
 
