@@ -50,26 +50,28 @@ SearchSuggestion = {
     }
 
     var searchQueryList = document.getElementById("search-sugguestion-list");
-
     searchQueryList.innerHTML = ""
-    var ulItem = document.createElement('ul');
     // Open our object store and then get a cursor list of all the different data items
     // in the IDB to iterate through
     var objectStore = db.transaction(['SearchSuggestionList'], 'readonly').objectStore('SearchSuggestionList');
     var timestampIndex = objectStore.index('timestamp');
 
+    var searchSuggestionFound = false;
     timestampIndex.openCursor(null, 'prev').onsuccess = function(event) {
       var cursor = event.target.result;
       // if there is still another cursor to go, keep runing this code
-      if(cursor) {
+      if (cursor) {
+        searchSuggestionFound = true;
         // create a list item to put each data item inside when displaying it
         searchQueryList.appendChild(
           SearchSuggestion.createSuggestionListElement(cursor.value.queryString)
         );                                      // put the item item inside the task list
         cursor.continue();                     // continue on to the next item in the cursor
       }
+      if (searchSuggestionFound) {
+        searchQueryList.classList.add("d-flex");
+      }
     }
-    searchQueryList.classList.add("d-flex");
   },
 
   createSuggestionListElement: function(suggestion) {
