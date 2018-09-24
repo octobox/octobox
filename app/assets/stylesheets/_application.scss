@@ -187,6 +187,9 @@ html {
     position: relative;
     top: -3px
   }
+  .search-input-box {
+    max-width: 450px;
+  }
 }
 
 .navbar-nav {
@@ -812,12 +815,4 @@ svg{
 
 .blur-action {
   opacity: .5;
-}
-
-.form-inline {
-  flex-grow: 1;
-}
-
-.search-input-box {
-  min-width: 450px;
 }
