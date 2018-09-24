@@ -30,6 +30,7 @@ gem 'gemoji', require: false
 gem 'bootsnap', require: false
 gem 'bugsnag'
 gem 'jwt'
+gem 'oj'
 
 # Supported databases
 gem 'mysql2', require: false
@@ -49,6 +50,9 @@ group :test do
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
+  gem 'selenium-webdriver'
+  gem 'capybara'
+  gem 'percy-capybara'
 end
 
 group :development do

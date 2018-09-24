@@ -1,6 +1,5 @@
 @import 'variables';
 @import 'bootstrap-custom';
-@import "patterns/blankslate";
 
 $notification-items: (
   'checkbox',
@@ -94,6 +93,7 @@ html {
         }
         height: 100%;
         overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
       }
       height: 100%;
       > .card {
@@ -135,12 +135,6 @@ html {
   vertical-align: -.38em;
 }
 
-.jumbotron {
-  .octobox-icon {
-    margin-right: 8px;
-    vertical-align: -14px;
-  }
-}
 .navbar-main {
   margin-bottom: 0;
 }
@@ -235,9 +229,6 @@ html {
       }
     }
     &.navbar-dark{
-      .navbar-collapse.show{
-        border-top: solid 1px $navbar-dark-color;
-      }
       .dropdown-menu{
         > a{
           color: $navbar-dark-color;
@@ -253,9 +244,6 @@ html {
       }
     }
     &.navbar-light{
-      .navbar-collapse.show{
-        border-top: solid 1px $navbar-light-color;
-      }
       .dropdown-menu{
         > a{
           color: $navbar-light-color;
@@ -378,17 +366,12 @@ td.keys {
     }
     &.filter {
       padding: 5px 15px;
-
       &.repo-label {
         padding-left: 42px;
-
-        .octicon {
-          margin-right: 5px;
-        }
       }
-
       .badge {
         top: 6px;
+        padding: 2px 6px;
       }
     }
   }
@@ -481,6 +464,9 @@ td.keys {
     td {
       display: block;
     }
+    tbody{
+      width:100%
+    }
     &.table > tbody > tr.active {
       background: $list-group-action-active-bg;
       &:hover {
@@ -495,7 +481,7 @@ td.keys {
     .notification {
       border-top: 1px solid $list-group-border-color;
       position: relative;
-      padding: 10px 10px 10px 40px;
+      padding: 10px 0px;
       &:first-child {
         border-top: none;
       }
@@ -505,28 +491,38 @@ td.keys {
     }
     .notification-checkbox,
     .notification-star,
-    .notification-date {
+    .notification-icon,
+    .notification-date, {
       position: absolute;
     }
-    .notification-checkbox {
-      top: 8px;
+    .notification-icon{
+      top: 12px;
       left: 10px;
+    }
+    .notification-checkbox {
+      top: 42px;
+      left: 11px;
     }
     .notification-star {
-      top: 38px;
-      left: 10px;
+      top: 72px;
+      left: 10px
     }
-    .notification-icon,
+    .notification-subject,
+    .notification-repo,
+    .notification-subject-author,
+    .notification-reason{
+      display: block;
+      width: calc(100% - 6rem);
+      position: relative;
+      left: 40px
+    }
     .notification-subject {
       display: inline-block;
-    }
-    .notification-subject {
       .link {
-        display: inline-block;
-        overflow: hidden;
-        width: calc(100vw - 200px);
-        white-space: nowrap;
-        text-overflow: ellipsis;
+        overflow-wrap: break-word;
+      }
+      &:first-child .badge{
+        display: block;
       }
     }
     .notification-subject-author:before {
@@ -812,4 +808,8 @@ svg{
 .custom-input {
   width: 100% !important;
   max-width: 458px;
+}
+
+.blur-action {
+  opacity: .5;
 }
