@@ -1,6 +1,16 @@
 @import 'variables';
 @import 'bootstrap-custom';
-@import "patterns/blankslate";
+
+$notification-items: (
+  'checkbox',
+  'star',
+  'archived',
+  'subject',
+  'repo',
+  'subject-author',
+  'reason'
+  'datetime'
+);
 
 html, body {
   overflow-x: hidden;
@@ -125,12 +135,6 @@ html {
   vertical-align: -.38em;
 }
 
-.jumbotron {
-  .octobox-icon {
-    margin-right: 8px;
-    vertical-align: -14px;
-  }
-}
 .navbar-main {
   margin-bottom: 0;
 }
@@ -361,17 +365,12 @@ td.keys {
     }
     &.filter {
       padding: 5px 15px;
-
       &.repo-label {
         padding-left: 42px;
-
-        .octicon {
-          margin-right: 5px;
-        }
       }
-
       .badge {
         top: 6px;
+        padding: 2px 6px;
       }
     }
   }
@@ -406,6 +405,11 @@ td.keys {
 }
 
 @include media-breakpoint-up(md) {
+  @each $item in $notification-items{
+    .notification-#{$item}{
+      text-overflow: ellipsis;
+    }
+  }
   .notification-star,
   .notification-icon,
   .notification-checkbox {
@@ -421,6 +425,11 @@ td.keys {
     }
   }
   .notification{
+    .notification-repo,
+    .notification-subject-author{
+      max-width: 10rem;
+      overflow: hidden;
+    }
     .notification-date{
       min-width: 5em;
     }
@@ -751,4 +760,8 @@ svg{
 
 .text-large{
   font-size: 16px;
+}
+
+.blur-action {
+  opacity: .5;
 }
