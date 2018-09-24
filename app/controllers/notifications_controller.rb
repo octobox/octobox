@@ -171,6 +171,28 @@ class NotificationsController < ApplicationController
     head :ok
   end
 
+  # Delete selected notifications
+  #
+  # :category: Notifications Actions
+  #
+  # ==== Parameters
+  #
+  # * +:id+ - An array of IDs of notifications you'd like to delete. If ID is 'all', all notifications will be deleted
+  #
+  # ==== Example
+  #
+  # <code>POST notifications/delete_selected.json?id=all</code>
+  #   HEAD 204
+  #
+  def delete_selected
+    selected_notifications.delete_all
+    if request.xhr?
+      head :ok
+    else
+      redirect_back fallback_location: root_path
+    end
+  end
+
   # Mark a notification as read
   #
   # :category: Notifications Actions

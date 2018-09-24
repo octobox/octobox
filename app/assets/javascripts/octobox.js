@@ -96,7 +96,7 @@ var Octobox = (function() {
 
     $(document).keydown(function(e) {
       // disable shortcuts for the seach box
-      if (e.target.id !== "search-box" && !e.ctrlKey && !e.altKey  && !e.shiftKey && !e.metaKey) {
+      if (e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
         var shortcutFunction = shortcuts[e.which];
         if (shortcutFunction) { shortcutFunction(e) }
       }
@@ -228,7 +228,7 @@ var Octobox = (function() {
 
   var changeArchive = function() {
     if ( hasMarkedRows() ) {
-      $("button.archive_selected, button.unarchive_selected, button.mute_selected").show().css("display", "inline-block");
+      $("button.archive_selected, button.unarchive_selected, button.mute_selected, button.delete_selected").show().css("display", "inline-block");
       if ( !hasMarkedRows(true) ) {
         $(".js-select_all").prop("checked", true).prop("indeterminate", false);
         $("button.select_all").show().css("display", "inline-block");
@@ -238,7 +238,7 @@ var Octobox = (function() {
       }
     } else {
       $(".js-select_all").prop("checked", false).prop("indeterminate", false);
-      $("button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all").hide();
+      $("button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all, button.delete_selected").hide();
     }
     var marked_unread_length = getMarkedRows().filter(".active").length;
     if ( marked_unread_length > 0 ) {
@@ -276,6 +276,14 @@ var Octobox = (function() {
     if($(".js-start_sync").length){ sync() }
     if($(".js-initial_sync").length){ sync() }
   };
+
+  var deleteSelected = function(){
+    if (getDisplayedRows().length === 0) return;
+    var rows = getMarkedOrCurrentRows();
+    rows.addClass("blur-action");
+    var ids = getIdsFromRows(rows);
+    $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
+  }
 
   // private methods
 
@@ -423,6 +431,7 @@ var Octobox = (function() {
     190: sync,             // .
     82:  sync,             // r
     27:  escPressed,       // esc
+    51:  deleteSelected    // #
   }
   var unread_count = 0;
   var lastCheckedNotification = null;
@@ -441,6 +450,7 @@ var Octobox = (function() {
     initialize: initialize,
     removeCurrent: removeCurrent,
     toggleOffCanvas: toggleOffCanvas,
-    markRead: markRead
+    markRead: markRead,
+    deleteSelected: deleteSelected
   }
 })();
