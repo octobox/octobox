@@ -1,14 +1,18 @@
 class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
   def change
+
     # this query is to find unique labels in the order they are craeted by grouping them on GITHUB_ID;
     # I have extracted the labels GITHUB_ID and ID to create mapping between the two.
     # I ran the inner query IN POSTGRE server to check that ORDER of labels is by created_at ASC
+
     sql ="SELECT new_labels.github_id, labels.id, labels.created_at FROM (SELECT DISTINCT
           ON (labels.github_id) labels.github_id, labels.created_at FROM labels GROUP BY
           labels.github_id, labels.created_at ORDER BY labels.github_id) new_labels
           INNER JOIN labels on new_labels.github_id = labels.github_id WHERE
           labels.created_at = new_labels.created_at;".gsub("\n", "").gsub(/\s+/, " ")
     records = ActiveRecord::Base.connection.execute(sql)
+
+    return if records.blank?
 
     # creating a mapping of Label GITHUB_ID and ID ordered by created_at ASC
     github_id_label_id_map = {}
