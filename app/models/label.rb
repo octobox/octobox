@@ -1,5 +1,7 @@
 class Label < ApplicationRecord
   belongs_to :repository
+  # old mapping for label to subject
+  # belongs_to :subject
 
   def text_color
     red, blue, green = RGB::Color.from_rgb_hex("##{color}").to_rgb

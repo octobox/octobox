@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 2018_09_25_044912) do
     t.bigint "subject_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["subject_id", "label_id"], name: "index_subject_labels_on_subject_id_and_label_id", unique: true
     t.index ["label_id"], name: "index_subject_labels_on_label_id"
     t.index ["subject_id"], name: "index_subject_labels_on_subject_id"
   end
