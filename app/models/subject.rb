@@ -1,6 +1,10 @@
 class Subject < ApplicationRecord
+
+  include Octobox::Subjects::SyncSubjectLabels
+  # in case changes need to be reverted
+  # include Octobox::Subjects::OldSyncSubjectLabels
+
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
-  has_many :labels, dependent: :delete_all
   has_many :users, through: :notifications
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_one :app_installation, through: :repository
@@ -17,41 +21,6 @@ class Subject < ApplicationRecord
 
   def author_url
     "#{Octobox.config.github_domain}#{author_url_path}"
-  end
-
-  # to ensure smooth transition for Subject has_many association to Labels through SubjectLabels
-  # Creating Subject Labels when Label are being created.
-  # We can monitor whether this is working as expected for 2-3 days
-  # only then update the association in Subject Table
-  def update_labels(remote_labels)
-    existing_labels = labels.to_a
-    remote_labels.each do |l|
-      label = labels.find_by_github_id(l['id'])
-      if label.nil?
-        new_label = Label.create({
-          github_id: l['id'],
-          color: l['color'],
-          name: l['name'],
-          repository_id: self.repository.id
-        })
-        labels << new_label
-        SubjectLabel.create({
-          subject_id: self.id
-          label_id: label.id
-        })
-      else
-        label.github_id = l['id'] # smoothly migrate legacy labels
-        label.color = l['color']
-        label.name = l['name']
-        # update the repository_id in labels
-        label.repository_id = self.repository.id
-        label.save if label.changed?
-      end
-    end
-
-    remote_label_ids = remote_labels.map{|l| l['id'] }
-    deleted_labels = existing_labels.reject{|l| remote_label_ids.include?(l.github_id) }
-    deleted_labels.each(&:destroy)
   end
 
   def sync_involved_users
@@ -80,7 +49,7 @@ class Subject < ApplicationRecord
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked']
     })
-    subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
+    subject.sync_labels(remote_subject['labels']) if remote_subject['labels'].present?
     subject.sync_involved_users
   end
 

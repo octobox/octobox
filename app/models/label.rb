@@ -1,5 +1,4 @@
 class Label < ApplicationRecord
-  belongs_to :subject
   belongs_to :repository
 
   def text_color
