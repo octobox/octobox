@@ -138,6 +138,7 @@ class NotificationTest < ActiveSupport::TestCase
     stub_request(:get, url).and_return(response)
 
     user = create(:user)
+    repository = create(:repository)
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
     notification.update_from_api_response(api_response, unarchive: true)
@@ -176,6 +177,7 @@ class NotificationTest < ActiveSupport::TestCase
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification_updated_at = Time.parse(api_response.updated_at)
     create(:morty)
+    repository = create(:repository)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)

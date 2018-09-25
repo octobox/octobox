@@ -8,6 +8,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     stub_fetch_subject_enabled(value: false)
     stub_notifications_request
     stub_repository_request
+    @repository = create(:repository)
     @user = create(:user)
   end
 
@@ -668,8 +669,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
     subject2 = create(:subject, notifications: [notification2])
-    create(:label, subject: subject1, name: 'bug')
-    create(:label, subject: subject2, name: 'feature')
+    label1 = create(:label, repository: @repository, name: 'bug')
+    label2 = create(:label, repository: @repository, name: 'feature')
+    create(:subject_label, subject: subject1, label: label1)
+    create(:subject_label, subject: subject2, label: label2)
     get '/?q=label%3Abug'
     assert_equal assigns(:notifications).length, 1
   end
@@ -680,8 +683,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
     subject2 = create(:subject, notifications: [notification2])
-    create(:label, subject: subject1, name: 'bug')
-    create(:label, subject: subject2, name: 'feature')
+    label1 = create(:label, repository: @repository, name: 'bug')
+    label2 = create(:label, repository: @repository, name: 'feature')
+    create(:subject_label, subject: subject1, label: label1)
+    create(:subject_label, subject: subject2, label: label2)
     get '/?q=label%3Abug%2Cfeature'
     assert_equal assigns(:notifications).length, 2
   end
@@ -692,8 +697,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
     subject2 = create(:subject, notifications: [notification2])
-    create(:label, subject: subject1, name: 'bug')
-    create(:label, subject: subject2, name: 'feature')
+    label1 = create(:label, repository: @repository, name: 'bug')
+    label2 = create(:label, repository: @repository, name: 'feature')
+    create(:subject_label, subject: subject1, label: label1)
+    create(:subject_label, subject: subject2, label: label2)
     get '/?q=-label%3Abug'
     assert_equal assigns(:notifications).length, 1
     assert_equal assigns(:notifications).first.labels.first.name, 'feature'
@@ -705,8 +712,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
     subject2 = create(:subject, notifications: [notification2])
-    create(:label, subject: subject1, name: 'bug')
-    create(:label, subject: subject2, name: 'feature')
+    label1 = create(:label, repository: @repository, name: 'bug')
+    label2 = create(:label, repository: @repository, name: 'feature')
+    create(:subject_label, subject: subject1, label: label1)
+    create(:subject_label, subject: subject2, label: label2)
     get '/?q=-label%3Abug%2Cfeature'
     assert_equal assigns(:notifications).length, 0
   end
