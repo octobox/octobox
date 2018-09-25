@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 2018_10_12_130339) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "github_id"
+    t.bigint "repository_id"
+    t.index ["repository_id"], name: "index_labels_on_repository_id"
     t.index ["name"], name: "index_labels_on_name"
     t.index ["subject_id"], name: "index_labels_on_subject_id"
   end
@@ -94,6 +96,15 @@ ActiveRecord::Schema.define(version: 2018_10_12_130339) do
     t.datetime "updated_at", null: false
     t.integer "app_installation_id"
     t.index ["full_name"], name: "index_repositories_on_full_name", unique: true
+  end
+
+  create_table "subject_labels", force: :cascade do |t|
+    t.bigint "label_id"
+    t.bigint "subject_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["label_id"], name: "index_subject_labels_on_label_id"
+    t.index ["subject_id"], name: "index_subject_labels_on_subject_id"
   end
 
   create_table "subjects", force: :cascade do |t|
@@ -158,5 +169,6 @@ ActiveRecord::Schema.define(version: 2018_10_12_130339) do
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end
 
+  add_foreign_key "labels", "repositories"
   add_foreign_key "labels", "subjects", on_update: :cascade, on_delete: :cascade
 end

@@ -15,20 +15,36 @@ class Subject < ApplicationRecord
 
   after_update :sync_involved_users
 
+  def author_url
+    "#{Octobox.config.github_domain}#{author_url_path}"
+  end
+
+  # to ensure smooth transition for Subject has_many association to Labels through SubjectLabels
+  # Creating Subject Labels when Label are being created.
+  # We can monitor whether this is working as expected for 2-3 days
+  # only then update the association in Subject Table
   def update_labels(remote_labels)
     existing_labels = labels.to_a
     remote_labels.each do |l|
       label = labels.find_by_github_id(l['id'])
       if label.nil?
-        labels.create({
+        new_label = Label.create({
           github_id: l['id'],
           color: l['color'],
           name: l['name'],
+          repository_id: self.repository.id
+        })
+        labels << new_label
+        SubjectLabel.create({
+          subject_id: self.id
+          label_id: label.id
         })
       else
         label.github_id = l['id'] # smoothly migrate legacy labels
         label.color = l['color']
         label.name = l['name']
+        # update the repository_id in labels
+        label.repository_id = self.repository.id
         label.save if label.changed?
       end
     end

@@ -33,6 +33,7 @@ gem 'jwt'
 gem 'oj'
 gem 'yard'
 gem 'simple_form'
+gem 'activerecord-import'
 
 # Supported databases
 gem 'mysql2', require: false
