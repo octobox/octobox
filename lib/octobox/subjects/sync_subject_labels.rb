@@ -13,13 +13,13 @@ module Octobox
         detach_subject_labels_removed_on_remote(remote_labels.map{|l| l['id'] })
 
         # get all label currently attached to this repository from DB
-        existing_labels_on_repo = Label.where(
-          'github_id in (?) and repository_id = ?', remote_labels.map{|l| l['id'] }, repository.id
-        ).pluck(:id, :github_id)
+        existing_labels_on_repo = Label.find_by_sql("SELECT DISTINCT ON (labels.github_id) labels.github_id, labels.id FROM labels
+           WHERE repository_id = #{repository.id} GROUP BY labels.github_id, labels.created_at, labels.id
+           ORDER BY labels.github_id").pluck(:id, :github_id)
 
         # filter out and create new labels added for the first time on a repository
         labels_to_be_added = remote_labels.reject { |l|
-          existing_labels_on_repo.collect(&:github_id).include?(l['id'])
+          existing_labels_on_repo.collect(&:last).include?(l['id'])
         }.map {
           |l| Label.new(github_id: l['id'], color: l['color'], name: l['name'], repository_id: repository.id)
         }
@@ -34,7 +34,7 @@ module Octobox
         # update name and color of existing labels
         update_labels(
           remote_labels,
-          existing_labels_on_repo.reject { |label| labels_to_be_added.collect(&:github_id).include?(label.id) }
+          existing_labels_on_repo.reject { |label| labels_to_be_added.collect(&:github_id).include?(label.first) }
         )
       end
 
@@ -43,10 +43,8 @@ module Octobox
 
         updated_labels = []
         remote_labels.each do |label|
-          if matching_label = labels_for_update.select { |l| l.github_id == label['id'] }
-            label['github_id'] = label['id']
-            label['id'] = matching_label.id
-            update_labels << label
+          if matching_label = labels_for_update.select { |l| l.last == label['id'] }.try(:first)
+            updated_labels << {id: matching_label.first, color: label['color'], name: label['name']}
           end
         end
 

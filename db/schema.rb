@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_25_044912) do
+ActiveRecord::Schema.define(version: 2018_09_25_101520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -46,8 +46,8 @@ ActiveRecord::Schema.define(version: 2018_09_25_044912) do
     t.datetime "updated_at", null: false
     t.integer "github_id"
     t.bigint "repository_id"
-    t.index ["repository_id"], name: "index_labels_on_repository_id"
     t.index ["name"], name: "index_labels_on_name"
+    t.index ["repository_id"], name: "index_labels_on_repository_id"
     t.index ["subject_id"], name: "index_labels_on_subject_id"
   end
 
@@ -103,8 +103,8 @@ ActiveRecord::Schema.define(version: 2018_09_25_044912) do
     t.bigint "subject_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["subject_id", "label_id"], name: "index_subject_labels_on_subject_id_and_label_id", unique: true
     t.index ["label_id"], name: "index_subject_labels_on_label_id"
+    t.index ["subject_id", "label_id"], name: "index_subject_labels_on_subject_id_and_label_id", unique: true
     t.index ["subject_id"], name: "index_subject_labels_on_subject_id"
   end
 
