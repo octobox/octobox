@@ -806,6 +806,8 @@ svg{
   flex-grow: 0 !important;
   font-weight: 400;
   font-size: 12px;
+  position: absolute;
+  right: 5px;
   text-decoration: none !important;
   color: rgba($body-color, 0.9);
 }
