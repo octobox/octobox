@@ -98,11 +98,11 @@ class Search
   end
 
   def owner
-    parsed_query[:owner]
+    parsed_query[:owner].presence || parsed_query[:org].presence || parsed_query[:user]
   end
 
   def exclude_owner
-    parsed_query[:'-owner']
+    parsed_query[:'-owner'].presence || parsed_query[:'-org'].presence || parsed_query[:'-user']
   end
 
   def author
