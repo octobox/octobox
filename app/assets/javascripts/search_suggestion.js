@@ -97,17 +97,9 @@ SearchSuggestion = {
 
   addToSearchBox: function(event) {
     var queryString = event.target.getAttribute('aria-label');
-    if(queryString) {
-      if ($("#search-box").val().length > 0) {
-        var search_value = $("#search-box").val() + "," + queryString;
-        $("#search-box").val(search_value);
-      }
-      else {
-       $("#search-box").val(queryString);
-      }
-    }
-
-    $("#search-sugguestion-list").removeClass('d-block');
+    $("#search-box").val(queryString);
+    SearchSuggestion.hideSearchSuggestion();
+    $("#search").submit()
   },
 
   addSearchString: function(searchQuery) {
@@ -164,11 +156,13 @@ SearchSuggestion = {
   },
 
   hideSearchSuggestion: function() {
-    $(document).mouseup(function(e) {
-      var container = $("#search-sugguestion-list");
-      if (!container.is(e.target) && container.has(e.target).length === 0) {
-        container.removeClass('d-flex');
-      }
-    });
+    $("#search-sugguestion-list").removeClass('d-flex');
+  },
+
+  unblur: function(e) {
+    var container = $("#search-sugguestion-list");
+    if (!container.is(e.target) && container.has(e.target).length === 0) {
+      SearchSuggestion.hideSearchSuggestion();
+    }
   }
 }
