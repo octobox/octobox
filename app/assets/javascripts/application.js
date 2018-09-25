@@ -29,12 +29,10 @@ $(document).on("submit", "#search", function(event) {
 });
 
 $(document).on("click", ".search-remove-btn", SearchSuggestion.deleteSearchString);
-
 $(document).on("click", "#search-box", SearchSuggestion.displaySearchSuggestions);
-
 $(document).on("click", "#search-sugguestion-list", SearchSuggestion.addToSearchBox);
 
-SearchSuggestion.hideSearchSuggestion();
+$(document).on("mouseup", SearchSuggestion.unblur);
 
 $(document).on('change', 'input.archive, input.unarchive', Octobox.changeArchive);
 $(document).on('change', '.js-select_all', Octobox.checkAll);
