@@ -71,26 +71,32 @@ namespace :tasks do
     records.map { |record| github_id_label_id_map[record['github_id']] = record['id'] }
 
     # this query is get mapping between Labels and Repository through subjects table
-    label_repo_sql = "labels.github_id in (?) and repositories.github_id is NOT NULL and subjects.github_id is NOT NULL"
-    label_repos = Label.joins(:subject => :repository).where(
-      label_repo_sql, github_id_label_id_map.keys
-    ).select("labels.id, labels.github_id, repositories.id as repository_id")
     label_repo_map = {}
-    label_repos.map { |label| label_repo_map[label.github_id] = label.repository_id }
+    label_github_ids = github_id_label_id_map.keys.join(",")
+
+    label_repo_sql = "SELECT DISTINCT ON (labels.github_id) labels.github_id, labels.id,
+    repositories.id AS repository_id FROM labels INNER JOIN subjects ON subjects.id = labels.subject_id
+    INNER JOIN repositories ON repositories.full_name = subjects.repository_full_name
+    WHERE labels.github_id IN (#{label_github_ids})".gsub("\n", "").gsub(/\s+/, " ")
+
+    label_repos = ActiveRecord::Base.connection.execute(label_repo_sql)
+    label_repos.map { |label| label_repo_map[label["github_id"]] = label["repository_id"] }
 
     updated_labels = []
     subject_label_records = []
 
     # finding labels in batches to reduce Memory footprint and also decrease the load on DB
-    Label.where("repository_id is NULL").find_in_batches(batch_size: 2000).each do |label|
-      subject_label_records << {
-        label_id: github_id_label_id_map[label.github_id],
-        subject_id: label.subject_id
-      }
-      updated_labels << {
-        id: label.id,
-        repository_id: label_repo_map[label.github_id]
-      }
+    Label.find_in_batches(batch_size: 2000) do |labels|
+      labels.each do |label|
+        subject_label_records << {
+          label_id: github_id_label_id_map[label.github_id],
+          subject_id: label.subject_id
+        }
+        updated_labels << {
+          id: label.id,
+          repository_id: label_repo_map[label.github_id]
+        }
+      end
     end
 
     # on_duplicate_key_ignore skips a record if a UNIQUE key constraint is violated
