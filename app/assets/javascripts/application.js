@@ -11,8 +11,30 @@
 //= require bootstrap/modal
 //= require_tree .
 
+var db;
+
+window.onload = function() {
+  SearchSuggestion.init()
+}
+
+function getDisplayedRows() {
+  return $(".js-table-notifications tr.notification")
+}
+
 document.addEventListener("turbolinks:load", Octobox.initialize);
 document.addEventListener("turbolinks:before-cache", Octobox.removeCurrent);
+
+$(document).on("submit", "#search", function(event) {
+  SearchSuggestion.addSearchString($("#search-box").val());
+});
+
+$(document).on("click", ".search-remove-btn", SearchSuggestion.deleteSearchString);
+
+$(document).on("click", "#search-box", SearchSuggestion.displaySearchSuggestions);
+
+$(document).on("click", "#search-sugguestion-list", SearchSuggestion.addToSearchBox);
+
+SearchSuggestion.hideSearchSuggestion();
 
 $(document).on('change', 'input.archive, input.unarchive', Octobox.changeArchive);
 $(document).on('change', '.js-select_all', Octobox.checkAll);
