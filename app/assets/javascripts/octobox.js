@@ -451,7 +451,6 @@ var Octobox = (function() {
     removeCurrent: removeCurrent,
     toggleOffCanvas: toggleOffCanvas,
     markRead: markRead,
-    deleteSelected: deleteSelected,
-    refreshOnSync: refreshOnSync
+    deleteSelected: deleteSelected
   }
 })();
