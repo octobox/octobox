@@ -172,7 +172,7 @@ var Octobox = (function() {
 
   var sync = function() {
     if($("a.js-sync.js-async").length) {
-      $.get("/notifications/sync.json", this.refreshOnSync);
+      $.get("/notifications/sync.json", refreshOnSync);
     } else {
       Turbolinks.visit($("a.js-sync").attr("href"))
     }
@@ -451,6 +451,7 @@ var Octobox = (function() {
     removeCurrent: removeCurrent,
     toggleOffCanvas: toggleOffCanvas,
     markRead: markRead,
-    deleteSelected: deleteSelected
+    deleteSelected: deleteSelected,
+    refreshOnSync: refreshOnSync
   }
 })();
