@@ -842,4 +842,18 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/'
     assert_equal assigns(:per_page), 100
   end
+
+  test 'archives false Unarchives the notifications' do
+    sign_in_as(@user)
+
+    notification1 = create(:notification, user: @user, archived: true)
+    notification2 = create(:notification, user: @user, archived: true)
+    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+
+    post '/notifications/archive_selected', params: { id: [notification1.id], value: false }, xhr: true
+
+    assert_response :ok
+
+    assert !notification1.reload.archived?
+  end
 end

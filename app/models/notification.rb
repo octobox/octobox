@@ -55,7 +55,7 @@ class Notification < ApplicationRecord
   end
 
   def self.archive(notifications, value)
-    value = ActiveRecord::Type::Boolean.new.cast(value) || true
+    value = value ? ActiveRecord::Type::Boolean.new.cast(value) : true
     notifications.update_all(archived: value)
     mark_read(notifications)
   end
