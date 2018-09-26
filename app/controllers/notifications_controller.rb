@@ -239,7 +239,11 @@ class NotificationsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_back fallback_location: root_path
+        if request.referer && !request.referer.match('/notifications/sync')
+          redirect_back fallback_location: root_path
+        else
+          redirect_to root_path
+        end
       end
       format.json { {} }
     end
