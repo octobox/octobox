@@ -1,6 +1,7 @@
 <% if current_user.syncing? %>
   <span class="js-is_syncing"><!-- This causes the sync icon to spin --></span>
 <% end %>
+<span class='js-unread-count' data-count="<%= @unread_count %>"></span>
 
 <div class="flex-content">
   <div class="flex-sidebar">
