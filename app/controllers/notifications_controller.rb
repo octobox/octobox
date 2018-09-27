@@ -88,6 +88,7 @@ class NotificationsController < ApplicationController
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
 
+    @unread_count = user_unread_count
     @notifications = scope.page(page).per(per_page)
     @total = @notifications.total_count
 
@@ -104,9 +105,7 @@ class NotificationsController < ApplicationController
   #   { "count" : 1 }
   #
   def unread_count
-    scope = current_user.notifications
-    count = scope.inbox.distinct.group(:unread).count.fetch(true){ 0 }
-    render json: { 'count' => count }
+    render json: { 'count' => user_unread_count }
   end
 
   # Mute selected notifications, this will also archive them
@@ -268,6 +267,10 @@ class NotificationsController < ApplicationController
   end
 
   private
+
+  def user_unread_count
+    current_user.notifications.inbox.distinct.group(:unread).count.fetch(true){ 0 }
+  end
 
   def selected_notifications
     if params[:id] == ['all']

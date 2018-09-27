@@ -30,55 +30,59 @@ var Octobox = (function() {
 
   var updateFavicon = function () {
     $.get( "/notifications/unread_count", function(data) {
-      if (data.count !== unread_count) {
-        unread_count = data.count;
-
-        var title = "Octobox";
-        if (unread_count > 0) {
-          title += " (" + unread_count + ")";
-        }
-        window.document.title = title;
-
-        var old_link = document.getElementById("favicon-count");
-        if ( old_link ) {
-          $(old_link).remove();
-        }
-
-        var canvas = document.createElement("canvas"),
-          ctx,
-          img = document.createElement("img"),
-          link = document.getElementById("favicon").cloneNode(true),
-          txt = unread_count + "";
-
-        link.id = "favicon-count";
-
-        if (canvas.getContext) {
-          canvas.height = canvas.width = 32;
-          ctx = canvas.getContext("2d");
-
-            img.onload = function () {
-              ctx.drawImage(this, 0, 0);
-
-              if (unread_count > 0){
-                ctx.fillStyle = "#f93e00";
-                ctx.font = "bold 20px 'helvetica', sans-serif";
-
-                var width = ctx.measureText(txt).width;
-                ctx.fillRect(0, 0, width+4, 24);
-
-                ctx.fillStyle = "#fff";
-                ctx.fillText(txt, 2, 20);
-              }
-
-              link.href = canvas.toDataURL("image/png");
-              document.body.appendChild(link);
-            };
-
-          img.src = "/favicon-32x32.png";
-        }
-      }
+      setFavicon(data.count)
     });
   };
+
+  var setFavicon = function(count) {
+    if (count !== unread_count) {
+      unread_count = count;
+
+      var title = "Octobox";
+      if (unread_count > 0) {
+        title += " (" + unread_count + ")";
+      }
+      window.document.title = title;
+
+      var old_link = document.getElementById("favicon-count");
+      if ( old_link ) {
+        $(old_link).remove();
+      }
+
+      var canvas = document.createElement("canvas"),
+        ctx,
+        img = document.createElement("img"),
+        link = document.getElementById("favicon").cloneNode(true),
+        txt = unread_count + "";
+
+      link.id = "favicon-count";
+
+      if (canvas.getContext) {
+        canvas.height = canvas.width = 32;
+        ctx = canvas.getContext("2d");
+
+          img.onload = function () {
+            ctx.drawImage(this, 0, 0);
+
+            if (unread_count > 0){
+              ctx.fillStyle = "#f93e00";
+              ctx.font = "bold 20px 'helvetica', sans-serif";
+
+              var width = ctx.measureText(txt).width;
+              ctx.fillRect(0, 0, width+4, 24);
+
+              ctx.fillStyle = "#fff";
+              ctx.fillText(txt, 2, 20);
+            }
+
+            link.href = canvas.toDataURL("image/png");
+            document.body.appendChild(link);
+          };
+
+        img.src = "/favicon-32x32.png";
+      }
+    }
+  }
 
   var enableTooltips = function() {
     if(!("ontouchstart" in window))
@@ -112,7 +116,10 @@ var Octobox = (function() {
     if (getDisplayedRows().length === 0) return;
     if ( $(".js-table-notifications tr").length === 0 ) return;
     var ids = getIdsFromRows(getMarkedOrCurrentRows());
-    $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
+    $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
+      resetCursorAfterRowsRemoved(ids);
+      updateFavicon();
+    });
   };
 
   var markReadSelected = function() {
@@ -120,7 +127,7 @@ var Octobox = (function() {
     var rows = getMarkedOrCurrentRows();
     rows.addClass("blur-action");
     $.post("/notifications/mark_read_selected" + location.search, {"id[]": getIdsFromRows(rows)}).done(function () {
-      rows.removeClass("blur-action")
+      rows.removeClass("blur-action");
       rows.removeClass("active");
       updateFavicon();
     })
@@ -139,7 +146,10 @@ var Octobox = (function() {
 
     var ids = getIdsFromRows(getMarkedOrCurrentRows());
 
-    $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } ).done(function() {resetCursorAfterRowsRemoved(ids)});
+    $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } ).done(function() {
+      resetCursorAfterRowsRemoved(ids);
+      updateFavicon();
+    });
   };
 
   var toggleSelectAll = function() {
@@ -266,7 +276,7 @@ var Octobox = (function() {
     enableTooltips();
 
     if ($("#help-box").length){
-      updateFavicon();
+      setFavicon($('.js-unread-count').data('count'))
       initShiftClickCheckboxes()
       recoverPreviousCursorPosition();
       setAutoSyncTimer();
@@ -283,7 +293,10 @@ var Octobox = (function() {
     var rows = getMarkedOrCurrentRows();
     rows.addClass("blur-action");
     var ids = getIdsFromRows(rows);
-    $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {resetCursorAfterRowsRemoved(ids)});
+    $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
+      resetCursorAfterRowsRemoved(ids);
+      updateFavicon();
+    });
   }
 
   // private methods
