@@ -39,9 +39,8 @@ $(document).on('change', '.js-select_all', Octobox.checkAll);
 
 $(document).on('click', 'button.select_all', Octobox.toggleSelectAll);
 
-$(document).on('click', 'button.archive_selected, button.unarchive_selected', function(event) {
-	Octobox.toggleArchive($(this));
-});
+$(document).on('click', 'button.archive_selected', Octobox.archive);
+$(document).on('click', 'button.unarchive_selected', Octobox.unarchive);
 
 $(document).on('click', 'button.mute_selected', Octobox.mute);
 $(document).on('click', 'button.delete_selected', Octobox.deleteSelected);
