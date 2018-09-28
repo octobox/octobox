@@ -1,6 +1,7 @@
 class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
   def change
 
+    return if Label.count.zero?
     # this query is to find unique labels in the order they are craeted by grouping them on GITHUB_ID;
     # I have extracted the labels GITHUB_ID and ID to create mapping between the two.
     # I ran the inner query IN POSTGRE server to check that ORDER of labels is by created_at ASC
