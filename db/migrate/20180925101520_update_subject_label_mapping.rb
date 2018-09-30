@@ -17,7 +17,7 @@ class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
     label_repo_map = {}
     label_github_ids = github_id_label_id_map.keys.join(",")
 
-    label_repos = fetch_label_repo_mapping
+    label_repos = fetch_label_repo_mapping(label_github_ids)
     label_repos.map { |label| label_repo_map[label["github_id"]] = label["repository_id"] }
 
     updated_labels = []
@@ -49,20 +49,20 @@ class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
     }
   end
 
-  def fetch_label_repo_mapping
+  def fetch_label_repo_mapping(label_github_ids)
     if ActiveRecord::Base.connection.instance_values["config"][:adapter] == "mysql"
-      fetch_label_repo_mapping_mysql
+      fetch_label_repo_mapping_mysql(label_github_ids)
     else
-      fetch_label_repo_mapping_postgres
+      fetch_label_repo_mapping_postgres(label_github_ids)
     end
   end
 
-  def fetch_label_repo_mapping_mysql
+  def fetch_label_repo_mapping_mysql(label_github_ids)
     Label.joins(:subject => :repository).where("labels.github_id IN (?)", label_github_ids).
     select("labels.github_id, labels.id, repositories.id AS repository_id")
   end
 
-  def fetch_label_repo_mapping_postgres
+  def fetch_label_repo_mapping_postgres(label_github_ids)
     label_repo_sql = "SELECT DISTINCT ON (labels.github_id) labels.github_id, labels.id,
     repositories.id AS repository_id FROM labels INNER JOIN subjects ON subjects.id = labels.subject_id
     INNER JOIN repositories ON repositories.full_name = subjects.repository_full_name
