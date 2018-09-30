@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(version: 2018_09_25_101520) do
     t.datetime "updated_at", null: false
     t.integer "github_id"
     t.bigint "repository_id"
+    t.index ["created_at"], name: "index_labels_on_created_at"
+    t.index ["github_id"], name: "index_labels_on_github_id"
     t.index ["name"], name: "index_labels_on_name"
     t.index ["repository_id"], name: "index_labels_on_repository_id"
     t.index ["subject_id"], name: "index_labels_on_subject_id"
