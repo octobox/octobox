@@ -19,19 +19,17 @@ module Octobox
         }.map {
           |l| Label.new(github_id: l['id'], color: l['color'], name: l['name'], repository_id: repository.id)
         }
-
+        # insert new labels in bulk
         if labels_to_be_added.present?
-          # insert new labels in bulk
-          Label.import labels_to_be_added
-          # create subject label mapping for New Added Labels
-          attach_label_to_subject(labels_to_be_added.collect(&:github_id))
+          Label.import labels_to_be_added, on_duplicate_key_ignore: true
         end
-
         # update name and color of existing labels
         update_labels(
           remote_labels,
           existing_labels_on_repo.reject { |label| labels_to_be_added.collect(&:github_id).include?(label.first) }
         )
+        # create subject label mapping for New Added Labels
+        attach_label_to_subject(remote_labels.map{|l| l['id'] })
       end
 
       def update_labels(remote_labels, labels_for_update)
@@ -54,7 +52,7 @@ module Octobox
 
         subject_labels = Label.where('github_id in (?)', label_github_ids).ids
         subject_labels.map!{ |label_id| SubjectLabel.new(subject_id: self.id, label_id: label_id) }
-        SubjectLabel.import subject_labels
+        SubjectLabel.import subject_labels, on_duplicate_key_ignore: true
       end
 
       def detach_subject_labels_removed_on_remote(remote_label_ids)
