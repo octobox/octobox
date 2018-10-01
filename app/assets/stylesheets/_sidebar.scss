@@ -1,0 +1,79 @@
+$sidebar-width: 250px;
+
+.nav-filters {
+  border-top: 1px solid $nav-divider-color;
+  margin: 4px 0;
+  padding: 4px 0 0;
+
+  &:first-child{
+    margin-top: 0px;
+    padding-top: 0px;
+    border-top: none;
+  }
+
+  > li > a {
+    position: relative;
+    .badge {
+      top: 11px;
+    }
+    &.filter {
+      padding: 5px 15px;
+      &.repo-label {
+        padding-left: 42px;
+      }
+      .badge {
+        top: 6px;
+        padding: 2px 6px;
+      }
+    }
+  }
+  .badge {
+    line-height: 12px;
+    position: absolute;
+    right: 10px;
+  }
+}
+
+.sidebar-icon {
+  display: inline-block;
+  margin-right: 5px;
+  width: 18px;
+  &.octicon-primitive-dot, &.octicon-primitive-square {
+    margin-top: -3px;
+    margin-bottom: -3px;
+  }
+}
+
+.sidebar-avatar {
+  margin-right: 3px;
+}
+
+@include media-breakpoint-down(md) {
+
+  .flex-content {
+    position: relative;
+    height: 100%;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+  .flex-sidebar {
+    position: absolute;
+    // enable momentum scrolling on mobile safari
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    bottom: 0;
+    top: 0;
+    width: $sidebar-width;
+    left: -$sidebar-width;
+  }
+
+  .flex-content {
+    left: 0;
+  }
+
+  .flex-content.active {
+    left: $sidebar-width;
+  }
+
+}

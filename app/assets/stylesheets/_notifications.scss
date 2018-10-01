@@ -1,0 +1,189 @@
+$notification-items: (
+  'checkbox',
+  'star',
+  'archived',
+  'subject',
+  'repo',
+  'subject-author',
+  'reason'
+  'datetime'
+);
+
+.table-notifications {
+  td{
+    padding: 0.6rem;
+  }
+  .active {
+    font-weight: bold;
+    background-color: $list-group-action-active-bg;
+  }
+}
+
+.table > tbody > tr:first-child > td {
+  border-top: none;
+}
+
+.toggle-star {
+  cursor: pointer;
+}
+
+.owner-label, .repo-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.notification-repo, .notification-date {
+  white-space: nowrap;
+}
+
+@include media-breakpoint-up(md) {
+  .table-notifications tr td:first-child {
+    border-left: 2px solid $list-group-bg;
+  }
+  .table-notifications tr:hover td:first-child {
+    border-left: 2px solid $list-group-action-hover-color;
+  }
+  .table-notifications tr.active td:first-child {
+    border-left: 2px solid $list-group-action-active-bg;
+  }
+  .table-notifications tr.active:hover td:first-child {
+    border-left: 2px solid $list-group-action-hover-color;
+  }
+  td.current {
+    border-left: 2px solid $list-group-active-border-color !important;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  @each $item in $notification-items{
+    .notification-#{$item}{
+      text-overflow: ellipsis;
+    }
+  }
+  .notification-star,
+  .notification-icon,
+  .notification-checkbox {
+    width: 1%;
+    text-align: center;
+  }
+  .notification-checkbox {
+    input {
+      margin-left: 6px;
+      margin-right: 0;
+      position: relative;
+      top: -1px;
+    }
+  }
+  .notification{
+    .notification-repo,
+    .notification-subject-author{
+      max-width: 10rem;
+      overflow: hidden;
+    }
+    .notification-date{
+      min-width: 5.5em;
+    }
+    .buttons{
+      display: none;
+      a{
+        &:hover, &:focus{
+          text-decoration: none;
+        }
+      }
+    }
+    &:hover, &:focus{
+      .notification-date small{
+        display: none;
+      }
+      .buttons{
+        display: inline;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .table-notifications {
+    table,
+    thead,
+    tbody,
+    tfoot,
+    tr,
+    th,
+    td {
+      display: block;
+    }
+    tbody{
+      width:100%
+    }
+    &.table > tbody > tr.active {
+      background: $list-group-action-active-bg;
+      &:hover {
+        background: $list-group-action-active-bg;
+      }
+
+    }
+    &.table > tbody > tr > td {
+      border: none;
+      padding: 0;
+    }
+    .notification {
+      border-top: 1px solid $list-group-border-color;
+      position: relative;
+      padding: 10px 0px;
+      &:first-child {
+        border-top: none;
+      }
+      .buttons{
+        display: none;
+      }
+    }
+    .notification-checkbox,
+    .notification-star,
+    .notification-icon,
+    .notification-date, {
+      position: absolute;
+    }
+    .notification-icon{
+      top: 12px;
+      left: 10px;
+    }
+    .notification-checkbox {
+      top: 42px;
+      left: 11px;
+    }
+    .notification-star {
+      top: 72px;
+      left: 10px
+    }
+    .notification-subject,
+    .notification-repo,
+    .notification-subject-author,
+    .notification-reason{
+      display: block;
+      width: calc(100% - 6rem);
+      position: relative;
+      left: 40px
+    }
+    .notification-subject {
+      display: inline-block;
+      .link {
+        overflow-wrap: break-word;
+      }
+      &:first-child .badge{
+        display: block;
+      }
+    }
+    .notification-subject-author:before {
+      content: "by ";
+      color: $text-muted;
+      font-size: 10px;
+    }
+    .notification-date {
+      top: 10px;
+      right: 10px;
+    }
+  }
+
+}

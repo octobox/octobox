@@ -1,0 +1,115 @@
+html, body {
+  overflow-x: hidden;
+  min-height: 100%;
+}
+
+body {
+  font-size: 14px;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+.flex-header {
+  flex: 0 0 auto;
+}
+.flex-content {
+  display: flex;
+  min-height:0;
+}
+.flex-sidebar {
+  flex: 0 0 250px;
+  overflow: auto;
+  padding-bottom: 60px;
+  .nav-item{
+    max-width: 100%;
+    &:hover{
+      background-color: $list-group-hover-bg;
+    }
+  }
+}
+.flex-main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+}
+.flex-container {
+  padding: 15px;
+  min-width: 0;
+  &.text-content{
+    h1, h2{
+      padding-top: $spacer * 3
+    }
+    max-width: 60em;
+    font-size: 16px;
+    ul:last-child{
+      min-height: 31em;
+    }
+  }
+  .flex-main & {
+    padding-left: 0;
+  }
+}
+
+.footer {
+  text-align: center;
+  color: $text-muted;
+  a{
+    color: color-yiq($body-bg);
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .flex-main{
+    overflow-y: hidden;
+  }
+  .flex-container {
+    .flex-main & {
+      padding-left: 15px;
+      overflow-y: hidden;
+      &.text-content{
+        h1, h2{
+          padding-top: inherit;
+        }
+        height: 100%;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+      height: 100%;
+      > .card {
+        height: 100%;
+        overflow-y: scroll;
+        // enable momentum scrolling on mobile safari
+        -webkit-overflow-scrolling: touch;
+        > .card-header {
+          position: absolute;
+          z-index: 1;
+          right: 0;
+          left: 0;
+        }
+        > .table {
+          margin-top: 51px;
+          &.filtered {
+            margin-top: 60.5px;
+          }
+        }
+      }
+    }
+    .flex-sidebar & {
+      padding-right: 0;
+    }
+  }
+}
+
+.turbolinks-progress-bar {
+  height: 2px !important;
+  background-color: theme-color("primary") !important;
+  box-shadow: 0 0 10px rgba(theme-color("primary"), 0.7) !important;
+}
+
+.header-flash-messages {
+  .alert {
+    margin-bottom: 0;
+    border: 0px;
+    border-radius: 0px;
+  }
+}
