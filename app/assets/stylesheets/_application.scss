@@ -525,7 +525,7 @@ td.keys {
         display: block;
       }
     }
-    .notification-subject-author:before {
+    .notification-subject-author:before:not(:empty) {
       content: "by ";
       color: $text-muted;
       font-size: 10px;
