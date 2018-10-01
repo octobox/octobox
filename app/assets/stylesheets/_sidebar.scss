@@ -1,9 +1,14 @@
-$sidebar-width: 250px;
-
 .nav-filters {
   border-top: 1px solid $nav-divider-color;
   margin: 4px 0;
   padding: 4px 0 0;
+
+  .nav-item{
+    max-width: 100%;
+    &:hover{
+      background-color: $list-group-hover-bg;
+    }
+  }
 
   &:first-child{
     margin-top: 0px;
@@ -46,34 +51,4 @@ $sidebar-width: 250px;
 
 .sidebar-avatar {
   margin-right: 3px;
-}
-
-@include media-breakpoint-down(md) {
-
-  .flex-content {
-    position: relative;
-    height: 100%;
-    -webkit-transition: all .25s ease-out;
-         -o-transition: all .25s ease-out;
-            transition: all .25s ease-out;
-  }
-  .flex-sidebar {
-    position: absolute;
-    // enable momentum scrolling on mobile safari
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    bottom: 0;
-    top: 0;
-    width: $sidebar-width;
-    left: -$sidebar-width;
-  }
-
-  .flex-content {
-    left: 0;
-  }
-
-  .flex-content.active {
-    left: $sidebar-width;
-  }
-
 }
