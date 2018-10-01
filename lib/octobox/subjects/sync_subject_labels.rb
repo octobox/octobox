@@ -42,9 +42,7 @@ module Octobox
           end
         end
 
-        Label.import updated_labels, on_duplicate_key_update: {
-          conflict_target: [:id], columns: [:color, :name]
-        }
+        import_labels(updated_labels)
       end
 
       def attach_label_to_subject(label_github_ids)
@@ -66,6 +64,16 @@ module Octobox
       end
 
       private
+
+      def import_labels(updated_labels)
+        if DatabaseConfig.is_mysql?
+          Label.import updated_labels, on_duplicate_key_update: [:color, :name]
+        else
+          Label.import updated_labels, on_duplicate_key_update: {
+            conflict_target: [:id], columns: [:color, :name]
+          }
+        end
+      end
 
       def fetch_existing_labels_on_repo
         # get all label currently attached to this repository from DB order by created at ASC and
