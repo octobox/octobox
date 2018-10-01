@@ -1,0 +1,54 @@
+.nav-filters {
+  border-top: 1px solid $nav-divider-color;
+  margin: 4px 0;
+  padding: 4px 0 0;
+
+  .nav-item{
+    max-width: 100%;
+    &:hover{
+      background-color: $list-group-hover-bg;
+    }
+  }
+
+  &:first-child{
+    margin-top: 0px;
+    padding-top: 0px;
+    border-top: none;
+  }
+
+  > li > a {
+    position: relative;
+    .badge {
+      top: 11px;
+    }
+    &.filter {
+      padding: 5px 15px;
+      &.repo-label {
+        padding-left: 42px;
+      }
+      .badge {
+        top: 6px;
+        padding: 2px 6px;
+      }
+    }
+  }
+  .badge {
+    line-height: 12px;
+    position: absolute;
+    right: 10px;
+  }
+}
+
+.sidebar-icon {
+  display: inline-block;
+  margin-right: 5px;
+  width: 18px;
+  &.octicon-primitive-dot, &.octicon-primitive-square {
+    margin-top: -3px;
+    margin-bottom: -3px;
+  }
+}
+
+.sidebar-avatar {
+  margin-right: 3px;
+}

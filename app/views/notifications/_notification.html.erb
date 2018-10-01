@@ -42,6 +42,7 @@
       </small>
     </td>
   <% end %>
+
   <td class='notification-subject-author'>
     <% if notification.display_subject? %>
       <% if notification.subject && notification.subject.author %>
@@ -51,6 +52,7 @@
       <% end %>
     <% end %>
   </td>
+
   <td class='notification-reason'>
     <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "badge badge-#{reason_label(notification.reason)}" %>
   </td>
