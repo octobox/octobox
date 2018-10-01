@@ -43,7 +43,7 @@
       <% if Octobox.personal_access_tokens_enabled? %>
         <div class="card mb-3">
           <h5 class="card-header">
-            Octobox API Access
+            Personal Access Token
           </h5>
           <div class="card-body">
             <div class="form-group">
@@ -73,7 +73,7 @@
       </h5>
       <div class="card-body">
         <div class="form-group">
-          <%= f.select :theme, [['Light', 'light'], ['Dark', 'dark']], {}, class: 'form-control  w-25' %>
+          <%= f.select :theme, [['Light', 'light'], ['Dark', 'dark']], {}, class: 'form-control  w-50' %>
         </div>
 
         <%= submit_tag 'Save', class: 'btn btn-primary' %>
@@ -116,13 +116,13 @@
       <p>If you've been added to a new Organisation you may need to enable or request access for Octobox to sync notifications for those repositories.</p>
       <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_client_id}", class: 'btn btn-outline-dark' do %>
         <%= octicon 'tools' %>&nbsp;
-        Manage Oauth Access on GitHub
+        Manage Oauth Access
       <% end %>
 
       <% if Octobox.github_app? && current_user.github_app_authorized? %>
         <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_app_client_id}", class: 'btn btn-outline-dark' do %>
           <%= octicon 'octoface' %>&nbsp;
-          Manage App Access on GitHub
+          Manage App Access
         <% end %>
       <% end %>
     </div>
@@ -135,11 +135,11 @@
       </h5>
       <div class="card-body">
         <% if current_user.app_installations.any? %>
-          <table class='table'>
+          <table class='table table-responsive-sm'>
             <thead>
               <tr>
                 <th class='border-top-0'>Account</th>
-                <th class='border-top-0'>Repositories</th>
+                <th class='border-top-0'>Repos</th>
                 <% if Octobox.config.marketplace_url.present? %>
                   <th class='border-top-0' colspan='2'>Billing</th>
                 <% end %>
@@ -155,7 +155,7 @@
                     <%= app_installation.account_login %>
                   </td>
                   <td class="align-middle">
-                    <%= pluralize app_installation.repositories.github_app_installed.count, 'repository' %>
+                    <%= pluralize app_installation.repositories.github_app_installed.count, 'repo' %>
                   </td >
                   <% if Octobox.config.marketplace_url.present? %>
                     <td class="align-middle">
@@ -223,20 +223,56 @@
     </h5>
     <div class="card-body">
       <p>
-        <%= pluralize @total, 'notification' %> synced since you started using Octobox <%= distance_of_time_in_words_to_now current_user.created_at %> ago.
+        <%= pluralize @total, 'notification' %> synced since you started using Octobox
+        <span title='Signed up on <%= current_user.created_at.to_s(:long) %> UTC'>
+          <%= pluralize(((Time.current - current_user.created_at)/ 1.day).round, 'day') %> ago.
+        </span>
       </p>
-      <% if @most_active %>
-        <p>
-          <strong>Most active repositories</strong>
-        </p>
-        <ul>
-          <% @most_active.each do |repository_full_name, count| %>
-            <li>
-              <%= link_to repository_full_name, "#{Octobox.config.github_domain}/#{repository_full_name}" %> - <%= pluralize count, 'notification' %>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
+      <div class="row">
+        <% if @most_active_repos %>
+          <div class="col-md">
+            <table class='table table-sm table-responsive-sm'>
+              <thead>
+                <th class='border-top-0' colspan="2">Most active repositories</th>
+              </thead>
+              <tbody>
+                <% @most_active_repos.each do |repository_full_name, count| %>
+                  <tr>
+                    <td>
+                      <%= link_to repository_full_name, "#{Octobox.config.github_domain}/#{repository_full_name}" %>
+                    </td>
+                    <td>
+                      <%= pluralize count, 'notification' %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+
+        <% if @most_active_repos %>
+          <div class="col-md">
+            <table class='table table-sm table-responsive-sm'>
+              <thead>
+                <th class='border-top-0' colspan="2">Most active owners</th>
+              </thead>
+              <tbody>
+                <% @most_active_orgs.each do |repository_owner_name, count| %>
+                  <tr>
+                    <td>
+                      <%= link_to repository_owner_name, "#{Octobox.config.github_domain}/#{repository_owner_name}" %>
+                    </td>
+                    <td>
+                      <%= pluralize count, 'notification' %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 
