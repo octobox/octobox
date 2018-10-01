@@ -481,6 +481,7 @@ td.keys {
       border-top: 1px solid $list-group-border-color;
       position: relative;
       padding: 10px 0px;
+      min-height: 110px;
       &:first-child {
         border-top: none;
       }
@@ -524,7 +525,7 @@ td.keys {
         display: block;
       }
     }
-    .notification-subject-author:before {
+    .notification-subject-author:before:not(:empty) {
       content: "by ";
       color: $text-muted;
       font-size: 10px;
