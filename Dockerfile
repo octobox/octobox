@@ -38,4 +38,4 @@ RUN RAILS_ENV=development bin/rails api_docs:generate \
  && chmod -R g=u /usr/src/app
 
 # Startup
-CMD ["bin/docker-start"]
+CMD ["bin/run-dev.sh"]
