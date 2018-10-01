@@ -247,4 +247,106 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal Notification.subjectable.length, 1
     assert_equal Notification.subjectable.first, notification1
   end
+
+  test 'update_from_api_response creates a subject and creates new associated Labels when fetch_subject is enabled' do
+    stub_background_jobs_enabled(value: false)
+    stub_fetch_subject_enabled
+    stub_repository_request
+    url = 'https://api.github.com/repos/octobox/octobox/issues/560'
+    response = { status: 200, body: file_fixture('open_issue.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    user = create(:user)
+    repository = create(:repository)
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+    notification.update_from_api_response(api_response, unarchive: true)
+
+    notification.reload
+
+    refute_nil notification.subject
+    assert_equal 3, notification.subject.labels.count
+    assert_equal 3, SubjectLabel.count
+    assert_equal 3, Label.count
+    assert_equal [repository.id], notification.subject.labels.collect(&:repository_id).uniq
+  end
+
+  test 'update_from_api_response creates only new Labels when fetch_subject is enabled' do
+    stub_background_jobs_enabled(value: false)
+    stub_fetch_subject_enabled
+    stub_repository_request
+    url = 'https://api.github.com/repos/octobox/octobox/issues/560'
+    response = { status: 200, body: file_fixture('open_issue.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    user = create(:user)
+    repository = create(:repository)
+    create(:label, github_id: 208045946, name: "bug", color: "f29513", repository_id: repository.id)
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+
+    assert_difference 'Label.count', 2 do
+      notification.update_from_api_response(api_response, unarchive: true)
+    end
+
+    notification.reload
+    assert_equal 3, notification.subject.labels.count
+  end
+
+  test 'update_from_api_response updates name and color if labels already exist when fetch_subject is enabled' do
+    stub_background_jobs_enabled(value: false)
+    stub_fetch_subject_enabled
+    stub_repository_request
+    url = 'https://api.github.com/repos/octobox/octobox/issues/560'
+    response = { status: 200, body: file_fixture('labels_update.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    user = create(:user)
+    repository = create(:repository)
+    create(:label, github_id: 208045946, name: "bug", color: "f29513", repository_id: repository.id)
+    create(:label, github_id: 675690998, name: "dependencies", color: "0025ff", repository_id: repository.id)
+    create(:label, github_id: 1039525078, name: "javascript", color: "168700", repository_id: repository.id)
+
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+
+    assert_no_difference 'Label.count' do
+      notification.update_from_api_response(api_response, unarchive: true)
+    end
+
+    notification.reload
+    assert_equal 3, notification.subject.labels.count
+    assert_equal "bug_updated", Label.find_by_github_id(208045946).name
+    assert_equal "aaaaaa", Label.find_by_github_id(208045946).color
+    assert_equal "bbbbbb", Label.find_by_github_id(675690998).color
+    assert_equal 3, SubjectLabel.count
+  end
+
+  test 'updated_from_api_response associates existing labels with Subject using SubjectLabel mapping' do
+    stub_background_jobs_enabled(value: false)
+    stub_fetch_subject_enabled
+    stub_repository_request
+
+    url = 'https://api.github.com/repos/octobox/octobox/pulls/403'
+    response = { status: 200, body: file_fixture('merged_pull_request.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, url).and_return(response)
+
+    api_response = notifications_from_fixture('morty_notifications.json').third
+    notification_updated_at = Time.parse(api_response.updated_at)
+    user = create(:morty)
+    repository = create(:repository)
+    subject = create(:subject, state: 'open', url: url, updated_at: (notification_updated_at - 5.seconds), repository_full_name: repository.full_name)
+    notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
+    label_1 = create(:label, github_id: 208045946, name: "bug", color: "f29513", repository_id: repository.id)
+    label_2 = create(:label, github_id: 675690998, name: "dependencies", color: "0025ff", repository_id: repository.id)
+    label_3 = create(:label, github_id: 1039525078, name: "javascript", color: "168700", repository_id: repository.id)
+    create(:subject_label, label_id: label_1.id, subject_id: subject.id)
+
+    assert_difference ->{ Label.count } => 0, ->{ subject.labels.count } => 2, ->{ SubjectLabel.count } => 2 do
+      notification.update_from_api_response(api_response, unarchive: true)
+    end
+
+    subject.reload
+    assert_equal 'merged', subject.state
+  end
 end

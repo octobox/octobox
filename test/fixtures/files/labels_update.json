@@ -33,15 +33,15 @@
     {
       "id": 208045946,
       "url": "https://api.github.com/repos/octobox/octobox/labels/bug",
-      "name": "bug",
-      "color": "f29513",
+      "name": "bug_updated",
+      "color": "aaaaaa",
       "default": true
     },
     {
       "id": 675690998,
       "url": "https://api.github.com/repos/octobox/octobox/labels/dependencies",
       "name": "dependencies",
-      "color": "0025ff",
+      "color": "bbbbbb",
       "default": false
     },
     {
