@@ -19,13 +19,6 @@ html, body {
 
 body {
   font-size: 14px;
-}
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-.flex-body {
   display: flex;
   height: 100vh;
   flex-direction: column;
@@ -110,10 +103,7 @@ html {
         > .table {
           margin-top: 51px;
           &.filtered {
-            margin-top: 79.5px;
-            @include media-breakpoint-down(md) {
-              margin-top: 60.5px;
-            }
+            margin-top: 60.5px;
           }
         }
       }
@@ -749,7 +739,7 @@ svg{
 }
 
 .private-repo{
-  fill: icon-private-repo-color;
+  fill: $icon-private-repo-color;
 }
 
 .search-help{
