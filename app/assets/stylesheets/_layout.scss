@@ -36,7 +36,6 @@ body {
   width: $sidebar-width;
   padding: 15px;
   padding-bottom: 60px;
-  overflow: auto;
 }
 
 .flex-main {
@@ -65,12 +64,7 @@ body {
 }
 
 @include media-breakpoint-down(md) {
-
   .flex-main{
-    height: 100%;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-  }
 
   .flex-content {
     position: relative;
