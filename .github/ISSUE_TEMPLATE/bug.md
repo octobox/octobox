@@ -1,3 +1,8 @@
+---
+name: 🐛 Bug Report
+about: Create a report to help us improve Octobox
+---
+
 <!--- Provide a general summary of the issue in the Title above -->
 
 Are you experiencing this issue in octobox.io or your own instance?
@@ -21,4 +26,4 @@ Are you experiencing this issue in octobox.io or your own instance?
  * Add, commit, push your changes
  * Submit a pull request and add this in comments - `Addresses #<put issue number here>`
  * Ask for a review in comments section of pull request
- * Celebrate your contribution to this project 🎉 
+ * Celebrate your contribution to this project 🎉
