@@ -2,9 +2,10 @@ class Search
   attr_accessor :parsed_query
   attr_accessor :scope
 
-  def initialize(query: '', scope:)
+  def initialize(query: '', scope:, params: {})
     @parsed_query = SearchParser.new(query)
     @scope = scope
+    convert(params)
   end
 
   def results
@@ -39,7 +40,37 @@ class Search
     res
   end
 
+  def to_query
+    query_string = @parsed_query.operators.map do |key, value|
+      "#{key}:#{value.join(',')}"
+    end.join(' ') + " #{@parsed_query.freetext}"
+
+    query_string.strip
+  end
+
+  def inbox_selected?
+    inbox == true && archived != true
+  end
+
+  def archive_selected?
+    inbox != true && archived == true
+  end
+
   private
+
+  def convert(params)
+    [:starred, :unlabelled, :bot].each do |param|
+      @parsed_query[param] = ['true'] if params[param].present?
+    end
+
+    @parsed_query[:archived] = ['true'] if params[:archive].present?
+    @parsed_query[:inbox] = ['true'] if params[:archive].blank? && params[:starred].blank? && params[:q].blank?
+
+    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :assigned, :label].each do |filter|
+      next if params[filter].blank?
+      @parsed_query[filter] = Array(params[filter]).map(&:underscore)
+    end
+  end
 
   def lock_conditionally(scope)
     return scope if is_locked.nil?
