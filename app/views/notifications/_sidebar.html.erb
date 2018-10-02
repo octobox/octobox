@@ -134,18 +134,20 @@
   </ul>
 <% end %>
 
-<% if @statuses.keys.compact.any? %>
-  <ul class="nav nav-pills flex-column nav-filters">
-    <% @statuses.sort_by{ |status, count| status.to_s }.reverse_each do |status, count| %>
-      <% next if status.nil? %>
-      <%= filter_link :status, status, count do %>
-        <span class='text-<%= status %>'>
-          <%= notification_status(status, true) %>
-        </span>
-        Status <%= status.underscore.humanize %>
+<% if display_subject? %>
+  <% if @statuses.keys.compact.any? %>
+    <ul class="nav nav-pills flex-column nav-filters">
+      <% @statuses.sort_by{ |status, count| status.to_s }.reverse_each do |status, count| %>
+        <% next if status.nil? %>
+        <%= filter_link :status, status, count do %>
+          <span class='text-<%= status %>'>
+            <%= notification_status(status, true) %>
+          </span>
+          Status <%= status.underscore.humanize %>
+        <% end %>
       <% end %>
-    <% end %>
-  </ul>
+    </ul>
+  <% end %>
 <% end %>
 
 <% if @visiblity && @visiblity.any? %>

@@ -9,7 +9,13 @@ $notification-items: (
   'datetime'
 );
 
-.donut-chart > .in_progress, .donut-chart > .pending {
+.svg-pr-status {
+  width: 9px;
+  margin-right: 3px;
+  margin-left: 2px;
+}
+
+.svg-pr-status > .in_progress, .svg-pr-status > .pending {
   fill: $octicon-pr-pending-color;
 }
 

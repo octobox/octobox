@@ -32,8 +32,8 @@ module NotificationsHelper
     pending: "pending"
   }
 
-  DONUT_CHART_SVG = '<svg height="32" width="32" class="donut-chart">
-    <path d="M 15 0 A 15 15 0 1 1 14.99 0 L 14.99 6 A 9 9 0 1 0 15 6" class="pending"></path>
+  DONUT_CHART_SVG = '<svg class="svg-pr-status align-middle" viewBox="0 0 8 16" version="1.1" width="8" height="16" aria-hidden="true">
+    <path class="pending" fill-rule="evenodd" d="M0 8c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4z"></path>
   </svg>'
 
   def filters
