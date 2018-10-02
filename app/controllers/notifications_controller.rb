@@ -78,6 +78,7 @@ class NotificationsController < ApplicationController
 
     if display_subject?
       @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
+      @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
       @unlabelled            = scope.reorder(nil).unlabelled.count
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count

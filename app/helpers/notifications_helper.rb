@@ -53,7 +53,8 @@ module NotificationsHelper
       bot:        params[:bot],
       unlabelled: params[:unlabelled],
       assigned:   params[:assigned],
-      is_private: params[:is_private]
+      is_private: params[:is_private],
+      status:     params[:status]
     }
   end
 
@@ -255,21 +256,22 @@ module NotificationsHelper
     end
   end
 
-  def notification_status(status)
+  def notification_status(status, sidebar=false)
     if status.present?
       case status
       when SUBJECT_STATUS[:success]
-        content_tag(:span,
+        sidebar ? octicon('check', height: 16, class: 'sidebar-icon') : content_tag(:span,
           octicon('check', height: 16),
           class: 'badge badge-light badge-pr-status-success'
         )
+
       when SUBJECT_STATUS[:failure]
-        content_tag(:span,
+        sidebar ? octicon('x', height: 16, class: 'sidebar-icon') : content_tag(:span,
           octicon('x', height: 16),
           class: 'badge badge-light badge-pr-status-failure-error'
         )
       when SUBJECT_STATUS[:error]
-        content_tag(:span,
+        sidebar ? octicon('alert', height: 16, class: 'sidebar-icon') : content_tag(:span,
           octicon('alert', height: 16),
           class: 'badge badge-light badge-pr-status-failure-error'
         )
