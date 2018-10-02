@@ -27,7 +27,9 @@ module NotificationsHelper
 
   SUBJECT_STATUS = {
     success: "success",
-    failure: "failure"
+    failure: "failure",
+    error: "error",
+    pending: "pending"
   }
 
   def filters
@@ -250,7 +252,7 @@ module NotificationsHelper
   end
 
   def notification_status(status)
-    if status.present? && status.in?(SUBJECT_STATUS.values)
+    if status.present?
       case status
       when SUBJECT_STATUS[:success]
         content_tag(:span,
@@ -261,6 +263,12 @@ module NotificationsHelper
       when SUBJECT_STATUS[:failure]
         content_tag(:span,
           octicon('x', height: 16, style: 'fill: #cb2431'),
+          class: 'badge badge-light',
+          style: 'background-color: white'
+        )
+      when SUBJECT_STATUS[:error]
+        content_tag(:span,
+          octicon('alert', height: 16, style: 'fill: #cb2431'),
           class: 'badge badge-light',
           style: 'background-color: white'
         )
