@@ -25,6 +25,11 @@ module NotificationsHelper
     'RepositoryVulnerabilityAlert' => 'alert'
   }.freeze
 
+  SUBJECT_STATUS = {
+    success: "success",
+    failure: "failure"
+  }
+
   def filters
     {
       reason:     params[:reason],
@@ -243,4 +248,26 @@ module NotificationsHelper
       search_query_matches?(query, pinned_search.query)
     end
   end
+
+  def notification_status(status)
+    if status.present? && status.in?(SUBJECT_STATUS.values)
+      case status
+      when SUBJECT_STATUS[:success]
+        content_tag(:span,
+          octicon('check', height: 16, style: 'fill: white'),
+          class: 'badge badge-light',
+          style: 'background-color: #2cbe4e'
+        )
+      when SUBJECT_STATUS[:failure]
+        content_tag(:span,
+          octicon('x', height: 16, style: 'fill: #cb2431'),
+          class: 'badge badge-light',
+          style: 'background-color: white'
+        )
+      end
+    else
+      ''
+    end
+  end
+
 end
