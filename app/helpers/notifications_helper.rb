@@ -86,32 +86,20 @@ module NotificationsHelper
     filters.merge(override)
   end
 
-  def mute_button
-    function_button('Mute', 'mute', "mute_selected", 'Mute notification')
+  def mute_selected_button
+    function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items')
   end
 
-  def mute_selected_button(hidden=false)
-    function_button('Mute selected', 'mute', "mute_selected #{'hidden-button' if hidden}", 'Mute selected items') unless params[:archive]
+  def mark_read_selected_button
+    function_button('Mark as read', 'eye', 'mark_read_selected', 'Mark items as read')
   end
 
-  def mark_read_selected_button(hidden=false)
-    function_button('Mark as read', 'eye', "mark_read_selected #{'hidden-button' if hidden}", 'Mark items as read')
+  def archive_selected_button
+    function_button("Archive selected", 'checklist', "archive_toggle archive_selected", 'Archive selected items')
   end
 
-  def archive_button
-    function_button("Archive", 'checklist', "archive_toggle archive_selected", 'Archive')
-  end
-
-  def archive_selected_button(hidden=false)
-    function_button("Archive selected", 'checklist', "archive_toggle archive_selected #{'hidden-button' if hidden}", 'Archive selected items')
-  end
-
-  def unarchive_button
-    function_button("Unarchive", 'inbox', "archive_toggle unarchive_selected", 'Unarchive notification')
-  end
-
-  def unarchive_selected_button(hidden=false)
-    function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected #{'hidden-button' if hidden}", 'Unarchive selected items')
+  def unarchive_selected_button
+    function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected", 'Unarchive selected items')
   end
 
   def delete_selected_button
@@ -128,7 +116,7 @@ module NotificationsHelper
   end
 
   def function_button(title, octicon, css_class, tooltip)
-    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
+    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
       octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-md-inline-block ml-1')
     end
   end
@@ -260,10 +248,5 @@ module NotificationsHelper
   def not_repo_in_active_org(param)
     return true unless param == :repo
     params[:owner].blank?
-  end
-
-  def parse_markdown(str)
-    return if str.blank?
-    GitHub::Markup.render('.md', str)
   end
 end
