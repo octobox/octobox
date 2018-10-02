@@ -1,6 +1,5 @@
 html, body {
   overflow-x: hidden;
-  min-height: 100%;
 }
 
 body {
@@ -28,27 +27,24 @@ body {
   }
 }
 
-.flex-content {
+.flex-content{
   display: flex;
-  min-height:0;
 }
 
 .flex-sidebar {
   flex: 0 0 250px;
-  overflow: auto;
+  width: $sidebar-width;
+  padding: 15px;
   padding-bottom: 60px;
+  overflow: auto;
 }
 
 .flex-main {
   flex: 1;
   min-width: 0;
   overflow: auto;
-}
-
-.flex-container {
-  padding: 15px;
-  min-width: 0;
-  &.text-content{
+  padding-left: 0;
+  .text-content{
     h1, h2{
       padding-top: $spacer * 3
     }
@@ -57,9 +53,6 @@ body {
     ul:last-child{
       min-height: 31em;
     }
-  }
-  .flex-main & {
-    padding-left: 0;
   }
 }
 
@@ -72,56 +65,31 @@ body {
 }
 
 @include media-breakpoint-down(md) {
-  .flex-main{
-    overflow-y: hidden;
-  }
-  .flex-container {
-    .flex-main & {
-      padding-left: 15px;
-      overflow-y: hidden;
-      &.text-content{
-        h1, h2{
-          padding-top: inherit;
-        }
-        height: 100%;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-      }
-      height: 100%;
-      > .card {
-        height: 100%;
-        overflow-y: scroll;
-        // enable momentum scrolling on mobile safari
-        -webkit-overflow-scrolling: touch;
-        > .card-header {
-          position: absolute;
-          z-index: 1;
-          right: 0;
-          left: 0;
-        }
-        > .table {
-          margin-top: 51px;
-          &.filtered {
-            margin-top: 60.5px;
-          }
-        }
-      }
-    }
-    .flex-sidebar & {
-      padding-right: 0;
-    }
-  }
-}
 
-@include media-breakpoint-down(md) {
+  .flex-main{
+    height: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
 
   .flex-content {
     position: relative;
+    left: 0;
     height: 100%;
     -webkit-transition: all .25s ease-out;
          -o-transition: all .25s ease-out;
             transition: all .25s ease-out;
   }
+
+  .text-content{
+    padding: 0 15px;
+    
+  }
+
+  .flex-content.active {
+    left: $sidebar-width;
+  }
+
   .flex-sidebar {
     position: absolute;
     // enable momentum scrolling on mobile safari
@@ -132,13 +100,5 @@ body {
     width: $sidebar-width;
     left: -$sidebar-width;
   }
-
-  .flex-content {
-    left: 0;
-  }
-
-  .flex-content.active {
-    left: $sidebar-width;
-  }
-
 }
+

@@ -5,6 +5,7 @@ class SearchParser
   OPERATOR_EXPRESSION = /(\-?\w+):[\ 　]?([\w\p{Han}\p{Katakana}\p{Hiragana}\p{Hangul}ー\.\-,\/]+|(["'])(\\?.)*?\3)/
 
   attr_accessor :freetext
+  attr_accessor :operators
 
   def initialize(query)
     query = query.to_s
@@ -25,5 +26,9 @@ class SearchParser
 
   def [](key)
     @operators[key.to_sym] || []
+  end
+
+  def []=(key, value)
+    @operators[key.to_sym] = value
   end
 end
