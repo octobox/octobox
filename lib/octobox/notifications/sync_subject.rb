@@ -9,6 +9,7 @@ module Octobox
       }
       SUBJECT_TYPE_COMMIT_RELEASE = ['Commit', 'Release'].freeze
       SUBJECT_STATE_MERGED = 'merged'.freeze
+      SUBJECT_STATUS_PENDING = 'pending'.freeze
 
       def update_subject(force = false)
         return unless display_subject?
@@ -68,13 +69,22 @@ module Octobox
         if subject_type == SUBJECT_TYPE_ISSUE_REQUEST[:PullRequest] && remote_subject.statuses_url.present?
           remote_status = download_status(remote_subject.statuses_url)
           if remote_status.present?
-            subject.status = remote_status.state
+            subject.status = assign_status(remote_status)
             subject.save if subject.changed?
           end
         end
       end
 
       private
+
+      def assign_status(remote_status)
+        case remote_status.state
+        when SUBJECT_STATUS_PENDING
+          remote_status.statuses.present? ? remote_status.state : nil
+        else
+          remote_status.state
+        end
+      end
 
       def combined_status_url(status_url)
         "#{status_url}/status".gsub('statuses', 'commits')

@@ -32,6 +32,11 @@ module NotificationsHelper
     pending: "pending"
   }
 
+  DONUT_CHART_SVG = '<svg height="32" width="32" class="donut-chart">
+    <path d="M 15 0 A 15 15 0 1 1 14.99 0 L 14.99 6 A 9 9 0 1 0 15 6" class="pending">
+    </path>
+  </svg>'
+
   def filters
     {
       reason:     params[:reason],
@@ -256,22 +261,21 @@ module NotificationsHelper
       case status
       when SUBJECT_STATUS[:success]
         content_tag(:span,
-          octicon('check', height: 16, style: 'fill: white'),
-          class: 'badge badge-light',
-          style: 'background-color: #2cbe4e'
+          octicon('check', height: 16),
+          class: 'badge badge-light badge-pr-status-success'
         )
       when SUBJECT_STATUS[:failure]
         content_tag(:span,
-          octicon('x', height: 16, style: 'fill: #cb2431'),
-          class: 'badge badge-light',
-          style: 'background-color: white'
+          octicon('x', height: 16),
+          class: 'badge badge-light badge-pr-status-failure-error'
         )
       when SUBJECT_STATUS[:error]
         content_tag(:span,
-          octicon('alert', height: 16, style: 'fill: #cb2431'),
-          class: 'badge badge-light',
-          style: 'background-color: white'
+          octicon('alert', height: 16),
+          class: 'badge badge-light badge-pr-status-failure-error'
         )
+      when SUBJECT_STATUS[:pending]
+        content_tag(:span, DONUT_CHART_SVG.html_safe)
       end
     else
       ''

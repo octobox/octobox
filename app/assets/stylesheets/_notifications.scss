@@ -9,6 +9,24 @@ $notification-items: (
   'datetime'
 );
 
+.donut-chart > .in_progress, .donut-chart > .pending {
+  fill: $octicon-pr-pending-color;
+}
+
+.badge-pr-status-success {
+  background-color: $octicon-pr-success-badge-bg-color;
+  .octicon {
+    fill: white;
+  }
+}
+
+.badge-pr-status-failure-error {
+  background-color: $list-group-bg;
+  .octicon {
+    fill: $octicon-pr-failure_error-color;
+  }
+}
+
 .table-notifications {
   td{
     padding: 0.6rem;
@@ -16,6 +34,10 @@ $notification-items: (
   .active {
     font-weight: bold;
     background-color: $list-group-action-active-bg;
+
+    .badge-pr-status-failure-error {
+      background-color: $list-group-action-active-bg;
+    }
   }
 }
 
