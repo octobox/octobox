@@ -27,6 +27,8 @@ class Search
     res = res.exclude_author(exclude_author) if exclude_author.present?
     res = res.assigned(assignee) if assignee.present?
     res = res.exclude_assigned(exclude_assignee) if exclude_assignee.present?
+    res = res.status(status) if status.present?
+    res = res.exclude_status(exclude_status) if exclude_status.present?
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
     res = res.archived(!inbox) unless inbox.nil?
@@ -186,6 +188,14 @@ class Search
 
   def exclude_assignee
     parsed_query[:'-assignee']
+  end
+
+  def status
+    parsed_query[:status]
+  end
+
+  def exclude_status
+    parsed_query[:'-status']
   end
 
   def starred

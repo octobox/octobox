@@ -33,8 +33,7 @@ module NotificationsHelper
   }
 
   DONUT_CHART_SVG = '<svg height="32" width="32" class="donut-chart">
-    <path d="M 15 0 A 15 15 0 1 1 14.99 0 L 14.99 6 A 9 9 0 1 0 15 6" class="pending">
-    </path>
+    <path d="M 15 0 A 15 15 0 1 1 14.99 0 L 14.99 6 A 9 9 0 1 0 15 6" class="pending"></path>
   </svg>'
 
   def filters
