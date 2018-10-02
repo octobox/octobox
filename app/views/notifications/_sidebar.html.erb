@@ -26,84 +26,92 @@
       <% end %>
     <% end %>
   </li>
+</ul>
 
-  <%= menu_separator %>
+<ul class="nav nav-pills flex-column nav-filters">
+  <%= filter_link :unread, false, @unread_notifications[false] do %>
+      <%= octicon 'mail-read', height: 16, class: 'sidebar-icon star-active' %>
+      Read
+  <% end %>
 
-  <% @unread_notifications.each do |unread_notification, count| %>
-    <%= filter_link :unread, unread_notification, count do %>
-      <% if unread_notification %>
-        <%= octicon 'mail', height: 16, class: 'sidebar-icon star-active' %>
-        Unread
-      <% else %>
-        <%= octicon 'mail-read', height: 16, class: 'sidebar-icon star-active' %>
-        Read
+  <%= filter_link :unread, true, @unread_notifications[true] do %>
+      <%= octicon 'mail', height: 16, class: 'sidebar-icon star-active' %>
+      Unread
+  <% end %>
+</ul>
+
+<% if display_subject? %>
+  <% if @states.keys.compact.any? %>
+    <ul class="nav nav-pills flex-column nav-filters">
+      <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
+        <% next if state.nil? %>
+        <%= filter_link :state, state, count do %>
+          <span class='text-<%= state_label(state) %>'>
+            <%= octicon 'primitive-square', height: 24, class: 'sidebar-icon' %>
+          </span>
+          <%= state.underscore.humanize %>
+
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if @unlabelled > 0 || @bot_notifications > 0 || @assigned > 0 %>
+    <ul class="nav nav-pills flex-column nav-filters">
+      <% if @assigned > 0 %>
+        <%= filter_link :assigned, current_user.github_login, @assigned do %>
+          <%= octicon 'person', height: 16, class: 'sidebar-icon' %>
+          Assigned to you
+        <% end %>
+      <% end %>
+      <% if @bot_notifications > 0 %>
+        <%= filter_link :bot, true, @bot_notifications do %>
+          <%= octicon 'hubot', height: 18, class: 'sidebar-icon' %>
+          Bots
+        <% end %>
       <% end %>
 
-    <% end %>
+      <% if @unlabelled > 0 %>
+        <%= filter_link :unlabelled, true, @unlabelled do %>
+          <%= octicon 'tag', height: 16, class: 'sidebar-icon' %>
+          Unlabelled
+        <% end %>
+      <% end %>
+    </ul>
   <% end %>
-  <%= menu_separator unless @unread_notifications.empty? %>
+<% end %>
 
-  <% if display_subject? %>
-    <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
-      <% next if state.nil? %>
-      <%= filter_link :state, state, count do %>
-        <span class='text-<%= state_label(state) %>'>
-          <%= octicon 'primitive-square', height: 24, class: 'sidebar-icon' %>
+<% if @types.any? %>
+  <ul class="nav nav-pills flex-column nav-filters">
+    <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
+      <%= filter_link :type, type, count do %>
+        <% if notification_icon(type).nil? %>
+            <span class='sidebar-icon'></span>
+        <% else %>
+            <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
+        <% end %>
+        <%= type.underscore.gsub('repository', '').humanize %>
+
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @reasons.any? %>
+  <ul class="nav nav-pills flex-column nav-filters">
+    <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
+      <%= reason_filter_link reason, count do %>
+        <span class='text-<%= reason_label(reason) %>'>
+          <%= octicon 'primitive-dot', height: 24, class: 'sidebar-icon' %>
         </span>
-        <%= state.underscore.humanize %>
-
+        <%= reason.underscore.humanize %>
       <% end %>
     <% end %>
-    <%= menu_separator unless @states.empty? %>
+  </ul>
+<% end %>
 
-    <% if @assigned > 0 %>
-      <%= filter_link :assigned, current_user.github_login, @assigned do %>
-        <%= octicon 'person', height: 16, class: 'sidebar-icon' %>
-        Assigned to you
-      <% end %>
-    <% end %>
-    <% if @bot_notifications > 0 %>
-      <%= filter_link :bot, true, @bot_notifications do %>
-        <%= octicon 'hubot', height: 18, class: 'sidebar-icon' %>
-        Bots
-      <% end %>
-    <% end %>
-
-    <% if @unlabelled > 0 %>
-      <%= filter_link :unlabelled, true, @unlabelled do %>
-        <%= octicon 'tag', height: 16, class: 'sidebar-icon' %>
-        Unlabelled
-      <% end %>
-    <% end %>
-
-    <%= menu_separator if @unlabelled > 0 || @bot_notifications > 0 || @assigned > 0 %>
-  <% end %>
-
-  <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
-    <%= filter_link :type, type, count do %>
-      <% if notification_icon(type).nil? %>
-          <span class='sidebar-icon'></span>
-      <% else %>
-          <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
-      <% end %>
-      <%= type.underscore.gsub('repository', '').humanize %>
-
-    <% end %>
-  <% end %>
-  <%= menu_separator unless @types.empty? %>
-
-  <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
-    <%= reason_filter_link reason, count do %>
-      <span class='text-<%= reason_label(reason) %>'>
-        <%= octicon 'primitive-dot', height: 24, class: 'sidebar-icon' %>
-      </span>
-      <%= reason.underscore.humanize %>
-
-    <% end %>
-  <% end %>
-  <%= menu_separator unless @reasons.empty? %>
-
-  <% if @visiblity %>
+<% if @visiblity && @visiblity.any? %>
+  <ul class="nav nav-pills flex-column nav-filters">
     <% @visiblity.sort_by{|visiblity, count| visiblity.to_s }.each do |visiblity, count| %>
       <%= filter_link :is_private, visiblity, count do %>
         <% if visiblity %>
@@ -113,9 +121,10 @@
         <% end %>
       <% end %>
     <% end %>
-    <%= menu_separator unless @visiblity.empty? %>
-  <% end %>
+  </ul>
+<% end %>
 
+<ul class="nav nav-pills flex-column nav-filters">
   <% @unread_repositories.sort_by{|repo_name, count| repo_name.downcase }.group_by{|repo_name, count| repo_name.split('/')[0] }.each do |org, repos| %>
     <%= org_filter_link :owner, org do %>
       <%= image_tag "#{Octobox.config.github_domain}/#{org}.png?size=40", width: 20, class: 'img-rounded sidebar-avatar', alt: org %>

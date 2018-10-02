@@ -6,22 +6,24 @@ class HooksController < ApplicationController
   def create
     case event_header
     when 'issues', 'issue_comment'
-      SyncSubjectWorker.perform_async(payload['issue'])
+      SyncSubjectWorker.perform_async_if_configured(payload['issue'])
     when 'pull_request'
-      SyncSubjectWorker.perform_async(payload['pull_request'])
+      SyncSubjectWorker.perform_async_if_configured(payload['pull_request'])
     when 'label'
-      SyncLabelWorker.perform_async(payload) if payload['action'] == 'edited'
+      SyncLabelWorker.perform_async_if_configured(payload) if payload['action'] == 'edited'
     when 'installation'
       case payload['action']
       when 'created'
-        SyncInstallationWorker.perform_async(payload)
+        SyncInstallationWorker.perform_async_if_configured(payload)
       when 'deleted'
         AppInstallation.find_by_github_id(payload['installation']['id']).try(:destroy)
       end
     when 'installation_repositories'
-      SyncInstallationRepositoriesWorker.perform_async(payload)
+      SyncInstallationRepositoriesWorker.perform_async_if_configured(payload)
     when 'github_app_authorization'
-      SyncGithubAppAuthorizationWorker.perform_async(payload['sender']['id'])
+      SyncGithubAppAuthorizationWorker.perform_async_if_configured(payload['sender']['id'])
+    when 'marketplace_purchase'
+      MarketplacePurchaseWorker.perform_async_if_configured(payload)
     end
 
     head :no_content
@@ -50,7 +52,7 @@ class HooksController < ApplicationController
   end
 
   def payload
-    @payload ||= JSON.parse(request_body)
+    @payload ||= Oj.load(request_body)
   end
 
   def signature_header

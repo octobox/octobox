@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class Notification < ApplicationRecord
+
+  include Octobox::Notifications::InclusiveScope
+  include Octobox::Notifications::ExclusiveScope
+
   SUBJECTABLE_TYPES = ['Issue', 'PullRequest', 'Commit', 'Release'].freeze
 
   if DatabaseConfig.is_postgres?
@@ -25,35 +29,8 @@ class Notification < ApplicationRecord
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_many :labels, through: :subject
 
-  scope :inbox,    -> { where(archived: false) }
-  scope :archived, ->(value = true) { where(archived: value) }
-  scope :newest,   -> { order('notifications.updated_at DESC') }
-  scope :starred,  ->(value = true) { where(starred: value) }
-
-  scope :repo,     ->(repo_name)    { where(arel_table[:repository_full_name].matches(repo_name)) }
-  scope :type,     ->(subject_type) { where(subject_type: subject_type) }
-  scope :reason,   ->(reason)       { where(reason: reason) }
-  scope :unread,   ->(unread)       { where(unread: unread) }
-  scope :owner,    ->(owner_name)   { where(arel_table[:repository_owner_name].matches(owner_name)) }
-  scope :author,    ->(author_name)   { joins(:subject).where(Subject.arel_table[:author].matches(author_name)) }
-
-  scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
-
-  scope :state,    ->(state) { joins(:subject).where('subjects.state = ?', state) }
-  scope :author,    ->(author) { joins(:subject).where(Subject.arel_table[:author].matches(author)) }
-
-  scope :labelable,   -> { where(subject_type: ['Issue', 'PullRequest']) }
-  scope :label,    ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name))}
-  scope :unlabelled,  -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
-
-  scope :assigned, ->(assignee) { joins(:subject).where("subjects.assignees LIKE ?", "%:#{assignee}:%") }
-  scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
-
-  scope :subjectable, -> { where(subject_type: SUBJECTABLE_TYPES) }
-  scope :with_subject, -> { includes(:subject).where.not(subjects: { url: nil }) }
-  scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
-
-  scope :bot_author, -> { joins(:subject).where('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot') }
+  validates :subject_url, presence: true
+  validates :archived, inclusion: [true, false]
 
   paginates_per 20
 
@@ -67,6 +44,7 @@ class Notification < ApplicationRecord
       if "RepositoryInvitation" == api_response.subject.type
         attrs[:subject_url] = "#{api_response.repository.html_url}/invitations"
       end
+      attrs[:updated_at] = Time.current if api_response.updated_at.nil?
       attrs
     end
   end
@@ -77,7 +55,8 @@ class Notification < ApplicationRecord
   end
 
   def self.archive(notifications, value)
-    notifications.update_all(archived: ActiveRecord::Type::Boolean.new.cast(value))
+    value = value ? ActiveRecord::Type::Boolean.new.cast(value) : true
+    notifications.update_all(archived: value)
     mark_read(notifications)
   end
 
@@ -85,37 +64,48 @@ class Notification < ApplicationRecord
     unread = notifications.select(&:unread)
     return if unread.empty?
     user = unread.first.user
+    MarkReadWorker.perform_async_if_configured(user.id, unread.map(&:github_id))
+    where(id: unread.map(&:id)).update_all(unread: false)
+  end
+
+  def self.mark_read_on_github(user, notification_ids)
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
     begin
       conn.in_parallel(manager) do
-        unread.each do |n|
-            conn.patch "notifications/threads/#{n.github_id}"
+        notification_ids.each do |id|
+            conn.patch "notifications/threads/#{id}"
         end
       end
     rescue Octokit::Forbidden, Octokit::NotFound
       # one or more notifications are for repos the user no longer has access to
     end
-    where(id: unread.map(&:id)).update_all(unread: false)
   end
 
   def self.mute(notifications)
     return if notifications.empty?
     user = notifications.to_a.first.user
+    MuteNotificationsWorker.perform_async_if_configured(user.id, notifications.map(&:github_id))
+    where(id: notifications.map(&:id)).update_all(archived: true, unread: false, muted_at: Time.current)
+  end
+
+  def self.mute_on_github(user, notification_ids)
     conn = user.github_client.client_without_redirects
     manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
-    conn.in_parallel(manager) do
-      notifications.each do |n|
-        conn.patch "notifications/threads/#{n.github_id}"
-        conn.put "notifications/threads/#{n.github_id}/subscription", {ignored: true}.to_json
+    begin
+      conn.in_parallel(manager) do
+        notification_ids.each do |id|
+          conn.patch "notifications/threads/#{id}"
+          conn.put "notifications/threads/#{id}/subscription", {ignored: true}.to_json
+        end
       end
+    rescue Octokit::Forbidden, Octokit::NotFound
+      # one or more notifications are for repos the user no longer has access to
     end
-
-    where(id: notifications.map(&:id)).update_all(archived: true, unread: false)
   end
 
   def expanded_subject_url
-    return subject_url unless Octobox.config.subjects_enabled?
+    return subject_url unless display_subject?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
   end
 
@@ -140,6 +130,7 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
+    archived = false if archived.nil? # fixup existing records where archived is nil
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
     update_subject
@@ -147,7 +138,7 @@ class Notification < ApplicationRecord
   end
 
   def github_app_installed?
-    user.app_token.present? && repository.try(:github_app_installed?)
+    Octobox.github_app? && user.github_app_authorized? && repository.try(:display_subject?)
   end
 
   def subjectable?
@@ -189,8 +180,13 @@ class Notification < ApplicationRecord
   end
 
   def update_subject(force = false)
-    return unless subjectable?
+    return unless display_subject?
+    return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
+    UpdateSubjectWorker.perform_async_if_configured(self.id, force)
+  end
+
+  def update_subject_in_foreground(force = false)
     return unless display_subject?
     # skip syncing if the notification was updated around the same time as subject
     return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
@@ -201,6 +197,7 @@ class Notification < ApplicationRecord
     if subject
       case subject_type
       when 'Issue', 'PullRequest'
+        subject.repository_full_name = repository_full_name
         subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
         subject.state = remote_subject.merged_at.present? ? 'merged' : remote_subject.state
         subject.save(touch: false) if subject.changed?
@@ -209,6 +206,7 @@ class Notification < ApplicationRecord
       case subject_type
       when 'Issue', 'PullRequest'
         create_subject({
+          repository_full_name: repository_full_name,
           github_id: remote_subject.id,
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
@@ -216,15 +214,18 @@ class Notification < ApplicationRecord
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at,
-          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
+          assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:",
+          locked: remote_subject.locked,
         })
       when 'Commit', 'Release'
         create_subject({
+          repository_full_name: repository_full_name,
           github_id: remote_subject.id,
           author: remote_subject.author&.login,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
-          updated_at: remote_subject.updated_at
+          updated_at: remote_subject.updated_at,
+          locked: remote_subject.locked
         })
       end
     end
@@ -289,5 +290,27 @@ class Notification < ApplicationRecord
         last_synced_at: Time.current
       })
     end
+  end
+
+  private
+
+  def download_subject
+    user.subject_client.get(subject_url)
+
+  # If permissions changed and the user hasn't accepted, we get a 401
+  # We may receive a 403 Forbidden or a 403 Not Available
+  # We may be rate limited and get a 403 as well
+  # We may also get blocked by legal reasons (451)
+  # Regardless of the reason, any client error should be rescued and warned so we don't
+  # end up blocking other syncs
+  rescue Octokit::ClientError => e
+    Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
+    nil
+  end
+
+  def download_repository
+    user.github_client.repository(repository_full_name)
+  rescue Octokit::ClientError => e
+    nil
   end
 end

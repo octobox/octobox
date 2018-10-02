@@ -114,6 +114,10 @@ module NotificationsHelper
     function_button("Unarchive selected", 'inbox', "archive_toggle unarchive_selected #{'hidden-button' if hidden}", 'Unarchive selected items')
   end
 
+  def delete_selected_button
+    function_button("Delete selected", 'trashcan', "delete_selected", 'Delete selected items')
+  end
+
   def select_all_button(cur_selected, total)
     button_tag(type: 'button', class: "select_all btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': "Number of items selected") do
       octicon('check', height: 16) +
@@ -229,9 +233,9 @@ module NotificationsHelper
       link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
         yield
         if active && not_repo_in_active_org(param)
-          concat content_tag(:span, octicon('x', :height => 16), class: 'badge')
+          concat content_tag(:span, octicon('x', :height => 16), class: 'badge badge-light')
         elsif count.present?
-          concat content_tag(:span, count, class: 'badge')
+          concat content_tag(:span, count, class: 'badge badge-light')
         end
       end
     end

@@ -69,7 +69,7 @@ module StubHelper
     unless body
       file_fixture = file_fixture('user.json')
       file_fixture_content = file_fixture.read
-      body = JSON.parse(file_fixture_content)
+      body = Oj.load(file_fixture_content)
       body[:id] = user.github_id if user.respond_to?(:github_id)
       body = body.to_json
     end
@@ -98,5 +98,10 @@ module StubHelper
 
   def stub_fetch_subject_enabled(value: true)
     Octobox.config.stubs(:fetch_subject).returns(value)
+    Octobox.config.stubs(:github_app).returns(value)
+  end
+
+  def stub_background_jobs_enabled(value: true)
+    Octobox.config.stubs(:background_jobs_enabled).returns(value)
   end
 end

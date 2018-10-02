@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sidekiq/web'
+require 'sidekiq-status/web'
 if Octobox.config.sidekiq_schedule_enabled?
   require 'sidekiq-scheduler/web'
 end
@@ -31,9 +32,11 @@ Rails.application.routes.draw do
       post :archive_selected
       post :sync
       get  :sync
+      get  :syncing
       post :mute_selected
       post :mark_read_selected
       get  :unread_count
+      post :delete_selected
     end
 
     member do
@@ -48,7 +51,7 @@ Rails.application.routes.draw do
 
   post '/hooks/github', to: 'hooks#create'
 
-  if Octobox.config.octobox_io
+  if Octobox.octobox_io?
     get '/privacy', to: 'pages#privacy'
     get '/terms', to: 'pages#terms'
   end

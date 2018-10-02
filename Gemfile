@@ -3,7 +3,7 @@ ruby '2.5.1'
 
 gem 'rails', '~> 5.2'
 gem 'bootstrap'
-gem "attr_encrypted", "~> 3.1.0"
+gem 'attr_encrypted'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'local_time'
@@ -25,30 +25,37 @@ gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler'
 gem 'rack-canonical-host'
-gem 'gemoji'
+gem 'sidekiq-status'
+gem 'gemoji', require: false
 gem 'bootsnap', require: false
 gem 'github-markup', require: 'github/markup'
 gem 'kramdown'
 gem 'bugsnag'
+gem 'jwt'
+gem 'oj'
+gem 'yard'
 
 # Supported databases
 gem 'mysql2', require: false
-gem 'pg', '1.1.2', require: false
+gem 'pg', '1.1.3', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
+  gem 'active_record_query_trace'
 end
 
 group :test do
   gem 'factory_bot'
   gem 'simplecov'
-  gem 'codeclimate-test-reporter'
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
+  gem 'selenium-webdriver'
+  gem 'capybara'
+  gem 'percy-capybara'
 end
 
 group :development do
@@ -57,6 +64,10 @@ group :development do
   gem 'rubocop', require: false
   gem 'spring'
   gem 'spring-watcher-listen'
+  gem 'brakeman'
+  gem 'bullet'
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 group :production do

@@ -9,6 +9,10 @@ require 'rails/test_help'
 require 'webmock/minitest'
 require 'mocha/minitest'
 
+require 'sidekiq_unique_jobs/testing'
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
+
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
 
 FactoryBot.find_definitions
@@ -43,7 +47,7 @@ module NotificationTestHelper
   end
 
   def notifications_from_fixture(fixture_file)
-    JSON.parse(file_fixture(fixture_file).read, object_class: OpenStruct).tap do |notifications|
+    Oj.load(file_fixture(fixture_file).read, object_class: OpenStruct).tap do |notifications|
       notifications.map { |n| n.last_read_at = Time.parse(n.last_read_at).to_s if n.last_read_at }
     end
   end

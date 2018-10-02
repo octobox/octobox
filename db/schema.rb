@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_30_145149) do
+ActiveRecord::Schema.define(version: 2018_09_17_090422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
+
+  create_table "app_installation_permissions", force: :cascade do |t|
+    t.integer "app_installation_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "app_installations", force: :cascade do |t|
     t.integer "github_id"
@@ -69,6 +76,9 @@ ActiveRecord::Schema.define(version: 2018_08_30_145149) do
     t.boolean "starred", default: false
     t.string "repository_owner_name", default: ""
     t.string "latest_comment_url"
+    t.datetime "muted_at"
+    t.index ["muted_at"], name: "index_notifications_on_muted_at"
+    t.index ["repository_full_name"], name: "index_notifications_on_repository_full_name"
     t.index ["subject_url"], name: "index_notifications_on_subject_url"
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at"
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true
@@ -96,8 +106,33 @@ ActiveRecord::Schema.define(version: 2018_08_30_145149) do
     t.string "assignees", default: "::"
     t.integer "github_id"
     t.string "repository_full_name"
-    t.text "body"
+    t.boolean "locked"
     t.index ["url"], name: "index_subjects_on_url"
+  end
+
+  create_table "subscription_plans", force: :cascade do |t|
+    t.integer "github_id"
+    t.string "name"
+    t.string "description"
+    t.integer "monthly_price_in_cents"
+    t.integer "yearly_price_in_cents"
+    t.string "price_model"
+    t.boolean "has_free_trial"
+    t.string "unit_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "subscription_purchases", force: :cascade do |t|
+    t.integer "subscription_plan_id"
+    t.integer "account_id"
+    t.string "billing_cycle"
+    t.integer "unit_count"
+    t.boolean "on_free_trial"
+    t.datetime "free_trial_ends_on"
+    t.datetime "next_billing_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -114,6 +149,8 @@ ActiveRecord::Schema.define(version: 2018_08_30_145149) do
     t.string "encrypted_personal_access_token_iv"
     t.string "encrypted_app_token"
     t.string "encrypted_app_token_iv"
+    t.string "sync_job_id"
+    t.string "theme", default: "light"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end

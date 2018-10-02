@@ -5,6 +5,7 @@ if Rails.env.production?
     config.frequency     = 5    # seconds
     config.percent_usage = 0.98
     config.rolling_restart_frequency = 6 * 3600 # 6 hours in seconds
+    config.reaper_status_logs = false
   end
   PumaWorkerKiller.start
 end

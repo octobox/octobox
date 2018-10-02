@@ -1,0 +1,92 @@
+// bootstrap
+@import 'bootstrap-custom';
+
+// custom components and colors
+@import 'variables';
+@import 'badges';
+@import 'labels';
+@import 'fills';
+
+//primary layout
+@import 'layout';
+
+//secondary layouts
+@import 'navbar';
+@import 'sidebar';
+@import 'notifications';
+@import 'dialogs';
+
+.sync{
+  margin-right: 0px;
+}
+
+.img-rounded {
+  border-radius: 3px;
+}
+
+.octicon {
+  vertical-align: text-bottom;
+}
+
+.filter-label {
+  pointer-events: none;
+}
+
+.card-notifications {
+  margin-bottom: 20px;
+  .card-header {
+    background: mix($black, $card-bg, 3%);
+    padding: 6px 8px;
+    .pagination{
+      margin: 6px 0px 0px;
+    }
+  }
+  .bold {
+    font-weight: bold;
+  }
+}
+
+.select-all {
+  padding-left: 6px;
+  input {
+    position: relative;
+    left: 2px;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(1turn); }
+}
+
+.spinning{
+  animation: spin 1s infinite steps(90);
+}
+
+.screenshot{
+  max-width: 100%;
+}
+
+.hidden-button {
+  display: none;
+}
+
+.settings-sha {
+  margin: 35px 0 10px;
+}
+
+.emoji{
+  height: 1em;
+  width: 1em;
+}
+
+.per-page .dropdown-menu{
+  min-width: 4rem;
+}
+
+.text-large{
+  font-size: 16px;
+}
+
+.blur-action {
+  opacity: .5;
+}

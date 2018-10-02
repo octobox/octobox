@@ -146,6 +146,13 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 60_000, @user.refresh_interval
   end
 
+  test 'sync_notifications sets job id and enqueues job' do
+    @user.sync_notifications
+    @user.reload
+    assert_not_nil @user.sync_job_id
+    assert_equal 1, SyncNotificationsWorker.jobs.size
+  end
+
   [{refresh_interval: 90_000, minimum_refresh_interval: 0, expected_result: nil},
    {refresh_interval: 90_000, minimum_refresh_interval: 60, expected_result: 60 * 60_000},
    {refresh_interval: 0, minimum_refresh_interval: 60, expected_result: nil},

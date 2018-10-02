@@ -1,0 +1,7 @@
+@import "themes/darkly/variables";
+@import "application";
+@import "themes/darkly/bootswatch";
+
+.navbar-dark {
+	background: mix($body-bg, $white, 95%) !important;
+}
