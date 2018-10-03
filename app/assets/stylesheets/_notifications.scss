@@ -16,9 +16,10 @@ $notification-items: (
   .active {
     font-weight: bold;
     background-color: $list-group-action-active-bg;
-
-    .badge-pr-status-failure-error, .badge-pr-status-pending {
-      background-color: $list-group-action-active-bg;
+    .badge-pr {
+      &.failure, &.error, &.pending {
+        background-color: $list-group-action-active-bg;
+      }
     }
   }
 }

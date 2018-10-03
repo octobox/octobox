@@ -3,6 +3,7 @@ $sidebar-width: 250px;
 $notification-open: #5cb85c !default;
 $notification-closed: #d9534f !default;
 $notification-merged: #a128ca !default;
+$notification-pending: #dbab09 !default;
 
 $label-default-color: #333 !default;
 $label-muted-color: #ccc !default;
@@ -20,7 +21,3 @@ $icon-star-hover-fill: $icon-star-stroke !default;
 $icon-star-hover-stroke: $icon-star-stroke !default;
 $icon-star-active-fill: #f0ad4e !default;
 $icon-star-active-stroke: $icon-star-active-fill !default;
-
-$octicon-pr-failure_error-color: #cb2431 !default;
-$octicon-pr-pending-color: #dbab09 !default;
-$octicon-pr-success-badge-bg-color: #2cbe4e !default;

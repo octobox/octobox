@@ -28,21 +28,14 @@
   }
 }
 
-.pending {
-  fill: $octicon-pr-pending-color;
-}
-
-.badge-pr-status-pending, .badge-pr-status-failure-error {
-  background-color: $list-group-bg;
-}
-
-.badge-pr-status-success {
-  background-color: $octicon-pr-success-badge-bg-color;
-  .octicon {
+.badge-pr {
+  &.success {
+    background-color: $notification-open;
+  }
+  &.success > .octicon {
     fill: white;
   }
-}
-
-.badge-pr-status-failure-error > .octicon {
-  fill: $octicon-pr-failure_error-color;
+  &.failure, &.pending, &.error {
+    background-color: $list-group-bg;
+  }
 }

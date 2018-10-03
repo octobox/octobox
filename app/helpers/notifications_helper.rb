@@ -32,6 +32,13 @@ module NotificationsHelper
     pending: "pending"
   }
 
+  NOTIFICATION_STATUS_OCTICON = {
+    'success' => 'check',
+    'failure' => 'x',
+    'error' => 'alert',
+    'pending' => 'primitive-dot'
+  }
+
   def filters
     {
       reason:     params[:reason],
@@ -254,31 +261,16 @@ module NotificationsHelper
 
   def notification_status(status, sidebar=false)
     if status.present?
-      case status
-      when SUBJECT_STATUS[:success]
-        sidebar ? octicon('check', height: 16, class: 'sidebar-icon') : content_tag(:span,
-          octicon('check', height: 16),
-          class: 'badge badge-light badge-pr-status-success'
-        )
-      when SUBJECT_STATUS[:failure]
-        sidebar ? octicon('x', height: 16, class: 'sidebar-icon') : content_tag(:span,
-          octicon('x', height: 16),
-          class: 'badge badge-light badge-pr-status-failure-error'
-        )
-      when SUBJECT_STATUS[:error]
-        sidebar ? octicon('alert', height: 16, class: 'sidebar-icon') : content_tag(:span,
-          octicon('alert', height: 16),
-          class: 'badge badge-light badge-pr-status-failure-error'
-        )
-      when SUBJECT_STATUS[:pending]
-        sidebar ? octicon('primitive-dot', height: 24, class: 'sidebar-icon pending') : content_tag(:span,
-          octicon('primitive-dot', height: 18, class: 'pending'),
-          class: 'badge badge-light badge-pr-status-pending'
+      if sidebar
+        octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
+      else
+        content_tag(:span,
+          octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "#{status}"),
+          class: "badge badge-light badge-pr #{status}"
         )
       end
     else
       ''
     end
   end
-
 end
