@@ -32,6 +32,7 @@ module Octobox
             subject.repository_full_name = repository_full_name
             subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
             subject.state = remote_subject.merged_at.present? ? SUBJECT_STATE_MERGED : remote_subject.state
+            subject.sha = remote_subject.head&.sha
             subject.save(touch: false) if subject.changed?
           end
         else
@@ -47,6 +48,7 @@ module Octobox
               updated_at: remote_subject.updated_at,
               assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:",
               locked: remote_subject.locked,
+              sha: remote_subject.head&.sha
             })
           when *SUBJECT_TYPE_COMMIT_RELEASE
             create_subject({

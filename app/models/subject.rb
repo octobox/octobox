@@ -71,6 +71,13 @@ class Subject < ApplicationRecord
     subject.sync_involved_users
   end
 
+  def self.sync_status(sha, state)
+    subject = Subject.find_by(sha: sha)
+    if subject
+      subject.update({state: state})
+    end
+  end
+
   private
 
   def self.extract_full_name(url)

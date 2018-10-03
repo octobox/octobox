@@ -282,7 +282,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private].each do |sub_scope|
+    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status].each do |sub_scope|
       next unless params[sub_scope].present?
       # This cast is required due to a bug in type casting
       # TODO: Rails 5.2 was supposed to fix this:
