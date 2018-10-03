@@ -31,20 +31,17 @@
 .badge-pr {
   &.success {
     background-color: $notification-open;
-  }
-  &.success > .octicon {
-    fill: white;
+    .octicon {
+      fill: white;
+    }
   }
   &.failure, &.pending, &.error {
     background-color: $list-group-bg;
+    .active &, .notification:hover & {
+      background-color: $list-group-action-active-bg;
+    }
   }
-  &.pending > .octicon {
+  &.pending .octicon {
     vertical-align: middle;
-  }
-}
-
-.notification.active .badge-pr, .notification:hover .badge-pr {
-  &.failure, &.error, &.pending {
-    background-color: $list-group-action-active-bg;
   }
 }
