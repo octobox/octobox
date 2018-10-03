@@ -188,15 +188,15 @@ module NotificationsHelper
     end
   end
 
-  def repo_filter_link(param, value, count)
-    active = params[param] == value || params[:owner] == value.split('/')[0]
-    sidebar_filter_link(active, param, value, count, :owner, 'repo-label') do
+  def repo_filter_link(param, repo_name, count)
+    active = params[param] == repo_name || params[:owner] == repo_name.split('/')[0]
+    sidebar_filter_link(active, param, repo_name, count, :owner, 'repo-label', nil, repo_name) do
       yield
     end
   end
 
-  def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, path_params = nil)
-    content_tag :li, class: (active ? 'nav-item active' : 'nav-item') do
+  def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, path_params = nil, title = nil)
+    content_tag :li, class: (active ? 'nav-item active' : 'nav-item'), title: title do
       active = (active && not_repo_in_active_org(param))
       path_params ||= filtered_params(param => (active ? nil : value)).except(except)
       link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
