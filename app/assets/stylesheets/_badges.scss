@@ -38,4 +38,13 @@
   &.failure, &.pending, &.error {
     background-color: $list-group-bg;
   }
+  &.pending > .octicon {
+    vertical-align: middle;
+  }
+}
+
+.notification.active .badge-pr, .notification:hover .badge-pr {
+  &.failure, &.error, &.pending {
+    background-color: $list-group-action-active-bg;
+  }
 }
