@@ -9,30 +9,6 @@ $notification-items: (
   'datetime'
 );
 
-.svg-pr-status {
-  width: 9px;
-  margin-right: 3px;
-  margin-left: 2px;
-}
-
-.svg-pr-status > .in_progress, .svg-pr-status > .pending {
-  fill: $octicon-pr-pending-color;
-}
-
-.badge-pr-status-success {
-  background-color: $octicon-pr-success-badge-bg-color;
-  .octicon {
-    fill: white;
-  }
-}
-
-.badge-pr-status-failure-error {
-  background-color: $list-group-bg;
-  .octicon {
-    fill: $octicon-pr-failure_error-color;
-  }
-}
-
 .table-notifications {
   td{
     padding: 0.6rem;
@@ -41,7 +17,7 @@ $notification-items: (
     font-weight: bold;
     background-color: $list-group-action-active-bg;
 
-    .badge-pr-status-failure-error {
+    .badge-pr-status-failure-error, .badge-pr-status-pending {
       background-color: $list-group-action-active-bg;
     }
   }

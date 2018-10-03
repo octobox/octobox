@@ -32,10 +32,6 @@ module NotificationsHelper
     pending: "pending"
   }
 
-  DONUT_CHART_SVG = '<svg class="svg-pr-status align-middle" viewBox="0 0 8 16" version="1.1" width="8" height="16" aria-hidden="true">
-    <path class="pending" fill-rule="evenodd" d="M0 8c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4z"></path>
-  </svg>'
-
   def filters
     {
       reason:     params[:reason],
@@ -264,7 +260,6 @@ module NotificationsHelper
           octicon('check', height: 16),
           class: 'badge badge-light badge-pr-status-success'
         )
-
       when SUBJECT_STATUS[:failure]
         sidebar ? octicon('x', height: 16, class: 'sidebar-icon') : content_tag(:span,
           octicon('x', height: 16),
@@ -276,7 +271,10 @@ module NotificationsHelper
           class: 'badge badge-light badge-pr-status-failure-error'
         )
       when SUBJECT_STATUS[:pending]
-        content_tag(:span, DONUT_CHART_SVG.html_safe)
+        sidebar ? octicon('primitive-dot', height: 24, class: 'sidebar-icon pending') : content_tag(:span,
+          octicon('primitive-dot', height: 18, class: 'pending'),
+          class: 'badge badge-light badge-pr-status-pending'
+        )
       end
     else
       ''

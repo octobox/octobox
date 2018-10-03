@@ -27,3 +27,22 @@
     background-color: darken($label-security_alert-color, 10% );
   }
 }
+
+.pending {
+  fill: $octicon-pr-pending-color;
+}
+
+.badge-pr-status-pending, .badge-pr-status-failure-error {
+  background-color: $list-group-bg;
+}
+
+.badge-pr-status-success {
+  background-color: $octicon-pr-success-badge-bg-color;
+  .octicon {
+    fill: white;
+  }
+}
+
+.badge-pr-status-failure-error > .octicon {
+  fill: $octicon-pr-failure_error-color;
+}
