@@ -71,10 +71,10 @@ class Subject < ApplicationRecord
     subject.sync_involved_users
   end
 
-  def self.sync_status(sha, state)
+  def self.sync_status(sha, status)
     subject = Subject.find_by(sha: sha)
     if subject
-      subject.update({state: state})
+      subject.update({status: status})
     end
   end
 
