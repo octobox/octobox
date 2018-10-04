@@ -100,7 +100,7 @@ var Octobox = (function() {
 
     $(document).keydown(function(e) {
       // disable shortcuts for the seach box
-      if (e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
+      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
         var shortcutFunction = shortcuts[e.which];
         if (shortcutFunction) { shortcutFunction(e) }
       }
