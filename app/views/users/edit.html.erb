@@ -17,6 +17,44 @@
   </div>
   <hr>
 
+  <div class="card mb-3" id='pinned-searches'>
+    <h5 class="card-header">
+      Pinned Searches
+    </h5>
+    <div class="card-body">
+      <p>Pin your favorite searches to the sidebar so you can access them quickly</p>
+
+      <% if current_user.pinned_searches.any? %>
+        <table class='table table-responsive-sm border-bottom'>
+          <thead>
+            <th>
+              Name
+            </th>
+            <th colspan="2">
+              Search Query
+            </th>
+          </thead>
+          <% current_user.pinned_searches.each do |pinned_search| %>
+            <tr>
+              <td>
+                <%= pinned_search.name %>
+              </td>
+              <td>
+                <%= pinned_search.query %>
+              </td>
+              <td>
+                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: 'Edit', data: {toggle: 'tooltip'}, class: 'mr-2' %>
+                <%= link_to octicon('trashcan'), pinned_search_path(pinned_search), title: 'Delete', data: {toggle: 'tooltip'}, method: :delete %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+      <p><strong>Pin a search:</strong></p>
+      <%= render 'pinned_searches/form' %>
+    </div>
+  </div>
+
   <%= form_for current_user do |f| %>
     <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
       <% if Octobox.refresh_interval_enabled? %>
