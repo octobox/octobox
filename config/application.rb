@@ -23,5 +23,6 @@ Bundler.require(*Rails.groups)
 module Octobox
   class Application < Rails::Application
     config.eager_load_paths << Rails.root.join("lib")
+    config.exceptions_app = routes
   end
 end
