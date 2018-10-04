@@ -32,6 +32,7 @@ gem 'bugsnag'
 gem 'jwt'
 gem 'oj'
 gem 'yard'
+gem 'simple_form'
 
 # Supported databases
 gem 'mysql2', require: false

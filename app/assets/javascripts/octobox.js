@@ -279,12 +279,12 @@ var Octobox = (function() {
   };
 
   var initialize = function() {
-    enableKeyboardShortcuts();
     enableTooltips();
 
     if ($("#help-box").length){
-      setFavicon($('.js-unread-count').data('count'))
-      initShiftClickCheckboxes()
+      enableKeyboardShortcuts();
+      setFavicon($('.js-unread-count').data('count'));
+      initShiftClickCheckboxes();
       recoverPreviousCursorPosition();
       setAutoSyncTimer();
     }

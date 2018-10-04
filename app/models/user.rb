@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :delete_all
   has_many :app_installation_permissions, dependent: :delete_all
   has_many :app_installations, through: :app_installation_permissions
+  has_many :pinned_searches, dependent: :delete_all
 
   ERRORS = {
     invalid_token: [:personal_access_token, 'is not a valid token for this github user'],

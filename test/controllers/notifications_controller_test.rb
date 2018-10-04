@@ -856,4 +856,54 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     assert !notification1.reload.archived?
   end
+
+  test 'shows saved searches in sidebar' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select '.pinned_search', {count: 1}
+  end
+
+  test 'highlights active saved searches in sidebar' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/?q=inbox%3Atrue+owner%3Aoctobox'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select '.pinned_search .active', {count: 1}
+  end
+
+  test 'only shows new saved search link if filters are active' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
+
+  test 'shows new saved search link if not already saved' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/?q=foo'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 1}
+  end
+
+  test "doesn't show new saved search link if already saved" do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/?q=inbox%3Atrue+owner%3Aoctobox'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
+
+  test "doesn't show new saved search link if already saved with params" do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/?owner=octobox'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
 end

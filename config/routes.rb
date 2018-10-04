@@ -55,6 +55,8 @@ Rails.application.routes.draw do
     get '/terms', to: 'pages#terms'
   end
 
+  resources :pinned_searches
+
   get '/settings', to: 'users#edit'
   resources :users, only: [:update, :destroy] do
     collection do

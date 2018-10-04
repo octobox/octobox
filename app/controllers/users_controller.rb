@@ -25,6 +25,7 @@ class UsersController < ApplicationController
     @total = repo_counts.sum(&:last)
     @most_active_repos = repo_counts.sort_by(&:last).reverse.first(10)
     @most_active_orgs = current_user.notifications.group(:repository_owner_name).count.sort_by(&:last).reverse.first(10)
+    @pinned_search = PinnedSearch.new(query: params[:q])
   end
 
   # Update a user profile. Only updates the current user
