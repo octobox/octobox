@@ -221,6 +221,24 @@ class NotificationsController < ApplicationController
     head :ok
   end
 
+  # Snooze a notification
+  #
+  # :category: Notifications Actions
+  #
+  # ==== Example
+  #
+  # <code>POST notifications/:id/snooze_selected.json</code>
+  #   HEAD 204
+  #
+  def snooze_selected
+    Notification.snooze(selected_notifications, params[:value])
+    if request.xhr?
+      head :ok
+    else
+      redirect_back fallback_location: root_path
+    end
+  end
+
   # Synchronize notifications with GitHub
   #
   # :category: Notifications Actions
@@ -315,6 +333,8 @@ class NotificationsController < ApplicationController
       scope.starred
     elsif params[:archive].present?
       scope.archived
+    elsif params[:snoozed].present?
+      scope.snoozed
     else
       scope.inbox
     end

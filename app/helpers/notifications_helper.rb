@@ -73,6 +73,10 @@ module NotificationsHelper
     filters[:starred].present?
   end
 
+  def snoozed_selected?
+    filters[:snoozed].present?
+  end
+
   def showing_search_results?
     filters[:q].present?
   end

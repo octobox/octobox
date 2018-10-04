@@ -111,6 +111,11 @@ class Notification < ApplicationRecord
     end
   end
 
+  def self.snooze(notifications, value)
+    notifications.update_all(snooze_until: value)
+    mark_read(notifications)
+  end
+
   def expanded_subject_url
     return subject_url unless display_subject?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one

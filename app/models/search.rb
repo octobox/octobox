@@ -33,6 +33,7 @@ class Search
     res = res.archived(archived) unless archived.nil?
     res = res.archived(!inbox) unless inbox.nil?
     res = res.unread(unread) unless unread.nil?
+    res = res.snoozed(snoozed) unless snoozed.nil?
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
@@ -235,6 +236,10 @@ class Search
 
   def is_muted
     boolean_prefix(:muted)
+  end
+
+  def snoozed
+    boolean_prefix(:snoozed)
   end
 
   private
