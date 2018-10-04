@@ -31,13 +31,6 @@ Example actions:
 - delete a notification
 
 
-## Sync and show status of pull requests CI [#866](https://github.com/octobox/octobox/issues/866)
-
-Pull request statuses are things like CI pass/fail, CLA bots and review requirements which all results in a ✅ or ❌, we can sync those statuses in from GitHub to give you a better overview of what's going on on your notifications.
-
-We can then also allow filtering and searching by pass/pending/fail/error statuses and show the ✅ or ❌ in the UI.
-
-
 ## Localization [#703](https://github.com/octobox/octobox/issues/703)
 
 Let's make Octobox more friendly for people whose primary language isn't English, allowing them to switch interface text to the language of their preference.
