@@ -177,6 +177,16 @@ var Octobox = (function() {
     });
   }
 
+  var snoozeSelected = function(value){
+    if (getDisplayedRows().length === 0) return;
+    var ids = getIdsFromRows(getMarkedOrCurrentRows());
+
+    $.post( "/notifications/snooze_selected" + location.search, { "id[]": ids, "value": value } ).done(function() {
+      resetCursorAfterRowsRemoved(ids);
+      updateFavicon();
+    });
+  }
+
   var toggleSelectAll = function() {
     $.map($("button.select_all > span"), function( val, i ) {
       $(val).toggleClass("bold")
@@ -492,6 +502,7 @@ var Octobox = (function() {
     removeCurrent: removeCurrent,
     toggleOffCanvas: toggleOffCanvas,
     markRead: markRead,
-    deleteSelected: deleteSelected
+    deleteSelected: deleteSelected,
+    snoozeSelected: snoozeSelected
   }
 })();

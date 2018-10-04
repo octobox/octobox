@@ -6,7 +6,6 @@ module Octobox
       included do
         scope :muted,    -> { where("muted_at IS NOT NULL") }
         scope :inbox,    -> { where.not(archived: true) }
-        scope :snoozed,  -> { where.("snooze_until > ? ", Time.now) }
         scope :archived, ->(value = true) { where(archived: value) }
         scope :newest,   -> { order('notifications.updated_at DESC') }
         scope :starred,  ->(value = true) { where(starred: value) }
@@ -65,6 +64,14 @@ module Octobox
           joins(:subject).where(
             assignees.map { |assignee| Subject.arel_table[:assignees].matches("%:#{assignee}:%") }.reduce(:or)
           )
+        }
+
+        scope :snoozed,    ->(value) {
+          if value
+            where("snooze_until > ? ", Time.now)
+          else
+            where("snooze_until IS NULL OR snooze_until < ? ", Time.now)
+          end
         }
       end
     end

@@ -31,9 +31,13 @@ class Search
     res = res.exclude_status(exclude_status) if exclude_status.present?
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
-    res = res.archived(!inbox) unless inbox.nil?
-    res = res.unread(unread) unless unread.nil?
     res = res.snoozed(snoozed) unless snoozed.nil?
+
+    # we dont want snoozed or archived notifications to show up in Main Feed
+    res = res.snoozed(!inbox) unless inbox.nil?
+    res = res.archived(!inbox) unless inbox.nil?
+
+    res = res.unread(unread) unless unread.nil?
     res = res.bot_author unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?

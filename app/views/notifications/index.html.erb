@@ -41,6 +41,7 @@
         <% end %>
         <%= archive_selected_button unless archive_selected? %>
         <%= unarchive_selected_button unless inbox_selected? %>
+        <%= snooze_selected_button unless snoozed_selected? %>
         <%= mute_selected_button %>
         <%= mark_read_selected_button %>
         <%= delete_selected_button if archive_selected? %>
