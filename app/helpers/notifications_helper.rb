@@ -230,4 +230,17 @@ module NotificationsHelper
     return true unless param == :repo
     params[:owner].blank?
   end
+
+  def search_query_matches?(query, other_query)
+    query.split(' ').sort == other_query.split(' ').sort
+  end
+
+  def search_pinned?(query)
+    return unless query.present?
+    return false if current_user.pinned_searches.empty?
+
+    current_user.pinned_searches.any? do |pinned_search|
+      search_query_matches?(query, pinned_search.query)
+    end
+  end
 end

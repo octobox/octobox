@@ -74,6 +74,15 @@ ActiveRecord::Schema.define(version: 2018_09_17_090422) do
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true
   end
 
+  create_table "pinned_searches", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "query"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_pinned_searches_on_user_id"
+  end
+
   create_table "repositories", force: :cascade do |t|
     t.string "full_name", null: false
     t.integer "github_id"
@@ -133,13 +142,13 @@ ActiveRecord::Schema.define(version: 2018_09_17_090422) do
     t.datetime "last_synced_at"
     t.integer "refresh_interval", default: 0
     t.string "api_token"
+    t.string "sync_job_id"
     t.string "encrypted_access_token"
     t.string "encrypted_access_token_iv"
     t.string "encrypted_personal_access_token"
     t.string "encrypted_personal_access_token_iv"
     t.string "encrypted_app_token"
     t.string "encrypted_app_token_iv"
-    t.string "sync_job_id"
     t.string "theme", default: "light"
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
