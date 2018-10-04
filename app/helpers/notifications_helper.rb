@@ -259,18 +259,15 @@ module NotificationsHelper
     end
   end
 
-  def notification_status(status, sidebar=false)
-    if status.present?
-      if sidebar
-        octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
-      else
-        content_tag(:span,
-          octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "#{status}"),
-          class: "badge badge-light badge-pr #{status}"
-        )
-      end
-    else
-      ''
-    end
+  def notification_status(status)
+    content_tag(:span,
+      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: status),
+      class: "badge badge-light badge-pr #{status}"
+    )
   end
+
+  def sidebar_notification_status(status)
+    octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
+  end
+
 end

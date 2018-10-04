@@ -141,7 +141,7 @@
         <% next if status.nil? %>
         <%= filter_link :status, status, count do %>
           <span class='text-<%= status %>'>
-            <%= notification_status(status, true) %>
+            <%= sidebar_notification_status(status) %>
           </span>
           Status <%= status.underscore.humanize %>
         <% end %>
