@@ -905,6 +905,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?owner=octobox'
     assert_response :success
     assert_select '.new_pinned_search', {count: 0}
+  end
 
   test 'renders results by status' do
     sign_in_as(@user)
