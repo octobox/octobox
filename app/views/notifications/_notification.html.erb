@@ -32,6 +32,7 @@
         <% notification.subject.labels.each do |label| %>
           <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge d-sm", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
         <% end %>
+        <%= notification_status(notification.subject.status) %>
       <% end %>
     <% end %>
   </td>

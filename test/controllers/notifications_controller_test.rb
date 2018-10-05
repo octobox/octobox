@@ -906,4 +906,48 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select '.new_pinned_search', {count: 0}
   end
+
+  test 'renders results by status' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification5 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], status: 'failure')
+    create(:subject, notifications: [notification2], status: 'success')
+    create(:subject, notifications: [notification3], status: 'pending')
+    create(:subject, notifications: [notification4])
+    create(:subject, notifications: [notification5], status: 'failure')
+
+    get '/?status=success'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?status=failure'
+    assert_equal assigns(:notifications).length, 2
+
+    get '/?status=pending'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by status' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], status: 'failure')
+    create(:subject, notifications: [notification2], status: 'success')
+    create(:subject, notifications: [notification3], status: 'pending')
+    create(:subject, notifications: [notification4])
+
+    get '/?q=status%3Asuccess'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?q=status%3Afailure'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?q=status%3Apending'
+    assert_equal assigns(:notifications).length, 1
+  end
 end

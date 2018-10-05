@@ -11,4 +11,14 @@ class NotificationTest < ActiveSupport::TestCase
     subject = create(:subject, author: "greenkeeper[bot]")
     assert_equal "https://github.com/apps/greenkeeper", subject.author_url
   end
+
+  test 'sync_status updates the status of subject' do
+    subject = create(:subject, status: "pending", sha: 'a10867b14bb761a232cd80139fbd4c0d33264240')
+  	Subject.sync_status('a10867b14bb761a232cd80139fbd4c0d33264240', 'success')
+
+    subject.reload
+
+    assert_equal 'success', subject.status
+  end
+
 end

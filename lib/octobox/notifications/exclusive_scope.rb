@@ -6,6 +6,7 @@ module Octobox
       included do
         scope :unmuted,        -> { where("muted_at IS NULL") }
         scope :exclude_type,   ->(subject_type) { where.not(subject_type: subject_type) }
+        scope :exclude_status, ->(status)       { joins(:subject).where("subjects.status is NULL or subjects.status != ?", status) }
         scope :exclude_reason, ->(reason)       { where.not(reason: reason) }
         scope :not_locked,     -> { joins(:subject).where(subjects: { locked: false }) }
         scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
@@ -38,14 +39,14 @@ module Octobox
           )
         }
 
-        scope :exclude_label,      ->(label_names) {
+        scope :exclude_label, ->(label_names) {
           label_names = [label_names] if label_names.is_a?(String)
           joins(:labels).where.not(
             label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
           )
         }
 
-        scope :exclude_assigned,   ->(assignees) {
+        scope :exclude_assigned, ->(assignees) {
           assignees = [assignees] if assignees.is_a?(String)
           joins(:subject).where.not(
             assignees.map { |assignee| Subject.arel_table[:assignees].matches("%:#{assignee}:%") }.reduce(:or)

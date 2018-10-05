@@ -73,6 +73,10 @@ svg{
   fill: $notification-closed;
 }
 
+.notification-pending{
+  fill: $notification-pending;
+}
+
 .private-repo{
   fill: $icon-private-repo-color;
 }
@@ -80,5 +84,14 @@ svg{
 .btn-outline-dark{
   &:hover svg, &:active svg{
     fill: color-yiq($body-color);
+  }
+}
+
+.octicon {
+  &.failure, &.error {
+    fill: $notification-closed;
+  }
+  &.pending {
+    fill: $notification-pending;
   }
 }

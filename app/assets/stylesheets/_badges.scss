@@ -27,3 +27,24 @@
     background-color: darken($label-security_alert-color, 10% );
   }
 }
+
+.badge-pr {
+  &.success {
+    background-color: $notification-open;
+    .octicon {
+      fill: white;
+    }
+  }
+  &.failure, &.pending, &.error {
+    background-color: $list-group-bg;
+    .active & {
+      background-color: $list-group-action-active-bg;
+    }
+    .notification:hover & {
+      background-color: transparent;
+    }
+  }
+  &.pending .octicon {
+    vertical-align: middle;
+  }
+}

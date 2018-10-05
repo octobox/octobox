@@ -25,6 +25,20 @@ module NotificationsHelper
     'RepositoryVulnerabilityAlert' => 'alert'
   }.freeze
 
+  SUBJECT_STATUS = {
+    success: "success",
+    failure: "failure",
+    error: "error",
+    pending: "pending"
+  }
+
+  NOTIFICATION_STATUS_OCTICON = {
+    'success' => 'check',
+    'failure' => 'x',
+    'error' => 'alert',
+    'pending' => 'primitive-dot'
+  }
+
   def filters
     {
       reason:     params[:reason],
@@ -42,7 +56,8 @@ module NotificationsHelper
       bot:        params[:bot],
       unlabelled: params[:unlabelled],
       assigned:   params[:assigned],
-      is_private: params[:is_private]
+      is_private: params[:is_private],
+      status:     params[:status]
     }
   end
 
@@ -243,4 +258,16 @@ module NotificationsHelper
       search_query_matches?(query, pinned_search.query)
     end
   end
+
+  def notification_status(status)
+    content_tag(:span,
+      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: status),
+      class: "badge badge-light badge-pr #{status}"
+    )
+  end
+
+  def sidebar_notification_status(status)
+    octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
+  end
+
 end

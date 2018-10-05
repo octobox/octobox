@@ -1,0 +1,27 @@
+{
+  "state": "failure",
+  "statuses": [
+    {
+      "url": "https://api.github.com/repos/rails/rails/statuses/84b4e75e5f627d34f7a85982bda7b260f34db4dd",
+      "id": 5582066989,
+      "state": "success",
+      "description": "All good!",
+      "target_url": "https://codeclimate.com/github/rails/rails/pull/33945",
+      "context": "codeclimate",
+      "created_at": "2018-10-01T15:29:57Z",
+      "updated_at": "2018-10-01T15:29:57Z"
+    },
+    {
+      "url": "https://api.github.com/repos/rails/rails/statuses/84b4e75e5f627d34f7a85982bda7b260f34db4dd",
+      "id": 5582476392,
+      "state": "error",
+      "description": "The Travis CI build could not complete due to an error",
+      "target_url": "https://travis-ci.org/rails/rails/builds/435669868?utm_source=github_status&utm_medium=notification",
+      "context": "continuous-integration/travis-ci/pr",
+      "created_at": "2018-10-01T16:29:55Z",
+      "updated_at": "2018-10-01T16:29:55Z"
+    }
+  ],
+  "sha": "84b4e75e5f627d34f7a85982bda7b260f34db4dd",
+  "total_count": 2
+}

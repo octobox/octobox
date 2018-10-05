@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_17_090422) do
+ActiveRecord::Schema.define(version: 2018_10_02_064359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -106,6 +106,8 @@ ActiveRecord::Schema.define(version: 2018_09_17_090422) do
     t.integer "github_id"
     t.string "repository_full_name"
     t.boolean "locked"
+    t.string "status"
+    t.string "sha"
     t.index ["url"], name: "index_subjects_on_url"
   end
 

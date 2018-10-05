@@ -78,6 +78,7 @@ class NotificationsController < ApplicationController
 
     if display_subject?
       @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
+      @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
       @unlabelled            = scope.reorder(nil).unlabelled.count
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
@@ -281,7 +282,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private].each do |sub_scope|
+    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status].each do |sub_scope|
       next unless params[sub_scope].present?
       # This cast is required due to a bug in type casting
       # TODO: Rails 5.2 was supposed to fix this:
