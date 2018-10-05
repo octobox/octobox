@@ -28,6 +28,8 @@ gem 'rack-canonical-host'
 gem 'sidekiq-status'
 gem 'gemoji', require: false
 gem 'bootsnap', require: false
+gem 'github-markup', require: 'github/markup'
+gem 'kramdown'
 gem 'bugsnag'
 gem 'jwt'
 gem 'oj'

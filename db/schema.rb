@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_17_090422) do
+ActiveRecord::Schema.define(version: 2018_09_13_142522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -33,6 +33,16 @@ ActiveRecord::Schema.define(version: 2018_09_17_090422) do
     t.integer "target_id"
     t.string "permission_pull_requests"
     t.string "permission_issues"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer "subject_id"
+    t.integer "github_id"
+    t.string "author"
+    t.string "author_association"
+    t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -102,6 +112,7 @@ ActiveRecord::Schema.define(version: 2018_09_17_090422) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "html_url"
+    t.text "body"
     t.string "assignees", default: "::"
     t.integer "github_id"
     t.string "repository_full_name"

@@ -146,7 +146,37 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    @display_subject ||= subjectable? && (Octobox.fetch_subject? || github_app_installed?)
+    github_app_installed? || Octobox.config.fetch_subject
+  end
+
+  private
+
+  def download_subject
+    user.subject_client.get(subject_url)
+
+  # If permissions changed and the user hasn't accepted, we get a 401
+  # We may receive a 403 Forbidden or a 403 Not Available
+  # We may be rate limited and get a 403 as well
+  # We may also get blocked by legal reasons (451)
+  # Regardless of the reason, any client error should be rescued and warned so we don't
+  # end up blocking other syncs
+  rescue Octokit::ClientError => e
+    Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
+    nil
+  end
+
+  def download_comments
+    user.github_client.get(subject_url.gsub('/pulls/', '/issues/') + '/comments')
+
+  # If permissions changed and the user hasn't accepted, we get a 401
+  # We may receive a 403 Forbidden or a 403 Not Available
+  # We may be rate limited and get a 403 as well
+  # We may also get blocked by legal reasons (451)
+  # Regardless of the reason, any client error should be rescued and warned so we don't
+  # end up blocking other syncs
+  rescue Octokit::ClientError => e
+    Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
+    nil
   end
 
   def update_subject(force = false)
@@ -180,6 +210,7 @@ class Notification < ApplicationRecord
           github_id: remote_subject.id,
           state: remote_subject.merged_at.present? ? 'merged' : remote_subject.state,
           author: remote_subject.user.login,
+          body: remote_subject.body,
           html_url: remote_subject.html_url,
           created_at: remote_subject.created_at,
           updated_at: remote_subject.updated_at,
@@ -202,19 +233,34 @@ class Notification < ApplicationRecord
     case subject_type
     when 'Issue', 'PullRequest'
       subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
+      update_comments
     end
   end
 
-  def update_repository(force = false)
-    return unless Octobox.config.subjects_enabled?
-    return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
+  def update_comments
+    remote_comments = download_comments
+    return unless remote_comments.present?
 
-    UpdateRepositoryWorker.perform_async_if_configured(self.id, force)
+    remote_comments.each do |remote_comment|
+      subject.comments.find_or_create_by(github_id: remote_comment.id) do |comment|
+        comment.author = remote_comment.user.login
+        comment.body = remote_comment.body
+        comment.author_association = remote_comment.author_association
+        comment.created_at = remote_comment.created_at
+        comment.save
+      end
+    end
   end
 
-  def update_repository_in_foreground(force = false)
-    return unless Octobox.config.subjects_enabled?
-    return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
+  def download_repository
+    user.github_client.repository(repository_full_name)
+  rescue Octokit::ClientError => e
+    nil
+  end
+
+  def update_repository
+    return unless display_subject?
+    return if repository != nil && updated_at - repository.updated_at < 2.seconds
 
     remote_repository = download_repository
 
