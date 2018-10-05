@@ -91,6 +91,24 @@ var Octobox = (function() {
     }
   };
 
+  var enablePopOvers = function() {
+    $('[data-toggle="popover"]').popover({ trigger: "manual" , html: true})
+    .on("mouseenter", function () {
+        var _this = this;
+        $(this).popover("show");
+        $(".popover").on("mouseleave", function () {
+            $(_this).popover('hide');
+        });
+    }).on("mouseleave", function () {
+        var _this = this;
+        setTimeout(function () {
+            if (!$(".popover:hover").length) {
+                $(_this).popover("hide");
+            }
+        }, 300);
+    });
+  }
+
   var enableKeyboardShortcuts = function() {
     // Add shortcut events only once
     if (window.row_index !== undefined) return;
@@ -280,6 +298,7 @@ var Octobox = (function() {
 
   var initialize = function() {
     enableTooltips();
+    enablePopOvers();
 
     if ($("#help-box").length){
       enableKeyboardShortcuts();
