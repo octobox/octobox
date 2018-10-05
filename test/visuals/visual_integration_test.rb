@@ -29,14 +29,14 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     Percy::Capybara.snapshot(page, name: '/') if Octobox.config.percy_configured?
 
     Capybara.current_session.current_window.resize_to(576,800)
-    Percy::Capybara.snapshot(page, name: '/') if Octobox.config.percy_configured?    
+    Percy::Capybara.snapshot(page, name: '/') if Octobox.config.percy_configured?
   end
 
   test 'render a logged in user' do
     sign_in_as(@user)
     stub_fetch_subject_enabled
     visit login_path
-    
+
     page.has_selector?('table tr')
     Percy::Capybara.snapshot(page, name: '/:auth') if Octobox.config.percy_configured?
 
@@ -44,9 +44,8 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     click_button('sidebar_toggle', wait: 0.25)
     find('.flex-sidebar').visible?
     Percy::Capybara.snapshot(page, name: '/:auth sidebar_toggle') if Octobox.config.percy_configured?
-    
-    check('select_all')
-    find('#select_all').visible?
+
+    has_unchecked_field?('label[for=select_all]', visible: :false)
   end
 
   test 'render some filtered stuff' do
@@ -64,7 +63,7 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
 
     page.has_content?('Documentation')
     Percy::Capybara.snapshot(page, name: '/documentation') if Octobox.config.percy_configured?
-    
+
     Capybara.current_session.current_window.resize_to(576,800)
     click_button('sidebar_toggle', wait: 0.25)
     find('.flex-sidebar').visible?
@@ -77,9 +76,8 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     stub_fetch_subject_enabled
     visit login_path
 
-    check('select_all')
-    find('#select_all').visible?
-  
+    has_unchecked_field?('label[for=select_all]', visible: :false)
+
     Percy::Capybara.snapshot(page, name: '/:auth (dark)') if Octobox.config.percy_configured?
   end
 
