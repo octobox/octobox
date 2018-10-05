@@ -96,7 +96,7 @@ module Octobox
         user.subject_client.get(
           combined_status_url(status_url)
         )
-      rescue Octokit::ClientError => e
+      rescue Octokit::ClientError
         nil
       end
 
