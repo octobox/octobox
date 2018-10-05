@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_02_064359) do
+ActiveRecord::Schema.define(version: 2018_10_05_090055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2018_10_02_064359) do
     t.string "permission_issues"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "permission_statuses"
   end
 
   create_table "labels", force: :cascade do |t|
@@ -106,8 +107,8 @@ ActiveRecord::Schema.define(version: 2018_10_02_064359) do
     t.integer "github_id"
     t.string "repository_full_name"
     t.boolean "locked"
-    t.string "status"
     t.string "sha"
+    t.string "status"
     t.index ["url"], name: "index_subjects_on_url"
   end
 

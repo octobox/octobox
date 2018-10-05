@@ -14,7 +14,8 @@ class SyncInstallationWorker
       target_type: payload['installation']['target_type'],
       target_id: payload['installation']['target_id'],
       permission_pull_requests: payload['installation']['permissions']['pull_requests'],
-      permission_issues: payload['installation']['permissions']['issues']
+      permission_issues: payload['installation']['permissions']['issues'],
+      permission_statuses: payload['installation']['permissions']['statuses']
     })
 
     app_installation.add_repositories(payload['repositories'])
