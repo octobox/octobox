@@ -260,9 +260,12 @@ module NotificationsHelper
   end
 
   def notification_status(status)
+    return unless status.present?
     content_tag(:span,
       octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: status),
-      class: "badge badge-light badge-pr #{status}"
+      class: "badge badge-light badge-pr #{status}",
+      title: status.humanize,
+      data: {toggle: 'tooltip'}
     )
   end
 
