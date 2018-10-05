@@ -22,15 +22,21 @@
   <% end %>
 
   <td class='notification-icon <%= notification_icon_color(notification.state) if notification.display_subject? %>'>
-    <% if Octobox.github_app? && !notification.display_subject? %>
-      <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification.subject_type, notification.state) %>" data-content="<%= render 'app_prompt', notification: notification %>">
-        <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
-      </a>
+    <% if Octobox.github_app? %>
+      <% if !notification.repository.try(:github_app_installed?) %>
+        <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification.subject_type, notification.state) %>" data-content="<%= render 'app_prompt', notification: notification %>">
+          <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
+        </a>
+      <% elsif notification.repository.try(:private?) && Octobox.octobox_io? %>
+        <a tabindex="0" class="" role="button" data-toggle="popover" title="Coming soon" data-content="<%= render 'private_repos' %>">
+          <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
+        </a>
+      <% else %>
+        <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
+      <% end %>
     <% else %>
       <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
     <% end %>
-
-
   </td>
   <td class='notification-subject'>
     <%= link_to notification.subject_title, notification.web_url, target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: 'link', onclick: "Octobox.markRead(#{notification.id})" %>
