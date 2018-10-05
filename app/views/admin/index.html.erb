@@ -105,8 +105,28 @@
           </div>
         </div>
       </div>
+
+      <% if Octobox.config.marketplace_url.present? %>
+        <div class="col-md-3">
+          <div class="card shadow-sm  mb-3">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <%= octicon 'credit-card', height: 50 %>
+                  </div>
+                  <div class="media-body text-right">
+                    <h3>
+                      <%= number_to_human SubscriptionPurchase.active.count %>
+                    </h3>
+                    <span>Active Subscriptions</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
     <% end %>
-
-
   </div>
 </div>

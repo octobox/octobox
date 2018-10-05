@@ -37,7 +37,7 @@ class PageLimitingOctokitClientTest < ActiveSupport::TestCase
         link_header: '<https://api.github.com/notifications?page=1&per_page=2>; rel="first"'
       }
     ].each do |page|
-      notifications = JSON.parse(file_fixture('morty_notifications.json').read)
+      notifications = Oj.load(file_fixture('morty_notifications.json').read)
       id = page[:page_number] * 2
       notifications.each do |n|
         n['id'] = id.to_s

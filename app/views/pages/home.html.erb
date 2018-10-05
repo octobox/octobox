@@ -1,177 +1,170 @@
-<div class="jumbotron">
-  <div class="container">
-    <h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
-    <p class="text-center">Untangle your GitHub Notifications</p>
-    <div class="text-center ">
-      <%= image_tag 'screenshot.png', class: 'screenshot', alt: 'Octobox Screenshot' %>
-      <div class="row justify-content-md-center">
-        <h4 class='mb-5 w-75  font-weight-light'>Octobox helps you manage your GitHub notifications efficiently so you can spend less time managing and more time getting things done.</h4>
+<div class="container mt-5">
+  <h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
+  <p class="text-center">Untangle your GitHub Notifications</p>
+  <div class="text-center ">
+    <%= image_tag 'screenshot.png', class: 'screenshot', alt: 'Octobox Screenshot' %>
+    <div class="row justify-content-center">
+      <h4 class='mb-5 w-75  font-weight-light'>Octobox helps you manage your GitHub notifications efficiently so you can spend less time managing and more time getting things done.</h4>
+    </div>
+    <p>
+      <%= link_to login_path, class: 'btn btn-outline-dark btn-lg' do %>
+        <%= octicon 'mark-github', height: 22 %>
+        <span class='ml-1'>Sign in with GitHub</span>
+      <% end %>
+      <% if Octobox.github_app? && !Octobox.octobox_io? %>
+        <%= link_to Octobox.config.app_install_url, class: 'btn btn-outline-dark btn-lg' do %>
+          <%= octicon 'briefcase', height: 22 %>
+          <span class='ml-1'>Install the GitHub App</span>
+        <% end %>
+      <% end %>
+    </p>
+    <p>
+      <a class="github-button" href="https://github.com/octobox/octobox" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star octobox/octobox on GitHub">Star</a>
+      <a class="github-button" href="https://github.com/octobox/octobox/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork octobox/octobox on GitHub">Fork</a>
+    </p>
+  </div>
+
+  <div class="row mb-5 mt-5">
+    <div class="col-lg-6">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center mr-4">
+                <%= octicon 'inbox', height: 50 %>
+              </div>
+              <div class="media-body">
+                <h4>Don't lose track</h4>
+                Octobox adds an extra "archived" state to each notification so you can mark it as "done". If anything happens on an archived thread, issue or PR, Octobox will move it back into your inbox.
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center mr-4">
+                <%= octicon 'star', height: 50 %>
+              </div>
+              <div class="media-body">
+                <h4>Starred notifications</h4>
+                Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center mr-4">
+                <%= octicon 'settings', height: 50 %>
+              </div>
+              <div class="media-body">
+                <h4>Filter all the things</h4>
+                Filter notifications by notification type, action, state and reason and keep notifications from bots alongside your regular label, author and assignees.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center mr-4">
+                <%= octicon 'search', height: 50 %>
+              </div>
+              <div class="media-body">
+                <h4>Search with prefix filters</h4>
+                No more Jedi mind tricks. Combine a wide range of powerful search filters help you get straight to the notification you're looking for and focus on just what you need.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center mr-4">
+                <%= octicon 'keyboard', height: 50 %>
+              </div>
+              <div class="media-body">
+                <h4>Built for keyboard warriors</h4>
+                Navigate, triage and manage your notifications like a pro using Gmail-inspired keyboard shortcuts for every function, no mouse required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card shadow-sm mb-3">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="media d-flex">
+              <div class="align-self-center mr-4">
+                <%= octicon 'mark-github', height: 50 %>
+              </div>
+              <div class="media-body">
+                <h4>Open for everyone</h4>
+                Octobox developers use Octobox to develop Octobox. 100% developed and managed in the open on GitHub under a FLOSS license.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Used by developers from top organisations</h3>
+  <div class="row mb-5 mt-4">
+    <div class="col">
+      <% used_by_orgs.each do |org| %>
+        <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block mr-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row justify-content-center text-large">
+    <div class="col-lg-12">
+      <h3>Why is this a thing?</h3>
       <p>
-        <%= link_to login_path, class: 'btn btn-outline-dark btn-lg' do %>
-          <%= octicon 'mark-github', height: 22 %>
-          <span class='ml-1'>Sign in with GitHub</span>
-        <% end %>
-        <% if Octobox.github_app? && !Octobox.octobox_io? %>
-          <%= link_to Octobox.config.app_install_url, class: 'btn btn-outline-dark btn-lg' do %>
-            <%= octicon 'briefcase', height: 22 %>
-            <span class='ml-1'>Install the GitHub App</span>
-          <% end %>
-        <% end %>
+        Octobox helps you triage notifications efficiently so you can spend less time managing and more time getting things done.
       </p>
       <p>
-        <a class="github-button" href="https://github.com/octobox/octobox" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star octobox/octobox on GitHub">Star</a>
-        <a class="github-button" href="https://github.com/octobox/octobox/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork octobox/octobox on GitHub">Fork</a>
+        If you manage more any active projects on GitHub, you probably find <a href="https://github.com/notifications">GitHub Notifications</a> pretty lacking. Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
       </p>
-    </div>
+      <p>
+        Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
+      </p>
 
-    <div class="row mb-5 mt-5">
-      <div class="col-lg-6">
-        <div class="card shadow-sm mb-3">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center mr-4">
-                  <%= octicon 'inbox', height: 50 %>
-                </div>
-                <div class="media-body">
-                  <h4>Don't lose track</h4>
-                  Octobox adds an extra "archived" state to each notification so you can mark it as "done". If anything happens on an archived thread, issue or PR, Octobox will move it back into your inbox.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card shadow-sm mb-3">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center mr-4">
-                  <%= octicon 'star', height: 50 %>
-                </div>
-                <div class="media-body">
-                  <h4>Starred notifications</h4>
-                  Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card shadow-sm mb-3">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center mr-4">
-                  <%= octicon 'settings', height: 50 %>
-                </div>
-                <div class="media-body">
-                  <h4>Filter all the things</h4>
-                  Filter notifications by notification type, action, state and reason and keep notifications from bots alongside your regular label, author and assignees.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card shadow-sm mb-3">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center mr-4">
-                  <%= octicon 'search', height: 50 %>
-                </div>
-                <div class="media-body">
-                  <h4>Search with prefix filters</h4>
-                  No more Jedi mind tricks. Combine a wide range of powerful search filters help you get straight to the notification you're looking for and focus on just what you need.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card shadow-sm mb-3">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center mr-4">
-                  <%= octicon 'keyboard', height: 50 %>
-                </div>
-                <div class="media-body">
-                  <h4>Built for keyboard warriors</h4>
-                  Navigate, triage and manage your notifications like a pro using Gmail-inspired keyboard shortcuts for every function, no mouse required.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card shadow-sm mb-3">
-          <div class="card-content">
-            <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center mr-4">
-                  <%= octicon 'mark-github', height: 50 %>
-                </div>
-                <div class="media-body">
-                  <h4>Open for everyone</h4>
-                  Octobox developers use Octobox to develop Octobox. 100% developed and managed in the open on GitHub under a FLOSS license.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <h3>Run your own Octobox</h3>
 
-    <h3>Used by developers from top organisations</h3>
-    <div class="row mb-5 mt-4">
-      <div class="col">
-        <% used_by_orgs.each do |org| %>
-          <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block mr-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
-        <% end %>
-      </div>
-    </div>
+      <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox. Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
 
-    <div class="row justify-content-center text-large">
-      <div class="col-lg-12">
-        <h3>Why is this a thing?</h3>
-        <p>
-          Octobox helps you triage notifications efficiently so you can spend less time managing and more time getting things done.
-        </p>
-        <p>
-          If you manage more any active projects on GitHub, you probably find <a href="https://github.com/notifications">GitHub Notifications</a> pretty lacking. Notifications are marked as read and disappear from the list as soon as you load the page or view the email of the notification. This makes it very hard to keep on top of which notifications you still need to follow up on. Most open source maintainers and GitHub staff end up using a complex combination of filters and labels in Gmail to manage their notifications from their inbox. If, like me, you try to avoid email, then you might want something else.
-        </p>
-        <p>
-          Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
-        </p>
+      <h3>Contribute</h3>
 
-        <p class="text-center"><%= emojify(':keyboard:') %></p>
+      <p>Octobox is open source and the source code is hosted at <a href="https://github.com/octobox/octobox">GitHub</a>. If you have an idea for a feature or enhancement, open an <a href="https://github.com/octobox/octobox/issues/new">issue</a> or a pull request.</p>
 
-        <h3>Run your own Octobox</h3>
+      <p>If you want to contribute you'll find we're a welcoming bunch. If you don't know where to start, take a look at the issues tagged as <a href="https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22">"Help Wanted"</a>.</p>
 
-        <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox. Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
+      <p>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
 
-        <p class="text-center"><%= emojify(':octopus:') %></p>
+      <p>Finally, this is an open source project. If you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
 
-        <h3>Contribute</h3>
-
-        <p>Octobox is open source and the source code is hosted at <a href="https://github.com/octobox/octobox">GitHub</a>. If you have an idea for a feature or enhancement, open an <a href="https://github.com/octobox/octobox/issues/new">issue</a> or a pull request.</p>
-
-        <p>If you want to contribute you'll find we're a welcoming bunch. If you don't know where to start, take a look at the issues tagged as <a href="https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22">"Help Wanted"</a>.</p>
-
-        <p>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
-
-        <p>Finally, this is an open source project. If you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
-
-        <p class="text-center"><%= emojify(':postbox:') %></p>
-      </div>
     </div>
   </div>
 </div>

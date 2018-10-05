@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :delete_all
   has_many :app_installation_permissions, dependent: :delete_all
   has_many :app_installations, through: :app_installation_permissions
+  has_many :pinned_searches, dependent: :delete_all
 
   ERRORS = {
     invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
@@ -28,6 +29,8 @@ class User < ApplicationRecord
     message: ERRORS[:refresh_interval_size][1]
   }
   validate :personal_access_token_validator
+
+  scope :not_recently_synced, -> { where('last_synced_at < ?', 1.minute.ago) }
 
   def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)

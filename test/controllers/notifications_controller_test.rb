@@ -4,6 +4,7 @@ require 'test_helper'
 class NotificationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     Octobox.config.stubs(:github_app).returns(false)
+    stub_background_jobs_enabled(value: false)
     stub_fetch_subject_enabled(value: false)
     stub_notifications_request
     stub_repository_request
@@ -113,7 +114,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'renders notifications filtered by label' do
     stub_fetch_subject_enabled
-    Octobox.config.stubs(:github_app).returns(false)
     sign_in_as(@user)
 
     get '/'
@@ -212,6 +212,18 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert notification3.reload.archived?
   end
 
+  test 'archives defaults value to true' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, archived: false)
+    notification2 = create(:notification, user: @user, archived: false)
+
+    post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: nil }, xhr: true
+
+    assert_response :ok
+
+    assert notification1.reload.archived?
+    assert notification2.reload.archived?
+  end
 
   test 'mutes multiple notifications' do
     sign_in_as(@user)
@@ -288,17 +300,18 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   test 'syncs users notifications' do
     sign_in_as(@user)
 
-    post "/notifications/sync"
+    get "/notifications/sync"
     assert_response :redirect
   end
 
   test 'syncs users notifications async' do
+    stub_background_jobs_enabled
     # Initial sync means we won't enqueue a sync immediately on login
     sign_in_as(@user, initial_sync: true)
     job_id = @user.sync_job_id
 
     inline_sidekiq_status do
-      post "/notifications/sync?async=true"
+      get "/notifications/sync"
       @user.reload
 
       assert_response :redirect
@@ -326,7 +339,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::BadGateway)
 
-    post "/notifications/sync"
+    get "/notifications/sync"
     assert_response :redirect
     assert_equal "Having issues connecting to GitHub. Please try again.", flash[:error]
   end
@@ -343,7 +356,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::Unauthorized)
 
-    post "/notifications/sync"
+    get "/notifications/sync"
     assert_response :redirect
     assert_equal "Your GitHub token seems to be invalid. Please try again.", flash[:error]
   end
@@ -352,7 +365,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::Forbidden)
 
-    post "/notifications/sync"
+    get "/notifications/sync"
     assert_response :redirect
     assert_equal "Your GitHub token seems to be invalid. Please try again.", flash[:error]
   end
@@ -369,7 +382,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     User.any_instance.stubs(:sync_notifications_in_foreground).raises(Faraday::ConnectionFailed.new('offline error'))
 
-    post "/notifications/sync"
+    get "/notifications/sync"
     assert_response :redirect
     assert_equal "You seem to be offline. Please try again.", flash[:error]
   end
@@ -425,7 +438,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get notifications_path(format: :json)
 
     assert_response :success
-    json = JSON.parse(response.body)
+    json = Oj.load(response.body)
     notification_count = Notification.inbox.where(user: @user).count
     assert_equal notification_count, json["pagination"]["total_notifications"]
     assert_equal 0, json["pagination"]["page"]
@@ -440,7 +453,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get notifications_path(format: :json)
 
     assert_response :success
-    json = JSON.parse(response.body)
+    json = Oj.load(response.body)
     assert_equal 0, json["pagination"]["total_notifications"]
     assert_equal 0, json["pagination"]["page"]
     assert_equal 0, json["pagination"]["total_pages"]
@@ -459,7 +472,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    json = JSON.parse(response.body)
+    json = Oj.load(response.body)
     notification_ids = json["notifications"].map { |n| n["id"] }
 
     assert notification_ids.include?(notification1.id)
@@ -483,12 +496,59 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 2
   end
 
+  test 'search results can filter to exclude a repo' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, repository_full_name: 'a/b')
+    create(:notification, user: @user, repository_full_name: 'b/c')
+    get '/?q=-repo%3Aa%2Fb'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).first.repository_full_name, 'b/c'
+  end
+
+  test 'search results can filter to exclude multiple repos' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, repository_full_name: 'a/b')
+    create(:notification, user: @user, repository_full_name: 'b/c')
+    get '/?q=-repo%3Aa%2Fb%2Cb%2Fc'
+    assert_equal assigns(:notifications).length, 0
+  end
+
   test 'search results can filter by owner' do
     sign_in_as(@user)
     create(:notification, user: @user, repository_owner_name: 'andrew')
     create(:notification, user: @user, repository_owner_name: 'octobox')
     get '/?q=owner%3Aoctobox'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple owners' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, repository_owner_name: 'andrew')
+    create(:notification, user: @user, repository_owner_name: 'octobox')
+    get '/?q=owner%3Aoctobox%2Candrew'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter to exclude owner' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, repository_owner_name: 'andrew')
+    create(:notification, user: @user, repository_owner_name: 'octobox')
+    get '/?q=-owner%3Aoctobox'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).first.repository_owner_name, 'andrew'
+  end
+
+  test 'search results can filter to exclude multiple owners' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, repository_owner_name: 'andrew')
+    create(:notification, user: @user, repository_owner_name: 'octobox')
+    get '/?q=-owner%3Aoctobox%2Candrew'
+    assert_equal assigns(:notifications).length, 0
   end
 
   test 'search results can filter by type' do
@@ -499,12 +559,32 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter to exclude type' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, subject_type: 'Issue')
+    create(:notification, user: @user, subject_type: 'PullRequest')
+    get '/?q=-type%3Apull_request'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).first.subject_type, 'Issue'
+  end
+
   test 'search results can filter by reason' do
     sign_in_as(@user)
     create(:notification, user: @user, reason: 'assign')
     create(:notification, user: @user, reason: 'mention')
     get '/?q=reason%3Amention'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter to exclude reason' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, reason: 'assign')
+    create(:notification, user: @user, reason: 'mention')
+    get '/?q=-reason%3Amention'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).first.reason, 'assign'
   end
 
   test 'search results can filter by starred' do
@@ -523,11 +603,230 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter by inbox' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    notification1 = create(:notification, user: @user, archived: true)
+    notification2 = create(:notification, user: @user, archived: false)
+    get '/?q=inbox%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).to_a, [notification2]
+  end
+
   test 'search results can filter by unread' do
     sign_in_as(@user)
     create(:notification, user: @user, unread: true)
     create(:notification, user: @user, unread: false)
     get '/?q=unread%3Afalse'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by author' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew')
+    create(:subject, notifications: [notification2], author: 'benjam')
+    get '/?q=author%3Aandrew'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple authors' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew')
+    create(:subject, notifications: [notification2], author: 'benjam')
+    get '/?q=author%3Aandrew%2Cbenjam'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter to exclude author' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew')
+    create(:subject, notifications: [notification2], author: 'benjam')
+    get '/?q=-author%3Aandrew'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).first.subject.author, 'benjam'
+  end
+
+  test 'search results can filter to exclude multiple authors' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew')
+    create(:subject, notifications: [notification2], author: 'benjam')
+    get '/?q=-author%3Aandrew%2Cbenjam'
+    assert_equal assigns(:notifications).length, 0
+  end
+
+  test 'search results can filter by label' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    subject1 = create(:subject, notifications: [notification1])
+    subject2 = create(:subject, notifications: [notification2])
+    create(:label, subject: subject1, name: 'bug')
+    create(:label, subject: subject2, name: 'feature')
+    get '/?q=label%3Abug'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple labels' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    subject1 = create(:subject, notifications: [notification1])
+    subject2 = create(:subject, notifications: [notification2])
+    create(:label, subject: subject1, name: 'bug')
+    create(:label, subject: subject2, name: 'feature')
+    get '/?q=label%3Abug%2Cfeature'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter to exclude label' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    subject1 = create(:subject, notifications: [notification1])
+    subject2 = create(:subject, notifications: [notification2])
+    create(:label, subject: subject1, name: 'bug')
+    create(:label, subject: subject2, name: 'feature')
+    get '/?q=-label%3Abug'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).first.labels.first.name, 'feature'
+  end
+
+  test 'search results can filter to exclude multiple labels' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    subject1 = create(:subject, notifications: [notification1])
+    subject2 = create(:subject, notifications: [notification2])
+    create(:label, subject: subject1, name: 'bug')
+    create(:label, subject: subject2, name: 'feature')
+    get '/?q=-label%3Abug%2Cfeature'
+    assert_equal assigns(:notifications).length, 0
+  end
+
+  test 'search results can filter by state' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], state: "open")
+    create(:subject, notifications: [notification2], state: "closed")
+    get '/?q=state%3Aopen'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple states' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], state: "open")
+    create(:subject, notifications: [notification2], state: "closed")
+    get '/?q=state%3Aopen%2Cclosed'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter to exclude state' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], state: "open")
+    create(:subject, notifications: [notification2], state: "closed")
+    get '/?q=-state%3Aopen'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).first.subject.state, 'closed'
+  end
+
+  test 'search results can filter to exclude multiple states' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], state: "open")
+    create(:subject, notifications: [notification2], state: "closed")
+    get '/?q=-state%3Aopen%2Cclosed'
+    assert_equal assigns(:notifications).length, 0
+  end
+
+  test 'search results can filter by assignee' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], assignees: ":andrew:")
+    create(:subject, notifications: [notification2], assignees: ":benjam:")
+    get '/?q=assignee%3Aandrew'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by multiple assignees' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], assignees: ":andrew:")
+    create(:subject, notifications: [notification2], assignees: ":benjam:")
+    get '/?q=assignee%3Aandrew%2Cbenjam'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter to exclude assignee' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], assignees: ":andrew:")
+    create(:subject, notifications: [notification2], assignees: ":benjam:")
+    get '/?q=-assignee%3Aandrew'
+    assert_equal assigns(:notifications).length, 1
+    assert_equal assigns(:notifications).first.subject.assignees, ":benjam:"
+  end
+
+  test 'search results can filter to exclude multiple assignees' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], assignees: ":andrew:")
+    create(:subject, notifications: [notification2], assignees: ":benjam:")
+    get '/?q=-assignee%3Aandrew%2Cbenjam'
+    assert_equal assigns(:notifications).length, 0
+  end
+
+  test 'search results can filter by locked:true' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], locked: true)
+    create(:subject, notifications: [notification2], locked: true)
+    get '/?q=locked%3Atrue'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'search results can filter by locked:false' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'Issue')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], locked: false)
+    create(:subject, notifications: [notification2], locked: true)
+    get '/?q=locked%3Afalse'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by muted:true' do
+    sign_in_as(@user)
+    create(:notification, user: @user, muted_at: Time.current)
+    create(:notification, user: @user)
+    get '/?q=muted%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by muted:false' do
+    sign_in_as(@user)
+    Notification.destroy_all
+    create(:notification, user: @user, muted_at: Time.current)
+    create(:notification, user: @user)
+    get '/?q=muted%3Afalse'
     assert_equal assigns(:notifications).length, 1
   end
 
@@ -542,5 +841,113 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?per_page=100'
     get '/'
     assert_equal assigns(:per_page), 100
+  end
+
+  test 'archives false Unarchives the notifications' do
+    sign_in_as(@user)
+
+    notification1 = create(:notification, user: @user, archived: true)
+    notification2 = create(:notification, user: @user, archived: true)
+    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+
+    post '/notifications/archive_selected', params: { id: [notification1.id], value: false }, xhr: true
+
+    assert_response :ok
+
+    assert !notification1.reload.archived?
+  end
+
+  test 'shows saved searches in sidebar' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select '.pinned_search', {count: 1}
+  end
+
+  test 'highlights active saved searches in sidebar' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/?q=inbox%3Atrue+owner%3Aoctobox'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select '.pinned_search .active', {count: 1}
+  end
+
+  test 'only shows new saved search link if filters are active' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
+
+  test 'shows new saved search link if not already saved' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/?q=foo'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 1}
+  end
+
+  test "doesn't show new saved search link if already saved" do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/?q=inbox%3Atrue+owner%3Aoctobox'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
+
+  test "doesn't show new saved search link if already saved with params" do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+    get '/?owner=octobox'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
+
+  test 'renders results by status' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification5 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], status: 'failure')
+    create(:subject, notifications: [notification2], status: 'success')
+    create(:subject, notifications: [notification3], status: 'pending')
+    create(:subject, notifications: [notification4])
+    create(:subject, notifications: [notification5], status: 'failure')
+
+    get '/?status=success'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?status=failure'
+    assert_equal assigns(:notifications).length, 2
+
+    get '/?status=pending'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by status' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], status: 'failure')
+    create(:subject, notifications: [notification2], status: 'success')
+    create(:subject, notifications: [notification3], status: 'pending')
+    create(:subject, notifications: [notification4])
+
+    get '/?q=status%3Asuccess'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?q=status%3Afailure'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?q=status%3Apending'
+    assert_equal assigns(:notifications).length, 1
   end
 end

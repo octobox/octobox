@@ -78,6 +78,7 @@ class NotificationsController < ApplicationController
 
     if display_subject?
       @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
+      @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
       @unlabelled            = scope.reorder(nil).unlabelled.count
       @bot_notifications     = scope.reorder(nil).bot_author.count
       @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
@@ -88,9 +89,10 @@ class NotificationsController < ApplicationController
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
 
-    @total = scope.count
-
+    @unread_count = user_unread_count
     @notifications = scope.page(page).per(per_page)
+    @total = @notifications.total_count
+
     @cur_selected = [per_page, @total].min
   end
 
@@ -104,9 +106,7 @@ class NotificationsController < ApplicationController
   #   { "count" : 1 }
   #
   def unread_count
-    scope = current_user.notifications
-    count = scope.inbox.distinct.group(:unread).count.fetch(true){ 0 }
-    render json: { 'count' => count }
+    render json: { 'count' => user_unread_count }
   end
 
   # Mute selected notifications, this will also archive them
@@ -171,6 +171,28 @@ class NotificationsController < ApplicationController
     head :ok
   end
 
+  # Delete selected notifications
+  #
+  # :category: Notifications Actions
+  #
+  # ==== Parameters
+  #
+  # * +:id+ - An array of IDs of notifications you'd like to delete. If ID is 'all', all notifications will be deleted
+  #
+  # ==== Example
+  #
+  # <code>POST notifications/delete_selected.json?id=all</code>
+  #   HEAD 204
+  #
+  def delete_selected
+    selected_notifications.delete_all
+    if request.xhr?
+      head :ok
+    else
+      redirect_back fallback_location: root_path
+    end
+  end
+
   # Mark a notification as read
   #
   # :category: Notifications Actions
@@ -209,7 +231,7 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def sync
-    if Octobox.background_jobs_enabled? && params[:async]
+    if Octobox.background_jobs_enabled?
       current_user.sync_notifications
     else
       current_user.sync_notifications_in_foreground
@@ -217,7 +239,11 @@ class NotificationsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_back fallback_location: root_path
+        if request.referer && !request.referer.match('/notifications/sync')
+          redirect_back fallback_location: root_path
+        else
+          redirect_to root_path
+        end
       end
       format.json { {} }
     end
@@ -243,6 +269,10 @@ class NotificationsController < ApplicationController
 
   private
 
+  def user_unread_count
+    current_user.notifications.inbox.distinct.group(:unread).count.fetch(true){ 0 }
+  end
+
   def selected_notifications
     if params[:id] == ['all']
       current_notifications
@@ -252,7 +282,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private].each do |sub_scope|
+    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status].each do |sub_scope|
       next unless params[sub_scope].present?
       # This cast is required due to a bug in type casting
       # TODO: Rails 5.2 was supposed to fix this:
@@ -274,11 +304,13 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = display_subject? ? [{subject: :labels}] : nil
+    eager_load_relation = display_subject? ? [{subject: :labels}, {repository: {app_installation: {subscription_purchase: :subscription_plan}}}] : nil
     scope = current_user.notifications.includes(eager_load_relation)
 
+    @search = Search.new(scope: scope, query: params[:q], params: params)
+
     if params[:q].present?
-      scope = Search.new(scope: scope, query: params[:q]).results
+      @search.results
     elsif params[:starred].present?
       scope.starred
     elsif params[:archive].present?

@@ -22,6 +22,10 @@ class HooksController < ApplicationController
       SyncInstallationRepositoriesWorker.perform_async_if_configured(payload)
     when 'github_app_authorization'
       SyncGithubAppAuthorizationWorker.perform_async_if_configured(payload['sender']['id'])
+    when 'marketplace_purchase'
+      MarketplacePurchaseWorker.perform_async_if_configured(payload)
+    when 'status'
+      SyncStatusWorker.perform_async_if_configured(payload['sha'], payload['state'])
     end
 
     head :no_content
@@ -50,7 +54,7 @@ class HooksController < ApplicationController
   end
 
   def payload
-    @payload ||= JSON.parse(request_body)
+    @payload ||= Oj.load(request_body)
   end
 
   def signature_header

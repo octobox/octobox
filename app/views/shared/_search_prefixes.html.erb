@@ -54,9 +54,21 @@
     </tr>
     <tr>
       <td>
+        <code>inbox:true</code>
+      </td>
+      <td>Search notifications in your inbox. Also accepts false for the inverse.</td>
+    </tr>
+    <tr>
+      <td>
         <code>unread:true</code>
       </td>
       <td>Search unread notifications.  Also accepts false for the inverse.</td>
+    </tr>
+    <tr>
+      <td>
+        <code>muted:true</code>
+      </td>
+      <td>Search muted notifications.  Also accepts false for the inverse.</td>
     </tr>
     <tr>
       <td>
@@ -94,6 +106,15 @@
       </tr>
       <tr>
         <td>
+          <code>status:success</code>
+        </td>
+        <td>
+          Filter by notifications from pull requests where checks status is '<code>success</code>'.
+          Also accepts <code>failure</code>, <code>pending</code> and <code>error</code>.
+        </td>
+      </tr>
+      <tr>
+        <td>
           <code>unlabelled:true</code>
         </td>
         <td>Search notifications that don't have any labels.</td>
@@ -116,6 +137,13 @@
         </td>
         <td>Filter by notifications from issue or pull requests that are assigned to '<code>andrew</code>'.</td>
       </tr>
+      <tr>
+        <td>
+          <code>locked:true</code>
+        </td>
+        <td>Search for lock conversations. Also accepts false for the inverse.</td>
+      </tr>
+      <tr>
     <% end %>
   </tbody>
 </table>

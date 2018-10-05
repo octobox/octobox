@@ -50,13 +50,6 @@ $link-color:                #AACCFF !default;
 
 // Fonts
 
-$font-family-sans-serif:      "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
-
-$font-size-base:              0.9375rem !default;
-
-$h1-font-size:                3rem !default;
-$h2-font-size:                2.5rem !default;
-$h3-font-size:                2rem !default;
 $text-muted:				  $gray-300 !default;
 
 // Tables
@@ -91,17 +84,14 @@ $dropdown-link-hover-bg:            $primary !default;
 
 // Navs
 
-$nav-link-padding-x:                1rem !default;
 $nav-link-disabled-color:           $gray-500 !default;
-$nav-divider-color:					$gray-700 !default;
+$nav-divider-color:					        $gray-700 !default;
 $nav-tabs-border-color:             $gray-700 !default;
 $nav-tabs-link-hover-border-color:  $nav-tabs-border-color $nav-tabs-border-color transparent !default;
 $nav-tabs-link-active-color:        $white !default;
 $nav-tabs-link-active-border-color: $nav-tabs-border-color $nav-tabs-border-color transparent !default;
 
 // Navbar
-
-$navbar-padding-y:                  1rem !default;
 
 $navbar-dark-color:                 $white !default;
 $navbar-dark-hover-color:           $success !default;
@@ -130,14 +120,11 @@ $pagination-disabled-color:         $white !default;
 $pagination-disabled-bg:            darken($body-bg, 3%) !default;
 $pagination-disabled-border-color:  darken($pagination-active-border-color, 3%) !default;
 
-// Jumbotron
-
-$jumbotron-bg:                      $body-bg !default;
 
 // Cards
 
 $card-cap-bg:                       lighten($body-bg, 5%) !default;
-$card-bg:                           lighten($body-bg, 1%) !default;
+$card-bg:                           lighten($body-bg, 5%) !default;
 
 // Popovers
 
@@ -154,20 +141,15 @@ $modal-header-border-color:         mix($body-bg, $white, 80%) !default;
 
 // Progress bars
 
-$progress-height:                   0.625rem !default;
-$progress-font-size:                0.625rem !default;
 $progress-bg:                       $gray-700 !default;
 
 // List group
 
 $list-group-bg:                     $card-bg !default;
-$list-group-border-color:           lighten($body-bg, 20%) !default;
-$list-group-action-active-bg:		lighten($body-bg, 3%) !default;
-$list-group-hover-bg:               lighten($body-bg, 5%) !default;
+$list-group-border-color:           lighten($body-bg, 15%) !default;
+$list-group-action-active-bg:		lighten($body-bg, 10%) !default;
+$list-group-hover-bg:               lighten($body-bg, 20%) !default;
 
-// Breadcrumbs
-
-$breadcrumb-bg:                     $gray-700 !default;
 
 // Close
 

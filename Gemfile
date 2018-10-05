@@ -27,10 +27,13 @@ gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler'
 gem 'rack-canonical-host'
 gem 'sidekiq-status'
-gem 'gemoji'
+gem 'gemoji', require: false
 gem 'bootsnap', require: false
 gem 'bugsnag'
 gem 'jwt'
+gem 'oj'
+gem 'yard'
+gem 'simple_form'
 
 # Supported databases
 gem 'mysql2', require: false
@@ -41,6 +44,7 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
+  gem 'active_record_query_trace'
 end
 
 group :test do
@@ -49,6 +53,9 @@ group :test do
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
+  gem 'selenium-webdriver'
+  gem 'capybara'
+  gem 'percy-capybara'
 end
 
 group :development do
@@ -58,6 +65,9 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'brakeman'
+  gem 'bullet'
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 group :production do

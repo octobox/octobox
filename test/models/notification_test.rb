@@ -44,8 +44,8 @@ class NotificationTest < ActiveSupport::TestCase
 
     Notification.mute([notification1, notification2])
 
-    assert notification1.reload.archived?
-    assert notification2.reload.archived?
+    assert notification1.reload.archived? && notification1.muted_at?
+    assert notification2.reload.archived? && notification2.muted_at?
   end
 
   test '#mute doesnt fail if there is no notifications given' do
@@ -142,6 +142,8 @@ class NotificationTest < ActiveSupport::TestCase
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
     notification.update_from_api_response(api_response, unarchive: true)
 
+    notification.reload
+
     refute_nil notification.subject
     assert_equal url, notification.subject.url
     assert_equal "open", notification.subject.state
@@ -220,6 +222,10 @@ class NotificationTest < ActiveSupport::TestCase
     response = { status: 200, body: file_fixture('merged_pull_request.json'), headers: { 'Content-Type' => 'application/json' } }
     stub_request(:get, url).and_return(response)
 
+    statuses_url = "https://api.github.com/repos/octobox/octobox/commits/84b4e75e5f627d34f7a85982bda7b260f34db4dd/status"
+    response = { status: 200, body: file_fixture('status_request.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, statuses_url).and_return(response)
+
     api_response = notifications_from_fixture('morty_notifications.json').third
     notification_updated_at = Time.parse(api_response.updated_at)
     user = create(:morty)
@@ -229,5 +235,6 @@ class NotificationTest < ActiveSupport::TestCase
 
     subject.reload
     assert_equal 'merged', subject.state
+    assert_equal 'failure', subject.status
   end
 end

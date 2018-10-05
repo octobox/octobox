@@ -10,6 +10,8 @@ class Subject < ApplicationRecord
   scope :label, ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name)) }
   scope :repository, ->(full_name) { where(arel_table[:url].matches("%/repos/#{full_name}/%")) }
 
+  validates :url, presence: true, uniqueness: true
+
   after_update :sync_involved_users
 
   def author_url
@@ -41,7 +43,7 @@ class Subject < ApplicationRecord
 
   def sync_involved_users
     return unless Octobox.github_app?
-    involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_async_if_configured(user_id) }
+    involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minute, user_id) }
   end
 
   def self.sync(remote_subject)
@@ -62,10 +64,18 @@ class Subject < ApplicationRecord
       html_url: remote_subject['html_url'],
       created_at: remote_subject['created_at'],
       updated_at: remote_subject['updated_at'],
-      assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:"
+      assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
+      locked: remote_subject['locked']
     })
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
     subject.sync_involved_users
+  end
+
+  def self.sync_status(sha, status)
+    subject = Subject.find_by(sha: sha)
+    if subject
+      subject.update({status: status})
+    end
   end
 
   private
@@ -75,7 +85,9 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    (user_ids + Array(repository.try(:user_ids))).uniq
+    ids = users.pluck(:id)
+    ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
+    ids.uniq
   end
 
   def author_url_path
