@@ -24,6 +24,12 @@
       fill: $navbar-dark-color;
     }
   }
+  //twbs really should implement fills
+  .btn-outline-light:hover, :focus, :active{
+    svg{
+      fill: $white;
+    }
+  }
 }
 
 .search-help{
