@@ -264,7 +264,7 @@ class Notification < ApplicationRecord
 
   def download_repository
     user.github_client.repository(repository_full_name)
-  rescue Octokit::ClientError => e
+  rescue Octokit::ClientError
     nil
   end
 end
