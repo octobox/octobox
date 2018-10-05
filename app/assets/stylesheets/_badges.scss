@@ -30,9 +30,9 @@
 
 .badge-pr {
   &.success {
-    background-color: $notification-open;
+    background-color: transparent;
     .octicon {
-      fill: white;
+      fill: $notification-open;
     }
   }
   &.failure, &.pending, &.error {
