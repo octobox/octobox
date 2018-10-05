@@ -37,6 +37,16 @@ $notification-items: (
   white-space: nowrap;
 }
 
+.custom-checkbox {
+  input[type=checkbox]:not(:checked) + label {
+    &::before, &::after {
+      background-color: $body-bg;
+      border: 1px solid $list-group-border-color;
+      border-radius: .25rem;
+    }
+  }
+}
+
 @include media-breakpoint-up(md) {
   .table-notifications tr td:first-child {
     border-left: 2px solid $list-group-bg;
@@ -68,11 +78,9 @@ $notification-items: (
     text-align: center;
   }
   .notification-checkbox {
-    input {
-      margin-left: 6px;
-      margin-right: 0;
-      position: relative;
-      top: -1px;
+    label {
+      top: -16px;
+      left: 5px;
     }
   }
   .notification{
@@ -132,6 +140,7 @@ $notification-items: (
       border-top: 1px solid $list-group-border-color;
       position: relative;
       padding: 10px 0px;
+      min-height: 110px;
       &:first-child {
         border-top: none;
       }
@@ -150,12 +159,12 @@ $notification-items: (
       left: 10px;
     }
     .notification-checkbox {
-      top: 42px;
-      left: 11px;
+      top: 32px;
+      left: 10px;
     }
     .notification-star {
-      top: 72px;
-      left: 10px
+      top: 85px;
+      left: 10px;
     }
     .notification-subject,
     .notification-repo,
