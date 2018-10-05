@@ -53,9 +53,13 @@
 
 .select-all {
   padding-left: 6px;
+  margin-right: 14px;
   input {
     position: relative;
-    left: 2px;
+  }
+  label {
+    top: -14px;
+    left: 10px;
   }
 }
 
