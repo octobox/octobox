@@ -46,4 +46,24 @@ class AppInstallation < ApplicationRecord
     return true unless Octobox.config.marketplace_url
     subscription_purchase.try(:private_repositories_enabled?)
   end
+
+  def sync
+    remote_installation = Octobox.github_app_client.installation(github_id)
+    update_attributes(AppInstallation.map_from_api(remote_installation))
+  end
+
+  def self.map_from_api(remote_installation)
+    {
+      github_id: remote_installation['id'],
+      app_id: remote_installation['app_id'],
+      account_login: remote_installation['account']['login'],
+      account_id: remote_installation['account']['id'],
+      account_type: remote_installation['account']['type'],
+      target_type: remote_installation['target_type'],
+      target_id: remote_installation['target_id'],
+      permission_pull_requests: remote_installation['permissions']['pull_requests'],
+      permission_issues: remote_installation['permissions']['issues'],
+      permission_statuses: remote_installation['permissions']['statuses']
+    }
+  end
 end

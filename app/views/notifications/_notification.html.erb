@@ -1,36 +1,45 @@
 <tr id='notification-<%= notification.id %>' class='notification <%= notification.unread ? 'active' : '' %>'>
-  <td class='notification-checkbox'>
-    <%= check_box_tag(
-        '',
-        notification.id,
-        false,
-        title: (notification.archived ? 'Unarchive' : 'Archive'),
-        class: (notification.archived ? 'unarchive' : 'archive')
-      )
-    %>
+  <td class='notification-checkbox align-middle'>
+    <div class="custom-control custom-checkbox">
+      <%= check_box_tag(
+          "notification_#{notification.id}",
+          notification.id,
+          false,
+          title: (notification.archived ? 'Unarchive' : 'Archive'),
+          class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive')
+        )
+      %>
+      <%= label_tag "notification_#{notification.id}", '', class: "custom-control-label" %>
+    </div>
   </td>
-  <td class='notification-star'>
+  <td class='notification-star align-middle'>
     <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
   </td>
 
   <% if show_archive_icon? %>
-    <td class='notification-archived'>
+    <td class='notification-archived align-middle'>
       <% if notification.archived? %>
         <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
       <% end %>
     </td>
   <% end %>
 
-  <td class='notification-icon <%= notification_icon_color(notification.state) if notification.display_subject? %>'>
-    <% if Octobox.github_app? && !notification.display_subject? %>
-      <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification.subject_type, notification.state) %>" data-content="<%= render 'app_prompt', notification: notification %>">
-        <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
-      </a>
+  <td class='notification-icon align-middle <%= notification_icon_color(notification.state) if notification.display_subject? %>'>
+    <% if Octobox.github_app? %>
+      <% if notification.subjectable? && !notification.repository.try(:github_app_installed?) %>
+        <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification.subject_type, notification.state) %>" data-content="<%= render 'app_prompt', notification: notification %>">
+          <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
+        </a>
+      <% elsif notification.subjectable? && notification.repository.try(:private?) && Octobox.octobox_io? %>
+        <a tabindex="0" class="" role="button" data-toggle="popover" title="Coming soon" data-content="<%= render 'private_repos' %>">
+          <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
+        </a>
+      <% else %>
+        <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
+      <% end %>
     <% else %>
       <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
     <% end %>
-
-
   </td>
   <td class='notification-subject'>
     <%= link_to notification.subject_title, notification.web_url, target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: 'link', onclick: "Octobox.markRead(#{notification.id})" %>
