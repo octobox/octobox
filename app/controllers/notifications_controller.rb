@@ -309,7 +309,7 @@ class NotificationsController < ApplicationController
     @search = Search.new(scope: scope, query: params[:q], params: params)
 
     if params[:q].present?
-      scope = @search.results
+      @search.results
     elsif params[:starred].present?
       scope.starred
     elsif params[:archive].present?
