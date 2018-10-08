@@ -24,7 +24,7 @@ class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
     subject_label_records = []
 
     # finding labels in batches to reduce Memory footprint and also decrease the load on DB
-    Label.find_in_batches(batch_size: 2000) do |labels|
+    Label.in_batches(of: 2000) do |labels|
       labels.each do |label|
         subject_label_records << {
           label_id: github_id_label_id_map[label.github_id],
@@ -43,50 +43,6 @@ class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
     # this is to contain the RACE condition which can arise is their is already a record in SubjectLabel
     # table but we have generated on extra during batch processing
     SubjectLabel.import subject_label_records, on_duplicate_key_ignore: true, :batch_size => 5000
-
-    Label.import updated_labels, on_duplicate_key_update: {
-      conflict_target: [:id], columns: [:repository_id]
-    }
-  end
-
-  def fetch_label_repo_mapping(label_github_ids)
-    if ActiveRecord::Base.connection.instance_values["config"][:adapter] == "mysql"
-      fetch_label_repo_mapping_mysql(label_github_ids)
-    else
-      fetch_label_repo_mapping_postgres(label_github_ids)
-    end
-  end
-
-  def fetch_label_repo_mapping_mysql(label_github_ids)
-    Label.joins(:subject => :repository).where("labels.github_id IN (?)", label_github_ids).
-    select("labels.github_id, labels.id, repositories.id AS repository_id")
-  end
-
-  def fetch_label_repo_mapping_postgres(label_github_ids)
-    label_repo_sql = "SELECT DISTINCT ON (labels.github_id) labels.github_id, labels.id,
-    repositories.id AS repository_id FROM labels INNER JOIN subjects ON subjects.id = labels.subject_id
-    INNER JOIN repositories ON repositories.full_name = subjects.repository_full_name
-    WHERE labels.github_id IN (#{label_github_ids})".gsub("\n", "").gsub(/\s+/, " ")
-    ActiveRecord::Base.connection.execute(label_repo_sql)
-  end
-
-  def fetch_unique_labels
-    if ActiveRecord::Base.connection.instance_values["config"][:adapter] == "mysql"
-      fetch_unique_labels_mysql
-    else
-      fetch_unique_labels_postgres
-    end
-  end
-
-  def fetch_unique_labels_mysql
-    Label.group("github_id").order("created_at ASC").select("id, github_id")
-  end
-
-  def fetch_unique_labels_postgres
-    sql = "select id, github_id from (SELECT labels.id,
-          labels.github_id, rank() over (partition BY labels.github_id ORDER BY labels.created_at)
-          AS l FROM labels) AS temp where l = 1 ORDER by id;".gsub("\n", "").gsub(/\s+/, " ")
-
-    ActiveRecord::Base.connection.execute(sql)
+    import_labels(updated_labels)
   end
 end

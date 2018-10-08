@@ -9,10 +9,11 @@ class SyncLabelWorker
     return if repository.nil?
     return if payload['changes']['name'].nil?
 
-    subjects = repository.subjects.label(payload['changes']['name']['from'])
-    subjects.each do |subject|
-      n = subject.notifications.first
-      n.try(:update_subject, true)
-    end
+    Label.where(
+      name: payload['changes']['name']['from'],
+      repository: repository
+    ).update_all(
+      name: payload['label']['name']
+    )
   end
 end

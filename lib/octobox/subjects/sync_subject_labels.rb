@@ -62,40 +62,6 @@ module Octobox
           self.id, remote_label_ids
         ).destroy_all
       end
-
-      private
-
-      def import_labels(updated_labels)
-        if DatabaseConfig.is_mysql?
-          Label.import updated_labels, on_duplicate_key_update: [:color, :name]
-        else
-          Label.import updated_labels, on_duplicate_key_update: {
-            conflict_target: [:id], columns: [:color, :name]
-          }
-        end
-      end
-
-      def fetch_existing_labels_on_repo
-        # get all label currently attached to this repository from DB order by created at ASC and
-        # group by github_id
-        if DatabaseConfig.is_mysql?
-          fetch_existing_labels_from_mysql
-        else
-          fetch_existing_labels_from_postgres
-        end
-      end
-
-      def fetch_existing_labels_from_mysql
-        Label.where("repository_id = ? ", repository.id).group("github_id").
-        order("created_at ASC").pluck(:id, :github_id)
-      end
-
-      def fetch_existing_labels_from_postgres
-        Label.find_by_sql("select id, github_id from (SELECT labels.id,
-          labels.github_id, rank() over (partition BY labels.github_id ORDER BY labels.created_at)
-          AS l FROM labels where repository_id = #{repository.id}) AS temp where l = 1 ORDER by id;"
-        ).pluck(:id, :github_id)
-      end
     end
   end
 end

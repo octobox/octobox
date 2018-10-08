@@ -51,6 +51,7 @@ namespace :tasks do
   desc "Sync App Installations"
   task sync_installations: :environment do
     AppInstallation.all.find_each(&:sync)
+  end
 
   desc "Update Subject Label Mapping using the JOIN table and Map Labels to Repositories"
   task update_subject_label_relationship: :environment do
