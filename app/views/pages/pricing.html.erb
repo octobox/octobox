@@ -2,46 +2,40 @@
 	<h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
 	<h3 class='text-center pt-3'>One product, two ways to pay</h3>
 	<div class='d-flex flex-column flex-lg-row pt-3 px-3 pb-3 justify-content-center'>
-		<div class="pricing card mx-3 shadow p-3 mb-5 bg-white rounded">
-		  <div class="card-body">
-		  	<p class='text-muted'>GitHub</p>
-		    <h5 class="card-title">Support the company</h5>
-		    <h6 class="card-subtitle mb-2 text-muted">Buy from the GitHub marketplace.</h6>
-		    <p class="card-text">Private repository access</p>
-		    <%= render('features') %>
-			  <div class='d-flex align-items-center border-top border-bottom py-2 mt-3 mb-3 d-flex flex-md-items-center flex-justify-between'>
-			  	<span class="price pr-2">$100</span>
-			  	<span class="text-small text-muted d-block mt-1 mt-md-0">/ month</span>
-			  </div>
-			  <a href='' target='_blank' class='btn btn-success w-100'>Purchase on GitHub</a>
-			  <p class='text-muted'><small>Next: confirm yur purchase on GitHub</small></p>
-		  </div>
-		</div>
+		<% if Random.new().rand <= 0.5 %>
+			<%= render('opencollective')%>
+			<%= render('github')%>
+		<% else %>
+			<%= render('github')%>
+			<%= render('opencollective')%>
+		<% end %>
+	</div>	
+	<div class='container readable mb-5'>
+		<h2 class='text-center mb-5'>What... Why?</h2>
+		
+		<h5>An experiment in open source sustainability</h5>
+    
+    <p>Like many open source projects Octobox currently relies on volunteers and donations to cover the cost of maintaining the Octobox project. This is <a href='https://www.fordfoundation.org/about/library/reports-and-studies/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/'>not sustainable</a>. 
 
-		<div class="pricing card mx-3 shadow p-3 mb-5 bg-white rounded">
-		  <div class="card-body">
-		  	<p class='text-muted'>Open Collective</p>
-		    <h5 class="card-title">Support the community</h5>
-		    <h6 class="card-subtitle mb-2 text-muted">Pay by donation on Open Collective.</h6>
-		    <p class="card-text">Private repository access</p>
-		    <%= render('features') %>
-			  <div class='d-flex align-items-center border-top border-bottom py-2 mt-3 mb-3 d-flex flex-md-items-center flex-justify-between'>
-			  	<span class="price pr-2">$100</span>
-			  	<span class="text-small text-muted d-block mt-1 mt-md-0">/ month</span>
-			  </div>
-			  <a href='' target='_blank' class='btn btn-success w-100'>Donate on Open Collective</a>
-			  <p class='text-muted'><small>Next: make your donation on Open Collective</small></p>
-		  </div>
-		</div>
-	</div>
-	<div class='container w-100 w-md-50 mb-5'>
-		<h2 class='text-center'>Wait... What? why?</h2>
-		<p>
-				Octobox is an open source project with a new approach to securing its financial sustainability
-		</p>
-		<p>
-				
-		</p>
+    <p>Octobox is primarily maintained by Andrew Nesbitt and Benjamin Nickolls. We believe that many of the issues around the sustainability of open source software <i>can</i> be solved by the community itself. We also believe in leading by example, testing our assumptions and backing up our decisions with data.</p>
+
+    <p>Octobox has a small community of <a href='https://github.com/orgs/octobox/people'>maintainers</a>, <a href='https://github.com/octobox/octobox/graphs/contributors'>contributors</a>, <a href='https://opencollective.com/octobox/#contributors'>supporters and sponsors</a>. Our first priority is to begin building a sustainable income, for ourselves and our community. Our second is to demonstrate that our approach is repeatable and scalable, proving that we can solve this problem <i>together</i>. Our pricing model is our first experiment.
+   
+    <h5 class='pt-3'>Do you prefer supporting a commercial provider, or the community itself?</h5>
+    <p>Octobox.io operated by Octobox Ltd. a company registered in the UK by Andrew Nesbitt and Benjamin Nickolls. The company is primarily designed to offer limited liability to the operators of Octobox.io and to renumerate directors and staff as employees or contractors.</p>
+
+    <p>The Octobox project will continue to collect donations via Open Collective and operate a transparent ledger of income and outgoings for the project — including, for the time being, the costs of hosting Octobox.io. When it is able the project will pay maintainers for their time including time spent operating Octobox.io, which will be directed through Octobox Ltd.</p>
+
+    <p>Octobox Ltd. will provide private repository access to those who donate an equivalent sum (or more) to the community as pay directly through alternate channels. In addition the company will pledge at least 15% of its revenues for use by the community to further the open source project, forever.</p>
+
+    <h5 class='pt-3'>Why does this matter?</h5>
+
+    <p>Most open source projects struggle to navigate the legislative, legal and social issues around sustianing their projects. By diving straight into the deep end and documenting our experiences we hope to provide a blueprint for others to follow.</p>
+
+    <p>By asking you to make the choice with how you pay we will demonstrate whether donation-based, community-first sustainabiliy strategies work over more classical, commercial-lead approaches.</p>
+
+    <p>Thanks for taking the time to read this. If anything is unclear or you have concerns about this please <a href='https://github.com/octobox/octobox/issues/new'>raise an issue</a> or <a href='mailto: hello@octobox.io'>get in touch</a>.</p>
+
 	</div>
 </div>
 

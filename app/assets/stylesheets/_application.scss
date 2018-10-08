@@ -32,6 +32,10 @@
   pointer-events: none;
 }
 
+.blockquote{
+  border-left: 3px solid theme-color('secondary');
+}
+
 .card-notifications {
   margin-bottom: 20px;
   border-radius: 0;
