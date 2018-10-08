@@ -39,6 +39,13 @@ module NotificationsHelper
     'pending' => 'primitive-dot'
   }
 
+  PRIMARY_ACTIONS = {
+    inbox:   { css_class: 'text-primary', icon: 'inbox' },
+    archive: { css_class: 'text-success', icon: 'archive' },
+    starred: { css_class: 'star-active',  icon: 'star' },
+    snoozed: { css_class: 'text-danger',  icon: 'clock' }
+  }
+
   def filters
     {
       reason:     params[:reason],
@@ -57,12 +64,13 @@ module NotificationsHelper
       unlabelled: params[:unlabelled],
       assigned:   params[:assigned],
       is_private: params[:is_private],
-      status:     params[:status]
+      status:     params[:status],
+      snoozed:    params[:snoozed]
     }
   end
 
   def inbox_selected?
-    !archive_selected? && !starred_selected? && !showing_search_results?
+    !archive_selected? && !starred_selected? && !showing_search_results? && !snoozed_selected?
   end
 
   def archive_selected?
@@ -90,7 +98,7 @@ module NotificationsHelper
   end
 
   def bucket_param_keys
-    [:archive, :starred]
+    [:archive, :starred, :snoozed]
   end
 
   def filter_param_keys
@@ -126,7 +134,7 @@ module NotificationsHelper
   end
 
   def snooze_selected_button
-    function_button("Snooze selected", 'clock', "snooze_selected", 'Snoozed selected items')
+    function_button("Snooze selected", 'clock', "snooze_selected", 'Snooze selected items')
   end
 
   def select_all_button(cur_selected, total)
@@ -279,6 +287,51 @@ module NotificationsHelper
 
   def sidebar_notification_status(status)
     octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
+  end
+
+  def primary_action_octicon(action_type)
+    octicon(
+      PRIMARY_ACTIONS[action_type][:icon],
+      height: 16,
+      class: "sidebar-icon #{PRIMARY_ACTIONS[action_type][:css_class]}"
+    )
+  end
+
+  def primary_action_badge(action_type)
+    return '' if !is_active?(action_type)
+    content_tag(:span, @unread_notifications.sum(&:last), class: "badge badge-light")
+  end
+
+  def primary_action_path(action_type)
+    if action_type == :inbox
+      root_path(per_page: params[:per_page])
+    else
+      root_path(action_type => true, per_page: params[:per_page])
+    end
+  end
+
+  def primary_action_link(action_type)
+    link_to primary_action_path(action_type), class: "nav-link  #{'active' if is_active?(action_type)}" do
+      concat primary_action_octicon(action_type)
+      concat action_type.to_s.titleize
+      concat primary_action_badge(action_type)
+    end
+  end
+
+  def is_active?(action_type)
+    public_send("#{action_type}_selected?")
+  end
+
+  def sidebar_primary_actions
+    html = ""
+    PRIMARY_ACTIONS.keys.each do |action_type|
+      html << content_tag(:li,
+        primary_action_link(action_type),
+        class: "nav-item",
+        role: "presentation"
+      )
+    end
+    html
   end
 
 end

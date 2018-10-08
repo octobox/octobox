@@ -231,7 +231,7 @@ class NotificationsController < ApplicationController
   #   HEAD 204
   #
   def snooze_selected
-    Notification.snooze(selected_notifications, params[:value])
+    Notification.snooze(selected_notifications, snooze_params)
     if request.xhr?
       head :ok
     else
@@ -284,6 +284,10 @@ class NotificationsController < ApplicationController
       render json: { error: Sidekiq::Status::get(current_user.sync_job_id, :exception) }, status: :ok
     end
   end
+
+  #  ===================
+  #  = Private Methods =
+  #  ===================
 
   private
 
@@ -386,5 +390,9 @@ class NotificationsController < ApplicationController
 
   def per_page_cookie
     Integer(cookies[:per_page]) rescue nil
+  end
+
+  def snooze_params
+    params.permit(:id, :duration, :unit, :id => [])
   end
 end

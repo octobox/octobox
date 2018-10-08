@@ -181,7 +181,7 @@ var Octobox = (function() {
     if (getDisplayedRows().length === 0) return;
     var ids = getIdsFromRows(getMarkedOrCurrentRows());
 
-    $.post( "/notifications/snooze_selected" + location.search, { "id[]": ids, "value": value } ).done(function() {
+    $.post( "/notifications/snooze_selected" + location.search, { "id[]": ids, "duration": duration, "unit": unit } ).done(function() {
       resetCursorAfterRowsRemoved(ids);
       updateFavicon();
     });

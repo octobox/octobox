@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       post :mark_read_selected
       get  :unread_count
       post :delete_selected
+      post :snooze_selected
     end
 
     member do

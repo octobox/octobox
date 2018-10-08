@@ -1,40 +1,5 @@
 <ul class="nav nav-pills flex-column nav-filters">
-  <li role="presentation" class="nav-item">
-    <%= link_to root_path(per_page: params[:per_page]), { :class=>"nav-link #{'active' if @search.inbox_selected?}" } do %>
-      <%= octicon 'inbox', height: 16, class: 'sidebar-icon text-primary' %>
-      Inbox
-      <% if @search.inbox_selected? %>
-        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
-      <% end %>
-    <% end %>
-  </li>
-  <li role="presentation" class="nav-item">
-    <%= link_to root_path(archive: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if @search.archive_selected?}" } do %>
-      <%= octicon 'check', height: 16, class: 'sidebar-icon text-success' %>
-      Archive
-      <% if @search.archive_selected? %>
-        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
-      <% end %>
-    <% end %>
-  </li>
-  <li role="presentation" class="nav-item">
-    <%= link_to root_path(starred: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if starred_selected?}" } do %>
-      <%= octicon 'star', height: 16, class: 'sidebar-icon star-active' %>
-      Starred
-      <% if starred_selected? %>
-        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
-      <% end %>
-    <% end %>
-  </li>
-  <li role="presentation" class="nav-item">
-    <%= link_to root_path(snoozed: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if snoozed_selected?}" } do %>
-      <%= octicon 'clock', height: 16, class: 'sidebar-icon text-danger' %>
-      Snoozed
-      <% if snoozed_selected? %>
-        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
-      <% end %>
-    <% end %>
-  </li>
+  <%= sidebar_primary_actions.html_safe %>
 </ul>
 
 <% if current_user.pinned_searches.any? || any_active_filters? %>
@@ -109,6 +74,21 @@
       <% end %>
     </ul>
   <% end %>
+
+  <% if @statuses.keys.compact.any? %>
+    <ul class="nav nav-pills flex-column nav-filters">
+      <% @statuses.sort_by{ |status, count| status.to_s }.reverse_each do |status, count| %>
+        <% next if status.nil? %>
+        <%= filter_link :status, status, count do %>
+          <span class='text-<%= status %>'>
+            <%= sidebar_notification_status(status) %>
+          </span>
+          <%= status.underscore.humanize %>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+
 <% end %>
 
 <% if @types.any? %>

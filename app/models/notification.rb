@@ -111,8 +111,11 @@ class Notification < ApplicationRecord
     end
   end
 
-  def self.snooze(notifications, value)
-    notifications.update_all(snooze_until: value)
+  def self.snooze(notifications, snooze_params)
+    return if snooze_params[:duration].to_i.zero?
+    notifications.update_all(
+      snooze_until: Time.now.advance(snooze_params[:unit].to_sym => snooze_params[:duration].to_i)
+    )
     mark_read(notifications)
   end
 
