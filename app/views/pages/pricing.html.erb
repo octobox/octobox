@@ -1,0 +1,48 @@
+<div class='container mt-5'>
+	<h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
+	<h3 class='text-center pt-3'>One product, two ways to pay</h3>
+	<div class='d-flex flex-column flex-lg-row pt-3 px-3 pb-3 justify-content-center'>
+		<div class="pricing card mx-3 shadow p-3 mb-5 bg-white rounded">
+		  <div class="card-body">
+		  	<p class='text-muted'>GitHub</p>
+		    <h5 class="card-title">Support the company</h5>
+		    <h6 class="card-subtitle mb-2 text-muted">Buy from the GitHub marketplace.</h6>
+		    <p class="card-text">Private repository access</p>
+		    <%= render('features') %>
+			  <div class='d-flex align-items-center border-top border-bottom py-2 mt-3 mb-3 d-flex flex-md-items-center flex-justify-between'>
+			  	<span class="price pr-2">$100</span>
+			  	<span class="text-small text-muted d-block mt-1 mt-md-0">/ month</span>
+			  </div>
+			  <a href='' target='_blank' class='btn btn-success w-100'>Purchase on GitHub</a>
+			  <p class='text-muted'><small>Next: confirm yur purchase on GitHub</small></p>
+		  </div>
+		</div>
+
+		<div class="pricing card mx-3 shadow p-3 mb-5 bg-white rounded">
+		  <div class="card-body">
+		  	<p class='text-muted'>Open Collective</p>
+		    <h5 class="card-title">Support the community</h5>
+		    <h6 class="card-subtitle mb-2 text-muted">Pay by donation on Open Collective.</h6>
+		    <p class="card-text">Private repository access</p>
+		    <%= render('features') %>
+			  <div class='d-flex align-items-center border-top border-bottom py-2 mt-3 mb-3 d-flex flex-md-items-center flex-justify-between'>
+			  	<span class="price pr-2">$100</span>
+			  	<span class="text-small text-muted d-block mt-1 mt-md-0">/ month</span>
+			  </div>
+			  <a href='' target='_blank' class='btn btn-success w-100'>Donate on Open Collective</a>
+			  <p class='text-muted'><small>Next: make your donation on Open Collective</small></p>
+		  </div>
+		</div>
+	</div>
+	<div class='container w-100 w-md-50 mb-5'>
+		<h2 class='text-center'>Wait... What? why?</h2>
+		<p>
+				Octobox is an open source project with a new approach to securing its financial sustainability
+		</p>
+		<p>
+				
+		</p>
+	</div>
+</div>
+
+<%= render 'layouts/footer'%>

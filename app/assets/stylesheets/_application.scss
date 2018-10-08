@@ -47,8 +47,19 @@
   }
 }
 
+.card.pricing{
+  .price{
+    font-size:2rem;
+  }
+}
+
 .card-header{
   background: mix($black, $card-bg, 3%);
+}
+
+.list-group-flush .list-group-item{
+  padding: 0rem;
+  border: 0;
 }
 
 .select-all {
