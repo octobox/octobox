@@ -16,6 +16,10 @@
 @import 'notifications';
 @import 'dialogs';
 
+.btn.disabled {
+ pointer-events: all !important;
+}
+
 .sync{
   margin-right: 0px;
 }

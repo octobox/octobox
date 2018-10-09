@@ -31,7 +31,7 @@
           <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
         </a>
       <% elsif Octobox.octobox_io? && notification.upgrade_required? %>
-        <a tabindex="0" class="" role="button" data-toggle="popover" title="Coming soon" data-content="<%= render 'private_repos' %>">
+        <a tabindex="0" class="" role="button" data-toggle="popover" title="Subscribe Now" data-content="<%= render 'private_repos' %>">
           <%= octicon notification_icon(notification.subject_type, notification.state), :height => 16 %>
         </a>
       <% else %>
