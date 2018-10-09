@@ -18,9 +18,61 @@ svg{
   @include create-fills($color, $value);
 }
 
-// add our own while we're at it
-@each $color, $value in $labels{
-  @include create-fills($color, $value);
+// add svg support for tbs buttons
+@mixin button-variant($background, $border, $hover-background: darken($background, 7.5%), $hover-border: darken($border, 10%), $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
+  fill: color-yiq($background);
+  & svg{
+    fill: color-yiq($background);
+  }
+  @include hover {
+    fill: color-yiq($hover-background);
+  }
+  &.disabled,
+  &.disabled svg,
+  &:disabled,
+  &:disabled svg {
+    fill: color-yiq($background);
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active
+  .show > &.dropdown-toggle {
+    fill: color-yiq($active-background);
+  }
+}
+
+@mixin button-outline-variant($color, $color-hover: color-yiq($color), $active-background: $color, $active-border: $color) {
+  fill: $color;
+  & svg{
+    fill: $color;
+  }
+  &:hover, 
+  &:hover svg {
+    fill: $color-hover;
+  }
+  &.disabled,
+  &.disabled svg,
+  &:disabled,
+  &:disabled svg {
+    fill: $color;
+    background-color: transparent;
+  }
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active
+  .show > &.dropdown-toggle {
+    fill: color-yiq($active-background);
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .btn-#{$color} {
+    @include button-variant($value, $value);
+  }
+}
+@each $color, $value in $theme-colors {
+  .btn-outline-#{$color} {
+    @include button-outline-variant($value);
+  }
 }
 
 .text-default, .text-default svg{

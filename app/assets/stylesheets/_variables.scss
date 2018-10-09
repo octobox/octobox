@@ -16,14 +16,6 @@ $label-team_mention-text-color: #fff !default;
 $label-security_alert-color: #800000 !default;
 $label-security_alert-text-color: #fff !default;
 
-$labels:(
-	"default": $label-default-color,
-	"muted": $label-muted-color,
-	"subscribed": $label-subscribed-color,
-	"team_mention": $label-team-mention-color,
-	"security_alert": $label-security_alert-color
-);
-
 $icon-private-repo-color: #dbab09 !default;
 $icon-star-fill: none !default;
 $icon-star-stroke: #aaa !default;
