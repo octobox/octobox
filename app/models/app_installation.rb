@@ -48,7 +48,7 @@ class AppInstallation < ApplicationRecord
   end
 
   def sync
-    remote_installation = Octobox.github_app_client.installation(github_id)
+    remote_installation = Octobox.github_app_client.installation(github_id, accept: 'application/vnd.github.machine-man-preview+json')
     update_attributes(AppInstallation.map_from_api(remote_installation))
   end
 
