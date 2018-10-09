@@ -24,6 +24,12 @@
       fill: $navbar-dark-color;
     }
   }
+  //twbs really should implement fills
+  .btn-outline-light:hover, :focus, :active{
+    svg{
+      fill: $white;
+    }
+  }
 }
 
 .search-help{
@@ -45,21 +51,16 @@
 }
 
 .navbar-avatar-fixed-width {
-  width: 20px;
+  width: 29px;
   display: inline-block;
 }
-
 .navbar-avatar {
-  margin-bottom: -3px;
   width: inherit;
   position: relative;
+  top: 1px;
 }
 
 @include media-breakpoint-up(md){
-  .navbar-avatar {
-    position: relative;
-    top: -3px
-  }
   .search-input-box {
     max-width: 450px;
   }
@@ -67,8 +68,6 @@
 
 .navbar-nav {
   .octicon {
-    margin-right: 5px;
-    margin-left: -5px;
     width: 16px;
   }
 }

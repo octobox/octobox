@@ -57,6 +57,10 @@ body {
   }
 }
 
+.readable{
+  max-width: 48rem;
+}
+
 .footer {
   text-align: center;
   color: $text-muted;
