@@ -21,7 +21,7 @@ class Repository < ApplicationRecord
   end
 
   def required_plan_available?
-    return true unless Octobox.config.marketplace_url
+    return true unless Octobox.octobox_io?
     private? ? app_installation.private_repositories_enabled? : true
   end
 end
