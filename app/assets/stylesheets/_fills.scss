@@ -41,6 +41,10 @@ svg{
   fill: theme-color("secondary");
 }
 
+.text-light, .text-light svg{
+  fill: theme-color("light");
+}
+
 .text-subscribed, .text-subscribed svg{
   fill: $label-subscribed-color;
 }

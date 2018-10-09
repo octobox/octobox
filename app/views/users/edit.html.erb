@@ -166,7 +166,7 @@
     </div>
   </div>
 
-  <% if Octobox.github_app? && current_user.github_app_authorized? %>
+  <% if Octobox.github_app? %>
     <div class="card mb-3">
       <h5 class="card-header">
         GitHub App Installations
@@ -178,7 +178,7 @@
               <tr>
                 <th class='border-top-0'>Account</th>
                 <th class='border-top-0'>Repos</th>
-                <% if Octobox.config.marketplace_url.present? %>
+                <% if Octobox.octobox_io? %>
                   <th class='border-top-0' colspan='2'>Billing</th>
                 <% end %>
                 <th class='border-top-0'>Settings</th>
@@ -195,7 +195,7 @@
                   <td class="align-middle">
                     <%= pluralize app_installation.repositories.github_app_installed.count, 'repo' %>
                   </td >
-                  <% if Octobox.config.marketplace_url.present? %>
+                  <% if Octobox.octobox_io? %>
                     <td class="align-middle">
                       <% if app_installation.subscription_purchase %>
                         <% if app_installation.subscription_purchase.active? %>
@@ -223,9 +223,13 @@
                     </td>
                     <td>
                       <% if app_installation.subscription_purchase.try(:active?) %>
-                        <%= link_to 'Edit Plan', Octobox.config.marketplace_url, class: 'btn btn-primary btn-sm', target: '_blank', rel: 'noopener' %>
+                        <% if app_installation.subscription_purchase.edit_url.present? %>
+                          <%= link_to 'Edit Plan', app_installation.subscription_purchase.edit_url, class: 'btn btn-primary btn-sm', target: '_blank', rel: 'noopener' %>
+                        <% else %>
+                          <%= link_to octicon("gift"), 'https://twitter.com/FluffSociety/status/1042866091985387520', class: 'btn btn-sm', target: '_blank', rel: 'noopener' %>
+                        <% end %>
                       <% else %>
-                        <%= link_to 'Start a Plan', Octobox.config.marketplace_url, class: 'btn btn-primary btn-sm', target: '_blank', rel: 'noopener' %>
+                        <%= link_to 'Start a Plan', pricing_path, class: 'btn btn-primary btn-sm' %>
                       <% end %>
                     </td>
                   <% end %>
@@ -238,6 +242,12 @@
           </table>
           <hr>
         <% end %>
+        <% unless current_user.github_app_authorized? %>
+          <p>
+            Connect your GitHub account to the Octobox App to enable every installation for your notifications
+          </p>
+          <p><%= link_to 'Login to the GitHub App', '/auth/githubapp', class: 'btn btn-info' %></p>
+        <% end %>
         <p>
           The Octobox GitHub App enables extra features and data for repositories that have it installed:
         </p>
@@ -246,11 +256,7 @@
           <li>Full support for private repositories</li>
           <li>Sync new and updated notifications automatically</li>
         </ul>
-        <% if Octobox.config.marketplace_url.present? %>
-          <%= link_to 'Install GitHub App', Octobox.config.marketplace_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
-        <% else %>
-          <%= link_to 'Install GitHub App', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
-        <% end %>
+        <%= link_to 'Install GitHub App', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
       </div>
     </div>
   <% end %>

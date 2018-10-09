@@ -14,4 +14,9 @@ class SubscriptionPurchase < ApplicationRecord
   def private_repositories_enabled?
     active? && subscription_plan.private_repositories_enabled?
   end
+
+  def edit_url
+    return Octobox.config.marketplace_url if subscription_plan.github?
+    return "https://opencollective.com/octobox" if subscription_plan.open_collective?
+  end
 end

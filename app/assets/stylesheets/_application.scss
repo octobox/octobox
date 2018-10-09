@@ -16,6 +16,10 @@
 @import 'notifications';
 @import 'dialogs';
 
+.btn.disabled {
+ pointer-events: all !important;
+}
+
 .sync{
   margin-right: 0px;
 }
@@ -30,6 +34,10 @@
 
 .filter-label {
   pointer-events: none;
+}
+
+.blockquote{
+  border-left: 3px solid theme-color('secondary');
 }
 
 .card-notifications {
@@ -47,8 +55,19 @@
   }
 }
 
+.card.pricing{
+  .price{
+    font-size:2rem;
+  }
+}
+
 .card-header{
   background: mix($black, $card-bg, 3%);
+}
+
+.list-group-flush .list-group-item{
+  padding: 0rem;
+  border: 0;
 }
 
 .select-all {

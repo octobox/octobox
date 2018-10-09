@@ -43,7 +43,7 @@ class AppInstallation < ApplicationRecord
   end
 
   def private_repositories_enabled?
-    return true unless Octobox.config.marketplace_url
+    return true unless Octobox.octobox_io?
     subscription_purchase.try(:private_repositories_enabled?)
   end
 
