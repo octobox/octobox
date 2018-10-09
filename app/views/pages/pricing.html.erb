@@ -2,25 +2,20 @@
 	<h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
 	<h3 class='text-center pt-3'>One product, two ways to pay</h3>
 	<div class='d-flex flex-column flex-lg-row pt-3 px-3 pb-3 justify-content-center'>
-		<% if Random.new().rand <= 0.5 %>
-			<%= render('opencollective')%>
-			<%= render('github')%>
-		<% else %>
-			<%= render('github')%>
-			<%= render('opencollective')%>
-		<% end %>
-	</div>	
+		<%= render('opencollective')%>
+		<%= render('github')%>
+	</div>
 	<div class='container readable mb-5'>
 		<h2 class='text-center mb-5'>What... Why?</h2>
-		
+
 		<h5>An experiment in open source sustainability</h5>
-    
-    <p>Like many open source projects Octobox currently relies on volunteers and donations to cover the cost of maintaining the Octobox project. This is <a href='https://www.fordfoundation.org/about/library/reports-and-studies/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/'>not sustainable</a>. 
+
+    <p>Like many open source projects Octobox currently relies on volunteers and donations to cover the cost of maintaining the Octobox project. This is <a href='https://www.fordfoundation.org/about/library/reports-and-studies/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/'>not sustainable</a>.
 
     <p>Octobox is primarily maintained by Andrew Nesbitt and Benjamin Nickolls. We believe that many of the issues around the sustainability of open source software <i>can</i> be solved by the community itself. We also believe in leading by example, testing our assumptions and backing up our decisions with data.</p>
 
     <p>Octobox has a small community of <a href='https://github.com/orgs/octobox/people'>maintainers</a>, <a href='https://github.com/octobox/octobox/graphs/contributors'>contributors</a>, <a href='https://opencollective.com/octobox/#contributors'>supporters and sponsors</a>. Our first priority is to begin building a sustainable income, for ourselves and our community. Our second is to demonstrate that our approach is repeatable and scalable, proving that we can solve this problem <i>together</i>. Our pricing model is our first experiment.
-   
+
     <h5 class='pt-3'>Do you prefer supporting a commercial provider, or the community itself?</h5>
     <p>Octobox.io operated by Octobox Ltd. a company registered in the UK by Andrew Nesbitt and Benjamin Nickolls. The company is primarily designed to offer limited liability to the operators of Octobox.io and to renumerate directors and staff as employees or contractors.</p>
 
