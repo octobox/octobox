@@ -20,8 +20,6 @@ svg{
 @each $color, $value in $text-colors{
   @include create-fills($color, $value);
 }
-
-// add svg support for tbs buttons
 @mixin button-variant($background, $border, $hover-background: darken($background, 7.5%), $hover-border: darken($border, 10%), $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
   fill: color-yiq($background);
   & svg{
@@ -43,7 +41,6 @@ svg{
     fill: color-yiq($active-background);
   }
 }
-
 @mixin button-outline-variant($color, $color-hover: color-yiq($color), $active-background: $color, $active-border: $color) {
   fill: $color;
   & svg{
@@ -66,7 +63,6 @@ svg{
     fill: color-yiq($active-background);
   }
 }
-
 @each $color, $value in $theme-colors {
   .btn-#{$color} {
     @include button-variant($value, $value);
@@ -75,6 +71,14 @@ svg{
 @each $color, $value in $theme-colors {
   .btn-outline-#{$color} {
     @include button-outline-variant($value);
+  }
+}
+.nav-pills {
+  .nav-link.active,
+  .nav-link.active svg,
+  .show > .nav-link,
+  .show > .nav-link svg, {
+    fill: $nav-pills-link-active-color;
   }
 }
 
@@ -118,6 +122,9 @@ svg{
 }
 
 .octicon {
+  &.success {
+    fill: $notification-open;
+  }
   &.failure, &.error {
     fill: $notification-closed;
   }
