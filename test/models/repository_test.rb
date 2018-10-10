@@ -33,7 +33,7 @@ class RepositoryTest < ActiveSupport::TestCase
 
   test 'finds subjects by full_name' do
     subject = create(:subject, url: "https://api.github.com/repos/#{@repository.full_name}/issues/1", repository_full_name: @repository.full_name)
-    subject2 = create(:subject, url: "https://api.github.com/repos/foo/bar/issues/1", repository_full_name: 'foo/bar')
+    create(:subject, url: "https://api.github.com/repos/foo/bar/issues/1", repository_full_name: 'foo/bar')
     assert_equal @repository.subjects.length, 1
     assert_equal @repository.subjects.first, subject
   end
