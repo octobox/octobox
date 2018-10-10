@@ -38,7 +38,7 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     visit login_path
 
     page.has_selector?('table tr')
-    Percy::Capybara.snapshot(page, name: '/:auth') if Octobox.config.percy_configured
+    Percy::Capybara.snapshot(page, name: '/:auth') if Octobox.config.percy_configured?
   end
 
   test 'render the sidebar on small devices' do
@@ -58,7 +58,7 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     visit login_path
 
     Capybara.current_session.current_window.resize_to(576,800)
-    click_button('dropdown_toggle', wait: 0.25)
+    click_button('.dropdown_toggle', wait: 0.25)
     find('.dropdown-item').visible?
     Percy::Capybara.snapshot(page, name: '/:auth navbar_toggle') if Octobox.config.percy_configured?
 
