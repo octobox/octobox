@@ -12,7 +12,7 @@ class SearchParser
     @operators = {}
 
     offset = 0
-    while m = OPERATOR_EXPRESSION.match(query, offset)
+    while (m = OPERATOR_EXPRESSION.match(query, offset))
       key = m[1].downcase.to_sym
       value = m[2]
       value = value[1, value.length - 2] if ["'", '"'].include?(value[0])
