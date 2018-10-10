@@ -114,12 +114,6 @@ svg{
   fill: $icon-private-repo-color;
 }
 
-.btn-outline-dark{
-  &:hover svg, &:active svg{
-    fill: color-yiq($body-color);
-  }
-}
-
 .octicon {
   &.failure, &.error {
     fill: $notification-closed;
