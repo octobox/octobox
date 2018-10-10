@@ -68,10 +68,17 @@ class Search
     @parsed_query[:archived] = ['true'] if params[:archive].present?
     @parsed_query[:inbox] = ['true'] if params[:archive].blank? && params[:starred].blank? && params[:q].blank?
 
-    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :assigned, :label].each do |filter|
+    [:reason, :type, :unread, :state, :is_private].each do |filter|
       next if params[filter].blank?
       @parsed_query[filter] = Array(params[filter]).map(&:underscore)
     end
+
+    [:repo, :owner, :author, :label].each do |filter|
+      next if params[filter].blank?
+      @parsed_query[filter] = Array(params[filter])
+    end
+
+    @parsed_query[:assignee] = Array(params[:assigned]) if params[:assigned].present?
   end
 
   def lock_conditionally(scope)

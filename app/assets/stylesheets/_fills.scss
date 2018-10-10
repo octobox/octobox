@@ -17,6 +17,9 @@ svg{
 @each $color, $value in $theme-colors{
   @include create-fills($color, $value);
 }
+@each $color, $value in $text-colors{
+  @include create-fills($color, $value);
+}
 
 // add svg support for tbs buttons
 @mixin button-variant($background, $border, $hover-background: darken($background, 7.5%), $hover-border: darken($border, 10%), $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
