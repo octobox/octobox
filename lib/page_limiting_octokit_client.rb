@@ -1,5 +1,5 @@
 module PageLimitingOctokitClient
-  def paginate(url, options = {}, &block)
+  def paginate(url, options = {})
     under_max_results = -> (data, max_results) {
       ! max_results || ! data.respond_to?(:size) || data.size < max_results
     }

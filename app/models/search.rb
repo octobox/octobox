@@ -166,11 +166,11 @@ class Search
   end
 
   def reason
-    parsed_query[:reason].map{|r| r.downcase.gsub(' ', '_') }
+    parsed_query[:reason].map{|r| r.downcase.tr(' ', '_') }
   end
 
   def exclude_reason
-    parsed_query[:'-reason'].map{|r| r.downcase.gsub(' ', '_') }
+    parsed_query[:'-reason'].map{|r| r.downcase.tr(' ', '_') }
   end
 
   def state

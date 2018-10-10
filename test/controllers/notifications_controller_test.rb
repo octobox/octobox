@@ -229,7 +229,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
-    notification3 = create(:notification, user: @user, archived: false)
+    create(:notification, user: @user, archived: false)
 
     Notification.expects(:mute).with([notification1, notification2])
 
@@ -254,7 +254,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
-    notification3 = create(:notification, user: @user, archived: false)
+    create(:notification, user: @user, archived: false)
 
     Notification.expects(:mark_read).with([notification1, notification2])
 
@@ -606,7 +606,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   test 'search results can filter by inbox' do
     sign_in_as(@user)
     @user.notifications.delete_all
-    notification1 = create(:notification, user: @user, archived: true)
+    create(:notification, user: @user, archived: true)
     notification2 = create(:notification, user: @user, archived: false)
     get '/?q=inbox%3Atrue'
     assert_equal assigns(:notifications).length, 1
@@ -847,7 +847,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
 
     notification1 = create(:notification, user: @user, archived: true)
-    notification2 = create(:notification, user: @user, archived: true)
+    create(:notification, user: @user, archived: true)
     stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { id: [notification1.id], value: false }, xhr: true
@@ -859,7 +859,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'shows saved searches in sidebar' do
     sign_in_as(@user)
-    pinned_search = create(:pinned_search, user: @user)
+    create(:pinned_search, user: @user)
     get '/'
     assert_response :success
     assert_template 'notifications/index'
@@ -868,7 +868,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'highlights active saved searches in sidebar' do
     sign_in_as(@user)
-    pinned_search = create(:pinned_search, user: @user)
+    create(:pinned_search, user: @user)
     get '/?q=inbox%3Atrue+owner%3Aoctobox'
     assert_response :success
     assert_template 'notifications/index'
@@ -877,7 +877,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'only shows new saved search link if filters are active' do
     sign_in_as(@user)
-    pinned_search = create(:pinned_search, user: @user)
+    create(:pinned_search, user: @user)
     get '/'
     assert_response :success
     assert_select '.new_pinned_search', {count: 0}
@@ -885,7 +885,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'shows new saved search link if not already saved' do
     sign_in_as(@user)
-    pinned_search = create(:pinned_search, user: @user)
+    create(:pinned_search, user: @user)
     get '/?q=foo'
     assert_response :success
     assert_select '.new_pinned_search', {count: 1}
@@ -893,7 +893,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test "doesn't show new saved search link if already saved" do
     sign_in_as(@user)
-    pinned_search = create(:pinned_search, user: @user)
+    create(:pinned_search, user: @user)
     get '/?q=inbox%3Atrue+owner%3Aoctobox'
     assert_response :success
     assert_select '.new_pinned_search', {count: 0}
@@ -901,7 +901,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test "doesn't show new saved search link if already saved with params" do
     sign_in_as(@user)
-    pinned_search = create(:pinned_search, user: @user)
+    create(:pinned_search, user: @user)
     get '/?owner=octobox'
     assert_response :success
     assert_select '.new_pinned_search', {count: 0}

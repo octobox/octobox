@@ -157,7 +157,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 1.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
@@ -175,7 +175,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
@@ -228,7 +228,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     api_response = notifications_from_fixture('morty_notifications.json').third
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, state: 'open', url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
