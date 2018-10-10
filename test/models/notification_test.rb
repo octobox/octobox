@@ -237,4 +237,12 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal 'merged', subject.state
     assert_equal 'failure', subject.status
   end
+
+  test 'subjectable scope returns only notifications that can have subjects' do
+    notification1 = create(:notification, subject_type: 'Issue')
+    notification2 = create(:notification, subject_type: 'RepositoryVulnerabilityAlert')
+
+    assert_equal Notification.subjectable.length, 1
+    assert_equal Notification.subjectable.first, notification1
+  end
 end
