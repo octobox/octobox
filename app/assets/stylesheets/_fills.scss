@@ -5,13 +5,13 @@ svg{
 // add svg support for twbs theme colors
 @mixin create-fills($color, $value){
   .text-#{$color}, .text-#{$color} svg{
-    fill: $value;
+    fill: $value !important;
   }
   .#{$color}-color, .#{$color}-color svg{
-    fill: $value;
+    fill: $value !important;
   }
   .#{$color}-text-color, .#{$color}-text-color svg{
-      fill: color-yiq($value);
+      fill: color-yiq($value) !important;
   }
 }
 @each $color, $value in $theme-colors{
@@ -73,11 +73,12 @@ svg{
     @include button-outline-variant($value);
   }
 }
+
 .nav-pills {
   .nav-link.active,
-  .nav-link.active svg,
+  .nav-link.active svg:not(.octicon-x),
   .show > .nav-link,
-  .show > .nav-link svg, {
+  .show > .nav-link svg:not(.octicon-x),{
     fill: $nav-pills-link-active-color;
   }
 }
@@ -90,19 +91,19 @@ svg{
 }
 
 .nav-link.active .text-primary{
-    fill: $nav-pills-link-active-color;
+    fill: $nav-pills-link-active-color !important;
 }
 
 .octicon-star {
-  fill: $icon-star-fill;
-  stroke: $icon-star-stroke;
+  fill: $icon-star-fill !important;
+  stroke: $icon-star-stroke !important;
   cursor: pointer;
   &:hover {
     fill: $icon-star-hover-fill;
   }
   &.star-active {
-    fill: $icon-star-active-fill;
-    stroke: $icon-star-active-stroke;
+    fill: $icon-star-active-fill !important;
+    stroke: $icon-star-active-stroke !important;
   }
 }
 
@@ -123,12 +124,12 @@ svg{
 
 .octicon {
   &.success {
-    fill: $notification-open;
+    fill: $notification-open !important;
   }
   &.failure, &.error {
-    fill: $notification-closed;
+    fill: $notification-closed !important;
   }
   &.pending {
-    fill: $notification-pending;
+    fill: $notification-pending !important;
   }
 }
