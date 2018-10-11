@@ -122,25 +122,13 @@ class User < ApplicationRecord
 
   def personal_access_token_validator
     return unless personal_access_token.present?
-    unless Octobox.personal_access_tokens_enabled?
-      errors.add(*ERRORS[:disallowed_tokens])
-      return
-    end
-    unless Octokit::Client.new.validate_credentials(access_token: effective_access_token)
-      errors.add(*ERRORS[:invalid_token])
-      return
-    end
-    unless github_id == github_client.user.id
-      errors.add(*ERRORS[:invalid_token])
-      return
-    end
-    unless github_client.scopes.include? 'notifications'
-      errors.add(*ERRORS[:missing_notifications_scope])
-    end
-    if Octobox.restricted_access_enabled? && !github_client.scopes.include?('read:org')
-      errors.add(*ERRORS[:missing_read_org_scope])
-    end
+    return unless validate_tokens_are_enabled
+    return unless validate_token_credentials
+    return unless validate_github_id
+    validate_github_client_notifications_scope
+    validate_github_client_read_scope
   end
+
 
   def masked_personal_access_token
     personal_access_token.blank? ? '' :
@@ -157,5 +145,37 @@ class User < ApplicationRecord
     app_installation_ids = app_installations.map(&:id)
     removed_permissions = app_installation_permissions.reject{|ep| app_installation_ids.include?(ep.app_installation_id) }
     removed_permissions.each(&:destroy)
+  end
+
+  private
+
+  def validate_tokens_are_enabled
+    return true if Octobox.personal_access_tokens_enabled?
+    errors.add(*ERRORS[:disallowed_tokens])
+    false
+  end
+
+  def validate_token_credentials
+    return true if Octokit::Client.new.validate_credentials(access_token: effective_access_token)
+    errors.add(*ERRORS[:invalid_token])
+    false
+  end
+
+  def validate_github_id
+    return true if github_id == github_client.user.id
+    errors.add(*ERRORS[:invalid_token])
+    false
+  end
+
+  def validate_github_client_notifications_scope
+    return true if github_client.scopes.include? 'notifications'
+    errors.add(*ERRORS[:missing_notifications_scope])
+    false
+  end
+
+  def validate_github_client_read_scope
+    return true if !Octobox.restricted_access_enabled? || github_client.scopes.include?('read:org')
+    errors.add(*ERRORS[:missing_read_org_scope])
+    false
   end
 end
