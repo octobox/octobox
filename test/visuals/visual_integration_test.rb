@@ -52,19 +52,6 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
     Percy::Capybara.snapshot(page, name: '/:auth sidebar_toggle') if Octobox.config.percy_configured?
   end
 
-  test 'render the navbar on small devices' do
-    sign_in_as(@user)
-    stub_fetch_subject_enabled
-    visit login_path
-
-    Capybara.current_session.current_window.resize_to(576,800)
-    click_button('.dropdown_toggle', wait: 0.25)
-    find('.dropdown-item').visible?
-    Percy::Capybara.snapshot(page, name: '/:auth navbar_toggle') if Octobox.config.percy_configured?
-
-    has_unchecked_field?('label[for=select_all]', visible: :false)
-  end
-
   test 'render some filtered stuff' do
     sign_in_as(@user)
     stub_fetch_subject_enabled
