@@ -151,7 +151,8 @@ $notification-items: (
     .notification-checkbox,
     .notification-star,
     .notification-icon,
-    .notification-date, {
+    .notification-date,
+    .notification-archived {
       position: absolute;
     }
     .notification-icon{
@@ -165,6 +166,11 @@ $notification-items: (
     .notification-star {
       top: 85px;
       left: 10px;
+    }
+    .notification-archived {
+      float: right;
+      right: 18px;
+      top: 55px;
     }
     .notification-subject,
     .notification-repo,

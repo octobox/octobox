@@ -110,7 +110,7 @@ module Octobox
       # Regardless of the reason, any client error should be rescued and warned so we don't
       # end up blocking other syncs
       rescue Octokit::ClientError => e
-        Rails.logger.warn("\n\n\033[32m[#{Time.now}] WARNING -- #{e.message}\033[0m\n\n")
+        Rails.logger.warn("\n\n\033[32m[#{Time.current}] WARNING -- #{e.message}\033[0m\n\n")
         nil
       end
 

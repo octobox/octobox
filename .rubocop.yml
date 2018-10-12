@@ -1,5 +1,6 @@
 AllCops:
   DisabledByDefault: true
+  TargetRubyVersion: 2.5
 
 #################### Lint ################################
 
@@ -295,6 +296,10 @@ Performance/StringReplacement:
                   you are deleting characters.
   Reference: 'https://github.com/JuanitoFatas/fast-ruby#stringgsub-vs-stringtr-code'
   Enabled: true
+
+Performance:
+  enabled: true
+
 
 ##################### Rails ##################################
 

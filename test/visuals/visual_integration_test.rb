@@ -39,13 +39,17 @@ class VisualIntegrationTest < ActionDispatch::IntegrationTest
 
     page.has_selector?('table tr')
     Percy::Capybara.snapshot(page, name: '/:auth') if Octobox.config.percy_configured?
+  end
+
+  test 'render the sidebar on small devices' do
+    sign_in_as(@user)
+    stub_fetch_subject_enabled
+    visit login_path
 
     Capybara.current_session.current_window.resize_to(576,800)
     click_button('sidebar_toggle', wait: 0.25)
     find('.flex-sidebar').visible?
     Percy::Capybara.snapshot(page, name: '/:auth sidebar_toggle') if Octobox.config.percy_configured?
-
-    has_unchecked_field?('label[for=select_all]', visible: :false)
   end
 
   test 'render some filtered stuff' do

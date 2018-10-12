@@ -15,7 +15,7 @@ module Octobox
         scope :status,   ->(status)       { joins(:subject).where(subjects: { status: status }) }
         scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
         scope :locked,     -> { joins(:subject).where(subjects: { locked: true }) }
-        scope :subjectable,-> { where(subject_type: SUBJECTABLE_TYPES) }
+        scope :subjectable,-> { where(subject_type: Notification::SUBJECTABLE_TYPES) }
         scope :bot_author, -> { joins(:subject).where('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot') }
         scope :labelable,  -> { where(subject_type: ['Issue', 'PullRequest']) }
         scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }

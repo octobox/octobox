@@ -132,7 +132,7 @@ class Notification < ApplicationRecord
   def update_from_api_response(api_response, unarchive: false)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
-    archived = false if archived.nil? # fixup existing records where archived is nil
+    self.archived = false if archived.nil? # fixup existing records where archived is nil
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
     update_subject
@@ -149,5 +149,10 @@ class Notification < ApplicationRecord
 
   def display_subject?
     @display_subject ||= subjectable? && (Octobox.fetch_subject? || github_app_installed?)
+  end
+
+  def upgrade_required?
+    return nil unless repository.present?
+    repository.private? && !repository.required_plan_available?
   end
 end

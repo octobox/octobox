@@ -10,14 +10,15 @@ class AppInstallation < ApplicationRecord
 
   def add_repositories(remote_repositories)
     remote_repositories.each do |remote_repository|
-      repository = repositories.find_or_create_by(github_id: remote_repository['id'])
+      repository = Repository.find_or_create_by(github_id: remote_repository['id'])
 
       repository.update_attributes({
         full_name: remote_repository['full_name'],
         private: remote_repository['private'],
         owner: remote_repository['full_name'].split('/').first,
         github_id: remote_repository['id'],
-        last_synced_at: Time.current
+        last_synced_at: Time.current,
+        app_installation_id: self.id
       })
 
       repository.notifications.includes(:user).find_each{|n| n.update_subject(true) }
@@ -43,13 +44,20 @@ class AppInstallation < ApplicationRecord
   end
 
   def private_repositories_enabled?
-    return true unless Octobox.config.marketplace_url
+    return true unless Octobox.octobox_io?
     subscription_purchase.try(:private_repositories_enabled?)
   end
 
   def sync
-    remote_installation = Octobox.github_app_client.installation(github_id)
+    remote_installation = Octobox.github_app_client.installation(github_id, accept: 'application/vnd.github.machine-man-preview+json')
     update_attributes(AppInstallation.map_from_api(remote_installation))
+  end
+
+  def sync_repositories
+    access_token = Octobox.github_app_client.create_installation_access_token(self.github_id, accept: 'application/vnd.github.machine-man-preview+json')
+    client = Octokit::Client.new(access_token: access_token.token, auto_paginate: true)
+    remote_repositories = client.list_app_installation_repositories.repositories
+    add_repositories(remote_repositories)
   end
 
   def self.map_from_api(remote_installation)

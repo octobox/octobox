@@ -157,7 +157,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 1.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
@@ -175,7 +175,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
@@ -228,7 +228,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     api_response = notifications_from_fixture('morty_notifications.json').third
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, state: 'open', url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
@@ -236,5 +236,13 @@ class NotificationTest < ActiveSupport::TestCase
     subject.reload
     assert_equal 'merged', subject.state
     assert_equal 'failure', subject.status
+  end
+
+  test 'subjectable scope returns only notifications that can have subjects' do
+    notification1 = create(:notification, subject_type: 'Issue')
+    notification2 = create(:notification, subject_type: 'RepositoryVulnerabilityAlert')
+
+    assert_equal Notification.subjectable.length, 1
+    assert_equal Notification.subjectable.first, notification1
   end
 end
