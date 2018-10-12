@@ -44,6 +44,14 @@ module Octobox
                           default_media_type: 'application/vnd.github.machine-man-preview+json')
     end
 
+    def installation_client(app_installation_id)
+      Octokit::Client.new(access_token: installation_access_token(app_installation_id), auto_paginate: true)
+    end
+
+    def installation_access_token(app_installation_id)
+      Octobox.github_app_client.create_installation_access_token(app_installation_id, accept: 'application/vnd.github.machine-man-preview+json').token
+    end
+
     private
 
     def generate_jwt
