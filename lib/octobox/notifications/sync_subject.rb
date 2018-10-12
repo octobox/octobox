@@ -33,6 +33,7 @@ module Octobox
             subject.state = remote_subject.merged_at.present? ? SUBJECT_STATE_MERGED : remote_subject.state
             subject.sha = remote_subject.head&.sha
             subject.body = remote_subject.body
+            subject.locked = remote_subject.locked
             subject.save(touch: false) if subject.changed?
           end
         else
