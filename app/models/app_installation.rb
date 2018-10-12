@@ -54,10 +54,11 @@ class AppInstallation < ApplicationRecord
   end
 
   def sync_repositories
-    access_token = Octobox.github_app_client.create_installation_access_token(self.github_id, accept: 'application/vnd.github.machine-man-preview+json')
-    client = Octokit::Client.new(access_token: access_token.token, auto_paginate: true)
+    installation_client(self.github_id)
     remote_repositories = client.list_app_installation_repositories.repositories
     add_repositories(remote_repositories)
+  rescue Octokit::ClientError
+    nil
   end
 
   def self.map_from_api(remote_installation)

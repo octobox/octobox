@@ -25,7 +25,7 @@ class HooksController < ApplicationController
     when 'marketplace_purchase'
       MarketplacePurchaseWorker.perform_async_if_configured(payload)
     when 'status'
-      SyncStatusWorker.perform_async_if_configured(payload['sha'], payload['state'])
+      SyncStatusWorker.perform_async_if_configured(payload['sha'], payload['name'])
     end
 
     head :no_content
