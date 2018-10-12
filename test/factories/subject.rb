@@ -4,5 +4,6 @@ FactoryBot.define do
     sequence(:github_id, 1000000) { |n| n }
     state { 'open' }
     author { 'andrew' }
+    repository_full_name { 'octobox/octobox' }
   end
 end

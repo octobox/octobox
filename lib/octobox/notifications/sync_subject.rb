@@ -9,7 +9,6 @@ module Octobox
       }
       SUBJECT_TYPE_COMMIT_RELEASE = ['Commit', 'Release'].freeze
       SUBJECT_STATE_MERGED = 'merged'.freeze
-      SUBJECT_STATUS_PENDING = 'pending'.freeze
 
       def update_subject(force = false)
         return unless display_subject?
@@ -63,41 +62,18 @@ module Octobox
           end
         end
 
-        case subject_type
-        when *SUBJECT_TYPE_ISSUE_REQUEST.values
-          subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
-        end
+        update_labels(remote_subject)
 
-        if subject_type == SUBJECT_TYPE_ISSUE_REQUEST[:PullRequest] && remote_subject.statuses_url.present?
-          remote_status = download_status(remote_subject.statuses_url)
-          if remote_status.present?
-            subject.status = assign_status(remote_status)
-            subject.save if subject.changed?
-          end
-        end
+        subject&.update_status
       end
 
       private
 
-      def assign_status(remote_status)
-        case remote_status.state
-        when SUBJECT_STATUS_PENDING
-          remote_status.statuses.present? ? remote_status.state : nil
-        else
-          remote_status.state
+      def update_labels(remote_subject)
+        case subject_type
+        when *SUBJECT_TYPE_ISSUE_REQUEST.values
+          subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
         end
-      end
-
-      def combined_status_url(status_url)
-        "#{status_url}/status".gsub('statuses', 'commits')
-      end
-
-      def download_status(status_url)
-        user.subject_client.get(
-          combined_status_url(status_url)
-        )
-      rescue Octokit::ClientError
-        nil
       end
 
       def download_subject
@@ -113,7 +89,6 @@ module Octobox
         Rails.logger.warn("\n\n\033[32m[#{Time.current}] WARNING -- #{e.message}\033[0m\n\n")
         nil
       end
-
     end
   end
 end

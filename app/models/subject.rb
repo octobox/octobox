@@ -3,6 +3,7 @@ class Subject < ApplicationRecord
   has_many :labels, dependent: :delete_all
   has_many :users, through: :notifications
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
+  has_one :app_installation, through: :repository
 
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
   private_constant :BOT_AUTHOR_REGEX
@@ -13,10 +14,6 @@ class Subject < ApplicationRecord
   validates :url, presence: true, uniqueness: true
 
   after_update :sync_involved_users
-
-  def author_url
-    "#{Octobox.config.github_domain}#{author_url_path}"
-  end
 
   def update_labels(remote_labels)
     existing_labels = labels.to_a
@@ -71,14 +68,43 @@ class Subject < ApplicationRecord
     subject.sync_involved_users
   end
 
-  def self.sync_status(sha, status)
-    subject = Subject.find_by(sha: sha)
-    if subject
-      subject.update({status: status})
+  def self.sync_status(sha, repository_full_name)
+    where(repository_full_name: repository_full_name).find_by_sha(sha)&.update_status
+  end
+
+  def update_status
+    if sha.present?
+      remote_status = download_status
+      if remote_status.present?
+        self.status = assign_status(remote_status)
+        self.save if changed?
+      end
     end
   end
 
   private
+
+  def assign_status(remote_status)
+    if remote_status.state == 'pending'
+      remote_status.statuses.present? ? remote_status.state : nil
+    else
+      remote_status.state
+    end
+  end
+
+  def download_status
+    github_client.combined_status(repository_full_name, sha)
+  rescue Octokit::ClientError
+    nil
+  end
+
+  def github_client
+    if app_installation.present?
+      Octobox.installation_client(app_installation.github_id)
+    else
+      users.first&.subject_client
+    end
+  end
 
   def self.extract_full_name(url)
     url.match(/\/repos\/([\w.-]+\/[\w.-]+)\//)[1]
@@ -88,17 +114,5 @@ class Subject < ApplicationRecord
     ids = users.pluck(:id)
     ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
     ids.uniq
-  end
-
-  def author_url_path
-    if bot_author?
-      "/apps/#{BOT_AUTHOR_REGEX.match(author)[1]}"
-    else
-      "/#{author}"
-    end
-  end
-
-  def bot_author?
-    BOT_AUTHOR_REGEX.match?(author)
   end
 end
