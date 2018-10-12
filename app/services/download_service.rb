@@ -66,15 +66,19 @@ class DownloadService
     return if notifications.blank?
     eager_load_relation = Octobox.config.subjects_enabled? ? [:subject, :repository] : nil
     existing_notifications = user.notifications.includes(eager_load_relation).where(github_id: notifications.map(&:id))
-    notifications.reject{|n| !unarchive && n.unread }.each do |notification|
+    updates = notifications.reject{|n| !unarchive && n.unread }.map do |notification|
       n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
       n = user.notifications.new(github_id: notification.id, archived: false) if n.nil?
       next unless n
-      begin
-        n.update_from_api_response(notification, unarchive: unarchive)
-      rescue ActiveRecord::RecordNotUnique
-        nil
-      end
+      n.update_from_api_response(notification, unarchive: unarchive)
+    end
+
+    Notification.import updates, on_duplicate_key_update: API_ATTRIBUTE_MAP.keys
+
+    updated_notifications = user.notifications.where(github_id: updates.map(&:github_id)).includes(:user)
+    updated_notifications.find_each do |notification|
+      notification.update_subject
+      notification.update_repository
     end
   end
 
