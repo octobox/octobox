@@ -101,6 +101,18 @@ module NotificationsHelper
     filters.merge(override)
   end
 
+  def mute_button
+    function_button('Mute', 'mute', "mute_selected", 'Mute notification') unless params[:archive]
+  end
+
+  def archive_button
+    function_button("Archive", 'checklist', "archive_toggle archive", 'Archive')
+  end
+
+  def unarchive_button
+    function_button("Unarchive", 'inbox', "archive_toggle unarchive", 'Unarchive notification')
+  end
+
   def mute_selected_button
     function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items')
   end
@@ -273,4 +285,27 @@ module NotificationsHelper
     octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
   end
 
+  def notification_button(subject_type, state = nil)
+    state = nil unless display_subject?
+    return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
+    SUBJECT_TYPES[subject_type]
+  end
+
+  def notification_button_title(subject_type, state = nil)
+    return subject_type.underscore.humanize if state.blank?
+    "#{state.underscore.humanize}"
+  end
+
+  def notification_button_color(state)
+    {
+      'open' => 'btn-success',
+      'closed' => 'btn-danger',
+      'merged' => 'text-subscribed'
+    }[state]
+  end
+
+  def parse_markdown(str)
+    return if str.blank?
+    GitHub::Markup.render('.md', str)
+  end
 end

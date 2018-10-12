@@ -312,6 +312,14 @@ var Octobox = (function() {
     if($(".js-is_syncing").length){ refreshOnSync() }
     if($(".js-start_sync").length){ sync() }
     if($(".js-initial_sync").length){ sync() }
+
+    window.onpopstate = function(event) {
+      if(event.state.thread){
+        $.get(event.state.thread, function(data){
+          $('#thread').html(data)
+        });
+      }
+    };
   };
 
   var deleteSelected = function(){

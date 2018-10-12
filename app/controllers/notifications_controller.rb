@@ -96,6 +96,41 @@ class NotificationsController < ApplicationController
     @cur_selected = [per_page, @total].min
   end
 
+  def show
+    scope = notifications_for_presentation.newest
+    @types                 = scope.reorder(nil).distinct.group(:subject_type).count
+    @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
+    @reasons               = scope.reorder(nil).distinct.group(:reason).count
+    @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
+
+    if display_subject?
+      @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
+      @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
+      @unlabelled            = scope.reorder(nil).unlabelled.count
+      @bot_notifications     = scope.reorder(nil).bot_author.count
+      @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
+      @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
+      @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
+    end
+
+    scope = current_notifications(scope)
+    check_out_of_bounds(scope)
+
+    @unread_count = user_unread_count
+    @notifications = scope.page(page).per(per_page)
+    @total = @notifications.total_count
+
+    @cur_selected = [per_page, @total].min
+
+    ids = scope.pluck(:id)
+    position = ids.index(params[:id].to_i)
+    @notification = scope.find(params[:id])
+    @previous = ids[position-1] unless position-1 < 0
+    @next = ids[position+1] unless position+1 > ids.length
+
+    render partial: "notifications/thread", layout: false if request.xhr?
+  end
+
   # Return a count for the number of unread notifications
   #
   # :category: Notifications CRUD

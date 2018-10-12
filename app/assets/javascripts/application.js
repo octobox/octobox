@@ -61,3 +61,13 @@ $(document).on('click', 'tr.notification', function() {
 $(document).on('click', '.toggle-star', function() {
   Octobox.toggleStarClick($(this))
 })
+
+
+
+$(document).on('click', '.js-link', function () {
+  history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
+  $.get($(this).attr('href'), function(data){
+    $('#thread').html(data)
+  });
+  return false;
+});

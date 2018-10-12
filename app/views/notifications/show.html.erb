@@ -1,0 +1,13 @@
+<div class="d-flex">
+  <div class="col" style='min-width:250px; overflow-y:scroll;'>
+    <%= render "sidebar" %>
+  </div>
+  <div class="col flex-fill" style='overflow-y:scroll;'>
+    <%= render 'list' %>
+  </div>
+  <div  id='thread' class="col" style='min-width:50em; overflow-y:scroll;'>
+    <%= render 'thread' %>
+  </div>
+</div>
+
+<%= render 'help-box' %>
