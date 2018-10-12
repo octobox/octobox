@@ -46,7 +46,7 @@
     <% end %>
   </td>
   <td class='notification-subject'>
-    <%= link_to notification.subject_title, notification.web_url, target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: 'link', onclick: "Octobox.markRead(#{notification.id})" %>
+    <%= link_to notification.subject_title, notification.web_url, target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: 'link', onclick: "Octobox.markRead(#{notification.id})", title: notification.title %>
 
     <% if notification.display_subject? %>
       <% if notification.subject %>
