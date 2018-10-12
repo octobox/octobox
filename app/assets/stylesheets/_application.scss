@@ -99,3 +99,13 @@
 .blur-action {
   opacity: .5;
 }
+
+@media (hover:none), (any-hover:none) {
+  .btn-outline-dark:hover {
+    background-color: transparent;
+
+    svg {
+      fill: $body-color;
+    }
+  }
+}
