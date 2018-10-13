@@ -11,10 +11,6 @@ class User < ApplicationRecord
   has_many :pinned_searches, dependent: :delete_all
 
   ERRORS = {
-    invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
-    missing_notifications_scope: [:personal_access_token, 'does not include the notifications scope'],
-    missing_read_org_scope: [:personal_access_token, 'does not include the read:org scope'],
-    disallowed_tokens: [:personal_access_token, 'is not allowed in this instance'],
     refresh_interval_size: [:refresh_interval, 'must be less than 1 day']
   }.freeze
 
@@ -28,7 +24,7 @@ class User < ApplicationRecord
     less_than_or_equal_to: 86_400_000,
     message: ERRORS[:refresh_interval_size][1]
   }
-  validate :personal_access_token_validator
+  validates_with PersonalAccessTokenValidator
 
   scope :not_recently_synced, -> { where('last_synced_at < ?', 1.minute.ago) }
 
@@ -120,16 +116,6 @@ class User < ApplicationRecord
     Octobox.personal_access_tokens_enabled? && personal_access_token.present? ? personal_access_token : access_token
   end
 
-  def personal_access_token_validator
-    return unless personal_access_token.present?
-    return unless validate_tokens_are_enabled
-    return unless validate_token_credentials
-    return unless validate_github_id
-    validate_github_client_notifications_scope
-    validate_github_client_read_scope
-  end
-
-
   def masked_personal_access_token
     personal_access_token.blank? ? '' :
     "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
@@ -145,37 +131,5 @@ class User < ApplicationRecord
     app_installation_ids = app_installations.map(&:id)
     removed_permissions = app_installation_permissions.reject{|ep| app_installation_ids.include?(ep.app_installation_id) }
     removed_permissions.each(&:destroy)
-  end
-
-  private
-
-  def validate_tokens_are_enabled
-    return true if Octobox.personal_access_tokens_enabled?
-    errors.add(*ERRORS[:disallowed_tokens])
-    false
-  end
-
-  def validate_token_credentials
-    return true if Octokit::Client.new.validate_credentials(access_token: effective_access_token)
-    errors.add(*ERRORS[:invalid_token])
-    false
-  end
-
-  def validate_github_id
-    return true if github_id == github_client.user.id
-    errors.add(*ERRORS[:invalid_token])
-    false
-  end
-
-  def validate_github_client_notifications_scope
-    return true if github_client.scopes.include? 'notifications'
-    errors.add(*ERRORS[:missing_notifications_scope])
-    false
-  end
-
-  def validate_github_client_read_scope
-    return true if !Octobox.restricted_access_enabled? || github_client.scopes.include?('read:org')
-    errors.add(*ERRORS[:missing_read_org_scope])
-    false
   end
 end
