@@ -66,7 +66,6 @@ module Octobox
         end
 
         update_labels(remote_subject)
-
         subject&.update_status
       end
 
@@ -75,7 +74,7 @@ module Octobox
       def update_labels(remote_subject)
         case subject_type
         when *SUBJECT_TYPE_ISSUE_REQUEST.values
-          subject.update_labels(remote_subject.labels) if remote_subject.labels.present?
+          subject.sync_labels(remote_subject.labels) if remote_subject.labels.present?
         end
       end
 

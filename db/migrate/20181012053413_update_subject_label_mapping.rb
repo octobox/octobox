@@ -4,9 +4,9 @@ class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
     return if Label.count.zero?
     # this query is to find unique labels in the order they are created by grouping them on GITHUB_ID;
     # I have extracted the labels GITHUB_ID and ID to create mapping between the two.
-    # I ran the inner query IN POSTGRE server to check that ORDER of labels is by created_at ASC
+    # I ran the inner query IN POSTGRES server to check that ORDER of labels is by created_at ASC
 
-    records = fetch_unique_labels
+    records = Db::Resolver.new.db.fetch_unique_labels
     return if records.blank?
 
     # creating a mapping of Label GITHUB_ID and ID ordered by created_at ASC
@@ -15,9 +15,7 @@ class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
 
     # this query is get mapping between Labels and Repository through subjects table
     label_repo_map = {}
-    label_github_ids = github_id_label_id_map.keys.join(",")
-
-    label_repos = fetch_label_repo_mapping(label_github_ids)
+    label_repos = Db::Resolver.new.db.fetch_label_repo_mapping(github_id_label_id_map.keys.join(","))
     label_repos.map { |label| label_repo_map[label["github_id"]] = label["repository_id"] }
 
     updated_labels = []
@@ -43,6 +41,6 @@ class UpdateSubjectLabelMapping < ActiveRecord::Migration[5.2]
     # this is to contain the RACE condition which can arise is their is already a record in SubjectLabel
     # table but we have generated on extra during batch processing
     SubjectLabel.import subject_label_records, on_duplicate_key_ignore: true, :batch_size => 5000
-    import_labels(updated_labels)
+    Db::Resolver.new.db.import_labels(updated_labels, [:repository_id])
   end
 end

@@ -12,7 +12,7 @@ module Octobox
         # detach removed labels from subject
         detach_subject_labels_removed_on_remote(remote_labels.map{|l| l['id'] })
 
-        existing_labels_on_repo = fetch_existing_labels_on_repo
+        existing_labels_on_repo = Db::Resolver.new.db.fetch_existing_labels_on_repo(repository.id)
         # filter out and create new labels added for the first time on a repository
         labels_to_be_added = remote_labels.reject { |l|
           existing_labels_on_repo.collect(&:last).include?(l['id'])
@@ -24,7 +24,7 @@ module Octobox
           Label.import labels_to_be_added, on_duplicate_key_ignore: true
         end
         # update name and color of existing labels
-        update_labels(
+        update_existing_labels(
           remote_labels,
           existing_labels_on_repo.reject { |label| labels_to_be_added.collect(&:github_id).include?(label.first) }
         )
@@ -32,7 +32,7 @@ module Octobox
         attach_label_to_subject(remote_labels.map{|l| l['id'] })
       end
 
-      def update_labels(remote_labels, labels_for_update)
+      def update_existing_labels(remote_labels, labels_for_update)
         return if labels_for_update.blank?
 
         updated_labels = []
@@ -42,13 +42,13 @@ module Octobox
           end
         end
 
-        import_labels(updated_labels)
+        Db::Resolver.new.db.import_labels(updated_labels, [:color, :name])
       end
 
       def attach_label_to_subject(label_github_ids)
         return if label_github_ids.blank?
 
-        subject_labels = Label.where('github_id in (?)', label_github_ids).ids
+        subject_labels = Label.where('github_id in (?) and repository_id is NOT NULL', label_github_ids).ids
         subject_labels.map!{ |label_id| SubjectLabel.new(subject_id: self.id, label_id: label_id) }
         SubjectLabel.import subject_labels, on_duplicate_key_ignore: true
       end

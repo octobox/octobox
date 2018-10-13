@@ -12,14 +12,6 @@ class LabelTest < ActiveSupport::TestCase
     end
   end
 
-  test 'creating Label for duplicate github_id fails' do
-    @label.save!
-
-    assert_raises ActiveRecord::RecordNotUnique do
-      create(:label, github_id: 208045946, name: "bug", color: "f29513", repository_id: @repository.id)
-    end
-  end
-
   test 'renders contrasting label color' do
     label = Label.new({color: 'ffffff'})
     assert_equal 'black', label.text_color
