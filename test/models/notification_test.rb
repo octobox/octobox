@@ -214,7 +214,7 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
-  test 'updated_from_api_response updates the existing subject if present' do
+  test 'update_from_api_response updates the existing subject if present' do
     stub_background_jobs_enabled(value: false)
     stub_fetch_subject_enabled
     stub_repository_request
