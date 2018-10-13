@@ -91,6 +91,7 @@ class NotificationsController < ApplicationController
 
     @unread_count = user_unread_count
     @notifications = scope.page(page).per(per_page)
+    @pinned_searches = current_user.pinned_searches
     @total = @notifications.total_count
 
     @cur_selected = [per_page, @total].min

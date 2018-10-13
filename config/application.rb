@@ -23,6 +23,7 @@ Bundler.require(*Rails.groups)
 module Octobox
   class Application < Rails::Application
     config.eager_load_paths << Rails.root.join("lib")
+    config.autoload_paths += Dir["#{config.root}/app/view_objects/**/"]
     config.exceptions_app = routes
   end
 end

@@ -31,6 +31,10 @@
         <%= params[:state].humanize %>
       <% end %>
 
+      <%= filter_option :status do %>
+        <%= params[:status].humanize %>
+      <% end %>
+
       <%= filter_option :label do %>
         Label: <%= emojify(params[:label]) %>
       <% end %>

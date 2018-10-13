@@ -1,10 +1,9 @@
-<ul class="nav nav-pills flex-column nav-filters">
-  <%= sidebar_primary_actions.html_safe %>
-</ul>
 
-<% if current_user.pinned_searches.any? || any_active_filters? %>
+<%= PrimaryLinks.new(controller.view_context, unread_notifications: @unread_notifications).html %>
+
+<% if @pinned_searches.any? || any_active_filters? %>
   <ul class="nav nav-pills flex-column nav-filters">
-    <% current_user.pinned_searches.each do |pinned_search| %>
+    <% @pinned_searches.each do |pinned_search| %>
       <li role="presentation" class="nav-item pinned_search">
         <%= link_to root_path(q: pinned_search.query), { :class=>"nav-link #{'active' if search_query_matches?(@search.to_query, pinned_search.query)}", title: pinned_search.query } do %>
           <%= octicon 'search', height: 16, class: 'sidebar-icon' %>
@@ -27,122 +26,33 @@
 <% end %>
 
 <ul class="nav nav-pills flex-column nav-filters">
-  <%= filter_link :unread, false, @unread_notifications[false] do %>
-      <%= octicon 'mail-read', height: 16, class: 'sidebar-icon' %>
-      Read
-  <% end %>
-
-  <%= filter_link :unread, true, @unread_notifications[true] do %>
-      <%= octicon 'mail', height: 16, class: 'sidebar-icon' %>
-      Unread
-  <% end %>
+  <%= GeneralLinks.new(controller.view_context, action_name: 'unread', text: 'read', count: @unread_notifications[false], value: false ).html %>
+  <%= GeneralLinks.new(controller.view_context, action_name: 'unread', text: 'unread', count: @unread_notifications[true], value: true).html %>
 </ul>
 
 <% if display_subject? %>
-  <% if @states.keys.compact.any? %>
-    <ul class="nav nav-pills flex-column nav-filters">
-      <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
-        <% next if state.nil? %>
-        <%= filter_link :state, state, count do %>
-          <%= octicon 'primitive-square', height: 24, class: "sidebar-icon text-#{state_label(state)}" %>
-          <%= state.underscore.humanize %>
-        <% end %>
-      <% end %>
-    </ul>
-  <% end %>
+  <%= SecondaryLinks.new(controller.view_context, action_types: @states, action_name: :state).html if @states.keys.compact.any? %>
 
   <% if @unlabelled > 0 || @bot_notifications > 0 || @assigned > 0 %>
     <ul class="nav nav-pills flex-column nav-filters">
-      <% if @assigned > 0 %>
-        <%= filter_link :assigned, current_user.github_login, @assigned do %>
-          <%= octicon 'person', height: 16, class: 'sidebar-icon' %>
-          Assigned to you
-        <% end %>
-      <% end %>
-      <% if @bot_notifications > 0 %>
-        <%= filter_link :bot, true, @bot_notifications do %>
-          <%= octicon 'hubot', height: 18, class: 'sidebar-icon' %>
-          Bots
-        <% end %>
-      <% end %>
+      <%= GeneralLinks.new(controller.view_context, action_name: 'assigned', text: 'Assigned to you', count: @assigned, query_param: current_user.github_login).html if @assigned > 0 %>
 
-      <% if @unlabelled > 0 %>
-        <%= filter_link :unlabelled, true, @unlabelled do %>
-          <%= octicon 'tag', height: 16, class: 'sidebar-icon' %>
-          Unlabelled
-        <% end %>
-      <% end %>
+      <%= GeneralLinks.new(controller.view_context, action_name: 'bot', text: 'Bots', count: @bot_notifications).html if @bot_notifications > 0 %>
+
+      <%= GeneralLinks.new(controller.view_context, action_name: 'unlabelled', text: 'Unlabelled', count: @unlabelled).html if @unlabelled > 0 %>
     </ul>
   <% end %>
 
-  <% if @statuses.keys.compact.any? %>
-    <ul class="nav nav-pills flex-column nav-filters">
-      <% @statuses.sort_by{ |status, count| status.to_s }.reverse_each do |status, count| %>
-        <% next if status.nil? %>
-        <%= filter_link :status, status, count do %>
-          <span class='text-<%= status %>'>
-            <%= sidebar_notification_status(status) %>
-          </span>
-          <%= status.underscore.humanize %>
-        <% end %>
-      <% end %>
-    </ul>
-  <% end %>
-
+  <%= SecondaryLinks.new(controller.view_context, action_types: @statuses, action_name: :status).html if @statuses.keys.compact.any? %>
 <% end %>
 
-<% if @types.any? %>
-  <ul class="nav nav-pills flex-column nav-filters">
-    <% @types.sort_by{|type, count| type.downcase }.each do |type, count| %>
-      <%= filter_link :type, type, count do %>
-        <% if notification_icon(type).nil? %>
-            <span class='sidebar-icon'></span>
-        <% else %>
-            <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon' %>
-        <% end %>
-        <%= type.underscore.gsub('repository', '').humanize %>
-
-      <% end %>
-    <% end %>
-  </ul>
-<% end %>
-
-<% if @reasons.any? %>
-  <ul class="nav nav-pills flex-column nav-filters">
-    <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
-      <%= reason_filter_link reason, count do %>
-        <%= octicon 'primitive-dot', height: 24, class: "sidebar-icon text-#{reason_label(reason)}" %>
-        <%= reason.underscore.humanize %>
-      <% end %>
-    <% end %>
-  </ul>
-<% end %>
-
-<% if display_subject? %>
-  <% if @statuses.keys.compact.any? %>
-    <ul class="nav nav-pills flex-column nav-filters">
-      <% @statuses.sort_by{ |status, count| status.to_s }.reverse_each do |status, count| %>
-        <% next if status.nil? %>
-        <%= filter_link :status, status, count do %>
-          <%= sidebar_notification_status(status) %>
-          <%= status.underscore.humanize %>
-        <% end %>
-      <% end %>
-    </ul>
-  <% end %>
-<% end %>
+<%= SecondaryLinks.new(controller.view_context, action_types: @types, action_name: :type).html if @types.any? %>
+<%= SecondaryLinks.new(controller.view_context, action_types: @reasons, action_name: :reason).html if @reasons.any? %>
 
 <% if @visiblity && @visiblity.any? %>
   <ul class="nav nav-pills flex-column nav-filters">
-    <% @visiblity.sort_by{|visiblity, count| visiblity.to_s }.each do |visiblity, count| %>
-      <%= filter_link :is_private, visiblity, count do %>
-        <% if visiblity %>
-          <%= octicon('lock', class: 'private-repo sidebar-icon') %> Private
-        <% else %>
-          <%= octicon('repo', class: 'sidebar-icon') %> Public
-        <% end %>
-      <% end %>
-    <% end %>
+    <%= GeneralLinks.new(controller.view_context, action_name: 'is_private', text: 'Private', count: @visiblity[true], value: true).html if @visiblity[true] %>
+    <%= GeneralLinks.new(controller.view_context, action_name: 'is_private', text: 'Public', count: @visiblity[false], value: false).html if @visiblity[false] %>
   </ul>
 <% end %>
 
