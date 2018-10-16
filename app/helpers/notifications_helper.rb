@@ -102,15 +102,15 @@ module NotificationsHelper
   end
 
   def mute_button
-    function_button('Mute', 'mute', "mute_selected", 'Mute notification') unless params[:archive]
+    function_button('Mute', 'mute', "mute_selected", 'Mute notification', false) unless params[:archive]
   end
 
   def archive_button
-    function_button("Archive", 'checklist', "archive_toggle archive", 'Archive')
+    function_button("Archive", 'checklist', "archive_toggle archive", 'Archive', false)
   end
 
   def unarchive_button
-    function_button("Unarchive", 'inbox', "archive_toggle unarchive", 'Unarchive notification')
+    function_button("Unarchive", 'inbox', "archive_toggle unarchive", 'Unarchive notification', false)
   end
 
   def mute_selected_button
@@ -142,8 +142,8 @@ module NotificationsHelper
     end if cur_selected < total
   end
 
-  def function_button(title, octicon, css_class, tooltip)
-    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
+  def function_button(title, octicon, css_class, tooltip, hidden=true)
+    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark #{'hidden-button' if hidden}", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
       octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-md-inline-block ml-1')
     end
   end

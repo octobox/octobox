@@ -1,22 +1,21 @@
 <div class='d-flex card-header sticky-top justify-content-between'>
   <div>
     <%= link_to octicon('arrow-left', height: 18), root_path(filtered_params({})), class: 'd-xxl-none btn btn-sm btn-outline-dark', data:{toggle:'offcanvas'} %>
-    
     <%= link_to octicon('star', height: 18), '#' ,class: "btn btn-sm btn-outline-dark toggle-star #{@notification.starred ? 'star-active' : 'star-inactive'}", data: { id: @notification.id, toggle: 'tooltip' }, title: @notification.starred ? 'Remove star' : 'Star' %>
     <%= archive_button unless archive_selected? %>
     <%= unarchive_button unless inbox_selected? %>
-    <%= mute_selected_button %>
+    <%= mute_button %>
   </div>
   <div>
     <% if @previous %>
-      <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "js-link btn btn-sm previous btn-outline-dark" %>
+      <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "js-link btn btn-sm previous btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
     <% else %>
-      <%= link_to octicon('chevron-left'), '#', class: "js-link btn btn-sm previous btn-outline-light text-muted" %>
+      <%= link_to octicon('chevron-left'), '#', class: "js-link btn btn-sm previous btn-outline-light text-muted", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
     <% end %>
     <% if @next %>
-      <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "js-link btn btn-sm next btn-outline-dark" %>
+      <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "js-link btn btn-sm next btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
     <% else %>
-      <%= link_to octicon('chevron-right'), '#', class: "js-link btn btn-sm next btn-outline-light text-muted}" %>
+      <%= link_to octicon('chevron-right'), '#', class: "js-link btn btn-sm next btn-outline-light text-muted}", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
     <% end %>
   </div>
 </div>

@@ -286,7 +286,11 @@ var Octobox = (function() {
   };
 
   var toggleOffCanvas = function() {
-    $(".flex-content").toggleClass("active")
+    $(".flex-content").toggleClass("active");
+  };
+
+  var showThread = function() {
+    !$(".flex-content").hasClass("active") ? $(".flex-content").addClass("active") : null; 
   };
 
   function markRead(id) {
