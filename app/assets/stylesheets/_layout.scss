@@ -30,6 +30,16 @@ body {
 .flex-content{
   display: flex;
   height: calc(100vh - 56px);
+
+  position: relative;
+  left: 0;
+  height: 100%;
+  -webkit-transition: all .25s ease-out;
+       -o-transition: all .25s ease-out;
+          transition: all .25s ease-out;
+  &.active {
+    left: $sidebar-width;
+  }
 }
 
 .flex-sidebar {
@@ -38,13 +48,28 @@ body {
   padding: 15px;
   padding-bottom: 60px;
   overflow: auto;
+
+  position: absolute;
+  // enable momentum scrolling on mobile safari
+  overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  bottom: 0;
+  top: 0;
+  width: $sidebar-width;
+  left: -$sidebar-width;
 }
 
 .flex-main {
   flex: 1;
   min-width: 0;
-  overflow: auto;
+  overflow-x: hidden;
   padding-left: 0;
+}
+
+.flex-thread {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
   .text-content{
     h1, h2{
       padding-top: $spacer * 3
@@ -77,33 +102,10 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 
-  .flex-content {
-    position: relative;
-    left: 0;
-    height: 100%;
-    -webkit-transition: all .25s ease-out;
-         -o-transition: all .25s ease-out;
-            transition: all .25s ease-out;
-  }
-
   .text-content{
     padding: 0 15px;
     
   }
 
-  .flex-content.active {
-    left: $sidebar-width;
-  }
-
-  .flex-sidebar {
-    position: absolute;
-    // enable momentum scrolling on mobile safari
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    bottom: 0;
-    top: 0;
-    width: $sidebar-width;
-    left: -$sidebar-width;
-  }
 }
 
