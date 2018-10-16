@@ -48,6 +48,8 @@ end
 
 group :test do
   gem 'factory_bot'
+  gem 'guard'
+  gem 'guard-minitest'
   gem 'simplecov'
   gem 'webmock'
   gem 'mocha'
