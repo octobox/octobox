@@ -41,6 +41,8 @@ gem 'pg', '1.1.3', require: false
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
+  gem 'guard'
+  gem 'guard-minitest'
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
   gem 'active_record_query_trace'
@@ -48,8 +50,6 @@ end
 
 group :test do
   gem 'factory_bot'
-  gem 'guard'
-  gem 'guard-minitest'
   gem 'simplecov'
   gem 'webmock'
   gem 'mocha'
