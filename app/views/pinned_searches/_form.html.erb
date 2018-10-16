@@ -1,0 +1,13 @@
+<%= simple_form_for @pinned_search do |f| %>
+  <div class="form-row">
+    <div class="col">
+      <%= f.input :name, placeholder: 'Name', class: "form-control", label: false %>
+    </div>
+    <div class="col">
+      <%= f.input :query, placeholder: 'Search Query', class: 'form-control', label: false %>
+    </div>
+    <div class="col">
+      <%= f.submit 'Save', class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>

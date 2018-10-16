@@ -8,12 +8,9 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :delete_all
   has_many :app_installation_permissions, dependent: :delete_all
   has_many :app_installations, through: :app_installation_permissions
+  has_many :pinned_searches, dependent: :delete_all
 
   ERRORS = {
-    invalid_token: [:personal_access_token, 'is not a valid token for this github user'],
-    missing_notifications_scope: [:personal_access_token, 'does not include the notifications scope'],
-    missing_read_org_scope: [:personal_access_token, 'does not include the read:org scope'],
-    disallowed_tokens: [:personal_access_token, 'is not allowed in this instance'],
     refresh_interval_size: [:refresh_interval, 'must be less than 1 day']
   }.freeze
 
@@ -27,7 +24,7 @@ class User < ApplicationRecord
     less_than_or_equal_to: 86_400_000,
     message: ERRORS[:refresh_interval_size][1]
   }
-  validate :personal_access_token_validator
+  validates_with PersonalAccessTokenValidator
 
   scope :not_recently_synced, -> { where('last_synced_at < ?', 1.minute.ago) }
 
@@ -80,9 +77,9 @@ class User < ApplicationRecord
 
   def sync_notifications_in_foreground
     download_service.download
-    Rails.logger.info("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} synced their notifications\033[0m\n\n")
+    Rails.logger.info("\n\n\033[32m[#{Time.current}] INFO -- #{github_login} synced their notifications\033[0m\n\n")
   rescue Octokit::Unauthorized => e
-    Rails.logger.warn("\n\n\033[32m[#{Time.now}] INFO -- #{github_login} failed to sync notifications -- #{e.message}\033[0m\n\n")
+    Rails.logger.warn("\n\n\033[32m[#{Time.current}] INFO -- #{github_login} failed to sync notifications -- #{e.message}\033[0m\n\n")
   end
 
   def download_service
@@ -117,28 +114,6 @@ class User < ApplicationRecord
 
   def effective_access_token
     Octobox.personal_access_tokens_enabled? && personal_access_token.present? ? personal_access_token : access_token
-  end
-
-  def personal_access_token_validator
-    return unless personal_access_token.present?
-    unless Octobox.personal_access_tokens_enabled?
-      errors.add(*ERRORS[:disallowed_tokens])
-      return
-    end
-    unless Octokit::Client.new.validate_credentials(access_token: effective_access_token)
-      errors.add(*ERRORS[:invalid_token])
-      return
-    end
-    unless github_id == github_client.user.id
-      errors.add(*ERRORS[:invalid_token])
-      return
-    end
-    unless github_client.scopes.include? 'notifications'
-      errors.add(*ERRORS[:missing_notifications_scope])
-    end
-    if Octobox.restricted_access_enabled? && !github_client.scopes.include?('read:org')
-      errors.add(*ERRORS[:missing_read_org_scope])
-    end
   end
 
   def masked_personal_access_token

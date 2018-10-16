@@ -11,12 +11,15 @@ module ApplicationHelper
   end
 
   def flash_messages
-    flash.each do |msg_type, message|
-      concat(content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} fade show") do
-        concat content_tag(:button, 'x', class: 'close', data: { dismiss: 'alert' })
-        concat message
-      end)
-    end
+    return unless flash.any?
+    concat(content_tag(:div, class: "flex-header header-flash-messages") do
+      flash.each do |msg_type, message|
+        concat(content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} fade show") do
+          concat content_tag(:button, 'x', class: 'close', data: { dismiss: 'alert' })
+          concat message
+        end)
+      end
+    end)
     nil
   end
 

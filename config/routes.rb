@@ -10,6 +10,10 @@ require 'admin_constraint'
 Rails.application.routes.draw do
   root to: 'notifications#index'
 
+  get '/404', to: 'errors#not_found'
+  get '/422', to: 'errors#unprocessable'
+  get '/500', to: 'errors#internal'
+
   constraints AdminConstraint.new do
     namespace :admin do
       mount Sidekiq::Web => "/sidekiq"
@@ -51,9 +55,12 @@ Rails.application.routes.draw do
   post '/hooks/github', to: 'hooks#create'
 
   if Octobox.octobox_io?
+    get '/pricing', to: 'pages#pricing'
     get '/privacy', to: 'pages#privacy'
     get '/terms', to: 'pages#terms'
   end
+
+  resources :pinned_searches
 
   get '/settings', to: 'users#edit'
   resources :users, only: [:update, :destroy] do

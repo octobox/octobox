@@ -62,24 +62,18 @@ class SearchParserTest < ActiveSupport::TestCase
 
   test 'has multiple operators with "' do
     query = 'operator: "123 is lol" otheroperator: "12" operator: "other value"'
-    expectedvalue = '123 is lol'
-    othervalue = 'other value'
     search = SearchParser.new query
     assert_equal search[:operator], ['123 is lol', 'other value']
   end
    #
   test 'has multiple operators with \'' do
     query = 'operator: \'123 is lol\' otheroperator: \'12\' operator: \'other value\''
-    expectedvalue = '123 is lol'
-    othervalue = 'other value'
     search = SearchParser.new query
     assert_equal search[:operator], ['123 is lol', 'other value']
   end
 
   test 'has multiple operators with \' and "' do
     query = 'operator: \'123 is " lol\' otheroperator: \'12\' operator: "other \' value"'
-    expectedvalue = '123 is " lol'
-    othervalue = 'other \' value'
     search = SearchParser.new query
     assert_equal search[:operator], ["123 is \" lol", "other ' value"]
   end
@@ -100,6 +94,6 @@ class SearchParserTest < ActiveSupport::TestCase
   test 'allows - in prefix' do
     query = '-repo:octobox/octobox,foo/bar'
     search = SearchParser.new query
-    assert_equal search[:'-repo'], ['octobox/octobox','foo/bar'] 
+    assert_equal search[:'-repo'], ['octobox/octobox','foo/bar']
   end
 end

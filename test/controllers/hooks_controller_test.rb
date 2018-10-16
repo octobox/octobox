@@ -29,6 +29,10 @@ class HooksControllerTest < ActionController::TestCase
   test 'issue_comment webhook payload' do
     send_webhook 'issue_comment'
   end
+
+  test 'status webhook payload' do
+    send_webhook 'status'
+  end
 end
 
 def send_webhook(event_type)

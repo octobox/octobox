@@ -229,7 +229,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
-    notification3 = create(:notification, user: @user, archived: false)
+    create(:notification, user: @user, archived: false)
 
     Notification.expects(:mute).with([notification1, notification2])
 
@@ -254,7 +254,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
-    notification3 = create(:notification, user: @user, archived: false)
+    create(:notification, user: @user, archived: false)
 
     Notification.expects(:mark_read).with([notification1, notification2])
 
@@ -606,7 +606,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   test 'search results can filter by inbox' do
     sign_in_as(@user)
     @user.notifications.delete_all
-    notification1 = create(:notification, user: @user, archived: true)
+    create(:notification, user: @user, archived: true)
     notification2 = create(:notification, user: @user, archived: false)
     get '/?q=inbox%3Atrue'
     assert_equal assigns(:notifications).length, 1
@@ -847,7 +847,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
 
     notification1 = create(:notification, user: @user, archived: true)
-    notification2 = create(:notification, user: @user, archived: true)
+    create(:notification, user: @user, archived: true)
     stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { id: [notification1.id], value: false }, xhr: true
@@ -855,5 +855,99 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     assert !notification1.reload.archived?
+  end
+
+  test 'shows saved searches in sidebar' do
+    sign_in_as(@user)
+    create(:pinned_search, user: @user)
+    get '/'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select '.pinned_search', {count: 1}
+  end
+
+  test 'highlights active saved searches in sidebar' do
+    sign_in_as(@user)
+    create(:pinned_search, user: @user)
+    get '/?q=inbox%3Atrue+owner%3Aoctobox'
+    assert_response :success
+    assert_template 'notifications/index'
+    assert_select '.pinned_search .active', {count: 1}
+  end
+
+  test 'only shows new saved search link if filters are active' do
+    sign_in_as(@user)
+    create(:pinned_search, user: @user)
+    get '/'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
+
+  test 'shows new saved search link if not already saved' do
+    sign_in_as(@user)
+    create(:pinned_search, user: @user)
+    get '/?q=foo'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 1}
+  end
+
+  test "doesn't show new saved search link if already saved" do
+    sign_in_as(@user)
+    create(:pinned_search, user: @user)
+    get '/?q=inbox%3Atrue+owner%3Aoctobox'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
+
+  test "doesn't show new saved search link if already saved with params" do
+    sign_in_as(@user)
+    create(:pinned_search, user: @user)
+    get '/?owner=octobox'
+    assert_response :success
+    assert_select '.new_pinned_search', {count: 0}
+  end
+
+  test 'renders results by status' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification5 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], status: 'failure')
+    create(:subject, notifications: [notification2], status: 'success')
+    create(:subject, notifications: [notification3], status: 'pending')
+    create(:subject, notifications: [notification4])
+    create(:subject, notifications: [notification5], status: 'failure')
+
+    get '/?status=success'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?status=failure'
+    assert_equal assigns(:notifications).length, 2
+
+    get '/?status=pending'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by status' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], status: 'failure')
+    create(:subject, notifications: [notification2], status: 'success')
+    create(:subject, notifications: [notification3], status: 'pending')
+    create(:subject, notifications: [notification4])
+
+    get '/?q=status%3Asuccess'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?q=status%3Afailure'
+    assert_equal assigns(:notifications).length, 1
+
+    get '/?q=status%3Apending'
+    assert_equal assigns(:notifications).length, 1
   end
 end

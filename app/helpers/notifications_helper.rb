@@ -25,6 +25,20 @@ module NotificationsHelper
     'RepositoryVulnerabilityAlert' => 'alert'
   }.freeze
 
+  SUBJECT_STATUS = {
+    success: "success",
+    failure: "failure",
+    error: "error",
+    pending: "pending"
+  }
+
+  NOTIFICATION_STATUS_OCTICON = {
+    'success' => 'check',
+    'failure' => 'x',
+    'error' => 'alert',
+    'pending' => 'primitive-dot'
+  }
+
   def filters
     {
       reason:     params[:reason],
@@ -42,7 +56,8 @@ module NotificationsHelper
       bot:        params[:bot],
       unlabelled: params[:unlabelled],
       assigned:   params[:assigned],
-      is_private: params[:is_private]
+      is_private: params[:is_private],
+      status:     params[:status]
     }
   end
 
@@ -177,26 +192,26 @@ module NotificationsHelper
   end
 
   def filter_link(param, value, count)
-    sidebar_filter_link(params[param] == value.to_s, param, value, count) do
+    sidebar_filter_link(active: params[param] == value.to_s, param: param, value: value, count: count) do
       yield
     end
   end
 
   def org_filter_link(param, value)
-    sidebar_filter_link(params[param] == value.to_s, param, value, nil, :repo, 'owner-label') do
+    sidebar_filter_link(active: params[param] == value.to_s, param: param, value: value, except: :repo, link_class: 'owner-label') do
       yield
     end
   end
 
-  def repo_filter_link(param, value, count)
-    active = params[param] == value || params[:owner] == value.split('/')[0]
-    sidebar_filter_link(active, param, value, count, :owner, 'repo-label') do
+  def repo_filter_link(param, repo_name, count)
+    active = params[param] == repo_name || params[:owner] == repo_name.split('/')[0]
+    sidebar_filter_link(active: active, param: param, value: repo_name, count: count, except: :owner, link_class: 'repo-label', title: repo_name) do
       yield
     end
   end
 
-  def sidebar_filter_link(active, param, value, count, except = nil, link_class = nil, path_params = nil)
-    content_tag :li, class: (active ? 'nav-item active' : 'nav-item') do
+  def sidebar_filter_link(active:, param:, value:, count: nil, except: nil, link_class: nil, path_params: nil, title: nil)
+    content_tag :li, class: (active ? 'nav-item active' : 'nav-item'), title: title do
       active = (active && not_repo_in_active_org(param))
       path_params ||= filtered_params(param => (active ? nil : value)).except(except)
       link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
@@ -215,7 +230,7 @@ module NotificationsHelper
     link_value = reason_link_param_value(params[:reason], value, active)
     path_params = filtered_params(:reason => link_value)
 
-    sidebar_filter_link(active, :reason, link_value, count, nil, nil, path_params) do
+    sidebar_filter_link(active: active, param: :reason, value: link_value, count: count, path_params: path_params) do
       yield
     end
   end
@@ -230,4 +245,32 @@ module NotificationsHelper
     return true unless param == :repo
     params[:owner].blank?
   end
+
+  def search_query_matches?(query, other_query)
+    query.split(' ').sort == other_query.split(' ').sort
+  end
+
+  def search_pinned?(query)
+    return unless query.present?
+    return false if current_user.pinned_searches.empty?
+
+    current_user.pinned_searches.any? do |pinned_search|
+      search_query_matches?(query, pinned_search.query)
+    end
+  end
+
+  def notification_status(status)
+    return unless status.present?
+    content_tag(:span,
+      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: status),
+      class: "badge badge-light badge-pr #{status}",
+      title: status.humanize,
+      data: {toggle: 'tooltip'}
+    )
+  end
+
+  def sidebar_notification_status(status)
+    octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
+  end
+
 end

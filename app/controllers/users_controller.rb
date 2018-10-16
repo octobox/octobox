@@ -20,10 +20,12 @@ class UsersController < ApplicationController
   def profile; end
 
   def edit # :nodoc:
-    counts = current_user.notifications.group(:repository_full_name).count
+    repo_counts = current_user.notifications.group(:repository_full_name).count
     @latest_git_sha = ENV['HEROKU_SLUG_COMMIT'] || Git.open(Rails.root).object('HEAD').sha rescue nil
-    @total = counts.sum(&:last)
-    @most_active = counts.sort_by(&:last).reverse.first(10)
+    @total = repo_counts.sum(&:last)
+    @most_active_repos = repo_counts.sort_by(&:last).reverse.first(10)
+    @most_active_orgs = current_user.notifications.group(:repository_owner_name).count.sort_by(&:last).reverse.first(10)
+    @pinned_search = PinnedSearch.new(query: params[:q])
   end
 
   # Update a user profile. Only updates the current user

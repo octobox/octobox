@@ -32,7 +32,8 @@
     "permissions": {
       "pull_requests": "read",
       "issues": "read",
-      "metadata": "read"
+      "metadata": "read",
+      "statuses": "read"
     },
     "events": [
       "issues",

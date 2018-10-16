@@ -1,18 +1,18 @@
 <ul class="nav nav-pills flex-column nav-filters">
   <li role="presentation" class="nav-item">
-    <%= link_to root_path(per_page: params[:per_page]), { :class=>"nav-link #{'active' if inbox_selected?}" } do %>
+    <%= link_to root_path(per_page: params[:per_page]), { :class=>"nav-link #{'active' if @search.inbox_selected?}" } do %>
       <%= octicon 'inbox', height: 16, class: 'sidebar-icon text-primary' %>
       Inbox
-      <% if inbox_selected? %>
+      <% if @search.inbox_selected? %>
         <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
       <% end %>
     <% end %>
   </li>
   <li role="presentation" class="nav-item">
-    <%= link_to root_path(archive: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if archive_selected?}" } do %>
+    <%= link_to root_path(archive: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if @search.archive_selected?}" } do %>
       <%= octicon 'check', height: 16, class: 'sidebar-icon text-success' %>
       Archive
-      <% if archive_selected? %>
+      <% if @search.archive_selected? %>
         <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
       <% end %>
     <% end %>
@@ -28,14 +28,38 @@
   </li>
 </ul>
 
+<% if current_user.pinned_searches.any? || any_active_filters? %>
+  <ul class="nav nav-pills flex-column nav-filters">
+    <% current_user.pinned_searches.each do |pinned_search| %>
+      <li role="presentation" class="nav-item pinned_search">
+        <%= link_to root_path(q: pinned_search.query), { :class=>"nav-link #{'active' if search_query_matches?(@search.to_query, pinned_search.query)}", title: pinned_search.query } do %>
+          <%= octicon 'search', height: 16, class: 'sidebar-icon' %>
+          <%= pinned_search.name %>
+          <% if search_query_matches?(@search.to_query, pinned_search.query) %>
+            <span class="badge badge-light"><%= @total %></span>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+    <% if any_active_filters? && !search_pinned?(@search.to_query) %>
+      <li  role="presentation" class="nav-item">
+        <%= link_to settings_path(q: @search.to_query, anchor: 'pinned-searches'), class: 'nav-link new_pinned_search' do %>
+          <%= octicon 'pin', height: 16, class: 'sidebar-icon' %>
+          Pin this search
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
 <ul class="nav nav-pills flex-column nav-filters">
   <%= filter_link :unread, false, @unread_notifications[false] do %>
-      <%= octicon 'mail-read', height: 16, class: 'sidebar-icon star-active' %>
+      <%= octicon 'mail-read', height: 16, class: 'sidebar-icon' %>
       Read
   <% end %>
 
   <%= filter_link :unread, true, @unread_notifications[true] do %>
-      <%= octicon 'mail', height: 16, class: 'sidebar-icon star-active' %>
+      <%= octicon 'mail', height: 16, class: 'sidebar-icon' %>
       Unread
   <% end %>
 </ul>
@@ -46,11 +70,8 @@
       <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
         <% next if state.nil? %>
         <%= filter_link :state, state, count do %>
-          <span class='text-<%= state_label(state) %>'>
-            <%= octicon 'primitive-square', height: 24, class: 'sidebar-icon' %>
-          </span>
+          <%= octicon 'primitive-square', height: 24, class: "sidebar-icon text-#{state_label(state)}" %>
           <%= state.underscore.humanize %>
-
         <% end %>
       <% end %>
     </ul>
@@ -88,7 +109,7 @@
         <% if notification_icon(type).nil? %>
             <span class='sidebar-icon'></span>
         <% else %>
-            <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon star-active' %>
+            <%= octicon notification_icon(type), height: 16, class: 'sidebar-icon' %>
         <% end %>
         <%= type.underscore.gsub('repository', '').humanize %>
 
@@ -101,13 +122,25 @@
   <ul class="nav nav-pills flex-column nav-filters">
     <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
       <%= reason_filter_link reason, count do %>
-        <span class='text-<%= reason_label(reason) %>'>
-          <%= octicon 'primitive-dot', height: 24, class: 'sidebar-icon' %>
-        </span>
+        <%= octicon 'primitive-dot', height: 24, class: "sidebar-icon text-#{reason_label(reason)}" %>
         <%= reason.underscore.humanize %>
       <% end %>
     <% end %>
   </ul>
+<% end %>
+
+<% if display_subject? %>
+  <% if @statuses.keys.compact.any? %>
+    <ul class="nav nav-pills flex-column nav-filters">
+      <% @statuses.sort_by{ |status, count| status.to_s }.reverse_each do |status, count| %>
+        <% next if status.nil? %>
+        <%= filter_link :status, status, count do %>
+          <%= sidebar_notification_status(status) %>
+          <%= status.underscore.humanize %>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
 <% end %>
 
 <% if @visiblity && @visiblity.any? %>

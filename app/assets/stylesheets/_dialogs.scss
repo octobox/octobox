@@ -1,0 +1,26 @@
+table.keyboard-mappings {
+  font-size: 12px;
+}
+
+table.keyboard-mappings tr > td {
+  padding-bottom: 6px;
+}
+
+td.keys {
+  padding-right: 10px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.key {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  line-height: 10px;
+  vertical-align: middle;
+  background-color: rgba($body-color,0.1);
+  border: solid 1px rgba($body-color,0.2);
+  border-bottom-color: rgba($body-color,0.3);
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 rgba($body-color,0.4);
+}

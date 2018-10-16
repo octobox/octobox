@@ -2,9 +2,10 @@ class Search
   attr_accessor :parsed_query
   attr_accessor :scope
 
-  def initialize(query: '', scope:)
+  def initialize(query: '', scope:, params: {})
     @parsed_query = SearchParser.new(query)
     @scope = scope
+    convert(params)
   end
 
   def results
@@ -26,6 +27,8 @@ class Search
     res = res.exclude_author(exclude_author) if exclude_author.present?
     res = res.assigned(assignee) if assignee.present?
     res = res.exclude_assigned(exclude_assignee) if exclude_assignee.present?
+    res = res.status(status) if status.present?
+    res = res.exclude_status(exclude_status) if exclude_status.present?
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
     res = res.archived(!inbox) unless inbox.nil?
@@ -39,7 +42,44 @@ class Search
     res
   end
 
+  def to_query
+    query_string = @parsed_query.operators.map do |key, value|
+      "#{key}:#{value.join(',')}"
+    end.join(' ') + " #{@parsed_query.freetext}"
+
+    query_string.strip
+  end
+
+  def inbox_selected?
+    inbox == true && archived != true
+  end
+
+  def archive_selected?
+    inbox != true && archived == true
+  end
+
   private
+
+  def convert(params)
+    [:starred, :unlabelled, :bot].each do |param|
+      @parsed_query[param] = ['true'] if params[param].present?
+    end
+
+    @parsed_query[:archived] = ['true'] if params[:archive].present?
+    @parsed_query[:inbox] = ['true'] if params[:archive].blank? && params[:starred].blank? && params[:q].blank?
+
+    [:reason, :type, :unread, :state, :is_private].each do |filter|
+      next if params[filter].blank?
+      @parsed_query[filter] = Array(params[filter]).map(&:underscore)
+    end
+
+    [:repo, :owner, :author, :label].each do |filter|
+      next if params[filter].blank?
+      @parsed_query[filter] = Array(params[filter])
+    end
+
+    @parsed_query[:assignee] = Array(params[:assigned]) if params[:assigned].present?
+  end
 
   def lock_conditionally(scope)
     return scope if is_locked.nil?
@@ -126,11 +166,11 @@ class Search
   end
 
   def reason
-    parsed_query[:reason].map{|r| r.downcase.gsub(' ', '_') }
+    parsed_query[:reason].map{|r| r.downcase.tr(' ', '_') }
   end
 
   def exclude_reason
-    parsed_query[:'-reason'].map{|r| r.downcase.gsub(' ', '_') }
+    parsed_query[:'-reason'].map{|r| r.downcase.tr(' ', '_') }
   end
 
   def state
@@ -155,6 +195,14 @@ class Search
 
   def exclude_assignee
     parsed_query[:'-assignee']
+  end
+
+  def status
+    parsed_query[:status]
+  end
+
+  def exclude_status
+    parsed_query[:'-status']
   end
 
   def starred

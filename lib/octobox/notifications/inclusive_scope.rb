@@ -12,9 +12,10 @@ module Octobox
         scope :type,     ->(subject_type) { where(subject_type: subject_type) }
         scope :reason,   ->(reason)       { where(reason: reason) }
         scope :unread,   ->(unread)       { where(unread: unread) }
+        scope :status,   ->(status)       { joins(:subject).where(subjects: { status: status }) }
         scope :unassigned, -> { joins(:subject).where("subjects.assignees = '::'") }
         scope :locked,     -> { joins(:subject).where(subjects: { locked: true }) }
-        scope :subjectable,-> { where(subject_type: SUBJECTABLE_TYPES) }
+        scope :subjectable,-> { where(subject_type: Notification::SUBJECTABLE_TYPES) }
         scope :bot_author, -> { joins(:subject).where('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot') }
         scope :labelable,  -> { where(subject_type: ['Issue', 'PullRequest']) }
         scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
@@ -28,7 +29,7 @@ module Octobox
           )
         }
 
-        scope :owner,    ->(owner_names)   {
+        scope :owner, ->(owner_names)   {
           owner_names = [owner_names] if owner_names.is_a?(String)
           where(
             owner_names.map { |owner_name| arel_table[:repository_owner_name].matches(owner_name) }.reduce(:or)
@@ -49,7 +50,7 @@ module Octobox
           )
         }
 
-        scope :label,      ->(label_names) {
+        scope :label, ->(label_names) {
           label_names = [label_names] if label_names.is_a?(String)
 
           joins(:labels).where(
@@ -58,7 +59,7 @@ module Octobox
 
         }
 
-        scope :assigned,   ->(assignees) {
+        scope :assigned, ->(assignees) {
           assignees = [assignees] if assignees.is_a?(String)
           joins(:subject).where(
             assignees.map { |assignee| Subject.arel_table[:assignees].matches("%:#{assignee}:%") }.reduce(:or)

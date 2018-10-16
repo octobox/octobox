@@ -9,6 +9,7 @@
 //= require bootstrap/tooltip
 //= require bootstrap/dropdown
 //= require bootstrap/modal
+//= require bootstrap/popover
 //= require_tree .
 
 var db;

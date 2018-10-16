@@ -56,13 +56,7 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 
 You can use Octobox right now at [octobox.io](https://octobox.io), a shared instance hosted by the Octobox team.
 
-**Note:** octobox.io has a few features intentionally disabled:
-
-* Subject syncing (includes authorship and open/closed/merged status information) ([#411](https://github.com/octobox/octobox/pull/411))
-* Personal Access Tokens ([#185](https://github.com/octobox/octobox/pull/185))
-
-Features are disabled for various reasons, such as not wanting to store users' tokens at this time.
-Some features might never be enabled, and some just might have other prerequisite work pending completion.
+**Note:** octobox.io has Personal Access Tokens ([#185](https://github.com/octobox/octobox/pull/185)) intentionally disabled.
 
 ### Install
 
@@ -144,11 +138,12 @@ For other updates, follow the project on Twitter: [@octoboxio](https://twitter.c
  * Fork the project.
  * Make your feature addition or bug fix.
  * Add tests for it. This is important so we don't break it in a future version unintentionally.
+   * You can use `bundle exec guard` if you'd like the relevant tests to automatically run each time a file is modified.
  * Send a pull request. Bonus points for topic branches.
 
 ### Vulnerability disclosure
 
-We support and encourage security research on Octobox under the terms of our [vulnerability disclosure policy](docs/VULNERABILITY_DISCLOSURE_POLICY.md). 
+We support and encourage security research on Octobox under the terms of our [vulnerability disclosure policy](docs/VULNERABILITY_DISCLOSURE_POLICY.md).
 
 ### Code of Conduct
 

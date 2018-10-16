@@ -157,7 +157,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 1.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
@@ -175,7 +175,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
@@ -214,7 +214,7 @@ class NotificationTest < ActiveSupport::TestCase
     end
   end
 
-  test 'updated_from_api_response updates the existing subject if present' do
+  test 'update_from_api_response updates the existing subject if present' do
     stub_background_jobs_enabled(value: false)
     stub_fetch_subject_enabled
     stub_repository_request
@@ -222,14 +222,27 @@ class NotificationTest < ActiveSupport::TestCase
     response = { status: 200, body: file_fixture('merged_pull_request.json'), headers: { 'Content-Type' => 'application/json' } }
     stub_request(:get, url).and_return(response)
 
+    statuses_url = "https://api.github.com/repos/octobox/octobox/commits/84b4e75e5f627d34f7a85982bda7b260f34db4dd/status"
+    response = { status: 200, body: file_fixture('status_request.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, statuses_url).and_return(response)
+
     api_response = notifications_from_fixture('morty_notifications.json').third
     notification_updated_at = Time.parse(api_response.updated_at)
-    user = create(:morty)
+    create(:morty)
     subject = create(:subject, state: 'open', url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response, unarchive: true)
 
     subject.reload
     assert_equal 'merged', subject.state
+    assert_equal 'failure', subject.status
+  end
+
+  test 'subjectable scope returns only notifications that can have subjects' do
+    notification1 = create(:notification, subject_type: 'Issue')
+    notification2 = create(:notification, subject_type: 'RepositoryVulnerabilityAlert')
+
+    assert_equal Notification.subjectable.length, 1
+    assert_equal Notification.subjectable.first, notification1
   end
 end

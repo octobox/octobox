@@ -40,26 +40,14 @@
     <meta name="twitter:creator" content="teabass">
   </head>
 
-  <body class="flex-body">
+  <body>
     <% if logged_in? %>
       <div class="flex-header">
         <%= render 'layouts/header' %>
       </div>
-    <% elsif !current_page?('/') %>
-
-        <div class="container my-5">
-          <h1 class="text-center">
-            <%= link_to root_path, class: 'text-dark' do %>
-              <%= octobox_round(80) %> Octobox
-            <% end %>
-          </h1>
-          <p class="text-center">Untangle your GitHub Notifications</p>
-        </div>
-
     <% end %>
-    <div class="flex-header header-flash-messages">
-      <%= flash_messages %>
-    </div>
+
+    <%= flash_messages %>
 
     <%= yield %>
 
