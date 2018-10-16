@@ -91,6 +91,24 @@ var Octobox = (function() {
     }
   };
 
+  var enablePopOvers = function() {
+    $('[data-toggle="popover"]').popover({ trigger: "manual" , html: true})
+    .on("mouseenter", function () {
+        var _this = this;
+        $(this).popover("show");
+        $(".popover").on("mouseleave", function () {
+            $(_this).popover('hide');
+        });
+    }).on("mouseleave", function () {
+        var _this = this;
+        setTimeout(function () {
+            if (!$(".popover:hover").length) {
+                $(_this).popover("hide");
+            }
+        }, 300);
+    });
+  }
+
   var enableKeyboardShortcuts = function() {
     // Add shortcut events only once
     if (window.row_index !== undefined) return;
@@ -100,7 +118,7 @@ var Octobox = (function() {
 
     $(document).keydown(function(e) {
       // disable shortcuts for the seach box
-      if (e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
+      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
         var shortcutFunction = shortcuts[e.which];
         if (shortcutFunction) { shortcutFunction(e) }
       }
@@ -279,12 +297,13 @@ var Octobox = (function() {
   };
 
   var initialize = function() {
-    enableKeyboardShortcuts();
     enableTooltips();
+    enablePopOvers();
 
     if ($("#help-box").length){
-      setFavicon($('.js-unread-count').data('count'))
-      initShiftClickCheckboxes()
+      enableKeyboardShortcuts();
+      setFavicon($('.js-unread-count').data('count'));
+      initShiftClickCheckboxes();
       recoverPreviousCursorPosition();
       setAutoSyncTimer();
     }

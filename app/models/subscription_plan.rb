@@ -9,6 +9,14 @@ class SubscriptionPlan < ApplicationRecord
     name.match?(/private/i)
   end
 
+  def github?
+    github_id.present?
+  end
+
+  def open_collective?
+    name.match?(/Open Collective/i)
+  end
+
   def self.sync_plans
     Octobox.github_app_client.list_plans.each do |remote_plan|
       plan = find_or_initialize_by(github_id: remote_plan.id)

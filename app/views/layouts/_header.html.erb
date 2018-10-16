@@ -8,7 +8,7 @@
         <span class="sr-only">Toggle search</span>
         <%= octicon 'search', height: 16, class: 'text-muted' %>
       </button>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button id='navbarnav_toggle' class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="sr-only">Toggle navigation</span>
         <% if current_user %>
           <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, height:32, class: 'img-rounded navbar-avatar', alt: '' %>
@@ -21,11 +21,8 @@
   <% if @notifications %>
     <%= form_tag root_path, method: :get, class: 'form-inline collapse navbar-collapse', id: 'search', enforce_utf8: false do |f| %>
       <div class="search-sugguestion-section d-inline-flex justify-content-between align-items-center w-100">
-        <% filters.except(:q).select{|n,v| v.present? }.each do |name, value| %>
-            <%= hidden_field_tag name, value %>
-        <% end %>
         <div class="search-input-box position-relative d-flex align-items-center w-100">
-          <%= text_field_tag 'q', params[:q], placeholder: 'Search...', class: 'custom-input form-control', id: 'search-box', 'aria-label' => 'Search', :autocomplete => "off" %>
+          <%= text_field_tag 'q', @search.to_query, placeholder: 'Search...', class: 'custom-input form-control', id: 'search-box', 'aria-label' => 'Search', :autocomplete => "off" %>
           <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
             <%= octicon 'question', :height => 16 %>
           </div>
@@ -40,9 +37,16 @@
   <div class="user-info collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item nav-link d-none d-md-block">
-        <a href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener" aria-label='Support Octobox on OpenCollective'>
-          <%= octicon 'gift', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %>
-        </a>
+        <% if Octobox.octobox_io? %>
+          <a href="<%= Octobox.config.app_url %>" class='btn btn-sm btn-outline-light'>
+            <%= octicon 'briefcase', height: 16, class: 'mr-1' %>
+            Install the GitHub App
+          </a>
+        <% else %>
+          <a href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener" aria-label='Support Octobox on OpenCollective'>
+            <%= octicon 'gift', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %>
+          </a>
+        <% end %>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle d-none d-md-block" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

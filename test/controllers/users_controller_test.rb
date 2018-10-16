@@ -36,6 +36,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
   end
 
+  test 'displays settings page with saved search' do
+    sign_in_as(@user)
+    create(:pinned_search, user: @user)
+    get settings_path
+    assert_template 'users/edit'
+  end
+
   test 'assigns latest git sha on settings page' do
     sign_in_as(@user)
     get settings_path

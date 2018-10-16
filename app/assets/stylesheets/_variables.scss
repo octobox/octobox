@@ -1,15 +1,34 @@
+$sidebar-width: 250px;
+
 $notification-open: #5cb85c !default;
 $notification-closed: #d9534f !default;
 $notification-merged: #a128ca !default;
+$notification-pending: #dbab09 !default;
+
+$notification-colors: (
+	"open": $notification-open,
+	"closed": $notification-closed,
+	"merged": $notification-merged,
+	"pending": $notification-pending	
+);
 
 $label-default-color: #333 !default;
+$label-default-text-color: #fff !default;
 $label-muted-color: #ccc !default;
+$label-muted-text-color: #fff !default;
 $label-subscribed-color: #a128ca !default;
 $label-subscribed-text-color: #fff !default;
 $label-team_mention-color: #5d477e !default;
 $label-team_mention-text-color: #fff !default;
 $label-security_alert-color: #800000 !default;
 $label-security_alert-text-color: #fff !default;
+
+$text-colors: (
+	"light": theme-color("light"),
+	"subscribed": $label-subscribed-color,
+	"team_mention": $label-team_mention-color,
+	"security_alert": $label-security_alert-color 
+);
 
 $icon-private-repo-color: #dbab09 !default;
 $icon-star-fill: none !default;

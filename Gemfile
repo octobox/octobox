@@ -32,6 +32,7 @@ gem 'bugsnag'
 gem 'jwt'
 gem 'oj'
 gem 'yard'
+gem 'simple_form'
 
 # Supported databases
 gem 'mysql2', require: false
@@ -40,6 +41,8 @@ gem 'pg', '1.1.3', require: false
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
+  gem 'guard'
+  gem 'guard-minitest'
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
   gem 'active_record_query_trace'

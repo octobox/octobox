@@ -11,8 +11,8 @@
         <%= octicon 'mark-github', height: 22 %>
         <span class='ml-1'>Sign in with GitHub</span>
       <% end %>
-      <% if Octobox.github_app? && !Octobox.octobox_io? %>
-        <%= link_to Octobox.config.app_install_url, class: 'btn btn-outline-dark btn-lg' do %>
+      <% if Octobox.github_app? %>
+        <%= link_to Octobox.config.app_url, class: 'btn btn-outline-dark btn-lg' do %>
           <%= octicon 'briefcase', height: 22 %>
           <span class='ml-1'>Install the GitHub App</span>
         <% end %>
@@ -151,13 +151,9 @@
         Octobox adds an extra "archived" state to each notification so you can mark it as "done". If new activity happens on the thread/issue/pr, the next time you sync the app the relevant item will be unarchived and moved back into your inbox.
       </p>
 
-      <p class="text-center"><%= emojify(':keyboard:') %></p>
-
       <h3>Run your own Octobox</h3>
 
       <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox. Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
-
-      <p class="text-center"><%= emojify(':octopus:') %></p>
 
       <h3>Contribute</h3>
 
@@ -169,7 +165,6 @@
 
       <p>Finally, this is an open source project. If you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
 
-      <p class="text-center"><%= emojify(':postbox:') %></p>
     </div>
   </div>
 </div>
