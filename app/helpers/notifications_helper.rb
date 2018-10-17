@@ -102,7 +102,7 @@ module NotificationsHelper
   end
 
   def mute_button
-    function_button('Mute', 'mute', "mute_selected", 'Mute notification', false) unless params[:archive]
+    function_button('Mute', 'mute', "mute", 'Mute notification', false) unless params[:archive]
   end
 
   def archive_button

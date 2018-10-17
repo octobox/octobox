@@ -130,10 +130,19 @@ var Octobox = (function() {
     getDisplayedRows().find("input").prop("checked", checked).trigger("change");
   };
 
-  var mute = function() {
+  var muteThread = function() { 
+    var id = $('#notification-thread').data('id');
+    mute(id);
+  } ;
+
+  var muteSelected = function() {
     if (getDisplayedRows().length === 0) return;
     if ( $(".js-table-notifications tr").length === 0 ) return;
     var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    mute(ids);
+  };
+
+  var mute = function(ids){
     $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
       resetCursorAfterRowsRemoved(ids);
       updateFavicon();
@@ -498,7 +507,7 @@ var Octobox = (function() {
     88:  markCurrent,      // x
     89:  toggleArchive,    // y
     69:  toggleArchive,    // e
-    77:  mute,             // m
+    77:  muteSelected,     // m
     13:  openCurrentLink,  // Enter
     79:  openCurrentLink,  // o
     191: openModal,        // ?
@@ -513,7 +522,8 @@ var Octobox = (function() {
   return {
     moveCursorToClickedRow: moveCursorToClickedRow,
     checkAll: checkAll,
-    mute: mute,
+    muteThread: muteThread,
+    muteSelected: muteSelected,
     markReadSelected: markReadSelected,
     archiveSelected: archiveSelected,
     unarchiveSelected: unarchiveSelected,
