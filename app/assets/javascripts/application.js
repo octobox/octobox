@@ -39,15 +39,15 @@ $(document).on('change', 'input.archive, input.unarchive', Octobox.changeArchive
 $(document).on('change', '.js-select_all', Octobox.checkAll);
 
 $(document).on('click', 'button.select_all', Octobox.toggleSelectAll);
-$(document).on('click', 'button.archive_selected', Octobox.archive);
-$(document).on('click', 'button.unarchive_selected', Octobox.unarchive);
-
+$(document).on('click', 'button.archive_selected', Octobox.archiveSelected);
+$(document).on('click', 'button.unarchive_selected', Octobox.unarchiveSelected);
 $(document).on('click', 'button.mute_selected', Octobox.mute);
 $(document).on('click', 'button.delete_selected', Octobox.deleteSelected);
 $(document).on('click', 'button.mark_read_selected', Octobox.markReadSelected);
+$(document).on('click', 'button.closethread', Octobox.closeThread);
+
 $(document).on('click', 'tr.notification', Octobox.moveCursorToClickedRow);
 $(document).on('click', '[data-toggle="offcanvas"]', Octobox.toggleOffCanvas);
-$(document).on('click', 'button.closethread', Octobox.closeThread);
 
 $(document).on('click', 'a.js-sync', function(e) {
   e.preventDefault(e);

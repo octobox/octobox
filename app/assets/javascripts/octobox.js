@@ -150,27 +150,38 @@ var Octobox = (function() {
       updateFavicon();
     })
   };
-
+  
   var toggleArchive = function() {
     if ($(".archive_toggle").hasClass("archive_selected")) {
-      archive()
+      archiveSelected()
     } else {
-      unarchive()
+      unarchiveSelected()
     }
   };
 
-  var archive = function(){
-    archiveSelected(true);
-  }
-
-  var unarchive = function(){
-    archiveSelected(false);
-  }
-
-  var archiveSelected = function(value){
+  var archiveSelected = function(){
     if (getDisplayedRows().length === 0) return;
     var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    archive(ids, true);
+  }
 
+  var unarchiveSelected = function(){
+    if (getDisplayedRows().length === 0) return;
+    var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    archive(ids, false);
+  }
+
+  var archiveThread = function(){
+    var id = $('#notification-thread').data('id');
+    archive(id, true);
+  }
+
+  var unarchiveThread = function(){
+    var id = $('#notification-thread').data('id');
+    archive(id, false);
+  }
+
+  var archive = function(ids, value){
     $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } ).done(function() {
       resetCursorAfterRowsRemoved(ids);
       updateFavicon();
@@ -504,13 +515,15 @@ var Octobox = (function() {
     checkAll: checkAll,
     mute: mute,
     markReadSelected: markReadSelected,
-    archive: archive,
-    unarchive: unarchive,
+    archiveSelected: archiveSelected,
+    unarchiveSelected: unarchiveSelected,
     toggleSelectAll: toggleSelectAll,
     sync: sync,
     markRowCurrent: markRowCurrent,
     closeThread: closeThread,
     openThread: openThread,
+    archiveThread: archiveThread,
+    unarchiveThread: unarchiveThread,
     toggleStarClick: toggleStarClick,
     changeArchive: changeArchive,
     initialize: initialize,
