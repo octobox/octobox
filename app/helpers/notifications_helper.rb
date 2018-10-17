@@ -298,9 +298,9 @@ module NotificationsHelper
 
   def notification_button_color(state)
     {
-      'open' => 'btn-success',
-      'closed' => 'btn-danger',
-      'merged' => 'text-subscribed'
+      'open' => 'btn-open',
+      'closed' => 'btn-closed',
+      'merged' => 'btn-merged'
     }[state]
   end
 

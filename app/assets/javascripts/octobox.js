@@ -255,8 +255,14 @@ var Octobox = (function() {
   };
 
   var toggleStarClick = function(row) {
-    row.toggleClass("star-active star-inactive");
-    $.post("/notifications/"+row.data("id")+"/star")
+    star(row.data("id"))
+  };
+
+  var star = function(id){
+    console.log(id);
+    $('#notification-thread').data('id') == id ? $('#thread').find('.toggle-star').toggleClass("star-active star-inactive") : null;
+    $("#notification-"+id).find(".toggle-star").toggleClass("star-active star-inactive");
+    $.post("/notifications/"+id+"/star")
   };
 
   var changeArchive = function() {
@@ -284,13 +290,18 @@ var Octobox = (function() {
   var removeCurrent = function() {
     $("td.js-current").removeClass("current js-current");
   };
+  
+  var openThread = function() {
+    $("#thread").hasClass("d-none") ? $("#thread").toggleClass("d-none") : null;
+    $(".flex-content").hasClass("active") ? $(".flex-content").toggleClass("active") : null; 
+  };
+
+  var closeThread = function() {
+    !$("#thread").hasClass("d-none") ? $("#thread").toggleClass("d-none") : null; 
+  };
 
   var toggleOffCanvas = function() {
     $(".flex-content").toggleClass("active");
-  };
-
-  var showThread = function() {
-    !$(".flex-content").hasClass("active") ? $(".flex-content").addClass("active") : null; 
   };
 
   function markRead(id) {
@@ -498,6 +509,8 @@ var Octobox = (function() {
     toggleSelectAll: toggleSelectAll,
     sync: sync,
     markRowCurrent: markRowCurrent,
+    closeThread: closeThread,
+    openThread: openThread,
     toggleStarClick: toggleStarClick,
     changeArchive: changeArchive,
     initialize: initialize,

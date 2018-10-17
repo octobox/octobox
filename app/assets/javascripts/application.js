@@ -39,7 +39,6 @@ $(document).on('change', 'input.archive, input.unarchive', Octobox.changeArchive
 $(document).on('change', '.js-select_all', Octobox.checkAll);
 
 $(document).on('click', 'button.select_all', Octobox.toggleSelectAll);
-
 $(document).on('click', 'button.archive_selected', Octobox.archive);
 $(document).on('click', 'button.unarchive_selected', Octobox.unarchive);
 
@@ -48,7 +47,7 @@ $(document).on('click', 'button.delete_selected', Octobox.deleteSelected);
 $(document).on('click', 'button.mark_read_selected', Octobox.markReadSelected);
 $(document).on('click', 'tr.notification', Octobox.moveCursorToClickedRow);
 $(document).on('click', '[data-toggle="offcanvas"]', Octobox.toggleOffCanvas);
-// $(document).on('click', '[data-toggle="showThread"]', Octobox.showThread);
+$(document).on('click', 'button.closethread', Octobox.closeThread);
 
 $(document).on('click', 'a.js-sync', function(e) {
   e.preventDefault(e);
@@ -57,18 +56,17 @@ $(document).on('click', 'a.js-sync', function(e) {
 
 $(document).on('click', 'tr.notification', function() {
   Octobox.markRowCurrent($(this))
-})
+});
 
 $(document).on('click', '.toggle-star', function() {
   Octobox.toggleStarClick($(this))
-})
+});
 
-
-
-$(document).on('click', '.js-link', function () {
+$(document).on('click', '.subject-link', function () {
   history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
   $.get($(this).attr('href'), function(data){
     $('#thread').html(data)
   });
+  Octobox.openThread();
   return false;
 });
