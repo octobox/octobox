@@ -4,13 +4,13 @@
     "id": 1023072455,
     "node_id": "MDU6TGFiZWwxMDIzMDcyNDU1",
     "url": "https://api.github.com/repos/andrew/no-rabbits/labels/%F0%9F%A5%95%F0%9F%A5%95:carrot:",
-    "name": "🥕🥕:carrot:",
+    "name": ":carrot: :carrot:",
     "color": "080bcc",
     "default": false
   },
   "changes": {
     "name": {
-      "from": "🥕:carrot:"
+      "from": ":carrot:"
     }
   },
   "repository": {
