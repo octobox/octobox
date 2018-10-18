@@ -1,0 +1,41 @@
+{
+  "url": "https://api.github.com/repos/octobox/octobox/releases/12940250",
+  "assets_url": "https://api.github.com/repos/octobox/octobox/releases/12940250/assets",
+  "upload_url": "https://uploads.github.com/repos/octobox/octobox/releases/12940250/assets{?name,label}",
+  "html_url": "https://github.com/octobox/octobox/releases/tag/b145970",
+  "id": 12940250,
+  "node_id": "MDc6UmVsZWFzZTEyOTQwMjUw",
+  "tag_name": "b145970",
+  "target_commitish": "b1459701d753a5ececc922c3a05bf6824585d961",
+  "name": "Dark Mode, Searching, and Gems",
+  "draft": false,
+  "author": {
+    "login": "jules2689",
+    "id": 3074765,
+    "node_id": "MDQ6VXNlcjMwNzQ3NjU=",
+    "avatar_url": "https://avatars2.githubusercontent.com/u/3074765?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/jules2689",
+    "html_url": "https://github.com/jules2689",
+    "followers_url": "https://api.github.com/users/jules2689/followers",
+    "following_url": "https://api.github.com/users/jules2689/following{/other_user}",
+    "gists_url": "https://api.github.com/users/jules2689/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/jules2689/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/jules2689/subscriptions",
+    "organizations_url": "https://api.github.com/users/jules2689/orgs",
+    "repos_url": "https://api.github.com/users/jules2689/repos",
+    "events_url": "https://api.github.com/users/jules2689/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/jules2689/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "prerelease": false,
+  "created_at": "2018-09-17T16:20:33Z",
+  "published_at": "2018-09-17T17:15:59Z",
+  "assets": [
+
+  ],
+  "tarball_url": "https://api.github.com/repos/octobox/octobox/tarball/b145970",
+  "zipball_url": "https://api.github.com/repos/octobox/octobox/zipball/b145970",
+  "body": "Dependency Updates\r\n---\r\n- Updated autoprefixer-rails from 9.1.3 to 9.1.4 (#867)\r\n- Updated bootsnap from 1.3.1 to 1.3.2 ()\r\n- Updated et-orbi from 1.1.5 to 1.1.6 (#873)\r\n- Updated factory_bot from 4.11.0 to 4.11.1 (#892)\r\n- Updated fugit from 1.1.5 to 1.1.6 (#874)\r\n- Updated local_time from 2.0.1 to 2.1.0 (#871)\r\n- Updated marcel from 0.3.2 to 0.3.3 (#934)\r\n- Updated octicons_helper from 8.0.0 to 8.1.0 (#856)\r\n- Updated octokit from 4.10.0 to 4.12.0 (#853, #912)\r\n- Updated pg from 1.0.0 to 1.1.3 (#842, #886)\r\n- Updated rack-protection from 2.0.3 to 2.0.4 (#936)\r\n- Updated rubocop from 0.58.2 to 0.59.1 (#900, #935)\r\n- Updated sidekiq from 5.2.1 to 5.2.2 (#957)\r\n- Updated sidekiq-status from 1.0.1 to 1.1.0 (#865)\r\n- Updated simplecov from 0.13.0 to 0.16.1 (#881)\r\n- Updated skylight from 2.0.2 to 3.0.0 (#879)\r\n- Updated uglifier from 4.1.18 to 4.1.19 (#914)\r\n- Updated web-console from 3.6.2 to 3.7.0 (#863)\r\n\r\nOther\r\n---\r\n- Dark mode (#769)\r\n- Delay syncing involved users after webhook event by 1 minute (#956)\r\n- feature(install): Update of OpenShift template for new parameters (#944)\r\n- Allow more search prefixes to accept multiple arguments (#954, #947)\r\n- Suppress logger output for asset requests in production (#950)\r\n- Remove faraday probe as it's causing errors in sidekiq (#946)\r\n- Always sync repositories if subjects_enabled? (#945)\r\n- Split each sidebar section into it's own unordered list (#933)\r\n- Add redis and faraday probes to skylight config (#941)\r\n- Squash a sneaky n+1 query when running as a github app when calling web_url (#940)\r\n- Use kaminari paginator to calculate @total (#937)\r\n- Refactoring out boolean search prefix method (#931)\r\n- Skip edit label webhooks when there are no changes (#930)\r\n- Addresses #828 Sync locked details onto subjects (#926)\r\n- Addresses #811 Store muted_at and allow search filtering by muted:tru… (#923)\r\n- Fix svg fill color issues (#924)\r\n- Add validation of unique urls in subjects table (#929)\r\n- Show action buttons on hover of notification row (#823)\r\n- Svg & card header fixes (#922)\r\n- Addresses #919 Allow filtering by multiple repositories with search prefix (#921)\r\n- * make all svg's $body-color (#920)\r\n- Small tweaks to github app settings section (#915)\r\n- Don't show full list of repositories with app installed in settings (#911)\r\n- Sync install permissions along with notifications (#909)\r\n- Show installed github apps on user settings page (#910)\r\n- Add vulnerability disclosure policy (#908)\r\n- Sync GitHub App installations that a user has access to manage (#907)\r\n- Bring back #891 (#905)\r\n- Revert \"Add sorting to notifications (#891)\" (#904)\r\n- Add sorting to notifications (#891)\r\n- Add repository_full_name index on notifications table (#902)\r\n- Ensure there's always an updated_at set on notifications\r\n- Add Octobox.github_app_client for making API requests as the GitHub App (#901)\r\n- Remove top level version range from attr_encrypted gem\r\n- Only select required fields for repository sidebar public/private check\r\n- Load repositories for sidebar more efficiently\r\n- Move add/remove AppInstallation repository logic from worker to class (#897)\r\n- Reorder Notification#display_subject? conditions (#898)\r\n- Sync repository updates in the background if sidekiq enabled (#899)\r\n- Eager load notification users before syncin subjets in sidekiq workers (#896)\r\n- Extracted checking for app_token onto User method (#895)\r\n- * update favicons and app icon (#890)\r\n- Add option to force notifications to open in the same tab (#888)\r\n- Sync button shouldn't refresh page if sync is happening in background (#884)\r\n- Push subject syncing to sidekiq if background jobs enabled (#875)\r\n- Add brakeman security scanner to development environment (#877)\r\n- Persist per page in cookie (#880)\r\n- Refactor and improve test coverage on configurator class (#878)\r\n- Avoid double sidebar separator when @states contains only a nil key (#872)\r\n- Add feature list to homepage (#869)\r\n- Add feature list to Readme (#868)\r\n- Avoid calling sidekiq unless background jobs are enabled (#870)\r\n- Skip syncing users who don't have an access_token (#864)\r\n-  Store repository_full_name on Subject and setup proper relations with Repository (#854)\r\n- Always show read/unread sidebar menu items (#745)\r\n- Add docs for setting up Octobox as a GitHub app (#851)\r\n- Add \"assignee\" search prefix (#859)\r\n- Timeout the background job if it runs too long (#861)\r\n- User sync in the background (#603)\r\n- BG jobs are enabled if sidekiq schedule is enabled\r\n- Add custom worker options so that sidekiq can be optionally enabled\r\n- Add support for a \"native\" desktop app link in the dropdown\r\n- Update logo and icons (#849)\r\n- Move syncing logic in hooks controller into sidekiq jobs (#843)\r\n\r\n---\r\n\r\nFull diff: https://github.com/octobox/octobox/compare/41564bd...b145970"
+}

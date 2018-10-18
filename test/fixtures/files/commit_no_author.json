@@ -17,7 +17,7 @@
       "url": "https://api.github.com/repos/octobox/octobox/git/trees/8c928b84c31f90f1bab5d3caf12002dae085362e"
     },
     "url": "https://api.github.com/repos/octobox/octobox/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e",
-    "comment_count": 0,
+    "comment_count": 2,
     "verification": {
       "verified": false,
       "reason": "unsigned",
