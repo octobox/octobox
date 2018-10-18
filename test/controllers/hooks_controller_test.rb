@@ -39,6 +39,16 @@ class HooksControllerTest < ActionController::TestCase
     assert_equal Subject.count, 1
   end
 
+  test 'pull_request_review webhook payload' do
+    send_webhook 'pull_request_review'
+    assert_equal Subject.count, 1
+  end
+
+  test 'pull_request_review_comment webhook payload' do
+    send_webhook 'pull_request_review_comment'
+    assert_equal Subject.count, 1
+  end
+
   test 'issue_comment webhook payload' do
     send_webhook 'issue_comment'
     assert_equal Subject.count, 1
