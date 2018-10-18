@@ -71,6 +71,11 @@ class HooksControllerTest < ActionController::TestCase
     subject.reload
     assert_equal subject.status, 'failure'
   end
+
+  test 'repository webhook payload' do
+    send_webhook 'repository'
+    assert_equal Repository.count, 1
+  end
 end
 
 def send_webhook(event_type)
