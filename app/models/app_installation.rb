@@ -54,11 +54,14 @@ class AppInstallation < ApplicationRecord
   end
 
   def sync_repositories
-    installation_client(self.github_id)
-    remote_repositories = client.list_app_installation_repositories.repositories
+    remote_repositories = github_client.list_app_installation_repositories.repositories
     add_repositories(remote_repositories)
   rescue Octokit::ClientError
     nil
+  end
+
+  def github_client
+    Octobox.installation_client(self.github_id)
   end
 
   def self.map_from_api(remote_installation)
