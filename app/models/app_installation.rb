@@ -66,6 +66,14 @@ class AppInstallation < ApplicationRecord
     Octobox.installation_client(self.github_id)
   end
 
+  def self.sync_all
+    remote_installations = Octobox.github_app_client.find_app_installations(accept: 'application/vnd.github.machine-man-preview+json')
+    remote_installations.each do |remote_installation|
+      app_installation = AppInstallation.find_or_initialize_by(github_id: remote_installation.id)
+      app_installation.update_attributes(AppInstallation.map_from_api(remote_installation))
+    end
+  end
+
   def self.map_from_api(remote_installation)
     {
       github_id: remote_installation['id'],
