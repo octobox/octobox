@@ -72,8 +72,9 @@ module Octobox
           end
         end
 
-        update_labels(remote_subject)
+        return unless persisted?
 
+        update_labels(remote_subject)
         subject&.update_status
       end
 
