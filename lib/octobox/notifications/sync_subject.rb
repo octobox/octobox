@@ -33,7 +33,7 @@ module Octobox
             subject.assignees = ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:"
             subject.state = remote_subject.merged_at.present? ? SUBJECT_STATE_MERGED : remote_subject.state
             subject.sha = remote_subject.head&.sha
-            subject.body = remote_subject.body
+            subject.body = remote_subject.body.gsub("\u0000", "")
             subject.locked = remote_subject.locked
             subject.comment_count = remote_subject.comments
             subject.save(touch: false) if subject.changed?
@@ -55,7 +55,7 @@ module Octobox
               updated_at: remote_subject.updated_at,
               assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:",
               locked: remote_subject.locked,
-              body: remote_subject.body,
+              body: remote_subject.body.gsub("\u0000", ""),
               sha: remote_subject.head&.sha,
               comment_count: remote_subject.comments
             })
