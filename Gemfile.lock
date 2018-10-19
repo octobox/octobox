@@ -226,7 +226,7 @@ GEM
     percy-capybara (3.2.0)
       addressable (~> 2)
       percy-client (~> 2.0)
-    percy-client (2.0.0)
+    percy-client (2.0.1)
       addressable
       excon
       faraday (>= 0.9)
