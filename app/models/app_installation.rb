@@ -56,7 +56,7 @@ class AppInstallation < ApplicationRecord
   end
 
   def sync_repositories
-    remote_repositories = github_client.list_app_installation_repositories.repositories
+    remote_repositories = github_client.list_app_installation_repositories(accept: 'application/vnd.github.machine-man-preview+json').repositories
     add_repositories(remote_repositories)
   rescue Octokit::ClientError
     nil
