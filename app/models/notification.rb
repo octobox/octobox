@@ -84,7 +84,7 @@ class Notification < ApplicationRecord
             conn.patch "notifications/threads/#{id}"
         end
       end
-    rescue Octokit::Forbidden, Octokit::NotFound
+    rescue Octokit::Forbidden, Octokit::NotFound, Octokit::Unauthorized
       # one or more notifications are for repos the user no longer has access to
     end
   end
@@ -106,7 +106,7 @@ class Notification < ApplicationRecord
           conn.put "notifications/threads/#{id}/subscription", {ignored: true}.to_json
         end
       end
-    rescue Octokit::Forbidden, Octokit::NotFound
+    rescue Octokit::Forbidden, Octokit::NotFound, Octokit::Unauthorized
       # one or more notifications are for repos the user no longer has access to
     end
   end
