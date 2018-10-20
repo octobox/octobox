@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_18_095459) do
+ActiveRecord::Schema.define(version: 2018_10_20_075935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(version: 2018_10_18_095459) do
     t.string "encrypted_app_token"
     t.string "encrypted_app_token_iv"
     t.string "theme", default: "light"
+    t.boolean "show_app_banner", default: true
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end

@@ -36,6 +36,10 @@ class User < ApplicationRecord
     encrypted_app_token.present?
   end
 
+  def should_show_app_tooltips?
+    show_app_banner
+  end
+
   def refresh_interval=(val)
     val = nil if 0 == val
     super(val)

@@ -56,6 +56,27 @@
   </div>
 
   <%= form_for current_user do |f| %>
+    <% if Octobox.github_app? %>
+      <div class="card mb-3">
+        <h5 class="card-header">
+          GitHub App Reminders
+        </h5>
+        <div class="card-body">
+          <div class="form-group">
+            <div class="checkbox">
+              <label>
+                <%= f.check_box :show_app_banner, value: current_user[:show_app_banner] %>
+                Show reminders to install the GitHub app throughout Octobox
+              </label>
+            </div>
+
+            <%= submit_tag 'Save', class: 'btn btn-primary' %>
+            <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <% if Octobox.refresh_interval_enabled? || Octobox.personal_access_tokens_enabled? %>
       <% if Octobox.refresh_interval_enabled? %>
         <div class="card mb-3">
