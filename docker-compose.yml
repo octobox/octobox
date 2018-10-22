@@ -22,9 +22,12 @@
 # Using `$ docker-compose up` will automatically merge the override file in to
 # this one.
 #
-version: '3'
+version: '3.4'
 services:
   app:
+    build:
+      context: .
+      target: development
     image: octoboxio/octobox:latest
     ports:
       - "3000:3000"
@@ -37,6 +40,8 @@ services:
       - OCTOBOX_DATABASE_PASSWORD=development
       - OCTOBOX_DATABASE_HOST=database.service.octobox.internal
       - REDIS_URL=redis://redis.service.octobox.internal
+    volumes:
+      - './:/usr/src/app'
     networks:
       - internal
     depends_on:
