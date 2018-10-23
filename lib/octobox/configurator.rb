@@ -131,7 +131,12 @@ module Octobox
     end
 
     def app_url
-      "#{github_domain}/apps/#{app_slug}"
+      "#{github_domain}/#{app_path}/#{app_slug}"
+    end
+
+    def app_path
+      env_value = ENV['GITHUB_APP_PATH'].blank? ? nil : ENV['GITHUB_APP_PATH']
+      @app_path || env_value || 'apps'
     end
 
     def app_slug
