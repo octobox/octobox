@@ -81,13 +81,13 @@ Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
 
 ## Local installation
 
-First things first, you'll need to install Ruby 2.5.1. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to install Ruby 2.5.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.5.1
-rbenv global 2.5.1
+rbenv install 2.5.3
+rbenv global 2.5.3
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be

@@ -36,7 +36,7 @@
         "id": 1023072455,
         "node_id": "MDU6TGFiZWwxMDIzMDcyNDU1",
         "url": "https://api.github.com/repos/andrew/no-rabbits/labels/%F0%9F%A5%95%F0%9F%A5%95carrot",
-        "name": "🥕🥕carrot",
+        "name": "carrot",
         "color": "080bcc",
         "default": false
       }
@@ -53,7 +53,7 @@
     "updated_at": "2018-08-28T11:06:13Z",
     "closed_at": null,
     "author_association": "COLLABORATOR",
-    "body": "🥕 🥕 🥕 🥕 "
+    "body": "carrot carrot carrot"
   },
   "comment": {
     "url": "https://api.github.com/repos/andrew/no-rabbits/issues/comments/416544845",

@@ -84,7 +84,7 @@ class Notification < ApplicationRecord
             conn.patch "notifications/threads/#{id}"
         end
       end
-    rescue Octokit::Forbidden, Octokit::NotFound
+    rescue Octokit::Forbidden, Octokit::NotFound, Octokit::Unauthorized
       # one or more notifications are for repos the user no longer has access to
     end
   end
@@ -106,7 +106,7 @@ class Notification < ApplicationRecord
           conn.put "notifications/threads/#{id}/subscription", {ignored: true}.to_json
         end
       end
-    rescue Octokit::Forbidden, Octokit::NotFound
+    rescue Octokit::Forbidden, Octokit::NotFound, Octokit::Unauthorized
       # one or more notifications are for repos the user no longer has access to
     end
   end
@@ -145,7 +145,7 @@ class Notification < ApplicationRecord
   end
 
   def github_app_installed?
-    Octobox.github_app? && user.github_app_authorized? && repository.try(:display_subject?)
+    Octobox.github_app? && user.github_app_authorized? && repository.try(:github_app_installed?)
   end
 
   def subjectable?
@@ -153,7 +153,11 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    @display_subject ||= subjectable? && (Octobox.fetch_subject? || github_app_installed?)
+    @display_subject ||= subjectable? && (Octobox.fetch_subject? || (github_app_installed? && repository.display_subject?))
+  end
+
+  def download_subject?
+    @download_subject ||= subjectable? && (Octobox.fetch_subject? || github_app_installed?)
   end
 
   def upgrade_required?

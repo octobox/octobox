@@ -11,14 +11,14 @@ module Octobox
       SUBJECT_STATE_MERGED = 'merged'.freeze
 
       def update_subject(force = false)
-        return unless display_subject?
+        return unless download_subject?
         return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
         UpdateSubjectWorker.perform_async_if_configured(self.id, force)
       end
 
       def update_subject_in_foreground(force = false)
-        return unless display_subject?
+        return unless download_subject?
         # skip syncing if the notification was updated around the same time as subject
         return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
@@ -34,6 +34,11 @@ module Octobox
             subject.sha = remote_subject.head&.sha
             subject.body = remote_subject.body
             subject.locked = remote_subject.locked
+            subject.comment_count = remote_subject.comments
+            subject.save(touch: false) if subject.changed?
+          when *SUBJECT_TYPE_COMMIT_RELEASE
+            subject.locked = remote_subject.locked
+            subject.comment_count = remote_subject.commit&.comment_count
             subject.save(touch: false) if subject.changed?
           end
         else
@@ -50,7 +55,8 @@ module Octobox
               assignees: ":#{Array(remote_subject.assignees.try(:map, &:login)).join(':')}:",
               locked: remote_subject.locked,
               body: remote_subject.body,
-              sha: remote_subject.head&.sha
+              sha: remote_subject.head&.sha,
+              comment_count: remote_subject.comments
             })
           when *SUBJECT_TYPE_COMMIT_RELEASE
             create_subject({
@@ -60,13 +66,15 @@ module Octobox
               html_url: remote_subject.html_url,
               created_at: remote_subject.created_at,
               updated_at: remote_subject.updated_at,
-              locked: remote_subject.locked
+              locked: remote_subject.locked,
+              comment_count: remote_subject.commit&.comment_count
             })
           end
         end
 
-        update_labels(remote_subject)
+        return unless persisted?
 
+        update_labels(remote_subject)
         subject&.update_status
       end
 

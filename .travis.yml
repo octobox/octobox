@@ -1,7 +1,7 @@
 language: ruby
 sudo: false
 rvm:
-  - 2.5.1
+  - 2.5.3
 
 before_install:
   - gem update --system

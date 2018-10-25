@@ -24,4 +24,16 @@ class Repository < ApplicationRecord
     return true unless Octobox.octobox_io?
     private? ? app_installation.private_repositories_enabled? : true
   end
+
+  def self.sync(remote_repository)
+    repository = Repository.find_or_create_by(github_id: remote_repository['id'])
+
+    repository.update({
+      full_name: remote_repository['full_name'],
+      private: remote_repository['private'],
+      owner: remote_repository['full_name'].split('/').first,
+      github_id: remote_repository['id'],
+      last_synced_at: Time.current
+    })
+  end
 end

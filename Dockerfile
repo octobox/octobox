@@ -1,4 +1,4 @@
-FROM ruby:2.5.1-alpine
+FROM ruby:2.5.3-alpine
 
 # Install and update all dependencies (os, ruby)
 WORKDIR /usr/src/app

@@ -18,4 +18,32 @@ class SubjectTest < ActiveSupport::TestCase
 
     assert_equal 'success', subject.status
   end
+
+  test 'sync updates comment_count of an issue' do
+    remote_subject = Oj.load(File.open(file_fixture('subject_56.json')))
+    Subject.sync(remote_subject)
+    subject = Subject.first
+    assert_equal 8, subject.comment_count
+  end
+
+  test 'sync updates comment_count of a pull request' do
+    remote_subject = Oj.load(File.open(file_fixture('merged_pull_request.json')))
+    Subject.sync(remote_subject)
+    subject = Subject.first
+    assert_equal 0, subject.comment_count
+  end
+
+  test 'sync updates comment_count of a commit' do
+    remote_subject = Oj.load(File.open(file_fixture('commit_no_author.json')))
+    Subject.sync(remote_subject)
+    subject = Subject.first
+    assert_equal 2, subject.comment_count
+  end
+
+  test "sync doesnt update comment_count of releases" do
+    remote_subject = Oj.load(File.open(file_fixture('release.json')))
+    Subject.sync(remote_subject)
+    subject = Subject.first
+    assert_nil subject.comment_count
+  end
 end

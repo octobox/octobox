@@ -57,12 +57,15 @@ class Subject < ApplicationRecord
       repository_full_name: full_name,
       github_id: remote_subject['id'],
       state: remote_subject['merged_at'].present? ? 'merged' : remote_subject['state'],
-      author: remote_subject['user']['login'],
+      author: remote_subject.fetch('user', {})['login'],
       html_url: remote_subject['html_url'],
-      created_at: remote_subject['created_at'],
-      updated_at: remote_subject['updated_at'],
+      created_at: remote_subject['created_at'] || Time.current,
+      updated_at: remote_subject['updated_at'] || Time.current,
+      comment_count: remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count'],
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
-      locked: remote_subject['locked']
+      locked: remote_subject['locked'],
+      sha: remote_subject.fetch('head', {})['sha'],
+      body: remote_subject['body']
     })
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
     subject.sync_involved_users
