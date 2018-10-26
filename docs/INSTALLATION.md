@@ -389,8 +389,8 @@ Due to a restriction in the GitHub App API, you'll need to create both an [Oauth
 Then create a new GitHub App, <https://github.com/settings/apps/new>, with the following settings:
 
 - Homepage URL: the domain you plan to run the app on (or http://localhost:3000)
-- User authorization callback URL: The domain plus `/auth/githubapp`, i.e. http://myoctoboxdomain.com/auth/githubapp
-- Setup URL: Same as the User authorization callback URL i.e. http://myoctoboxdomain.com/auth/githubapp
+- User authorization callback URL: The domain plus `/auth/githubapp/callback`, i.e. http://myoctoboxdomain.com/auth/githubapp/callback
+- Setup URL: The domain plus `/auth/githubapp`, i.e. http://myoctoboxdomain.com/auth/githubapp
 - Redirect on update: ✔
 - Webhook URL: The domain plus `/hooks/github`, i.e. http://myoctoboxdomain.com/hooks/github
 - Webhook secret: generate a password and paste it in here and save for later
