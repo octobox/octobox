@@ -278,7 +278,7 @@ module NotificationsHelper
       number = notification.subject_url.scan(/\d+/).first
       "##{number} #{notification.subject_title}"
     else
-      notification.subject_title 
+      notification.subject_title
     end
   end
 end
