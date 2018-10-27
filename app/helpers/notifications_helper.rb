@@ -273,4 +273,12 @@ module NotificationsHelper
     octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
   end
 
+  def subject_with_number(notification)
+    if notification.subject_type == "Issue" || "PullRequest"
+      number = notification.subject_url.scan(/\d+/).first
+      "##{number} #{notification.subject_title}"
+    else
+      notification.subject_title 
+    end
+  end
 end
