@@ -245,4 +245,14 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal Notification.subjectable.length, 1
     assert_equal Notification.subjectable.first, notification1
   end
+
+  test 'subject_number extracts the issue number from the subject url' do
+    notification = build_stubbed(:notification, subject_url: 'https://github.com/octobox/octobox/issues/1109')
+    assert_equal notification.subject_number, "1109"
+  end
+
+  test 'subject_number extracts the issue number from the subject url even if the user or org contains a number' do
+    notification = build_stubbed(:notification, subject_url: 'https://github.com/octobox42/octobox42/issues/1109')
+    assert_equal notification.subject_number, "1109"
+  end
 end

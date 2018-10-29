@@ -164,4 +164,8 @@ class Notification < ApplicationRecord
     return nil unless repository.present?
     repository.private? && !repository.required_plan_available?
   end
+
+  def subject_number
+    subject_url.scan(/\d+$/).first
+  end
 end
