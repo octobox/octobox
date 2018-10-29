@@ -222,7 +222,7 @@ GEM
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
     parallel (1.12.1)
-    parser (2.5.1.2)
+    parser (2.5.3.0)
       ast (~> 2.4.0)
     percy-capybara (3.2.0)
       addressable (~> 2)
