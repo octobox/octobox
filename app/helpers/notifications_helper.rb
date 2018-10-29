@@ -275,7 +275,7 @@ module NotificationsHelper
 
   def subject_with_number(notification)
     if notification.subject_type == 'Issue' || 'PullRequest'
-      number = notification.subject_url.scan(/\d+/).first
+      number = notification.subject_url.scan(/\d+$/).first
       "<span class=\"notification-number\">##{number}</span> #{notification.subject_title}".html_safe
     else
       notification.subject_title
