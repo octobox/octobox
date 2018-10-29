@@ -27,14 +27,17 @@
 
 <div id='notification-thread' class="p-3" data-id='<%= @notification.id %>'>
 
-  <h2><%= @notification.subject_title %> &nbsp <%= link_to octicon('link-external', height: 32), @notification.web_url, target: '_blank', class: 'link' %> </h2>
-
-  <button class='btn btn-sm <%= notification_button_color(@notification.state) if display_subject? %>'>
-    <%= octicon notification_icon(@notification.subject_type, @notification.state), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
-    <%= notification_button_title(@notification.subject_type, @notification.state) %>
-  </button>
+  <h2>
+    <button class='btn btn-sm <%= notification_button_color(@notification.state) if display_subject? %>'>
+      <%= octicon notification_icon(@notification.subject_type, @notification.state), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
+      <%= notification_button_title(@notification.subject_type, @notification.state) %>
+    </button>
+    <%= @notification.subject_title %> &nbsp 
+    <%= link_to octicon('link-external', height: 32), @notification.web_url, target: '_blank', class: 'link' %> 
+  </h2>
 
   <% if display_subject? %>
+      <%= notification_status(@notification.subject.status) %>
       <% if @notification.subject %>
           <%= link_to @notification.subject.author, root_path(filtered_params(author: @notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= @notification.subject_type.downcase %>
       <% end %>
@@ -82,7 +85,7 @@
         </div>
       </div>
 
-      <div class="<%= 'comment-'+comment.id.to_s %> card-body collapse <%= 'show' unless DateTime.parse(@notification.last_read_at) > comment.created_at%> ">
+      <div class="<%= 'comment-'+comment.id.to_s %> card-body collapse <%= 'show' unless @notification.last_read_at && DateTime.parse(@notification.last_read_at) > comment.created_at%> ">
         <%== parse_markdown(comment.body) %>  
       </div>
     </div>
