@@ -90,6 +90,7 @@ class NotificationsController < ApplicationController
     check_out_of_bounds(scope)
 
     @unread_count = user_unread_count
+    @display_comments = current_user.display_comments
     @notifications = scope.page(page).per(per_page)
     @total = @notifications.total_count
 
@@ -117,6 +118,7 @@ class NotificationsController < ApplicationController
     check_out_of_bounds(scope)
 
     @unread_count = user_unread_count
+    @display_comments = current_user.display_comments
     @notifications = scope.page(page).per(per_page)
     @total = @notifications.total_count
 

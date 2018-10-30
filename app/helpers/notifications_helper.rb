@@ -308,4 +308,13 @@ module NotificationsHelper
     return if str.blank?
     GitHub::Markup.render('.md', str)
   end
+
+  def notification_link(notification)
+    display_thread? && notification.subjectable? ? notification_url(notification) : notification.web_url
+  end
+
+  def display_thread?
+    Octobox.include_comments? && current_user.display_comments
+  end
+
 end
