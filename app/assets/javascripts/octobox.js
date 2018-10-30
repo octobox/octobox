@@ -312,12 +312,20 @@ var Octobox = (function() {
   };
   
   var openThread = function() {
-    $("#thread").hasClass("d-none") ? $("#thread").toggleClass("d-none") : null;
-    $(".flex-content").hasClass("active") ? $(".flex-content").toggleClass("active") : null; 
+    if($("#thread").hasClass("d-none")){
+      $("#thread").toggleClass("d-none");
+      $(".flex-main").toggleClass("show-thread");
+    }
+    if($(".flex-content").hasClass("active")){
+      $(".flex-content").toggleClass("active");
+    }
   };
 
   var closeThread = function() {
-    !$("#thread").hasClass("d-none") ? $("#thread").toggleClass("d-none") : null; 
+    if(!$("#thread").hasClass("d-none")){
+      $("#thread").toggleClass("d-none");
+      $(".flex-main").toggleClass("show-thread");
+    }
   };
 
   var toggleOffCanvas = function() {
