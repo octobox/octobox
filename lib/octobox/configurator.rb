@@ -175,6 +175,11 @@ module Octobox
     end
     attr_writer :github_app_jwt
 
+    def include_comments
+      @include_comments || env_boolean('INCLUDE_COMMENTS')
+    end
+    attr_writer :include_comments
+
     private
 
     def env_boolean(env_var_name)
