@@ -11,7 +11,7 @@
 #   actively develop Octobox, you can override this file by adding the following to
 #   a docker-compose.override.yml:
 #
-#   version '3'
+#   version: '3'
 #   services:
 #     app:
 #       build:
