@@ -45,6 +45,7 @@ $(document).on('click', 'button.archive', Octobox.archiveThread);
 $(document).on('click', 'button.unarchive', Octobox.unarchiveThread);
 $(document).on('click', 'button.mute', Octobox.muteThread);
 $(document).on('click', 'button.mute_selected', Octobox.muteSelected);
+$(document).on('click', 'button.delete', Octobox.deleteThread);
 $(document).on('click', 'button.delete_selected', Octobox.deleteSelected);
 $(document).on('click', 'button.mark_read_selected', Octobox.markReadSelected);
 $(document).on('click', 'button.closethread', Octobox.closeThread);

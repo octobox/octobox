@@ -365,16 +365,25 @@ var Octobox = (function() {
     };
   };
 
-  var deleteSelected = function(){
-    if (getDisplayedRows().length === 0) return;
-    var rows = getMarkedOrCurrentRows();
-    rows.addClass("blur-action");
-    var ids = getIdsFromRows(rows);
+  var deleteMe = function(ids){
     $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
       resetCursorAfterRowsRemoved(ids);
       updateFavicon();
     });
   }
+
+  var deleteSelected = function(){
+    if (getDisplayedRows().length === 0) return;
+    var rows = getMarkedOrCurrentRows();
+    rows.addClass("blur-action");
+    var ids = getIdsFromRows(rows);
+    delete(ids);
+  }
+
+  var deleteThread = function() { 
+    var id = $('#notification-thread').data('id');
+    deleteMe(id);
+  } ;
 
   // private methods
 
@@ -548,6 +557,7 @@ var Octobox = (function() {
     removeCurrent: removeCurrent,
     toggleOffCanvas: toggleOffCanvas,
     markRead: markRead,
-    deleteSelected: deleteSelected
+    deleteSelected: deleteSelected,
+    deleteThread: deleteThread
   }
 })();
