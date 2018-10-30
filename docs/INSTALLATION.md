@@ -167,7 +167,7 @@ that, you can override the `docker-compose.yml` configuration by adding a
 `docker-compose.override.yml` with the following:
 
 ```yaml
-version '3'
+version: '3'
 services:
   app:
     build:

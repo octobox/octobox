@@ -38,6 +38,16 @@ ActiveRecord::Schema.define(version: 2018_10_18_095459) do
     t.string "permission_statuses"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.integer "subject_id"
+    t.bigint "github_id"
+    t.string "author"
+    t.string "author_association"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "labels", force: :cascade do |t|
     t.string "name"
     t.string "color"

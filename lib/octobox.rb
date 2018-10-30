@@ -38,6 +38,10 @@ module Octobox
       config.background_jobs_enabled
     end
 
+    def include_comments?
+      config.include_comments
+    end
+
     def github_app_client
       Octokit::Client.new(bearer_token: generate_jwt,
                           auto_paginate: true,
