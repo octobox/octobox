@@ -10,11 +10,11 @@
   <div class="flex-main">
     <%= render "list" %>
   </div>
-  <div id='thread' class='flex-thread'>
-    <div class="pl-5 text-center align-self-center">
+  <div id='thread' class='flex-thread d-none d-xxxl-block'>
+    <div class="nothing-here text-center align-self-center">
       <%= octicon 'comment-discussion', height: 32, class: 'blankslate-icon' %>
       <h3>Nothing to see here.</h3>
-      <p>Tap a notification to see the contents of it's thread here.</p>
+      <p>Select a notification to see the contents of its thread here.</p>
       <% unless current_user.notifications.any? %>
         <p><i>Expecting threads?? Make sure <a href="<%= Octobox.config.include_comments %>/settings/notifications">comments</a> are enabled on your installation.</i></p>
       <% end %>

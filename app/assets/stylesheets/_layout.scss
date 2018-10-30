@@ -82,6 +82,10 @@ body {
   }
 }
 
+.nothing-here{
+  margin-top: calc((100vh - 56px - 96px)/2);
+}
+
 .readable{
   max-width: 48rem;
 }
