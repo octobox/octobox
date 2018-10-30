@@ -21,6 +21,8 @@ config/initializers/custom.rb
 
 .env
 coverage
+docker-compose.override.yml
+docker-compose.production.yml
 .DS_Store
 public/assets
 public/docs
