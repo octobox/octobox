@@ -310,7 +310,7 @@ module NotificationsHelper
   end
 
   def notification_link(notification)
-    display_thread? && notification.subjectable? ? notification_url(notification) : notification.web_url
+    display_thread? && notification.subjectable? ? notification_url(notification, filtered_params) : notification.web_url
   end
 
   def display_thread?
