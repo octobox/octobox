@@ -47,7 +47,7 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-up(md) {
+@include media-breakpoint-up(xl) {
   .table-notifications tr td:first-child {
     border-left: 2px solid $list-group-bg;
   }
@@ -65,7 +65,7 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-up(md) {
+@include media-breakpoint-up(xl) {
   @each $item in $notification-items{
     .notification-#{$item}{
       text-overflow: ellipsis;
@@ -111,7 +111,7 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-down(lg) {
   .table-notifications {
     table,
     thead,

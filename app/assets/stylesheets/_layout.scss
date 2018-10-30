@@ -30,16 +30,6 @@ body {
 .flex-content{
   display: flex;
   height: calc(100vh - 56px);
-
-  position: relative;
-  left: 0;
-  height: 100%;
-  -webkit-transition: all .25s ease-out;
-       -o-transition: all .25s ease-out;
-          transition: all .25s ease-out;
-  &.active {
-    left: $sidebar-width;
-  }
 }
 
 .flex-sidebar {
@@ -48,15 +38,6 @@ body {
   padding: 15px;
   padding-bottom: 60px;
   overflow: auto;
-
-  position: absolute;
-  // enable momentum scrolling on mobile safari
-  overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-  bottom: 0;
-  top: 0;
-  width: $sidebar-width;
-  left: -$sidebar-width;
 }
 
 .flex-main {
@@ -98,7 +79,7 @@ body {
   }
 }
 
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(lg) {
 
   .flex-main{
     height: 100%;
@@ -106,10 +87,32 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 
+  .flex-content {
+    position: relative;
+    left: 0;
+    height: 100%;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+    &.active {
+    	left: $sidebar-width;
+  	}
+  }
+
   .text-content{
     padding: 0 15px;
     
   }
 
+  .flex-sidebar {
+    position: absolute;
+    // enable momentum scrolling on mobile safari
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    bottom: 0;
+    top: 0;
+    width: $sidebar-width;
+    left: -$sidebar-width;
+  }
 }
 
