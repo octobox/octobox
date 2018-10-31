@@ -66,11 +66,4 @@ $(document).on('click', '.toggle-star', function() {
   Octobox.toggleStarClick($(this))
 });
 
-$(document).on('click', '.subject-link', function () {
-  history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
-  $.get($(this).attr('href'), function(data){
-    $('#thread').html(data)
-  });
-  Octobox.openThread();
-  return false;
-});
+$(document).on('click', '.subject-link', Octobox.viewThread);

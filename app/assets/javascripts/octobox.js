@@ -130,7 +130,7 @@ var Octobox = (function() {
     getDisplayedRows().find("input").prop("checked", checked).trigger("change");
   };
 
-  var muteThread = function() { 
+  var muteThread = function() {
     var id = $('#notification-thread').data('id');
     mute(id);
   } ;
@@ -159,7 +159,7 @@ var Octobox = (function() {
       updateFavicon();
     })
   };
-  
+
   var toggleArchive = function() {
     if ($(".archive_toggle").hasClass("archive_selected")) {
       archiveSelected()
@@ -310,7 +310,7 @@ var Octobox = (function() {
   var removeCurrent = function() {
     $("td.js-current").removeClass("current js-current");
   };
-  
+
   var openThread = function() {
     if($("#thread").hasClass("d-none")){
       $("#thread").toggleClass("d-none");
@@ -380,10 +380,19 @@ var Octobox = (function() {
     delete(ids);
   }
 
-  var deleteThread = function() { 
+  var deleteThread = function() {
     var id = $('#notification-thread').data('id');
     deleteMe(id);
   } ;
+
+  var viewThread = function() {
+    history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
+    $.get($(this).attr('href'), function(data){
+      $('#thread').html(data)
+    });
+    openThread();
+    return false;
+  }
 
   // private methods
 
@@ -471,7 +480,7 @@ var Octobox = (function() {
       $("#help-box").modal("hide");
     } else if($(".flex-main").hasClass("show-thread")){
       closeThread();
-    } 
+    }
     else{
       clearFilters();
     }
@@ -561,6 +570,7 @@ var Octobox = (function() {
     toggleOffCanvas: toggleOffCanvas,
     markRead: markRead,
     deleteSelected: deleteSelected,
-    deleteThread: deleteThread
+    deleteThread: deleteThread,
+    viewThread: viewThread
   }
 })();
