@@ -469,7 +469,10 @@ var Octobox = (function() {
   var escPressed = function(e) {
     if ($("#help-box").is(":visible")) {
       $("#help-box").modal("hide");
-    } else {
+    } else if($(".flex-main").hasClass("show-thread")){
+      closeThread();
+    } 
+    else{
       clearFilters();
     }
   };

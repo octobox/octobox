@@ -10,7 +10,7 @@
   <div class="flex-main">
     <%= render "list" %>
   </div>
-  <% if @display_comments %>
+  <% if display_thread? %>
     <div id='thread' class='flex-thread d-none d-xxxl-block'>
       <div class="nothing-here text-center align-self-center">
         <%= octicon 'comment-discussion', height: 32, class: 'blankslate-icon' %>
