@@ -314,11 +314,10 @@ module NotificationsHelper
   end
 
   def notification_link(notification)
-    display_thread? && notification.subjectable? ? notification_url(notification, filtered_params) : notification.web_url
+    notification.display_thread? ? notification_url(notification, filtered_params) : notification.web_url
   end
 
   def display_thread?
     Octobox.include_comments? && current_user.display_comments
   end
-
 end
