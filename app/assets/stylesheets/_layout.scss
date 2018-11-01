@@ -32,6 +32,13 @@ body {
   height: calc(100vh - 56px);
 }
 
+.alert{
+  .close{
+    line-height: inherit;
+    font-size: inherit;
+  }
+}
+
 .flex-sidebar {
   flex: 0 0 250px;
   width: $sidebar-width;
@@ -43,8 +50,14 @@ body {
 .flex-main {
   flex: 1;
   min-width: 0;
-  overflow: auto;
+  overflow-x: hidden;
   padding-left: 0;
+}
+
+.flex-thread {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
   .text-content{
     h1, h2{
       padding-top: $spacer * 3
@@ -55,6 +68,10 @@ body {
       min-height: 31em;
     }
   }
+}
+
+.nothing-here{
+  margin-top: calc((100vh - 56px - 96px)/2);
 }
 
 .readable{
@@ -69,8 +86,7 @@ body {
   }
 }
 
-@include media-breakpoint-down(md) {
-
+@mixin responsive{
   .flex-main{
     height: 100%;
     overflow-y: scroll;
@@ -84,15 +100,14 @@ body {
     -webkit-transition: all .25s ease-out;
          -o-transition: all .25s ease-out;
             transition: all .25s ease-out;
+    &.active {
+      left: $sidebar-width;
+    }
   }
 
   .text-content{
     padding: 0 15px;
     
-  }
-
-  .flex-content.active {
-    left: $sidebar-width;
   }
 
   .flex-sidebar {
@@ -107,3 +122,9 @@ body {
   }
 }
 
+@include media-breakpoint-down(lg) {
+  @include responsive;
+  .flex-main.show-thread{
+    display:none;
+  }
+}

@@ -109,6 +109,11 @@ svg{
   }
 }
 
+.star-active .octicon-star{
+  fill: $icon-star-active-fill !important;
+  stroke: $icon-star-active-stroke !important;
+}
+
 .notification-open{
   fill: $notification-open;
 }

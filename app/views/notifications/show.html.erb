@@ -1,0 +1,18 @@
+<% if current_user.syncing? %>
+  <span class="js-is_syncing"><!-- This causes the sync icon to spin --></span>
+<% end %>
+<span class='js-unread-count' data-count="<%= @unread_count %>"></span>
+
+<div class="flex-content">
+  <div class="flex-sidebar">
+    <%= render "sidebar" %>
+  </div>
+  <div class="flex-main show-thread">
+    <%= render "list" %>
+  </div>
+  <div id='thread' class='flex-thread'>
+   <%= render 'thread' %>
+  </div>
+</div>
+
+<%= render 'help-box' %>

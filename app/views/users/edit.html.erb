@@ -1,11 +1,9 @@
 <div class="container user-settings">
-  <div class="row">
-    <div class="col">
-      <h1 class="pt-3">Settings</h1>
-    </div>
-    <div class="col">
+  <div class="w-100 d-flex justify-content-between">
+    <h1 class="pt-3">Settings</h1>
+    <div>
       <% if @latest_git_sha %>
-        <p class="settings-sha float-right">
+        <p class="settings-sha">
           Version:
           <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank', rel: "noopener", title: "Current Git commit SHA" %>
           <%= link_to Octobox.config.source_repo + "/compare/#{@latest_git_sha}..master", target: '_blank', rel: "noopener", title: "Compare with latest commits on master" do %>
@@ -105,17 +103,36 @@
       <% end %>
     <% end %>
 
-    <div class="card mb-3">
-      <h5 class="card-header">
-        Theme
-      </h5>
-      <div class="card-body">
-        <div class="form-group">
-          <%= f.select :theme, [['Light', 'light'], ['Dark', 'dark']], {}, class: 'form-control  w-50' %>
-        </div>
+    <div class='d-flex mb-3'>
+      <div class="card w-50 mr-3">
+        <h5 class="card-header">
+          Theme
+        </h5>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.select :theme, [['Light', 'light'], ['Dark', 'dark']], {}, class: 'form-control' %>
+          </div>
 
-        <%= submit_tag 'Save', class: 'btn btn-primary' %>
-        <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+          <%= submit_tag 'Save', class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+        </div>
+      </div>
+
+      <div class="card w-50">
+        <div class='ribbon info'>
+          <span>Beta</span>
+        </div>
+        <h5 class="card-header">
+          Open notifications
+        </h5>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.select :display_comments, [['On GitHub', 'false'], ['On Octobox', 'true']], {}, class: 'form-control' %>
+          </div>
+
+          <%= submit_tag 'Save', class: 'btn btn-primary' %>
+          <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+        </div>
       </div>
     </div>
   <% end %>
