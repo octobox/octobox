@@ -33,6 +33,8 @@ gem 'jwt'
 gem 'oj'
 gem 'yard'
 gem 'simple_form'
+gem 'github-markup', require: 'github/markup'
+gem 'kramdown'
 
 # Supported databases
 gem 'mysql2', require: false

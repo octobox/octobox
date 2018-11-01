@@ -164,4 +164,8 @@ class Notification < ApplicationRecord
     return nil unless repository.present?
     repository.private? && !repository.required_plan_available?
   end
+
+  def display_thread?
+    Octobox.include_comments? && subjectable? && subject.present? && user.display_comments?
+  end
 end
