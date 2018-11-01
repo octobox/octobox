@@ -32,6 +32,13 @@ body {
   height: calc(100vh - 56px);
 }
 
+.alert{
+  .close{
+    line-height: inherit;
+    font-size: inherit;
+  }
+}
+
 .flex-sidebar {
   flex: 0 0 250px;
   width: $sidebar-width;
