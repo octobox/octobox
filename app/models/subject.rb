@@ -86,6 +86,14 @@ class Subject < ApplicationRecord
     end
   end
 
+  def author_url_path
+    if bot_author?
+      "/apps/#{BOT_AUTHOR_REGEX.match(author)[1]}"
+    else
+      "/#{author}"
+    end
+  end
+
   private
 
   def assign_status(remote_status)
@@ -118,5 +126,9 @@ class Subject < ApplicationRecord
     ids = users.pluck(:id)
     ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
     ids.uniq
+  end
+
+  def bot_author?
+    BOT_AUTHOR_REGEX.match?(author)
   end
 end

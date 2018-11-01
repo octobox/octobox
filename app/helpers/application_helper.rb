@@ -49,4 +49,8 @@ module ApplicationHelper
     current_user.try(:theme) || 'light'
   end
 
+  def avatar_url(github_login, size: 30)
+    github_login = github_login.gsub('[bot]', '') if Comment::BOT_AUTHOR_REGEX.match?(github_login)
+    "#{Octobox.config.github_domain}/#{github_login}.png?s=#{size}"
+  end
 end
