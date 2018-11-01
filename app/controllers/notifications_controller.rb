@@ -94,10 +94,6 @@ class NotificationsController < ApplicationController
     @total = @notifications.total_count
 
     @cur_selected = [per_page, @total].min
-
-    if Octobox.include_comments? && !current_user.display_comments 
-      flash[:success] = "Octobox now supports comment thread views, enable it in settings" 
-    end
   end
 
   def show
