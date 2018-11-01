@@ -388,7 +388,12 @@ var Octobox = (function() {
   var viewThread = function() {
     history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
     $.get($(this).attr('href'), function(data){
-      $('#thread').html(data)
+      if (data["error"] != null) {
+        $(".header-flash-messages").empty();
+        notify(data["error"], "danger")
+      } else {
+        $('#thread').html(data)
+      }
     });
     openThread();
     return false;
