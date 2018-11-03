@@ -1,4 +1,4 @@
-FROM ruby:2.5.3-alpine
+FROM pawurb/ruby-jemalloc-node-yarn:latest
 
 # Install and update all dependencies (os, ruby)
 WORKDIR /usr/src/app
