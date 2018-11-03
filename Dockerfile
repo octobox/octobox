@@ -15,6 +15,7 @@ RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     tzdata \
     libmysqlclient-dev \
+    git \
  && apt-get clean \
  && bundle config --global frozen 1 \
  && bundle install --without test production --jobs 2 \
