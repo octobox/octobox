@@ -11,7 +11,8 @@ COPY Gemfile Gemfile.lock /usr/src/app/
 
 # * Setup system
 # * Install Ruby dependencies
-RUN apk add --update \
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-base \
     netcat-openbsd \
     git \
@@ -20,7 +21,7 @@ RUN apk add --update \
     mysql-dev \
     tzdata \
     curl-dev \
- && rm -rf /var/cache/apk/* \
+ && apt-get clean \
  && bundle config --global frozen 1 \
  && bundle install --without test production --jobs 2 \
  && gem install foreman
