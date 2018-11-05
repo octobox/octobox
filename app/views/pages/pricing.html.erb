@@ -1,14 +1,16 @@
-<div class='container mt-5'>
+<div class='container readable mt-5'>
 	<h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
-	<h3 class='text-center pt-3'>One product, two ways to pay</h3>
-	<div class='d-flex flex-column flex-lg-row pt-3 px-3 pb-3 justify-content-center'>
+	<h3 class='pt-3 text-center'>One product, two ways to pay</h3>
+    <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects. To add private repository access to your personal or organisation's account:</p>
+	
+    <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>
 		<%= render('opencollective')%>
 		<%= render('github')%>
 	</div>
-	<div class='container readable mb-5'>
-		<h2 class='text-center mb-5'>What... Why?</h2>
+	
+	<h2 id='why' class='text-center mb-5 pt-3'>What... Why?</h2>
 
-		<h5>An experiment in open source sustainability</h5>
+	<h5>An experiment in open source sustainability</h5>
 
     <p>Like many open source projects Octobox currently relies on volunteers and donations to cover the cost of maintaining the Octobox project. This is <a href='https://www.fordfoundation.org/about/library/reports-and-studies/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/'>not sustainable</a>.
 
@@ -30,8 +32,6 @@
     <p>By asking you to make the choice with how you pay we will demonstrate whether donation-based, community-first sustainabiliy strategies work over more classical, commercial-lead approaches.</p>
 
     <p>Thanks for taking the time to read this. If anything is unclear or you have concerns about this please <a href='https://github.com/octobox/octobox/issues/new'>raise an issue</a> or <a href='mailto: hello@octobox.io'>get in touch</a>.</p>
-
-	</div>
 </div>
 
 <%= render 'layouts/footer'%>
