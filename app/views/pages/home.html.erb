@@ -104,32 +104,34 @@
     </div>
   </div>
 
-  <div class="container readable mb-5">
+  <% if Octobox.octobox_io? %>
+    <div class="container readable mb-5">
 
-    <h3 id='pricing' class='pt-4'>Pricing</h3>
-    <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects. To add private repository access to your personal or organisation's account:</p>
-    <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>
-      <%= render('pages/opencollective')%>
-      <%= render('pages/github')%>
-    </div>
-    <p class='text-large'>Wondering why there are two options? <a href='/pricing#why'>Read more about our pricing strategy</a>.</p> 
-
-    <h3 id='users' class='pt-4'>Used by developers from</h3>
-    <div class="row mt-4">
-      <div class="col">
-        <% used_by_orgs.each do |org| %>
-          <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block mr-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
-        <% end %>
+      <h3 id='pricing' class='pt-4'>Pricing</h3>
+      <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects. To add private repository access to your personal or organisation's account:</p>
+      <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>
+        <%= render('pages/opencollective')%>
+        <%= render('pages/github')%>
       </div>
-    </div>
+      <p class='text-large'>Wondering why there are two options? <a href='/pricing#why'>Read more about our pricing strategy</a>.</p> 
 
-  </div>
+      <h3 id='users' class='pt-4'>Used by developers from</h3>
+      <div class="row mt-4">
+        <div class="col">
+          <% used_by_orgs.each do |org| %>
+            <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block mr-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  <% end %>
 
   <div class="container readable text-large mb-5">
 
     <h3 id='run-your-own' class='pt-4'>Run your own Octobox</h3>
 
-    <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox. Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
+    <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox? Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
 
     <h3 id='contribute' class='pt-4'>Contribute</h3>
 
