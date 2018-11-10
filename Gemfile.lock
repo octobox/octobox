@@ -372,7 +372,7 @@ GEM
       sprockets (>= 3.0.0)
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
-    thor (0.20.0)
+    thor (0.20.2)
     thread_safe (0.3.6)
     tilt (2.0.8)
     turbolinks (5.2.0)
