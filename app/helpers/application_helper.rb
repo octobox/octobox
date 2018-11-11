@@ -15,7 +15,7 @@ module ApplicationHelper
     concat(content_tag(:div, class: "flex-header header-flash-messages") do
       flash.each do |msg_type, message|
         concat(content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} fade show") do
-          concat content_tag(:button, 'x', class: 'close', data: { dismiss: 'alert' })
+          concat content_tag(:button, octicon('x'), class: 'close', data: { dismiss: 'alert' })
           concat message
         end)
       end
@@ -49,4 +49,8 @@ module ApplicationHelper
     current_user.try(:theme) || 'light'
   end
 
+  def avatar_url(github_login, size: 30)
+    github_login = github_login.gsub('[bot]', '') if Comment::BOT_AUTHOR_REGEX.match?(github_login)
+    "#{Octobox.config.github_domain}/#{github_login}.png?s=#{size}"
+  end
 end

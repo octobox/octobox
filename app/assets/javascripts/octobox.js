@@ -130,10 +130,19 @@ var Octobox = (function() {
     getDisplayedRows().find("input").prop("checked", checked).trigger("change");
   };
 
-  var mute = function() {
+  var muteThread = function() {
+    var id = $('#notification-thread').data('id');
+    mute(id);
+  } ;
+
+  var muteSelected = function() {
     if (getDisplayedRows().length === 0) return;
     if ( $(".js-table-notifications tr").length === 0 ) return;
     var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    mute(ids);
+  };
+
+  var mute = function(ids){
     $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
       resetCursorAfterRowsRemoved(ids);
       updateFavicon();
@@ -153,24 +162,35 @@ var Octobox = (function() {
 
   var toggleArchive = function() {
     if ($(".archive_toggle").hasClass("archive_selected")) {
-      archive()
+      archiveSelected()
     } else {
-      unarchive()
+      unarchiveSelected()
     }
   };
 
-  var archive = function(){
-    archiveSelected(true);
-  }
-
-  var unarchive = function(){
-    archiveSelected(false);
-  }
-
-  var archiveSelected = function(value){
+  var archiveSelected = function(){
     if (getDisplayedRows().length === 0) return;
     var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    archive(ids, true);
+  }
 
+  var unarchiveSelected = function(){
+    if (getDisplayedRows().length === 0) return;
+    var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    archive(ids, false);
+  }
+
+  var archiveThread = function(){
+    var id = $('#notification-thread').data('id');
+    archive(id, true);
+  }
+
+  var unarchiveThread = function(){
+    var id = $('#notification-thread').data('id');
+    archive(id, false);
+  }
+
+  var archive = function(ids, value){
     $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } ).done(function() {
       resetCursorAfterRowsRemoved(ids);
       updateFavicon();
@@ -255,8 +275,14 @@ var Octobox = (function() {
   };
 
   var toggleStarClick = function(row) {
-    row.toggleClass("star-active star-inactive");
-    $.post("/notifications/"+row.data("id")+"/star")
+    star(row.data("id"))
+  };
+
+  var star = function(id){
+    console.log(id);
+    $('#notification-thread').data('id') == id ? $('#thread').find('.toggle-star').toggleClass("star-active star-inactive") : null;
+    $("#notification-"+id).find(".toggle-star").toggleClass("star-active star-inactive");
+    $.post("/notifications/"+id+"/star")
   };
 
   var changeArchive = function() {
@@ -285,8 +311,25 @@ var Octobox = (function() {
     $("td.js-current").removeClass("current js-current");
   };
 
+  var openThread = function() {
+    if($("#thread").hasClass("d-none")){
+      $("#thread").toggleClass("d-none");
+      $(".flex-main").toggleClass("show-thread");
+    }
+    if($(".flex-content").hasClass("active")){
+      $(".flex-content").toggleClass("active");
+    }
+  };
+
+  var closeThread = function() {
+    if(!$("#thread").hasClass("d-none")){
+      $("#thread").toggleClass("d-none");
+      $(".flex-main").toggleClass("show-thread");
+    }
+  };
+
   var toggleOffCanvas = function() {
-    $(".flex-content").toggleClass("active")
+    $(".flex-content").toggleClass("active");
   };
 
   function markRead(id) {
@@ -312,17 +355,48 @@ var Octobox = (function() {
     if($(".js-is_syncing").length){ refreshOnSync() }
     if($(".js-start_sync").length){ sync() }
     if($(".js-initial_sync").length){ sync() }
+
+    window.onpopstate = function(event) {
+      if(event.state.thread){
+        $.get(event.state.thread, function(data){
+          $('#thread').html(data)
+        });
+      }
+    };
   };
+
+  var deleteMe = function(ids){
+    $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
+      resetCursorAfterRowsRemoved(ids);
+      updateFavicon();
+    });
+  }
 
   var deleteSelected = function(){
     if (getDisplayedRows().length === 0) return;
     var rows = getMarkedOrCurrentRows();
     rows.addClass("blur-action");
     var ids = getIdsFromRows(rows);
-    $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
-      resetCursorAfterRowsRemoved(ids);
-      updateFavicon();
+    delete(ids);
+  }
+
+  var deleteThread = function() {
+    var id = $('#notification-thread').data('id');
+    deleteMe(id);
+  } ;
+
+  var viewThread = function() {
+    history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
+    $.get($(this).attr('href'), function(data){
+      if (data["error"] != null) {
+        $(".header-flash-messages").empty();
+        notify(data["error"], "danger")
+      } else {
+        $('#thread').html(data)
+      }
     });
+    openThread();
+    return false;
   }
 
   // private methods
@@ -409,7 +483,10 @@ var Octobox = (function() {
   var escPressed = function(e) {
     if ($("#help-box").is(":visible")) {
       $("#help-box").modal("hide");
-    } else {
+    } else if($(".flex-main").hasClass("show-thread")){
+      closeThread();
+    }
+    else{
       clearFilters();
     }
   };
@@ -464,7 +541,7 @@ var Octobox = (function() {
     88:  markCurrent,      // x
     89:  toggleArchive,    // y
     69:  toggleArchive,    // e
-    77:  mute,             // m
+    77:  muteSelected,     // m
     13:  openCurrentLink,  // Enter
     79:  openCurrentLink,  // o
     191: openModal,        // ?
@@ -479,19 +556,26 @@ var Octobox = (function() {
   return {
     moveCursorToClickedRow: moveCursorToClickedRow,
     checkAll: checkAll,
-    mute: mute,
+    muteThread: muteThread,
+    muteSelected: muteSelected,
     markReadSelected: markReadSelected,
-    archive: archive,
-    unarchive: unarchive,
+    archiveSelected: archiveSelected,
+    unarchiveSelected: unarchiveSelected,
     toggleSelectAll: toggleSelectAll,
     sync: sync,
     markRowCurrent: markRowCurrent,
+    closeThread: closeThread,
+    openThread: openThread,
+    archiveThread: archiveThread,
+    unarchiveThread: unarchiveThread,
     toggleStarClick: toggleStarClick,
     changeArchive: changeArchive,
     initialize: initialize,
     removeCurrent: removeCurrent,
     toggleOffCanvas: toggleOffCanvas,
     markRead: markRead,
-    deleteSelected: deleteSelected
+    deleteSelected: deleteSelected,
+    deleteThread: deleteThread,
+    viewThread: viewThread
   }
 })();

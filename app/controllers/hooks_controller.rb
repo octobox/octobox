@@ -23,7 +23,7 @@ class HooksController < ApplicationController
     when 'github_app_authorization'
       SyncGithubAppAuthorizationWorker.perform_async_if_configured(payload['sender']['id'])
     when 'marketplace_purchase'
-      MarketplacePurchaseWorker.perform_async_if_configured(payload)
+      MarketplacePurchaseWorker.perform_async_if_configured(payload)  if ['purchased', 'cancelled', 'changed'].include?(payload['action'])
     when 'status'
       SyncStatusWorker.perform_async_if_configured(payload['sha'], payload['name'])
     when 'repository'
