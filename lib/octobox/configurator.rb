@@ -131,7 +131,12 @@ module Octobox
     end
 
     def app_url
-      "#{github_domain}/apps/#{app_slug}"
+      "#{github_domain}/#{app_path}/#{app_slug}"
+    end
+
+    def app_path
+      env_value = ENV['GITHUB_APP_PATH'].blank? ? nil : ENV['GITHUB_APP_PATH']
+      @app_path || env_value || 'apps'
     end
 
     def app_slug
@@ -169,6 +174,11 @@ module Octobox
       @github_app_jwt || ENV['GITHUB_APP_JWT']
     end
     attr_writer :github_app_jwt
+
+    def include_comments
+      @include_comments || env_boolean('INCLUDE_COMMENTS')
+    end
+    attr_writer :include_comments
 
     private
 

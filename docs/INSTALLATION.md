@@ -13,8 +13,8 @@ in your GitHub settings for Octobox to work.
 * [Deployment to OpenShift Online](#deployment-to-openshift-online)
 * [Encryption Key](#encryption-key)
 * [Local installation](#local-installation)
-* [Using Docker](#using-docker)
-* [Using reverse proxy](#using-reverse-proxy)
+* [Using Docker](#using-docker-and-docker-compose)
+* [Using reverse proxy](#using-a-reverse-proxy)
 
 ### Configuration
 
@@ -137,70 +137,69 @@ Finally you can boot the rails app:
 rails s
 ```
 
-## Using Docker
+## Using Docker and Docker Compose
 
-### Using Docker Compose
-
-You can use Docker to run Octobox in development.
+You can use Docker to run Octobox in development or production!
 
 First, [install Docker](https://docs.docker.com/engine/installation/). If you've got run macOS or Windows, Docker for Mac/Windows makes this really easy.
 
 > If you have Windows Home Edition, you'll need to download and run [Docker Toolbox](https://www.docker.com/products/docker-toolbox).
 
-Second, download the `docker-compose.yml` file from [here](https://raw.githubusercontent.com/octobox/octobox/master/docker-compose.yml)
+### Trying out Octobox
 
-Then, run:
-
-```bash
-GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up --build
-```
-
-Octobox will be running on [http://localhost:3000](http://localhost:3000).
-
-**Note**: You can add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
-
-
-**Note**: If you want to help with the development of this project you should clone the code, and then run:
+If you're just giving Octobox a try, you can simply download the
+`docker-compose.yml` file from
+[here](https://raw.githubusercontent.com/octobox/octobox/master/docker-compose.yml), then run:
 
 ```bash
-GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose -f docker-compose-dev.yml up --build
+$ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up --build
 ```
 
+This will pull the latest image from Docker Hub and set everything up! Octobox will be running in a development configuration on [http://localhost:3000](http://localhost:3000).
 
-### Production environment
+**Note**: You can add environment variables such as `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
 
-First, Create a network interface
+### Configuring a development environment
 
-```bash
-docker network create octobox-network
+If you've cloned the Octobox repository and are looking to contribute to the
+project, you'll want to build your own image with your local source code. To do
+that, you can override the `docker-compose.yml` configuration by adding a
+`docker-compose.override.yml` with the following:
+
+```yaml
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
 ```
 
-Second, download and run postgres instance
+Using `docker-compose up` automatically merges the override file in to the base configuration.
 
-```bash
-docker run -d --network octobox-network --name=database.service.octobox.internal -e POSTGRES_PASSWORD=development -v pg_data:/var/lib/postgresql/data postgres:9.6-alpine
-```
+### Configuring a production environment
 
-**Note**: you should name your database instance `database.service.octobox.internal` so that `octobox` container can connect to it.
+The `docker-compose.yml` file provided is for a _development_ configuration;
+there are are a number of things you'll want to configure differently for
+production use, like setting the Rails application for production and setting
+up a reverse proxy such as Apache or Nginx to serve static assets. You can use the
+`docker-compose.yml` file as an example to write your own or simply override
+the existing configuration with `docker-compose.override.yml`. Both the
+override file and `docker-compose.production.yml` are gitignored.
 
-Then, run the following command to download the latest docker image and start octobox in the background.
-
-```bash
-docker run -d --network octobox-network --name=octobox -e OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY=my_key RAILS_ENV=development -e GITHUB_CLIENT_ID=yourclientid -e GITHUB_CLIENT_SECRET=yourclientsecret -e OCTOBOX_DATABASE_PASSWORD=development -e OCTOBOX_DATABASE_NAME=postgres -e OCTOBOX_DATABASE_USERNAME=postgres -e OCTOBOX_DATABASE_HOST=database.service.octobox.internal  -p 3000:3000 octoboxio/octobox:latest
-```
-
-Octobox will be running on [http://localhost:3000](http://localhost:3000).
+For more about override files and merging configurations, see [https://docs.docker.com/compose/extends/](https://docs.docker.com/compose/extends/)
 
 ### Upgrading docker image:
 
 1. Pull the latest image using the command `docker pull octoboxio/octobox:latest` or `docker-compose pull` if you are using docker-compose.
 2. Restart your running container using the command `docker restart octobox` or `docker-compose restart` if you are using docker-compose.
 
-## Using reverse proxy
+## Using a reverse proxy
 
-If you want to use a public domain name to access your local Octobox deployment, you will need to set up a reverse proxy
-(e.g. Apache, Nginx). Information about the domain name needs to be properly passed to Octobox, in order not to
-interfere with the OAuth flow.
+If you want to use a public domain name to access your local Octobox
+deployment, you will need to set up a reverse proxy (e.g. Apache, Nginx).
+Information about the domain name needs to be properly passed to Octobox, in
+order not to interfere with the OAuth flow.
 
 ### Example Nginx configuration
 
@@ -221,6 +220,11 @@ server {
   }
 }
 ```
+
+Note that this is only an example; there are numerous ways to configure Nginx
+depending on your circumstances. For example, in a production environment
+you'll also want to configure Nginx to serve static assets and pass all other
+requests to the application server.
 
 # Configuration
 
@@ -385,8 +389,8 @@ Due to a restriction in the GitHub App API, you'll need to create both an [Oauth
 Then create a new GitHub App, <https://github.com/settings/apps/new>, with the following settings:
 
 - Homepage URL: the domain you plan to run the app on (or http://localhost:3000)
-- User authorization callback URL: The domain plus `/auth/githubapp`, i.e. http://myoctoboxdomain.com/auth/githubapp
-- Setup URL: Same as the User authorization callback URL i.e. http://myoctoboxdomain.com/auth/githubapp
+- User authorization callback URL: The domain plus `/auth/githubapp/callback`, i.e. http://myoctoboxdomain.com/auth/githubapp/callback
+- Setup URL: The domain plus `/auth/githubapp`, i.e. http://myoctoboxdomain.com/auth/githubapp
 - Redirect on update: ✔
 - Webhook URL: The domain plus `/hooks/github`, i.e. http://myoctoboxdomain.com/hooks/github
 - Webhook secret: generate a password and paste it in here and save for later

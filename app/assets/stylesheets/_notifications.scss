@@ -47,7 +47,7 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-up(md) {
+@mixin add-borders{
   .table-notifications tr td:first-child {
     border-left: 2px solid $list-group-bg;
   }
@@ -65,7 +65,28 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-up(md) {
+@mixin remove-borders{
+  .table-notifications tr td:first-child {
+    border-left: 0;
+  }
+  .table-notifications tr:hover td:first-child {
+    border-left: 0;
+  }
+  .table-notifications tr.active td:first-child {
+    border-left: 0;
+  }
+  .table-notifications tr.active:hover td:first-child {
+    border-left: 0;
+  }
+  td.current {
+    border-left: 0 !important;
+  }
+}
+
+@mixin regular-table{
+  
+  @include add-borders;
+
   @each $item in $notification-items{
     .notification-#{$item}{
       text-overflow: ellipsis;
@@ -111,7 +132,7 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-down(sm) {
+@mixin responsive-table{
   .table-notifications {
     table,
     thead,
@@ -160,8 +181,8 @@ $notification-items: (
       left: 10px;
     }
     .notification-checkbox {
-      top: 32px;
-      left: 10px;
+      top: 48px;
+      left: 4px;
     }
     .notification-star {
       top: 85px;
@@ -200,5 +221,21 @@ $notification-items: (
       right: 10px;
     }
   }
+}
 
+@include media-breakpoint-up(xxxl){
+  @include regular-table; 
+}
+
+@include media-breakpoint-down(xxl) {
+  @include regular-table; 
+  .flex-main.show-thread{
+    @include remove-borders;
+    @include responsive-table;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  @include remove-borders;
+  @include responsive-table;
 }
