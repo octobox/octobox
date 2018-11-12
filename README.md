@@ -84,6 +84,12 @@ You can also install the cross-browser [Octobox Web Extension](https://github.co
 
 <img width="739" alt="screenshot 2018-11-12 at 14 32 38" src="https://user-images.githubusercontent.com/158833/48353900-6046e600-e688-11e8-9325-eaaa30f4190e.png">
 
+## Viewing comment threads
+
+Octobox's thread view support is currently in public beta. To enable it select 'on octobox' from the 'Open notifications' menu in `/settings`. 
+
+Threads need to be synchronised in order to view them in Octobox. Some notifications will still show the :link-external: icon from the notification window if they do not have an associated thread or have yet to synchronise one. 
+
 ## Keyboard shortcuts
 
 You can use keyboard shortcuts to navigate and perform certain actions:
