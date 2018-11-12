@@ -80,9 +80,9 @@ You can also install the cross-browser [Octobox Web Extension](https://github.co
 
 ## Requirements
 
-[Web notifications](https://github.com/settings/notifications) must be enabled in your GitHub settings for Octobox to work.
+[Web notifications](https://github.com/settings/notifications) must be enabled in your GitHub settings for Octobox to work. To receive vulnerability notifications you must enable these also. 
 
-<img width="757" alt="Notifications settings screen" src="https://cloud.githubusercontent.com/assets/1060/21509954/3a01794c-cc86-11e6-9bbc-9b33b55f85d1.png">
+<img width="739" alt="screenshot 2018-11-12 at 14 32 38" src="https://user-images.githubusercontent.com/158833/48353900-6046e600-e688-11e8-9325-eaaa30f4190e.png">
 
 ## Keyboard shortcuts
 
