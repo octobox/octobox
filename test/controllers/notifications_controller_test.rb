@@ -8,6 +8,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     stub_fetch_subject_enabled(value: false)
     stub_notifications_request
     stub_repository_request
+    stub_comments_requests
     @user = create(:user)
   end
 
