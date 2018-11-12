@@ -36,4 +36,22 @@ class Repository < ApplicationRecord
       last_synced_at: Time.current
     })
   end
+
+  def sync_subjects
+    UpdateRepoSubjectsWorker.perform_async_if_configured(self.id)
+  end
+
+  def sync_subjects_in_foreground
+    subject_urls = notifications.subjectable.distinct.pluck(:subject_url)
+    client = app_installation.github_client
+    subject_urls.each do |subject_url|
+      begin
+        remote_subject = client.get(subject_url)
+        SyncSubjectWorker.perform_async_if_configured(remote_subject.to_h)
+      rescue Octokit::ClientError => e
+        Rails.logger.warn("\n\n\033[32m[#{Time.current}] WARNING -- #{e.message}\033[0m\n\n")
+        nil
+      end
+    end
+  end
 end
