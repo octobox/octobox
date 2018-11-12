@@ -88,7 +88,7 @@ You can also install the cross-browser [Octobox Web Extension](https://github.co
 
 Octobox's thread view support is currently in public beta. To enable it select 'on octobox' from the 'Open notifications' menu in `/settings`. 
 
-Threads need to be synchronised in order to view them in Octobox. Some notifications will still show the :link-external: icon from the notification window if they do not have an associated thread or have yet to synchronise one. 
+Threads need to be synchronised in order to view them in Octobox. Some notifications will still show the `:link-external:` icon from the notification window if they do not have an associated thread or have yet to synchronise one. 
 
 ## Keyboard shortcuts
 
