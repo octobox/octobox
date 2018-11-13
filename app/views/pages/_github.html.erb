@@ -1,7 +1,7 @@
-<div class="pricing card shadow p-3 bg-white rounded text-muted">
+<div class="pricing card shadow p-3 bg-white rounded">
   <%= render('pages/ribbon')%>
   <div class="card-body">
-  	<p class='text-muted'>GitHub Marketplace - coming soon</p>
+  	<p class='text-muted'>GitHub Marketplace</p>
     <h5 class="card-title">Support the company</h5>
     <h6 class="card-subtitle mb-2 text-muted">Buy from the GitHub marketplace.</h6>
     <p class="card-text">Private repository access</p>
@@ -10,7 +10,7 @@
 	  	<span class="price pr-2">$100</span>
 	  	<span class="text-small text-muted d-block mt-1 mt-md-0">/ month</span>
 	  </div>
-	  <a href='#' title='Coming soon' data-toggle='tooltip' class='btn btn-success w-100 disabled'>Purchase on GitHub</a>
+	  <a href='<%= Octobox.config.marketplace_url %>' class='btn btn-success w-100'>Subscribe on GitHub</a>
 	  <p class='text-muted'><small>Next: confirm your purchase on GitHub</small></p>
   </div>
 </div>
