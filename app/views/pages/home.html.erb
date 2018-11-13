@@ -1,9 +1,9 @@
 <div class="container readable">
-  
+
   <h1 class="text-center mt-5"><%= octobox_round(80) %> <span class='align-middle'>Octobox</span></h1>
   <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3>
   <h5 class='text-center font-weight-light'>
-      <%= number_to_human Notification.count %> notifications managed, and counting &#8230 
+      <%= number_to_human Notification.count %> notifications managed, and counting &#8230
   </h5>
   <div class='container readable text-center'>
     <%= image_tag 'screenshot.png', class: 'screenshot mt-3', alt: 'Octobox Screenshot' %>
@@ -58,11 +58,11 @@
           </div>
           <div class="media-body">
             <h5>Filter all the things</h5>
-            Filter notifications by notification type, action, state and reason and keep notifications from bots alongside your regular label, author and assignees.
+            Filter notifications by repository, organisation, type, action, state, CI status and reason and keep notifications from bots alongside your regular labels, author and assignees.
           </div>
         </div>
       </div>
-    </div>          
+    </div>
     <div class="card shadow-sm mb-3">
       <div class="card-body">
         <div class="media">
@@ -87,7 +87,7 @@
             Navigate, triage and manage your notifications like a pro using Gmail-inspired keyboard shortcuts for every function, no mouse required.
           </div>
         </div>
-      </div>      
+      </div>
     </div>
     <div class="card shadow-sm mb-3">
       <div class="card-body">
@@ -113,7 +113,7 @@
         <%= render('pages/opencollective')%>
         <%= render('pages/github')%>
       </div>
-      <p class='text-large'>Wondering why there are two options? <a href='/pricing#why'>Read more about our pricing strategy</a>.</p> 
+      <p class='text-large'>Wondering why there are two options? <a href='/pricing#why'>Read more about our pricing strategy</a>.</p>
 
       <h3 id='users' class='pt-4'>Used by developers from</h3>
       <div class="row mt-4">
