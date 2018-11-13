@@ -81,6 +81,10 @@ body {
   max-width: 48rem;
 }
 
+.pricing.card{
+  margin: 1rem;
+}
+
 .footer {
   text-align: center;
   color: $text-muted;
@@ -90,6 +94,13 @@ body {
 }
 
 @mixin responsive{
+
+  .container{
+    padding: 0 1rem;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .flex-main{
     height: 100%;
     overflow-y: scroll;
@@ -108,11 +119,6 @@ body {
     }
   }
 
-  .text-content{
-    padding: 0 15px;
-    
-  }
-
   .flex-sidebar {
     position: absolute;
     // enable momentum scrolling on mobile safari
@@ -122,6 +128,10 @@ body {
     top: 0;
     width: $sidebar-width;
     left: -$sidebar-width;
+  }
+
+  .pricing.card{
+    margin: 1rem 0;
   }
 }
 
