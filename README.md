@@ -6,7 +6,7 @@ Octobox helps you manage your GitHub notifications efficiently so you can spend 
 
 - **Starred notifications** - Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
 
-- **Filter all the things** - Filter notifications by notification type, action, state and reason and keep notifications from bots alongside your regular label, author and assignees.
+- **Filter all the things** - Filter notifications by repository, organisation, type, action, state, CI status and reason and keep notifications from bots alongside your regular labels, author and assignees.
 
 - **Search with prefix filters** - No more Jedi mind tricks. Combine a wide range of powerful search filters help you get straight to the notification you're looking for and focus on just what you need.
 
