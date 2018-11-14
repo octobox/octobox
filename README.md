@@ -82,7 +82,7 @@ You can also install the cross-browser [Octobox Web Extension](https://github.co
 
 [Web notifications](https://github.com/settings/notifications) must be enabled in your GitHub settings for Octobox to work. To receive vulnerability notifications, you must enable them as well.
 
-<img width="739" alt="screenshot 2018-11-12 at 14 32 38" src="/docs/assets/48353900-6046e600-e688-11e8-9325-eaaa30f4190e.png">
+<img width="739" alt="screenshot 2018-11-12 at 14 32 38" src="/docs/assets/notification-settings.png">
 
 ## Viewing comment threads
 
