@@ -121,7 +121,7 @@ GEM
     github-markup (3.0.1)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    guard (2.14.2)
+    guard (2.15.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
       lumberjack (>= 1.0.12, < 2.0)
