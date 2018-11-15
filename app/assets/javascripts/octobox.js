@@ -156,6 +156,7 @@ var Octobox = (function() {
     $.post("/notifications/mark_read_selected" + location.search, {"id[]": getIdsFromRows(rows)}).done(function () {
       rows.removeClass("blur-action");
       rows.removeClass("active");
+      rows.find("input[type=checkbox]").prop('checked', false);
       updateFavicon();
     })
   };
