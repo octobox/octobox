@@ -75,9 +75,11 @@
   }
 }
 
-.list-group-flush .list-group-item{
-  padding: 0rem;
-  border: 0;
+.pricing.card{
+  .list-group-flush .list-group-item{
+    padding: 0rem;
+    border: 0;
+  }
 }
 
 .select-all {
