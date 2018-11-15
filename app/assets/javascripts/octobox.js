@@ -366,30 +366,27 @@ var Octobox = (function() {
     };
   };
 
-  var deleteMe = function(ids){
-    $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
-      resetCursorAfterRowsRemoved(ids);
-      updateFavicon();
-    });
+  var deleteNotifications = function(ids){
+    var result = confirm("Are you sure you want to delete?");
+    if (result) {
+      $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
+        resetCursorAfterRowsRemoved(ids);
+        updateFavicon();
+      });
+    }
   }
 
   var deleteSelected = function(){
-    var result = confirm("Are you sure you want to delete?");
-    if (result) {
-      if (getDisplayedRows().length === 0) return;
-      var rows = getMarkedOrCurrentRows();
-      rows.addClass("blur-action");
-      var ids = getIdsFromRows(rows);
-      delete(ids);
-    }
+    if (getDisplayedRows().length === 0) return;
+    var rows = getMarkedOrCurrentRows();
+    rows.addClass("blur-action");
+    var ids = getIdsFromRows(rows);
+    deleteNotifications(ids);
   }
 
   var deleteThread = function() {
-    var result = confirm("Are you sure you want to delete?");
-    if (result) {
-      var id = $('#notification-thread').data('id');
-      deleteMe(id);
-    }
+    var id = $('#notification-thread').data('id');
+    deleteNotifications(id);
   } ;
 
   var viewThread = function() {
