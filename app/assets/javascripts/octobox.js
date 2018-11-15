@@ -374,16 +374,22 @@ var Octobox = (function() {
   }
 
   var deleteSelected = function(){
-    if (getDisplayedRows().length === 0) return;
-    var rows = getMarkedOrCurrentRows();
-    rows.addClass("blur-action");
-    var ids = getIdsFromRows(rows);
-    delete(ids);
+    var result = confirm("Are you sure you want to delete?");
+    if (result) {
+      if (getDisplayedRows().length === 0) return;
+      var rows = getMarkedOrCurrentRows();
+      rows.addClass("blur-action");
+      var ids = getIdsFromRows(rows);
+      delete(ids);
+    }
   }
 
   var deleteThread = function() {
-    var id = $('#notification-thread').data('id');
-    deleteMe(id);
+    var result = confirm("Are you sure you want to delete?");
+    if (result) {
+      var id = $('#notification-thread').data('id');
+      deleteMe(id);
+    }
   } ;
 
   var viewThread = function() {
