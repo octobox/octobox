@@ -21,7 +21,7 @@ class AppInstallation < ApplicationRecord
         app_installation_id: self.id
       })
 
-      repository.notifications.includes(:user, :subject, :repository).find_each{|n| n.update_subject(true) }
+      repository.sync_subjects
     end
   end
 

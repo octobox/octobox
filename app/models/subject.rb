@@ -2,6 +2,7 @@ class Subject < ApplicationRecord
   has_many :notifications, foreign_key: :subject_url, primary_key: :url
   has_many :labels, dependent: :delete_all
   has_many :users, through: :notifications
+  has_many :comments, dependent: :delete_all
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_one :app_installation, through: :repository
 
@@ -85,6 +86,14 @@ class Subject < ApplicationRecord
     end
   end
 
+  def author_url_path
+    if bot_author?
+      "/apps/#{BOT_AUTHOR_REGEX.match(author)[1]}"
+    else
+      "/#{author}"
+    end
+  end
+
   private
 
   def assign_status(remote_status)
@@ -96,6 +105,7 @@ class Subject < ApplicationRecord
   end
 
   def download_status
+    return unless github_client
     github_client.combined_status(repository_full_name, sha)
   rescue Octokit::ClientError
     nil
@@ -117,5 +127,9 @@ class Subject < ApplicationRecord
     ids = users.pluck(:id)
     ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
     ids.uniq
+  end
+
+  def bot_author?
+    BOT_AUTHOR_REGEX.match?(author)
   end
 end

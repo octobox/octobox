@@ -1,9 +1,14 @@
+//add xxl and xxxl breakpoints
+@import 'breakpoints';
+
 // bootstrap
 @import 'bootstrap-custom';
 
 // custom components and colors
 @import 'variables';
 @import 'badges';
+@import 'ribbons';
+@import 'buttons';
 @import 'labels';
 @import 'fills';
 
@@ -43,6 +48,7 @@
 .card-notifications {
   margin-bottom: 20px;
   border-radius: 0;
+  border-top: 0;
   .card-header {
     padding: 6px 8px;
     border-radius: 0;
@@ -63,11 +69,17 @@
 
 .card-header{
   background: mix($black, $card-bg, 3%);
+  &.sticky-top{
+    padding: 6px 8px;
+    border-radius: 0;
+  }
 }
 
-.list-group-flush .list-group-item{
-  padding: 0rem;
-  border: 0;
+.pricing.card{
+  .list-group-flush .list-group-item{
+    padding: 0rem;
+    border: 0;
+  }
 }
 
 .select-all {

@@ -1,21 +1,33 @@
+# This file contains a *development* configuration for running Octobox.
+#
+# * You can use this file as-is to give Octobox a try on your local machine; it pulls
+#   images from Docker Hub and uses the default 'development' environment.
+#
+# * You can use this file as an example for your own production configuration, either
+#   by overriding it or just creating your own from scratch. 'docker-compose.override.yml'
+#   is gitignored for your convenience.
+#
+# * Similarly, if you're a developer who has cloned the Octobox repository to
+#   actively develop Octobox, you can override this file by adding the following to
+#   a docker-compose.override.yml:
+#
+#   version: '3'
+#   services:
+#     app:
+#       build:
+#         context: .
+#         dockerfile: Dockerfile
+#
+# This will build your own image from your local filesystem to test changes.
+# Using `$ docker-compose up` will automatically merge the override file in to
+# this one.
+#
 version: '3'
 services:
-  database.service.octobox.internal:
-    image: postgres:9.6-alpine
-    environment:
-      - POSTGRES_PASSWORD=development
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    networks:
-      - internal
-  redis.service.octobox.internal:
-    image: redis:3.2-alpine
-    networks:
-      - internal
   app:
     image: octoboxio/octobox:latest
     ports:
-      - 3000:3000
+      - "3000:3000"
     environment:
       - RAILS_ENV=development
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
@@ -24,7 +36,24 @@ services:
       - OCTOBOX_DATABASE_USERNAME=postgres
       - OCTOBOX_DATABASE_PASSWORD=development
       - OCTOBOX_DATABASE_HOST=database.service.octobox.internal
-      - REDIS_URL=redis.service.octobox.internal
+      - REDIS_URL=redis://redis.service.octobox.internal
+    networks:
+      - internal
+    depends_on:
+      - database.service.octobox.internal
+      - redis.service.octobox.internal
+
+  database.service.octobox.internal:
+    image: postgres:9.6-alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    environment:
+      - POSTGRES_PASSWORD=development
+
+  redis.service.octobox.internal:
+    image: redis:3.2-alpine
     networks:
       - internal
 

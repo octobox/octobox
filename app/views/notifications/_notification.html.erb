@@ -46,7 +46,10 @@
     <% end %>
   </td>
   <td class='notification-subject'>
-    <%= link_to notification.subject_title, notification.web_url, target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: 'link', onclick: "Octobox.markRead(#{notification.id})", title: notification.title %>
+    <%= link_to notification_link(notification), target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: 'subject-link link', onclick: "Octobox.markRead(#{notification.id})", data:{toggle:(notification.display_thread? ? 'showthread' : nil)}, title: notification.title do %>
+        <%= notification.subject_title%>
+        <%= octicon('link-external', class:'text-primary') unless notification.display_thread? %>
+    <% end %>
 
     <% if notification.display_subject? %>
       <% if notification.subject %>
@@ -93,11 +96,11 @@
           <%= octicon('archive', height: 15) %>
         <% end %>
       <% end %>
-      <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute' ) do %>
+      <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute', 'data-confirm': "Are you sure you want to mute?") do %>
         <%= octicon('mute', height: 15) %>
       <% end %>
       <% if notification.archived? %>
-        <%= link_to(delete_selected_notifications_path(id: notification.id), class: 'ml-1', method: :post, 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Delete' ) do %>
+        <%= link_to(delete_selected_notifications_path(id: notification.id), class: 'ml-1', method: :post, 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Delete', 'data-confirm': "Are you sure you want to delete?") do %>
           <%= octicon('trashcan', height: 15) %>
         <% end %>
       <% end %>

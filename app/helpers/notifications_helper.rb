@@ -101,6 +101,22 @@ module NotificationsHelper
     filters.merge(override)
   end
 
+  def mute_button
+    function_button('Mute', 'mute', "mute", 'Mute notification', false)
+  end
+
+  def delete_button
+    function_button("Delete", 'trashcan', "delete", 'Delete notification', false)
+  end
+
+  def archive_button
+    function_button("Archive", 'checklist', "archive_toggle archive", 'Archive', false)
+  end
+
+  def unarchive_button
+    function_button("Unarchive", 'inbox', "archive_toggle unarchive", 'Unarchive notification', false)
+  end
+
   def mute_selected_button
     function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items')
   end
@@ -130,8 +146,8 @@ module NotificationsHelper
     end if cur_selected < total
   end
 
-  def function_button(title, octicon, css_class, tooltip)
-    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
+  def function_button(title, octicon, css_class, tooltip, hidden=true)
+    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark #{'hidden-button' if hidden}", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
       octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-md-inline-block ml-1')
     end
   end
@@ -273,4 +289,35 @@ module NotificationsHelper
     octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
   end
 
+  def notification_button(subject_type, state = nil)
+    state = nil unless display_subject?
+    return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
+    SUBJECT_TYPES[subject_type]
+  end
+
+  def notification_button_title(subject_type, state = nil)
+    return subject_type.underscore.humanize if state.blank?
+    "#{state.underscore.humanize}"
+  end
+
+  def notification_button_color(state)
+    {
+      'open' => 'btn-open',
+      'closed' => 'btn-closed',
+      'merged' => 'btn-merged'
+    }[state]
+  end
+
+  def parse_markdown(str)
+    return if str.blank?
+    GitHub::Markup.render('.md', str)
+  end
+
+  def notification_link(notification)
+    notification.display_thread? ? notification_url(notification, filtered_params) : notification.web_url
+  end
+
+  def display_thread?
+    Octobox.include_comments? && current_user.display_comments
+  end
 end

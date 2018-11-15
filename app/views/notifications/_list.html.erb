@@ -1,0 +1,102 @@
+<div class="card card-notifications justify-content-between">
+  <div class="card-header sticky-top">
+    <% if @notifications.to_a.any? %>
+      <div class="per-page btn-group float-right d-block" data-toggle="tooltip" data-placement="left" title="Notifications per page">
+        <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= @per_page %>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right text-right">
+          <% %w(20 40 60 80 100).map do |pagination_interval| %>
+            <%= link_to pagination_interval, root_path(filtered_params(per_page: pagination_interval.to_i)), class: "dropdown-item #{'active' if @per_page == pagination_interval.to_i}" %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="btn btn-sm btn-link help float-right d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
+      <%= octicon 'keyboard', :height => 16 %>
+    </div>
+    <button id='sidebar_toggle' type="button" class="d-inline-block d-xl-none btn btn-sm btn-outline-dark" data-toggle="offcanvas" aria-label='Toggle sidebar'>
+      <%= octicon 'three-bars', :height => 16 %>
+    </button>
+    <% if @notifications.to_a.any? %>
+      <div class="custom-control custom-checkbox select-all d-inline-block">
+        <input id="select_all" type="checkbox" class='custom-control-input js-select_all' aria-label='Select All'>
+        <%= label_tag "select_all", '', class: "custom-control-label" %>
+      </div>
+      <%= select_all_button(@cur_selected, @total) %>
+    <% end %>
+    <%= link_to sync_notifications_path(filters), class: "btn btn-sm btn-outline-dark js-sync #{'js-async' if Octobox.background_jobs_enabled?}", 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync' do %>
+      <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync? || current_user.syncing?}" %>
+    <% end %>
+    <%= archive_selected_button unless archive_selected? %>
+    <%= unarchive_selected_button unless inbox_selected? %>
+    <%= mute_selected_button %>
+    <%= mark_read_selected_button %>
+    <%= delete_selected_button if archive_selected? %>
+    <%= render 'filter-list' %>
+    <% if current_user.last_synced_at %>
+      <span class='text-muted d-none d-sm-inline-block'>
+        <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+      </span>
+    <% end %>
+  </div>
+
+  <table class='table table-hover table-notifications js-table-notifications mb-0 <%= 'filtered' if any_active_filters? %>' data-refresh-interval=<%= current_user.effective_refresh_interval %>>
+    <% if @notifications.to_a.any? %>
+      <%= render partial: 'notification', collection: @notifications %>
+    <% elsif initial_sync? %>
+      <div class="py-5 text-center js-initial_sync">
+        <%= octicon 'cloud-download', height: 32, class: 'blankslate-icon' %>
+        <h3>Syncing your notifications for the first time...</h3>
+        <p>This might take a minute or two</p>
+      </div>
+      <% unless current_user.syncing? %>
+        <span class="js-start_sync"><!-- This causes a sync to occur --></span>
+      <% end %>
+    <% elsif no_url_filter_parameters_present %>
+      <div class="py-5 text-center">
+        <%= octicon 'thumbsup', height: 32, class: 'blankslate-icon' %>
+        <h3>You're in the clear!</h3>
+        <p>There are no notifications that need your attention.</p>
+        <p>
+          <%= link_to sync_notifications_path(filters), method: :post, class: 'btn btn-outline-secondary sync' do %>
+            <%= octicon 'sync', height: 18 %>
+            <span class='ml-1'>Refresh</span>
+          <% end %>
+        </p>
+        <% unless current_user.notifications.any? %>
+          <p><i>Expecting notifications? Make sure <a href="<%= Octobox.config.github_domain %>/settings/notifications">Web Notifications</a> are enabled on your GitHub account.</i></p>
+        <% end %>
+        <% if current_user.last_synced_at %>
+          <p class='text-muted'>
+            <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+          </p>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="py-5 text-center">
+        <%= octicon 'search', height: 32, class: 'blankslate-icon' %>
+        <h3>Nothing to see here.</h3>
+        <p>You can always try <%= link_to 'refreshing', sync_notifications_path(filters), method: :post %> or <%= link_to 'removing filters', root_path %>.</p>
+        <% unless current_user.notifications.any? %>
+          <p><i>Expecting notifications? Make sure <a href="<%= Octobox.config.github_domain %>/settings/notifications">Web Notifications</a> are enabled on your GitHub account.</i></p>
+        <% end %>
+        <% if current_user.last_synced_at %>
+          <p class='text-muted'>
+            <small>Last sync: <%= time_ago_in_words current_user.last_synced_at %> ago</small>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+  </table>
+  <div class="card-footer d-block d-lg-none mb-0">
+      <%= paginate @notifications, left: 1, right: 1, window: 0 %>
+  </div>
+</div>
+
+<div class="d-none d-md-flex justify-content-center">
+  <%= paginate @notifications %>
+</div>
+
+<%= render 'layouts/footer' %>

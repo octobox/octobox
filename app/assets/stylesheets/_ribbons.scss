@@ -1,0 +1,27 @@
+.ribbon {
+   position: absolute;
+   right: -1px; top: -1px;
+   z-index: 1;
+   overflow: hidden;
+   width: 100px; height: 100px; 
+   text-align: right;
+}
+.ribbon span {
+   font-size: 10px;
+   color: #fff; 
+   text-transform: uppercase; 
+   text-align: center;
+   font-weight: bold; line-height: 20px;
+   transform: rotate(45deg);
+   width: 125px; display: block;
+   background: theme-color('info');
+   box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+   position: absolute;
+   top: 26px; right: -25px;
+}
+
+@each $color, $value in $theme-colors{
+	.ribbon.#{$color} span{
+		background: $value;
+	}
+}
