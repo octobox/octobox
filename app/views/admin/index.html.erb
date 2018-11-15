@@ -168,6 +168,26 @@
             </div>
           </div>
         </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm  mb-3">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <%= octicon 'gift', height: 50 %>
+                  </div>
+                  <div class="media-body text-right">
+                    <h3>
+                      <%= number_to_human SubscriptionPurchase.active.free_trial.count %>
+                    </h3>
+                    <span>Free Trials</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       <% end %>
     <% end %>
   </div>
