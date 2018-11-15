@@ -3,11 +3,11 @@
   "description": "Untangle your GitHub Notifications",
   "repository": "https://github.com/octobox/octobox",
   "scripts": {
-    "postdeploy": "bundle exec rake db:migrate",
     "dokku": {
       "predeploy": "bundle exec rake assets:precompile",
       "postdeploy": "bundle exec rake db:migrate"
-    }
+    },
+    "postdeploy": "bundle exec rake db:migrate"
   },
   "keywords": [
     "github",
