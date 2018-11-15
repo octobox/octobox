@@ -13,8 +13,8 @@ in your GitHub settings for Octobox to work.
 * [Deployment to OpenShift Online](#deployment-to-openshift-online)
 * [Encryption Key](#encryption-key)
 * [Local installation](#local-installation)
-* [Using Docker](#using-docker)
-* [Using reverse proxy](#using-reverse-proxy)
+* [Using Docker](#using-docker-and-docker-compose)
+* [Using reverse proxy](#using-a-reverse-proxy)
 
 ### Configuration
 
@@ -167,7 +167,7 @@ that, you can override the `docker-compose.yml` configuration by adding a
 `docker-compose.override.yml` with the following:
 
 ```yaml
-version '3'
+version: '3'
 services:
   app:
     build:

@@ -127,11 +127,19 @@ module Octobox
     attr_writer :source_repo
 
     def app_install_url
-      "#{app_url}/installations/new"
+      if marketplace_url.present?
+        marketplace_url
+      else
+        "#{app_url}/installations/new"
+      end
     end
 
     def app_url
-      "#{github_domain}/#{app_path}/#{app_slug}"
+      if marketplace_url.present?
+        marketplace_url
+      else
+        "#{github_domain}/#{app_path}/#{app_slug}"
+      end
     end
 
     def app_path
@@ -174,6 +182,11 @@ module Octobox
       @github_app_jwt || ENV['GITHUB_APP_JWT']
     end
     attr_writer :github_app_jwt
+
+    def include_comments
+      @include_comments || env_boolean('INCLUDE_COMMENTS')
+    end
+    attr_writer :include_comments
 
     private
 

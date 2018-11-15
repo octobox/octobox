@@ -5,7 +5,8 @@ class SubscriptionPurchase < ApplicationRecord
   validates :account_id, presence: true
   validates :subscription_plan_id, presence: true
 
-  scope :active, -> { where('unit_count > 0') }
+  scope :active,     -> { where('unit_count > 0') }
+  scope :free_trial, -> { where(on_free_trial: true) }
 
   def active?
     unit_count > 0

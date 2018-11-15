@@ -12,6 +12,12 @@ $notification-colors: (
 	"pending": $notification-pending	
 );
 
+//extend theme colours for anything that generates afterward
+$theme-colors: map-merge(
+  $theme-colors,
+  $notification-colors
+);
+
 $label-default-color: #333 !default;
 $label-default-text-color: #fff !default;
 $label-muted-color: #ccc !default;

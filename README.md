@@ -6,7 +6,7 @@ Octobox helps you manage your GitHub notifications efficiently so you can spend 
 
 - **Starred notifications** - Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
 
-- **Filter all the things** - Filter notifications by notification type, action, state and reason and keep notifications from bots alongside your regular label, author and assignees.
+- **Filter all the things** - Filter notifications by repository, organisation, type, action, state, CI status and reason and keep notifications from bots alongside your regular labels, author and assignees.
 
 - **Search with prefix filters** - No more Jedi mind tricks. Combine a wide range of powerful search filters help you get straight to the notification you're looking for and focus on just what you need.
 
@@ -80,9 +80,15 @@ You can also install the cross-browser [Octobox Web Extension](https://github.co
 
 ## Requirements
 
-[Web notifications](https://github.com/settings/notifications) must be enabled in your GitHub settings for Octobox to work.
+[Web notifications](https://github.com/settings/notifications) must be enabled in your GitHub settings for Octobox to work. To receive vulnerability notifications, you must enable them as well.
 
-<img width="757" alt="Notifications settings screen" src="https://cloud.githubusercontent.com/assets/1060/21509954/3a01794c-cc86-11e6-9bbc-9b33b55f85d1.png">
+<img width="739" alt="screenshot 2018-11-12 at 14 32 38" src="/docs/assets/notification-settings.png">
+
+## Viewing comment threads
+
+Octobox's thread view support is currently in public beta. To enable it select 'on octobox' from the 'Open notifications' menu in `/settings`. 
+
+Threads need to be synchronised in order to view them in Octobox. Some notifications will still show the `:link-external:` icon from the notification window if they do not have an associated thread or have yet to synchronise one. 
 
 ## Keyboard shortcuts
 
