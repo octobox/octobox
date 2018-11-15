@@ -5,6 +5,7 @@ require 'sidekiq-status/web'
 if Octobox.config.sidekiq_schedule_enabled?
   require 'sidekiq-scheduler/web'
 end
+require 'sidekiq_unique_jobs/web'
 require 'admin_constraint'
 
 Rails.application.routes.draw do
