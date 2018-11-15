@@ -143,10 +143,13 @@ var Octobox = (function() {
   };
 
   var mute = function(ids){
-    $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
-      resetCursorAfterRowsRemoved(ids);
-      updateFavicon();
-    });
+    var result = confirm("Are you sure you want to mute?");
+    if (result) {
+      $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
+        resetCursorAfterRowsRemoved(ids);
+        updateFavicon();
+      });
+    }
   };
 
   var markReadSelected = function() {
