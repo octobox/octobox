@@ -96,7 +96,7 @@
           <%= octicon('archive', height: 15) %>
         <% end %>
       <% end %>
-      <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute' ) do %>
+      <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute', 'data-confirm': "Are you sure you want to mute?") do %>
         <%= octicon('mute', height: 15) %>
       <% end %>
       <% if notification.archived? %>
