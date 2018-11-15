@@ -260,21 +260,21 @@ var Octobox = (function() {
 
   var initShiftClickCheckboxes = function() {
     // handle shift+click multiple check
-    var notificationCheckboxes = $("input.archive[type='checkbox']");
-    notificationCheckboxes.click(function(e) {
+    var notificationCheckboxes = $(".notification-checkbox .custom-checkbox input");
+    $(".notification-checkbox .custom-checkbox").click(function(e) {
       if(!lastCheckedNotification) {
-        lastCheckedNotification = this;
+        lastCheckedNotification = $(this).find("input");
         return;
       }
 
       if(e.shiftKey) {
-        var start = notificationCheckboxes.index(this);
+        var start = notificationCheckboxes.index($(this).find("input"));
         var end = notificationCheckboxes.index(lastCheckedNotification);
-
-        notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop("checked", lastCheckedNotification.checked);
+        var selected = notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1)
+        selected.prop("checked", lastCheckedNotification.prop("checked"));
       }
 
-      lastCheckedNotification = this;
+      lastCheckedNotification = $(this).find("input");
     });
   };
 
