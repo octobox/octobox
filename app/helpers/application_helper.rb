@@ -40,9 +40,9 @@ module ApplicationHelper
   end
 
   def used_by_orgs
-    %w(kubernetes facebook nodejs angular Microsoft dotnet
+    %w(kubernetes facebook nodejs angular Microsoft google
        elastic src-d alphagov vuejs rails algolia
-       shopify WordPress golang)
+       shopify WordPress golang opencollective travis-ci github Financial-Times rust-lang)
   end
 
   def current_theme
