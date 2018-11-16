@@ -291,7 +291,11 @@ module NotificationsHelper
 
   def subject_with_number(notification)
     if notification.subject_type == 'Issue' || 'PullRequest'
-      "<span class=\"notification-number\">##{notification.subject_number}</span> #{notification.subject_title}".html_safe
+      capture do
+        concat content_tag(:span, "##{notification.subject_number}", class: "notification-number")
+        concat " "
+        concat notification.subject_title
+      end
     else
       notification.subject_title
     end
