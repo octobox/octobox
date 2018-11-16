@@ -15,7 +15,7 @@ $notification-items: (
   }
   .active {
     font-weight: bold;
-    background-color: $list-group-action-active-bg;
+    background-color: mix($list-group-action-active-bg, $body-bg, 50%);
   }
 }
 
@@ -51,11 +51,11 @@ $notification-items: (
   .table-notifications tr td:first-child {
     border-left: 2px solid $list-group-bg;
   }
-  .table-notifications tr:hover td:first-child {
-    border-left: 2px solid $list-group-action-hover-color;
-  }
   .table-notifications tr.active td:first-child {
     border-left: 2px solid $list-group-action-active-bg;
+  }
+  .table-notifications tr:hover td:first-child {
+    border-left: 2px solid $list-group-action-hover-color;
   }
   .table-notifications tr.active:hover td:first-child {
     border-left: 2px solid $list-group-action-hover-color;
@@ -167,6 +167,11 @@ $notification-items: (
       }
       .buttons{
         display: none;
+      }
+      &:hover, &:focus{
+        .notification-date small{
+          display: inline;
+        }
       }
     }
     .notification-checkbox,

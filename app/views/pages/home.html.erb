@@ -1,11 +1,11 @@
 <div class="container readable">
-  
-  <h1 class="text-center mt-5"><%= octobox_round(80) %> <span class='align-middle'>Octobox</span></h1>
+
+  <h1 class="text-center pt-5"><%= octobox_round(80) %> <span class='align-middle'>Octobox</span></h1>
   <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3>
   <h5 class='text-center font-weight-light'>
-      <%= number_to_human Notification.count %> notifications managed, and counting &#8230 
+      <%= number_to_human Notification.count %> notifications managed, and counting &#8230
   </h5>
-  <div class='container readable text-center'>
+  <div class='text-center'>
     <%= image_tag 'screenshot.png', class: 'screenshot mt-3', alt: 'Octobox Screenshot' %>
     <p>
       <%= link_to login_path, class: 'btn btn-outline-dark btn-lg' do %>
@@ -21,130 +21,123 @@
     </p>
   </div>
 
-  <div class="container readable my-5">
-    <h3 id='features'>Features</h3>
-    <h5 class='mb-5 text-muted font-weight-light'>Octobox helps you manage your GitHub notifications efficiently so you can spend less time managing and more time getting things done:</h4>
-     <div class="card shadow-sm mb-3">
-      <div class="card-body">
-        <div class="media">
-          <div class="align-self-center mr-4">
-            <%= octicon 'inbox', height: 50 %>
-          </div>
-          <div class="media-body">
-            <h5>Don't lose track</h5>
-            Octobox adds an extra "archived" state to each notification so you can mark it as "done". If anything happens on an archived thread, issue or PR, Octobox will move it back into your inbox.
-          </div>
+  
+  <h3 id='features' class='pt-5'>Features</h3>
+  <h5 class='mb-5 text-muted font-weight-light'>Octobox helps you manage your GitHub notifications efficiently so you can spend less time managing and more time getting things done:</h4>
+   <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="media">
+        <div class="align-self-center mr-4">
+          <%= octicon 'inbox', height: 50 %>
+        </div>
+        <div class="media-body">
+          <h5>Don't lose track</h5>
+          Octobox adds an extra "archived" state to each notification so you can mark it as "done". If anything happens on an archived thread, issue or PR, Octobox will move it back into your inbox.
         </div>
       </div>
     </div>
-    <div class="card shadow-sm mb-3">
-      <div class="card-body">
-        <div class="media">
-          <div class="align-self-center mr-4">
-            <%= octicon 'star', height: 50 %>
-          </div>
-          <div class="media-body">
-            <h5>Starred notifications</h5>
-            Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
-          </div>
+  </div>
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="media">
+        <div class="align-self-center mr-4">
+          <%= octicon 'star', height: 50 %>
+        </div>
+        <div class="media-body">
+          <h5>Starred notifications</h5>
+          Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
         </div>
       </div>
     </div>
-    <div class="card shadow-sm mb-3">
-      <div class="card-body">
-        <div class="media">
-          <div class="align-self-center mr-4">
-            <%= octicon 'settings', height: 50 %>
-          </div>
-          <div class="media-body">
-            <h5>Filter all the things</h5>
-            Filter notifications by notification type, action, state and reason and keep notifications from bots alongside your regular label, author and assignees.
-          </div>
+  </div>
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="media">
+        <div class="align-self-center mr-4">
+          <%= octicon 'settings', height: 50 %>
         </div>
-      </div>
-    </div>          
-    <div class="card shadow-sm mb-3">
-      <div class="card-body">
-        <div class="media">
-          <div class="align-self-center mr-4">
-            <%= octicon 'search', height: 50 %>
-          </div>
-          <div class="media-body">
-            <h5>Search with prefix filters</h5>
-            No more Jedi mind tricks. Combine a wide range of powerful search filters help you get straight to the notification you're looking for and focus on just what you need.
-          </div>
+        <div class="media-body">
+          <h5>Filter all the things</h5>
+          Filter notifications by repository, organisation, type, action, state, CI status and reason and keep notifications from bots alongside your regular labels, author and assignees.
         </div>
       </div>
     </div>
-    <div class="card shadow-sm mb-3">
-      <div class="card-body">
-        <div class="media">
-          <div class="align-self-center mr-4">
-            <%= octicon 'keyboard', height: 50 %>
-          </div>
-          <div class="media-body">
-            <h5>Built for keyboard warriors</h5>
-            Navigate, triage and manage your notifications like a pro using Gmail-inspired keyboard shortcuts for every function, no mouse required.
-          </div>
+  </div>
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="media">
+        <div class="align-self-center mr-4">
+          <%= octicon 'search', height: 50 %>
         </div>
-      </div>      
+        <div class="media-body">
+          <h5>Search with prefix filters</h5>
+          No more Jedi mind tricks. Combine a wide range of powerful search filters help you get straight to the notification you're looking for and focus on just what you need.
+        </div>
+      </div>
     </div>
-    <div class="card shadow-sm mb-3">
-      <div class="card-body">
-        <div class="media">
-          <div class="align-self-center mr-4">
-            <%= octicon 'mark-github', height: 50 %>
-          </div>
-          <div class="media-body">
-            <h5>Open for everyone</h5>
-            Octobox developers use Octobox to develop Octobox. 100% developed and managed in the open on GitHub under a FLOSS license.
-          </div>
+  </div>
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="media">
+        <div class="align-self-center mr-4">
+          <%= octicon 'keyboard', height: 50 %>
+        </div>
+        <div class="media-body">
+          <h5>Built for keyboard warriors</h5>
+          Navigate, triage and manage your notifications like a pro using Gmail-inspired keyboard shortcuts for every function, no mouse required.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="media">
+        <div class="align-self-center mr-4">
+          <%= octicon 'mark-github', height: 50 %>
+        </div>
+        <div class="media-body">
+          <h5>Open for everyone</h5>
+          Octobox developers use Octobox to develop Octobox. 100% developed and managed in the open on GitHub under a FLOSS license.
         </div>
       </div>
     </div>
   </div>
 
   <% if Octobox.octobox_io? %>
-    <div class="container readable mb-5">
+    <h3 id='pricing' class='pt-5'>Pricing</h3>
+    <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects. To add private repository access to your personal or organisation's account:</p>
+    <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>
+      <%= render('pages/opencollective')%>
+      <%= render('pages/github')%>
+    </div>
+    <p class='text-large'>Wondering why there are two options? <a href='/pricing#why'>Read more about our pricing strategy</a>.</p>
 
-      <h3 id='pricing' class='pt-4'>Pricing</h3>
-      <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects. To add private repository access to your personal or organisation's account:</p>
-      <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>
-        <%= render('pages/opencollective')%>
-        <%= render('pages/github')%>
+    <h3 id='users' class='pt-4'>Used by developers from</h3>
+    <div class="row mt-4">
+      <div class="col">
+        <% used_by_orgs.each do |org| %>
+          <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block mr-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
+        <% end %>
       </div>
-      <p class='text-large'>Wondering why there are two options? <a href='/pricing#why'>Read more about our pricing strategy</a>.</p> 
-
-      <h3 id='users' class='pt-4'>Used by developers from</h3>
-      <div class="row mt-4">
-        <div class="col">
-          <% used_by_orgs.each do |org| %>
-            <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block mr-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
-          <% end %>
-        </div>
-      </div>
-
     </div>
   <% end %>
 
-  <div class="container readable text-large mb-5">
 
-    <h3 id='run-your-own' class='pt-4'>Run your own Octobox</h3>
 
-    <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox? Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
+  <h3 id='run-your-own' class='pt-5'>Run your own Octobox</h3>
 
-    <h3 id='contribute' class='pt-4'>Contribute</h3>
+  <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox? Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
 
-    <p>Octobox is open source and the source code is hosted at <a href="https://github.com/octobox/octobox">GitHub</a>. If you have an idea for a feature or enhancement, open an <a href="https://github.com/octobox/octobox/issues/new">issue</a> or a pull request.</p>
+  <h3 id='contribute' class='pt-4'>Contribute</h3>
 
-    <p>If you want to contribute you'll find we're a welcoming bunch. If you don't know where to start, take a look at the issues tagged as <a href="https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22">"Help Wanted"</a>.</p>
+  <p>Octobox is open source and the source code is hosted at <a href="https://github.com/octobox/octobox">GitHub</a>. If you have an idea for a feature or enhancement, open an <a href="https://github.com/octobox/octobox/issues/new">issue</a> or a pull request.</p>
 
-    <p>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
+  <p>If you want to contribute you'll find we're a welcoming bunch. If you don't know where to start, take a look at the issues tagged as <a href="https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22">"Help Wanted"</a>.</p>
 
-    <p>Finally, if you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
+  <p>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
 
-  </div>
+  <p class='mb-5'>Finally, if you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
+
+  <%= render 'layouts/footer'%>
 </div>
-
-<%= render 'layouts/footer'%>
 <script async defer src="https://buttons.github.io/buttons.js"></script>

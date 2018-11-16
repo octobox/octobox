@@ -105,6 +105,7 @@ class Subject < ApplicationRecord
   end
 
   def download_status
+    return unless github_client
     github_client.combined_status(repository_full_name, sha)
   rescue Octokit::ClientError
     nil

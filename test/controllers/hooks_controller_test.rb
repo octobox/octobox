@@ -19,12 +19,14 @@ class HooksControllerTest < ActionController::TestCase
   end
 
   test 'installation_repositories webhook payload' do
+    stub_access_tokens_request
     app = create(:app_installation, github_id: 293804)
     send_webhook 'installation_repositories'
     assert_equal Repository.count, 1
   end
 
   test 'installation webhook payload' do
+    stub_access_tokens_request
     send_webhook 'installation'
     assert_equal AppInstallation.count, 1
   end

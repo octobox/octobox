@@ -143,10 +143,13 @@ var Octobox = (function() {
   };
 
   var mute = function(ids){
-    $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
-      resetCursorAfterRowsRemoved(ids);
-      updateFavicon();
-    });
+    var result = confirm("Are you sure you want to mute?");
+    if (result) {
+      $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
+        resetCursorAfterRowsRemoved(ids);
+        updateFavicon();
+      });
+    }
   };
 
   var markReadSelected = function() {
@@ -156,6 +159,7 @@ var Octobox = (function() {
     $.post("/notifications/mark_read_selected" + location.search, {"id[]": getIdsFromRows(rows)}).done(function () {
       rows.removeClass("blur-action");
       rows.removeClass("active");
+      rows.find("input[type=checkbox]").prop('checked', false);
       updateFavicon();
     })
   };
@@ -256,21 +260,21 @@ var Octobox = (function() {
 
   var initShiftClickCheckboxes = function() {
     // handle shift+click multiple check
-    var notificationCheckboxes = $("input.archive[type='checkbox']");
-    notificationCheckboxes.click(function(e) {
+    var notificationCheckboxes = $(".notification-checkbox .custom-checkbox input");
+    $(".notification-checkbox .custom-checkbox").click(function(e) {
       if(!lastCheckedNotification) {
-        lastCheckedNotification = this;
+        lastCheckedNotification = $(this).find("input");
         return;
       }
 
       if(e.shiftKey) {
-        var start = notificationCheckboxes.index(this);
+        var start = notificationCheckboxes.index($(this).find("input"));
         var end = notificationCheckboxes.index(lastCheckedNotification);
-
-        notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1).prop("checked", lastCheckedNotification.checked);
+        var selected = notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1)
+        selected.prop("checked", lastCheckedNotification.prop("checked"));
       }
 
-      lastCheckedNotification = this;
+      lastCheckedNotification = $(this).find("input");
     });
   };
 
@@ -365,11 +369,14 @@ var Octobox = (function() {
     };
   };
 
-  var deleteMe = function(ids){
-    $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
-      resetCursorAfterRowsRemoved(ids);
-      updateFavicon();
-    });
+  var deleteNotifications = function(ids){
+    var result = confirm("Are you sure you want to delete?");
+    if (result) {
+      $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
+        resetCursorAfterRowsRemoved(ids);
+        updateFavicon();
+      });
+    }
   }
 
   var deleteSelected = function(){
@@ -377,12 +384,12 @@ var Octobox = (function() {
     var rows = getMarkedOrCurrentRows();
     rows.addClass("blur-action");
     var ids = getIdsFromRows(rows);
-    delete(ids);
+    deleteNotifications(ids);
   }
 
   var deleteThread = function() {
     var id = $('#notification-thread').data('id');
-    deleteMe(id);
+    deleteNotifications(id);
   } ;
 
   var viewThread = function() {
