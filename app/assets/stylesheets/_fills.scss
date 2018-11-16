@@ -96,17 +96,18 @@ svg{
     fill: $nav-pills-link-active-color !important;
 }
 
-.octicon-star {
+.table-notifications .octicon-star {
   fill: $icon-star-fill !important;
   stroke: $icon-star-stroke !important;
   cursor: pointer;
   &:hover {
     fill: $icon-star-hover-fill;
   }
-  &.star-active {
-    fill: $icon-star-active-fill !important;
-    stroke: $icon-star-active-stroke !important;
-  }
+}
+
+.star-active {
+  fill: $icon-star-active-fill !important;
+  stroke: $icon-star-active-stroke !important;
 }
 
 .star-active .octicon-star{

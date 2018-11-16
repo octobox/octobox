@@ -14,6 +14,10 @@ if Octobox.background_jobs_enabled?
     end
     Sidekiq::Status.configure_server_middleware config, expiration: 60.minutes
     Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
+
+    config.death_handlers << ->(job, _ex) do
+      SidekiqUniqueJobs::Digests.del(digest: job['unique_digest']) if job['unique_digest']
+    end
   end
 
   Sidekiq.configure_client do |config|
