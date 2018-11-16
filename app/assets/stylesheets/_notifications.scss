@@ -244,3 +244,7 @@ $notification-items: (
   @include remove-borders;
   @include responsive-table;
 }
+
+a span.notification-number {
+  font-weight: normal;
+}
