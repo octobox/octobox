@@ -16,6 +16,10 @@ if Octobox.background_jobs_enabled?
     Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
   end
 
+  config.death_handlers << ->(job, _ex) do
+    SidekiqUniqueJobs::Digests.del(digest: job['unique_digest']) if job['unique_digest']
+  end
+
   Sidekiq.configure_client do |config|
     config.redis = { url: Octobox.config.redis_url }
     Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
