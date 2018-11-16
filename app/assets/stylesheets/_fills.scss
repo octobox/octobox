@@ -48,7 +48,7 @@ svg{
   & svg{
     fill: $color;
   }
-  &:hover, 
+  &:hover,
   &:hover svg {
     fill: $color-hover;
   }
@@ -97,8 +97,8 @@ svg{
 }
 
 .table-notifications .octicon-star {
-  fill: $icon-star-fill !important;
-  stroke: $icon-star-stroke !important;
+  fill: $icon-star-fill;
+  stroke: $icon-star-stroke;
   cursor: pointer;
   &:hover {
     fill: $icon-star-hover-fill;
