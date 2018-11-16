@@ -289,6 +289,18 @@ module NotificationsHelper
     octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
   end
 
+  def subject_with_number(notification)
+    if notification.subject_type == 'Issue' || 'PullRequest'
+      capture do
+        concat content_tag(:span, "##{notification.subject_number}", class: "notification-number")
+        concat " "
+        concat notification.subject_title
+      end
+    else
+      notification.subject_title
+    end
+  end
+
   def notification_button(subject_type, state = nil)
     state = nil unless display_subject?
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
