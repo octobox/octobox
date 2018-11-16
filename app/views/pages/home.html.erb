@@ -21,10 +21,12 @@
     </p>
   </div>
 
-  
-  <h3 id='features' class='pt-5'>Features</h3>
-  <h5 class='mb-5 text-muted font-weight-light'>Octobox helps you manage your GitHub notifications efficiently so you can spend less time managing and more time getting things done:</h4>
-   <div class="card shadow-sm mb-3">
+  <h3 id='sound-like-you' class='pt-5'>Sound like you?</h3>
+  <p class='text-large'>You often wonder whether that issue you can't find was a figment of your imagination. You may even wake up in a cold sweat at the thought of hundreds of notifications landing in your inbox each morning.</p>
+
+  <p class='text-large'>Many developers, and even some GitHub staff, use email filters to manage their notifications. If you'd prefer to stay away from email then Octobox is for you:</p>
+
+  <div id='dont-lose-track' class="card shadow-sm mb-3">
     <div class="card-body">
       <div class="media">
         <div class="align-self-center mr-4">
@@ -37,20 +39,33 @@
       </div>
     </div>
   </div>
-  <div class="card shadow-sm mb-3">
+  <div id='star-notifications' class="card shadow-sm mb-3">
     <div class="card-body">
       <div class="media">
         <div class="align-self-center mr-4">
           <%= octicon 'star', height: 50 %>
         </div>
         <div class="media-body">
-          <h5>Starred notifications</h5>
+          <h5>Star notifications</h5>
           Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
         </div>
       </div>
     </div>
   </div>
-  <div class="card shadow-sm mb-3">
+  <div id='enhanced-notifications' class="card shadow-sm mb-3">
+    <div class="card-body">
+      <div class="media">
+        <div class="align-self-center mr-4">
+          <%= octicon 'telescope', height: 50 %>
+        </div>
+        <div class="media-body">
+          <h5>Enhanced notifications</h5>
+          Like notifictions, but better. With issue/pull-request status, CI status, labels and more shown alongside basic title, organisation, repo and type information. 
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id='filter-all-the-things' class="card shadow-sm mb-3">
     <div class="card-body">
       <div class="media">
         <div class="align-self-center mr-4">
@@ -63,7 +78,7 @@
       </div>
     </div>
   </div>
-  <div class="card shadow-sm mb-3">
+  <div id='search-with-prefix-filters' class="card shadow-sm mb-3">
     <div class="card-body">
       <div class="media">
         <div class="align-self-center mr-4">
@@ -76,7 +91,7 @@
       </div>
     </div>
   </div>
-  <div class="card shadow-sm mb-3">
+  <div id='built-for-keyboard-warriors' class="card shadow-sm mb-3">
     <div class="card-body">
       <div class="media">
         <div class="align-self-center mr-4">
@@ -89,23 +104,10 @@
       </div>
     </div>
   </div>
-  <div class="card shadow-sm mb-3">
-    <div class="card-body">
-      <div class="media">
-        <div class="align-self-center mr-4">
-          <%= octicon 'mark-github', height: 50 %>
-        </div>
-        <div class="media-body">
-          <h5>Open for everyone</h5>
-          Octobox developers use Octobox to develop Octobox. 100% developed and managed in the open on GitHub under a FLOSS license.
-        </div>
-      </div>
-    </div>
-  </div>
 
   <% if Octobox.octobox_io? %>
     <h3 id='pricing' class='pt-5'>Pricing</h3>
-    <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects. To add private repository access to your personal or organisation's account:</p>
+    <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects with basic notifications for private projects. To add <a href='#enhanced-notifications'>enhanced notifications</a> for private repositories to your organisation's account:</p>
     <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>
       <%= render('pages/opencollective')%>
       <%= render('pages/github')%>
@@ -126,17 +128,17 @@
 
   <h3 id='run-your-own' class='pt-5'>Run your own Octobox</h3>
 
-  <p>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox? Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
+  <p class='text-large'>The Octobox team hosts a shared instance of Octobox at <a href="https://octobox.io/">octobox.io</a>, but perhaps you're looking to host your own or get yourself set up to contribute to Octobox? Fantastic! There are a number of install options available to you, check out the <a href="https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md">installation guide</a>.</p>
 
   <h3 id='contribute' class='pt-4'>Contribute</h3>
 
-  <p>Octobox is open source and the source code is hosted at <a href="https://github.com/octobox/octobox">GitHub</a>. If you have an idea for a feature or enhancement, open an <a href="https://github.com/octobox/octobox/issues/new">issue</a> or a pull request.</p>
+  <p class='text-large'>Octobox is open source and the source code is hosted at <a href="https://github.com/octobox/octobox">GitHub</a>. If you have an idea for a feature or enhancement, open an <a href="https://github.com/octobox/octobox/issues/new">issue</a> or a pull request.</p>
 
-  <p>If you want to contribute you'll find we're a welcoming bunch. If you don't know where to start, take a look at the issues tagged as <a href="https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22">"Help Wanted"</a>.</p>
+  <p class='text-large'>If you want to contribute you'll find we're a welcoming bunch. If you don't know where to start, take a look at the issues tagged as <a href="https://github.com/octobox/octobox/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22">"Help Wanted"</a>.</p>
 
-  <p>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
+  <p class='text-large'>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
 
-  <p class='mb-5'>Finally, if you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
+  <p class='text-large mb-5'>Finally, if you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
 
   <%= render 'layouts/footer'%>
 </div>
