@@ -1,4 +1,5 @@
 $sidebar-width: 250px;
+$header-height: 63px;
 
 $notification-open: #5cb85c !default;
 $notification-closed: #d9534f !default;
@@ -9,7 +10,7 @@ $notification-colors: (
 	"open": $notification-open,
 	"closed": $notification-closed,
 	"merged": $notification-merged,
-	"pending": $notification-pending	
+	"pending": $notification-pending
 );
 
 //extend theme colours for anything that generates afterward
@@ -33,7 +34,7 @@ $text-colors: (
 	"light": theme-color("light"),
 	"subscribed": $label-subscribed-color,
 	"team_mention": $label-team_mention-color,
-	"security_alert": $label-security_alert-color 
+	"security_alert": $label-security_alert-color
 );
 
 $icon-private-repo-color: #dbab09 !default;

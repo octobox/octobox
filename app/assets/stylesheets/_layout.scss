@@ -29,7 +29,7 @@ body {
 
 .flex-content{
   display: flex;
-  height: calc(100vh - 56px);
+  height: calc(100vh - #{$header-height});
 }
 
 .alert{
@@ -74,7 +74,7 @@ body {
 }
 
 .nothing-here{
-  margin-top: calc((100vh - 56px - 96px)/2);
+  margin-top: calc((100vh - #{$header-height} - 96px)/2);
 }
 
 .readable{
