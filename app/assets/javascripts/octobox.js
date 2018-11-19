@@ -304,7 +304,6 @@ var Octobox = (function() {
       .fail(function(){
         $('#notification-thread').data('id') == id ? $('#thread').find('.toggle-star').toggleClass("star-active star-inactive") : null;
         $("#notification-"+id).find(".toggle-star").toggleClass("star-active star-inactive");
-        $(".header-flash-messages").empty();
         notify("Could not toggle star(s)", "danger");
       });
   };
@@ -504,13 +503,16 @@ var Octobox = (function() {
   };
 
   var notify = function(message, type) {
+    $(".header-flash-messages").remove();
     var alert_html = [
-      "<div class='alert alert-" + type + " fade show'>",
-      "   <button class='close' data-dismiss='alert'>x</button>",
-      message,
+      "<div class='flex-header header-flash-messages'>",
+      "  <div class='alert alert-" + type + " fade show'>",
+      "    <button class='close' data-dismiss='alert'>x</button>",
+             message,
+      "  </div>",
       "</div>"
     ].join("\n");
-    $(".header-flash-messages").append(alert_html);
+    $(".flex-header").after(alert_html);
   };
 
   var autoSync = function() {
