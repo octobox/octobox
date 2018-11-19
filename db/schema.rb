@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_30_143903) do
+ActiveRecord::Schema.define(version: 2018_11_19_121346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2018_10_30_143903) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["subject_id"], name: "index_comments_on_subject_id"
   end
 
   create_table "labels", force: :cascade do |t|
