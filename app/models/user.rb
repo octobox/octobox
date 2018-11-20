@@ -26,7 +26,7 @@ class User < ApplicationRecord
   }
   validates_with PersonalAccessTokenValidator
 
-  scope :not_recently_synced, -> { where('last_synced_at < ?', 1.minute.ago) }
+  scope :not_recently_synced, -> { where('last_synced_at < ?', 5.minutes.ago) }
 
   def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)
