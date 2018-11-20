@@ -145,9 +145,14 @@ var Octobox = (function() {
   var mute = function(ids){
     var result = confirm("Are you sure you want to mute?");
     if (result) {
-      $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
+      $.post( "/notifications/mute_selected" + location.search, { "id[]": ids})
+      .done(function() {
         resetCursorAfterRowsRemoved(ids);
         updateFavicon();
+      })
+      .fail(function(){
+        $(".header-flash-messages").empty();
+        notify("Could not mute notification(s)", "danger");
       });
     }
   };
@@ -156,12 +161,17 @@ var Octobox = (function() {
     if (getDisplayedRows().length === 0) return;
     var rows = getMarkedOrCurrentRows();
     rows.addClass("blur-action");
-    $.post("/notifications/mark_read_selected" + location.search, {"id[]": getIdsFromRows(rows)}).done(function () {
+    $.post("/notifications/mark_read_selected" + location.search, {"id[]": getIdsFromRows(rows)})
+    .done(function () {
       rows.removeClass("blur-action");
       rows.removeClass("active");
       rows.find("input[type=checkbox]").prop('checked', false);
       updateFavicon();
     })
+    .fail(function(){
+        $(".header-flash-messages").empty();
+        notify("Could not mark notification(s) read", "danger");
+    });
   };
 
   var toggleArchive = function() {
@@ -195,9 +205,14 @@ var Octobox = (function() {
   }
 
   var archive = function(ids, value){
-    $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } ).done(function() {
+    $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } )
+    .done(function() {
       resetCursorAfterRowsRemoved(ids);
       updateFavicon();
+    })
+    .fail(function(){
+      $(".header-flash-messages").empty();
+      notify("Could not archive notification(s)", "danger");
     });
   }
 
@@ -283,10 +298,14 @@ var Octobox = (function() {
   };
 
   var star = function(id){
-    console.log(id);
     $('#notification-thread').data('id') == id ? $('#thread').find('.toggle-star').toggleClass("star-active star-inactive") : null;
     $("#notification-"+id).find(".toggle-star").toggleClass("star-active star-inactive");
     $.post("/notifications/"+id+"/star")
+      .fail(function(){
+        $('#notification-thread').data('id') == id ? $('#thread').find('.toggle-star').toggleClass("star-active star-inactive") : null;
+        $("#notification-"+id).find(".toggle-star").toggleClass("star-active star-inactive");
+        notify("Could not toggle star(s)", "danger");
+      });
   };
 
   var changeArchive = function() {
@@ -337,8 +356,13 @@ var Octobox = (function() {
   };
 
   function markRead(id) {
-    $.post( "/notifications/"+id+"/mark_read").done(function() {
+    $.post( "/notifications/"+id+"/mark_read")
+    .done(function() {
       updateFavicon();
+    })
+    .fail(function(){
+      $(".header-flash-messages").empty();
+      notify("Could not mark notification(s) read", "danger");
     });
     $("#notification-"+id).removeClass("active");
   };
@@ -372,9 +396,14 @@ var Octobox = (function() {
   var deleteNotifications = function(ids){
     var result = confirm("Are you sure you want to delete?");
     if (result) {
-      $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
+      $.post("/notifications/delete_selected" + location.search, {"id[]": ids})
+      .done(function() {
         resetCursorAfterRowsRemoved(ids);
         updateFavicon();
+      })
+      .fail(function(){
+        $(".header-flash-messages").empty();
+        notify("Could not delete notification", "danger");
       });
     }
   }
@@ -474,13 +503,16 @@ var Octobox = (function() {
   };
 
   var notify = function(message, type) {
+    $(".header-flash-messages").remove();
     var alert_html = [
-      "<div class='alert alert-" + type + " fade show'>",
-      "   <button class='close' data-dismiss='alert'>x</button>",
-      message,
+      "<div class='flex-header header-flash-messages'>",
+      "  <div class='alert alert-" + type + " fade show'>",
+      "    <button class='close' data-dismiss='alert'>x</button>",
+             message,
+      "  </div>",
       "</div>"
     ].join("\n");
-    $(".header-flash-messages").append(alert_html);
+    $(".flex-header").after(alert_html);
   };
 
   var autoSync = function() {
