@@ -72,7 +72,7 @@
       </div>
     <% end %>
 
-    <% @notification.subject.comments.each do |comment| %>
+    <% @notification.subject.comments.order('created_at DESC').each do |comment| %>
       <div id="<%= 'comment-'+comment.id.to_s %>" class="card-comment card mt-3 ">
 
         <div class="card-header clickable media d-flex align-items-center text-muted" data-toggle='collapse' data-target=".comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
