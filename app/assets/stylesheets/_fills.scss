@@ -48,7 +48,7 @@ svg{
   & svg{
     fill: $color;
   }
-  &:hover, 
+  &:hover,
   &:hover svg {
     fill: $color-hover;
   }
@@ -96,22 +96,37 @@ svg{
     fill: $nav-pills-link-active-color !important;
 }
 
-.octicon-star {
-  fill: $icon-star-fill !important;
-  stroke: $icon-star-stroke !important;
+@mixin star-active{
+  fill: $icon-star-active-fill !important;
+  stroke: $icon-star-active-stroke !important;
+}
+
+@mixin star-fill{
+  fill: $icon-star-fill;
+  stroke: $icon-star-stroke;
   cursor: pointer;
-  &:hover {
-    fill: $icon-star-hover-fill;
-  }
-  &.star-active {
-    fill: $icon-star-active-fill !important;
-    stroke: $icon-star-active-stroke !important;
+  .star-active{
+    @include star-active;
   }
 }
 
+.table-notifications .octicon-star {
+  @include star-fill;
+  &:hover {
+    fill: $icon-star-hover-fill;
+  }
+}
+
+#thread .octicon-star{
+ @include star-fill;
+}
+
+.star-active {
+  @include star-active;
+}
+
 .star-active .octicon-star{
-  fill: $icon-star-active-fill !important;
-  stroke: $icon-star-active-stroke !important;
+  @include star-active;
 }
 
 .notification-open{

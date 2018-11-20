@@ -68,7 +68,12 @@ class Subject < ApplicationRecord
       sha: remote_subject.fetch('head', {})['sha'],
       body: remote_subject['body']
     })
+
+    return unless subject.persisted?
+
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
+    subject.update_comments if Octobox.include_comments?
+    subject.update_status
     subject.sync_involved_users
   end
 
@@ -94,6 +99,20 @@ class Subject < ApplicationRecord
     end
   end
 
+  def update_comments
+    remote_comments = download_comments
+    return unless remote_comments.present?
+    remote_comments.each do |remote_comment|
+      comments.find_or_create_by(github_id: remote_comment.id) do |comment|
+        comment.author = remote_comment.user.login
+        comment.body = remote_comment.body
+        comment.author_association = remote_comment.author_association
+        comment.created_at = remote_comment.created_at
+        comment.save
+      end
+    end
+  end
+
   private
 
   def assign_status(remote_status)
@@ -108,6 +127,13 @@ class Subject < ApplicationRecord
     return unless github_client
     github_client.combined_status(repository_full_name, sha)
   rescue Octokit::ClientError
+    nil
+  end
+
+  def download_comments
+    return unless github_client
+    github_client.get(url.gsub('/pulls/', '/issues/') + '/comments')
+  rescue Octokit::ClientError => e
     nil
   end
 

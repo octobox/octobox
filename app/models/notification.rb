@@ -6,7 +6,7 @@ class Notification < ApplicationRecord
   include Octobox::Notifications::SyncSubject
   include Octobox::Notifications::SyncRepository
 
-  SUBJECTABLE_TYPES = SUBJECT_TYPE_COMMIT_RELEASE + SUBJECT_TYPE_ISSUE_REQUEST.values
+  SUBJECTABLE_TYPES = SUBJECT_TYPE_COMMIT_RELEASE + SUBJECT_TYPE_ISSUE_REQUEST
 
   if DatabaseConfig.is_postgres?
     include PgSearch
@@ -163,6 +163,10 @@ class Notification < ApplicationRecord
   def upgrade_required?
     return nil unless repository.present?
     repository.private? && !repository.required_plan_available?
+  end
+
+  def subject_number
+    subject_url.scan(/\d+$/).first
   end
 
   def display_thread?
