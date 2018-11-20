@@ -177,7 +177,7 @@ class Notification < ApplicationRecord
 
   def github_client
     if app_installation.present?
-      app_installation.github_client
+      user.app_installation_client
     else
       user.github_client
     end
