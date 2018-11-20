@@ -72,13 +72,17 @@ class Subject < ApplicationRecord
     return unless subject.persisted?
 
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
-    subject.update_comments if Octobox.include_comments?
+    subject.update_comments if Octobox.include_comments? && subject.has_comments?
     subject.update_status
     subject.sync_involved_users if (subject.saved_changes.keys & subject.notifiable_fields).any?
   end
 
   def self.sync_status(sha, repository_full_name)
     where(repository_full_name: repository_full_name).find_by_sha(sha)&.update_status
+  end
+
+  def has_comments?
+     comment_count && comment_count > 0
   end
 
   def update_status
