@@ -18,4 +18,8 @@ class Comment < ApplicationRecord
   def bot_author?
     BOT_AUTHOR_REGEX.match?(author)
   end
+
+  def unread?(notification)
+    notification.last_read_at && DateTime.parse(notification.last_read_at) < created_at
+  end
 end
