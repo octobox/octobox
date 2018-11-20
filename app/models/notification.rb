@@ -31,6 +31,8 @@ class Notification < ApplicationRecord
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_many :labels, through: :subject
 
+  has_one :app_installation, through: :repository
+
   validates :subject_url, presence: true
   validates :archived, inclusion: [true, false]
 
@@ -171,5 +173,13 @@ class Notification < ApplicationRecord
 
   def display_thread?
     Octobox.include_comments? && subjectable? && subject.present? && user.display_comments?
+  end
+
+  def github_client
+    if app_installation.present?
+      app_installation.github_client
+    else
+      user.github_client
+    end
   end
 end

@@ -139,9 +139,9 @@ class Subject < ApplicationRecord
 
   def github_client
     if app_installation.present?
-      Octobox.installation_client(app_installation.github_id)
+      app_installation.github_client
     else
-      users.first&.subject_client
+      users.first&.github_client
     end
   end
 

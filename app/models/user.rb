@@ -93,12 +93,8 @@ class User < ApplicationRecord
     @github_client
   end
 
-  def subject_client
-    Octokit::Client.new(access_token: subject_token, auto_paginate: true)
-  end
-
-  def subject_token
-    app_token || effective_access_token
+  def app_installation_client
+    Octokit::Client.new(access_token: app_token, auto_paginate: true)
   end
 
   def github_avatar_url
@@ -123,7 +119,7 @@ class User < ApplicationRecord
 
   def sync_app_installation_access
     return unless github_app_authorized?
-    remote_installs = subject_client.find_user_installations(accept: 'application/vnd.github.machine-man-preview+json')
+    remote_installs = app_installation_client.find_user_installations(accept: 'application/vnd.github.machine-man-preview+json')
     app_installations = AppInstallation.where(github_id: remote_installs[:installations].map(&:id))
     app_installations.each do |app_installation|
       app_installation_permissions.find_or_create_by(app_installation_id: app_installation.id)
