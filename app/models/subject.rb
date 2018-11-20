@@ -74,7 +74,7 @@ class Subject < ApplicationRecord
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
     subject.update_comments if Octobox.include_comments?
     subject.update_status
-    subject.sync_involved_users
+    subject.sync_involved_users if (subject.saved_changes.keys & subject.notifiable_fields).any?
   end
 
   def self.sync_status(sha, repository_full_name)
@@ -111,6 +111,10 @@ class Subject < ApplicationRecord
         comment.save
       end
     end
+  end
+  
+  def notifiable_fields
+    ['state', 'assignees', 'locked', 'sha', 'comment_count']
   end
 
   private
