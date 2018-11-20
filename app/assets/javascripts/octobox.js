@@ -386,6 +386,9 @@ var Octobox = (function() {
 
     window.onpopstate = function(event) {
       if(event.state.thread){
+
+        $('#thread').html($('#loading').html())
+
         $.get(event.state.thread, function(data){
           $('#thread').html(data)
         });
@@ -423,6 +426,9 @@ var Octobox = (function() {
 
   var viewThread = function() {
     history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
+
+    $('#thread').html($('#loading').html())
+
     $.get($(this).attr('href'), function(data){
       if (data["error"] != null) {
         $(".header-flash-messages").empty();
