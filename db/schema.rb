@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_19_121346) do
+ActiveRecord::Schema.define(version: 2018_11_20_094340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 2018_11_19_121346) do
     t.datetime "updated_at", null: false
     t.integer "app_installation_id"
     t.index ["full_name"], name: "index_repositories_on_full_name", unique: true
+    t.index ["github_id"], name: "index_repositories_on_github_id"
   end
 
   create_table "subjects", force: :cascade do |t|
