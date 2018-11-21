@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     get '/admin', to: 'admin#index', as: :admin
   end
 
+  mount ActionCable.server => '/cable'
+
   get :login,  to: 'sessions#new'
   get :logout, to: 'sessions#destroy'
 

@@ -12,6 +12,12 @@ $notification-items: (
 .table-notifications {
   td{
     padding: 0.6rem;
+    &.notification-archived, .notification-repo{
+      padding: 0;
+      svg, small{
+        margin: 0.6rem;
+      }
+    }
   }
   .active {
     font-weight: bold;
