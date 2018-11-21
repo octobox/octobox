@@ -15,6 +15,7 @@ class Subject < ApplicationRecord
   validates :url, presence: true, uniqueness: true
 
   after_update :sync_involved_users
+  after_save :push_to_channels
 
   def update_labels(remote_labels)
     existing_labels = labels.to_a
@@ -37,6 +38,7 @@ class Subject < ApplicationRecord
     remote_label_ids = remote_labels.map{|l| l['id'] }
     deleted_labels = existing_labels.reject{|l| remote_label_ids.include?(l.github_id) }
     deleted_labels.each(&:destroy)
+    push_to_channels if existing_labels != labels.to_a
   end
 
   def sync_involved_users
@@ -116,12 +118,20 @@ class Subject < ApplicationRecord
       end
     end
   end
-  
+
   def notifiable_fields
     ['state', 'assignees', 'locked', 'sha', 'comment_count']
   end
 
+  def push_to_channels
+    notifications.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+  end
+
   private
+
+  def pushable_fields
+    ['state', 'status', 'body']
+  end
 
   def assign_status(remote_status)
     if remote_status.state == 'pending'
@@ -149,7 +159,7 @@ class Subject < ApplicationRecord
     if app_installation.present?
       Octobox.installation_client(app_installation.github_id)
     else
-      users.first&.subject_client
+      users.with_access_token.first&.subject_client
     end
   end
 
@@ -158,8 +168,8 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    ids = users.pluck(:id)
-    ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
+    ids = users.with_access_token.not_recently_synced.pluck(:id)
+    ids += repository.users.with_access_token.not_recently_synced.pluck(:id) if repository.present?
     ids.uniq
   end
 
