@@ -12,7 +12,7 @@ module Octobox
 
       def update_repository_in_foreground(force = false)
         return unless Octobox.config.subjects_enabled?
-        return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
+        return if !force && repository
 
         remote_repository = download_repository
 
