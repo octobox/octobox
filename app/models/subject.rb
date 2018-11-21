@@ -168,7 +168,7 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    ids = users.pluck(:id)
+    ids = users.not_recently_synced.pluck(:id)
     ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
     ids.uniq
   end
