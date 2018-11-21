@@ -5,7 +5,7 @@ module Octobox
 
       def update_repository(force = false)
         return unless Octobox.config.subjects_enabled?
-        return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
+        return if !force && repository
 
         UpdateRepositoryWorker.perform_async_if_configured(self.id, force)
       end
