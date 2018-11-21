@@ -26,7 +26,7 @@ module Octobox
         end
 
         if repository
-          repository.update_attributes({
+          repository.update({
             full_name: remote_repository.full_name,
             private: remote_repository.private,
             owner: remote_repository.owner[:login],
