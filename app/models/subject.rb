@@ -159,7 +159,7 @@ class Subject < ApplicationRecord
     if app_installation.present?
       Octobox.installation_client(app_installation.github_id)
     else
-      users.first&.subject_client
+      users.with_access_token.first&.subject_client
     end
   end
 
@@ -168,8 +168,8 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    ids = users.not_recently_synced.pluck(:id)
-    ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
+    ids = users.with_access_token.not_recently_synced.pluck(:id)
+    ids += repository.users.with_access_token.not_recently_synced.pluck(:id) if repository.present?
     ids.uniq
   end
 
