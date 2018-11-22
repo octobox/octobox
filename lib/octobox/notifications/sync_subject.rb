@@ -25,6 +25,14 @@ module Octobox
         Subject.sync(remote_subject.to_h.as_json)
       end
 
+      def github_client
+        if app_installation.present?
+          user.app_installation_client
+        else
+          user.github_client
+        end
+      end
+
       private
 
       def download_subject

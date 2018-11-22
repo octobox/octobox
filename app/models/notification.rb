@@ -174,12 +174,4 @@ class Notification < ApplicationRecord
   def display_thread?
     Octobox.include_comments? && subjectable? && subject.present? && user.display_comments?
   end
-
-  def github_client
-    if app_installation.present?
-      user.app_installation_client
-    else
-      user.github_client
-    end
-  end
 end
