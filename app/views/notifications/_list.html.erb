@@ -33,7 +33,7 @@
     <%= unarchive_selected_button unless inbox_selected? %>
     <%= mute_selected_button %>
     <%= mark_read_selected_button %>
-    <%= delete_selected_button if archive_selected? %>
+    <%= delete_selected_button unless inbox_selected? %>
     <%= render 'filter-list' %>
     <% if current_user.last_synced_at %>
       <span class='text-muted d-none d-sm-inline-block'>
