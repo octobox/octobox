@@ -6,7 +6,8 @@
           notification.id,
           false,
           title: (notification.archived ? 'Unarchive' : 'Archive'),
-          class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive')
+          class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive'),
+          autocomplete: "off"
         )
       %>
       <%= label_tag "notification_#{notification.id}", '', class: "custom-control-label" %>
@@ -44,7 +45,7 @@
     <% end %>
   </td>
   <td class='notification-subject'>
-    <%= link_to notification_link(notification), target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: 'subject-link link', onclick: "Octobox.markRead(#{notification.id})", data:{toggle:(notification.display_thread? ? 'showthread' : nil)}, title: notification.title do %>
+    <%= link_to notification_link(notification), target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: "subject-link link #{'thread-link' if notification.display_thread?}", onclick: "Octobox.markRead(#{notification.id})", data:{toggle:(notification.display_thread? ? 'showthread' : nil)}, title: notification.title do %>
         <%= subject_with_number(notification) %>
         <%= octicon('link-external', class:'text-primary') unless notification.display_thread? %>
     <% end %>
