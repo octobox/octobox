@@ -87,6 +87,10 @@ class Subject < ApplicationRecord
      comment_count && comment_count > 0
   end
 
+  def commentable?
+    !comment_count.nil?
+  end
+
   def update_status
     if sha.present?
       remote_status = download_status

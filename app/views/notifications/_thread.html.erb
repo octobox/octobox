@@ -89,5 +89,12 @@
         </div>
       </div>
     <% end %>
+
+    <% if @notification.subject.commentable? %>
+      <%= link_to @notification.subject.html_url+'#new_comment_field', target: :blank, class: 'btn btn-success mt-2 float-right' do %>
+        Reply on GitHub
+        <%= octicon('link-external', height: 18, class: 'ml-1') %>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
