@@ -6,7 +6,8 @@
           notification.id,
           false,
           title: (notification.archived ? 'Unarchive' : 'Archive'),
-          class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive')
+          class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive'),
+          autocomplete: "off"
         )
       %>
       <%= label_tag "notification_#{notification.id}", '', class: "custom-control-label" %>
