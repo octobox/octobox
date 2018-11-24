@@ -88,10 +88,15 @@ class User < ApplicationRecord
   end
 
   def github_client
-    unless defined?(@github_client) && effective_access_token == @github_client.access_token
-      @github_client = Octokit::Client.new(access_token: effective_access_token, auto_paginate: true)
-    end
-    @github_client
+    personal_access_token_client || access_token_client
+  end
+
+  def personal_access_token_client
+    @personal_access_token_client ||= Octokit::Client.new(access_token: personal_access_token, auto_paginate: true) if personal_access_tokens_enabled?
+  end
+
+  def access_token_client
+    @access_token_client ||= Octokit::Client.new(access_token: access_token, auto_paginate: true)
   end
 
   def app_installation_client
@@ -110,7 +115,7 @@ class User < ApplicationRecord
   end
 
   def effective_access_token
-    personal_access_tokens_enabled? ? personal_access_token : access_token
+    github_client.access_token
   end
 
   def masked_personal_access_token
