@@ -109,12 +109,16 @@ class User < ApplicationRecord
   end
 
   def effective_access_token
-    Octobox.personal_access_tokens_enabled? && personal_access_token.present? ? personal_access_token : access_token
+    personal_access_tokens_enabled? ? personal_access_token : access_token
   end
 
   def masked_personal_access_token
     personal_access_token.blank? ? '' :
     "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
+  end
+
+  def personal_access_tokens_enabled?
+    Octobox.personal_access_tokens_enabled? && personal_access_token.present?
   end
 
   def sync_app_installation_access

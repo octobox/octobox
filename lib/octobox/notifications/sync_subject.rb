@@ -26,7 +26,9 @@ module Octobox
       end
 
       def github_client
-        if app_installation.present?
+        if user.personal_access_tokens_enabled?
+          user.github_client
+        elsif app_installation.present?
           user.app_installation_client
         else
           user.github_client
