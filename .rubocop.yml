@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   DisabledByDefault: true
   TargetRubyVersion: 2.5
@@ -207,6 +209,8 @@ Metrics/ClassLength:
   Description: 'Avoid classes longer than 250 lines of code.'
   Enabled: true
   Max: 250
+  Exclude:
+    - 'test/**/*'
 
 Metrics/CyclomaticComplexity:
   Description: >-
