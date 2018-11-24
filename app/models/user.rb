@@ -92,7 +92,7 @@ class User < ApplicationRecord
   end
 
   def personal_access_token_client
-    @personal_access_token_client ||= Octokit::Client.new(access_token: personal_access_token, auto_paginate: true) if personal_access_tokens_enabled?
+    @personal_access_token_client ||= Octokit::Client.new(access_token: personal_access_token, auto_paginate: true) if personal_access_token_enabled?
   end
 
   def access_token_client
@@ -123,7 +123,7 @@ class User < ApplicationRecord
     "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
   end
 
-  def personal_access_tokens_enabled?
+  def personal_access_token_enabled?
     Octobox.personal_access_tokens_enabled? && personal_access_token.present?
   end
 
