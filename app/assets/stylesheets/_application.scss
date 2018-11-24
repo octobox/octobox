@@ -130,3 +130,9 @@
 .blur-action {
   opacity: .5;
 }
+
+@include media-breakpoint-down(lg){
+  .not-a-nav{
+    background-color: $body-bg;
+  }
+}

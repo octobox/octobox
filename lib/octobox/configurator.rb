@@ -188,6 +188,11 @@ module Octobox
     end
     attr_writer :include_comments
 
+    def push_notifications
+      @push_notifications || ENV['PUSH_NOTIFICATIONS']
+    end
+    attr_writer :push_notifications
+
     private
 
     def env_boolean(env_var_name)

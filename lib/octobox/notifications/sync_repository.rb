@@ -5,14 +5,14 @@ module Octobox
 
       def update_repository(force = false)
         return unless Octobox.config.subjects_enabled?
-        return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
+        return if !force && repository
 
         UpdateRepositoryWorker.perform_async_if_configured(self.id, force)
       end
 
       def update_repository_in_foreground(force = false)
         return unless Octobox.config.subjects_enabled?
-        return if !force && repository != nil && updated_at - repository.updated_at < 2.seconds
+        return if !force && repository
 
         remote_repository = download_repository
 
@@ -26,7 +26,7 @@ module Octobox
         end
 
         if repository
-          repository.update_attributes({
+          repository.update({
             full_name: remote_repository.full_name,
             private: remote_repository.private,
             owner: remote_repository.owner[:login],

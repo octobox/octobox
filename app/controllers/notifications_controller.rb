@@ -128,6 +128,8 @@ class NotificationsController < ApplicationController
     @previous = ids[position-1] unless position-1 < 0
     @next = ids[position+1] unless position+1 > ids.length
 
+    @comments = @notification.subject.comments.order('created_at ASC')
+
     render partial: "notifications/thread", layout: false if request.xhr?
   end
 

@@ -66,4 +66,4 @@ $(document).on('click', '.toggle-star', function() {
   Octobox.toggleStarClick($(this))
 });
 
-$(document).on('click', '.subject-link', Octobox.viewThread);
+$(document).on('click', '.thread-link', Octobox.viewThread);

@@ -156,10 +156,15 @@ module NotificationsHelper
     notification_param_keys.all?{|param| params[param].blank? }
   end
 
-  def notification_icon(subject_type, state = nil)
-    state = nil unless display_subject?
+  def notification_icon(notification)
+    subject_type = notification.subject_type
+    state = notification.user.github_app_authorized? ? notification.state : nil
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
+    subject_type_icon(subject_type)
+  end
+
+  def subject_type_icon(subject_type)
     SUBJECT_TYPES[subject_type]
   end
 

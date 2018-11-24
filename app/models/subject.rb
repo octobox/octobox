@@ -15,6 +15,7 @@ class Subject < ApplicationRecord
   validates :url, presence: true, uniqueness: true
 
   after_update :sync_involved_users
+  after_save :push_to_channels
 
   def update_labels(remote_labels)
     existing_labels = labels.to_a
@@ -37,6 +38,7 @@ class Subject < ApplicationRecord
     remote_label_ids = remote_labels.map{|l| l['id'] }
     deleted_labels = existing_labels.reject{|l| remote_label_ids.include?(l.github_id) }
     deleted_labels.each(&:destroy)
+    push_to_channels if existing_labels != labels.to_a
   end
 
   def sync_involved_users
@@ -72,13 +74,21 @@ class Subject < ApplicationRecord
     return unless subject.persisted?
 
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
-    subject.update_comments if Octobox.include_comments?
+    subject.update_comments if Octobox.include_comments? && subject.has_comments?
     subject.update_status
-    subject.sync_involved_users
+    subject.sync_involved_users if (subject.saved_changes.keys & subject.notifiable_fields).any?
   end
 
   def self.sync_status(sha, repository_full_name)
     where(repository_full_name: repository_full_name).find_by_sha(sha)&.update_status
+  end
+
+  def has_comments?
+     comment_count && comment_count > 0
+  end
+
+  def commentable?
+    !comment_count.nil?
   end
 
   def update_status
@@ -113,7 +123,19 @@ class Subject < ApplicationRecord
     end
   end
 
+  def notifiable_fields
+    ['state', 'assignees', 'locked', 'sha', 'comment_count']
+  end
+
+  def push_to_channels
+    notifications.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+  end
+
   private
+
+  def pushable_fields
+    ['state', 'status', 'body']
+  end
 
   def assign_status(remote_status)
     if remote_status.state == 'pending'
@@ -141,7 +163,7 @@ class Subject < ApplicationRecord
     if app_installation.present?
       app_installation.github_client
     else
-      users.first&.github_client
+      users.with_access_token.first&.github_client
     end
   end
 
@@ -150,8 +172,8 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    ids = users.pluck(:id)
-    ids += repository.users.not_recently_synced.pluck(:id) if repository.present?
+    ids = users.with_access_token.not_recently_synced.pluck(:id)
+    ids += repository.users.with_access_token.not_recently_synced.pluck(:id) if repository.present?
     ids.uniq
   end
 

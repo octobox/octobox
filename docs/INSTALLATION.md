@@ -31,6 +31,7 @@ in your GitHub settings for Octobox to work.
 * [Google Analytics](#google-analytics)
 * [Running Octobox as a GitHub App](#running-octobox-as-a-github-app)
 * [Open links in the same tab](#open-links-in-the-same-tab)
+* [Live updates](#live-updates)
 
 # Installation
 ## Database Selection
@@ -423,3 +424,9 @@ If you wish to run the GitHub app locally and still recieve webhook events, use 
 If you use Octobox inside of [Wavebox](https://wavebox.io/), [Franz](https://meetfranz.com/) or [Station](https://getstation.com/), you may find the default behaviour of opening notification links in new tabs annoying.
 
 You can set the `OPEN_IN_SAME_TAB` environment variable, which will force all notification links to open in the same tab rather than new ones.
+
+## Live updates
+
+Octobox has an experimental feature where it can live-update notifications when they change using websockets. Only notifications you are currently viewing will be updated, no rows will be added or removed dynamically.
+
+To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance.
