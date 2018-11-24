@@ -130,6 +130,11 @@ var Octobox = (function() {
     getDisplayedRows().find("input").prop("checked", checked).trigger("change");
   };
 
+  var uncheckAll = function () {
+    $(".js-select_all").prop("checked", false);
+    checkAll();
+  }
+
   var muteThread = function() {
     var id = $('#notification-thread').data('id');
     mute(id);
@@ -165,7 +170,7 @@ var Octobox = (function() {
     .done(function () {
       rows.removeClass("blur-action");
       rows.removeClass("active");
-      rows.find("input[type=checkbox]").prop('checked', false);
+      uncheckAll();
       updateFavicon();
     })
     .fail(function(){
