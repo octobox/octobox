@@ -25,6 +25,16 @@ module Octobox
         Subject.sync(remote_subject.to_h.as_json)
       end
 
+      def github_client
+        if user.personal_access_tokens_enabled?
+          user.github_client
+        elsif app_installation.present?
+          user.app_installation_client
+        else
+          user.github_client
+        end
+      end
+
       private
 
       def download_subject
@@ -39,16 +49,6 @@ module Octobox
       rescue Octokit::ClientError => e
         Rails.logger.warn("\n\n\033[32m[#{Time.current}] WARNING -- #{e.message}\033[0m\n\n")
         nil
-      end
-
-      def github_client
-        if user.personal_access_tokens_enabled?
-          user.github_client
-        elsif app_installation.present?
-          user.app_installation_client
-        else
-          user.github_client
-        end
       end
     end
   end
