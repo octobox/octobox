@@ -74,6 +74,7 @@ Lint/EmptyInterpolation:
 Layout/EndAlignment:
   Description: 'Align ends correctly.'
   Enabled: true
+  AutoCorrect: true
 
 Lint/EndInMethod:
   Description: 'END blocks should not be placed inside method definitions.'
@@ -159,6 +160,7 @@ Lint/UnusedMethodArgument:
   Description: 'Checks for unused method arguments.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#underscore-unused-vars'
   Enabled: true
+  AutoCorrect: true
 
 Lint/UnreachableCode:
   Description: 'Unreachable code.'

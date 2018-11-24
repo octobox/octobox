@@ -12,7 +12,7 @@ module DatabaseConfig
         ENV['DATABASE']
       else
         'postgresql'
-      end
+                end
 
       # Allow postgres://... as the Heroku buildpack dues
       adapter = 'postgresql' if adapter == 'postgres'
@@ -62,7 +62,7 @@ module DatabaseConfig
           'octobox'
         else
           ''
-        end
+                  end
         ENV.fetch('OCTOBOX_DATABASE_USERNAME') { default }
       end
     end
