@@ -96,11 +96,11 @@ class User < ApplicationRecord
   end
 
   def access_token_client
-    @access_token_client ||= Octokit::Client.new(access_token: access_token, auto_paginate: true)
+    @access_token_client ||= Octokit::Client.new(access_token: access_token, auto_paginate: true) if access_token.present?
   end
 
   def app_installation_client
-    Octokit::Client.new(access_token: app_token, auto_paginate: true)
+    Octokit::Client.new(access_token: app_token, auto_paginate: true) if app_token.present?
   end
 
   def github_avatar_url
@@ -115,7 +115,7 @@ class User < ApplicationRecord
   end
 
   def effective_access_token
-    github_client.access_token
+    github_client&.access_token
   end
 
   def masked_personal_access_token
