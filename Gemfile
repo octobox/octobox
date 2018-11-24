@@ -48,6 +48,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
   gem 'active_record_query_trace'
+  gem 'rubocop', require: false
 end
 
 group :test do
@@ -64,7 +65,6 @@ end
 group :development do
   gem 'web-console'
   gem 'listen'
-  gem 'rubocop', require: false
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'brakeman'
