@@ -255,4 +255,54 @@ class NotificationTest < ActiveSupport::TestCase
     notification = build_stubbed(:notification, subject_url: 'https://github.com/octobox42/octobox42/issues/1109')
     assert_equal notification.subject_number, "1109"
   end
+
+  test 'github_client uses the users personal access token when it is present' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = build(:user, personal_access_token: 'FAKE_PERSONAL_ACCESS_TOKEN')
+    stub_user_request(user: user)
+
+    notification = create(:notification, user: user)
+
+    assert_equal notification.github_client.access_token, 'FAKE_PERSONAL_ACCESS_TOKEN'
+  end
+
+  test 'github_client uses the users personal access token when it is present even if the Github App is installed for the repo' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = build(:user, personal_access_token: 'FAKE_PERSONAL_ACCESS_TOKEN', app_token: 'BAD_APP_TOKEN')
+    stub_user_request(user: user)
+
+    app_installation = create(:app_installation)
+    repository = create(:repository, app_installation: app_installation)
+    notification = create(:notification, user: user, repository: repository)
+
+    assert_equal notification.github_client.access_token, 'FAKE_PERSONAL_ACCESS_TOKEN'
+  end
+
+  test 'github_client uses the users access access token' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = create(:user, access_token: 'FAKE_ACCESS_TOKEN')
+
+    notification = create(:notification, user: user)
+
+    assert_equal notification.github_client.access_token, 'FAKE_ACCESS_TOKEN'
+  end
+
+  test 'github_client uses the app token when when the Github App is installed for the repo' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = create(:user, app_token: 'FAKE_APP_TOKEN', access_token: 'BAD_ACCESS_TOKEN')
+
+    app_installation = create(:app_installation)
+    repository = create(:repository, app_installation: app_installation)
+    notification = create(:notification, user: user, repository: repository)
+
+    assert_equal notification.github_client.access_token, 'FAKE_APP_TOKEN'
+  end
 end

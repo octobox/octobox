@@ -31,6 +31,8 @@ class Notification < ApplicationRecord
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_many :labels, through: :subject
 
+  has_one :app_installation, through: :repository
+
   validates :subject_url, presence: true
   validates :archived, inclusion: [true, false]
 
