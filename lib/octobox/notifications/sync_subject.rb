@@ -25,10 +25,20 @@ module Octobox
         Subject.sync(remote_subject.to_h.as_json)
       end
 
+      def github_client
+        if user.personal_access_token_enabled?
+          user.personal_access_token_client
+        elsif app_installation.present?
+          user.app_installation_client
+        else
+          user.access_token_client
+        end
+      end
+
       private
 
       def download_subject
-        user.subject_client.get(subject_url)
+        github_client.get(subject_url)
 
       # If permissions changed and the user hasn't accepted, we get a 401
       # We may receive a 403 Forbidden or a 403 Not Available
