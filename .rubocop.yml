@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   DisabledByDefault: true
   TargetRubyVersion: 2.5
@@ -72,6 +74,7 @@ Lint/EmptyInterpolation:
 Layout/EndAlignment:
   Description: 'Align ends correctly.'
   Enabled: true
+  AutoCorrect: true
 
 Lint/EndInMethod:
   Description: 'END blocks should not be placed inside method definitions.'
@@ -157,6 +160,7 @@ Lint/UnusedMethodArgument:
   Description: 'Checks for unused method arguments.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#underscore-unused-vars'
   Enabled: true
+  AutoCorrect: true
 
 Lint/UnreachableCode:
   Description: 'Unreachable code.'
@@ -207,6 +211,8 @@ Metrics/ClassLength:
   Description: 'Avoid classes longer than 250 lines of code.'
   Enabled: true
   Max: 250
+  Exclude:
+    - 'test/**/*'
 
 Metrics/CyclomaticComplexity:
   Description: >-
