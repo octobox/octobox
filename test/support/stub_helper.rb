@@ -58,14 +58,14 @@ module StubHelper
     stub_request(method, url).to_return(response)
   end
 
-  def stub_comments_requests(url: nil, body: nil, method: :get, extra_headers: {})
+  def stub_comments_requests(extra_headers: {})
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 
     stub_request(:get, /\/comments\z/)
       .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
   end
 
-  def stub_access_tokens_request(url: nil, body: nil, method: :get, extra_headers: {})
+  def stub_access_tokens_request(extra_headers: {})
     Octobox.stubs(:generate_jwt).returns('MIIEpAIBAAKCAQEA8PcoKAOyTG0rl9PUfdgey3smnkF2U0')
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 
@@ -73,7 +73,7 @@ module StubHelper
       .to_return({ status: 200, body: file_fixture('access_token.json'), headers: headers })
   end
 
-  def stub_repository_request(url: nil, body: nil, method: :get, extra_headers: {})
+  def stub_repository_request(extra_headers: {})
     stub_comments_requests
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 
