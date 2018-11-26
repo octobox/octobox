@@ -1,0 +1,57 @@
+version: '2'
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes_from:
+      - 'app'
+    networks:
+      - internal
+    depends_on:
+      - app
+
+  app:
+    image: akerouanton/octobox:latest
+    restart: unless-stopped
+    env_file: '.env'
+    environment:
+      - OCTOBOX_DATABASE_HOST=database.service.octobox.internal
+      - REDIS_URL=redis://redis.service.octobox.internal
+      - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=1
+      - PORT=5000
+    networks:
+      - internal
+    depends_on:
+      - database.service.octobox.internal
+      - redis.service.octobox.internal
+
+  database.service.octobox.internal:
+    image: postgres:9.6-alpine
+    restart: unless-stopped
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - internal
+    environment:
+      - POSTGRES_USER=${OCTOBOX_DATABASE_USERNAME}
+      - POSTGRES_DB=${OCTOBOX_DATABASE_NAME}
+      - POSTGRES_PASSWORD=${OCTOBOX_DATABASE_PASSWORD}
+
+  redis.service.octobox.internal:
+    image: redis:3.2-alpine
+    restart: unless-stopped
+    networks:
+      - internal
+
+volumes:
+  pg_data:
+
+networks:
+  internal:
+    driver: bridge
