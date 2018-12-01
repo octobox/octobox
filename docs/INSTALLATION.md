@@ -82,7 +82,10 @@ Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`. With doc
 
 ## Local installation
 
-First things first, you'll need to install Ruby 2.5.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to fork and clone Octobox repository to
+your local machine.
+
+Secondly, you'll need to install Ruby 2.5.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
@@ -125,7 +128,7 @@ Now go and register a new [GitHub OAuth Application](https://github.com/settings
 
 If you're deploying this to production, just replace `http://localhost:3000` with your applications URL.
 
-Once you've created your application you can then then add the following to your `.env`:
+Once you've created your application you can then then create a new `.env` file and then add the following to your file:
 
 ```
 GITHUB_CLIENT_ID=yourclientidhere
