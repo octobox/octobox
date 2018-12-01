@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'digest/md5'
 class Notification < ApplicationRecord
 
   include Octobox::Notifications::InclusiveScope
@@ -158,6 +159,11 @@ class Notification < ApplicationRecord
 
   def display_subject?
     @display_subject ||= subjectable? && (Octobox.fetch_subject? || (github_app_installed? && repository.display_subject?))
+  end
+
+  def display_org_color
+    Digest::MD5.hexdigest(repository_full_name)[0..5]
+
   end
 
   def download_subject?

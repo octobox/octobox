@@ -1,5 +1,5 @@
 <tr id='notification-<%= notification.id %>' class='notification <%= notification.unread ? 'active' : '' %>'>
-  <td class='notification-checkbox align-middle'>
+  <td class='notification-checkbox align-middle' style='border-left: 1px solid #<%= notification.display_org_color%> !important;'>
     <div class="custom-control custom-checkbox">
       <%= check_box_tag(
           "notification_#{notification.id}",
@@ -67,6 +67,7 @@
       </small>
     <% end %>
   </td>
+
 
   <td class='notification-subject-author'>
     <% if notification.display_subject? %>
