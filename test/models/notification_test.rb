@@ -305,4 +305,34 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert_equal notification.github_client.access_token, 'FAKE_APP_TOKEN'
   end
+
+  test 'display_org_color is the same for same repos' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = create(:user, app_token: 'FAKE_APP_TOKEN', access_token: 'BAD_ACCESS_TOKEN')
+
+    app_installation = create(:app_installation)
+
+    repository = create(:repository, app_installation: app_installation, full_name: 'SAMSIES')
+    notification = create(:notification, user: user, repository: repository)
+
+    assert_equal notification.display_org_color, notification.display_org_color
+  end 
+
+  test 'display_org_color is different for each different repo' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = create(:user, app_token: 'FAKE_APP_TOKEN', access_token: 'BAD_ACCESS_TOKEN')
+
+    app_installation = create(:app_installation)
+    repository1 = create(:repository, app_installation: app_installation, full_name: 'SAMSIES')
+    notification1 = create(:notification, user: user, repository: repository1)
+
+    repository2 = create(:repository, app_installation: app_installation, full_name: 'NOTSAMSIES')
+    notification2 = create(:notification, user: user, repository: repository2)
+
+    assert_not_equal notification1.display_org_color, notification2.display_org_color
+  end 
 end
