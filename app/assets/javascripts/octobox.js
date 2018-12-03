@@ -483,6 +483,16 @@ var Octobox = (function() {
     moveCursor("down")
   };
 
+  var nextPage = function() {
+    nextPageButton = $(".page-item:last-child .page-link[rel=next]");
+    if (nextPageButton.length) window.location.href = nextPageButton.attr('href');
+  }
+
+  var prevPage = function() {
+    previousPageButton = $(".page-item:first-child .page-link[rel=prev]")
+    if (previousPageButton.length) window.location.href = previousPageButton.attr('href');
+  }
+
   var markCurrent = function() {
     getCurrentRow().find("input[type=checkbox]").click();
   };
@@ -597,6 +607,8 @@ var Octobox = (function() {
     68:  markReadSelected, // d
     74:  cursorDown,       // j
     75:  cursorUp,         // k
+    78:  nextPage,         // n
+    80:  prevPage,         // p
     83:  toggleStar,       // s
     88:  markCurrent,      // x
     89:  toggleArchive,    // y
