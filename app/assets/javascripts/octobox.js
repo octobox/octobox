@@ -118,8 +118,8 @@ var Octobox = (function() {
 
     $(document).keydown(function(e) {
       // disable shortcuts for the seach box
-      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
-        var shortcutFunction = shortcuts[e.which];
+      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.metaKey) {
+        var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShorcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }
       }
     });
@@ -508,6 +508,11 @@ var Octobox = (function() {
     $("#help-box").modal({ keyboard: false });
   };
 
+  var focusSearchInput = function(e) {
+    e.preventDefault();
+    $("#search-box").focus();
+  }
+
   var openCurrentLink = function(e) {
     e.preventDefault(e);
     getCurrentRow().find("td.notification-subject .link")[0].click();
@@ -581,6 +586,11 @@ var Octobox = (function() {
       scrollToCursor();
     }
   };
+  
+  // keyboard shortcuts when shift key is pressed
+  var shiftShotcuts = {
+    191: openModal,        // ?
+  }
 
   var shortcuts = {
     65:  checkSelectAll,   // a
@@ -594,7 +604,7 @@ var Octobox = (function() {
     77:  muteSelected,     // m
     13:  openCurrentLink,  // Enter
     79:  openCurrentLink,  // o
-    191: openModal,        // ?
+    191: focusSearchInput,  // /
     190: sync,             // .
     82:  sync,             // r
     27:  escPressed,       // esc
