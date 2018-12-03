@@ -118,8 +118,8 @@ var Octobox = (function() {
 
     $(document).keydown(function(e) {
       // disable shortcuts for the seach box
-      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
-        var shortcutFunction = shortcuts[e.which];
+      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.metaKey) {
+        var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShorcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }
       }
     });
@@ -483,6 +483,16 @@ var Octobox = (function() {
     moveCursor("down")
   };
 
+  var nextPage = function() {
+    nextPageButton = $(".page-item:last-child .page-link[rel=next]");
+    if (nextPageButton.length) window.location.href = nextPageButton.attr('href');
+  }
+
+  var prevPage = function() {
+    previousPageButton = $(".page-item:first-child .page-link[rel=prev]")
+    if (previousPageButton.length) window.location.href = previousPageButton.attr('href');
+  }
+
   var markCurrent = function() {
     getCurrentRow().find("input[type=checkbox]").click();
   };
@@ -507,6 +517,11 @@ var Octobox = (function() {
   var openModal = function() {
     $("#help-box").modal({ keyboard: false });
   };
+
+  var focusSearchInput = function(e) {
+    e.preventDefault();
+    $("#search-box").focus();
+  }
 
   var openCurrentLink = function(e) {
     e.preventDefault(e);
@@ -581,12 +596,19 @@ var Octobox = (function() {
       scrollToCursor();
     }
   };
+  
+  // keyboard shortcuts when shift key is pressed
+  var shiftShotcuts = {
+    191: openModal,        // ?
+  }
 
   var shortcuts = {
     65:  checkSelectAll,   // a
     68:  markReadSelected, // d
     74:  cursorDown,       // j
     75:  cursorUp,         // k
+    78:  nextPage,         // n
+    80:  prevPage,         // p
     83:  toggleStar,       // s
     88:  markCurrent,      // x
     89:  toggleArchive,    // y
@@ -594,7 +616,7 @@ var Octobox = (function() {
     77:  muteSelected,     // m
     13:  openCurrentLink,  // Enter
     79:  openCurrentLink,  // o
-    191: openModal,        // ?
+    191: focusSearchInput,  // /
     190: sync,             // .
     82:  sync,             // r
     27:  escPressed,       // esc
