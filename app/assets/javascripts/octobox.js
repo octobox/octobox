@@ -119,7 +119,7 @@ var Octobox = (function() {
     $(document).keydown(function(e) {
       // disable shortcuts for the seach box
       if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.metaKey) {
-        var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShorcuts)[e.which] ;
+        var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShortcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }
       }
     });
@@ -598,7 +598,7 @@ var Octobox = (function() {
   };
   
   // keyboard shortcuts when shift key is pressed
-  var shiftShotcuts = {
+  var shiftShortcuts = {
     191: openModal,        // ?
   }
 
