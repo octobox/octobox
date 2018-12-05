@@ -1,3 +1,6 @@
+.badge-success, .badge-dark, .badge-danger{
+  cursor: default;
+}
 .badge-subscribed{
   background-color: $label-subscribed-color;
   color: $label-subscribed-text-color;
