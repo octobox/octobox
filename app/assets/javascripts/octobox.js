@@ -282,19 +282,27 @@ var Octobox = (function() {
     // handle shift+click multiple check
     var notificationCheckboxes = $(".notification-checkbox .custom-checkbox input");
     $(".notification-checkbox .custom-checkbox").click(function(e) {
+      e.preventDefault();
+      window.getSelection().removeAllRanges(); // remove all text selected
+
       if(!lastCheckedNotification) {
+        // No notifications selected
         lastCheckedNotification = $(this).find("input");
+        lastCheckedNotification.prop("checked", !lastCheckedNotification.prop("checked"));
         return;
       }
 
       if(e.shiftKey) {
         var start = notificationCheckboxes.index($(this).find("input"));
         var end = notificationCheckboxes.index(lastCheckedNotification);
-        var selected = notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1)
+        var selected = notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end) + 1)
         selected.prop("checked", lastCheckedNotification.prop("checked"));
+        lastCheckedNotification = $(this).find("input");
+        return;
       }
 
       lastCheckedNotification = $(this).find("input");
+      lastCheckedNotification.prop("checked", !lastCheckedNotification.prop("checked"));
     });
   };
 
