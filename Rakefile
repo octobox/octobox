@@ -20,3 +20,10 @@ task 'test:visuals' => 'test:prepare' do
 end
 
 task(:default).clear.enhance ['test:skip_visuals']
+
+if %w[development test].include? Rails.env
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new
+
+  task(:default).enhance %i[rubocop]
+end

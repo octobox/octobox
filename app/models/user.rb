@@ -26,7 +26,8 @@ class User < ApplicationRecord
   }
   validates_with PersonalAccessTokenValidator
 
-  scope :not_recently_synced, -> { where('last_synced_at < ?', 1.minute.ago) }
+  scope :not_recently_synced, -> { where('last_synced_at < ?', 5.minutes.ago) }
+  scope :with_access_token, -> { where.not(encrypted_access_token: nil) }
 
   def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)
@@ -87,18 +88,19 @@ class User < ApplicationRecord
   end
 
   def github_client
-    unless defined?(@github_client) && effective_access_token == @github_client.access_token
-      @github_client = Octokit::Client.new(access_token: effective_access_token, auto_paginate: true)
-    end
-    @github_client
+    personal_access_token_client || access_token_client
   end
 
-  def subject_client
-    Octokit::Client.new(access_token: subject_token, auto_paginate: true)
+  def personal_access_token_client
+    @personal_access_token_client ||= Octokit::Client.new(access_token: personal_access_token, auto_paginate: true) if personal_access_token_enabled?
   end
 
-  def subject_token
-    app_token || effective_access_token
+  def access_token_client
+    @access_token_client ||= Octokit::Client.new(access_token: access_token, auto_paginate: true) if access_token.present?
+  end
+
+  def app_installation_client
+    Octokit::Client.new(access_token: app_token, auto_paginate: true) if app_token.present?
   end
 
   def github_avatar_url
@@ -113,7 +115,7 @@ class User < ApplicationRecord
   end
 
   def effective_access_token
-    Octobox.personal_access_tokens_enabled? && personal_access_token.present? ? personal_access_token : access_token
+    github_client&.access_token
   end
 
   def masked_personal_access_token
@@ -121,9 +123,13 @@ class User < ApplicationRecord
     "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
   end
 
+  def personal_access_token_enabled?
+    Octobox.personal_access_tokens_enabled? && personal_access_token.present?
+  end
+
   def sync_app_installation_access
     return unless github_app_authorized?
-    remote_installs = subject_client.find_user_installations(accept: 'application/vnd.github.machine-man-preview+json')
+    remote_installs = app_installation_client.find_user_installations(accept: 'application/vnd.github.machine-man-preview+json')
     app_installations = AppInstallation.where(github_id: remote_installs[:installations].map(&:id))
     app_installations.each do |app_installation|
       app_installation_permissions.find_or_create_by(app_installation_id: app_installation.id)

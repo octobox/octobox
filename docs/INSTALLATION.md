@@ -31,6 +31,7 @@ in your GitHub settings for Octobox to work.
 * [Google Analytics](#google-analytics)
 * [Running Octobox as a GitHub App](#running-octobox-as-a-github-app)
 * [Open links in the same tab](#open-links-in-the-same-tab)
+* [Live updates](#live-updates)
 
 # Installation
 ## Database Selection
@@ -81,7 +82,10 @@ Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
 
 ## Local installation
 
-First things first, you'll need to install Ruby 2.5.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to fork and clone Octobox repository to
+your local machine.
+
+Secondly, you'll need to install Ruby 2.5.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
@@ -124,7 +128,7 @@ Now go and register a new [GitHub OAuth Application](https://github.com/settings
 
 If you're deploying this to production, just replace `http://localhost:3000` with your applications URL.
 
-Once you've created your application you can then then add the following to your `.env`:
+Once you've created your application you can then then create a new `.env` file and then add the following to your file:
 
 ```
 GITHUB_CLIENT_ID=yourclientidhere
@@ -423,3 +427,9 @@ If you wish to run the GitHub app locally and still recieve webhook events, use 
 If you use Octobox inside of [Wavebox](https://wavebox.io/), [Franz](https://meetfranz.com/) or [Station](https://getstation.com/), you may find the default behaviour of opening notification links in new tabs annoying.
 
 You can set the `OPEN_IN_SAME_TAB` environment variable, which will force all notification links to open in the same tab rather than new ones.
+
+## Live updates
+
+Octobox has an experimental feature where it can live-update notifications when they change using websockets. Only notifications you are currently viewing will be updated, no rows will be added or removed dynamically.
+
+To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance.

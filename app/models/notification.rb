@@ -31,8 +31,12 @@ class Notification < ApplicationRecord
   belongs_to :repository, foreign_key: :repository_full_name, primary_key: :full_name, optional: true
   has_many :labels, through: :subject
 
+  has_one :app_installation, through: :repository
+
   validates :subject_url, presence: true
   validates :archived, inclusion: [true, false]
+
+  after_update :push_if_changed
 
   paginates_per 20
 
@@ -171,5 +175,18 @@ class Notification < ApplicationRecord
 
   def display_thread?
     Octobox.include_comments? && subjectable? && subject.present? && user.display_comments?
+  end
+
+  def push_if_changed
+    push_to_channel if (saved_changes.keys & pushable_fields).any?
+  end
+
+  def pushable_fields
+    ['archived', 'reason', 'subject_title', 'subject_url', 'subject_type', 'unread']
+  end
+
+  def push_to_channel
+    string = ApplicationController.render(partial: 'notifications/notification', locals: { notification: self})
+    ActionCable.server.broadcast "notifications:#{user_id}", { id: "#notification-#{id}", html: string }
   end
 end

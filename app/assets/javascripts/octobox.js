@@ -118,8 +118,8 @@ var Octobox = (function() {
 
     $(document).keydown(function(e) {
       // disable shortcuts for the seach box
-      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
-        var shortcutFunction = shortcuts[e.which];
+      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.metaKey) {
+        var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShortcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }
       }
     });
@@ -129,6 +129,11 @@ var Octobox = (function() {
     var checked = $(".js-select_all").prop("checked")
     getDisplayedRows().find("input").prop("checked", checked).trigger("change");
   };
+
+  var uncheckAll = function () {
+    $(".js-select_all").prop("checked", false);
+    checkAll();
+  }
 
   var muteThread = function() {
     var id = $('#notification-thread').data('id');
@@ -145,9 +150,14 @@ var Octobox = (function() {
   var mute = function(ids){
     var result = confirm("Are you sure you want to mute?");
     if (result) {
-      $.post( "/notifications/mute_selected" + location.search, { "id[]": ids}).done(function() {
+      $.post( "/notifications/mute_selected" + location.search, { "id[]": ids})
+      .done(function() {
         resetCursorAfterRowsRemoved(ids);
         updateFavicon();
+      })
+      .fail(function(){
+        $(".header-flash-messages").empty();
+        notify("Could not mute notification(s)", "danger");
       });
     }
   };
@@ -156,12 +166,17 @@ var Octobox = (function() {
     if (getDisplayedRows().length === 0) return;
     var rows = getMarkedOrCurrentRows();
     rows.addClass("blur-action");
-    $.post("/notifications/mark_read_selected" + location.search, {"id[]": getIdsFromRows(rows)}).done(function () {
+    $.post("/notifications/mark_read_selected" + location.search, {"id[]": getIdsFromRows(rows)})
+    .done(function () {
       rows.removeClass("blur-action");
       rows.removeClass("active");
-      rows.find("input[type=checkbox]").prop('checked', false);
+      uncheckAll();
       updateFavicon();
     })
+    .fail(function(){
+        $(".header-flash-messages").empty();
+        notify("Could not mark notification(s) read", "danger");
+    });
   };
 
   var toggleArchive = function() {
@@ -195,9 +210,14 @@ var Octobox = (function() {
   }
 
   var archive = function(ids, value){
-    $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } ).done(function() {
+    $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } )
+    .done(function() {
       resetCursorAfterRowsRemoved(ids);
       updateFavicon();
+    })
+    .fail(function(){
+      $(".header-flash-messages").empty();
+      notify("Could not archive notification(s)", "danger");
     });
   }
 
@@ -283,10 +303,14 @@ var Octobox = (function() {
   };
 
   var star = function(id){
-    console.log(id);
     $('#notification-thread').data('id') == id ? $('#thread').find('.toggle-star').toggleClass("star-active star-inactive") : null;
     $("#notification-"+id).find(".toggle-star").toggleClass("star-active star-inactive");
     $.post("/notifications/"+id+"/star")
+      .fail(function(){
+        $('#notification-thread').data('id') == id ? $('#thread').find('.toggle-star').toggleClass("star-active star-inactive") : null;
+        $("#notification-"+id).find(".toggle-star").toggleClass("star-active star-inactive");
+        notify("Could not toggle star(s)", "danger");
+      });
   };
 
   var changeArchive = function() {
@@ -337,8 +361,13 @@ var Octobox = (function() {
   };
 
   function markRead(id) {
-    $.post( "/notifications/"+id+"/mark_read").done(function() {
+    $.post( "/notifications/"+id+"/mark_read")
+    .done(function() {
       updateFavicon();
+    })
+    .fail(function(){
+      $(".header-flash-messages").empty();
+      notify("Could not mark notification(s) read", "danger");
     });
     $("#notification-"+id).removeClass("active");
   };
@@ -362,6 +391,9 @@ var Octobox = (function() {
 
     window.onpopstate = function(event) {
       if(event.state.thread){
+
+        $('#thread').html($('#loading').html())
+
         $.get(event.state.thread, function(data){
           $('#thread').html(data)
         });
@@ -372,9 +404,14 @@ var Octobox = (function() {
   var deleteNotifications = function(ids){
     var result = confirm("Are you sure you want to delete?");
     if (result) {
-      $.post("/notifications/delete_selected" + location.search, {"id[]": ids}).done(function() {
+      $.post("/notifications/delete_selected" + location.search, {"id[]": ids})
+      .done(function() {
         resetCursorAfterRowsRemoved(ids);
         updateFavicon();
+      })
+      .fail(function(){
+        $(".header-flash-messages").empty();
+        notify("Could not delete notification", "danger");
       });
     }
   }
@@ -394,6 +431,9 @@ var Octobox = (function() {
 
   var viewThread = function() {
     history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
+
+    $('#thread').html($('#loading').html())
+
     $.get($(this).attr('href'), function(data){
       if (data["error"] != null) {
         $(".header-flash-messages").empty();
@@ -443,6 +483,16 @@ var Octobox = (function() {
     moveCursor("down")
   };
 
+  var nextPage = function() {
+    nextPageButton = $(".page-item:last-child .page-link[rel=next]");
+    if (nextPageButton.length) window.location.href = nextPageButton.attr('href');
+  }
+
+  var prevPage = function() {
+    previousPageButton = $(".page-item:first-child .page-link[rel=prev]")
+    if (previousPageButton.length) window.location.href = previousPageButton.attr('href');
+  }
+
   var markCurrent = function() {
     getCurrentRow().find("input[type=checkbox]").click();
   };
@@ -468,19 +518,27 @@ var Octobox = (function() {
     $("#help-box").modal({ keyboard: false });
   };
 
+  var focusSearchInput = function(e) {
+    e.preventDefault();
+    $("#search-box").focus();
+  }
+
   var openCurrentLink = function(e) {
     e.preventDefault(e);
     getCurrentRow().find("td.notification-subject .link")[0].click();
   };
 
   var notify = function(message, type) {
+    $(".header-flash-messages").remove();
     var alert_html = [
-      "<div class='alert alert-" + type + " fade show'>",
-      "   <button class='close' data-dismiss='alert'>x</button>",
-      message,
+      "<div class='flex-header header-flash-messages'>",
+      "  <div class='alert alert-" + type + " fade show'>",
+      "    <button class='close' data-dismiss='alert'>x</button>",
+             message,
+      "  </div>",
       "</div>"
     ].join("\n");
-    $(".header-flash-messages").append(alert_html);
+    $(".flex-header").after(alert_html);
   };
 
   var autoSync = function() {
@@ -538,12 +596,19 @@ var Octobox = (function() {
       scrollToCursor();
     }
   };
+  
+  // keyboard shortcuts when shift key is pressed
+  var shiftShortcuts = {
+    191: openModal,        // ?
+  }
 
   var shortcuts = {
     65:  checkSelectAll,   // a
     68:  markReadSelected, // d
     74:  cursorDown,       // j
     75:  cursorUp,         // k
+    78:  nextPage,         // n
+    80:  prevPage,         // p
     83:  toggleStar,       // s
     88:  markCurrent,      // x
     89:  toggleArchive,    // y
@@ -551,7 +616,7 @@ var Octobox = (function() {
     77:  muteSelected,     // m
     13:  openCurrentLink,  // Enter
     79:  openCurrentLink,  // o
-    191: openModal,        // ?
+    191: focusSearchInput,  // /
     190: sync,             // .
     82:  sync,             // r
     27:  escPressed,       // esc

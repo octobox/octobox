@@ -13,27 +13,16 @@ SearchSuggestion = {
     // Let us open our database
     var dbOpenRequest = window.indexedDB.open("SearchSuggestionList", 2);
 
-    // these two event handlers act on the database being opened successfully, or not
-    dbOpenRequest.onerror = function(event) {
-      console.log("Error loading database.");
-    };
-
     dbOpenRequest.onsuccess = function(event) {
-      console.log('Database Loaded successfully');
       db = dbOpenRequest.result;
     };
 
     dbOpenRequest.onupgradeneeded = function(event) {
       var db = event.target.result;
 
-      db.onerror = function(event) {
-        console.log('Error loading database');
-      };
-
       // Create an objectStore for this database
       var objectStore = db.createObjectStore("SearchSuggestionList", { keyPath: "queryString" });
       objectStore.createIndex("timestamp", "timestamp", { unique: false });
-      console.log("Object store created.");
     }
   },
 
@@ -111,9 +100,6 @@ SearchSuggestion = {
     }
     // open a read/write db transaction, ready for adding the data
     var transaction = db.transaction(["SearchSuggestionList"], "readwrite");
-    transaction.onerror = function() {
-      console.log('Transaction not opened due to error: ' + transaction.error);
-    };
 
     // call an object store that's already been added to the database
     var objectStore = transaction.objectStore("SearchSuggestionList");
@@ -130,9 +116,6 @@ SearchSuggestion = {
         }
         // Make a request to add our newItem object to the object store
         var objectStoreRequest = objectStore.add({queryString: searchQuery, timestamp: SearchSuggestion.getTimestamp()});
-        objectStoreRequest.onsuccess = function(event) {
-          console.log('Search Suggestion to Added IndexedDB :: ' + searchQuery);
-        };
       }
     }
   },
@@ -151,7 +134,6 @@ SearchSuggestion = {
     // report that the data item has been deleted
     transaction.oncomplete = function() {
       SearchSuggestion.displaySearchSuggestions();
-      console.log('Search Suggestion deleted.')
     };
   },
 

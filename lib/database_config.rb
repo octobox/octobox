@@ -7,12 +7,12 @@ module DatabaseConfig
     #
     def adapter
       adapter = if ENV['DATABASE_URL']
-        ENV['DATABASE_URL'].split(":").first
-      elsif ENV['DATABASE']
-        ENV['DATABASE']
-      else
-        'postgresql'
-      end
+                  ENV['DATABASE_URL'].split(":").first
+                elsif ENV['DATABASE']
+                  ENV['DATABASE']
+                else
+                  'postgresql'
+                end
 
       # Allow postgres://... as the Heroku buildpack dues
       adapter = 'postgresql' if adapter == 'postgres'
@@ -57,12 +57,12 @@ module DatabaseConfig
     def username
       database_url_or_fallback('username') do
         default = if is_mysql?
-          'root'
-        elsif Rails.env.production?
-          'octobox'
-        else
-          ''
-        end
+                    'root'
+                  elsif Rails.env.production?
+                    'octobox'
+                  else
+                    ''
+                  end
         ENV.fetch('OCTOBOX_DATABASE_USERNAME') { default }
       end
     end
