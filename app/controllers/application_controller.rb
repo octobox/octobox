@@ -5,13 +5,14 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
   helper_method :current_user, :logged_in?, :initial_sync?, :display_subject?
 
+  before_action :authenticate_user!
+
   before_action do
     if current_user && current_user.admin?
       Rack::MiniProfiler.authorize_request
     end
   end
 
-  before_action :authenticate_user!
   before_action :check_access_token_present
 
   before_bugsnag_notify :add_user_info_to_bugsnag if Rails.env.production?
