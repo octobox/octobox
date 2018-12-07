@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
   helper_method :current_user, :logged_in?, :initial_sync?, :display_subject?
-
   before_action :authenticate_user!
 
   before_action do
