@@ -40,6 +40,16 @@ gem 'kramdown'
 gem 'mysql2', require: false
 gem 'pg', '1.1.3', require: false
 
+# This needs to be under pg/mysql
+gem 'rack-mini-profiler', require: false
+
+# For memory profiling
+gem 'memory_profiler'
+
+# For call-stack profiling flamegraphs
+gem 'flamegraph'
+gem 'stackprof'
+
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'
