@@ -136,7 +136,7 @@ GEM
       minitest (>= 3.0)
     hashdiff (0.3.7)
     hashie (3.5.7)
-    i18n (1.1.1)
+    i18n (1.2.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.1)
     jbuilder (2.8.0)
