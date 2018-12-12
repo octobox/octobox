@@ -951,4 +951,20 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?q=status%3Apending'
     assert_equal assigns(:notifications).length, 1
   end
+
+  test 'highlights vulnerability alerts in the sidebar if there are unread notifications' do
+    sign_in_as(@user)
+    create(:notification, user: @user, subject_type: 'RepositoryVulnerabilityAlert', unread: true)
+    get '/'
+    assert_response :success
+    assert_select '.unread-alert', {count: 1}
+  end
+
+  test 'Does not highlight vulnerability alerts in the sidebar if there are no unread notifications' do
+    sign_in_as(@user)
+    create(:notification, user: @user, subject_type: 'RepositoryVulnerabilityAlert', unread: false)
+    get '/'
+    assert_response :success
+    assert_select '.unread-alert', {count: 0}
+  end
 end
