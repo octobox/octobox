@@ -29,3 +29,4 @@ public/docs
 .database
 config/sidekiq_custom_schedule.yml
 .yardoc
+dump.rdb
