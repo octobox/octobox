@@ -56,8 +56,11 @@ class Notification < ApplicationRecord
   end
 
   def title
-    body = subject.try(:body)
-    body.split("\n")[0..3].join if body
+    return unless display_subject?
+
+    if (body = subject.try(:body))
+      body.split("\n")[0..3].join
+    end
   end
 
   def state
