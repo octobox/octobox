@@ -71,6 +71,8 @@ group :development do
   gem 'bullet'
   gem 'binding_of_caller'
   gem 'better_errors'
+  gem 'railroady', '1.5.3' # Generates block diagrams
+  gem 'rails-erd', '1.5.2' # Generates block diagrams
 end
 
 group :production do
