@@ -71,6 +71,8 @@ group :development do
   gem 'bullet'
   gem 'binding_of_caller'
   gem 'better_errors'
+  gem 'bundler-audit', '0.6.0'
+  gem 'gemsurance', '0.9.0'
 end
 
 group :production do

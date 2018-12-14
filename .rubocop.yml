@@ -3,6 +3,8 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   DisabledByDefault: true
   TargetRubyVersion: 2.5
+  Exclude:
+  - tmp/**/*
 
 #################### Lint ################################
 
