@@ -506,7 +506,8 @@ var Octobox = (function() {
   }
 
   var markCurrent = function() {
-    getCurrentRow().find("input[type=checkbox]").click();
+    currentRow = getCurrentRow().find("input[type=checkbox]");
+    $(currentRow).prop("checked", !$(currentRow).prop("checked")).trigger('change');
   };
 
   var resetCursorAfterRowsRemoved = function(ids) {
