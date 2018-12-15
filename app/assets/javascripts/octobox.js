@@ -121,7 +121,11 @@ var Octobox = (function() {
       if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.metaKey) {
         var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShortcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }
+        return;
       }
+
+      // escape search-box
+      if(e.target.id === "search-box" && e.which === 27) shortcuts[27](e);
     });
   };
 
@@ -558,8 +562,9 @@ var Octobox = (function() {
       $("#help-box").modal("hide");
     } else if($(".flex-main").hasClass("show-thread")){
       closeThread();
-    }
-    else{
+    } else if($("#search-box").is(":focus")) {
+      $(".table-notifications").attr("tabindex", -1).focus();
+    } else {
       clearFilters();
     }
   };
