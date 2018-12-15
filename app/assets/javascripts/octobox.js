@@ -292,7 +292,7 @@ var Octobox = (function() {
       if(!lastCheckedNotification) {
         // No notifications selected
         lastCheckedNotification = $(this).find("input");
-        lastCheckedNotification.prop("checked", !lastCheckedNotification.prop("checked"));
+        lastCheckedNotification.prop("checked", !lastCheckedNotification.prop("checked")).trigger('change');
         return;
       }
 
@@ -300,13 +300,13 @@ var Octobox = (function() {
         var start = notificationCheckboxes.index($(this).find("input"));
         var end = notificationCheckboxes.index(lastCheckedNotification);
         var selected = notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end) + 1)
-        selected.prop("checked", lastCheckedNotification.prop("checked"));
+        selected.prop("checked", lastCheckedNotification.prop("checked")).trigger('change');
         lastCheckedNotification = $(this).find("input");
         return;
       }
 
       lastCheckedNotification = $(this).find("input");
-      lastCheckedNotification.prop("checked", !lastCheckedNotification.prop("checked"));
+      lastCheckedNotification.prop("checked", !lastCheckedNotification.prop("checked")).trigger('change');
     });
   };
 
