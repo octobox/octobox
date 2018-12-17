@@ -295,7 +295,7 @@ module NotificationsHelper
   end
 
   def subject_with_number(notification)
-    if notification.subject_type == 'Issue' || 'PullRequest'
+    if ['Issue', 'PullRequest'].include?(notification.subject_type)
       capture do
         concat content_tag(:span, "##{notification.subject_number}", class: "notification-number")
         concat " "
