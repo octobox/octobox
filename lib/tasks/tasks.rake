@@ -15,11 +15,6 @@ namespace :tasks do
     Notification.subjectable.find_each{|n| n.update_subject(true); print '.' }
   end
 
-  desc "Sync repositories"
-  task sync_repos: :environment do
-    Notification.find_each{|n| n.update_repository(true); print '.' }
-  end
-
   desc "Clean up duplicate subjects"
   task deduplicate_subjects: :environment do
     duplicate_subject_urls = Subject.select(:url).group(:url).having("count(*) > 1").pluck(:url)
