@@ -47,4 +47,13 @@ namespace :tasks do
   task sync_installations: :environment do
     AppInstallation.all.find_each(&:sync)
   end
+
+  desc "cleanup unique-jobs cache"
+  task cleanup_unique_jobs: :environment do
+    Sidekiq.redis do |conn|
+      conn.keys('uniquejobs:*').each do |key|
+        conn.del(key)
+      end
+    end
+  end
 end
