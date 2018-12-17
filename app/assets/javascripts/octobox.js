@@ -174,7 +174,6 @@ var Octobox = (function() {
     .done(function () {
       rows.removeClass("blur-action");
       rows.removeClass("active");
-      uncheckAll();
       updateFavicon();
     })
     .fail(function(){
