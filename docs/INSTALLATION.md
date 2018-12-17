@@ -434,4 +434,4 @@ You can set the `OPEN_IN_SAME_TAB` environment variable, which will force all no
 
 Octobox has an experimental feature where it can live-update notifications when they change using websockets. Only notifications you are currently viewing will be updated, no rows will be added or removed dynamically.
 
-To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance.
+To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance. Also, set `WEBSOCKET_ALLOWED_ORIGIN` to Octobox base URL, e.g. `http://localhost` (it can take multiple values, e.g. `http://localhost,https://localhost`).
