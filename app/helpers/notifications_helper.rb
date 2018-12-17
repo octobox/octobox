@@ -327,7 +327,7 @@ module NotificationsHelper
 
   def parse_markdown(str)
     return if str.blank?
-    GitHub::Markup.render('.md', str)
+    CommonMarker.render_html(str, :GITHUB_PRE_LANG, [:tagfilter, :autolink, :table, :strikethrough])
   end
 
   def notification_link(notification)
