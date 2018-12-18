@@ -25,7 +25,7 @@
 
   <td class='notification-icon align-middle <%= notification_icon_color(notification.state) if notification.display_subject? %>'>
     <% if Octobox.github_app? && notification.subjectable? %>
-      <% if notification.repository.try(:github_app_installed?) && !notification.user.github_app_authorized? %>
+      <% if notification.repository.try(:github_app_installed?) && !notification.user.try(:github_app_authorized?) %>
         <a tabindex="0" class="" role="button" data-toggle="popover" title="Login to the GitHub App" data-content="<%= render 'notifications/login_prompt' %>">
           <%= octicon notification_icon(notification), :height => 16 %>
         </a>
