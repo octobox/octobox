@@ -176,7 +176,7 @@ class Notification < ApplicationRecord
   end
 
   def display_thread?
-    Octobox.include_comments? && subjectable? && subject.present? && user.display_comments?
+    Octobox.include_comments? && subjectable? && subject.present? && user.try(:display_comments?)
   end
 
   def push_if_changed
