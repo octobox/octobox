@@ -99,7 +99,7 @@ GEM
       dotenv (= 2.5.0)
       railties (>= 3.2, < 6.0)
     encryptor (3.0.0)
-    erubi (1.7.1)
+    erubi (1.8.0)
     et-orbi (1.1.6)
       tzinfo
     ethon (0.11.0)
