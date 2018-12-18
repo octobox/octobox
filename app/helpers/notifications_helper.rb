@@ -158,7 +158,7 @@ module NotificationsHelper
 
   def notification_icon(notification)
     subject_type = notification.subject_type
-    state = notification.user.github_app_authorized? ? notification.state : nil
+    state = notification.user.try(:github_app_authorized?) ? notification.state : nil
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
     subject_type_icon(subject_type)
