@@ -4,7 +4,6 @@ class Notification < ApplicationRecord
   include Octobox::Notifications::InclusiveScope
   include Octobox::Notifications::ExclusiveScope
   include Octobox::Notifications::SyncSubject
-  include Octobox::Notifications::SyncRepository
 
   SUBJECTABLE_TYPES = SUBJECT_TYPE_COMMIT_RELEASE + SUBJECT_TYPE_ISSUE_REQUEST
 
@@ -148,11 +147,11 @@ class Notification < ApplicationRecord
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
     update_subject
-    update_repository
+    update_repository(api_response)
   end
 
   def github_app_installed?
-    Octobox.github_app? && user.github_app_authorized? && repository.try(:github_app_installed?)
+    Octobox.github_app? && user.try(:github_app_authorized?) && repository.try(:github_app_installed?)
   end
 
   def subjectable?
@@ -177,7 +176,7 @@ class Notification < ApplicationRecord
   end
 
   def display_thread?
-    Octobox.include_comments? && subjectable? && subject.present? && user.display_comments?
+    Octobox.include_comments? && subjectable? && subject.present? && user.try(:display_comments?)
   end
 
   def push_if_changed
@@ -191,5 +190,16 @@ class Notification < ApplicationRecord
   def push_to_channel
     string = ApplicationController.render(partial: 'notifications/notification', locals: { notification: self})
     ActionCable.server.broadcast "notifications:#{user_id}", { id: "#notification-#{id}", html: string }
+  end
+
+  def update_repository(api_response)
+    repo = Repository.find_or_create_by(github_id: api_response['repository']['id'])
+    repo.update_attributes({
+      full_name: api_response['repository']['full_name'],
+      private: api_response['repository']['private'],
+      owner: api_response['repository']['full_name'].split('/').first,
+      github_id: api_response['repository']['id'],
+      last_synced_at: Time.current
+    })
   end
 end

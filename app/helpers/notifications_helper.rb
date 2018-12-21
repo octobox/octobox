@@ -158,7 +158,7 @@ module NotificationsHelper
 
   def notification_icon(notification)
     subject_type = notification.subject_type
-    state = notification.user.github_app_authorized? ? notification.state : nil
+    state = notification.user.try(:github_app_authorized?) ? notification.state : nil
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
     subject_type_icon(subject_type)
@@ -295,7 +295,7 @@ module NotificationsHelper
   end
 
   def subject_with_number(notification)
-    if notification.subject_type == 'Issue' || 'PullRequest'
+    if ['Issue', 'PullRequest'].include?(notification.subject_type)
       capture do
         concat content_tag(:span, "##{notification.subject_number}", class: "notification-number")
         concat " "
@@ -327,7 +327,7 @@ module NotificationsHelper
 
   def parse_markdown(str)
     return if str.blank?
-    GitHub::Markup.render('.md', str)
+    CommonMarker.render_html(str, :GITHUB_PRE_LANG, [:tagfilter, :autolink, :table, :strikethrough])
   end
 
   def notification_link(notification)
