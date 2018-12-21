@@ -118,10 +118,14 @@ var Octobox = (function() {
 
     $(document).keydown(function(e) {
       // disable shortcuts for the seach box
-      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
-        var shortcutFunction = shortcuts[e.which];
+      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.metaKey) {
+        var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShortcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }
+        return;
       }
+
+      // escape search-box
+      if(e.target.id === "search-box" && e.which === 27) shortcuts[27](e);
     });
   };
 
@@ -170,7 +174,6 @@ var Octobox = (function() {
     .done(function () {
       rows.removeClass("blur-action");
       rows.removeClass("active");
-      uncheckAll();
       updateFavicon();
     })
     .fail(function(){
@@ -282,19 +285,27 @@ var Octobox = (function() {
     // handle shift+click multiple check
     var notificationCheckboxes = $(".notification-checkbox .custom-checkbox input");
     $(".notification-checkbox .custom-checkbox").click(function(e) {
+      e.preventDefault();
+      window.getSelection().removeAllRanges(); // remove all text selected
+
       if(!lastCheckedNotification) {
+        // No notifications selected
         lastCheckedNotification = $(this).find("input");
+        lastCheckedNotification.prop("checked", !lastCheckedNotification.prop("checked")).trigger('change');
         return;
       }
 
       if(e.shiftKey) {
         var start = notificationCheckboxes.index($(this).find("input"));
         var end = notificationCheckboxes.index(lastCheckedNotification);
-        var selected = notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end)+ 1)
-        selected.prop("checked", lastCheckedNotification.prop("checked"));
+        var selected = notificationCheckboxes.slice(Math.min(start,end), Math.max(start,end) + 1)
+        selected.prop("checked", lastCheckedNotification.prop("checked")).trigger('change');
+        lastCheckedNotification = $(this).find("input");
+        return;
       }
 
       lastCheckedNotification = $(this).find("input");
+      lastCheckedNotification.prop("checked", !lastCheckedNotification.prop("checked")).trigger('change');
     });
   };
 
@@ -483,8 +494,19 @@ var Octobox = (function() {
     moveCursor("down")
   };
 
+  var nextPage = function() {
+    nextPageButton = $(".page-item:last-child .page-link[rel=next]");
+    if (nextPageButton.length) window.location.href = nextPageButton.attr('href');
+  }
+
+  var prevPage = function() {
+    previousPageButton = $(".page-item:first-child .page-link[rel=prev]")
+    if (previousPageButton.length) window.location.href = previousPageButton.attr('href');
+  }
+
   var markCurrent = function() {
-    getCurrentRow().find("input[type=checkbox]").click();
+    currentRow = getCurrentRow().find("input[type=checkbox]");
+    $(currentRow).prop("checked", !$(currentRow).prop("checked")).trigger('change');
   };
 
   var resetCursorAfterRowsRemoved = function(ids) {
@@ -507,6 +529,11 @@ var Octobox = (function() {
   var openModal = function() {
     $("#help-box").modal({ keyboard: false });
   };
+
+  var focusSearchInput = function(e) {
+    e.preventDefault();
+    $("#search-box").focus();
+  }
 
   var openCurrentLink = function(e) {
     e.preventDefault(e);
@@ -535,8 +562,9 @@ var Octobox = (function() {
       $("#help-box").modal("hide");
     } else if($(".flex-main").hasClass("show-thread")){
       closeThread();
-    }
-    else{
+    } else if($("#search-box").is(":focus")) {
+      $(".table-notifications").attr("tabindex", -1).focus();
+    } else {
       clearFilters();
     }
   };
@@ -581,12 +609,19 @@ var Octobox = (function() {
       scrollToCursor();
     }
   };
+  
+  // keyboard shortcuts when shift key is pressed
+  var shiftShortcuts = {
+    191: openModal,        // ?
+  }
 
   var shortcuts = {
     65:  checkSelectAll,   // a
     68:  markReadSelected, // d
     74:  cursorDown,       // j
     75:  cursorUp,         // k
+    78:  nextPage,         // n
+    80:  prevPage,         // p
     83:  toggleStar,       // s
     88:  markCurrent,      // x
     89:  toggleArchive,    // y
@@ -594,7 +629,7 @@ var Octobox = (function() {
     77:  muteSelected,     // m
     13:  openCurrentLink,  // Enter
     79:  openCurrentLink,  // o
-    191: openModal,        // ?
+    191: focusSearchInput,  // /
     190: sync,             // .
     82:  sync,             // r
     27:  escPressed,       // esc
