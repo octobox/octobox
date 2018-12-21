@@ -227,6 +227,19 @@ server {
 }
 ```
 
+If you are using [Live updates](#live-updates) then you need to configure the websocket connection as well
+
+```bash
+location /cable {
+    proxy_pass http://localhost:3000/cable;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    add_header 'Access-Control-Allow-Origin' "$http_origin";
+    add_header 'Access-Control-Allow-Credentials' 'true';
+}
+```
+
 Note that this is only an example; there are numerous ways to configure Nginx
 depending on your circumstances. For example, in a production environment
 you'll also want to configure Nginx to serve static assets and pass all other
