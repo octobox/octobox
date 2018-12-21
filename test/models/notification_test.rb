@@ -118,6 +118,30 @@ class NotificationTest < ActiveSupport::TestCase
     assert_equal attributes, attributes.merge(expected_attributes)
   end
 
+  test 'update_from_api_response creates a repository' do
+    stub_fetch_subject_enabled(value: false)
+
+    user = create(:user)
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+    notification.update_from_api_response(api_response, unarchive: true)
+
+    refute_nil notification.repository
+    assert_equal notification.repository.full_name, 'octobox/octobox'
+  end
+
+  test 'update_from_api_response updates an existing repository' do
+    stub_fetch_subject_enabled(value: false)
+
+    user = create(:user)
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+    create(:repository, github_id: api_response[:repository][:id], full_name: 'old/name')
+    notification.update_from_api_response(api_response, unarchive: true)
+
+    refute_equal notification.repository.full_name, 'old/name'
+  end
+
   test 'update_from_api_response does not create a subject when fetch_subject is disabled' do
     stub_fetch_subject_enabled(value: false)
 

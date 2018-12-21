@@ -7,7 +7,7 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right text-right">
-          <% %w(20 40 60 80 100).map do |pagination_interval| %>
+          <% %w(10 20 40 60 80 100).map do |pagination_interval| %>
             <%= link_to pagination_interval, root_path(filtered_params(per_page: pagination_interval.to_i)), class: "dropdown-item #{'active' if @per_page == pagination_interval.to_i}" %>
           <% end %>
         </ul>
