@@ -225,6 +225,19 @@ server {
 }
 ```
 
+If you are using [Live updates](#live-updates) then you need to configure the websocket connection as well
+
+```bash
+location /cable {
+    proxy_pass http://localhost:3000/cable;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    add_header 'Access-Control-Allow-Origin' "$http_origin";
+    add_header 'Access-Control-Allow-Credentials' 'true';
+}
+```
+
 Note that this is only an example; there are numerous ways to configure Nginx
 depending on your circumstances. For example, in a production environment
 you'll also want to configure Nginx to serve static assets and pass all other
@@ -315,7 +328,7 @@ PERSONAL_ACCESS_TOKENS_ENABLED=1
 Once that is set, users can set a personal access token on the Settings page (found on the user drop-down menu).
 
 ## Limiting Access
-You can restrict access to your Octobox instance, and only allow members or a GitHub organization or team.  To limit access set the environment variable
+You can restrict access to your Octobox instance, and only allow members of a GitHub organization or team.  To limit access set the environment variable
 `RESTRICTED_ACCESS_ENABLED=1` then set either `GITHUB_ORGANIZATION_ID=<org_id_number>` `GITHUB_TEAM_ID=<team_id_number>`.
 
 You can get an organization's id with this curl command:
@@ -432,4 +445,4 @@ You can set the `OPEN_IN_SAME_TAB` environment variable, which will force all no
 
 Octobox has an experimental feature where it can live-update notifications when they change using websockets. Only notifications you are currently viewing will be updated, no rows will be added or removed dynamically.
 
-To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance.
+To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance. Also, set `WEBSOCKET_ALLOWED_ORIGIN` to Octobox base URL, e.g. `http://localhost` (it can take multiple values, e.g. `http://localhost,https://localhost`).
