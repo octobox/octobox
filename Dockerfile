@@ -1,4 +1,4 @@
-FROM pawurb/ruby-jemalloc-node-yarn:latest
+FROM ruby:2.5.3-alpine
 
 ENV APP_ROOT /usr/src/app
 WORKDIR $APP_ROOT
@@ -11,12 +11,16 @@ COPY Gemfile Gemfile.lock $APP_ROOT/
 
 # * Setup system
 # * Install Ruby dependencies
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    tzdata \
-    libmysqlclient-dev \
+RUN apk add --update \
+    build-base \
+    netcat-openbsd \
     git \
- && apt-get clean \
+    nodejs \
+    postgresql-dev \
+    mysql-dev \
+    tzdata \
+    curl-dev \
+ && rm -rf /var/cache/apk/* \
  && bundle config --global frozen 1 \
  && bundle install --without test --jobs 2 \
  && gem install foreman
@@ -38,4 +42,4 @@ RUN RAILS_ENV=development bin/rails api_docs:generate \
  && chmod -R g=u $APP_ROOT
 
 # Startup
-CMD ["bin/run-dev.sh"]
+CMD ["bin/docker-start"]
