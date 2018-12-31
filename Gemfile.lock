@@ -135,7 +135,7 @@ GEM
     guard-minitest (2.4.6)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    hashdiff (0.3.7)
+    hashdiff (0.3.8)
     hashie (3.6.0)
     i18n (1.3.0)
       concurrent-ruby (~> 1.0)
