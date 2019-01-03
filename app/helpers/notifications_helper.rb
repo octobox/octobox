@@ -307,7 +307,6 @@ module NotificationsHelper
   end
 
   def notification_button(subject_type, state = nil)
-    state = nil unless display_subject?
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     SUBJECT_TYPES[subject_type]
   end
