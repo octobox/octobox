@@ -28,7 +28,7 @@
 <div id='notification-thread' class="p-3" data-id='<%= @notification.id %>'>
 
   <h2>
-    <button class='btn btn-sm <%= notification_button_color(@notification.state) if display_subject? %>'>
+    <button class='btn btn-sm <%= notification_button_color(@notification.state) %>'>
       <%= octicon notification_icon(@notification), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
       <%= notification_button_title(@notification.subject_type, @notification.state) %>
     </button>
@@ -36,11 +36,9 @@
     <%= link_to octicon('link-external', height: 32), @notification.web_url, target: '_blank', class: 'link' %>
   </h2>
 
-  <% if display_subject? %>
-      <% if @notification.subject %>
-        <%= notification_status(@notification.subject.status) %>
-        <%= link_to @notification.subject.author, root_path(filtered_params(author: @notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= @notification.subject_type.downcase %>
-      <% end %>
+  <% if @notification.subject %>
+    <%= notification_status(@notification.subject.status) %>
+    <%= link_to @notification.subject.author, root_path(filtered_params(author: @notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= @notification.subject_type.downcase %>
   <% end %>
 
   on <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>

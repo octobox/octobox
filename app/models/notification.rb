@@ -162,10 +162,6 @@ class Notification < ApplicationRecord
     @display_subject ||= subjectable? && (Octobox.fetch_subject? || (github_app_installed? && repository.display_subject?))
   end
 
-  def download_subject?
-    @download_subject ||= subjectable? && (Octobox.fetch_subject? || github_app_installed?)
-  end
-
   def upgrade_required?
     return nil unless repository.present?
     repository.private? && !repository.required_plan_available?
