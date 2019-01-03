@@ -1,7 +1,7 @@
 .badge-success, .badge-dark, .badge-danger{
   cursor: default;
 }
-.badge-subscribed{
+.badge-subscribed, .badge-merged{
   background-color: $label-subscribed-color;
   color: $label-subscribed-text-color;
   &[href]:hover, &[href]:focus {

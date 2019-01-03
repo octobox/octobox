@@ -29,7 +29,7 @@
 
   <h2>
     <span class='badge <%= notification_button_color(@notification.state) if display_subject? %>'>
-      <%= octicon notification_icon(@notification), :height => '1em', title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
+      <%= octicon notification_icon(@notification), :height => '24', title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
       <%= notification_button_title(@notification.subject_type, @notification.state) %>
     </span>
     <%= @notification.subject_title %> &nbsp
