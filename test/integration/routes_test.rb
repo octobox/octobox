@@ -5,6 +5,7 @@ require 'test_helper'
 class RoutesTest < ActionDispatch::IntegrationTest
   setup do
     stub_notifications_request
+    stub_comments_requests
     stub_fetch_subject_enabled(value: false)
     @user = create(:user)
   end
