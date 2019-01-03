@@ -159,7 +159,7 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    @display_subject ||= subjectable? && (Octobox.fetch_subject? || (github_app_installed? && repository.display_subject?))
+    @display_subject ||= subjectable? && (Octobox.fetch_subject? || repository.try(:display_subject?))
   end
 
   def upgrade_required?
