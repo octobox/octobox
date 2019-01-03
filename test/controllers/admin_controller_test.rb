@@ -5,6 +5,7 @@ class AdminControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_fetch_subject_enabled(value: false)
     stub_notifications_request
+    stub_comments_requests
     @user = create(:user)
   end
 
