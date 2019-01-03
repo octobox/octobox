@@ -76,15 +76,13 @@ class NotificationsController < ApplicationController
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
     @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
 
-    if display_subject?
-      @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
-      @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
-      @unlabelled            = scope.reorder(nil).unlabelled.count
-      @bot_notifications     = scope.reorder(nil).bot_author.count
-      @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
-      @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
-    end
+    @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
+    @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
+    @unlabelled            = scope.reorder(nil).unlabelled.count
+    @bot_notifications     = scope.reorder(nil).bot_author.count
+    @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
+    @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
+    @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
 
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
@@ -103,15 +101,13 @@ class NotificationsController < ApplicationController
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
     @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
 
-    if display_subject?
-      @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
-      @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
-      @unlabelled            = scope.reorder(nil).unlabelled.count
-      @bot_notifications     = scope.reorder(nil).bot_author.count
-      @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
-      @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
-    end
+    @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
+    @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
+    @unlabelled            = scope.reorder(nil).unlabelled.count
+    @bot_notifications     = scope.reorder(nil).bot_author.count
+    @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
+    @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
+    @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
 
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
@@ -341,7 +337,7 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
-    eager_load_relation = display_subject? ? [{subject: :labels}, {repository: {app_installation: {subscription_purchase: :subscription_plan}}}] : nil
+    eager_load_relation = [{subject: :labels}, {repository: {app_installation: {subscription_purchase: :subscription_plan}}}]
     scope = current_user.notifications.includes(eager_load_relation)
 
     @search = Search.new(scope: scope, query: params[:q], params: params)

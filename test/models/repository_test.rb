@@ -57,4 +57,29 @@ class RepositoryTest < ActiveSupport::TestCase
     assert_equal notification.repository_owner_name, @repository.owner
     assert_equal notification.repository_full_name, @repository.full_name
   end
+
+  test 'display_subject is false for private repos without an app installation' do
+    repository = build(:repository, private: true)
+    refute repository.display_subject?
+  end
+
+  test 'display_subject is false for private repos with an unpaid app installed on Octobox.io' do
+    stub_env_var('OCTOBOX_IO', 'true')
+    app_installation = create(:app_installation)
+    app_installation.stubs(:private_repositories_enabled?).returns(false)
+    repository = create(:repository, full_name: 'private/repo', private: true, app_installation: app_installation)
+    refute repository.display_subject?
+  end
+
+  test 'display_subject is true for private repos with a paid app installed' do
+    app_installation = create(:app_installation)
+    app_installation.stubs(:private_repositories_enabled?).returns(true)
+    repository = create(:repository, full_name: 'private/repo', private: true, app_installation: app_installation)
+    assert repository.display_subject?
+  end
+
+  test 'display_subject is true for open source repos' do
+    repository = build(:repository, private: false)
+    assert repository.display_subject?
+  end
 end
