@@ -12,11 +12,16 @@ class Repository < ApplicationRecord
 
   scope :github_app_installed, -> { joins(:app_installation) }
 
+  def open_source?
+    !private?
+  end
+
   def github_app_installed?
     app_installation_id.present?
   end
 
   def display_subject?
+    return true unless private?
     github_app_installed? && required_plan_available?
   end
 
