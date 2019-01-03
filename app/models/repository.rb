@@ -17,6 +17,7 @@ class Repository < ApplicationRecord
   end
 
   def display_subject?
+    return true unless private?
     github_app_installed? && required_plan_available?
   end
 
