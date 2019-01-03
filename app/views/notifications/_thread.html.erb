@@ -28,7 +28,7 @@
 <div id='notification-thread' class="p-3" data-id='<%= @notification.id %>'>
 
   <h2>
-    <span class='badge <%= notification_button_color(@notification.state) if display_subject? %>'>
+    <span class='badge <%= notification_badge_color(@notification.state) if display_subject? %>'>
       <%= octicon notification_icon(@notification), :height => '24', title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
       <%= notification_button_title(@notification.subject_type, @notification.state) %>
     </span>
