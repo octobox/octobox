@@ -12,12 +12,12 @@
     <% if @previous %>
       <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "btn btn-sm previous btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
     <% else %>
-      <%= link_to octicon('chevron-left'), '#', class: "btn btn-sm previous btn-outline-light text-muted", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
+      <%= link_to octicon('chevron-left'), '#', class: "btn btn-sm previous btn-outline-secondary" %>
     <% end %>
     <% if @next %>
       <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "btn btn-sm next btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
     <% else %>
-      <%= link_to octicon('chevron-right'), '#', class: "btn btn-sm next btn-outline-light text-muted", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
+      <%= link_to octicon('chevron-right'), '#', class: "btn btn-sm next btn-outline-secondary" %>
     <% end %>
     <button class='btn btn-sm closethread btn-outline-dark d-xxxl-none' data-toggle='tooltip' title='Close discussion'>
       <%= octicon('x') %>
