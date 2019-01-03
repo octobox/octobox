@@ -7,10 +7,13 @@
 
 <div class='container readable'>
   <h1 class="text-center"><%= octobox_round(80) %> <span class='align-middle'>Octobox</span></h1>
-  <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3> 
-  <h5 class='text-center font-weight-light'>
-      <%= number_to_human Notification.count %> notifications managed, and counting &#8230
-  </h5>
+  <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3>
+  <% if Octobox.octobox_io? %>
+    <h5 class='text-center font-weight-light'>
+        <%= number_to_human Notification.fast_total, precision: 2 %> notifications managed, and counting &#8230
+    </h5>
+  <% end %>
+
   <div class='text-center'>
     <%= image_tag 'screenshot.png', class: 'screenshot mt-3', alt: 'Octobox Screenshot' %>
   </div>
@@ -63,12 +66,12 @@
   <% if Octobox.github_app? %>
     <h3 id='install-the-app' class='pt-5'>Liven up notifications with the GitHub app</h3>
     <p class='text-large'>By default Octobox will pull basic public and private notification information:</p>
-    
+
     <%= image_tag 'notification-basic.png', class: 'screenshot shadow-sm mb-4', alt: 'Basic notification' %>
-    
-    <p class='text-large'>Install the GitHub app to add live information on issue, PR, and CI status, labels, authors and 
+
+    <p class='text-large'>Install the GitHub app to add live information on issue, PR, and CI status, labels, authors and
     more to your organisation's notifications:</p>
-    
+
     <%= image_tag 'notification-enhanced.png', class: 'screenshot shadow-sm mb-4', alt: 'Enhanced notification' %>
 
     <div class='text-center'>
