@@ -624,6 +624,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by author' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], author: 'andrew')
@@ -634,6 +635,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple authors' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], author: 'andrew')
@@ -677,6 +679,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple labels' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -689,6 +692,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude label' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -702,6 +706,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude multiple labels' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -714,6 +719,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by state' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -724,6 +730,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple states' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -734,6 +741,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude state' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -745,6 +753,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude multiple states' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -755,6 +764,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by assignee' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], assignees: ":andrew:")
@@ -765,6 +775,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple assignees' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], assignees: ":andrew:")
@@ -806,6 +817,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by locked:false' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], locked: false)

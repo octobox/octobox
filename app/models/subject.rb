@@ -52,6 +52,8 @@ class Subject < ApplicationRecord
     # webhook payloads don't always have 'repository' info
     if remote_subject['repository']
       full_name = remote_subject['repository']['full_name']
+    elsif remote_subject['full_name']
+      full_name = remote_subject['full_name']
     else
       full_name = extract_full_name(remote_subject['url'])
     end

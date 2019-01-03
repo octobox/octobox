@@ -35,6 +35,10 @@ module Octobox
         end
       end
 
+      def download_subject?
+        @download_subject ||= subjectable? && github_client && (Octobox.fetch_subject? || github_app_installed? || repository.try(:open_source?))
+      end
+
       private
 
       def download_subject
