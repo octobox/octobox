@@ -28,7 +28,7 @@
   </li>
 </ul>
 
-<% if current_user.pinned_searches.any? || any_active_filters? %>
+<% if current_user.pinned_searches.present? || any_active_filters? %>
   <ul class="nav nav-pills flex-column nav-filters">
     <% current_user.pinned_searches.each do |pinned_search| %>
       <li role="presentation" class="nav-item pinned_search">
