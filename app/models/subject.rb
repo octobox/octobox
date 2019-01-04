@@ -52,6 +52,8 @@ class Subject < ApplicationRecord
     # webhook payloads don't always have 'repository' info
     if remote_subject['repository']
       full_name = remote_subject['repository']['full_name']
+    elsif remote_subject['full_name']
+      full_name = remote_subject['full_name']
     else
       full_name = extract_full_name(remote_subject['url'])
     end
@@ -154,7 +156,7 @@ class Subject < ApplicationRecord
 
   def download_comments
     return unless github_client
-    github_client.get(url.gsub('/pulls/', '/issues/') + '/comments')
+    github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
     nil
   end

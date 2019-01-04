@@ -49,7 +49,7 @@ GEM
     ast (2.4.0)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
-    autoprefixer-rails (9.4.3)
+    autoprefixer-rails (9.4.4)
       execjs
     better_errors (2.5.0)
       coderay (>= 1.0.0)
@@ -139,7 +139,7 @@ GEM
     hashie (3.6.0)
     i18n (1.4.0)
       concurrent-ruby (~> 1.0)
-    jaro_winkler (1.5.1)
+    jaro_winkler (1.5.2)
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)

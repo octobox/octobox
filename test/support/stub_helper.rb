@@ -61,7 +61,7 @@ module StubHelper
   def stub_comments_requests(extra_headers: {})
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 
-    stub_request(:get, /\/comments\z/)
+    stub_request(:get, /\/comments\?since\z/)
       .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
   end
 

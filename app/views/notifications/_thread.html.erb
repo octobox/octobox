@@ -12,12 +12,12 @@
     <% if @previous %>
       <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "btn btn-sm previous btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
     <% else %>
-      <%= link_to octicon('chevron-left'), '#', class: "btn btn-sm previous btn-outline-light text-muted", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
+      <%= link_to octicon('chevron-left'), '#', class: "btn btn-sm previous btn-outline-secondary" %>
     <% end %>
     <% if @next %>
       <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "btn btn-sm next btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
     <% else %>
-      <%= link_to octicon('chevron-right'), '#', class: "btn btn-sm next btn-outline-light text-muted", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
+      <%= link_to octicon('chevron-right'), '#', class: "btn btn-sm next btn-outline-secondary" %>
     <% end %>
     <button class='btn btn-sm closethread btn-outline-dark d-xxxl-none' data-toggle='tooltip' title='Close discussion'>
       <%= octicon('x') %>
@@ -28,7 +28,7 @@
 <div id='notification-thread' class="p-3" data-id='<%= @notification.id %>'>
 
   <h2>
-    <button class='btn btn-sm <%= notification_button_color(@notification.state) if display_subject? %>'>
+    <button class='btn btn-sm <%= notification_button_color(@notification.state) %>'>
       <%= octicon notification_icon(@notification), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
       <%= notification_button_title(@notification.subject_type, @notification.state) %>
     </button>
@@ -36,11 +36,9 @@
     <%= link_to octicon('link-external', height: 32), @notification.web_url, target: '_blank', class: 'link' %>
   </h2>
 
-  <% if display_subject? %>
-      <% if @notification.subject %>
-        <%= notification_status(@notification.subject.status) %>
-        <%= link_to @notification.subject.author, root_path(filtered_params(author: @notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= @notification.subject_type.downcase %>
-      <% end %>
+  <% if @notification.subject %>
+    <%= notification_status(@notification.subject.status) %>
+    <%= link_to @notification.subject.author, root_path(filtered_params(author: @notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= @notification.subject_type.downcase %>
   <% end %>
 
   on <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>
