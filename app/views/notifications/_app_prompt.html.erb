@@ -1,5 +1,10 @@
 <p>
-  Pull in state, labels, authors, assignees and CI status on issues and pull requests by installing the GitHub App on
+  <% if notification.repository.try(:open_source?) %>
+    Get realtime updates
+  <% else %>
+    Pull in state, labels, authors, assignees and CI status
+  <% end %>
+  on issues and pull requests by installing the GitHub App on
   <%= notification.repository_full_name %>.
 </p>
 
