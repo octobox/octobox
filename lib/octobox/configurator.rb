@@ -193,6 +193,11 @@ module Octobox
     end
     attr_writer :push_notifications
 
+    def public_subject_rollout
+      @public_subject_rollout || ENV['PUBLIC_SUBJECT_ROLLOUT'].try(:to_time)
+    end
+    attr_writer :public_subject_rollout
+
     private
 
     def env_boolean(env_var_name)
