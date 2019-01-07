@@ -52,7 +52,6 @@ See the comment thread right from within the Octobox interface, either in a thre
 - Show everyone who’s involved in a notification thread
 - Show new comments since last viewed
 
+## User to user discussions
 
-## Team discussions [#660](https://github.com/octobox/octobox/issues/660)
-
-Team discussions aren't currently available via the Notifications API, it's unclear if/when they will be available but they do have their own API that we can use to add notifications for team discussions to Octobox.
+GitHub used to have this years and years ago. The additonal context and social engagement is often useful for projects of globally distributed, disparate contributors. This might be implemented alongside 'reply on GitHub' functions as part of the above.
