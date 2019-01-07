@@ -76,6 +76,27 @@ svg{
   }
 }
 
+//add svg button for badges
+@mixin hover-focus {
+  &:hover,
+  &:focus {
+    @content;
+  }
+}
+
+@mixin badge-variant($bg) {
+  color: color-yiq($bg);
+  & svg{
+    fill: color-yiq($bg);
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .badge-#{$color} {
+    @include badge-variant($value);
+  }
+}
+
 .nav-pills {
   .nav-link.active,
   .nav-link.active svg:not(.octicon-x),

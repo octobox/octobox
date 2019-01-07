@@ -384,6 +384,10 @@ To enable this feature set the following environment variable:
 
 If you want this feature to work for private repositories, you'll need to [Customize the Scopes on GitHub](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
 
+As of 4th January 2019, Octobox can sync subjects from open source repositories without requiring `repo` scope. To limit the downloading of old open source subjects, add the current date to the `PUBLIC_SUBJECT_ROLLOUT` environment variable to minimize syncing of old notifications on large installations:
+
+    PUBLIC_SUBJECT_ROLLOUT=2019-01-04 12:30:00 UTC
+
 ## API Documentation
 
 API Documentation will be generated from the application's controllers using `bin/rake api_docs:generate`. Once generated it will be automatically listed in the Header dropdown.
