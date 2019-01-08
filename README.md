@@ -44,7 +44,6 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 	- [Web extension](#web-extension)
 - [Requirements](#requirements)
 - [Keyboard shortcuts](#keyboard-shortcuts)
-- [Alternatives](#alternatives)
 - [Contribute](#contribute)
 	- [Vulnerability disclosure](#vulnerability-disclosure)
 	- [Note on Patches/Pull Requests](#note-on-patchespull-requests)
