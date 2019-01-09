@@ -14,3 +14,7 @@
     <% end %>
   </p>
 </div>
+
+<% if Octobox.io? %>
+  <%= render 'layouts/private_notifications_notice' %>
+<% end %>

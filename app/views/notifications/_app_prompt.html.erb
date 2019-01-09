@@ -1,8 +1,8 @@
 <p>
-  <% if notification.repository.try(:open_source?) %>
-    Get realtime updates
-  <% else %>
+  <% if notification.private? %>
     Pull in state, labels, authors, assignees and CI status
+  <% else %>
+    Get realtime updates
   <% end %>
   on issues and pull requests by installing the GitHub App on
   <%= notification.repository_full_name %>.
