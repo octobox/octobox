@@ -26,7 +26,7 @@ module Octobox
       config.github_app
     end
 
-    def octobox_io?
+    def io?
       config.octobox_io
     end
 
