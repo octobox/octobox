@@ -128,8 +128,10 @@ $notification-items: (
       }
     }
     &:hover, &:focus{
-      .notification-date small{
-        display: none;
+      .notification-date{
+        small, .badge {
+          display: none;
+        }
       }
       .buttons{
         display: inline;
@@ -226,6 +228,9 @@ $notification-items: (
       content: "by ";
       color: $text-muted;
       font-size: 10px;
+    }
+    .notification-comment-count {
+      display:none
     }
     .notification-date {
       top: 10px;
