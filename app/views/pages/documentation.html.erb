@@ -30,15 +30,15 @@
         </p>
         <h2 id='accessing'>Accessing Octobox</h2>
         <hr>
-        <% if Octobox.octobox_io? %>
+        <% if Octobox.io? %>
           <p>
             This instance of Octobox is hosted by the Octobox.io team. To access Octobox.io you just need to sign in with your GitHub profile or install the GitHub app on the <%= link_to 'homepage', root_path %>.
           </p>
           <h3>Signing in with GitHub</h3>
           <p>
-             This will give you access to basic notification information for public <i>and</i> private repositories using GitHub's <code>notification</code> scope. <% if Octobox.octobox_io? %> To access more detailed information you need to install the Octobox.io GitHub App. <% end %>
+             This will give you access to basic notification information for public <i>and</i> private repositories using GitHub's <code>notification</code> scope. <% if Octobox.io? %> To access more detailed information you need to install the Octobox.io GitHub App. <% end %>
           </p>
-          <% if Octobox.octobox_io? %>
+          <% if Octobox.io? %>
             <h3>Installing the GitHub App</h3>
             <p>
               To access more detailed information about your notifications (assignees, labels, conversations threads etc) Octobox.io needs more privileged access to your repositories. To enable this you need to install our GitHub App for your personal or organisation's account. Access to public repositories on Octobox.io is free forever, access to private repositories is a paid-for service.
@@ -64,7 +64,7 @@
             Alternatively you can host your own instance of Octobox. See <a href='#https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md'>the installation guide</a> for instructions and details regarding deployment to Heroku, Docker, and more.
           </p>
         <% end %>
-        <% unless Octobox.octobox_io? %>
+        <% unless Octobox.io? %>
           <p>
             By default Octobox uses GitHub's basic OAuth <code>'notifications'</code> scope to access your notifications. This provides Octobox with access to notifications from both public <i>and</i> private repositories, but it provides very little detail about those notifications.
           </p>
