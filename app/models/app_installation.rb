@@ -44,7 +44,7 @@ class AppInstallation < ApplicationRecord
   end
 
   def private_repositories_enabled?
-    return true unless Octobox.octobox_io?
+    return true unless Octobox.io?
     subscription_purchase.try(:private_repositories_enabled?)
   end
 
