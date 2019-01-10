@@ -85,16 +85,10 @@ class NotificationsController < ApplicationController
 
     comments_loaded = 5
     @comments_to_load = 0
-    @more_comments = false
 
     if @notification.subject
-      if params[:expand_comments]
-        @comments = @notification.subject.comments.order('created_at ASC')
-      else
-        @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
-        @comments_to_load = @notification.subject.comments.count - comments_loaded
-        @more_comments = true
-      end
+      @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
+      @comments_left_to_load = @notification.subject.comments.count - comments_loaded > 0 ? @notification.subject.comments.count : 0
     else
       @comments = []
     end
@@ -104,15 +98,37 @@ class NotificationsController < ApplicationController
 
 
   def expand_comments(comments_loaded = 5)
-    return unless request.xhr?
+
+    # return unless request.xhr?
+
+    # scope = original_scope = notifications_for_presentation.newest
+    # ids = scope.pluck(:id)
+    # @notification = original_scope.find(params[:id])
+
+    # @comments = @notification.subject.comments.order('created_at ASC').pop(comments_loaded)
+    
+    # render :partial => "notifications/comments", layout:false, locals:{comments: @comments}
 
     scope = original_scope = notifications_for_presentation.newest
-    ids = scope.pluck(:id)
-    @notification = original_scope.find(params[:id])
+    scope = load_and_count_notifications(scope) unless request.xhr?
 
-    @comments = @notification.subject.comments.order('created_at ASC').pop(comments_loaded)
-    
-    render :partial => "notifications/comments", layout:false
+    ids = scope.pluck(:id)
+    position = ids.index(params[:id].to_i)
+    @notification = original_scope.find(params[:id])
+    @previous = ids[position-1] unless position.nil? || position-1 < 0
+    @next = ids[position+1] unless position.nil? || position+1 > ids.length
+
+    comments_loaded = 5
+    @comments_to_load = 0
+    @more_comments = false
+
+    if @notification.subject
+      @comments = @notification.subject.comments.order('created_at ASC')
+    else
+      @comments = []
+    end
+
+    render partial: "notifications/comments", locals:{comments: @comments}, layout: false if request.xhr?
   end
 
   # Return a count for the number of unread notifications

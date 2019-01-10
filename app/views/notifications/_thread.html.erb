@@ -70,7 +70,7 @@
       </div>
     <% end %>
 
-    <% if @more_comments %>
+    <% if @@comments_left_to_load > 0 %>
       <div id='more-comments'>
         <%= link_to expand_comments_notification_url, class: 'btn btn-secondary mt-3 expand_comments' do %>
           <%= octicon('comment', height: 16, class: 'ml-1') %>
