@@ -457,6 +457,22 @@ var Octobox = (function() {
     return false;
   }
 
+  var expandComments = function() {
+    history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
+
+    $('#more-comments').html($('#loading').html())
+
+    $.get($(this).attr('href'), function(data){
+      if (data["error"] != null) {
+        $(".header-flash-messages").empty();
+        notify(data["error"], "danger")
+      } else {
+        $('#more-comments').html(data)
+      }
+    });
+    return false;
+  }  
+
   // private methods
 
   var getDisplayedRows = function() {
@@ -661,6 +677,7 @@ var Octobox = (function() {
     markRead: markRead,
     deleteSelected: deleteSelected,
     deleteThread: deleteThread,
-    viewThread: viewThread
+    viewThread: viewThread,
+    expandComments: expandComments
   }
 })();
