@@ -33,7 +33,7 @@ class Search
     res = res.archived(archived) unless archived.nil?
     res = res.archived(!inbox) unless inbox.nil?
     res = res.unread(unread) unless unread.nil?
-    res = res.bot_author unless bot_author.nil?
+    res = res.bot_author(bot_author) unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
     res = lock_conditionally(res)
