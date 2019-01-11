@@ -47,8 +47,8 @@
 
   <%= time_ago_in_words(@notification.updated_at) %> ago
 
-  <div class='d-flex justify-content-between'>
-    <div class='labels mt-2'>
+  <div class='d-flex justify-content-between mt-2'>
+    <div class='labels'>
       <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "badge badge-#{reason_label(@notification.reason)}" %>
       <% if @notification.subject %>
         <% @notification.subject.labels.each do |label| %>
