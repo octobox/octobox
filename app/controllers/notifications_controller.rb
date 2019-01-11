@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class NotificationsController < ApplicationController
+
   skip_before_action :authenticate_user!
   before_action :authenticate_web_or_api!
   before_action :find_notification, only: [:star, :mark_read]
@@ -88,7 +89,7 @@ class NotificationsController < ApplicationController
 
     if @notification.subject
       @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
-      @comments_left_to_load = @notification.subject.comments.count - comments_loaded > 0 ? @notification.subject.comments.count : 0
+      @comments_left_to_load = @notification.subject.comments.count - comments_loaded > 0 ? @notification.subject.comments.count - comments_loaded : 0
     else
       @comments = []
     end
@@ -119,7 +120,7 @@ class NotificationsController < ApplicationController
     @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
     comments_loaded = 5
-    @comments_to_load = 0
+    @comments_left_to_load = 0
     @more_comments = false
 
     if @notification.subject
@@ -128,7 +129,11 @@ class NotificationsController < ApplicationController
       @comments = []
     end
 
-    render partial: "notifications/comments", locals:{comments: @comments}, layout: false if request.xhr?
+    if request.xhr?
+      render partial: "notifications/comments", locals:{comments: @comments}, layout: false
+    else
+      render 'notifications/show'
+    end
   end
 
   # Return a count for the number of unread notifications
