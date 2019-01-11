@@ -234,7 +234,7 @@ module NotificationsHelper
   def sidebar_filter_link(active:, param:, value:, count: nil, except: nil, link_class: nil, path_params: nil, title: nil)
     css_class = 'nav-item'
     css_class += ' active' if active
-    css_class += ' unread-alert' if unread_alerts?(value)
+    css_class += " #{param}-#{value}"
 
     content_tag :li, class: css_class, title: title do
       active = (active && not_repo_in_active_org(param))
@@ -339,11 +339,5 @@ module NotificationsHelper
 
   def display_thread?
     Octobox.include_comments? && current_user.display_comments
-  end
-
-  def unread_alerts?(type)
-    type == 'RepositoryVulnerabilityAlert' &&
-      Notification.reorder(nil).
-                   where(unread: true, subject_type: "RepositoryVulnerabilityAlert").count > 0
   end
 end

@@ -8,11 +8,24 @@
     &:hover{
       background-color: $list-group-hover-bg;
     }
+    &.active .badge svg{
+      fill: #212529;
+    }
     .nav-link{
       border-radius: 0;
     }
+    &.type-RepositoryVulnerabilityAlert{
+      background-color: $red;
+      a{
+        color: color-yiq($red);
+        fill: color-yiq($red);  
+        svg{
+          fill: color-yiq($red);
+        }
+      }
+    }
   }
-  .nav-item.unread-alert{background-color: red;}
+
   &:first-child{
     margin-top: 0px;
     padding-top: 0px;
