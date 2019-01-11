@@ -33,7 +33,7 @@
     <span class='text-muted font-weight-light'> #<%= @notification.id %> </span>
   </h2>
   
-  <%= link_to @notification.web_url, class: "btn btn-sm #{notification_button_color(@notification.state)}" do %>
+  <%= link_to @notification.web_url, class: "btn btn-sm #{notification_button_color(@notification.state)} mr-2" do %>
     <%= octicon notification_icon(@notification), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
     <%= notification_button_title(@notification.subject_type, @notification.state) %>
   <% end %>
