@@ -58,7 +58,6 @@ module NotificationsHelper
       assigned:        params[:assigned],
       is_private:      params[:is_private],
       status:          params[:status],
-      expand_comments: params[:expand_comments]
     }
   end
 

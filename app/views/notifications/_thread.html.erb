@@ -25,7 +25,7 @@
   </div>
 </div>
 
-<div id='notification-thread' class="p-3" data-id='<%= @notification.id %>'>
+<div id='notification-thread' class="p-3 mb-5" data-id='<%= @notification.id %>'>
 
   <h2>
     <span class='badge <%= notification_badge_color(@notification.state) %>'>
@@ -70,11 +70,11 @@
       </div>
     <% end %>
 
-    <% if @@comments_left_to_load > 0 %>
+    <% if @comments_left_to_load > 0 %>
       <div id='more-comments'>
         <%= link_to expand_comments_notification_url, class: 'btn btn-secondary mt-3 expand_comments' do %>
           <%= octicon('comment', height: 16, class: 'ml-1') %>
-          View <%= @comments_to_load %> more comments
+          View <%= @comments_left_to_load %> more comments
         <% end %>
       </div>
     <% end %>
