@@ -58,7 +58,7 @@
     </div>
     <% if @notification.subject %>
       <div>
-        <%= link_to pluralize(@comments.count,'comments'), expand_comments_notification_url,  class: 'text-muted'%>
+        <%= link_to pluralize(@comments.count,'comment'), expand_comments_notification_url,  class: 'text-muted'%>
       </div>
     <% end %>
   </div>
