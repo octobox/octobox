@@ -44,7 +44,7 @@
 
   on <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>
 
-  <%= time_ago_in_words(@notification.updated_at) %> ago Âˇ <%= pluralize(@comments.count,'comments') %>
+  <%= time_ago_in_words(@notification.updated_at) %> ago &middot; <%= pluralize(@comments.count,'comments') %>
 
   <div class='labels'>
     <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "badge badge-#{reason_label(@notification.reason)}" %>
