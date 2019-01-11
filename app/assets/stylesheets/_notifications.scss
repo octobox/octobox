@@ -177,8 +177,10 @@ $notification-items: (
         display: none;
       }
       &:hover, &:focus{
-        .notification-date small{
-          display: inline;
+        .notification-date{
+          small, .badge{
+            display: inline;
+          }
         }
       }
     }
@@ -228,9 +230,6 @@ $notification-items: (
       content: "by ";
       color: $text-muted;
       font-size: 10px;
-    }
-    .notification-comment-count {
-      display:none
     }
     .notification-date {
       top: 10px;
