@@ -316,6 +316,14 @@ module NotificationsHelper
     "#{state.underscore.humanize}"
   end
 
+  def notification_button_color(state)
+    {
+      'open' => 'btn-success',
+      'closed' => 'btn-danger',
+      'merged' => 'btn-merged'
+    }[state]
+  end
+
   def notification_badge_color(state)
     {
       'open' => 'badge-success',
