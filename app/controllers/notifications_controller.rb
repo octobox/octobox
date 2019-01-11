@@ -100,16 +100,6 @@ class NotificationsController < ApplicationController
 
   def expand_comments(comments_loaded = 5)
 
-    # return unless request.xhr?
-
-    # scope = original_scope = notifications_for_presentation.newest
-    # ids = scope.pluck(:id)
-    # @notification = original_scope.find(params[:id])
-
-    # @comments = @notification.subject.comments.order('created_at ASC').pop(comments_loaded)
-    
-    # render :partial => "notifications/comments", layout:false, locals:{comments: @comments}
-
     scope = original_scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 
