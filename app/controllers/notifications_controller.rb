@@ -98,7 +98,7 @@ class NotificationsController < ApplicationController
   end
 
 
-  def expand_comments(comments_loaded = 5)
+  def expand_comments
 
     scope = original_scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
@@ -109,7 +109,6 @@ class NotificationsController < ApplicationController
     @previous = ids[position-1] unless position.nil? || position-1 < 0
     @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
-    comments_loaded = 5
     @comments_left_to_load = 0
     @more_comments = false
 
