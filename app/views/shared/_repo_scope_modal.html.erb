@@ -9,7 +9,7 @@
         <div class="modal-body">
           <p>
             This feature requires additional permissions.
-            <% if Octobox.octobox_io? %>
+            <% if Octobox.io? %>
               <%= link_to 'Install the GitHub App', Octobox.config.app_url %> to enable them.
             <% else %>
               See the <%= link_to 'documentation', documentation_path(anchor: 'accessing') %> for how to enable them.

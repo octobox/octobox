@@ -197,7 +197,7 @@
               <tr>
                 <th class='border-top-0'>Account</th>
                 <th class='border-top-0'>Repos</th>
-                <% if Octobox.octobox_io? %>
+                <% if Octobox.io? %>
                   <th class='border-top-0' colspan='2'>Billing</th>
                 <% end %>
                 <th class='border-top-0'>Settings</th>
@@ -214,7 +214,7 @@
                   <td class="align-middle">
                     <%= pluralize app_installation.repositories.github_app_installed.count, 'repo' %>
                   </td >
-                  <% if Octobox.octobox_io? %>
+                  <% if Octobox.io? %>
                     <td class="align-middle">
                       <% if app_installation.subscription_purchase %>
                         <% if app_installation.subscription_purchase.active? %>

@@ -17,7 +17,13 @@ module Octobox
         scope :locked,     -> { joins(:subject).where(subjects: { locked: true }) }
         scope :subjectable,-> { where(subject_type: Notification::SUBJECTABLE_TYPES) }
         scope :commentable,-> { where(subject_type: Notification::SUBJECT_TYPE_COMMENTS) }
-        scope :bot_author, -> { joins(:subject).where('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot') }
+        scope :bot_author, ->(bot_author = true) {
+          if bot_author
+            joins(:subject).where('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot')
+          else
+            joins(:subject).where.not('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot')
+          end
+        }
         scope :labelable,  -> { where(subject_type: ['Issue', 'PullRequest']) }
         scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
         scope :unlabelled, -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
