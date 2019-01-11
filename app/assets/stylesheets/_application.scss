@@ -131,6 +131,16 @@
   opacity: .5;
 }
 
+.collapsing {
+    -webkit-transition: all .1s ease-out;
+    -o-transition: all .1s ease-out;
+    transition: all .1s ease-out;
+}
+
+.card-header.collapsed{
+  border-bottom: 0;
+}
+
 @include media-breakpoint-down(lg){
   .not-a-nav{
     background-color: $body-bg;
