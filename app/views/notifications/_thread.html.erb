@@ -27,15 +27,16 @@
 
 <div id='notification-thread' class="p-3 mb-5" data-id='<%= @notification.id %>'>
 
+
   <h2 class='text-capitalize'>
-    <%= link_to @notification.web_url, class: "btn btn-sm #{notification_button_color(@notification.state)}" do %>
-      <%= octicon notification_icon(@notification), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
-      <%= notification_button_title(@notification.subject_type, @notification.state) %>
-    <% end %>
     <%= @notification.subject_title %>
     <span class='text-muted font-weight-light'> #<%= @notification.id %> </span>
   </h2>
   
+  <%= link_to @notification.web_url, class: "btn btn-sm #{notification_button_color(@notification.state)}" do %>
+    <%= octicon notification_icon(@notification), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
+    <%= notification_button_title(@notification.subject_type, @notification.state) %>
+  <% end %>
 
   <% if @notification.subject %>
     <%= notification_status(@notification.subject.status) %>
@@ -44,17 +45,23 @@
 
   on <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>
 
-  <%= time_ago_in_words(@notification.updated_at) %> ago &middot; <%= pluralize(@comments.count,'comments') %>
+  <%= time_ago_in_words(@notification.updated_at) %> ago
 
-  <div class='labels'>
-    <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "badge badge-#{reason_label(@notification.reason)}" %>
-    <% if @notification.subject %>
-      <% @notification.subject.labels.each do |label| %>
-        <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+  <div class='d-flex justify-content-between'>
+    <div class='labels mt-2'>
+      <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "badge badge-#{reason_label(@notification.reason)}" %>
+      <% if @notification.subject %>
+        <% @notification.subject.labels.each do |label| %>
+          <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+        <% end %>
       <% end %>
+    </div>
+    <% if @notification.subject %>
+      <div>
+        <%= link_to pluralize(@comments.count,'comments'), expand_comments_notification_url,  class: 'text-muted'%>
+      </div>
     <% end %>
   </div>
-
   <% if @notification.subject %>
     <div class='discussion-thread'>
       <% if @notification.subject.body %>
