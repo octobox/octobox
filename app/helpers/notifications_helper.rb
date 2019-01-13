@@ -307,7 +307,6 @@ module NotificationsHelper
   end
 
   def notification_button(subject_type, state = nil)
-    state = nil unless display_subject?
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     SUBJECT_TYPES[subject_type]
   end
@@ -317,11 +316,11 @@ module NotificationsHelper
     "#{state.underscore.humanize}"
   end
 
-  def notification_button_color(state)
+  def notification_badge_color(state)
     {
-      'open' => 'btn-open',
-      'closed' => 'btn-closed',
-      'merged' => 'btn-merged'
+      'open' => 'badge-success',
+      'closed' => 'badge-danger',
+      'merged' => 'badge-merged'
     }[state]
   end
 

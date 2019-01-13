@@ -85,13 +85,13 @@ Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
 First things first, you'll need to fork and clone Octobox repository to
 your local machine.
 
-Secondly, you'll need to install Ruby 2.5.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+Secondly, you'll need to install Ruby 2.6.0. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.5.3
-rbenv global 2.5.3
+rbenv install 2.6.0
+rbenv global 2.6.0
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
@@ -384,6 +384,10 @@ To enable this feature set the following environment variable:
 
 If you want this feature to work for private repositories, you'll need to [Customize the Scopes on GitHub](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
 
+As of 4th January 2019, Octobox can sync subjects from open source repositories without requiring `repo` scope. To limit the downloading of old open source subjects, add the current date to the `PUBLIC_SUBJECT_ROLLOUT` environment variable to minimize syncing of old notifications on large installations:
+
+    PUBLIC_SUBJECT_ROLLOUT=2019-01-04 12:30:00 UTC
+
 ## API Documentation
 
 API Documentation will be generated from the application's controllers using `bin/rake api_docs:generate`. Once generated it will be automatically listed in the Header dropdown.
@@ -445,4 +449,4 @@ You can set the `OPEN_IN_SAME_TAB` environment variable, which will force all no
 
 Octobox has an experimental feature where it can live-update notifications when they change using websockets. Only notifications you are currently viewing will be updated, no rows will be added or removed dynamically.
 
-To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance. Also, set `WEBSOCKET_ALLOWED_ORIGIN` to Octobox base URL, e.g. `http://localhost` (it can take multiple values, e.g. `http://localhost,https://localhost`).
+To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance. Also, set `WEBSOCKET_ALLOWED_ORIGINS` to Octobox base URL, e.g. `http://localhost` (it can take multiple values, e.g. `http://localhost,https://localhost`).

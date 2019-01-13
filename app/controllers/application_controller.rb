@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   API_HEADER = 'X-Octobox-API'
 
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
-  helper_method :current_user, :logged_in?, :initial_sync?, :display_subject?
+  helper_method :current_user, :logged_in?, :initial_sync?
   before_action :authenticate_user!
   before_action :check_access_token_present
 
@@ -23,11 +23,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
-  def display_subject?
-    return true if Octobox.fetch_subject?
-    Octobox.config.github_app && current_user && current_user.github_app_authorized?
-  end
 
   def add_user_info_to_bugsnag(notification)
     return unless logged_in?

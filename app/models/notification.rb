@@ -146,8 +146,8 @@ class Notification < ApplicationRecord
     self.archived = false if archived.nil? # fixup existing records where archived is nil
     unarchive_if_updated if unarchive
     save(touch: false) if changed?
-    update_subject
     update_repository(api_response)
+    update_subject
   end
 
   def github_app_installed?
@@ -159,11 +159,7 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    @display_subject ||= subjectable? && (Octobox.fetch_subject? || (github_app_installed? && repository.display_subject?))
-  end
-
-  def download_subject?
-    @download_subject ||= subjectable? && (Octobox.fetch_subject? || github_app_installed?)
+    @display_subject ||= subjectable? && (Octobox.fetch_subject? || repository.try(:display_subject?))
   end
 
   def upgrade_required?
