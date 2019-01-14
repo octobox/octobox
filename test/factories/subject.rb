@@ -5,5 +5,11 @@ FactoryBot.define do
     state { 'open' }
     author { 'andrew' }
     repository_full_name { 'octobox/octobox' }
+
+    factory :comment do 
+      sequence(:github_id, 1000000) { |n| n }
+      author {'benjam'}
+      body {'blah'}
+    end 
   end
 end
