@@ -318,7 +318,7 @@ class NotificationsController < ApplicationController
       scope = scope.send(sub_scope, val)
     end
     scope = scope.unlabelled if params[:unlabelled].present?
-    scope = scope.bot_author if params[:bot].present?
+    scope = scope.bot_author(params[:bot]) if params[:bot].present?
     scope = scope.label(params[:label]) if params[:label].present?
     scope = scope.assigned(params[:assigned]) if params[:assigned].present?
     scope

@@ -963,4 +963,39 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?q=status%3Apending'
     assert_equal assigns(:notifications).length, 1
   end
+
+  test 'search results can filter by only bot' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    notification3 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], author: 'dependabot[bot]')
+    create(:subject, notifications: [notification2], author: 'py-bot')
+    create(:subject, notifications: [notification3], author: 'andrew')
+
+    get '/?q=bot%3Atrue'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'highlights vulnerability alerts in the sidebar if there are unread notifications' do
+    sign_in_as(@user)
+    create(:notification, user: @user, subject_type: 'RepositoryVulnerabilityAlert', unread: true)
+    get '/'
+    assert_response :success
+    assert_select '.type-RepositoryVulnerabilityAlert', {count: 1}
+  end
+
+  test 'search results can exclude bots' do
+    sign_in_as(@user)
+    Subject.delete_all
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    notification3 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], author: 'dependabot[bot]')
+    create(:subject, notifications: [notification2], author: 'py-bot')
+    create(:subject, notifications: [notification3], author: 'andrew')
+
+    get '/?q=bot%3Afalse'
+    assert_equal assigns(:notifications).length, 1
+  end
 end
