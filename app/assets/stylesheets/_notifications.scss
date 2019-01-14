@@ -234,11 +234,11 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-up(xxxl){
+@include media-breakpoint-up(xl){
   @include regular-table;
 }
 
-@include media-breakpoint-down(xxl) {
+@include media-breakpoint-down(lg) {
   @include regular-table;
   .flex-main.show-thread{
     @include remove-borders;
