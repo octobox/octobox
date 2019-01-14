@@ -2,7 +2,7 @@
 class NotificationsController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :authenticate_web_or_api!
-  before_action :find_notification, only: [:star, :mark_read]
+  before_action :find_notification, only: [:star]
 
   # Return a listing of notifications, including a summary of unread repos, notification reasons, and notification types
   #
@@ -187,20 +187,6 @@ class NotificationsController < ApplicationController
     else
       redirect_back fallback_location: root_path
     end
-  end
-
-  # Mark a notification as read
-  #
-  # :category: Notifications Actions
-  #
-  # ==== Example
-  #
-  # <code>POST notifications/:id/mark_read.json</code>
-  #   HEAD 204
-  #
-  def mark_read
-    @notification.update_columns unread: false
-    head :ok
   end
 
   # Star a notification

@@ -372,7 +372,7 @@ var Octobox = (function() {
   };
 
   function markRead(id) {
-    $.post( "/notifications/"+id+"/mark_read")
+    $.post("/notifications/mark_read_selected" + location.search, {"id": id})
     .done(function() {
       updateFavicon();
     })
