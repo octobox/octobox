@@ -1016,7 +1016,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     Subject.delete_all
     notification = create(:notification, user: @user)
-    subject = create(:subject, notifications: [notification1])
+    subject = create(:subject, notifications: [notification])
     10.times.each { create(:comment, subject: subject) }
     
     get expand_comments_notification_path(notification)
