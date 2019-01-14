@@ -8,7 +8,7 @@
 <div class='container readable'>
   <h1 class="text-center"><%= octobox_round(80) %> <span class='align-middle'>Octobox</span></h1>
   <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3>
-  <% if Octobox.octobox_io? %>
+  <% if Octobox.io? %>
     <h5 class='text-center font-weight-light'>
         <%= number_to_human Notification.fast_total, precision: 2 %> notifications managed, and counting &#8230
     </h5>
@@ -82,7 +82,7 @@
     </div>
   <% end %>
 
-  <% if Octobox.octobox_io? %>
+  <% if Octobox.io? %>
     <h3 id='pricing' class='pt-5'>Pricing</h3>
     <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects with basic notifications for private projects. To add <a href='#enhanced-notifications'>enhanced notifications</a> for private repositories to your organisation's account:</p>
     <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>

@@ -131,7 +131,7 @@ body {
   }
 }
 
-@include media-breakpoint-down(lg) {
+@include media-breakpoint-down(md) {
   @include responsive;
   .flex-main.show-thread{
     display:none;

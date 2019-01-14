@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_20_094340) do
+ActiveRecord::Schema.define(version: 2019_01_14_174802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 2018_11_20_094340) do
     t.string "status"
     t.text "body"
     t.integer "comment_count"
+    t.index ["repository_full_name"], name: "index_subjects_on_repository_full_name"
     t.index ["url"], name: "index_subjects_on_url"
   end
 
