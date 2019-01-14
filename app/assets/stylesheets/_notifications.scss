@@ -234,12 +234,9 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-up(xxxl){
-  @include regular-table;
-}
+@include regular-table;
 
-@include media-breakpoint-down(xxl) {
-  @include regular-table;
+@include media-breakpoint-down(xl) {
   .flex-main.show-thread{
     @include remove-borders;
     @include responsive-table;
