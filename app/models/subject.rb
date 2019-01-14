@@ -10,7 +10,6 @@ class Subject < ApplicationRecord
   private_constant :BOT_AUTHOR_REGEX
 
   scope :label, ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name)) }
-  scope :repository, ->(full_name) { where(arel_table[:url].matches("%/repos/#{full_name}/%")) }
 
   validates :url, presence: true, uniqueness: true
 
