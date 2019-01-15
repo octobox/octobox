@@ -30,10 +30,10 @@
 
   <h2 class='text-capitalize'>
     <%= @notification.subject_title %>
-    <span class='text-muted font-weight-light'> #<%= @notification.id %> </span>
+    <span class='text-muted font-weight-light'> #<%= @notification.subject_number %> </span>
   </h2>
   
-  <%= link_to @notification.web_url, class: "btn btn-sm #{notification_button_color(@notification.state)} mr-2" do %>
+  <%= link_to @notification.web_url, target: :blank, class: "btn btn-sm #{notification_button_color(@notification.state)} mr-2" do %>
     <%= octicon notification_icon(@notification), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
     <%= notification_button_title(@notification.subject_type, @notification.state) %>
   <% end %>
@@ -77,7 +77,13 @@
           </div>
           <div class="card-body">
             <article class="markdown-body">
-              <%== parse_markdown(@notification.subject.body) %>
+              <% if @notification.subject.body.present? %>
+                <%== parse_markdown(@notification.subject.body) %>
+              <% else %>
+                <p>
+                  <i>No description given.</i>
+                </p>
+              <% end %>
             </article>
           </div>
         </div>
