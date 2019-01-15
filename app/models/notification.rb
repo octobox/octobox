@@ -189,13 +189,16 @@ class Notification < ApplicationRecord
   end
 
   def update_repository(api_response)
-    repo = Repository.find_or_create_by(github_id: api_response['repository']['id'])
-    repo.update_attributes({
+    repo = repository ||  Repository.find_or_create_by(github_id: api_response['repository']['id'])
+    repo.assign_attributes({
       full_name: api_response['repository']['full_name'],
       private: api_response['repository']['private'],
       owner: api_response['repository']['full_name'].split('/').first,
-      github_id: api_response['repository']['id'],
-      last_synced_at: Time.current
+      github_id: api_response['repository']['id']
     })
+    if repo.changed?
+      repo.last_synced_at = Time.current
+      repo.save
+    end
   end
 end
