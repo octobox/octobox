@@ -128,8 +128,10 @@ $notification-items: (
       }
     }
     &:hover, &:focus{
-      .notification-date small{
-        display: none;
+      .notification-date{
+        small, .badge {
+          display: none;
+        }
       }
       .buttons{
         display: inline;
@@ -175,8 +177,10 @@ $notification-items: (
         display: none;
       }
       &:hover, &:focus{
-        .notification-date small{
-          display: inline;
+        .notification-date{
+          small, .badge{
+            display: inline;
+          }
         }
       }
     }
@@ -236,7 +240,7 @@ $notification-items: (
 
 @include regular-table;
 
-@include media-breakpoint-down(xl) {
+@include media-breakpoint-down(xxl) {
   .flex-main.show-thread{
     @include remove-borders;
     @include responsive-table;
