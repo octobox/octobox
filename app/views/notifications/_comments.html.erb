@@ -11,7 +11,13 @@
     </div>
 
     <div class="<%= 'comment-'+comment.id.to_s %> card-body collapse <%= 'show' if comment.unread?(@notification) || @comments.length <= index + 1 %> ">
-      <%== parse_markdown(comment.body) %>
+      <% if comment.body.present? %>
+        <%== parse_markdown(comment.body) %>
+      <% else %>
+        <p>
+          <i>No description given.</i>
+        </p>
+      <% end %>
     </div>
   </div>
 <% end %>
