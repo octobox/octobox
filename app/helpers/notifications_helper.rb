@@ -41,23 +41,23 @@ module NotificationsHelper
 
   def filters
     {
-      reason:     params[:reason],
-      unread:     params[:unread],
-      repo:       params[:repo],
-      type:       params[:type],
-      archive:    params[:archive],
-      starred:    params[:starred],
-      owner:      params[:owner],
-      per_page:   params[:per_page],
-      q:          params[:q],
-      state:      params[:state],
-      label:      params[:label],
-      author:     params[:author],
-      bot:        params[:bot],
-      unlabelled: params[:unlabelled],
-      assigned:   params[:assigned],
-      is_private: params[:is_private],
-      status:     params[:status]
+      reason:          params[:reason],
+      unread:          params[:unread],
+      repo:            params[:repo],
+      type:            params[:type],
+      archive:         params[:archive],
+      starred:         params[:starred],
+      owner:           params[:owner],
+      per_page:        params[:per_page],
+      q:               params[:q],
+      state:           params[:state],
+      label:           params[:label],
+      author:          params[:author],
+      bot:             params[:bot],
+      unlabelled:      params[:unlabelled],
+      assigned:        params[:assigned],
+      is_private:      params[:is_private],
+      status:          params[:status],
     }
   end
 
@@ -318,6 +318,14 @@ module NotificationsHelper
   def notification_button_title(subject_type, state = nil)
     return subject_type.underscore.humanize if state.blank?
     "#{state.underscore.humanize}"
+  end
+
+  def notification_button_color(state)
+    {
+      'open' => 'btn-success',
+      'closed' => 'btn-danger',
+      'merged' => 'btn-merged'
+    }[state]
   end
 
   def notification_badge_color(state)

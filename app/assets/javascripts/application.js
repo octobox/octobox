@@ -67,3 +67,5 @@ $(document).on('click', '.toggle-star', function() {
 });
 
 $(document).on('click', '.thread-link', Octobox.viewThread);
+
+$(document).on('click', '.expand-comments', Octobox.expandComments);
