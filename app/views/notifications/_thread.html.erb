@@ -30,7 +30,7 @@
 
   <h2 class='text-capitalize'>
     <%= @notification.subject_title %>
-    <span class='text-muted font-weight-light'> #<%= @notification.id %> </span>
+    <span class='text-muted font-weight-light'> #<%= @notification.subject_number %> </span>
   </h2>
   
   <%= link_to @notification.web_url, class: "btn btn-sm #{notification_button_color(@notification.state)} mr-2" do %>
