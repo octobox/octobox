@@ -287,17 +287,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert notification.reload.starred?
   end
 
-  test 'toggles unread on a notification' do
-    notification = create(:notification, user: @user, unread: true)
-
-    sign_in_as(@user)
-
-    post "/notifications/#{notification.id}/mark_read"
-    assert_response :ok
-
-    refute notification.reload.unread?
-  end
-
   test 'syncs users notifications' do
     sign_in_as(@user)
 
