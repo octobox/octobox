@@ -1,7 +1,7 @@
 <% comments.each_with_index do |comment, index| %>
   <div id="<%= 'comment-'+comment.id.to_s %>" class="card-comment card mt-3 ">
 
-    <div class="card-header clickable media d-flex align-items-center text-muted <%='collapsed' if !comment.unread?(@notification) || @comments.length <= index + 1 %>" data-toggle='collapse' data-target=".comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
+    <div class="card-header clickable media d-flex align-items-center text-muted <%='collapsed' if !comment.unread?(@notification) && !(@comments.length <= index + 1) %>" data-toggle='collapse' data-target=".comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
 
       <%= image_tag(avatar_url(comment.author), width: 20, class: 'mr-3 align-self-center') %>
 
