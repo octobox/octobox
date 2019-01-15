@@ -35,6 +35,19 @@ module Octobox
         end
       end
 
+      def download_subject?
+        @download_subject ||= subjectable? && github_client && (Octobox.fetch_subject? || github_app_installed? || download_public_subjects?)
+      end
+
+      def download_public_subjects?
+        return false unless repository.try(:open_source?)
+        if Octobox.config.public_subject_rollout
+          updated_at > Octobox.config.public_subject_rollout
+        else
+          return true
+        end
+      end
+
       private
 
       def download_subject
