@@ -145,9 +145,11 @@ class Notification < ApplicationRecord
     self.attributes = attrs
     self.archived = false if archived.nil? # fixup existing records where archived is nil
     unarchive_if_updated if unarchive
-    save(touch: false) if changed?
-    update_repository(api_response)
-    update_subject
+    if changed?
+      save(touch: false)
+      update_repository(api_response)
+      update_subject
+    end
   end
 
   def github_app_installed?
