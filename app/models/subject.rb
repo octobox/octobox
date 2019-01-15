@@ -42,7 +42,7 @@ class Subject < ApplicationRecord
 
   def sync_involved_users
     return unless Octobox.github_app?
-    involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minute, user_id) }
+    involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minutes, user_id) }
   end
 
   def self.sync(remote_subject)
@@ -173,9 +173,9 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    ids = users.with_access_token.not_recently_synced.pluck(:id)
-    ids += repository.users.with_access_token.not_recently_synced.pluck(:id) if repository.present?
-    ids.uniq
+    involved_users = users.with_access_token.not_recently_synced
+    involved_users += repository.users.with_access_token.not_recently_synced if repository.present?
+    involved_users.uniq.reject(&:syncing?).map(&:id)
   end
 
   def bot_author?
