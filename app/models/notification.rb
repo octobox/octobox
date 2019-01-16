@@ -186,8 +186,8 @@ class Notification < ApplicationRecord
   end
 
   def push_to_channel
-    string = ApplicationController.render(partial: 'notifications/notification', locals: { notification: self})
-    ActionCable.server.broadcast "notifications:#{user_id}", { id: "#notification-#{id}", html: string }
+    notification = ApplicationController.render(partial: 'notifications/notification', locals: { notification: self})
+    ActionCable.server.broadcast "notifications:#{user_id}", { id: self.id, notification: notification, thread: thread }
   end
 
   def update_repository(api_response)

@@ -3,9 +3,9 @@ $(document).on("turbolinks:load", function () {
     App.sync = App.cable.subscriptions.create("NotificationsChannel", {
       received: function(data) {
         if($(data.id).length) {
-          var selected = $(data.id).has("input:checked");
-
-          $(data.id)[0].outerHTML = data.html;
+          var el = 'notification-'+data.id;
+          var selected = $(el).has("input:checked");
+          $(el)[0].outerHTML = data.html;
           if (selected.length) {
             $(data.id).find("input[type=checkbox]").prop('checked', true);
           }
