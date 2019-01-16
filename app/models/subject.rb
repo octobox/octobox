@@ -69,7 +69,7 @@ class Subject < ApplicationRecord
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
-      body: remote_subject['body']
+      body: remote_subject['body'].try(:delete!, "\u0000")
     })
 
     return unless subject.persisted?
@@ -116,7 +116,7 @@ class Subject < ApplicationRecord
     remote_comments.each do |remote_comment|
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
         comment.author = remote_comment.user.login
-        comment.body = remote_comment.body
+        comment.body = remote_comment.body.try(:delete!, "\u0000")
         comment.author_association = remote_comment.author_association
         comment.created_at = remote_comment.created_at
         comment.save
