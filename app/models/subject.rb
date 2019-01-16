@@ -135,7 +135,7 @@ class Subject < ApplicationRecord
   private
 
   def pushable_fields
-    ['state', 'status', 'body']
+    ['state', 'status', 'body', 'comment_count']
   end
 
   def assign_status(remote_status)
