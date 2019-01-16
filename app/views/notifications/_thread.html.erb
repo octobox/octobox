@@ -32,7 +32,7 @@
     <%= @notification.subject_title %>
     <span class='text-muted font-weight-light'> #<%= @notification.subject_number %> </span>
   </h2>
-  
+
   <%= link_to @notification.web_url, target: :blank, class: "btn btn-sm #{notification_button_color(@notification.state)} mr-2" do %>
     <%= octicon notification_icon(@notification), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
     <%= notification_button_title(@notification.subject_type, @notification.state) %>
@@ -58,7 +58,7 @@
     </div>
     <% if @notification.subject %>
       <div>
-        <%= link_to pluralize(@comments.count+@comments_left_to_load,'comment'), expand_comments_notification_url,  class: 'text-muted'%>
+        <%= link_to pluralize(@notification.subject.comment_count,'comment'), expand_comments_notification_url,  class: 'text-muted'%>
       </div>
     <% end %>
   </div>
