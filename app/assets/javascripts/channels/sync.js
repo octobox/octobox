@@ -3,11 +3,17 @@ $(document).on("turbolinks:load", function () {
     App.sync = App.cable.subscriptions.create("NotificationsChannel", {
       received: function(data) {
         if($(data.id).length) {
-          var el = 'notification-'+data.id;
+
+          var el = '#notification-'+data.id;
+
           var selected = $(el).has("input:checked");
-          $(el)[0].outerHTML = data.html;
+          $(el)[0].outerHTML = data.notification;
           if (selected.length) {
-            $(data.id).find("input[type=checkbox]").prop('checked', true);
+            $(el).find("input[type=checkbox]").prop('checked', true);
+          }
+       
+          if($('#notification-thread').attr('data-id') == data.id){
+            $('#thread-subject').html(data.subject);
           }
         }
       }
