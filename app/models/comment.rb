@@ -1,6 +1,8 @@
 class Comment < ApplicationRecord
   belongs_to :subject
 
+  after_save :push_to_channels
+
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
 
   def web_url
@@ -24,8 +26,9 @@ class Comment < ApplicationRecord
   end
 
   def push_to_channels
-    notifications.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
     subjects.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+    comment = ApplicationController.render(partial: 'notifications/comment', locals: { comment: self})
+    ActionCable.server.broadcast "comments:#{subject.id}", { comment: comment}
   end
 
   private

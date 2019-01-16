@@ -129,8 +129,6 @@ class Subject < ApplicationRecord
   end
 
   def push_to_channels
-    comments = ApplicationController.render(partial: 'notifications/comments', locals: { comments: self.comments})
-    ActionCable.server.broadcast "comments:#{self.id}", {comments: comments}
     notifications.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
   end
 
