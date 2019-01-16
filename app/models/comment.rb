@@ -22,4 +22,15 @@ class Comment < ApplicationRecord
   def unread?(notification)
     notification.last_read_at && DateTime.parse(notification.last_read_at) < created_at
   end
+
+  def push_to_channels
+    notifications.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+    subjects.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+  end
+
+  private
+
+  def pushable_fields
+    ['body']
+  end
 end
