@@ -140,11 +140,11 @@ class Notification < ApplicationRecord
     end
   end
 
-  def update_from_api_response(api_response, unarchive: false)
+  def update_from_api_response(api_response)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
     self.archived = false if archived.nil? # fixup existing records where archived is nil
-    unarchive_if_updated if unarchive
+    unarchive_if_updated
     if changed?
       save(touch: false)
       update_repository(api_response)
