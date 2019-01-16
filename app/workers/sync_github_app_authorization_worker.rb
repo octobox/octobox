@@ -2,7 +2,7 @@
 
 class SyncGithubAppAuthorizationWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :sync_subjects, unique: :until_and_while_executing
+  sidekiq_options queue: :marketplace, unique: :until_and_while_executing
 
   def perform(github_id)
     user = User.find_by_github_id(github_id)
