@@ -75,12 +75,12 @@ class NotificationsController < ApplicationController
   end
 
   def show
-    scope = original_scope = notifications_for_presentation.newest
+    scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
-    @notification = original_scope.find(params[:id])
+    @notification = current_user.notifications.find(params[:id])
     @previous = ids[position-1] unless position.nil? || position-1 < 0
     @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
@@ -99,12 +99,12 @@ class NotificationsController < ApplicationController
 
   def expand_comments
 
-    scope = original_scope = notifications_for_presentation.newest
+    scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
-    @notification = original_scope.find(params[:id])
+    @notification = current_user.notifications.find(params[:id])
     @previous = ids[position-1] unless position.nil? || position-1 < 0
     @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
