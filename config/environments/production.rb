@@ -52,6 +52,9 @@ Rails.application.configure do
   # when problems arise.
   config.log_level = :info
 
+  # disable logging of action cable messages
+  config.action_cable.logger = Logger.new(nil)
+
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
 
