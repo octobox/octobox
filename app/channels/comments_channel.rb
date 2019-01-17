@@ -1,6 +1,6 @@
 class CommentsChannel < ApplicationCable::Channel
   def subscribed
-  	subject = Notification.find(params[:id]).subject
+  	subject = current_user.notifications.find(params[:id]).subject
     stream_for subject
   end
 
