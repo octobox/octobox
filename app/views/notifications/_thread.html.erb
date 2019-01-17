@@ -45,7 +45,7 @@
 
   on <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>
 
-  <%= time_ago_in_words(@notification.updated_at) %> ago
+  <%= time_ago_in_words(@notification.subject ? @notification.subject.created_at : @notification.created_at) %> ago
 
   <div class='d-flex justify-content-between mt-2'>
     <div class='labels'>
