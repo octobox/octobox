@@ -26,8 +26,8 @@ class Comment < ApplicationRecord
   end
 
   def push_to_channels
-    comment = ApplicationController.render(partial: 'notifications/comment', locals: {subject: self.subject.id, comment: self, comments:1})
-    ActionCable.server.broadcast self.subject, {comment: comment}
+    comment_html = ApplicationController.render(partial: 'notifications/comment', locals: {subject: self.subject.id, comment: self, comments:1})
+    ActionCable.server.broadcast "comments:#{subject.id}", {comment_html: comment_html, subject_id: self.subject.id}
   end
 
   private
