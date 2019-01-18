@@ -1,4 +1,5 @@
 if ($("meta[name='push_notifications']").length >0) {
+
   $(document).on('click', '.thread-link', function(){
     if(App.comments){
       App.comments.unsubscribe();
@@ -13,9 +14,7 @@ if ($("meta[name='push_notifications']").length >0) {
       }
     });
   });
-}
-
-if ($("meta[name='push_notifications']").length >0) {
+  
   $(document).on("turbolinks:load", function(){
     if($('#thread').is(':visible')){
       if(App.comments){
