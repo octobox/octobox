@@ -89,16 +89,18 @@
         </div>
       <% end %>
 
-      <% if @comments_left_to_load > 0 %>
-        <div id='more-comments'>
-          <%= link_to expand_comments_notification_url, class: 'btn btn-secondary mt-3 expand_comments' do %>
-            <%= octicon('comment', height: 16, class: 'ml-1') %>
-            View <%= @comments_left_to_load %> more comments
-          <% end %>
-        </div>
-      <% end %>
+      <% if @notification.subject.commentable? %>
+        <% if @comments_left_to_load > 0 %>
+          <div id='more-comments'>
+            <%= link_to expand_comments_notification_url, class: 'btn btn-secondary mt-3 expand_comments' do %>
+              <%= octicon('comment', height: 16, class: 'ml-1') %>
+              View <%= @comments_left_to_load %> more comments
+            <% end %>
+          </div>
+        <% end %>
 
-      <%= render partial: 'comments', locals: {comments: @comments} %>
+        <%= render partial: 'comments', locals: {comments: @comments} %>
+      <% end %>
     </div>
 
     <% if @notification.subject.commentable? %>

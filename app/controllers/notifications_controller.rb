@@ -84,9 +84,8 @@ class NotificationsController < ApplicationController
     @previous = ids[position-1] unless position.nil? || position-1 < 0
     @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
-    comments_loaded = 5
-
-    if @notification.subject
+    if @notification.subject && @notification.subject.commentable?
+      comments_loaded = 5
       @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
       @comments_left_to_load = @notification.subject.comment_count - comments_loaded > 0 ? @notification.subject.comment_count - comments_loaded : 0
     else
