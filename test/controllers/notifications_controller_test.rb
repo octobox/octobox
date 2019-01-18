@@ -998,6 +998,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/_thread'
   end
 
+  test 'renders a notification page without comments' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
+    get notification_path(notification1)
+
+    assert_response :success
+    assert_template 'notifications/_thread'
+  end
+
   test 'thread shows five commments' do
     sign_in_as(@user)
     Subject.delete_all
