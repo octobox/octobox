@@ -83,7 +83,7 @@
   </td>
 
   <td class='notification-date'>
-    <% if notification.subject %>
+    <% if notification.display_subject? && notification.subject %>
       <span class='badge badge-light n notification-comment-count mr-2'>
         <%= octicon 'comment', height: 10%>
         <%= notification.subject.comment_count %>
