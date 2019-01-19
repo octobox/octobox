@@ -2,7 +2,10 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   DisabledByDefault: true
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
+  Exclude:
+    - tmp/**/*
+    - vendor/**/*
 
 #################### Lint ################################
 
