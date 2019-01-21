@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    action-cable-testing (0.4.0)
+      actioncable (~> 5.0)
     actioncable (5.2.2)
       actionpack (= 5.2.2)
       nio4r (~> 2.0)
@@ -404,6 +406,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  action-cable-testing
   active_record_query_trace
   attr_encrypted
   better_errors

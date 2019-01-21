@@ -59,6 +59,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'percy-capybara'
+  gem 'action-cable-testing'
 end
 
 group :development do
