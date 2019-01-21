@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class NotificationsChannelTest < ActionCable::Channel::TestCase
+class CommentsChannelTest < ActionCable::Channel::TestCase
 
 
   test "Reject subscriptions without a current user" do
@@ -22,7 +22,11 @@ class NotificationsChannelTest < ActionCable::Channel::TestCase
     stub_connection(current_user: user)
     subscribe notification: notification.id
 
-    assert_has_stream 'comments:'+subject.id.to_s 
+    assert_has_stream "comments:#{subject.id}"
+
+    assert_broadcasts(subject, 1) do
+      create(:comment, subject: subject)
+    end
 
   end
 
