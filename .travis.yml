@@ -5,13 +5,13 @@ rvm:
 before_install:
   - gem update --system
   - gem install bundler
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.22.0/geckodriver-v0.22.0-linux64.tar.gz
-  - tar -xzf geckodriver-v0.22.0-linux64.tar.gz -C bin
-  - export PATH=$(pwd)/bin:$PATH
 
 addons:
-  firefox: latest
-  postgresql: "9.6"
+  postgresql: "10"
+   apt:
+    packages:
+    - postgresql-10
+    - postgresql-client-10
 
 services:
   - postgresql
@@ -31,7 +31,7 @@ cache: bundler
 
 env:
   global:
-    - MOZ_HEADLESS=1
+    - PGPORT=5433
   matrix:
     - DATABASE=mysql2
     - DATABASE=postgresql
