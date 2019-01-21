@@ -24,6 +24,7 @@ class DownloadService
   def download
     timestamp = Time.current
     fetch_new_notifications
+    fetch_all_notifications
     user.update_column(:last_synced_at, timestamp)
   end
 
@@ -46,6 +47,12 @@ class DownloadService
     process_notifications(notifications)
   end
 
+  def fetch_all_notifications
+    headers = {cache_control: %w(no-store no-cache)}
+    notifications = fetch_notifications(params: {all: true, headers: headers})
+    process_unread_state(notifications)
+  end
+
   def process_notifications(notifications)
     return if notifications.blank?
     eager_load_relation = Octobox.config.subjects_enabled? ? [:subject, :repository, :app_installation] : nil
@@ -56,6 +63,21 @@ class DownloadService
       next unless n
       begin
         n.update_from_api_response(notification)
+      rescue ActiveRecord::RecordNotUnique
+        nil
+      end
+    end
+  end
+
+  def process_unread_state(notifications)
+    return if notifications.blank?
+
+    existing_notifications = user.notifications.where(github_id: notifications.map(&:id)).select('id, github_id, unread')
+    notifications.each do |notification|
+      n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
+      next unless n
+      begin
+        n.update_column(:unread, notification['unread']) if n.unread != notification['unread']
       rescue ActiveRecord::RecordNotUnique
         nil
       end
