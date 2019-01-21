@@ -13,17 +13,17 @@ class NotificationsChannelTest < ActionCable::Channel::TestCase
     assert_no_streams
   end
 
-  test "receives notification webhooks when updated" do
+  test "receives comment webhooks when updated" do
+
     user = create(:user)
     notification = create(:notification, user: user)
+    subject = create(:subject, notifications: [notification])
 
-    stub_connection current_user: user
-    subscribe
-    assert_has_stream "notifications:#{user.id}"
+    stub_connection(current_user: user)
+    subscribe notification: notification.id
 
-    assert_broadcasts("notifications:#{user.id}", 1) do
-      notification.update(archived: true)
-    end
+    assert_has_stream 'comments:'+subject.id.to_s 
+
   end
 
 end
