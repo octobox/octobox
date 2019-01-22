@@ -125,6 +125,16 @@ class Subject < ApplicationRecord
     end
   end
 
+  def self.comment(user, subject, comment)
+    return if user.nil? || subject.nil? || comment.nil?
+    CommentWorker.perform_async_if_configured(user.id, subject.id, comment[:body])
+  end
+
+  def self.comment_on_github(user, subject, comment_body)
+    return if user.nil? || subject.nil? || comment_body.nil?
+    user.github_client.post "#{subject.url}/comments", {body: comment_body}.to_json
+  end
+
   def notifiable_fields
     ['state', 'assignees', 'locked', 'sha', 'comment_count']
   end

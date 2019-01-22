@@ -4,6 +4,7 @@
 	</div>
 	<div class='card-body'>
 		<%= text_area(:comment, :body, class: 'form-control', placeholder: 'Leave a comment') %>
- 		<%= submit_tag("Comment", class: 'btn mt-2 btn-success float-right') %>
+ 		<%= submit_tag("Comment", class: 'btn mt-2 btn-success ') %>
+ 		<%= hidden_field(:id, @notification.id) %>
  	</div>
 <% end %>

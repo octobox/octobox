@@ -126,7 +126,16 @@ class NotificationsController < ApplicationController
   end
 
   def comment
-    redirect_back fallback_location: root_path
+    subject = @current_user.notifications.find(params[:id]).subject
+    Subject.comment(@current_user, subject, params[:comment]) if subject.commentable?
+    if request.xhr?
+      #return parsed comment for immediate display
+      head :ok
+    else
+      #save the comment
+      #redirect back and rerender the comment that's now in the db
+      redirect_back fallback_location: root_path
+    end
   end
 
   # Return a count for the number of unread notifications
