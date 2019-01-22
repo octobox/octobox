@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       post :star
       post :mark_read
       get  :expand_comments
+      post :comment 
     end
   end
 

@@ -125,6 +125,10 @@ class NotificationsController < ApplicationController
     end
   end
 
+  def comment
+    redirect_back fallback_location: root_path
+  end
+
   # Return a count for the number of unread notifications
   #
   # :category: Notifications CRUD
