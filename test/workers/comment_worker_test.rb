@@ -7,8 +7,12 @@ class CommentWorkerTest < ActiveSupport::TestCase
     @comment = create(:comment)
   end
 
-  test 'Posts a comment ' do
-    #assert that a request happened
+  test 'enqueues a comment' do
+    CommentWorker.perform_async(@comment.id, @user.id, @comment.subject.id)
+    assert_equal 1, CommentWorker.jobs.size
+  end
+
+  test 'Posts and synchronises a comment with GitHub' do
     stub_request(:post, "#{@comment.subject.url}/comments").
     	to_return({ status: 200, body: file_fixture('new_comment.json'), headers: {'Content-Type' => 'application/json'}})
     CommentWorker.new.perform(@comment.id, @user.id, @comment.subject.id)
@@ -17,10 +21,20 @@ class CommentWorkerTest < ActiveSupport::TestCase
     assert_equal(@comment.github_id, 12345)
   end
 
-  #test that a request deletes an error 
-  #stub request and raise ex
+  test 'Recovers and retries if service is unavailable' do
+    stub_request(:post, "#{@comment.subject.url}/comments").
+      to_return({ status: 503})
+    CommentWorker.perform_async(@comment.id, @user.id, @comment.subject.id)
+    assert_equal 1, CommentWorker.jobs.size
+  end
 
-  #controler expects to see a comment get created through a  post request (in the notifications controller int test)
-  #should ahve enqueued a job, use stub to stub commetn on GH
+  test 'Destroys and comment if the subject no longer exists' do
+    stub_request(:post, "#{@comment.subject.url}/comments").
+      to_return({ status: 404})
+    CommentWorker.new.perform(@comment.id, @user.id, @comment.subject.id)
+    assert_raises(ActiveRecord::RecordNotFound) do
+      @comment.reload
+    end
+  end
 
 end

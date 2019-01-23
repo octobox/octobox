@@ -7,9 +7,23 @@ class CommentWorker
     user = User.find_by_id(user_id)
     subject = Subject.find_by_id(subject_id)
     if comment && user && subject && subject.commentable?
-    	subject.comment_on_github(comment, user) 
+      begin
+        subject.comment_on_github(comment, user) 
+      rescue Octokit::NotFound, Octokit::Unauthorized, Octokit::Forbidden
+        comment.try(:destroy)
+      rescue Octokit::BadGateway, Octokit::ServerError, Octokit::ServiceUnavailable => exception
+        handle_exception(exception, user)
+      rescue Faraday::ClientError => exception
+        handle_exception(exception, user)
+      end
     else
-    	# comment.try(:destroy)
+    	comment.try(:destroy)
     end
+  end
+
+  private
+
+  def handle_exception(exception, user)
+    logger.error("[ERROR] CommentWorkerJob#perform #{user.github_login} - #{exception.class}: #{exception.message}")
   end
 end
