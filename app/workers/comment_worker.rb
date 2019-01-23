@@ -9,8 +9,7 @@ class CommentWorker
     if comment && user && subject && subject.commentable?
     	subject.comment_on_github(comment, user) 
     else
-    	# try to delete the comment
-    	commment.try(:destroy)
+    	# comment.try(:destroy)
     end
   end
 end

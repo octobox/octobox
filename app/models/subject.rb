@@ -134,7 +134,6 @@ class Subject < ApplicationRecord
   def comment_on_github(comment, user)
     return if comment.body.empty?
     remote_comment = user.github_client.post "#{url}/comments", {body: comment.body}
-    #update the comment in the db
     comment.github_id = remote_comment.id
     comment.author_association = remote_comment.author_association
     comment.created_at = remote_comment.created_at

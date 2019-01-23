@@ -5,5 +5,6 @@ FactoryBot.define do
     state { 'open' }
     author { 'andrew' }
     repository_full_name { 'octobox/octobox' }
+    comment_count {1}
   end
 end
