@@ -125,14 +125,20 @@ class Subject < ApplicationRecord
     end
   end
 
-  def self.comment(user, subject, comment)
-    return if user.nil? || subject.nil? || comment.nil?
-    CommentWorker.perform_async_if_configured(user.id, subject.id, comment[:body])
+  def comment(user, comment_body)
+    return if comment_body.nil?
+    comment = comments.create(author: user.github_login, body: comment_body)
+    CommentWorker.perform_async_if_configured(comment.id, user.id, subject.id)
   end
 
-  def self.comment_on_github(user, subject, comment_body)
-    return if user.nil? || subject.nil? || comment_body.nil?
-    user.github_client.post "#{subject.url}/comments", {body: comment_body}.to_json
+  def comment_on_github(comment, user)
+    return if comment.body.empty?
+    remote_comment = user.github_client.post "#{url}/comments", {body: comment.body}
+    #update the comment in the db
+    comment.github_id = remote_comment.id
+    comment.author_association = remote_comment.author_association
+    comment.created_at = remote_comment.created_at
+    comment.save
   end
 
   def notifiable_fields
