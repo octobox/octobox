@@ -128,7 +128,7 @@ class Subject < ApplicationRecord
   def comment(user, comment_body)
     return if comment_body.nil?
     comment = comments.create(author: user.github_login, body: comment_body)
-    CommentWorker.perform_async_if_configured(comment.id, user.id, subject.id)
+    CommentWorker.perform_async_if_configured(comment.id, user.id, self.id)
   end
 
   def comment_on_github(comment, user)

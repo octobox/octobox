@@ -6,6 +6,11 @@ class CommentWorker
   	comment = Comment.find_by_id(comment_id)
     user = User.find_by_id(user_id)
     subject = Subject.find_by_id(subject_id)
-    subject.comment_on_github(user, comment) if comment && user && subject && subject.commentable?
+    if comment && user && subject && subject.commentable?
+    	subject.comment_on_github(comment, user) 
+    else
+    	# try to delete the comment
+    	commment.try(:destroy)
+    end
   end
 end
