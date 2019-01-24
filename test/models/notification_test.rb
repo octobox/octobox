@@ -85,7 +85,7 @@ class NotificationTest < ActiveSupport::TestCase
         archived: false,
         latest_comment_url: "https://api.github.com/repos/octobox/octobox/issues/comments/123"
       }.stringify_keys)
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
     assert notification.unread?
     refute notification.archived?
     assert_equal expected_attributes, notification.attributes
@@ -113,7 +113,7 @@ class NotificationTest < ActiveSupport::TestCase
     }.stringify_keys
     api_response = notifications_from_fixture('morty_notifications.json').second
     n = user.notifications.find_or_initialize_by(github_id: api_response[:id])
-    n.update_from_api_response(api_response, unarchive: true)
+    n.update_from_api_response(api_response)
     attributes = n.attributes
     assert_equal attributes, attributes.merge(expected_attributes)
   end
@@ -124,8 +124,8 @@ class NotificationTest < ActiveSupport::TestCase
     user = create(:user)
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
-    notification.update_from_api_response(api_response, unarchive: true)
-
+    notification.update_from_api_response(api_response)
+    notification.reload
     refute_nil notification.repository
     assert_equal notification.repository.full_name, 'octobox/octobox'
   end
@@ -137,8 +137,8 @@ class NotificationTest < ActiveSupport::TestCase
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
     create(:repository, github_id: api_response[:repository][:id], full_name: 'old/name')
-    notification.update_from_api_response(api_response, unarchive: true)
-
+    notification.update_from_api_response(api_response)
+    notification.reload
     refute_equal notification.repository.full_name, 'old/name'
   end
 
@@ -148,7 +148,7 @@ class NotificationTest < ActiveSupport::TestCase
     user = create(:user)
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     assert_nil notification.subject
   end
@@ -164,7 +164,7 @@ class NotificationTest < ActiveSupport::TestCase
     user = create(:user)
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     notification.reload
 
@@ -184,7 +184,7 @@ class NotificationTest < ActiveSupport::TestCase
     create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 1.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     refute_requested :get, subject.url
   end
@@ -202,7 +202,7 @@ class NotificationTest < ActiveSupport::TestCase
     create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     assert_requested :get, subject.url
   end
@@ -219,7 +219,7 @@ class NotificationTest < ActiveSupport::TestCase
     notification = create(:morty_updated)
 
     assert_difference 'Subject.count' do
-      notification.update_from_api_response(api_response, unarchive: true)
+      notification.update_from_api_response(api_response)
     end
   end
 
@@ -234,7 +234,7 @@ class NotificationTest < ActiveSupport::TestCase
     notification = create(:morty_updated)
 
     assert_no_difference 'Subject.count' do
-      notification.update_from_api_response(api_response, unarchive: true)
+      notification.update_from_api_response(api_response)
     end
   end
 
@@ -255,7 +255,7 @@ class NotificationTest < ActiveSupport::TestCase
     create(:morty)
     subject = create(:subject, state: 'open', url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     subject.reload
     assert_equal 'merged', subject.state

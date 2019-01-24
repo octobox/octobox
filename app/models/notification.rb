@@ -64,7 +64,7 @@ class Notification < ApplicationRecord
 
   def state
     return unless display_subject?
-    subject.try(:state)
+    @state ||= subject.try(:state)
   end
 
   def self.archive(notifications, value)
@@ -140,14 +140,16 @@ class Notification < ApplicationRecord
     end
   end
 
-  def update_from_api_response(api_response, unarchive: false)
+  def update_from_api_response(api_response)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
     self.archived = false if archived.nil? # fixup existing records where archived is nil
-    unarchive_if_updated if unarchive
-    save(touch: false) if changed?
-    update_repository(api_response)
-    update_subject
+    unarchive_if_updated
+    if changed?
+      save(touch: false)
+      update_repository(api_response)
+      update_subject
+    end
   end
 
   def github_app_installed?
@@ -172,7 +174,7 @@ class Notification < ApplicationRecord
   end
 
   def display_thread?
-    Octobox.include_comments? && subjectable? && subject.present? && user.try(:display_comments?)
+    @display_thread ||= Octobox.include_comments? && subjectable? && subject.present? && user.try(:display_comments?)
   end
 
   def push_if_changed
@@ -189,13 +191,16 @@ class Notification < ApplicationRecord
   end
 
   def update_repository(api_response)
-    repo = Repository.find_or_create_by(github_id: api_response['repository']['id'])
-    repo.update_attributes({
+    repo = repository ||  Repository.find_or_create_by(github_id: api_response['repository']['id'])
+    repo.assign_attributes({
       full_name: api_response['repository']['full_name'],
       private: api_response['repository']['private'],
       owner: api_response['repository']['full_name'].split('/').first,
-      github_id: api_response['repository']['id'],
-      last_synced_at: Time.current
+      github_id: api_response['repository']['id']
     })
+    if repo.changed?
+      repo.last_synced_at = Time.current
+      repo.save
+    end
   end
 end

@@ -287,17 +287,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert notification.reload.starred?
   end
 
-  test 'toggles unread on a notification' do
-    notification = create(:notification, user: @user, unread: true)
-
-    sign_in_as(@user)
-
-    post "/notifications/#{notification.id}/mark_read"
-    assert_response :ok
-
-    refute notification.reload.unread?
-  end
-
   test 'syncs users notifications' do
     sign_in_as(@user)
 
@@ -977,6 +966,14 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 2
   end
 
+  test 'highlights vulnerability alerts in the sidebar if there are unread notifications' do
+    sign_in_as(@user)
+    create(:notification, user: @user, subject_type: 'RepositoryVulnerabilityAlert', unread: true)
+    get '/'
+    assert_response :success
+    assert_select '.type-RepositoryVulnerabilityAlert', {count: 1}
+  end
+
   test 'search results can exclude bots' do
     sign_in_as(@user)
     Subject.delete_all
@@ -994,7 +991,17 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   test 'renders a notification page' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user)
-    
+
+    get notification_path(notification1)
+
+    assert_response :success
+    assert_template 'notifications/_thread'
+  end
+
+  test 'renders a notification page without comments' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
     get notification_path(notification1)
 
     assert_response :success
@@ -1005,9 +1012,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     Subject.delete_all
     notification = create(:notification, user: @user)
-    subject = create(:subject, notifications: [notification])
+    subject = create(:subject, notifications: [notification], comment_count: 10)
     10.times.each { create(:comment, subject: subject)}
-    
     get notification_path(notification)
     assert_equal assigns(:comments).length, 5
   end
@@ -1016,9 +1022,9 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     Subject.delete_all
     notification = create(:notification, user: @user)
-    subject = create(:subject, notifications: [notification])
+    subject = create(:subject, notifications: [notification], comment_count: 10)
     10.times.each { create(:comment, subject: subject) }
-    
+
     get expand_comments_notification_path(notification)
     assert_response :success
     assert_template 'notifications/_thread'

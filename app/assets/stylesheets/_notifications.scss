@@ -213,7 +213,7 @@ $notification-items: (
     .notification-subject-author,
     .notification-reason{
       display: block;
-      width: calc(100% - 6rem);
+      width: calc(100% - 8rem);
       position: relative;
       left: 40px
     }
@@ -238,12 +238,9 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-up(xxxl){
-  @include regular-table;
-}
+@include regular-table;
 
 @include media-breakpoint-down(xxl) {
-  @include regular-table;
   .flex-main.show-thread{
     @include remove-borders;
     @include responsive-table;

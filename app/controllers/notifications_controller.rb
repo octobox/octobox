@@ -3,7 +3,7 @@ class NotificationsController < ApplicationController
 
   skip_before_action :authenticate_user!
   before_action :authenticate_web_or_api!
-  before_action :find_notification, only: [:star, :mark_read]
+  before_action :find_notification, only: [:star]
 
   # Return a listing of notifications, including a summary of unread repos, notification reasons, and notification types
   #
@@ -75,19 +75,17 @@ class NotificationsController < ApplicationController
   end
 
   def show
-    scope = original_scope = notifications_for_presentation.newest
+    scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
-    @notification = original_scope.find(params[:id])
+    @notification = current_user.notifications.find(params[:id])
     @previous = ids[position-1] unless position.nil? || position-1 < 0
     @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
-    comments_loaded = 5
-    @comments_to_load = 0
-
-    if @notification.subject
+    if @notification.subject && @notification.subject.commentable?
+      comments_loaded = 5
       @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
       @comments_left_to_load = @notification.subject.comments.count - comments_loaded > 0 ? @notification.subject.comments.count - comments_loaded : 0
     else
@@ -230,20 +228,6 @@ class NotificationsController < ApplicationController
     else
       redirect_back fallback_location: root_path
     end
-  end
-
-  # Mark a notification as read
-  #
-  # :category: Notifications Actions
-  #
-  # ==== Example
-  #
-  # <code>POST notifications/:id/mark_read.json</code>
-  #   HEAD 204
-  #
-  def mark_read
-    @notification.update_columns unread: false
-    head :ok
   end
 
   # Star a notification
