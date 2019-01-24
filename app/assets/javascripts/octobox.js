@@ -117,15 +117,15 @@ var Octobox = (function() {
     window.current_id = undefined;
 
     $(document).keydown(function(e) {
-      // disable shortcuts for the seach box
-      if ($("#help-box").length && e.target.id !== "search-box" && !e.ctrlKey && !e.metaKey) {
+      // disable shortcuts for the seach and comment
+      if ($("#help-box").length && !["search-box","comment_body"].includes(e.target.id)  && !e.ctrlKey && !e.metaKey) {
         var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShortcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }
         return;
       }
 
-      // escape search-box
-      if(e.target.id === "search-box" && e.which === 27) shortcuts[27](e);
+      // escape search and comment
+      if(["search-box", "comment_body"].includes(e.target.id) && e.which === 27) shortcuts[27](e);
     });
   };
 
