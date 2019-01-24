@@ -1030,13 +1030,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     subject = create(:subject)
     notification = create(:notification, user: @user, subject: subject)
 
-    assert_equal notification.subject.comment_count, 1
-
     stub_request(:post, "#{subject.url}/comments").
       to_return({ status: 200, body: file_fixture('new_comment.json'), headers: {'Content-Type' => 'application/json'}})
     post comment_notification_path(notification), params: { id: notification.id, comment:{body: "blah"}}
 
     assert_redirected_to notification_path(notification)
-    assert_equal notification.subject.comment_count, 2
+    assert_equal notification.subject.comments.count, 1
   end
 end

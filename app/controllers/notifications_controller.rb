@@ -132,9 +132,8 @@ class NotificationsController < ApplicationController
       #return parsed comment for immediate display
       head :ok
     else
-      #save the comment in the DB
       #redirect back and rerender the comment that's now in the db
-      redirect_back fallback_location: root_path
+      redirect_back fallback_location: notification_path
     end
   end
 
