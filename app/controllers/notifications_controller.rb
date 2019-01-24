@@ -129,10 +129,8 @@ class NotificationsController < ApplicationController
     subject = @current_user.notifications.find(params[:id]).subject
     subject.comment(@current_user, params[:comment][:body]) if subject.commentable?
     if request.xhr?
-      #return parsed comment for immediate display
-      head :ok
+      render partial: "notifications/comments", locals:{comments: subject.comments.last}, layout: false
     else
-      #redirect back and rerender the comment that's now in the db
       redirect_back fallback_location: notification_path
     end
   end
