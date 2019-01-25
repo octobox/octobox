@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_14_174802) do
+ActiveRecord::Schema.define(version: 2019_01_25_105623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 2019_01_14_174802) do
     t.string "unit_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "number"
   end
 
   create_table "subscription_purchases", force: :cascade do |t|
