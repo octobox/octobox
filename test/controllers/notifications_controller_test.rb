@@ -991,6 +991,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   test 'renders a notification page' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
 
     get notification_path(notification1)
 
