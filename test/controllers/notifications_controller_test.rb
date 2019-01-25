@@ -287,17 +287,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert notification.reload.starred?
   end
 
-  test 'toggles unread on a notification' do
-    notification = create(:notification, user: @user, unread: true)
-
-    sign_in_as(@user)
-
-    post "/notifications/#{notification.id}/mark_read"
-    assert_response :ok
-
-    refute notification.reload.unread?
-  end
-
   test 'syncs users notifications' do
     sign_in_as(@user)
 
@@ -997,5 +986,50 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     get '/?q=bot%3Afalse'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'renders a notification page' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
+
+    get notification_path(notification1)
+
+    assert_response :success
+    assert_template 'notifications/_thread'
+  end
+
+  test 'renders a notification page without comments' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
+    get notification_path(notification1)
+
+    assert_response :success
+    assert_template 'notifications/_thread'
+  end
+
+  test 'thread shows five commments' do
+    sign_in_as(@user)
+    Subject.delete_all
+    notification = create(:notification, user: @user)
+    subject = create(:subject, notifications: [notification], comment_count: 10)
+    10.times.each { create(:comment, subject: subject)}
+
+    get notification_path(notification)
+    assert_equal assigns(:comments).length, 5
+  end
+
+  test 'thread shows expanded comments' do
+    sign_in_as(@user)
+    Subject.delete_all
+    notification = create(:notification, user: @user)
+    subject = create(:subject, notifications: [notification], comment_count: 10)
+    10.times.each { create(:comment, subject: subject) }
+
+    get expand_comments_notification_path(notification)
+    assert_response :success
+    assert_template 'notifications/_thread'
+    assert_equal assigns(:comments).length, 10
   end
 end

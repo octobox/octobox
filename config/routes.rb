@@ -49,7 +49,7 @@ Rails.application.routes.draw do
     member do
       get  :show
       post :star
-      post :mark_read
+      get  :expand_comments
     end
   end
 

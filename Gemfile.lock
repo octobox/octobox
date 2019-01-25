@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    action-cable-testing (0.4.0)
+      actioncable (~> 5.0)
     actioncable (5.2.2)
       actionpack (= 5.2.2)
       nio4r (~> 2.0)
@@ -49,7 +51,7 @@ GEM
     ast (2.4.0)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
-    autoprefixer-rails (9.4.5)
+    autoprefixer-rails (9.4.6)
       execjs
     better_errors (2.5.0)
       coderay (>= 1.0.0)
@@ -64,15 +66,15 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    brakeman (4.3.1)
-    bugsnag (6.10.0)
+    brakeman (4.4.0)
+    bugsnag (6.11.1)
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
     bullet (5.9.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (10.0.2)
-    capybara (3.12.0)
+    capybara (3.13.2)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -110,12 +112,12 @@ GEM
       activesupport (>= 3.0.0)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.12.2)
+    faraday_middleware (0.13.0)
       faraday (>= 0.7.4, < 1.0)
     ffi (1.9.25)
     formatador (0.2.5)
-    fugit (1.1.6)
-      et-orbi (~> 1.1, >= 1.1.6)
+    fugit (1.1.8)
+      et-orbi (~> 1.1, >= 1.1.7)
       raabro (~> 1.1)
     gemoji (3.0.0)
     get_process_mem (0.2.3)
@@ -137,7 +139,7 @@ GEM
       minitest (>= 3.0)
     hashdiff (0.3.8)
     hashie (3.6.0)
-    i18n (1.5.2)
+    i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.2)
     jbuilder (2.8.0)
@@ -185,7 +187,7 @@ GEM
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
-    mocha (1.7.0)
+    mocha (1.8.0)
       metaclass (~> 0.0.1)
     msgpack (1.2.6)
     multi_json (1.13.1)
@@ -213,7 +215,7 @@ GEM
       rails
     octokit (4.13.0)
       sawyer (~> 0.8.0, >= 0.5.3)
-    oj (3.7.6)
+    oj (3.7.8)
     omniauth (1.9.0)
       hashie (>= 3.4.6, < 3.7.0)
       rack (>= 1.6.2, < 3)
@@ -223,8 +225,8 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
-    parallel (1.12.1)
-    parser (2.5.3.0)
+    parallel (1.13.0)
+    parser (2.6.0.0)
       ast (~> 2.4.0)
     percy-capybara (3.2.0)
       addressable (~> 2)
@@ -295,7 +297,7 @@ GEM
     request_store (1.4.1)
       rack (>= 1.4)
     rgb (0.1.0)
-    rubocop (0.62.0)
+    rubocop (0.63.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -352,9 +354,9 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    skylight (3.1.2)
-      skylight-core (= 3.1.2)
-    skylight-core (3.1.2)
+    skylight (3.1.4)
+      skylight-core (= 3.1.4)
+    skylight-core (3.1.4)
       activesupport (>= 4.2.0)
     spring (2.0.2)
       activesupport (>= 4.2)
@@ -398,12 +400,13 @@ GEM
     websocket-extensions (0.1.3)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yard (0.9.16)
+    yard (0.9.18)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  action-cable-testing
   active_record_query_trace
   attr_encrypted
   better_errors

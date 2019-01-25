@@ -41,23 +41,23 @@ module NotificationsHelper
 
   def filters
     {
-      reason:     params[:reason],
-      unread:     params[:unread],
-      repo:       params[:repo],
-      type:       params[:type],
-      archive:    params[:archive],
-      starred:    params[:starred],
-      owner:      params[:owner],
-      per_page:   params[:per_page],
-      q:          params[:q],
-      state:      params[:state],
-      label:      params[:label],
-      author:     params[:author],
-      bot:        params[:bot],
-      unlabelled: params[:unlabelled],
-      assigned:   params[:assigned],
-      is_private: params[:is_private],
-      status:     params[:status]
+      reason:          params[:reason],
+      unread:          params[:unread],
+      repo:            params[:repo],
+      type:            params[:type],
+      archive:         params[:archive],
+      starred:         params[:starred],
+      owner:           params[:owner],
+      per_page:        params[:per_page],
+      q:               params[:q],
+      state:           params[:state],
+      label:           params[:label],
+      author:          params[:author],
+      bot:             params[:bot],
+      unlabelled:      params[:unlabelled],
+      assigned:        params[:assigned],
+      is_private:      params[:is_private],
+      status:          params[:status],
     }
   end
 
@@ -320,6 +320,14 @@ module NotificationsHelper
     "#{state.underscore.humanize}"
   end
 
+  def notification_button_color(state)
+    {
+      'open' => 'btn-success',
+      'closed' => 'btn-danger',
+      'merged' => 'btn-merged'
+    }[state]
+  end
+
   def notification_badge_color(state)
     {
       'open' => 'badge-success',
@@ -334,7 +342,7 @@ module NotificationsHelper
   end
 
   def notification_link(notification)
-    notification.display_thread? ? notification_url(notification, filtered_params) : notification.web_url
+    notification.display_thread? ? notification_path(notification, filtered_params) : notification.web_url
   end
 
   def display_thread?
