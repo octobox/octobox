@@ -19,7 +19,7 @@ Octobox helps you manage your GitHub notifications efficiently so you can spend 
 ![Screenshot of  Octobox](app/assets/images/screenshot.png)
 
 [![Build Status](https://travis-ci.org/octobox/octobox.svg?branch=master)](https://travis-ci.org/octobox/octobox)
-[![View Performance Data on Skylight](https://badges.skylight.io/status/eLvcBBdLmV6k.svg)](https://oss.skylight.io/app/applications/eLvcBBdLmV6k)
+[![View performance data on Skylight](https://badges.skylight.io/typical/eLvcBBdLmV6k.svg)](https://oss.skylight.io/app/applications/eLvcBBdLmV6k)
 [![Docker](https://img.shields.io/docker/pulls/octoboxio/octobox.svg)](https://hub.docker.com/r/octoboxio/octobox/)
 [![Gitter](https://img.shields.io/gitter/room/octobox/octobox.svg)](https://gitter.im/octobox/octobox)
 [![OpenCollective](https://opencollective.com/octobox/backers/badge.svg)](#backers)
