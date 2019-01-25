@@ -656,6 +656,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by label' do
     sign_in_as(@user)
+    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
