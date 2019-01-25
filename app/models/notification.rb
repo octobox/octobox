@@ -73,7 +73,7 @@ class Notification < ApplicationRecord
 
   def display?
     return true unless private?
-    return true unless Octobox.octobox_io?
+    return true unless Octobox.io?
     repository.try(:display_subject?) || user.has_personal_plan?
   end
 
