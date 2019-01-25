@@ -64,7 +64,7 @@ class Notification < ApplicationRecord
 
   def state
     return unless display_subject?
-    subject.try(:state)
+    @state ||= subject.try(:state)
   end
 
   def self.archive(notifications, value)
@@ -174,7 +174,7 @@ class Notification < ApplicationRecord
   end
 
   def display_thread?
-    Octobox.include_comments? && subjectable? && subject.present? && user.try(:display_comments?)
+    @display_thread ||= Octobox.include_comments? && subjectable? && subject.present? && user.try(:display_comments?)
   end
 
   def push_if_changed
