@@ -138,8 +138,12 @@ module Octobox
       if marketplace_url.present?
         marketplace_url
       else
-        "#{github_domain}/#{app_path}/#{app_slug}"
+        static_app_url
       end
+    end
+
+    def static_app_url
+      "#{github_domain}/#{app_path}/#{app_slug}"
     end
 
     def app_path
