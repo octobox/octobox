@@ -329,4 +329,66 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert_equal notification.github_client.access_token, 'FAKE_APP_TOKEN'
   end
+
+  test 'private? is true if repository present and private' do
+    repository = create(:repository, private: true)
+    notification = create(:notification, repository: repository)
+
+    assert notification.private?
+  end
+
+  test 'private? is false if repository missing' do
+    notification = create(:notification, repository: nil)
+
+    refute notification.private?
+  end
+
+  test 'private? is false if repository present and public' do
+    repository = create(:repository, private: false)
+    notification = create(:notification, repository: repository)
+
+    refute notification.private?
+  end
+
+  test 'display? is true for legacy notifications' do
+    notification = create(:notification, repository: nil)
+    assert notification.display?
+  end
+
+  test 'display? is true for public notifications' do
+    repository = create(:repository, private: false)
+    notification = create(:notification, repository: repository)
+
+    assert notification.display?
+  end
+
+  test 'display? is true for private notifications on a non-octobox.io install' do
+    stub_env_var('OCTOBOX_IO', 'false')
+    repository = create(:repository, private: true)
+    notification = create(:notification, repository: repository)
+
+    assert notification.display?
+  end
+
+  test 'display? is true for private notifications with a paid app installation on octobx.io' do
+    stub_env_var('OCTOBOX_IO', 'true')
+
+    repository = create(:repository, private: true)
+    notification = create(:notification, repository: repository)
+    repository.stubs(:display_subject?).returns(true)
+
+    assert notification.display?
+  end
+
+  test 'display? is true for private notifications with a paid personal plan on octobx.io' do
+    stub_env_var('OCTOBOX_IO', 'true')
+
+    repository = create(:repository, private: true)
+    repository.stubs(:display_subject?).returns(false)
+    notification = create(:notification, repository: repository)
+    user = notification.user
+    user.stubs(:has_personal_plan?).returns(true)
+
+    assert notification.display?
+  end
 end
