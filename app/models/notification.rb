@@ -67,6 +67,16 @@ class Notification < ApplicationRecord
     @state ||= subject.try(:state)
   end
 
+  def private?
+    repository.try(:private?)
+  end
+
+  def display?
+    return true unless private?
+    return true unless Octobox.io?
+    repository.try(:display_subject?) || user.has_personal_plan?
+  end
+
   def self.archive(notifications, value)
     value = value ? ActiveRecord::Type::Boolean.new.cast(value) : true
     notifications.update_all(archived: value)
