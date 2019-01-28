@@ -5,14 +5,14 @@
     Pull in state, labels, authors, assignees and CI status
   <% end %>
   on issues and pull requests by installing the
-  <% if notification.repository.try(:open_source?) || notification.user.has_personal_plan? %>
+  <% if notification.repository.try(:open_source?) || notification.user.try(:has_personal_plan?) %>
     <strong>free</strong>
   <% end %>
    GitHub App on
   <%= notification.repository_full_name %>.
 </p>
 
-<% if notification.user.has_personal_plan? %>
+<% if notification.user.try(:has_personal_plan?) %>
   <a href='<%= Octobox.config.static_app_url %>' class='btn btn-primary btn-sm'>Install the free GitHub App</a>
 <% else %>
   <a href='<%= Octobox.config.app_url %>' class='btn btn-primary btn-sm'>Install the <% if notification.repository.try(:open_source?) %>free <% end %>GitHub App</a>
