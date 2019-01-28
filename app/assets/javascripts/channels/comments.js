@@ -24,7 +24,7 @@ if ($("meta[name='push_notifications']").length >0) {
         channel: "CommentsChannel",
         notification: $(location).attr('href').split('/').pop()},{
         received: function(data){
-          if ($('#notification-thread').attr('data-id') == data.subject_id){
+          if ($('#notification-thread').attr('data-id') == data.subject_id && !$("#comment-"+data.comment_id).length){
             $('.discussion-thread').append(data.comment_html);
           }
         }
