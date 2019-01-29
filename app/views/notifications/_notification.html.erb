@@ -1,29 +1,29 @@
-<% if notification.display? %>
-  <tr id='notification-<%= notification.id %>' class='notification <%= notification.unread ? 'active' : '' %>'>
-    <td class='notification-checkbox align-middle'>
-      <div class="custom-control custom-checkbox">
-        <%= check_box_tag(
-            "notification_#{notification.id}",
-            notification.id,
-            false,
-            title: (notification.archived ? 'Unarchive' : 'Archive'),
-            class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive'),
-            autocomplete: "off"
-          )
-        %>
-        <%= label_tag "notification_#{notification.id}", '', class: "custom-control-label" %>
-      </div>
-    </td>
-    <td class='notification-star align-middle'>
-      <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
-    </td>
+<tr id='notification-<%= notification.id %>' class='notification <%= notification.unread ? 'active' : '' %>'>
+  <td class='notification-checkbox align-middle'>
+    <div class="custom-control custom-checkbox">
+      <%= check_box_tag(
+          "notification_#{notification.id}",
+          notification.id,
+          false,
+          title: (notification.archived ? 'Unarchive' : 'Archive'),
+          class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive'),
+          autocomplete: "off"
+        )
+      %>
+      <%= label_tag "notification_#{notification.id}", '', class: "custom-control-label" %>
+    </div>
+  </td>
+  <td class='notification-star align-middle'>
+    <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
+  </td>
 
-    <td class='notification-archived align-middle'>
-      <% if notification.archived? %>
-        <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
-      <% end %>
-    </td>
+  <td class='notification-archived align-middle'>
+    <% if notification.archived? %>
+      <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
+    <% end %>
+  </td>
 
+  <% if notification.display? %>
     <td class='notification-icon align-middle <%= notification_icon_color(notification.state) if notification.display_subject? %>'>
       <% if Octobox.github_app? && notification.subjectable? %>
         <% if notification.repository.try(:github_app_installed?) && !notification.user.try(:github_app_authorized?) %>
@@ -82,81 +82,51 @@
     <td class='notification-reason'>
       <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "badge badge-#{reason_label(notification.reason)}" %>
     </td>
-    <td class='notification-date'>
-      <small class='text-muted'>
-        <%= local_relative_time(notification.updated_at, type: 'time-or-date') %>
-      </small>
-
-      <span class='buttons'>
-        <% if notification.archived? %>
-          <%= link_to(archive_selected_notifications_path(id: notification.id, value: false), method: :post, class: 'mr-1', 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Unarchive' ) do %>
-            <%= octicon('inbox', height: 15) %>
-          <% end %>
-        <% else %>
-          <%= link_to(archive_selected_notifications_path(id: notification.id), method: :post, class: 'mr-1', 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Archive' ) do %>
-            <%= octicon('archive', height: 15) %>
-          <% end %>
-        <% end %>
-        <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute', 'data-confirm': "Are you sure you want to mute?") do %>
-          <%= octicon('mute', height: 15) %>
-        <% end %>
-        <% if notification.archived? %>
-          <%= link_to(delete_selected_notifications_path(id: notification.id), class: 'ml-1', method: :post, 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Delete', 'data-confirm': "Are you sure you want to delete?") do %>
-            <%= octicon('trashcan', height: 15) %>
-          <% end %>
-        <% end %>
-      </span>
+  <% else %>
+  <tr id='notification-<%= notification.id %>' class='notification notification-disabled'>
+    <td class='notification-checkbox align-middle'>
+      <div class="custom-control custom-checkbox">
+        <%= check_box_tag(
+            "notification_#{notification.id}",
+            notification.id,
+            false,
+            title: (notification.archived ? 'Unarchive' : 'Archive'),
+            class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive'),
+            autocomplete: "off"
+          )
+        %>
+        <%= label_tag "notification_#{notification.id}", '', class: "custom-control-label" %>
+      </div>
     </td>
-  </tr>
-<% else %>
-<tr id='notification-<%= notification.id %>' class='notification notification-disabled'>
-  <td class='notification-checkbox align-middle'>
-    <div class="custom-control custom-checkbox">
-      <%= check_box_tag(
-          "notification_#{notification.id}",
-          notification.id,
-          false,
-          title: (notification.archived ? 'Unarchive' : 'Archive'),
-          class: 'custom-control-input ' + (notification.archived ? 'unarchive' : 'archive'),
-          autocomplete: "off"
-        )
-      %>
-      <%= label_tag "notification_#{notification.id}", '', class: "custom-control-label" %>
-    </div>
-  </td>
-  <td class='notification-star align-middle'>
-    <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
-  </td>
+    <td class='notification-star align-middle'>
+      <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
+    </td>
 
-  <td class='notification-archived align-middle'>
-    <% if notification.archived? %>
-      <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
-    <% end %>
-  </td>
+    <td class='notification-archived align-middle'>
+      <% if notification.archived? %>
+        <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
+      <% end %>
+    </td>
 
-  <td class='notification-icon align-middle'>
-    <%= octicon('lock', height: 16) %>
-  </td>
-  <td class='notification-subject'>
-    Private notification on <strong><%= notification.repository_full_name %></strong>,
-    <%= link_to 'upgrade', pricing_path %> to unlock.
-  </td>
+    <td class='notification-icon align-middle'>
+      <%= octicon('lock', height: 16) %>
+    </td>
+    <td class='notification-subject'>
+      Private notification on <strong><%= notification.repository_full_name %></strong>,
+      <%= link_to 'upgrade', pricing_path %> to unlock.
+    </td>
 
-  <td class='notification-repo'>
-    <% unless params[:repo].present? %>
-      <small>
-        <%= link_to notification.repository_full_name, root_path(filtered_params(repo: notification.repository_full_name)), class: 'text-muted' %>
-      </small>
-    <% end %>
-  </td>
+    <td class='notification-repo'>
+      <% unless params[:repo].present? %>
+        <small>
+          <%= link_to notification.repository_full_name, root_path(filtered_params(repo: notification.repository_full_name)), class: 'text-muted' %>
+        </small>
+      <% end %>
+    </td>
 
-  <td class='notification-subject-author'>
-
-  </td>
-
-  <td class='notification-reason'>
-
-  </td>
+    <td class='notification-subject-author'></td>
+    <td class='notification-reason'></td>
+  <% end %>
 
   <td class='notification-date'>
     <% if notification.display_subject? && notification.subject %>
@@ -191,4 +161,3 @@
     </span>
   </td>
 </tr>
-<% end %>
