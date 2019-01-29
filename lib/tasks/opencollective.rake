@@ -7,6 +7,8 @@ namespace :opencollective do
 	desc "Sync supporters"
   task sync_supporters: :environment do
 
+    require 'open-uri'
+
     def get_sub_names(transactions, period, cost)
 
       txs = transactions.select do |item| 
@@ -15,8 +17,8 @@ namespace :opencollective do
       # check for users who have made multiple donations in the last month that tipped the jar
       tx_groups = txs.group_by{|item| item["github"].presence}
 
-      subscriptions = tx_groups.select do |_name, transactions|
-        transactions.sum{|item| item['lastTransactionAmount']} >= cost
+      subscriptions = tx_groups.select do |_name, group|
+        group.sum{|item| item['lastTransactionAmount']} >= cost
       end
 
       subscriber_names = subscriptions.map do |name, _transactions|
@@ -63,8 +65,6 @@ namespace :opencollective do
       end
 
     end
-  	
-    require 'open-uri'
 
     Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Syncing Open Collective supporters \033[0m\n\n")
 		
@@ -72,7 +72,6 @@ namespace :opencollective do
 
     organisation_subscribers = get_sub_names(response, period, organisation_cost_per_period)
     individual_subscibers = get_sub_names(response, period, individual_cost_per_period)
-
     individual_subscibers.delete_if { |name| organisation_subscribers.include?(name) }
     
     apply_plan(organisation_subscribers, 'Open Collective Organisation')
