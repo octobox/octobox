@@ -3,7 +3,7 @@ require 'test_helper'
 
 class CommentWorkerTest < ActiveSupport::TestCase
   setup do
-  	@user = create(:user)
+    @user = create(:user)
     @comment = create(:comment)
   end
 
@@ -14,7 +14,7 @@ class CommentWorkerTest < ActiveSupport::TestCase
 
   test 'Posts and synchronises a comment with GitHub' do
     stub_request(:post, "#{@comment.subject.url}/comments").
-    	to_return({ status: 200, body: file_fixture('new_comment.json'), headers: {'Content-Type' => 'application/json'}})
+      to_return({ status: 200, body: file_fixture('new_comment.json'), headers: {'Content-Type' => 'application/json'}})
     CommentWorker.new.perform(@comment.id, @user.id, @comment.subject.id)
     #updates comments with details from response
     @comment.reload
