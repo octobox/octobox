@@ -1,7 +1,8 @@
 namespace :opencollective do
 
   period = 1.month.ago
-  subs_cost_per_period = 100
+  individual_cost_per_period = 10
+  organisation_cost_per_period = 100
 	
 	desc "Sync supporters"
   task sync_supporters: :environment do
@@ -10,23 +11,25 @@ namespace :opencollective do
 		
     response = JSON.parse(open("https://opencollective.com/octobox/members.json"))
   	txs = response.select do |item| 
-  		Date.parse(item["lastTransactionAt"]) > period &&
-  		item["github"].present? || item["organization"].present?
+  		Date.parse(item["lastTransactionAt"]) > period && item["github"].present?
   	end
 
-    # check for users who have made multiple donations in the last month that tipped
-    tx_groups = txs.group_by{|item| item["github"].presence || item["organization"]}
+    # check for users who have made multiple donations in the last month that tipped the jar
+    tx_groups = txs.group_by{|item| item["github"].presence}
     subs = tx_groups.select do |_name, transactions|
-      transactions.sum{|item| item['lastTransactionAmount']} >= subs_cost_per_period
+      transactions.sum{|item| item['lastTransactionAmount']} >= organisation_cost_per_period
     end
 
   	subnames = subs.map do |name, _transactions|
-      # TODO make sure it's clear that you need to add your GH url or GH org name
       rz = name.match(/github.com\/(\w+)\//i) if name
       rz[1] if rz
   	end.compact
 
-    plan = SubscriptionPlan.find_by_name('Open Collective Private')
+    # grab the appropriate plan
+    plan_name = 'Open Collective Organisation'
+    plan = SubscriptionPlan.find_by_name(plan_name)
+    Rails.logger.info("n\n\033[32m[#{Time.current}] ERROR -- Could not find plan named #{plan_name}\033[0m\n\n") if plan.nil?
+
     current_subs_purchases = plan.subscription_purchases.where(unit_count: 1) unless plan.nil?
     if current_subs_purchases 
       current_subs_purchases.each do |purchase|
