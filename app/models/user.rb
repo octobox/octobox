@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :app_installation_permissions, dependent: :delete_all
   has_many :app_installations, through: :app_installation_permissions
   has_many :pinned_searches, dependent: :delete_all
-  has_one :personal_app_installation, foreign_key: :account_login, primary_key: :github_login, class_name: 'AppInstallation'
+  has_one :individual_subscription_purchase, foreign_key: :account_id, primary_key: :github_id, class_name: 'SubscriptionPurchase'
 
   ERRORS = {
     refresh_interval_size: [:refresh_interval, 'must be less than 1 day']
@@ -44,7 +44,7 @@ class User < ApplicationRecord
   end
 
   def has_personal_plan?
-    personal_app_installation && personal_app_installation.private_repositories_enabled?
+    individual_subscription_purchase && individual_subscription_purchase.private_repositories_enabled?
   end
 
   # For users who had zero values set before 20170111185505_allow_null_for_last_synced_at_in_users.rb
