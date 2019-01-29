@@ -8,6 +8,8 @@ namespace :opencollective do
   task sync_supporters: :environment do
   	
     require 'open-uri'
+
+    Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Syncing Open Collective supporters \033[0m\n\n")
 		
     response = JSON.parse(open("https://opencollective.com/octobox/members.json"))
   	txs = response.select do |item| 
@@ -16,12 +18,13 @@ namespace :opencollective do
 
     # check for users who have made multiple donations in the last month that tipped the jar
     tx_groups = txs.group_by{|item| item["github"].presence}
+
     subs = tx_groups.select do |_name, transactions|
       transactions.sum{|item| item['lastTransactionAmount']} >= organisation_cost_per_period
     end
 
   	subnames = subs.map do |name, _transactions|
-      rz = name.match(/github.com\/(\w+)\//i) if name
+      rz = name.match(/github.com\/(\w+)/i) if name
       rz[1] if rz
   	end.compact
 
