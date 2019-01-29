@@ -134,14 +134,16 @@ $notification-items: (
         }
       }
     }
-    &:hover, &:focus{
-      .notification-date{
-        small, .badge {
-          display: none;
+    @media (hover: hover) {
+      &:hover, &:focus{
+        .notification-date{
+          small, .badge {
+            display: none;
+          }
         }
-      }
-      .buttons{
-        display: inline;
+        .buttons{
+          display: inline;
+        }
       }
     }
   }
@@ -183,10 +185,12 @@ $notification-items: (
       .buttons{
         display: none;
       }
-      &:hover, &:focus{
-        .notification-date{
-          small, .badge{
-            display: inline;
+      @media (hover: hover) {
+        &:hover, &:focus{
+          .notification-date{
+            small, .badge{
+              display: inline;
+            }
           }
         }
       }
