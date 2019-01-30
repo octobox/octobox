@@ -124,8 +124,8 @@ class NotificationsController < ApplicationController
   end
 
   def comment
-    subject = @current_user.notifications.find(params[:id]).subject
-    subject.comment(@current_user, params[:comment][:body]) if subject.commentable?
+    subject = current_user.notifications.find(params[:id]).subject
+    subject.comment(current_user, params[:comment][:body]) if subject.commentable?
     if request.xhr?
       render partial: "notifications/comments", locals:{comments: subject.comments.last}, layout: false
     else
