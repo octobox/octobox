@@ -2,7 +2,7 @@ class AppInstallation < ApplicationRecord
   has_many :repositories, dependent: :destroy
   has_many :app_installation_permissions, dependent: :delete_all
   has_many :users, through: :app_installation_permissions
-  has_one :subscription_purchase, foreign_key: :account_id, primary_key: :account_id
+  has_one :subscription_purchase, foreign_key: :account_id, primary_key: :account_id, dependent: :destroy
 
   validates :github_id, presence: true, uniqueness: true
   validates :account_login, presence: true

@@ -64,7 +64,17 @@ class Notification < ApplicationRecord
 
   def state
     return unless display_subject?
-    subject.try(:state)
+    @state ||= subject.try(:state)
+  end
+
+  def private?
+    repository.try(:private?)
+  end
+
+  def display?
+    return true unless private?
+    return true unless Octobox.io?
+    repository.try(:display_subject?) || user.has_personal_plan?
   end
 
   def self.archive(notifications, value)
@@ -140,11 +150,11 @@ class Notification < ApplicationRecord
     end
   end
 
-  def update_from_api_response(api_response, unarchive: false)
+  def update_from_api_response(api_response)
     attrs = Notification.attributes_from_api_response(api_response)
     self.attributes = attrs
     self.archived = false if archived.nil? # fixup existing records where archived is nil
-    unarchive_if_updated if unarchive
+    unarchive_if_updated
     if changed?
       save(touch: false)
       update_repository(api_response)
@@ -161,7 +171,7 @@ class Notification < ApplicationRecord
   end
 
   def display_subject?
-    @display_subject ||= subjectable? && (Octobox.fetch_subject? || repository.try(:display_subject?))
+    @display_subject ||= subjectable? && (Octobox.fetch_subject? || repository.try(:display_subject?) || user.has_personal_plan?)
   end
 
   def upgrade_required?
@@ -174,7 +184,7 @@ class Notification < ApplicationRecord
   end
 
   def display_thread?
-    Octobox.include_comments? && subjectable? && subject.present? && user.try(:display_comments?)
+    @display_thread ||= Octobox.include_comments? && subjectable? && subject.present? && user.try(:display_comments?)
   end
 
   def push_if_changed
@@ -186,8 +196,9 @@ class Notification < ApplicationRecord
   end
 
   def push_to_channel
-    string = ApplicationController.render(partial: 'notifications/notification', locals: { notification: self})
-    ActionCable.server.broadcast "notifications:#{user_id}", { id: "#notification-#{id}", html: string }
+    notification = ApplicationController.render(partial: 'notifications/notification', locals: { notification: self})
+    subject = ApplicationController.render(partial: 'notifications/thread_subject', locals: { notification: self})
+    ActionCable.server.broadcast "notifications:#{user_id}", { id: self.id, notification: notification, subject: subject }
   end
 
   def update_repository(api_response)

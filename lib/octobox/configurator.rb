@@ -32,7 +32,7 @@ module Octobox
 
     def scopes
       default_scopes = 'notifications'
-      default_scopes += ', read:org' if !github_app && Octobox.restricted_access_enabled?
+      default_scopes += ', read:org' if Octobox.restricted_access_enabled?
       default_scopes += ', repo'     if !github_app && fetch_subject
 
       ENV.fetch('GITHUB_SCOPE', default_scopes)
@@ -138,8 +138,12 @@ module Octobox
       if marketplace_url.present?
         marketplace_url
       else
-        "#{github_domain}/#{app_path}/#{app_slug}"
+        static_app_url
       end
+    end
+
+    def static_app_url
+      "#{github_domain}/#{app_path}/#{app_slug}"
     end
 
     def app_path

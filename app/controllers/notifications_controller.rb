@@ -75,21 +75,19 @@ class NotificationsController < ApplicationController
   end
 
   def show
-    scope = original_scope = notifications_for_presentation.newest
+    scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
-    @notification = original_scope.find(params[:id])
+    @notification = current_user.notifications.find(params[:id])
     @previous = ids[position-1] unless position.nil? || position-1 < 0
     @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
-    comments_loaded = 5
-    @comments_to_load = 0
-
-    if @notification.subject
+    if @notification.subject && @notification.subject.commentable?
+      comments_loaded = 5
       @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
-      @comments_left_to_load = @notification.subject.comments.count - comments_loaded > 0 ? @notification.subject.comments.count - comments_loaded : 0
+      @comments_left_to_load = @notification.subject.comment_count - comments_loaded > 0 ? @notification.subject.comment_count - comments_loaded : 0
     else
       @comments = []
     end
@@ -100,17 +98,16 @@ class NotificationsController < ApplicationController
 
   def expand_comments
 
-    scope = original_scope = notifications_for_presentation.newest
+    scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
-    @notification = original_scope.find(params[:id])
+    @notification = current_user.notifications.find(params[:id])
     @previous = ids[position-1] unless position.nil? || position-1 < 0
     @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
     @comments_left_to_load = 0
-    @more_comments = false
 
     if @notification.subject
       @comments = @notification.subject.comments.order('created_at ASC')

@@ -59,6 +59,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'percy-capybara'
+  gem 'action-cable-testing'
 end
 
 group :development do
@@ -73,7 +74,7 @@ group :development do
 end
 
 group :production do
-  gem 'skylight'
+  gem 'skylight', '4.0.0.alpha4'
   gem 'lograge'
   gem 'puma_worker_killer'
 end

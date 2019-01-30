@@ -19,7 +19,7 @@ class Subject < ApplicationRecord
   def update_labels(remote_labels)
     existing_labels = labels.to_a
     remote_labels.each do |l|
-      label = labels.find_by_github_id(l['id'])
+      label = existing_labels.first{|lbl| lbl.github_id == l['id']} || labels.find_by_github_id(l['id'])
       if label.nil?
         labels.create({
           github_id: l['id'],
@@ -46,7 +46,7 @@ class Subject < ApplicationRecord
   end
 
   def self.sync(remote_subject)
-    subject = Subject.find_or_create_by(url: remote_subject['url'])
+    subject = Subject.includes(:labels).find_or_create_by(url: remote_subject['url'])
 
     # webhook payloads don't always have 'repository' info
     if remote_subject['repository']
@@ -69,7 +69,7 @@ class Subject < ApplicationRecord
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
-      body: remote_subject['body']
+      body: remote_subject['body'].try(:gsub, "\u0000", '')
     })
 
     return unless subject.persisted?
@@ -116,7 +116,7 @@ class Subject < ApplicationRecord
     remote_comments.each do |remote_comment|
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
         comment.author = remote_comment.user.login
-        comment.body = remote_comment.body
+        comment.body = remote_comment.body.try(:gsub, "\u0000", '')
         comment.author_association = remote_comment.author_association
         comment.created_at = remote_comment.created_at
         comment.save
@@ -135,7 +135,7 @@ class Subject < ApplicationRecord
   private
 
   def pushable_fields
-    ['state', 'status', 'body']
+    ['state', 'status', 'body', 'comment_count']
   end
 
   def assign_status(remote_status)

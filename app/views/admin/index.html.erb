@@ -178,10 +178,10 @@
                     <%= octicon 'gift', height: 50 %>
                   </div>
                   <div class="media-body text-right">
-                    <h3>
+                    <h3 title='<%= SubscriptionPurchase.active.free_trial.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
                       <%= number_to_human SubscriptionPurchase.active.free_trial.count %>
                     </h3>
-                    <span>Free Trials</span>
+                    <span >Free Trials</span>
                   </div>
                 </div>
               </div>
@@ -198,7 +198,7 @@
                     <%= octicon 'jersey', height: 50, class: 'success' %>
                   </div>
                   <div class="media-body text-right">
-                    <h3>
+                    <h3 title='<%= SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
                       <%= number_to_human SubscriptionPurchase.active.not_free_trial.paid.count %>
                     </h3>
                     <span>Paying Subscriptions</span>

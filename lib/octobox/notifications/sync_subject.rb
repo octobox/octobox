@@ -40,7 +40,7 @@ module Octobox
       end
 
       def download_public_subjects?
-        return false unless repository.try(:open_source?)
+        return false if private?
         if Octobox.config.public_subject_rollout
           updated_at > Octobox.config.public_subject_rollout
         else
