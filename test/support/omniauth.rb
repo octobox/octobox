@@ -26,5 +26,6 @@ module SignInHelper
     end
 
     @user.reload
+    Subject.delete_all
   end
 end

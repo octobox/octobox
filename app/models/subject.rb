@@ -13,7 +13,6 @@ class Subject < ApplicationRecord
 
   validates :url, presence: true, uniqueness: true
 
-  after_update :sync_involved_users
   after_save :push_to_channels
 
   def update_labels(remote_labels)
