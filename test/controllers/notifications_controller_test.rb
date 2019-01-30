@@ -114,8 +114,9 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders notifications filtered by label' do
-    stub_fetch_subject_enabled
     sign_in_as(@user)
+    subject = create(:subject, notifications: [@user.notifications.first])
+    create(:label, name: 'question', subject: subject)
 
     get '/'
     assert_response :success
@@ -613,7 +614,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by author' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], author: 'andrew')
@@ -624,7 +624,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple authors' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], author: 'andrew')
@@ -668,7 +667,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple labels' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -681,7 +679,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude label' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -695,7 +692,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude multiple labels' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -708,7 +704,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by state' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -719,7 +714,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple states' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -730,7 +724,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude state' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -742,7 +735,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude multiple states' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -753,7 +745,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by assignee' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], assignees: ":andrew:")
@@ -764,7 +755,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple assignees' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], assignees: ":andrew:")
@@ -806,7 +796,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by locked:false' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], locked: false)
@@ -976,7 +965,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can exclude bots' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     notification3 = create(:notification, user: @user)
@@ -1011,7 +999,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'thread shows five commments' do
     sign_in_as(@user)
-    Subject.delete_all
     notification = create(:notification, user: @user)
     subject = create(:subject, notifications: [notification], comment_count: 10)
     10.times.each { create(:comment, subject: subject)}
@@ -1022,7 +1009,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'thread shows expanded comments' do
     sign_in_as(@user)
-    Subject.delete_all
     notification = create(:notification, user: @user)
     subject = create(:subject, notifications: [notification], comment_count: 10)
     10.times.each { create(:comment, subject: subject) }
