@@ -13,13 +13,12 @@ class Subject < ApplicationRecord
 
   validates :url, presence: true, uniqueness: true
 
-  after_update :sync_involved_users
   after_save :push_to_channels
 
   def update_labels(remote_labels)
     existing_labels = labels.to_a
     remote_labels.each do |l|
-      label = existing_labels.first{|lbl| lbl.github_id == l['id']} || labels.find_by_github_id(l['id'])
+      label = labels.find_by_github_id(l['id'])
       if label.nil?
         labels.create({
           github_id: l['id'],
@@ -46,7 +45,7 @@ class Subject < ApplicationRecord
   end
 
   def self.sync(remote_subject)
-    subject = Subject.includes(:labels).find_or_create_by(url: remote_subject['url'])
+    subject = Subject.find_or_create_by(url: remote_subject['url'])
 
     # webhook payloads don't always have 'repository' info
     if remote_subject['repository']
@@ -144,7 +143,7 @@ class Subject < ApplicationRecord
   end
 
   def push_to_channels
-    notifications.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+    notifications.includes({:subject => :labels}, :repository, {:user => :individual_subscription_purchase}).find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
   end
 
   private

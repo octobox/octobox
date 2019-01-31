@@ -6,7 +6,7 @@ class SubscriptionPlan < ApplicationRecord
   scope :github, -> { where.not(github_id: nil) }
 
   def private_repositories_enabled?
-    name.match?(/private/i) || name.match?(/personal/i)
+    name.match?(/private/i) || name.match?(/personal/i) || name.match?(/individual/i) || name.match?(/organisation/i)
   end
 
   def github?
