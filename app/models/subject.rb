@@ -13,7 +13,6 @@ class Subject < ApplicationRecord
 
   validates :url, presence: true, uniqueness: true
 
-  after_update :sync_involved_users
   after_save :push_to_channels
 
   def update_labels(remote_labels)
@@ -144,7 +143,7 @@ class Subject < ApplicationRecord
   end
 
   def push_to_channels
-    notifications.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+    notifications.includes({:subject => :labels}, :repository, {:user => :individual_subscription_purchase}).find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
   end
 
   private
