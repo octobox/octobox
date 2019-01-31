@@ -18,7 +18,7 @@ class Subject < ApplicationRecord
   def update_labels(remote_labels)
     existing_labels = labels.to_a
     remote_labels.each do |l|
-      label = existing_labels.first{|lbl| lbl.github_id == l['id']} || labels.find_by_github_id(l['id'])
+      label = labels.find_by_github_id(l['id'])
       if label.nil?
         labels.create({
           github_id: l['id'],
@@ -45,7 +45,7 @@ class Subject < ApplicationRecord
   end
 
   def self.sync(remote_subject)
-    subject = Subject.includes(:labels).find_or_create_by(url: remote_subject['url'])
+    subject = Subject.find_or_create_by(url: remote_subject['url'])
 
     # webhook payloads don't always have 'repository' info
     if remote_subject['repository']
