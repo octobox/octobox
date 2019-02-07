@@ -59,6 +59,7 @@ Rails.application.routes.draw do
   post '/hooks/github', to: 'hooks#create'
 
   if Octobox.io?
+    get '/opencollective', to: 'open_collective#upgrade'
     get '/pricing', to: 'pages#pricing'
     get '/privacy', to: 'pages#privacy'
     get '/terms', to: 'pages#terms'
