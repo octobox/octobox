@@ -74,7 +74,7 @@
       
     </div>
 
-    <% if @notification.subject.commentable? %>
+    <% if current_user.can_comment?(@notification.subject)%>
       <%= render partial: 'reply', locals: {notification: @notification} %>
     <% end %>
   <% end %>

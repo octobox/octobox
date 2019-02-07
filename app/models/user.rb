@@ -143,4 +143,10 @@ class User < ApplicationRecord
     removed_permissions = app_installation_permissions.reject{|ep| app_installation_ids.include?(ep.app_installation_id) }
     removed_permissions.each(&:destroy)
   end
+
+  def can_comment?(subject)
+    # 
+    return subject.commentable? && subject.repository.commentable? && github_client || 
+      subject.repository.open_source? && github_client
+  end
 end

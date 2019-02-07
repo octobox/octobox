@@ -20,6 +20,10 @@ class Repository < ApplicationRecord
     app_installation_id.present?
   end
 
+  def commentable?
+    return display_subject && app_installation.write_issues?
+  end
+
   def display_subject?
     return true unless private?
     github_app_installed? && required_plan_available?
