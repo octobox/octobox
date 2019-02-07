@@ -145,8 +145,11 @@ class User < ApplicationRecord
   end
 
   def can_comment?(subject)
-    # 
-    return subject.commentable? && subject.repository.commentable? && github_client || 
-      subject.repository.open_source? && github_client
+    return subject.commentable? && subject.repository.commentable? && #is the subject/repo commentable? (checkes for write issues)
+      personal_access_token_enabled? || #do we have a personal access token?
+      Octobox.fetch_subject? || # are we running with repo scope?
+      subject.repository.open_source? && effective_access_token || #is this an open source repo without the app installed?
+      subject.repository.open_source? && github_app_authorized? || #is this an open source repo with the app installed? 
+      subject.respository.app_installation_id
   end
 end

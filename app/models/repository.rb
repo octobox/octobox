@@ -21,7 +21,8 @@ class Repository < ApplicationRecord
   end
 
   def commentable?
-    return display_subject && app_installation.write_issues?
+    return app_installation.write_issues? && display_subject? unless app_installation.nil?
+    display_subject?
   end
 
   def display_subject?
