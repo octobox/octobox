@@ -142,4 +142,43 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'user can comment on an open source repo' do
+    repository = create(:repository, private: false)
+    subject = create(:subject, repository: repository)
+    
+    assert @user.can_comment?(subject)
+  end
+
+  test 'user cannot comment on a private subject' do
+    repository = create(:repository, private: true)
+    subject = create(:subject, repository: repository)
+    
+    assert_not @user.can_comment?(subject)
+  end
+
+  test 'user cannot comment on a private subject without write permissions' do
+    repository = create(:repository, private: false)
+    installation = create(:app_installation, repositories: [repository], permission_issues: 'read')
+    subject = create(:subject, repository: repository)
+    
+    assert_not @user.can_comment?(subject)
+  end
+
+  test 'user can comment on a private subject with an app installation' do
+    repository = create(:repository, private: false)
+    installation = create(:app_installation, repositories: [repository], permission_issues: 'write')
+    subject = create(:subject, repository: repository)
+    
+    assert @user.can_comment?(subject)
+  end
+
+  test 'user can comment on a subject with a personal token' do
+    @user.encrypted_personal_access_token = '12345'
+    repository = create(:repository, private: true)
+    installation = create(:app_installation, repositories: [repository])
+    subject = create(:subject, repository: repository)
+    
+    assert @user.can_comment?(subject)
+  end
+
 end
