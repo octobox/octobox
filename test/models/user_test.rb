@@ -160,7 +160,7 @@ class UserTest < ActiveSupport::TestCase
   test 'user cannot comment on a private subject without write permissions' do
     stub_env_var('FETCH_SUBJECT', 'false')
     repository = create(:repository, private: true)
-    installation = create(:app_installation, repositories: [repository], permission_issues: 'read')
+    create(:app_installation, repositories: [repository], permission_issues: 'read')
     subject = create(:subject, repository: repository)
 
     refute @user.can_comment?(subject)
@@ -168,7 +168,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'user can comment on a private subject with an app installation' do
     repository = create(:repository, private: true)
-    installation = create(:app_installation, repositories: [repository], permission_issues: 'write')
+    create(:app_installation, repositories: [repository], permission_issues: 'write')
     subject = create(:subject, repository: repository)
 
     assert @user.can_comment?(subject)
@@ -176,7 +176,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'user cannot comment on a private subject without an app installation token' do
     repository = create(:repository, private: true)
-    installation = create(:app_installation, repositories: [repository], permission_issues: 'write')
+    create(:app_installation, repositories: [repository], permission_issues: 'write')
     subject = create(:subject, repository: repository)
 
     assert @user.can_comment?(subject)
@@ -189,7 +189,7 @@ class UserTest < ActiveSupport::TestCase
     @token_user = create(:token_user)
 
     repository = create(:repository, private: true)
-    installation = create(:app_installation, repositories: [repository])
+    create(:app_installation, repositories: [repository])
     subject = create(:subject, repository: repository)
 
     assert @token_user.can_comment?(subject)
