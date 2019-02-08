@@ -173,7 +173,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'user can comment on a subject with a personal token' do
-    @user.encrypted_personal_access_token = '12345'
+    stub_env_var('PERSONAL_ACCESS_TOKENS_ENABLED', 'true')
+    stub_personal_access_tokens_enabled
+    stub_user_request(user: build(:token_user))
+
+    @token_user = create(:token_user)
+    
     repository = create(:repository, private: true)
     installation = create(:app_installation, repositories: [repository])
     subject = create(:subject, repository: repository)
