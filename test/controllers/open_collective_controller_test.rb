@@ -5,6 +5,8 @@ class OpenCollectiveControllerTest < ActionDispatch::IntegrationTest
   setup do
     Octobox.stubs(:io?).returns(true)
     stub_notifications_request
+    stub_repository_request
+    stub_comments_requests
     stub_fetch_subject_enabled(value: false)
     @transactionid = 165052
     @plan = create(:subscription_plan, name: 'Open Collective Individual')
