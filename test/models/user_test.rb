@@ -167,6 +167,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'user can comment on a private subject with an app installation' do
+    @user = create(:user, app_token: SecureRandom.hex(20))
     repository = create(:repository, private: true)
     create(:app_installation, repositories: [repository], permission_issues: 'write')
     subject = create(:subject, repository: repository)
@@ -179,7 +180,7 @@ class UserTest < ActiveSupport::TestCase
     create(:app_installation, repositories: [repository], permission_issues: 'write')
     subject = create(:subject, repository: repository)
 
-    assert @user.can_comment?(subject)
+    refute @user.can_comment?(subject)
   end
 
   test 'user can comment on a subject with a personal token' do
