@@ -4,7 +4,7 @@ class OpenCollectiveController < ApplicationController
     transaction_id = params[:transactionid]
     transaction = Octobox::OpenCollective.load_transaction(transaction_id)
 
-    if transaction && transaction["result"]
+    if transaction && transaction["result"] && transaction["result"]["amount"] >= 1000
       plan = SubscriptionPlan.find_by_name('Open Collective Individual')
       subscription_purchase = SubscriptionPurchase.new(account_id: current_user.github_id,
                                                        unit_count: 1,
