@@ -145,10 +145,10 @@ class User < ApplicationRecord
   end
 
   def can_comment?(subject)
-    return (subject.commentable? && subject.repository.commentable?) && #is the subject/repo commentable? (checkes for write issues)
+    return (subject.commentable? && subject.repository.commentable?(self)) && #is the subject/repo commentable? (checkes for write issues)
       personal_access_token_enabled? || #do we have a personal access token?
       Octobox.fetch_subject? || # are we running with repo scope?      
-      subject.repository.app_installation_id || #there is an app installation on the repo (we already checked for write permission)
+      (subject.repository.app_installation_id && app_token) || #there is an app installation on the repo (we already checked for write permission) and do we have a token?
       (subject.repository.open_source? && effective_access_token) || #is this an open source repo without the app installed?
       subject.repository.app_installation_id #is this an open source repo with the app installed? 
   end
