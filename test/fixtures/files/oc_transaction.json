@@ -1,0 +1,48 @@
+{
+  "result": {
+    "id": 165052,
+    "uuid": null,
+    "type": "CREDIT",
+    "createdAt": "Thu Feb 07 2019 15:35:48 GMT+0000 (UTC)",
+    "description": "individual",
+    "amount": 1000,
+    "currency": "USD",
+    "hostCurrency": "USD",
+    "hostCurrencyFxRate": 1,
+    "netAmountInCollectiveCurrency": 831,
+    "hostFeeInHostCurrency": -50,
+    "platformFeeInHostCurrency": -50,
+    "paymentProcessorFeeInHostCurrency": -69,
+    "paymentMethod": {
+      "id": 42284,
+      "service": "stripe",
+      "name": "0002"
+    },
+    "fromCollective": {
+      "id": 1441,
+      "slug": "teabass",
+      "name": "Andrew Nesbitt",
+      "image": "https://opencollective-production.s3-us-west-1.amazonaws.com/andrew_aff03800-57e2-11e6-a2a8-bb3ee7158535.jpeg"
+    },
+    "collective": {
+      "id": 413,
+      "slug": "octobox",
+      "name": "Octobox",
+      "image": "https://opencollective-production.s3-us-west-1.amazonaws.com/4e491a10-aae0-11e8-a91b-df5253215e9d.png"
+    },
+    "host": {
+      "id": 11004,
+      "slug": "opensourcecollective",
+      "name": "Open Source Collective 501c6 (Non Profit)",
+      "image": "https://opencollective-production.s3-us-west-1.amazonaws.com/5f4a3920-11b6-11e8-b28d-b359f3c5ca14.png"
+    },
+    "order": {
+      "id": 40542,
+      "status": "ACTIVE",
+      "subscription": {
+        "id": 31719,
+        "interval": "month"
+      }
+    }
+  }
+}
