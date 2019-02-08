@@ -20,12 +20,9 @@ class Repository < ApplicationRecord
     app_installation_id.present?
   end
 
-  def commentable?(user)
-    if app_installation.nil?
-        return user.personal_access_token_enabled? || Octobox.fetch_subject?
-    end
-    (display_subject? && app_installation.write_issues?) ||
-        user.personal_access_token_enabled? || Octobox.fetch_subject?
+  def commentable?
+    return true unless private?
+    github_app_installed? && app_installation.write_issues?
   end
 
   def display_subject?

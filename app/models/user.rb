@@ -149,12 +149,11 @@ class User < ApplicationRecord
   end
 
   def can_comment?(subject)
-    if subject.commentable? && subject.repository.commentable?(self) 
-      return  personal_access_token_enabled? ||
-        Octobox.fetch_subject? ||
-        has_app_installed?(subject) || 
-        subject.repository.open_source 
-    end
-    false
+    return false unless subject.commentable?
+    return true if personal_access_token_enabled?
+    return true if Octobox.fetch_subject?
+    return true if subject.repository.open_source?
+    return true if app_token.present? && subject.repository.commentable?
+    return false
   end
 end

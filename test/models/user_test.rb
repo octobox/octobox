@@ -145,53 +145,54 @@ class UserTest < ActiveSupport::TestCase
   test 'user can comment on an open source repo' do
     repository = create(:repository, private: false)
     subject = create(:subject, repository: repository)
-    
+
     assert @user.can_comment?(subject)
   end
 
   test 'user cannot comment on a private subject' do
+    stub_env_var('FETCH_SUBJECT', 'false')
     repository = create(:repository, private: true)
     subject = create(:subject, repository: repository)
-    
-    assert_not @user.can_comment?(subject)
+
+    refute @user.can_comment?(subject)
   end
 
   test 'user cannot comment on a private subject without write permissions' do
-    repository = create(:repository, private: false)
+    stub_env_var('FETCH_SUBJECT', 'false')
+    repository = create(:repository, private: true)
     installation = create(:app_installation, repositories: [repository], permission_issues: 'read')
     subject = create(:subject, repository: repository)
-    
-    assert_not @user.can_comment?(subject)
+
+    refute @user.can_comment?(subject)
   end
 
   test 'user can comment on a private subject with an app installation' do
-    repository = create(:repository, private: false)
+    repository = create(:repository, private: true)
     installation = create(:app_installation, repositories: [repository], permission_issues: 'write')
     subject = create(:subject, repository: repository)
-    
+
     assert @user.can_comment?(subject)
   end
 
   test 'user cannot comment on a private subject without an app installation token' do
-    repository = create(:repository, private: false)
+    repository = create(:repository, private: true)
     installation = create(:app_installation, repositories: [repository], permission_issues: 'write')
     subject = create(:subject, repository: repository)
-    
+
     assert @user.can_comment?(subject)
   end
 
   test 'user can comment on a subject with a personal token' do
-    stub_env_var('PERSONAL_ACCESS_TOKENS_ENABLED', 'true')
     stub_personal_access_tokens_enabled
     stub_user_request(user: build(:token_user))
 
     @token_user = create(:token_user)
-    
+
     repository = create(:repository, private: true)
     installation = create(:app_installation, repositories: [repository])
     subject = create(:subject, repository: repository)
-    
-    assert @user.can_comment?(subject)
+
+    assert @token_user.can_comment?(subject)
   end
 
   test 'user can comment if running under repo scope' do
