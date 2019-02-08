@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class OpenCollectiveController < ApplicationController
+  before_action :check_octobox_io
+
   def callback
     transaction_id = params[:transactionid]
     transaction = Octobox::OpenCollective.load_transaction(transaction_id)

@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def check_octobox_io
+    redirect_to '/422', flash: {error: 'This page is only available on https://octobox.io'} unless Octobox.io?
+  end
+
   def add_user_info_to_bugsnag(notification)
     return unless logged_in?
 

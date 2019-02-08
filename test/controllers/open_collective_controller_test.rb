@@ -11,8 +11,17 @@ class OpenCollectiveControllerTest < ActionDispatch::IntegrationTest
     @user = create(:user)
   end
 
+  test 'route is only available on octobox.io' do
+    sign_in_as(@user)
+    Octobox.stubs(:io?).returns(false)
+    get "/opencollective?transactionid=#{@transactionid}"
+    assert_response :redirect
+    assert_redirected_to '/422'
+    assert_equal 'This page is only available on https://octobox.io', flash[:error]
+  end
+
   test 'logged out visitor gets directed to login page' do
-    get '/opencollective?transactionid=165052'
+    get "/opencollective?transactionid=#{@transactionid}"
     assert_response :redirect
     refute @user.has_personal_plan?
   end
