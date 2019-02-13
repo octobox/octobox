@@ -131,7 +131,12 @@ class Subject < ApplicationRecord
 
   def comment_on_github(comment, user)
     return if comment.body.empty?
-    remote_comment = user.github_client.post "#{url}/comments", {body: comment.body}
+
+    client = user.github_client
+    client = user.app_installation_client if user.app_token.present? && comment.subject.repository.commentable?
+
+    remote_comment = client.post "#{url}/comments", {body: comment.body}
+
     comment.github_id = remote_comment.id 
     comment.author_association = remote_comment.author_association
     comment.created_at = remote_comment.created_at
