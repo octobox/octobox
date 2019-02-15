@@ -44,16 +44,16 @@ module Octobox
       plan = SubscriptionPlan.find_by_name(plan_name)
       return Rails.logger.info("n\n\033[32m[#{Time.current}] ERROR -- Could not find plan named #{plan_name}\033[0m\n\n") if plan.nil?
 
-      current_subs_purchases = plan.subscription_purchases.where(unit_count: 1) unless plan.nil?
-
-      if current_subs_purchases
-        current_subs_purchases.each do |purchase|
-          unless subscriber_names.include? purchase.app_installation.account_login
-            purchase.update_attributes(unit_count: 0)
-            Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed open collective subscription purchase for #{purchase.app_installation.account_login}\033[0m\n\n")
-          end
-        end
-      end
+      # current_subs_purchases = plan.subscription_purchases.where(unit_count: 1) unless plan.nil?
+      #
+      # if current_subs_purchases
+      #   current_subs_purchases.each do |purchase|
+      #     unless subscriber_names.include? purchase.app_installation.account_login
+      #       purchase.update_attributes(unit_count: 0)
+      #       Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed open collective subscription purchase for #{purchase.app_installation.account_login}\033[0m\n\n")
+      #     end
+      #   end
+      # end
 
       subscriber_names.each do |subscriber|
         app_installation = AppInstallation.find_by_account_login(subscriber)
