@@ -176,6 +176,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'user cannot comment on a private subject without an app installation token' do
+    stub_env_var('FETCH_SUBJECT', 'false')
+    
     repository = create(:repository, private: true)
     create(:app_installation, repositories: [repository], permission_issues: 'write')
     subject = create(:subject, repository: repository)
