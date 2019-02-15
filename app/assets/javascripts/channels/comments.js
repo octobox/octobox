@@ -15,8 +15,6 @@ var subscribeToComments = function(){
 }
 
 if ($("meta[name='push_notifications']").length >0) {
-
-  $(document).on('click', '.thread-link', function(){ subscribeToComments() });
   
   $(document).on("turbolinks:load", function(){
     if($('#thread').is(':visible')){

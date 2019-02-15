@@ -454,6 +454,7 @@ var Octobox = (function() {
       }
     });
     openThread();
+    subscribeToComments();
     return false;
   }
 
