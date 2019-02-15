@@ -135,7 +135,7 @@ class NotificationsController < ApplicationController
         redirect_back fallback_location: notification_path
       end
     else
-      flash[:error] = 'Could not update your account'
+      flash[:error] = 'Could not post your comment'
       redirect_back fallback_location: notification_path 
     end
   end
