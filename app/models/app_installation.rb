@@ -71,7 +71,7 @@ class AppInstallation < ApplicationRecord
   end
 
   def read_issues?
-    permission_issues ? permission_issues == 'read' : false
+    permission_issues ? ['read','write'].include?(permission_issues) : false
   end
 
   def self.sync_all
