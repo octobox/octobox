@@ -85,13 +85,13 @@ Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
 First things first, you'll need to fork and clone Octobox repository to
 your local machine.
 
-Secondly, you'll need to install Ruby 2.6.0. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+Secondly, you'll need to install Ruby 2.6.1. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.6.0
-rbenv global 2.6.0
+rbenv install 2.6.1
+rbenv global 2.6.1
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
@@ -429,6 +429,7 @@ Then add the following ENV variables to `.env` (or `heroku config:add` if you're
 - `GITHUB_APP_CLIENT_SECRET` - From the GitHub App "OAuth credentials" section labelled `Client secret`
 - `GITHUB_APP_ID` - From the GitHub App "About" section labelled `ID`
 - `GITHUB_APP_SLUG`-  - From the GitHub App "About" section labelled `Public link`, the last section of the url, i.e https://github.com/apps/my-octobox -> `my-octobox`
+- `GITHUB_APP_JWT`- - In the GitHub App "Private keys" section, generate a private key, which will cause a `.pem` file to be downloaded to your computer. This environment variable must contain the contents of the `.pem` file with newlines preserved.
 - `GITHUB_WEBHOOK_SECRET` - The Webhook secret if you generated one earlier
 
 Then start the rails app and visit <https://github.com/apps/my-octobox/installations/new> to install it on the orgs/repos you wish, it should log you into Octobox on completion of the install.

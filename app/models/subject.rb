@@ -10,11 +10,9 @@ class Subject < ApplicationRecord
   private_constant :BOT_AUTHOR_REGEX
 
   scope :label, ->(label_name) { joins(:labels).where(Label.arel_table[:name].matches(label_name)) }
-  scope :repository, ->(full_name) { where(arel_table[:url].matches("%/repos/#{full_name}/%")) }
 
   validates :url, presence: true, uniqueness: true
 
-  after_update :sync_involved_users
   after_save :push_to_channels
 
   def update_labels(remote_labels)
@@ -43,7 +41,7 @@ class Subject < ApplicationRecord
 
   def sync_involved_users
     return unless Octobox.github_app?
-    involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minute, user_id) }
+    involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minutes, user_id) }
   end
 
   def self.sync(remote_subject)
@@ -70,7 +68,7 @@ class Subject < ApplicationRecord
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
-      body: remote_subject['body']
+      body: remote_subject['body'].try(:gsub, "\u0000", '')
     })
 
     return unless subject.persisted?
@@ -117,7 +115,7 @@ class Subject < ApplicationRecord
     remote_comments.each do |remote_comment|
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
         comment.author = remote_comment.user.login
-        comment.body = remote_comment.body
+        comment.body = remote_comment.body.try(:gsub, "\u0000", '')
         comment.author_association = remote_comment.author_association
         comment.created_at = remote_comment.created_at
         comment.save
@@ -130,13 +128,13 @@ class Subject < ApplicationRecord
   end
 
   def push_to_channels
-    notifications.find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+    notifications.includes({:subject => :labels}, :repository, {:user => :individual_subscription_purchase}).find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
   end
 
   private
 
   def pushable_fields
-    ['state', 'status', 'body']
+    ['state', 'status', 'body', 'comment_count']
   end
 
   def assign_status(remote_status)
@@ -174,9 +172,9 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    ids = users.with_access_token.not_recently_synced.pluck(:id)
-    ids += repository.users.with_access_token.not_recently_synced.pluck(:id) if repository.present?
-    ids.uniq
+    involved_users = users.with_access_token.not_recently_synced
+    involved_users += repository.users.with_access_token.not_recently_synced if repository.present?
+    involved_users.uniq.reject(&:syncing?).map(&:id)
   end
 
   def bot_author?

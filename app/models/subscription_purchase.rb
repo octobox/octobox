@@ -4,6 +4,7 @@ class SubscriptionPurchase < ApplicationRecord
 
   validates :account_id, presence: true
   validates :subscription_plan_id, presence: true
+  validates_uniqueness_of :oc_transactionid, allow_blank: true
 
   scope :active,         -> { where('unit_count > 0') }
   scope :free_trial,     -> { where(on_free_trial: true) }

@@ -114,8 +114,9 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders notifications filtered by label' do
-    stub_fetch_subject_enabled
     sign_in_as(@user)
+    subject = create(:subject, notifications: [@user.notifications.first])
+    create(:label, name: 'question', subject: subject)
 
     get '/'
     assert_response :success
@@ -285,17 +286,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     assert notification.reload.starred?
-  end
-
-  test 'toggles unread on a notification' do
-    notification = create(:notification, user: @user, unread: true)
-
-    sign_in_as(@user)
-
-    post "/notifications/#{notification.id}/mark_read"
-    assert_response :ok
-
-    refute notification.reload.unread?
   end
 
   test 'syncs users notifications' do
@@ -624,7 +614,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by author' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], author: 'andrew')
@@ -635,7 +624,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple authors' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], author: 'andrew')
@@ -679,7 +667,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple labels' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -692,7 +679,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude label' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -706,7 +692,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude multiple labels' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -719,7 +704,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by state' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -730,7 +714,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple states' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -741,7 +724,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude state' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -753,7 +735,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude multiple states' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], state: "open")
@@ -764,7 +745,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by assignee' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], assignees: ":andrew:")
@@ -775,7 +755,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by multiple assignees' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], assignees: ":andrew:")
@@ -817,7 +796,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter by locked:false' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
     notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
     create(:subject, notifications: [notification1], locked: false)
@@ -977,9 +955,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 2
   end
 
+  test 'highlights vulnerability alerts in the sidebar if there are unread notifications' do
+    sign_in_as(@user)
+    create(:notification, user: @user, subject_type: 'RepositoryVulnerabilityAlert', unread: true)
+    get '/'
+    assert_response :success
+    assert_select '.type-RepositoryVulnerabilityAlert', {count: 1}
+  end
+
   test 'search results can exclude bots' do
     sign_in_as(@user)
-    Subject.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     notification3 = create(:notification, user: @user)
@@ -989,5 +974,48 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     get '/?q=bot%3Afalse'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'renders a notification page' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
+
+    get notification_path(notification1)
+
+    assert_response :success
+    assert_template 'notifications/_thread'
+  end
+
+  test 'renders a notification page without comments' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
+    get notification_path(notification1)
+
+    assert_response :success
+    assert_template 'notifications/_thread'
+  end
+
+  test 'thread shows five commments' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, notifications: [notification], comment_count: 10)
+    10.times.each { create(:comment, subject: subject)}
+
+    get notification_path(notification)
+    assert_equal assigns(:comments).length, 5
+  end
+
+  test 'thread shows expanded comments' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, notifications: [notification], comment_count: 10)
+    10.times.each { create(:comment, subject: subject) }
+
+    get expand_comments_notification_path(notification)
+    assert_response :success
+    assert_template 'notifications/_thread'
+    assert_equal assigns(:comments).length, 10
   end
 end

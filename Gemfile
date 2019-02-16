@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.6.0'
+ruby '2.6.1'
 
 gem 'rails', '~> 5.2'
 gem 'bootstrap'
@@ -61,6 +61,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'percy-capybara'
+  gem 'action-cable-testing'
 end
 
 group :development do
@@ -75,7 +76,7 @@ group :development do
 end
 
 group :production do
-  gem 'skylight'
+  gem 'skylight', '4.0.0.beta'
   gem 'lograge'
   gem 'puma_worker_killer'
 end

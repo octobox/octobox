@@ -41,23 +41,23 @@ module NotificationsHelper
 
   def filters
     {
-      reason:     params[:reason],
-      unread:     params[:unread],
-      repo:       params[:repo],
-      type:       params[:type],
-      archive:    params[:archive],
-      starred:    params[:starred],
-      owner:      params[:owner],
-      per_page:   params[:per_page],
-      q:          params[:q],
-      state:      params[:state],
-      label:      params[:label],
-      author:     params[:author],
-      bot:        params[:bot],
-      unlabelled: params[:unlabelled],
-      assigned:   params[:assigned],
-      is_private: params[:is_private],
-      status:     params[:status]
+      reason:          params[:reason],
+      unread:          params[:unread],
+      repo:            params[:repo],
+      type:            params[:type],
+      archive:         params[:archive],
+      starred:         params[:starred],
+      owner:           params[:owner],
+      per_page:        params[:per_page],
+      q:               params[:q],
+      state:           params[:state],
+      label:           params[:label],
+      author:          params[:author],
+      bot:             params[:bot],
+      unlabelled:      params[:unlabelled],
+      assigned:        params[:assigned],
+      is_private:      params[:is_private],
+      status:          params[:status],
     }
   end
 
@@ -148,7 +148,7 @@ module NotificationsHelper
 
   def function_button(title, octicon, css_class, tooltip, hidden=true)
     button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark #{'hidden-button' if hidden}", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
-      octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-md-inline-block ml-1')
+      octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-xl-inline-block ml-1')
     end
   end
 
@@ -232,7 +232,11 @@ module NotificationsHelper
   end
 
   def sidebar_filter_link(active:, param:, value:, count: nil, except: nil, link_class: nil, path_params: nil, title: nil)
-    content_tag :li, class: (active ? 'nav-item active' : 'nav-item'), title: title do
+    css_class = 'nav-item'
+    css_class += ' active' if active
+    css_class += " #{param}-#{value}"
+
+    content_tag :li, class: css_class, title: title do
       active = (active && not_repo_in_active_org(param))
       path_params ||= filtered_params(param => (active ? nil : value)).except(except)
       link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
@@ -316,6 +320,14 @@ module NotificationsHelper
     "#{state.underscore.humanize}"
   end
 
+  def notification_button_color(state)
+    {
+      'open' => 'btn-success',
+      'closed' => 'btn-danger',
+      'merged' => 'btn-merged'
+    }[state]
+  end
+
   def notification_badge_color(state)
     {
       'open' => 'badge-success',
@@ -330,7 +342,7 @@ module NotificationsHelper
   end
 
   def notification_link(notification)
-    notification.display_thread? ? notification_url(notification, filtered_params) : notification.web_url
+    notification.display_thread? ? notification_path(notification, filtered_params) : notification.web_url
   end
 
   def display_thread?
