@@ -8,8 +8,9 @@ Rails.application.load_tasks
 Rake::Task['assets:precompile'].enhance ['api_docs:generate']
 
 task 'test:skip_visuals' => 'test:prepare' do
-  ["models", "helpers", "controllers", "integration", "workers"].each do |name|
-    $: << "test"
+  ['channels', 'controllers', 'integration', 'helpers', 'models',
+   'validators', 'workers'].each do |name|
+    $: << 'test'
     Rails::TestUnit::Runner.rake_run(["test/#{name}"])
   end
 end
