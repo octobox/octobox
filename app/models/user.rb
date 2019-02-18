@@ -104,6 +104,11 @@ class User < ApplicationRecord
     @access_token_client ||= Octokit::Client.new(access_token: access_token, auto_paginate: true) if access_token.present?
   end
 
+  def comment_client(comment)
+    return app_installation_client if app_token.present? && comment.subject.repository.private?
+    return github_client
+  end
+
   def app_installation_client
     Octokit::Client.new(access_token: app_token, auto_paginate: true) if app_token.present?
   end
@@ -153,7 +158,7 @@ class User < ApplicationRecord
     return true if personal_access_token_enabled?
     return true if Octobox.fetch_subject?
     return true if subject.repository.open_source?
-    return true if app_token.present? && subject.repository.commentable?
+    return true if github_app_authorized? && subject.repository.commentable?
     return false
   end
 end

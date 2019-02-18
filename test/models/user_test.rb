@@ -206,4 +206,26 @@ class UserTest < ActiveSupport::TestCase
     assert @user.can_comment?(subject)
   end
 
+  test 'comments are created using github tokens on public repositories' do
+    @app_user = create(:app_user)
+
+    repository = create(:repository, private: false)
+    subject = create(:subject, repository: repository)
+    comment = create(:comment, subject: subject)
+
+    assert_equal @app_user.comment_client(comment).class, Octokit::Client
+    assert_equal @app_user.comment_client(comment).access_token, @app_user.access_token
+  end
+
+  test 'comments are created using github app tokens on private repositories' do
+    @app_user = create(:app_user)
+
+    repository = create(:repository, private: true)
+    subject = create(:subject, repository: repository)
+    comment = create(:comment, subject: subject)
+
+    assert_equal @app_user.comment_client(comment).class, Octokit::Client
+    assert_equal @app_user.comment_client(comment).access_token, @app_user.app_token
+  end
+
 end

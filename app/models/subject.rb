@@ -132,8 +132,7 @@ class Subject < ApplicationRecord
   def comment_on_github(comment, user)
     return if comment.body.empty?
 
-    client = user.github_client
-    client = user.app_installation_client if user.app_token.present? && comment.subject.repository.commentable?
+    client = user.comment_client(comment)
 
     remote_comment = client.post "#{url}/comments", {body: comment.body}
 
