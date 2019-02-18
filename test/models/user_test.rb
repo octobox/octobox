@@ -209,7 +209,7 @@ class UserTest < ActiveSupport::TestCase
   test 'comments are created using github tokens on public repositories' do
     @app_user = create(:app_user)
 
-    repository = create(:repository, private: false)
+    repository = create(:repository)
     subject = create(:subject, repository: repository)
     comment = create(:comment, subject: subject)
 
@@ -221,6 +221,7 @@ class UserTest < ActiveSupport::TestCase
     @app_user = create(:app_user)
 
     repository = create(:repository, private: true)
+    create(:app_installation, repositories: [repository], permission_issues: 'write')
     subject = create(:subject, repository: repository)
     comment = create(:comment, subject: subject)
 
