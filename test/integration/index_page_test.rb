@@ -3,7 +3,7 @@ require 'test_helper'
 class IndexPageTest < ActionDispatch::IntegrationTest
   test 'index page without login is home page' do
     get root_path
-    assert_select "a[href=?]", login_path
+    assert_select "a[href=?]", login_path, text: 'Sign in'
     assert_select 'h1', text: 'Octobox'
     assert_select 'h3', text: 'Untangle your GitHub Notifications'
     assert_select 'h3', text: 'Sound like you?'
@@ -27,7 +27,7 @@ class IndexPageTest < ActionDispatch::IntegrationTest
     @user = create(:user)
     sign_in_as(@user)
     get root_path
-    assert_select "a[href=?]", logout_path
+    assert_select "a[href=?]", logout_path, text: 'Logout'
     assert_match 'Inbox', response.body
     assert_match 'Archive', response.body
     assert_match 'Starred', response.body
