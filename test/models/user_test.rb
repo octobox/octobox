@@ -207,14 +207,14 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'comments are created using github tokens on public repositories' do
-    @app_user = create(:app_user)
+    user = create(:user)
 
-    repository = create(:repository)
+    repository = create(:repository, private: false)
     subject = create(:subject, repository: repository)
     comment = create(:comment, subject: subject)
 
-    assert_equal @app_user.comment_client(comment).class, Octokit::Client
-    assert_equal @app_user.comment_client(comment).access_token, @app_user.access_token
+    assert_equal user.comment_client(comment).class, Octokit::Client
+    assert_equal user.comment_client(comment).access_token, user.access_token
   end
 
   test 'comments are created using github app tokens on private repositories' do
