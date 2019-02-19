@@ -49,4 +49,10 @@ class DocumentationTest < ActionDispatch::IntegrationTest
     get root_path
     assert_select "a[href=?]", documentation_path, text: 'User Documentation'
   end
+
+  test 'index page without login has link to documentation page' do
+    get root_path
+    assert_select "a[href=?]", documentation_path, text: 'More Info'
+    assert_select "a[href=?]", documentation_path, text: 'documentation'
+  end
 end

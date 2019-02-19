@@ -1,10 +1,13 @@
 <div class='not-a-nav sticky-top'>
+  <%= link_to documentation_path, class: 'btn btn-dark m-3 float-left' do %>
+    <span class='mr-1'>More Info</span>
+    <%= octicon 'question', height: 22 %>
+  <% end %>
   <%= link_to login_path, class: 'btn btn-dark m-3 float-right' do %>
     <span class='mr-1'>Sign in</span>
     <%= octicon 'mark-github', height: 22 %>
   <% end %>
 </div>
-
 <div class='container readable'>
   <h1 class="text-center"><%= octobox_round(80) %> <span class='align-middle'>Octobox</span></h1>
   <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3>
@@ -116,6 +119,10 @@
   <p class='text-large'>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
 
   <p class='text-large mb-5'>Finally, if you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
+
+  <h3 id='contribute' class='pt-5'>More Info</h3>
+
+  <p class='text-large'>More information is in our <%= link_to 'documentation', documentation_path %>.</p>
 
   <%= render 'layouts/footer'%>
 </div>
