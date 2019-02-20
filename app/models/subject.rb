@@ -134,8 +134,7 @@ class Subject < ApplicationRecord
 
     client = user.comment_client(comment)
 
-    remote_comment = client.post "#{url}/comments", {body: comment.body}
-
+    remote_comment = client.post url.gsub('/pulls/', '/issues/') + '/comments', {body: comment.body}
     comment.github_id = remote_comment.id 
     comment.author_association = remote_comment.author_association
     comment.created_at = remote_comment.created_at
