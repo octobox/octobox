@@ -21,12 +21,12 @@ class ConfiguratorTest < ActiveSupport::TestCase
 
   test "when ENV['RESTRICTED_ACCESS_ENABLED'] is true, config.scopes includes read:org" do
     stub_env_var('RESTRICTED_ACCESS_ENABLED', 'true')
-    assert_includes 'read:org', Octobox.config.scopes
+    assert_includes Octobox.config.scopes, 'read:org'
   end
 
   test "when ENV['FETCH_SUBJECT'] is true, config.scopes includes repo" do
     stub_env_var('FETCH_SUBJECT', 'true')
-    assert_includes 'repo', Octobox.config.scopes
+    assert_includes Octobox.config.scopes, 'repo'
   end
 
   test "when ENV['FETCH_SUBJECT'] is true and ENV['GITHUB_APP_ID'] is present, config.scopes does not include repo" do
