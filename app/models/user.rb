@@ -105,13 +105,8 @@ class User < ApplicationRecord
   end
 
   def comment_client(comment)
-    if app_token.present? && comment.subject.repository.commentable?
-      puts 'app_client'
-      return app_installation_client 
-    else
-      puts 'github_client'
-      return github_client
-    end
+    return app_installation_client if app_token.present? && comment.subject.repository.commentable?
+    return github_client
   end
 
   def app_installation_client
