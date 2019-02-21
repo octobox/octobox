@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       post :sync
       get  :sync
       get  :syncing
+      post :syncing
       post :mute_selected
       post :mark_read_selected
       get  :unread_count
