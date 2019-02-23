@@ -314,7 +314,7 @@ GEM
     rubyzip (1.2.2)
     rufus-scheduler (3.5.2)
       fugit (~> 1.1, >= 1.1.5)
-    safe_yaml (1.0.4)
+    safe_yaml (1.0.5)
     sassc (2.0.0)
       ffi (~> 1.9.6)
       rake
