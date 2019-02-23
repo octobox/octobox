@@ -1004,7 +1004,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification = create(:notification, user: @user)
     subject = create(:subject, notifications: [notification], comment_count: 10)
     10.times.each { create(:comment, subject: subject)}
-
     get notification_path(notification)
     assert_equal assigns(:comments).length, 5
   end
@@ -1020,5 +1019,18 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_template 'notifications/_thread'
     assert_equal assigns(:comments).length, 10
+  end
+
+  test 'creates a new comment when a comment is posted' do
+    sign_in_as(@user)
+    subject = create(:subject)
+    notification = create(:notification, user: @user, subject: subject)
+
+    stub_request(:post, "#{subject.url}/comments").
+      to_return({ status: 200, body: file_fixture('new_comment.json'), headers: {'Content-Type' => 'application/json'}})
+    post comment_notification_path(notification), params: { id: notification.id, comment:{body: "blah"}}
+
+    assert_redirected_to notification_path(notification)
+    assert_equal notification.subject.comments.count, 1
   end
 end
