@@ -139,6 +139,7 @@ GEM
       minitest (>= 3.0)
     hashdiff (0.3.8)
     hashie (3.6.0)
+    hirefire-resource (0.7.1)
     i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.2)
@@ -427,6 +428,7 @@ DEPENDENCIES
   git
   guard
   guard-minitest
+  hirefire-resource
   jbuilder
   jquery-rails
   jwt
