@@ -87,7 +87,8 @@ class NotificationsController < ApplicationController
     if @notification.subject && @notification.subject.commentable?
       comments_loaded = 5
       @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
-      @comments_left_to_load = @notification.subject.comment_count - comments_loaded > 0 ? @notification.subject.comment_count - comments_loaded : 0
+      @comments_left_to_load = @notification.subject.comment_count - comments_loaded 
+      @comments_left_to_load = 0 if @comments_left_to_load < 0
     else
       @comments = []
     end
@@ -119,6 +120,23 @@ class NotificationsController < ApplicationController
       render partial: "notifications/comments", locals:{comments: @comments}, layout: false
     else
       render 'notifications/show'
+    end
+  end
+
+  def comment
+    
+    subject = current_user.notifications.find(params[:id]).subject
+
+    if current_user.can_comment?(subject)
+      subject.comment(current_user, params[:comment][:body]) if subject.commentable?
+      if request.xhr?
+        render partial: "notifications/comments", locals:{comments: subject.comments.last}, layout: false
+      else
+        redirect_back fallback_location: notification_path
+      end
+    else
+      flash[:error] = 'Could not post your comment'
+      redirect_back fallback_location: notification_path 
     end
   end
 

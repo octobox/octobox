@@ -96,10 +96,10 @@ GEM
     crass (1.0.4)
     debug_inspector (0.0.3)
     docile (1.3.1)
-    dotenv (2.6.0)
-    dotenv-rails (2.6.0)
-      dotenv (= 2.6.0)
-      railties (>= 3.2, < 6.0)
+    dotenv (2.7.0)
+    dotenv-rails (2.7.0)
+      dotenv (= 2.7.0)
+      railties (>= 3.2, < 6.1)
     encryptor (3.0.0)
     erubi (1.8.0)
     et-orbi (1.1.7)
@@ -108,7 +108,7 @@ GEM
       ffi (>= 1.3.0)
     excon (0.62.0)
     execjs (2.7.0)
-    factory_bot (5.0.1)
+    factory_bot (5.0.2)
       activesupport (>= 4.2.0)
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
@@ -139,6 +139,7 @@ GEM
       minitest (>= 3.0)
     hashdiff (0.3.8)
     hashie (3.6.0)
+    hirefire-resource (0.7.1)
     i18n (1.5.3)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.2)
@@ -149,7 +150,7 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    json (2.1.0)
+    json (2.2.0)
     jwt (2.1.0)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
@@ -208,10 +209,10 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    octicons (8.4.1)
+    octicons (8.4.2)
       nokogiri (>= 1.6.3.1)
-    octicons_helper (8.4.1)
-      octicons (= 8.4.1)
+    octicons_helper (8.4.2)
+      octicons (= 8.4.2)
       rails
     octokit (4.13.0)
       sawyer (~> 0.8.0, >= 0.5.3)
@@ -313,7 +314,7 @@ GEM
     rubyzip (1.2.2)
     rufus-scheduler (3.5.2)
       fugit (~> 1.1, >= 1.1.5)
-    safe_yaml (1.0.4)
+    safe_yaml (1.0.5)
     sassc (2.0.0)
       ffi (~> 1.9.6)
       rake
@@ -427,6 +428,7 @@ DEPENDENCIES
   git
   guard
   guard-minitest
+  hirefire-resource
   jbuilder
   jquery-rails
   jwt

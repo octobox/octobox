@@ -104,6 +104,11 @@ class User < ApplicationRecord
     @access_token_client ||= Octokit::Client.new(access_token: access_token, auto_paginate: true) if access_token.present?
   end
 
+  def comment_client(comment)
+    return app_installation_client if app_token.present? && comment.subject.repository.commentable?
+    return github_client
+  end
+
   def app_installation_client
     Octokit::Client.new(access_token: app_token, auto_paginate: true) if app_token.present?
   end
@@ -142,5 +147,18 @@ class User < ApplicationRecord
     app_installation_ids = app_installations.map(&:id)
     removed_permissions = app_installation_permissions.reject{|ep| app_installation_ids.include?(ep.app_installation_id) }
     removed_permissions.each(&:destroy)
+  end
+
+  def has_app_installed?(subject)
+    subject.repository.app_installation_id && app_token
+  end
+
+  def can_comment?(subject)
+    return false unless subject.commentable?
+    return true if personal_access_token_enabled?
+    return true if Octobox.fetch_subject?
+    return true if subject.repository.open_source?
+    return true if github_app_authorized? && subject.repository.commentable?
+    return false
   end
 end
