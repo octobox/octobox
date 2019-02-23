@@ -66,6 +66,14 @@ class AppInstallation < ApplicationRecord
     Octobox.installation_client(self.github_id)
   end
 
+  def write_issues?
+    permission_issues ? permission_issues == 'write' : false
+  end
+
+  def read_issues?
+    permission_issues ? ['read','write'].include?(permission_issues) : false
+  end
+
   def self.sync_all
     remote_installations = Octobox.github_app_client.find_app_installations(accept: 'application/vnd.github.machine-man-preview+json')
     remote_installations.each do |remote_installation|

@@ -417,7 +417,7 @@ Then create a new GitHub App, <https://github.com/settings/apps/new>, with the f
 - Webhook secret: generate a password and paste it in here and save for later
 - Permissions:
   - Repository metadata: Read-only
-  - Issues: Read-only
+  - Issues: write
   - Pull Requests: Read-only
   - Commit statuses: Read-only
 - Subscribe to events: check all available options
