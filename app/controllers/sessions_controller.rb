@@ -5,7 +5,11 @@ class SessionsController < ApplicationController
   before_action :authorize_access!, only: :create
 
   def new
-    redirect_to '/auth/github'
+    if logged_in?
+      redirect_to root_path
+    else
+      redirect_to '/auth/github'
+    end
   end
 
   def create
