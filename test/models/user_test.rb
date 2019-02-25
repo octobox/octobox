@@ -142,10 +142,18 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test 'user can comment on an open source repo' do
+  test 'user cannot comment on an open source repo without repo scope' do
+    stub_env_var('FETCH_SUBJECT', 'false')
     repository = create(:repository, private: false)
     subject = create(:subject, repository: repository)
+    refute @user.can_comment?(subject)
+  end
 
+  test 'user can comment on an open source repo with repo scope' do
+    stub_env_var('FETCH_SUBJECT', 'true')
+    repository = create(:repository, private: false)
+    subject = create(:subject, repository: repository)
+    
     assert @user.can_comment?(subject)
   end
 
