@@ -850,11 +850,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'shows saved searches in sidebar' do
     sign_in_as(@user)
-    create(:pinned_search, user: @user)
     get '/'
     assert_response :success
     assert_template 'notifications/index'
-    assert_select '.pinned_search', {count: 1}
+    assert_select '.pinned_search', {count: 3}
   end
 
   test 'highlights active saved searches in sidebar' do
