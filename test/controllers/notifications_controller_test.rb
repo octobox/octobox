@@ -1022,6 +1022,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'creates a new comment when a comment is posted' do
+    stub_fetch_subject_enabled
     sign_in_as(@user)
     subject = create(:subject)
     notification = create(:notification, user: @user, subject: subject)
