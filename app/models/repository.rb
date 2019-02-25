@@ -21,7 +21,7 @@ class Repository < ApplicationRecord
   end
 
   def commentable?
-    return true unless private?
+    return true if Octobox.fetch_subject?
     github_app_installed? && app_installation.write_issues?
   end
 
