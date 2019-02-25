@@ -166,7 +166,7 @@ class User < ApplicationRecord
 
   def create_default_pinned_searches 
     pinned_searches.new(query: 'state:closed,merged archived:false', name: 'Archivable')
-    pinned_searches.new(query: 'type:pull_request state:open status:success', name: 'Mergable')
+    pinned_searches.new(query: 'type:pull_request state:open status:success', name: 'Mergeable')
     pinned_searches.new(query: "type:pull_request author:#{github_login} inbox:true", name: 'My PRs')
     save
   end
