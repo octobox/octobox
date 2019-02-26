@@ -45,7 +45,7 @@ namespace :tasks do
 
   desc "Sync App Installations"
   task sync_installations: :environment do
-    AppInstallation.all.find_each(&:sync)
+    AppInstallation.sync_all
   end
 
   desc "cleanup unique-jobs cache"
