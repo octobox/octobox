@@ -128,7 +128,7 @@ var Octobox = (function() {
       if(["search-box", "comment_body"].includes(e.target.id) && e.which === 27) shortcuts[27](e);
 
       // post comment form on CMD-enter
-      if(["comment_body"].includes(e.target.id) && (event.metaKey || event.ctrlKey) && event.which == 13) $('#reply').submit();
+      if(["comment_body"].includes(e.target.id) && (e.metaKey || e.ctrlKey) && e.which == 13) $('#reply').submit();
     });
   };
 
