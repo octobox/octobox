@@ -6,6 +6,7 @@
 
     <div class='media-body'>
       <b><%= link_to comment.author, Octobox.config.github_domain+'/'+comment.author_url_path, class: 'text-muted'%></b> commented <span class=''text-muted> <%=time_ago_in_words(comment.created_at).to_s %> ago</span>
+      <%= octicon 'sync', height: 14, class: "spinning float-right" if !comment.github_id %>
     </div>
   </div>
 
