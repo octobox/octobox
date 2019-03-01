@@ -30,7 +30,7 @@ class User < ApplicationRecord
   scope :not_recently_synced, -> { where('last_synced_at < ?', 5.minutes.ago) }
   scope :with_access_token, -> { where.not(encrypted_access_token: nil) }
 
-  after_create :create_default_pinned_searches, :display_comments_in_octobox
+  after_create :create_default_pinned_searches
 
   def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)
@@ -167,9 +167,5 @@ class User < ApplicationRecord
     pinned_searches.create(query: 'state:closed,merged archived:false', name: 'Archivable')
     pinned_searches.create(query: 'type:pull_request state:open status:success archived:false', name: 'Mergeable')
     pinned_searches.create(query: "type:pull_request author:#{github_login} inbox:true", name: 'My PRs')
-  end
-
-  def display_comments_in_octobox
-    update_attribute(:display_comments, true)
   end
 end
