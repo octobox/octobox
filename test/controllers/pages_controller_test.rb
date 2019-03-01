@@ -13,4 +13,18 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to '/documentation#support'
   end
+
+  test 'privacy page renders the home page if OCTOBOX_IO is not set' do
+    get privacy_path
+    assert_response :redirect
+    assert_redirected_to '/422'
+  end
+
+  test 'will render the privacy page if OCTOBOX_IO is set to true' do
+    set_env('OCTOBOX_IO', 'true') do
+      get privacy_path
+      assert_response :success
+      assert_template 'pages/privacy'
+    end
+  end
 end
