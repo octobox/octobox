@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   root to: 'notifications#index'
 
   get '/422', to: 'errors#unprocessable'
-  get '/500', to: 'errors#internal'
 
   constraints AdminConstraint.new do
     namespace :admin do
