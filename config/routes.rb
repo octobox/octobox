@@ -11,7 +11,6 @@ require 'admin_constraint'
 Rails.application.routes.draw do
   root to: 'notifications#index'
 
-  get '/404', to: 'errors#not_found'
   get '/422', to: 'errors#unprocessable'
   get '/500', to: 'errors#internal'
 
