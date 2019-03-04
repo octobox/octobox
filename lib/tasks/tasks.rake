@@ -50,10 +50,7 @@ namespace :tasks do
 
   desc "Update all users to display comments in Octobox"
   task display_comments: :environment do
-    User.all.each do |user|
-      user.display_comments = true
-      user.save
-    end
+    User.update_all(display_comments: true)
   end
 
   desc "cleanup unique-jobs cache"
