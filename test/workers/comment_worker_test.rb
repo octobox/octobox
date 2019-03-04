@@ -42,7 +42,7 @@ class CommentWorkerTest < ActiveSupport::TestCase
       to_return({ status: 404})
     assert @comment.subject.comment_count = 1
     CommentWorker.new.perform(@comment.id, @user.id, @comment.subject.id)
-    assert @comment.subject.comment_count = 0
+    assert @comment.subject.commentable?
   end
 
 end
