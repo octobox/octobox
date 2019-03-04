@@ -140,7 +140,7 @@ GEM
     hashdiff (0.3.8)
     hashie (3.6.0)
     hirefire-resource (0.7.1)
-    i18n (1.5.3)
+    i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.2)
     jbuilder (2.8.0)
