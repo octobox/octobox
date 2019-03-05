@@ -1,7 +1,7 @@
 class Comment < ApplicationRecord
   belongs_to :subject
 
-  after_create :push_to_channels
+  after_save :push_to_channels
 
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
 
