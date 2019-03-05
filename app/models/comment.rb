@@ -30,7 +30,7 @@ class Comment < ApplicationRecord
   end
 
   def pushable_fields
-      ['body', 'github_id']
+    ['body', 'github_id']
   end
 
   def push_to_channels
