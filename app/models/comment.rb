@@ -1,7 +1,7 @@
 class Comment < ApplicationRecord
   belongs_to :subject
 
-  after_save :push_to_channels
+  after_save :push_if_changed
 
   BOT_AUTHOR_REGEX = /\A(.*)\[bot\]\z/.freeze
 
@@ -23,6 +23,14 @@ class Comment < ApplicationRecord
 
   def unread?(notification)
     notification.last_read_at && DateTime.parse(notification.last_read_at) < created_at
+  end
+
+  def push_if_changed
+    push_to_channels if (saved_changes.keys & pushable_fields).any?
+  end
+
+  def pushable_fields
+      ['body', 'github_id']
   end
 
   def push_to_channels
