@@ -29,10 +29,6 @@ class Comment < ApplicationRecord
     push_to_channels if (saved_changes.keys & pushable_fields).any?
   end
 
-  def pushable_fields
-    ['body', 'github_id']
-  end
-
   def push_to_channels
     comment_html = ApplicationController.render(partial: 'notifications/comment', locals: {subject: self.subject.id, comment: self, comments:1})
     ActionCable.server.broadcast "comments:#{subject.id}", {comment_id: self.id, comment_html: comment_html, subject_id: self.subject.id}
@@ -41,6 +37,7 @@ class Comment < ApplicationRecord
   private
 
   def pushable_fields
-    ['body']
+    ['body', 'github_id']
   end
+
 end
