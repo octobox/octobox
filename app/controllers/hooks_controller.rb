@@ -15,6 +15,8 @@ class HooksController < ApplicationController
       case payload['action']
       when 'created'
         SyncInstallationWorker.perform_async_if_configured(payload)
+      when 'new_permissions_accepted'
+        UpdateInstallationWorker.perform_async_if_configured(payload['installation']['id'])
       when 'deleted'
         AppInstallation.find_by_github_id(payload['installation']['id']).try(:destroy)
       end
