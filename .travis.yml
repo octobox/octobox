@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.6.1
+  - 2.6.2
 
 before_install:
   - gem update --system
