@@ -23,7 +23,7 @@
   </div>
 </div>
 
-<div id='notification-thread' class="p-3 mb-5" data-id='<%= @notification.subject.id %>'>
+<div id='notification-thread' class="p-3 mb-5" data-id='<%= @notification.id %>' data-subject-id='<%= @notification.subject.id %>'>
 
   <div id='thread-subject'>
     <%= render 'thread_subject', notification: @notification %>
