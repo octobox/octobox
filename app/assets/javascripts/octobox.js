@@ -207,12 +207,12 @@ var Octobox = (function() {
 
   var archiveThread = function(){
     var id = $('#notification-thread').data('id');
-    archive(id, true);
+    archive([id], true);
   }
 
   var unarchiveThread = function(){
     var id = $('#notification-thread').data('id');
-    archive(id, false);
+    archive([id], false);
   }
 
   var archive = function(ids, value){
