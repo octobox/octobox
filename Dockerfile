@@ -21,9 +21,9 @@ RUN apk add --update \
     tzdata \
     curl-dev \
  && rm -rf /var/cache/apk/* \
+ && gem install bundler foreman \
  && bundle config --global frozen 1 \
- && bundle install --without test --jobs 2 \
- && gem install foreman
+ && bundle install --without test --jobs 2
 
 # ========================================================
 # Application layer
