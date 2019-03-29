@@ -364,6 +364,7 @@ var Octobox = (function() {
   };
 
   var closeThread = function() {
+    history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
     if(!$("#thread").hasClass("d-none")){
       $("#thread").toggleClass("d-none");
       $(".flex-main").toggleClass("show-thread");
