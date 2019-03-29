@@ -19,11 +19,11 @@ COPY Gemfile Gemfile.lock $APP_ROOT/
 # * Setup system
 # * Install common Ruby dependencies
 RUN apk add --no-cache build-base \
+ && gem install bundler foreman \
  && bundle config --global frozen 1 \
  && bundle install \
     --without development test production \
     --jobs $(grep -c ^processor /proc/cpuinfo) \
- && gem install foreman \
  && apk del build-base
 
 # Startup
