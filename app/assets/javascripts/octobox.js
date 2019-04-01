@@ -387,9 +387,17 @@ var Octobox = (function() {
     $("#notification-"+id).removeClass("active");
   };
 
+  function setViewportHeight() {
+    var vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
+
   var initialize = function() {
     enableTooltips();
     enablePopOvers();
+
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
 
     if ($("#help-box").length){
       enableKeyboardShortcuts();
