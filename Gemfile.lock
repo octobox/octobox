@@ -214,7 +214,7 @@ GEM
     octicons_helper (8.5.0)
       octicons (= 8.5.0)
       rails
-    octokit (4.13.0)
+    octokit (4.14.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.7.11)
     omniauth (1.9.0)
