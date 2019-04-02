@@ -389,7 +389,7 @@ var Octobox = (function() {
 
   function setViewportHeight() {
     var vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    document.documentElement.style.setProperty('--vh', "".concat(vh, "px"));
   };
 
   var initialize = function() {
