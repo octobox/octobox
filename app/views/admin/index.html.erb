@@ -208,6 +208,26 @@
             </div>
           </div>
         </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm  mb-3">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <%= octicon 'package', height: 50 %>
+                  </div>
+                  <div class="media-body text-right">
+                    <h3 title='ARR like a Pirate'>
+                      $<%= number_to_human SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.subscription_plan.monthly_price_in_cents}.reduce(:+)/100 %>
+                    </h3>
+                    <span>MRR</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       <% end %>
     <% end %>
   </div>
