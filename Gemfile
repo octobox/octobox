@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.6.1'
+ruby '2.6.2'
 
 gem 'rails', '~> 5.2'
 gem 'bootstrap'
@@ -74,7 +74,7 @@ group :development do
 end
 
 group :production do
-  gem 'skylight', '4.0.0.beta'
+  gem 'skylight', '4.0.0.beta2'
   gem 'lograge'
   gem 'puma_worker_killer'
   gem 'hirefire-resource'

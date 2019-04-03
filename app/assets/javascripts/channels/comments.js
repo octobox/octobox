@@ -7,8 +7,10 @@ var subscribeToComments = function(){
     channel: "CommentsChannel",
     notification: $(location).attr('href').split('/').pop()},{
     received: function(data){
-      if ($('#notification-thread').attr('data-id') == data.subject_id && !$("#comment-"+data.comment_id).length){
+      if ($('#notification-thread').attr('data-subject-id') == data.subject_id && !$("#comment-"+data.comment_id).length){
         $('.discussion-thread').append(data.comment_html);
+      } else if ($("#comment-"+data.comment_id).length){
+        $("#comment-"+data.comment_id)[0].outerHTML = data.comment_html;
       }
     }
   });

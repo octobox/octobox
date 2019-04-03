@@ -1,0 +1,34 @@
+{
+  "id": 293804,
+  "account": {
+    "login": "github",
+    "id": 1,
+    "node_id": "MDEyOk9yZ2FuaXphdGlvbjE=",
+    "url": "https://api.github.com/orgs/github",
+    "repos_url": "https://api.github.com/orgs/github/repos",
+    "events_url": "https://api.github.com/orgs/github/events",
+    "hooks_url": "https://api.github.com/orgs/github/hooks",
+    "issues_url": "https://api.github.com/orgs/github/issues",
+    "members_url": "https://api.github.com/orgs/github/members{/member}",
+    "public_members_url": "https://api.github.com/orgs/github/public_members{/member}",
+    "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+    "description": "A great organization"
+  },
+  "access_tokens_url": "https://api.github.com/installations/1/access_tokens",
+  "repositories_url": "https://api.github.com/installation/repositories",
+  "html_url": "https://github.com/organizations/github/settings/installations/1",
+  "app_id": 1,
+  "target_id": 1,
+  "target_type": "Organization",
+  "permissions": {
+    "metadata": "read",
+    "contents": "read",
+    "issues": "write",
+    "pull_requests": "write"
+  },
+  "events": [
+    "push",
+    "pull_request"
+  ],
+  "repository_selection": "selected"
+}
