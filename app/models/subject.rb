@@ -68,7 +68,8 @@ class Subject < ApplicationRecord
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
-      body: remote_subject['body'].try(:gsub, "\u0000", '')
+      body: remote_subject['body'].try(:gsub, "\u0000", ''),
+      draft: remote_subject['draft']
     })
 
     return unless subject.persisted?
