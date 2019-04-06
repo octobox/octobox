@@ -173,12 +173,14 @@ module NotificationsHelper
     "#{state.underscore.humanize} #{subject_type.underscore.humanize.downcase}"
   end
 
-  def notification_icon_color(state)
+  def notification_icon_color(notification)
+    return unless notification.display_subject?
+    return 'text-draft' if notification.draft?
     {
       'open' => 'text-success',
       'closed' => 'text-danger',
       'merged' => 'text-subscribed'
-    }[state]
+    }[notification.state]
   end
 
   def reason_label(reason)

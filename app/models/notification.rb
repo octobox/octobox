@@ -67,6 +67,11 @@ class Notification < ApplicationRecord
     @state ||= subject.try(:state)
   end
 
+  def draft?
+    return unless display_subject?
+    @draft ||= subject.try(:draft?)
+  end
+
   def private?
     repository.try(:private?)
   end
