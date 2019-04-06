@@ -5,12 +5,14 @@ $notification-open: #5cb85c !default;
 $notification-closed: #d9534f !default;
 $notification-merged: #a128ca !default;
 $notification-pending: #dbab09 !default;
+$notification-draft: #888 !default;
 
 $notification-colors: (
 	"open": $notification-open,
 	"closed": $notification-closed,
 	"merged": $notification-merged,
-	"pending": $notification-pending
+	"pending": $notification-pending,
+	"draft": $notification-draft,
 );
 
 //extend theme colours for anything that generates afterward
