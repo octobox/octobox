@@ -69,7 +69,7 @@ class Search
     @parsed_query[:archived] = ['true'] if params[:archive].present?
     @parsed_query[:inbox] = ['true'] if params[:archive].blank? && params[:starred].blank? && params[:q].blank?
 
-    [:reason, :type, :unread, :state, :is_private].each do |filter|
+    [:reason, :type, :unread, :state, :is_private, :draft].each do |filter|
       next if params[filter].blank?
       @parsed_query[filter] = Array(params[filter]).map(&:underscore)
     end
