@@ -143,7 +143,7 @@ class Subject < ApplicationRecord
   end
 
   def notifiable_fields
-    ['state', 'assignees', 'locked', 'sha', 'comment_count']
+    ['state', 'assignees', 'locked', 'sha', 'comment_count', 'draft']
   end
 
   def push_to_channels
@@ -153,7 +153,7 @@ class Subject < ApplicationRecord
   private
 
   def pushable_fields
-    ['state', 'status', 'body', 'comment_count']
+    ['state', 'status', 'body', 'comment_count', 'draft']
   end
 
   def assign_status(remote_status)
