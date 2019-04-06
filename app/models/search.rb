@@ -36,6 +36,7 @@ class Search
     res = res.bot_author(bot_author) unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
     res = res.is_private(is_private) unless is_private.nil?
+    res = res.draft(is_draft) unless is_draft.nil?
     res = lock_conditionally(res)
     res = mute_conditionally(res)
     res = apply_sort(res)
@@ -235,6 +236,10 @@ class Search
 
   def is_muted
     boolean_prefix(:muted)
+  end
+
+  def is_draft
+    boolean_prefix(:draft)
   end
 
   private
