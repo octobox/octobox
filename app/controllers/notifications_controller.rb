@@ -87,7 +87,7 @@ class NotificationsController < ApplicationController
     if @notification.subject && @notification.subject.commentable?
       comments_loaded = 5
       @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
-      @comments_left_to_load = @notification.subject.comment_count - comments_loaded 
+      @comments_left_to_load = @notification.subject.comment_count - comments_loaded
       @comments_left_to_load = 0 if @comments_left_to_load < 0
     else
       @comments = []
@@ -309,6 +309,7 @@ class NotificationsController < ApplicationController
     @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
     @unlabelled            = scope.reorder(nil).unlabelled.count
     @bot_notifications     = scope.reorder(nil).bot_author.count
+    @draft                 = scope.reorder(nil).draft.count
     @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
     @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
     @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
@@ -337,7 +338,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status].each do |sub_scope|
+    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status, :draft].each do |sub_scope|
       next unless params[sub_scope].present?
       # This cast is required due to a bug in type casting
       # TODO: Rails 5.2 was supposed to fix this:

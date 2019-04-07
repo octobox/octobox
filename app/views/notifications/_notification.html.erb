@@ -24,14 +24,14 @@
   </td>
 
   <% if notification.display? %>
-    <td class='notification-icon align-middle <%= notification_icon_color(notification.state) if notification.display_subject? %>'>
+    <td class='notification-icon align-middle <%= notification_icon_color(notification) %>'>
       <% if Octobox.github_app? && notification.subjectable? %>
         <% if notification.repository.try(:github_app_installed?) && !notification.user.try(:github_app_authorized?) %>
           <a tabindex="0" class="" role="button" data-toggle="popover" title="Login to the GitHub App" data-content="<%= render 'notifications/login_prompt' %>">
             <%= octicon notification_icon(notification), :height => 16 %>
           </a>
         <% elsif !notification.repository.try(:github_app_installed?) %>
-          <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification.subject_type, notification.state) %>" data-content="<%= render 'notifications/app_prompt', notification: notification %>">
+          <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification) %>" data-content="<%= render 'notifications/app_prompt', notification: notification %>">
             <%= octicon notification_icon(notification), :height => 16 %>
           </a>
         <% elsif Octobox.io? && notification.upgrade_required? %>
@@ -39,10 +39,10 @@
             <%= octicon notification_icon(notification), :height => 16 %>
           </a>
         <% else %>
-          <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
+          <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
         <% end %>
       <% else %>
-        <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
+        <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
       <% end %>
     </td>
     <td class='notification-subject'>

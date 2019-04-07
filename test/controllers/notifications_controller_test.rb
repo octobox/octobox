@@ -622,6 +622,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter by draft' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew', draft: false)
+    create(:subject, notifications: [notification2], author: 'benjam', draft: true)
+    get '/?q=draft%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+  end
+
   test 'search results can filter by multiple authors' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
