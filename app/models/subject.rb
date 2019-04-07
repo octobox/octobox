@@ -68,7 +68,8 @@ class Subject < ApplicationRecord
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
-      body: remote_subject['body'].try(:gsub, "\u0000", '')
+      body: remote_subject['body'].try(:gsub, "\u0000", ''),
+      draft: remote_subject['draft']
     })
 
     return unless subject.persisted?
@@ -142,7 +143,7 @@ class Subject < ApplicationRecord
   end
 
   def notifiable_fields
-    ['state', 'assignees', 'locked', 'sha', 'comment_count']
+    ['state', 'assignees', 'locked', 'sha', 'comment_count', 'draft']
   end
 
   def push_to_channels
@@ -152,7 +153,7 @@ class Subject < ApplicationRecord
   private
 
   def pushable_fields
-    ['state', 'status', 'body', 'comment_count']
+    ['state', 'status', 'body', 'comment_count', 'draft']
   end
 
   def assign_status(remote_status)

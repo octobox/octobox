@@ -73,6 +73,12 @@
         <%= state.underscore.humanize %>
       <% end %>
     <% end %>
+    <% if @draft > 0 %>
+      <%= filter_link :draft, true, @draft do %>
+        <%= octicon 'primitive-square', height: 24, class: "sidebar-icon text-draft" %>
+        Draft
+      <% end %>
+    <% end %>
   </ul>
 <% end %>
 
