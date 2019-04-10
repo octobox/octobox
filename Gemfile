@@ -18,7 +18,7 @@ gem 'faraday_middleware'
 gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
-gem 'rake'
+gem 'rake', require: false
 gem 'git'
 gem 'rgb'
 gem 'sidekiq'
