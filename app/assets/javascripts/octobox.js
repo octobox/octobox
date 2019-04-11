@@ -163,7 +163,6 @@ var Octobox = (function() {
         updateFavicon();
       })
       .fail(function(){
-        $(".header-flash-messages").empty();
         notify("Could not mute notification(s)", "danger");
       });
     }
@@ -180,7 +179,6 @@ var Octobox = (function() {
       updateFavicon();
     })
     .fail(function(){
-        $(".header-flash-messages").empty();
         notify("Could not mark notification(s) read", "danger");
     });
   };
@@ -222,7 +220,6 @@ var Octobox = (function() {
       updateFavicon();
     })
     .fail(function(){
-      $(".header-flash-messages").empty();
       notify("Could not archive notification(s)", "danger");
     });
   }
@@ -244,7 +241,6 @@ var Octobox = (function() {
       }, success: function(data, status, xhr) {
         if (data["error"] != null) {
           $(".sync .octicon").removeClass("spinning");
-          $(".header-flash-messages").empty();
           notify(data["error"], "danger")
         } else {
           Turbolinks.visit("/"+location.search);
@@ -381,7 +377,6 @@ var Octobox = (function() {
       updateFavicon();
     })
     .fail(function(){
-      $(".header-flash-messages").empty();
       notify("Could not mark notification(s) read", "danger");
     });
     $("#notification-"+id).removeClass("active");
@@ -433,7 +428,6 @@ var Octobox = (function() {
         updateFavicon();
       })
       .fail(function(){
-        $(".header-flash-messages").empty();
         notify("Could not delete notification", "danger");
       });
     }
@@ -459,7 +453,6 @@ var Octobox = (function() {
 
     $.get($(this).attr('href'), function(data){
       if (data["error"] != null) {
-        $(".header-flash-messages").empty();
         notify(data["error"], "danger")
       } else {
         $('#thread').html(data)
@@ -477,14 +470,13 @@ var Octobox = (function() {
 
     $.get($(this).attr('href'), function(data){
       if (data["error"] != null) {
-        $(".header-flash-messages").empty();
         notify(data["error"], "danger")
       } else {
         $('#more-comments').html(data)
       }
     });
     return false;
-  }  
+  }
 
   // private methods
 
@@ -638,7 +630,7 @@ var Octobox = (function() {
       scrollToCursor();
     }
   };
-  
+
   // keyboard shortcuts when shift key is pressed
   var shiftShortcuts = {
     191: openModal,        // ?
