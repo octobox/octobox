@@ -4,20 +4,6 @@ var Octobox = (function() {
     $(".js-select_all").click();
   };
 
-  var getCurrentRow = function() {
-    return getDisplayedRows().has("td.js-current");
-  };
-
-  var getDisplayedRows = function() {
-    return $(".js-table-notifications tr.notification");
-  };
-
-  var setRowCurrent = function(row, add) {
-    var classes = "current js-current";
-    var td = row.find("td.notification-checkbox");
-    add ? td.addClass(classes) : td.removeClass(classes);
-  };
-
   var moveCursorToClickedRow = function(event) {
     // Don't event.preventDefault(), since we want the
     // normal clicking behavior for links, starring, etc
@@ -136,11 +122,6 @@ var Octobox = (function() {
     var checked = $(".js-select_all").prop("checked")
     getDisplayedRows().find("input").prop("checked", checked).trigger("change");
   };
-
-  var uncheckAll = function () {
-    $(".js-select_all").prop("checked", false);
-    checkAll();
-  }
 
   var muteThread = function() {
     var id = $('#notification-thread').data('id');
@@ -490,7 +471,7 @@ var Octobox = (function() {
   };
 
   var getCurrentRow = function() {
-    return getDisplayedRows().has("td.js-current")
+    return getDisplayedRows().has("td.js-current");
   };
 
   var getMarkedOrCurrentRows = function() {
@@ -608,7 +589,7 @@ var Octobox = (function() {
   var setRowCurrent = function(row, add) {
     var classes = "current js-current";
     var td = row.find("td.notification-checkbox");
-    add ? td.addClass(classes) : td.removeClass(classes)
+    add ? td.addClass(classes) : td.removeClass(classes);
   };
 
   var moveCursor = function(upOrDown) {
