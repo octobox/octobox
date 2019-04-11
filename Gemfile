@@ -32,7 +32,6 @@ gem 'bugsnag'
 gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
-gem 'simple_form'
 gem 'commonmarker'
 
 # Supported databases
