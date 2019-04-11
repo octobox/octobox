@@ -330,22 +330,10 @@ var Octobox = (function() {
     $("td.js-current").removeClass("current js-current");
   };
 
-  var openThread = function() {
-    if($("#thread").hasClass("d-none")){
-      $("#thread").toggleClass("d-none");
-      $(".flex-main").toggleClass("show-thread");
-    }
-    if($(".flex-content").hasClass("active")){
-      $(".flex-content").toggleClass("active");
-    }
-  };
-
   var closeThread = function() {
     history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
-    if(!$("#thread").hasClass("d-none")){
-      $("#thread").toggleClass("d-none");
-      $(".flex-main").toggleClass("show-thread");
-    }
+    $("#thread").addClass("d-none");
+    $(".flex-main").removeClass("show-thread");
   };
 
   var toggleOffCanvas = function() {
@@ -439,7 +427,9 @@ var Octobox = (function() {
         $('#thread').html(data)
       }
     });
-    openThread();
+    $("#thread").removeClass("d-none");
+    $(".flex-main").addClass("show-thread");
+    $(".flex-content").removeClass("active")
     subscribeToComments();
     return false;
   }
@@ -652,7 +642,6 @@ var Octobox = (function() {
     sync: sync,
     markRowCurrent: markRowCurrent,
     closeThread: closeThread,
-    openThread: openThread,
     archiveThread: archiveThread,
     unarchiveThread: unarchiveThread,
     toggleStarClick: toggleStarClick,
