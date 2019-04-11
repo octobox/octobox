@@ -18,10 +18,6 @@ window.onload = function() {
   SearchSuggestion.init()
 }
 
-function getDisplayedRows() {
-  return $(".js-table-notifications tr.notification")
-}
-
 document.addEventListener("turbolinks:load", Octobox.initialize);
 document.addEventListener("turbolinks:before-cache", Octobox.removeCurrent);
 
