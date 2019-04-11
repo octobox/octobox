@@ -152,18 +152,6 @@ GEM
       thor (>= 0.14, < 2.0)
     json (2.2.0)
     jwt (2.1.0)
-    kaminari (1.1.1)
-      activesupport (>= 4.1.0)
-      kaminari-actionview (= 1.1.1)
-      kaminari-activerecord (= 1.1.1)
-      kaminari-core (= 1.1.1)
-    kaminari-actionview (1.1.1)
-      actionview
-      kaminari-core (= 1.1.1)
-    kaminari-activerecord (1.1.1)
-      activerecord
-      kaminari-core (= 1.1.1)
-    kaminari-core (1.1.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -226,6 +214,7 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
+    pagy (2.1.5)
     parallel (1.17.0)
     parser (2.6.2.1)
       ast (~> 2.4.0)
@@ -430,7 +419,6 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   jwt
-  kaminari
   listen
   local_time
   lograge
@@ -441,6 +429,7 @@ DEPENDENCIES
   octokit
   oj
   omniauth-github
+  pagy
   percy-capybara
   pg (= 1.1.4)
   pg_search

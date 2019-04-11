@@ -124,7 +124,6 @@ class NotificationsController < ApplicationController
   end
 
   def comment
-    
     subject = current_user.notifications.find(params[:id]).subject
 
     if current_user.can_comment?(subject)
@@ -136,7 +135,7 @@ class NotificationsController < ApplicationController
       end
     else
       flash[:error] = 'Could not post your comment'
-      redirect_back fallback_location: notification_path 
+      redirect_back fallback_location: notification_path
     end
   end
 
@@ -318,8 +317,8 @@ class NotificationsController < ApplicationController
     check_out_of_bounds(scope)
 
     @unread_count = user_unread_count
-    @notifications = scope.page(page).per(per_page)
-    @total = @notifications.total_count
+    @pagy, @notifications = pagy(scope, items: per_page, size: [1,2,2,1])
+    @total = @pagy.count
 
     @cur_selected = [per_page, @total].min
     return scope
