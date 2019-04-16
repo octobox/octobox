@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
   API_HEADER = 'X-Octobox-API'
 
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }

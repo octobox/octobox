@@ -1,9 +1,0 @@
-<% if current_page.last? %>
-  <li class="page-item disabled">
-    <span class="page-link"><%= raw(t 'views.pagination.next') %></span>
-  </li>
-<% else %>
-  <li class="page-item">
-    <%= link_to raw(t 'views.pagination.next'), url, :rel => 'next', :remote => remote, :class=>"page-link" %>
-  </li>
-<% end %>
