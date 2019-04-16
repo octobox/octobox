@@ -3,9 +3,9 @@
   <span class='text-muted font-weight-light'> #<%= notification.subject_number %> </span>
 </h2>
 
-<%= link_to notification.web_url, target: :blank, class: "btn btn-sm #{notification_button_color(notification.state)} mr-2" do %>
-  <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
-  <%= notification_button_title(notification.subject_type, notification.state) %>
+<%= link_to notification.web_url, target: '_blank', class: "btn btn-sm #{notification_button_color(notification)} mr-2" do %>
+  <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
+  <%= notification_button_title(notification) %>
 <% end %>
 
 <% if notification.subject %>

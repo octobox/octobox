@@ -5,7 +5,7 @@ gem 'rails', '~> 5.2'
 gem 'bootstrap'
 gem 'attr_encrypted'
 gem 'jquery-rails'
-gem 'kaminari'
+gem 'pagy'
 gem 'local_time'
 gem 'octicons_helper'
 gem 'octokit'
@@ -18,12 +18,12 @@ gem 'faraday_middleware'
 gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
-gem 'rake'
+gem 'rake', require: false
 gem 'git'
 gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
-gem 'sidekiq-scheduler'
+gem 'sidekiq-scheduler', require: false
 gem 'rack-canonical-host'
 gem 'sidekiq-status'
 gem 'gemoji', require: false
@@ -31,8 +31,7 @@ gem 'bootsnap', require: false
 gem 'bugsnag'
 gem 'jwt'
 gem 'oj'
-gem 'yard'
-gem 'simple_form'
+gem 'yard', require: false
 gem 'commonmarker'
 
 # Supported databases
@@ -58,7 +57,6 @@ group :test do
   gem 'minitest'
   gem 'selenium-webdriver'
   gem 'capybara'
-  gem 'percy-capybara'
   gem 'action-cable-testing'
 end
 

@@ -168,17 +168,20 @@ module NotificationsHelper
     SUBJECT_TYPES[subject_type]
   end
 
-  def notification_icon_title(subject_type, state = nil)
-    return subject_type.underscore.humanize if state.blank?
-    "#{state.underscore.humanize} #{subject_type.underscore.humanize.downcase}"
+  def notification_icon_title(notification)
+    return "Draft #{notification.subject_type.underscore.humanize.downcase}" if notification.draft?
+    return notification.subject_type.underscore.humanize if notification.state.blank?
+    "#{notification.state.underscore.humanize} #{notification.subject_type.underscore.humanize.downcase}"
   end
 
-  def notification_icon_color(state)
+  def notification_icon_color(notification)
+    return unless notification.display_subject?
+    return 'text-draft' if notification.draft?
     {
       'open' => 'text-success',
       'closed' => 'text-danger',
       'merged' => 'text-subscribed'
-    }[state]
+    }[notification.state]
   end
 
   def reason_label(reason)
@@ -315,25 +318,20 @@ module NotificationsHelper
     SUBJECT_TYPES[subject_type]
   end
 
-  def notification_button_title(subject_type, state = nil)
-    return subject_type.underscore.humanize if state.blank?
-    "#{state.underscore.humanize}"
+  def notification_button_title(notification)
+    return 'Draft' if notification.draft?
+    return notification.subject_type.underscore.humanize if notification.state.blank?
+    notification.state.underscore.humanize
   end
 
-  def notification_button_color(state)
+  def notification_button_color(notification)
+    return unless notification.display_subject?
+    return 'btn-draft' if notification.draft?
     {
       'open' => 'btn-success',
       'closed' => 'btn-danger',
       'merged' => 'btn-merged'
-    }[state]
-  end
-
-  def notification_badge_color(state)
-    {
-      'open' => 'badge-success',
-      'closed' => 'badge-danger',
-      'merged' => 'badge-merged'
-    }[state]
+    }[notification.state]
   end
 
   def parse_markdown(str)
