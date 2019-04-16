@@ -63,13 +63,14 @@ module Octobox
         subscription_purchase = app_installation.subscription_purchase
 
         if subscription_purchase.nil?
-          app_installation.create_subscription_purchase(subscription_plan: plan, unit_count: 1)
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Added open collective subscription purchase for #{subscriber}\033[0m\n\n")
-        elsif subscription_purchase.unit_count.zero?
-          subscription_purchase.update_attributes(plan: plan, unit_count: 1)
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Restarted open collective subscription purchase for #{subscriber}\033[0m\n\n")
+          app_installation.create_subscription_purchase(subscription_plan: plan, unit_count: 1, next_billing_date: Time.now + 1.month)
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Added #{plan_name} for #{subscriber}\033[0m\n\n")
+        elsif subscription_purchase.subscription_plan.name == plan_name && subscription_purchase.unit_count.zero?
+          subscription_purchase.update_attributes(unit_count: 1, next_billing_date: Time.now + 1.month)
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Restarted #{plan_name} for #{subscriber}\033[0m\n\n")
         else
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Renewed open collective subscription purchase for #{subscriber}\033[0m\n\n")
+          subscription_purchase.update_attributes(subscription_plan: plan, unit_count: 1, next_billing_date: Time.now + 1.month)
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Switched #{subscriber} to #{plan_name}\033[0m\n\n")
         end
       end
     end
