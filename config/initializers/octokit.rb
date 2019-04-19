@@ -10,7 +10,6 @@ end
 Octokit.middleware = Faraday::RackBuilder.new do |builder|
   builder.use Octokit::Middleware::FollowRedirects
   builder.use Octokit::Response::RaiseError
-  builder.use Octokit::Response::FeedParser
   builder.use FaradayMiddleware::Gzip
   builder.use :instrumentation
   builder.request :retry

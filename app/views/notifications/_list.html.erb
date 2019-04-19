@@ -90,13 +90,10 @@
       </div>
     <% end %>
   </table>
-  <div class="card-footer d-block d-lg-none mb-0">
-      <%= paginate @notifications, left: 1, right: 1, window: 0 %>
-  </div>
 </div>
 
-<div class="d-none d-md-flex justify-content-center">
-  <%= paginate @notifications %>
+<div class="d-flex justify-content-center">
+  <%== render 'pagination', pagy: @pagy %>
 </div>
 
 <%= render 'layouts/footer' %>

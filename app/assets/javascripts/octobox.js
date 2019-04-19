@@ -4,20 +4,6 @@ var Octobox = (function() {
     $(".js-select_all").click();
   };
 
-  var getCurrentRow = function() {
-    return getDisplayedRows().has("td.js-current");
-  };
-
-  var getDisplayedRows = function() {
-    return $(".js-table-notifications tr.notification");
-  };
-
-  var setRowCurrent = function(row, add) {
-    var classes = "current js-current";
-    var td = row.find("td.notification-checkbox");
-    add ? td.addClass(classes) : td.removeClass(classes);
-  };
-
   var moveCursorToClickedRow = function(event) {
     // Don't event.preventDefault(), since we want the
     // normal clicking behavior for links, starring, etc
@@ -151,11 +137,6 @@ var Octobox = (function() {
     getDisplayedRows().find("input").prop("checked", checked).trigger("change");
   };
 
-  var uncheckAll = function () {
-    $(".js-select_all").prop("checked", false);
-    checkAll();
-  }
-
   var muteThread = function() {
     var id = $('#notification-thread').data('id');
     mute(id);
@@ -177,7 +158,6 @@ var Octobox = (function() {
         updateFavicon();
       })
       .fail(function(){
-        $(".header-flash-messages").empty();
         notify("Could not mute notification(s)", "danger");
       });
     }
@@ -194,7 +174,6 @@ var Octobox = (function() {
       updateFavicon();
     })
     .fail(function(){
-        $(".header-flash-messages").empty();
         notify("Could not mark notification(s) read", "danger");
     });
   };
@@ -236,7 +215,6 @@ var Octobox = (function() {
       updateFavicon();
     })
     .fail(function(){
-      $(".header-flash-messages").empty();
       notify("Could not archive notification(s)", "danger");
     });
   }
@@ -258,7 +236,6 @@ var Octobox = (function() {
       }, success: function(data, status, xhr) {
         if (data["error"] != null) {
           $(".sync .octicon").removeClass("spinning");
-          $(".header-flash-messages").empty();
           notify(data["error"], "danger")
         } else {
           Turbolinks.visit("/"+location.search);
@@ -367,22 +344,10 @@ var Octobox = (function() {
     $("td.js-current").removeClass("current js-current");
   };
 
-  var openThread = function() {
-    if($("#thread").hasClass("d-none")){
-      $("#thread").toggleClass("d-none");
-      $(".flex-main").toggleClass("show-thread");
-    }
-    if($(".flex-content").hasClass("active")){
-      $(".flex-content").toggleClass("active");
-    }
-  };
-
   var closeThread = function() {
     history.pushState({thread: $(this).attr('href')}, 'Octobox', $(this).attr('href'))
-    if(!$("#thread").hasClass("d-none")){
-      $("#thread").toggleClass("d-none");
-      $(".flex-main").toggleClass("show-thread");
-    }
+    $("#thread").addClass("d-none");
+    $(".flex-main").removeClass("show-thread");
   };
 
   var toggleOffCanvas = function() {
@@ -395,7 +360,6 @@ var Octobox = (function() {
       updateFavicon();
     })
     .fail(function(){
-      $(".header-flash-messages").empty();
       notify("Could not mark notification(s) read", "danger");
     });
     $("#notification-"+id).removeClass("active");
@@ -447,7 +411,6 @@ var Octobox = (function() {
         updateFavicon();
       })
       .fail(function(){
-        $(".header-flash-messages").empty();
         notify("Could not delete notification", "danger");
       });
     }
@@ -473,13 +436,14 @@ var Octobox = (function() {
 
     $.get($(this).attr('href'), function(data){
       if (data["error"] != null) {
-        $(".header-flash-messages").empty();
         notify(data["error"], "danger")
       } else {
         $('#thread').html(data)
       }
     });
-    openThread();
+    $("#thread").removeClass("d-none");
+    $(".flex-main").addClass("show-thread");
+    $(".flex-content").removeClass("active")
     subscribeToComments();
     return false;
   }
@@ -491,14 +455,13 @@ var Octobox = (function() {
 
     $.get($(this).attr('href'), function(data){
       if (data["error"] != null) {
-        $(".header-flash-messages").empty();
         notify(data["error"], "danger")
       } else {
         $('#more-comments').html(data)
       }
     });
     return false;
-  }  
+  }
 
   // private methods
 
@@ -522,7 +485,7 @@ var Octobox = (function() {
   };
 
   var getCurrentRow = function() {
-    return getDisplayedRows().has("td.js-current")
+    return getDisplayedRows().has("td.js-current");
   };
 
   var getMarkedOrCurrentRows = function() {
@@ -640,7 +603,7 @@ var Octobox = (function() {
   var setRowCurrent = function(row, add) {
     var classes = "current js-current";
     var td = row.find("td.notification-checkbox");
-    add ? td.addClass(classes) : td.removeClass(classes)
+    add ? td.addClass(classes) : td.removeClass(classes);
   };
 
   var moveCursor = function(upOrDown) {
@@ -652,7 +615,7 @@ var Octobox = (function() {
       scrollToCursor();
     }
   };
-  
+
   // keyboard shortcuts when shift key is pressed
   var shiftShortcuts = {
     191: openModal,        // ?
@@ -693,7 +656,6 @@ var Octobox = (function() {
     sync: sync,
     markRowCurrent: markRowCurrent,
     closeThread: closeThread,
-    openThread: openThread,
     archiveThread: archiveThread,
     unarchiveThread: unarchiveThread,
     toggleStarClick: toggleStarClick,

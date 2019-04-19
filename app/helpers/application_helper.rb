@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Pagy::Frontend
   ALERT_TYPES = {
     success: 'alert-success',
     error: 'alert-danger',
