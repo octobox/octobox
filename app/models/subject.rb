@@ -56,6 +56,9 @@ class Subject < ApplicationRecord
       full_name = extract_full_name(remote_subject['url'])
     end
 
+    comment_count = remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count']
+    comment_count = subject.comment_count if comment_count.nil?
+
     subject.update({
       repository_full_name: full_name,
       github_id: remote_subject['id'],
@@ -64,7 +67,7 @@ class Subject < ApplicationRecord
       html_url: remote_subject['html_url'],
       created_at: remote_subject['created_at'] || Time.current,
       updated_at: remote_subject['updated_at'] || Time.current,
-      comment_count: remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count'],
+      comment_count: comment_count,
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
@@ -136,7 +139,7 @@ class Subject < ApplicationRecord
     client = user.comment_client(comment)
 
     remote_comment = client.post url.gsub('/pulls/', '/issues/') + '/comments', {body: comment.body}
-    comment.github_id = remote_comment.id 
+    comment.github_id = remote_comment.id
     comment.author_association = remote_comment.author_association
     comment.created_at = remote_comment.created_at
     comment.save
