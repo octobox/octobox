@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :subscription_purchase do
-    sequence(:number, 100) { |n| n }
+    app_installation
+    subscription_plan
   end
 end

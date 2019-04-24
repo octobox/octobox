@@ -3,8 +3,9 @@ require 'test_helper'
 class OpenCollectiveTest < ActiveSupport::TestCase
 
 	setup do
+		stub_oc_members_request
 		@user = create(:user, github_login: 'andrew', github_id: '12345')
-		@app = create(:app_installation, account_login: @user.github_login)
+		@app = create(:app_installation, account_login: @user.github_login, account_id: @user.github_id)
 
 		@individual_plan = create(:subscription_plan, name: "Open Collective Individual")
     @org_plan = create(:subscription_plan, name: "Open Collective Organisation")
@@ -15,11 +16,10 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 	end
 
 	test "gets subscriber names" do
-		stub_oc_members_request
 		transactions = Oj.load(Typhoeus.get("https://opencollective.com/octobox/members.json").body)
 
 		names = Octobox::OpenCollective.get_sub_names(transactions, 10)
-		
+
 		assert_equal names.length, 4
 		assert names.include?('tom')
 	end
