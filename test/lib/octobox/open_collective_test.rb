@@ -30,8 +30,8 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 	end
 
 	test "renews plans" do
-		create(:subscription_purchase, account_id: @user.github_id, subscription_plan_id: @individual_.id)
-		Octobox::OpenCollective.apply_plan([@user.github_login], @plan.name)
+		create(:subscription_purchase, account_id: @user.github_id, subscription_plan_id: @individual_plan.id)
+		Octobox::OpenCollective.apply_plan([@user.github_login], @individual_plan.name)
 		assert @user.has_personal_plan?
 	end
 
