@@ -30,7 +30,7 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 	end
 
 	test "renews plans" do
-		create(:subscription_purchase, account_id: @user.github_id, subscription_plan_id: @individual_plan.id)
+		create(:subscription_purchase, account_id: @user.github_id, subscription_plan_id: @individual_plan.id, unit_count: 0)
 		Octobox::OpenCollective.apply_plan([@user.github_login], @individual_plan.name)
 		assert @user.has_personal_plan?
 	end
@@ -43,13 +43,12 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 
 	test "upgrades plans" do
 
-		@repo = create(:repository, app_installation_id: @app.id, private: true)
-		@notification = create(:notification, repository: @repo, user: @user)
+		@another_user = create(:user, github_login: 'benjam', github_id: '5678')
+		create(:app_installation, account_login: @another_user.github_login, account_id: @another_user.github_id)
+		create(:subscription_purchase, account_id: @another_user.github_id, subscription_plan_id: @individual_plan.id, unit_count: 1)
 
-		create(:subscription_purchase, account_id: @user.github_id, subscription_plan_id: @individual_plan.id, unit_count: 1)
 		Octobox::OpenCollective.sync
 
-		refute @user.has_personal_plan?
-		refute @notification.upgrade_required?
+		assert_equal SubscriptionPurchase.find_by_account_id(@another_user.github_id).subscription_plan.name, @org_plan.name
 	end
 end
