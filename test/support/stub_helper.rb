@@ -102,6 +102,13 @@ module StubHelper
     end
   end
 
+  def stub_oc_members_request
+    transactions_url = "https://opencollective.com/octobox/members.json"
+
+    response = { status: 200, body: file_fixture('oc_members.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, transactions_url).to_return(response)
+  end
+
   def stub_personal_access_tokens_enabled(value: true)
     Octobox.config.stubs(:personal_access_tokens_enabled).returns(value)
   end
