@@ -44,16 +44,16 @@ module Octobox
       plan = SubscriptionPlan.find_by_name(plan_name)
       return Rails.logger.info("n\n\033[32m[#{Time.current}] ERROR -- Could not find plan named #{plan_name}\033[0m\n\n") if plan.nil?
 
-      # current_subs_purchases = plan.subscription_purchases.where(unit_count: 1) unless plan.nil?
-      #
-      # if current_subs_purchases
-      #   current_subs_purchases.each do |purchase|
-      #     unless subscriber_names.include? purchase.app_installation.account_login
-      #       purchase.update_attributes(unit_count: 0)
-      #       Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed open collective subscription purchase for #{purchase.app_installation.account_login}\033[0m\n\n")
-      #     end
-      #   end
-      # end
+      current_subs_purchases = plan.subscription_purchases.where(unit_count: 1) unless plan.nil?
+      
+      if current_subs_purchases
+        current_subs_purchases.each do |purchase|
+          unless subscriber_names.include? purchase.app_installation.account_login
+            purchase.update_attributes(unit_count: 0) unless purchase.next_billing_date.present? && purchase.next_billing_date > Time.now
+            Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed #{plan_name} for #{purchase.app_installation.account_login}\033[0m\n\n")
+          end
+        end
+      end
 
       subscriber_names.each do |subscriber|
         app_installation = AppInstallation.find_by_account_login(subscriber)
@@ -64,12 +64,13 @@ module Octobox
 
         if subscription_purchase.nil?
           app_installation.create_subscription_purchase(subscription_plan: plan, unit_count: 1)
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Added open collective subscription purchase for #{subscriber}\033[0m\n\n")
-        elsif subscription_purchase.unit_count.zero?
-          subscription_purchase.update_attributes(plan: plan, unit_count: 1)
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Restarted open collective subscription purchase for #{subscriber}\033[0m\n\n")
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Added #{plan_name} for #{subscriber}\033[0m\n\n")
+        elsif subscription_purchase.subscription_plan.name == plan_name && subscription_purchase.unit_count.zero?
+          subscription_purchase.update_attributes(unit_count: 1)
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Restarted #{plan_name} for #{subscriber}\033[0m\n\n")
         else
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Renewed open collective subscription purchase for #{subscriber}\033[0m\n\n")
+          subscription_purchase.update_attributes(subscription_plan: plan, unit_count: 1)
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Switched #{subscriber} to #{plan_name}\033[0m\n\n")
         end
       end
     end
