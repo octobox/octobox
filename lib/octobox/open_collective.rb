@@ -49,7 +49,7 @@ module Octobox
       if current_subs_purchases
         current_subs_purchases.each do |purchase|
 
-          next if app_installation.nil?
+          next if purchase.app_installation.nil?
           
           unless subscriber_names.include? purchase.app_installation.account_login
             purchase.update_attributes(unit_count: 0) unless purchase.next_billing_date.present? && purchase.next_billing_date > Time.now
