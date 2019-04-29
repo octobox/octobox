@@ -104,7 +104,7 @@ brew install postgres
 On Debian-based Linux distributions you can use apt-get to install Postgres:
 
 ```bash
-sudo apt-get install postgresql postgresql-contrib libpq-dev
+sudo apt-get install postgresql postgresql-contrib libpq-dev rbenv
 ```
 
 Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other
