@@ -44,7 +44,7 @@
     <% end %>
     <% if @notifications.to_a.any? %>
       <% @notifications.each do |notification| %>
-        <% if notification.unread? and notification_icon_color(notification) != 'text-subscribed' %>
+        <% if notification.unread? and !['closed', 'merged'].include?(notification.state) %>
           <meta rel="prerender" href="<%= notification_link(notification) %>">
         <% end %>
       <% end %>
