@@ -37,8 +37,14 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 
 	test "removes plans" do
 		create(:subscription_purchase, account_id: @user.github_id, subscription_plan_id: @individual_plan.id, unit_count: 1)
+		@another_user = create(:user, github_login: 'billy', github_id: '5678')
+		create(:app_installation, account_login: @another_user.github_login, account_id: @another_user.github_id)
+		create(:subscription_purchase, account_id: @another_user.github_id, subscription_plan_id: @individual_plan.id, unit_count: 1, next_billing_date: Time.now + 1.week)
+
 		Octobox::OpenCollective.sync
+
 		refute @user.has_personal_plan?
+		assert @another_user.has_personal_plan?
 	end
 
 	test "upgrades plans" do
