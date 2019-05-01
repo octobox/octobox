@@ -37,8 +37,6 @@ class Notification < ApplicationRecord
 
   after_update :push_if_changed
 
-  paginates_per 20
-
   class << self
     def attributes_from_api_response(api_response)
       attrs = DownloadService::API_ATTRIBUTE_MAP.map do |attr, path|

@@ -20,10 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  views:
-    pagination:
-      previous: 'Previous'
-      next: 'Next'
   exceptions:
     octokit:
       unauthorized: 'Your GitHub token seems to be invalid'
