@@ -86,14 +86,14 @@ var Octobox = (function() {
         clearTimeout(showTimer);
       }
 
+      var _this = this;
       showTimer = setTimeout(function () {
         showTimer = undefined
-        var _this = this;
-        $(this).popover("show");
+        $(_this).popover("show");
         $(".popover").on("mouseleave", function () {
             $(_this).popover('hide');
         });
-      }, 2000);
+      }, 500);
     }).on("mouseleave", function () {
       if (showTimer) {
         clearTimeout(showTimer);
