@@ -115,7 +115,7 @@ GEM
       faraday (>= 0.7.4, < 1.0)
     ffi (1.10.0)
     formatador (0.2.5)
-    fugit (1.2.0)
+    fugit (1.2.1)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
     gemoji (3.0.1)
