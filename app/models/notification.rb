@@ -182,6 +182,10 @@ class Notification < ApplicationRecord
     repository.private? && !repository.required_plan_available?
   end
 
+  def prerender?
+    unread? and !['closed', 'merged'].include?(state) and !display_thread?
+  end
+
   def subject_number
     subject_url.scan(/\d+$/).first
   end
