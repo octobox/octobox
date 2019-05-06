@@ -30,8 +30,6 @@ class DownloadServiceTest < ActiveSupport::TestCase
     stub_fetch_subject_enabled(value: false)
     user = create(:morty)
     create(:notification, last_read_at: 5.days.ago, updated_at: 30.minutes.ago, user: user)
-    # one second before oldest unread notification
-    unread_since =( user.notifications.unread(true).first.updated_at - 1).iso8601
     download_service = DownloadService.new(user)
     stub_notifications_request(
       url: "https://api.github.com/notifications?all=true&per_page=100"
@@ -88,7 +86,6 @@ class DownloadServiceTest < ActiveSupport::TestCase
   test '#download handles no new notifications' do
     user = create(:morty)
     download_service = DownloadService.new(user)
-    unread_since =( user.notifications.unread(true).first.updated_at - 1).iso8601
     stub_notifications_request(
       url: "https://api.github.com/notifications?all=true&per_page=100",
       body: ''
