@@ -43,7 +43,7 @@ class CommentsChannelTest < ActionCable::Channel::TestCase
     assert_has_stream "comments:#{subject.id}"
 
     assert_broadcasts(subject, 1) do
-      comment.update_attributes(body: "A new body")
+      comment.update(body: "A new body")
     end
 
   end
