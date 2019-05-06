@@ -10,7 +10,6 @@ class CreateNotifications < ActiveRecord::Migration[5.0]
       t.string :subject_type
       t.string :reason
       t.boolean :unread
-      t.string :updated_at
       t.string :last_read_at
       t.string :url
       t.boolean :archived, default: false
