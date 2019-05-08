@@ -351,6 +351,7 @@ GEM
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.9)
+    timecop (0.9.1)
     turbolinks (5.2.0)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -438,6 +439,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen
   sql_queries_count
+  timecop
   turbolinks
   typhoeus
   uglifier
