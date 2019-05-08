@@ -8,7 +8,7 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 		@app = create(:app_installation, account_login: @user.github_login, account_id: @user.github_id)
 
 		@individual_plan = create(:subscription_plan, name: "Open Collective Individual")
-    @org_plan = create(:subscription_plan, name: "Open Collective Organisation")
+		@org_plan = create(:subscription_plan, name: "Open Collective Organisation")
 	end
 
 	test "plans are set up" do
@@ -18,10 +18,12 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 	test "gets subscriber names" do
 		transactions = Oj.load(Typhoeus.get("https://opencollective.com/octobox/members.json").body)
 
-		names = Octobox::OpenCollective.get_sub_names(transactions, 10)
+		Timecop.freeze(Time.local(2019, 4, 13)) do
+			names = Octobox::OpenCollective.get_sub_names(transactions, 10)
 
-		assert_equal names.length, 4
-		assert names.include?('tom')
+			assert_equal names.length, 4
+			assert names.include?('tom')
+		end
 	end
 
 	test "adds new plans" do
