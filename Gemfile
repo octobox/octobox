@@ -33,7 +33,6 @@ gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
 gem 'commonmarker'
-gem 'timecop'
 
 # Supported databases
 gem 'mysql2', require: false
@@ -59,6 +58,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'action-cable-testing'
+  gem 'timecop'
 end
 
 group :development do
