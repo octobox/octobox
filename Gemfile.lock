@@ -180,7 +180,7 @@ GEM
     msgpack (1.2.10)
     multi_json (1.13.1)
     multi_xml (0.6.0)
-    multipart-post (2.0.0)
+    multipart-post (2.1.0)
     mysql2 (0.5.2)
     nenv (0.3.0)
     nio4r (2.3.1)
