@@ -33,6 +33,7 @@ gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
 gem 'commonmarker'
+gem 'timecop'
 
 # Supported databases
 gem 'mysql2', require: false

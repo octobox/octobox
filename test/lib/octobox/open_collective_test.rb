@@ -9,6 +9,8 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 
 		@individual_plan = create(:subscription_plan, name: "Open Collective Individual")
     @org_plan = create(:subscription_plan, name: "Open Collective Organisation")
+
+    Timecop.freeze(Time.local(2019, 4, 13))
 	end
 
 	test "plans are set up" do
