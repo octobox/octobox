@@ -58,6 +58,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'action-cable-testing'
+  gem 'timecop'
 end
 
 group :development do
