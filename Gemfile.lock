@@ -213,7 +213,7 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
-    pagy (3.1.0)
+    pagy (3.2.0)
     parallel (1.17.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
@@ -330,9 +330,9 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    skylight (4.0.0)
-      skylight-core (= 4.0.0)
-    skylight-core (4.0.0)
+    skylight (4.0.1)
+      skylight-core (= 4.0.1)
+    skylight-core (4.0.1)
       activesupport (>= 4.2.0)
     spring (2.0.2)
       activesupport (>= 4.2)
@@ -435,7 +435,7 @@ DEPENDENCIES
   sidekiq-status
   sidekiq-unique-jobs
   simplecov
-  skylight (= 4.0.0)
+  skylight (= 4.0.1)
   spring
   spring-watcher-listen
   sql_queries_count
