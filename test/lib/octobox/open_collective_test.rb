@@ -53,10 +53,11 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 
 		@another_user = create(:user, github_login: 'benjam', github_id: '5678')
 		create(:app_installation, account_login: @another_user.github_login, account_id: @another_user.github_id)
-		create(:subscription_purchase, account_id: @another_user.github_id, subscription_plan_id: @individual_plan.id, unit_count: 1)
 
-		Octobox::OpenCollective.sync
-
-		assert_equal SubscriptionPurchase.find_by_account_id(@another_user.github_id).subscription_plan.name, @org_plan.name
+		Timecop.freeze(Time.local(2019, 4, 13)) do
+			create(:subscription_purchase, account_id: @another_user.github_id, subscription_plan_id: @individual_plan.id, unit_count: 1)
+			Octobox::OpenCollective.sync
+			assert_equal SubscriptionPurchase.find_by_account_id(@another_user.github_id).subscription_plan.name, @org_plan.name
+		end
 	end
 end
