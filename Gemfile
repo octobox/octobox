@@ -47,6 +47,7 @@ group :development, :test do
   gem 'sql_queries_count'
   gem 'active_record_query_trace'
   gem 'rubocop', require: false
+  gem 'rubocop-performance'
 end
 
 group :test do
@@ -72,7 +73,7 @@ group :development do
 end
 
 group :production do
-  gem 'skylight', '4.0.0'
+  gem 'skylight', '4.0.1'
   gem 'lograge'
   gem 'puma_worker_killer'
   gem 'hirefire-resource'
