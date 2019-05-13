@@ -1,0 +1,14 @@
+.discussion-thread{
+	position:relative;
+	&:before {
+    background-color: #e6ebf1;
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 20px;
+    position: absolute;
+    top: 0;
+    width: 2px;
+    z-index: -1;
+	}
+}

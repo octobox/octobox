@@ -32,7 +32,7 @@ module Octobox
 
     def scopes
       default_scopes = 'notifications'
-      default_scopes += ', read:org' if !github_app && Octobox.restricted_access_enabled?
+      default_scopes += ', read:org' if Octobox.restricted_access_enabled?
       default_scopes += ', repo'     if !github_app && fetch_subject
 
       ENV.fetch('GITHUB_SCOPE', default_scopes)
@@ -102,20 +102,6 @@ module Octobox
     end
     attr_writer :github_team_id
 
-    def percy_token
-      @percy_token || ENV['PERCY_TOKEN'].presence
-    end
-    attr_writer :percy_token
-
-    def percy_project
-      @percy_project || ENV['PERCY_PROJECT'].presence
-    end
-    attr_writer :percy_project
-
-    def percy_configured?
-      percy_token.present? && percy_project.present?
-    end
-
     def native_link
       ENV['OCTOBOX_NATIVE_LINK'] || nil
     end
@@ -138,8 +124,12 @@ module Octobox
       if marketplace_url.present?
         marketplace_url
       else
-        "#{github_domain}/#{app_path}/#{app_slug}"
+        static_app_url
       end
+    end
+
+    def static_app_url
+      "#{github_domain}/#{app_path}/#{app_slug}"
     end
 
     def app_path
@@ -192,6 +182,11 @@ module Octobox
       @push_notifications || ENV['PUSH_NOTIFICATIONS']
     end
     attr_writer :push_notifications
+
+    def public_subject_rollout
+      @public_subject_rollout || ENV['PUBLIC_SUBJECT_ROLLOUT'].try(:to_time)
+    end
+    attr_writer :public_subject_rollout
 
     private
 

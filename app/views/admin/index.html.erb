@@ -15,7 +15,7 @@
               </div>
               <div class="media-body text-right">
                 <h3>
-                  <%= number_to_human User.count %>
+                  <%= number_to_human User.fast_total %>
                 </h3>
                 <span>Users</span>
               </div>
@@ -35,7 +35,7 @@
               </div>
               <div class="media-body text-right">
                 <h3>
-                  <%= number_to_human Notification.count %>
+                  <%= number_to_human Notification.fast_total %>
                 </h3>
                 <span>Notifications</span>
               </div>
@@ -55,7 +55,7 @@
               </div>
               <div class="media-body text-right">
                 <h3>
-                  <%= number_to_human Subject.count %>
+                  <%= number_to_human Subject.fast_total %>
                 </h3>
                 <span>Subjects</span>
               </div>
@@ -75,7 +75,7 @@
               </div>
               <div class="media-body text-right">
                 <h3>
-                  <%= number_to_human Repository.count %>
+                  <%= number_to_human Repository.fast_total %>
                 </h3>
                 <span>Repositories</span>
               </div>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="media-body text-right">
                   <h3>
-                    <%= number_to_human Comment.count %>
+                    <%= number_to_human Comment.fast_total %>
                   </h3>
                   <span>Comments</span>
                 </div>
@@ -148,20 +148,20 @@
         </div>
       </div>
 
-      <% if Octobox.octobox_io? %>
+      <% if Octobox.io? %>
         <div class="col-md-3">
           <div class="card shadow-sm  mb-3">
             <div class="card-content">
               <div class="card-body">
                 <div class="media d-flex">
                   <div class="align-self-center">
-                    <%= octicon 'credit-card', height: 50 %>
+                    <%= octicon 'hubot', height: 50 %>
                   </div>
                   <div class="media-body text-right">
                     <h3>
                       <%= number_to_human SubscriptionPurchase.active.count %>
                     </h3>
-                    <span>Active Subscriptions</span>
+                    <span>Marketplace installs</span>
                   </div>
                 </div>
               </div>
@@ -178,10 +178,50 @@
                     <%= octicon 'gift', height: 50 %>
                   </div>
                   <div class="media-body text-right">
-                    <h3>
+                    <h3 title='<%= SubscriptionPurchase.active.free_trial.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
                       <%= number_to_human SubscriptionPurchase.active.free_trial.count %>
                     </h3>
-                    <span>Free Trials</span>
+                    <span >Free Trials</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm  mb-3">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <%= octicon 'jersey', height: 50, class: 'success' %>
+                  </div>
+                  <div class="media-body text-right">
+                    <h3 title='<%= SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
+                      <%= number_to_human SubscriptionPurchase.active.not_free_trial.paid.count %>
+                    </h3>
+                    <span>Paying Subscriptions</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm  mb-3">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <%= octicon 'package', height: 50 %>
+                  </div>
+                  <div class="media-body text-right">
+                    <h3 title='ARR like a Pirate'>
+                      $<%= number_to_human SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.subscription_plan.monthly_price_in_cents}.reduce(:+)/100 %>
+                    </h3>
+                    <span>MRR</span>
                   </div>
                 </div>
               </div>

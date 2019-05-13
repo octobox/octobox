@@ -156,16 +156,4 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       refute DatabaseConfig.is_postgres?, 'was postgres, it should not have been'
     end
   end
-
-  def set_env(key, val)
-    original = ENV[key]
-    if val
-      ENV[key] = val.to_s
-    else
-      ENV.delete(key)
-    end
-    yield(val)
-  ensure
-    ENV[key] = original
-  end
 end

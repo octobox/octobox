@@ -1,0 +1,34 @@
+<h2 class='text-capitalize'>
+  <%= notification.subject_title %>
+  <span class='text-muted font-weight-light'> #<%= notification.subject_number %> </span>
+</h2>
+
+<%= link_to notification.web_url, target: '_blank', class: "btn btn-sm #{notification_button_color(notification)} mr-2" do %>
+  <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
+  <%= notification_button_title(notification) %>
+<% end %>
+
+<% if notification.subject %>
+  <%= notification_status(notification.subject.status) %>
+  <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= notification.subject_type.downcase %>
+<% end %>
+
+on <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
+
+<%= time_ago_in_words(notification.updated_at) %> ago
+
+<div class='d-flex justify-content-between mt-2'>
+  <div class='labels'>
+    <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "badge badge-#{reason_label(notification.reason)}" %>
+    <% if notification.subject %>
+      <% notification.subject.labels.each do |label| %>
+        <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+      <% end %>
+    <% end %>
+  </div>
+  <% if notification.subject %>
+    <div>
+      <%= link_to pluralize(notification.subject.comment_count,'comment'), expand_comments_notification_url(notification),  class: 'text-muted'%>
+    </div>
+  <% end %>
+</div>

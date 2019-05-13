@@ -6,7 +6,7 @@ class SubscriptionPlan < ApplicationRecord
   scope :github, -> { where.not(github_id: nil) }
 
   def private_repositories_enabled?
-    name.match?(/private/i)
+    name.match?(/private/i) || name.match?(/personal/i) || name.match?(/individual/i) || name.match?(/organisation/i)
   end
 
   def github?
@@ -27,7 +27,8 @@ class SubscriptionPlan < ApplicationRecord
         yearly_price_in_cents:  remote_plan.yearly_price_in_cents,
         price_model:            remote_plan.price_model,
         has_free_trial:         remote_plan.has_free_trial,
-        unit_name:              remote_plan.unit_name
+        unit_name:              remote_plan.unit_name,
+        number:                 remote_plan.number
       })
     end
   end

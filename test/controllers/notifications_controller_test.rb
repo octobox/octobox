@@ -114,8 +114,9 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders notifications filtered by label' do
-    stub_fetch_subject_enabled
     sign_in_as(@user)
+    subject = create(:subject, notifications: [@user.notifications.first])
+    create(:label, name: 'question', subject: subject)
 
     get '/'
     assert_response :success
@@ -285,17 +286,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     assert notification.reload.starred?
-  end
-
-  test 'toggles unread on a notification' do
-    notification = create(:notification, user: @user, unread: true)
-
-    sign_in_as(@user)
-
-    post "/notifications/#{notification.id}/mark_read"
-    assert_response :ok
-
-    refute notification.reload.unread?
   end
 
   test 'syncs users notifications' do
@@ -632,6 +622,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 1
   end
 
+  test 'search results can filter by draft' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+    notification2 = create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:subject, notifications: [notification1], author: 'andrew', draft: false)
+    create(:subject, notifications: [notification2], author: 'benjam', draft: true)
+    get '/?q=draft%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+  end
+
   test 'search results can filter by multiple authors' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, subject_type: 'Issue')
@@ -860,11 +860,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'shows saved searches in sidebar' do
     sign_in_as(@user)
-    create(:pinned_search, user: @user)
     get '/'
     assert_response :success
     assert_template 'notifications/index'
-    assert_select '.pinned_search', {count: 1}
+    assert_select '.pinned_search', {count: 3}
   end
 
   test 'highlights active saved searches in sidebar' do
@@ -950,5 +949,99 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     get '/?q=status%3Apending'
     assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'search results can filter by only bot' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    notification3 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], author: 'dependabot[bot]')
+    create(:subject, notifications: [notification2], author: 'py-bot')
+    create(:subject, notifications: [notification3], author: 'andrew')
+
+    get '/?q=bot%3Atrue'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'highlights vulnerability alerts in the sidebar if there are unread notifications' do
+    sign_in_as(@user)
+    create(:notification, user: @user, subject_type: 'RepositoryVulnerabilityAlert', unread: true)
+    get '/'
+    assert_response :success
+    assert_select '.type-RepositoryVulnerabilityAlert', {count: 1}
+  end
+
+  test 'search results can exclude bots' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+    notification3 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], author: 'dependabot[bot]')
+    create(:subject, notifications: [notification2], author: 'py-bot')
+    create(:subject, notifications: [notification3], author: 'andrew')
+
+    get '/?q=bot%3Afalse'
+    assert_equal assigns(:notifications).length, 1
+  end
+
+  test 'renders a notification page' do
+    skip("This test fails intermittenly")
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
+
+    get notification_path(notification1)
+
+    assert_response :success
+    assert_template 'notifications/_thread'
+  end
+
+  test 'renders a notification page without comments' do
+    skip("This test fails intermittenly")
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    create(:subject, notifications: [notification1], comment_count: nil)
+    get notification_path(notification1)
+
+    assert_response :success
+    assert_template 'notifications/_thread'
+  end
+
+  test 'thread shows five commments' do
+    skip("This test fails intermittenly")
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, notifications: [notification], comment_count: 10)
+    10.times.each { create(:comment, subject: subject)}
+    get notification_path(notification)
+    assert_equal assigns(:comments).length, 5
+  end
+
+  test 'thread shows expanded comments' do
+    skip("This test fails intermittenly")
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, notifications: [notification], comment_count: 10)
+    10.times.each { create(:comment, subject: subject) }
+
+    get expand_comments_notification_path(notification)
+    assert_response :success
+    assert_template 'notifications/_thread'
+    assert_equal assigns(:comments).length, 10
+  end
+
+  test 'creates a new comment when a comment is posted' do
+    stub_fetch_subject_enabled
+    sign_in_as(@user)
+    subject = create(:subject)
+    notification = create(:notification, user: @user, subject: subject)
+
+    stub_request(:post, "#{subject.url}/comments").
+      to_return({ status: 200, body: file_fixture('new_comment.json'), headers: {'Content-Type' => 'application/json'}})
+    post comment_notification_path(notification), params: { id: notification.id, comment:{body: "blah"}}
+
+    assert_redirected_to notification_path(notification)
+    assert_equal notification.subject.comments.count, 1
   end
 end

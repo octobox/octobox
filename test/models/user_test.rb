@@ -142,4 +142,99 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'user cannot comment on an open source repo without repo scope' do
+    stub_env_var('FETCH_SUBJECT', 'false')
+    repository = create(:repository, private: false)
+    subject = create(:subject, repository: repository)
+    refute @user.can_comment?(subject)
+  end
+
+  test 'user can comment on an open source repo with repo scope' do
+    stub_env_var('FETCH_SUBJECT', 'true')
+    repository = create(:repository, private: false)
+    subject = create(:subject, repository: repository)
+    
+    assert @user.can_comment?(subject)
+  end
+
+  test 'user cannot comment on a private subject' do
+    stub_env_var('FETCH_SUBJECT', 'false')
+    repository = create(:repository, private: true)
+    subject = create(:subject, repository: repository)
+
+    refute @user.can_comment?(subject)
+  end
+
+  test 'user cannot comment on a private subject without write permissions' do
+    stub_env_var('FETCH_SUBJECT', 'false')
+    repository = create(:repository, private: true)
+    create(:app_installation, repositories: [repository], permission_issues: 'read')
+    subject = create(:subject, repository: repository)
+
+    refute @user.can_comment?(subject)
+  end
+
+  test 'user can comment on a private subject with an app installation' do
+    @user = create(:user, app_token: SecureRandom.hex(20))
+    repository = create(:repository, private: true)
+    create(:app_installation, repositories: [repository], permission_issues: 'write')
+    subject = create(:subject, repository: repository)
+
+    assert @user.can_comment?(subject)
+  end
+
+  test 'user cannot comment on a private subject without an app installation token' do
+    stub_env_var('FETCH_SUBJECT', 'false')
+    
+    repository = create(:repository, private: true)
+    create(:app_installation, repositories: [repository], permission_issues: 'write')
+    subject = create(:subject, repository: repository)
+
+    refute @user.can_comment?(subject)
+  end
+
+  test 'user can comment on a subject with a personal token' do
+    stub_personal_access_tokens_enabled
+    stub_user_request(user: build(:token_user))
+
+    @token_user = create(:token_user)
+
+    repository = create(:repository, private: true)
+    create(:app_installation, repositories: [repository])
+    subject = create(:subject, repository: repository)
+
+    assert @token_user.can_comment?(subject)
+  end
+
+  test 'user can comment if running under repo scope' do
+    stub_env_var('FETCH_SUBJECT', 'true')
+    repository = create(:repository, private: true)
+    subject = create(:subject, repository: repository)
+
+    assert @user.can_comment?(subject)
+  end
+
+  test 'comments are created using github tokens on public repositories' do
+    user = create(:user)
+
+    repository = create(:repository, private: false)
+    subject = create(:subject, repository: repository)
+    comment = create(:comment, subject: subject)
+
+    assert_equal user.comment_client(comment).class, Octokit::Client
+    assert_equal user.comment_client(comment).access_token, user.access_token
+  end
+
+  test 'comments are created using github app tokens on private repositories' do
+    @app_user = create(:app_user)
+
+    repository = create(:repository, private: true)
+    create(:app_installation, repositories: [repository], permission_issues: 'write')
+    subject = create(:subject, repository: repository)
+    comment = create(:comment, subject: subject)
+
+    assert_equal @app_user.comment_client(comment).class, Octokit::Client
+    assert_equal @app_user.comment_client(comment).access_token, @app_user.app_token
+  end
+
 end

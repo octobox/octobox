@@ -1,4 +1,4 @@
-<tr id='notification-<%= notification.id %>' class='notification <%= notification.unread ? 'active' : '' %>'>
+<tr id='notification-<%= notification.id %>' class='notification <%= notification.unread ? 'active' : '' %> <%= notification.display? ? '' : 'notification-disabled' %>'>
   <td class='notification-checkbox align-middle'>
     <div class="custom-control custom-checkbox">
       <%= check_box_tag(
@@ -23,65 +23,95 @@
     <% end %>
   </td>
 
-  <td class='notification-icon align-middle <%= notification_icon_color(notification.state) if notification.display_subject? %>'>
-    <% if Octobox.github_app? && notification.subjectable? %>
-      <% if notification.repository.try(:github_app_installed?) && !notification.user.github_app_authorized? %>
-        <a tabindex="0" class="" role="button" data-toggle="popover" title="Login to the GitHub App" data-content="<%= render 'notifications/login_prompt' %>">
-          <%= octicon notification_icon(notification), :height => 16 %>
-        </a>
-      <% elsif !notification.repository.try(:github_app_installed?) %>
-        <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification.subject_type, notification.state) %>" data-content="<%= render 'notifications/app_prompt', notification: notification %>">
-          <%= octicon notification_icon(notification), :height => 16 %>
-        </a>
-      <% elsif Octobox.octobox_io? && notification.upgrade_required? %>
-        <a tabindex="0" class="" role="button" data-toggle="popover" title="Subscribe Now" data-content="<%= render 'notifications/private_repos' %>">
-          <%= octicon notification_icon(notification), :height => 16 %>
-        </a>
-      <% else %>
-        <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
-      <% end %>
-    <% else %>
-      <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification.subject_type, notification.state), data: {toggle: 'tooltip'} %>
-    <% end %>
-  </td>
-  <td class='notification-subject'>
-    <%= link_to notification_link(notification), target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: "link #{'thread-link' if notification.display_thread?}", onclick: "Octobox.markRead(#{notification.id})", data:{toggle:(notification.display_thread? ? 'showthread' : nil)}, title: notification.title do %>
-        <%= subject_with_number(notification) %>
-        <%= octicon('link-external', class:'text-primary') unless notification.display_thread? %>
-    <% end %>
-
-    <% if notification.display_subject? %>
-      <% if notification.subject %>
-        <% notification.subject.labels.each do |label| %>
-          <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge d-sm", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+  <% if notification.display? %>
+    <td class='notification-icon align-middle <%= notification_icon_color(notification) %>'>
+      <% if Octobox.github_app? && notification.subjectable? %>
+        <% if notification.repository.try(:github_app_installed?) && !notification.user.try(:github_app_authorized?) %>
+          <a tabindex="0" class="" role="button" data-toggle="popover" title="Login to the GitHub App" data-content="<%= render 'notifications/login_prompt' %>">
+            <%= octicon notification_icon(notification), :height => 16 %>
+          </a>
+        <% elsif !notification.repository.try(:github_app_installed?) %>
+          <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification) %>" data-content="<%= render 'notifications/app_prompt', notification: notification %>">
+            <%= octicon notification_icon(notification), :height => 16 %>
+          </a>
+        <% elsif Octobox.io? && notification.upgrade_required? %>
+          <a tabindex="0" class="" role="button" data-toggle="popover" title="Subscribe Now" data-content="<%= render 'notifications/private_repos' %>">
+            <%= octicon notification_icon(notification), :height => 16 %>
+          </a>
+        <% else %>
+          <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
         <% end %>
-        <%= notification_status(notification.subject.status) %>
+      <% else %>
+        <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
       <% end %>
-    <% end %>
-  </td>
+    </td>
+    <td class='notification-subject'>
+      <%= link_to notification_link(notification), target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: "link #{'thread-link' if notification.display_thread?}", onclick: "Octobox.markRead(#{notification.id})", data:{toggle:(notification.display_thread? ? 'showthread' : nil)}, title: notification.title do %>
+          <%= subject_with_number(notification) %>
+          <%= octicon('link-external', class:'text-primary') unless notification.display_thread? %>
+      <% end %>
 
-  <td class='notification-repo'>
-    <% unless params[:repo].present? %>
-      <small>
-        <%= link_to notification.repository_full_name, root_path(filtered_params(repo: notification.repository_full_name)), class: 'text-muted' %>
-      </small>
-    <% end %>
-  </td>
+      <% if notification.display_subject? %>
+        <% if notification.subject %>
+          <% notification.subject.labels.each do |label| %>
+            <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge d-sm", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
+          <% end %>
+          <%= notification_status(notification.subject.status) %>
+        <% end %>
+      <% end %>
+    </td>
 
-  <td class='notification-subject-author'>
-    <% if notification.display_subject? %>
-      <% if notification.subject && notification.subject.author %>
+    <td class='notification-repo'>
+      <% unless params[:repo].present? %>
         <small>
-          <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', title: 'Author', data: {toggle: 'tooltip'} %>
+          <%= link_to notification.repository_full_name, root_path(filtered_params(repo: notification.repository_full_name)), class: 'text-muted' %>
         </small>
       <% end %>
-    <% end %>
-  </td>
+    </td>
 
-  <td class='notification-reason'>
-    <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "badge badge-#{reason_label(notification.reason)}" %>
-  </td>
+    <td class='notification-subject-author'>
+      <% if notification.display_subject? %>
+        <% if notification.subject && notification.subject.author %>
+          <small>
+            <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', title: 'Author', data: {toggle: 'tooltip'} %>
+          </small>
+        <% end %>
+      <% end %>
+    </td>
+
+    <td class='notification-reason'>
+      <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "badge badge-#{reason_label(notification.reason)}" %>
+    </td>
+  <% else %>
+
+    <td class='notification-icon align-middle'>
+      <%= octicon('lock', height: 16) %>
+    </td>
+    <td class='notification-subject'>
+      Private notification on <strong><%= notification.repository_full_name %></strong>,
+      <%= link_to 'upgrade', pricing_path %> to unlock.
+    </td>
+
+    <td class='notification-repo'>
+      <% unless params[:repo].present? %>
+        <small>
+          <%= link_to notification.repository_full_name, root_path(filtered_params(repo: notification.repository_full_name)), class: 'text-muted' %>
+        </small>
+      <% end %>
+    </td>
+
+    <td class='notification-subject-author'></td>
+    <td class='notification-reason'></td>
+  <% end %>
+
   <td class='notification-date'>
+    <% if notification.display_subject? && notification.subject %>
+      <span class='badge badge-light n notification-comment-count mr-2'>
+        <%= octicon 'comment', height: 10%>
+        <%= notification.subject.comment_count %>
+      </span>
+    <% end %>
+
     <small class='text-muted'>
       <%= local_relative_time(notification.updated_at, type: 'time-or-date') %>
     </small>

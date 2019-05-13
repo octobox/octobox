@@ -118,22 +118,24 @@
         </div>
       </div>
 
-      <div class="w-100 mb-3 card">
-        <div class='ribbon info'>
-          <span>Beta</span>
-        </div>
-        <h5 class="card-header">
-          Open notifications
-        </h5>
-        <div class="card-body">
-          <div class="form-group">
-            <%= f.select :display_comments, [['On GitHub', 'false'], ['On Octobox', 'true']], {}, class: 'form-control' %>
+      <% if Octobox.config.subjects_enabled? && Octobox.config.include_comments %>
+        <div class="w-100 mb-3 card">
+          <div class='ribbon info'>
+            <span>Beta</span>
           </div>
+          <h5 class="card-header">
+            Open notifications
+          </h5>
+          <div class="card-body">
+            <div class="form-group">
+              <%= f.select :display_comments, [['On GitHub', 'false'], ['On Octobox', 'true']], {}, class: 'form-control' %>
+            </div>
 
-          <%= submit_tag 'Save', class: 'btn btn-primary' %>
-          <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+            <%= submit_tag 'Save', class: 'btn btn-primary' %>
+            <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
   <% end %>
 
@@ -195,7 +197,7 @@
               <tr>
                 <th class='border-top-0'>Account</th>
                 <th class='border-top-0'>Repos</th>
-                <% if Octobox.octobox_io? %>
+                <% if Octobox.io? %>
                   <th class='border-top-0' colspan='2'>Billing</th>
                 <% end %>
                 <th class='border-top-0'>Settings</th>
@@ -212,7 +214,7 @@
                   <td class="align-middle">
                     <%= pluralize app_installation.repositories.github_app_installed.count, 'repo' %>
                   </td >
-                  <% if Octobox.octobox_io? %>
+                  <% if Octobox.io? %>
                     <td class="align-middle">
                       <% if app_installation.subscription_purchase %>
                         <% if app_installation.subscription_purchase.active? %>
@@ -228,7 +230,7 @@
 
                           <% if app_installation.subscription_purchase.on_free_trial? %>
                             <i class='text-muted'>
-                              (Free Trail ends in <%= distance_of_time_in_words_to_now app_installation.subscription_purchase.free_trial_ends_on %>)
+                              (Free Trial ends in <%= distance_of_time_in_words_to_now app_installation.subscription_purchase.free_trial_ends_on %>)
                             </i>
                           <% end %>
                         <% else %>

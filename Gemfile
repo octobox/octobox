@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
-ruby '2.5.3'
+ruby '2.6.3'
 
 gem 'rails', '~> 5.2'
 gem 'bootstrap'
 gem 'attr_encrypted'
 gem 'jquery-rails'
-gem 'kaminari'
+gem 'pagy'
 gem 'local_time'
 gem 'octicons_helper'
 gem 'octokit'
@@ -18,12 +18,12 @@ gem 'faraday_middleware'
 gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
-gem 'rake'
+gem 'rake', require: false
 gem 'git'
 gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
-gem 'sidekiq-scheduler'
+gem 'sidekiq-scheduler', require: false
 gem 'rack-canonical-host'
 gem 'sidekiq-status'
 gem 'gemoji', require: false
@@ -31,14 +31,12 @@ gem 'bootsnap', require: false
 gem 'bugsnag'
 gem 'jwt'
 gem 'oj'
-gem 'yard'
-gem 'simple_form'
-gem 'github-markup', require: 'github/markup'
-gem 'kramdown'
+gem 'yard', require: false
+gem 'commonmarker'
 
 # Supported databases
 gem 'mysql2', require: false
-gem 'pg', '1.1.3', require: false
+gem 'pg', '1.1.4', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -48,6 +46,8 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
   gem 'active_record_query_trace'
+  gem 'rubocop', require: false
+  gem 'rubocop-performance'
 end
 
 group :test do
@@ -58,13 +58,13 @@ group :test do
   gem 'minitest'
   gem 'selenium-webdriver'
   gem 'capybara'
-  gem 'percy-capybara'
+  gem 'action-cable-testing'
+  gem 'timecop'
 end
 
 group :development do
   gem 'web-console'
   gem 'listen'
-  gem 'rubocop', require: false
   gem 'spring'
   gem 'spring-watcher-listen'
   gem 'brakeman'
@@ -74,7 +74,8 @@ group :development do
 end
 
 group :production do
-  gem 'skylight'
+  gem 'skylight', '4.0.1'
   gem 'lograge'
   gem 'puma_worker_killer'
+  gem 'hirefire-resource'
 end

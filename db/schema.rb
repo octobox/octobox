@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_20_094340) do
+ActiveRecord::Schema.define(version: 2019_04_06_173231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -123,6 +123,8 @@ ActiveRecord::Schema.define(version: 2018_11_20_094340) do
     t.string "status"
     t.text "body"
     t.integer "comment_count"
+    t.boolean "draft", default: false
+    t.index ["repository_full_name"], name: "index_subjects_on_repository_full_name"
     t.index ["url"], name: "index_subjects_on_url"
   end
 
@@ -137,6 +139,7 @@ ActiveRecord::Schema.define(version: 2018_11_20_094340) do
     t.string "unit_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "number"
   end
 
   create_table "subscription_purchases", force: :cascade do |t|
@@ -149,6 +152,7 @@ ActiveRecord::Schema.define(version: 2018_11_20_094340) do
     t.datetime "next_billing_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "oc_transactionid"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|

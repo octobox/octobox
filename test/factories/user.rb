@@ -12,6 +12,12 @@ FactoryBot.define do
       github_id { 8278492 }
     end
 
+    factory :app_user do
+      github_login { 'appuser' }
+      github_id { 8278492 }
+      app_token { 'livepork' }
+    end
+
     factory :morty do
       github_id { 947167 }
       github_login { "morty" }

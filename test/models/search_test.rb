@@ -45,4 +45,9 @@ class SearchTest < ActiveSupport::TestCase
     search = Search.new(query: 'inbox:true', scope: Notification.all, params: {label: 'LabelName'})
     assert_equal search.to_query, 'inbox:true label:LabelName'
   end
+
+  test 'converts draft param to draft prefix without changing it' do
+    search = Search.new(query: 'inbox:true', scope: Notification.all, params: {draft: 'true'})
+    assert_equal search.to_query, 'inbox:true draft:true'
+  end
 end

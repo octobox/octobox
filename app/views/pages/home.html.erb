@@ -1,16 +1,22 @@
 <div class='not-a-nav sticky-top'>
+  <%= link_to documentation_path, class: 'btn btn-dark m-3 float-left' do %>
+    <span class='mr-1'>More Info</span>
+    <%= octicon 'question', height: 22 %>
+  <% end %>
   <%= link_to login_path, class: 'btn btn-dark m-3 float-right' do %>
     <span class='mr-1'>Sign in</span>
     <%= octicon 'mark-github', height: 22 %>
   <% end %>
 </div>
-
 <div class='container readable'>
   <h1 class="text-center"><%= octobox_round(80) %> <span class='align-middle'>Octobox</span></h1>
-  <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3> 
-  <h5 class='text-center font-weight-light'>
-      <%= number_to_human Notification.count %> notifications managed, and counting &#8230
-  </h5>
+  <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3>
+  <% if Octobox.io? %>
+    <h5 class='text-center font-weight-light'>
+        <%= number_to_human Notification.fast_total, precision: 2 %> notifications managed, and counting &#8230
+    </h5>
+  <% end %>
+
   <div class='text-center'>
     <%= image_tag 'screenshot.png', class: 'screenshot mt-3', alt: 'Octobox Screenshot' %>
   </div>
@@ -63,12 +69,12 @@
   <% if Octobox.github_app? %>
     <h3 id='install-the-app' class='pt-5'>Liven up notifications with the GitHub app</h3>
     <p class='text-large'>By default Octobox will pull basic public and private notification information:</p>
-    
+
     <%= image_tag 'notification-basic.png', class: 'screenshot shadow-sm mb-4', alt: 'Basic notification' %>
-    
-    <p class='text-large'>Install the GitHub app to add live information on issue, PR, and CI status, labels, authors and 
+
+    <p class='text-large'>Install the GitHub app to add live information on issue, PR, and CI status, labels, authors and
     more to your organisation's notifications:</p>
-    
+
     <%= image_tag 'notification-enhanced.png', class: 'screenshot shadow-sm mb-4', alt: 'Enhanced notification' %>
 
     <div class='text-center'>
@@ -79,7 +85,7 @@
     </div>
   <% end %>
 
-  <% if Octobox.octobox_io? %>
+  <% if Octobox.io? %>
     <h3 id='pricing' class='pt-5'>Pricing</h3>
     <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects with basic notifications for private projects. To add <a href='#enhanced-notifications'>enhanced notifications</a> for private repositories to your organisation's account:</p>
     <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>
@@ -113,6 +119,10 @@
   <p class='text-large'>You can also help triage issues. This can include reproducing bug reports, or asking for vital information such as version numbers or reproduction instructions. If you would like to start triaging issues, one easy way to get started is to <a href="https://www.codetriage.com/octobox/octobox">subscribe to Octobox on CodeTriage</a>.</p>
 
   <p class='text-large mb-5'>Finally, if you would like to become a maintainer, we will consider adding you if you contribute frequently to the project. Feel free to ask.</p>
+
+  <h3 id='contribute' class='pt-5'>More Info</h3>
+
+  <p class='text-large'>More information is in our <%= link_to 'documentation', documentation_path %>.</p>
 
   <%= render 'layouts/footer'%>
 </div>

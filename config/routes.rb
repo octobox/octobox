@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       post :sync
       get  :sync
       get  :syncing
+      post :syncing
       post :mute_selected
       post :mark_read_selected
       get  :unread_count
@@ -49,7 +50,8 @@ Rails.application.routes.draw do
     member do
       get  :show
       post :star
-      post :mark_read
+      get  :expand_comments
+      post :comment 
     end
   end
 
@@ -58,11 +60,11 @@ Rails.application.routes.draw do
 
   post '/hooks/github', to: 'hooks#create'
 
-  if Octobox.octobox_io?
-    get '/pricing', to: 'pages#pricing'
-    get '/privacy', to: 'pages#privacy'
-    get '/terms', to: 'pages#terms'
-  end
+  # Octobox.io specific routes
+  get '/opencollective', to: 'open_collective#callback'
+  get '/pricing', to: 'pages#pricing'
+  get '/privacy', to: 'pages#privacy'
+  get '/terms', to: 'pages#terms'
 
   resources :pinned_searches
 

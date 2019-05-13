@@ -37,7 +37,12 @@
   <div class="user-info collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item nav-link d-none d-md-block">
-        <% if Octobox.octobox_io? && !current_user.github_app_authorized? %>
+        <% if Octobox.io? && current_user.notifications.inbox.is_private.any? %>
+          <a href="https://medium.com/octobox/walking-the-tightrope-charging-for-private-repos-on-octobox-io-6efe79662479" class='btn btn-sm btn-outline-light'>
+            <%= octicon 'info', height: 16, class: 'mr-1' %>
+            Private Notification Changes
+          </a>
+        <% elsif Octobox.io? && !current_user.github_app_authorized? %>
           <a href="<%= Octobox.config.app_url %>" class='btn btn-sm btn-outline-light'>
             <%= octicon 'briefcase', height: 16, class: 'mr-1' %>
             Install the GitHub App

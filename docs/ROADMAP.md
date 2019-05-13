@@ -36,14 +36,14 @@ Example actions:
 Let's make Octobox more friendly for people whose primary language isn't English, allowing them to switch interface text to the language of their preference.
 
 
-## Import/manage issues and pull requests from all repositories managed [#883](https://github.com/octobox/octobox/issues/883)
+## Import issues and pull requests from all repositories managed [#883](https://github.com/octobox/octobox/issues/883)
 
 Currently Octobox only imports issues and pull requests for you that have generated notifications, this often misses critical items that you manage as part of your work flow, especially when you first start using Octobox.
 
 This is a move to make it possible to use the power of Octobox as a more general purpose Issue and Pull Request management tool.
 
 
-## Thread view [#709](https://github.com/octobox/octobox/pull/709)
+## ~Thread view [#709](https://github.com/octobox/octobox/pull/709)~
 
 See the comment thread right from within the Octobox interface, either in a three column layout or a separate page depending on screen size.
 
@@ -52,7 +52,6 @@ See the comment thread right from within the Octobox interface, either in a thre
 - Show everyone who’s involved in a notification thread
 - Show new comments since last viewed
 
+## Private discussions
 
-## Team discussions [#660](https://github.com/octobox/octobox/issues/660)
-
-Team discussions aren't currently available via the Notifications API, it's unclear if/when they will be available but they do have their own API that we can use to add notifications for team discussions to Octobox.
+GitHub used to have this years and years ago. The additonal context and social engagement is often useful for projects of globally distributed, disparate contributors. This might be implemented alongside 'reply on GitHub' functions as part of the above.

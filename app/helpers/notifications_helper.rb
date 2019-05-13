@@ -41,23 +41,23 @@ module NotificationsHelper
 
   def filters
     {
-      reason:     params[:reason],
-      unread:     params[:unread],
-      repo:       params[:repo],
-      type:       params[:type],
-      archive:    params[:archive],
-      starred:    params[:starred],
-      owner:      params[:owner],
-      per_page:   params[:per_page],
-      q:          params[:q],
-      state:      params[:state],
-      label:      params[:label],
-      author:     params[:author],
-      bot:        params[:bot],
-      unlabelled: params[:unlabelled],
-      assigned:   params[:assigned],
-      is_private: params[:is_private],
-      status:     params[:status]
+      reason:          params[:reason],
+      unread:          params[:unread],
+      repo:            params[:repo],
+      type:            params[:type],
+      archive:         params[:archive],
+      starred:         params[:starred],
+      owner:           params[:owner],
+      per_page:        params[:per_page],
+      q:               params[:q],
+      state:           params[:state],
+      label:           params[:label],
+      author:          params[:author],
+      bot:             params[:bot],
+      unlabelled:      params[:unlabelled],
+      assigned:        params[:assigned],
+      is_private:      params[:is_private],
+      status:          params[:status],
     }
   end
 
@@ -148,7 +148,7 @@ module NotificationsHelper
 
   def function_button(title, octicon, css_class, tooltip, hidden=true)
     button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark #{'hidden-button' if hidden}", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
-      octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-md-inline-block ml-1')
+      octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-xl-inline-block ml-1')
     end
   end
 
@@ -158,7 +158,7 @@ module NotificationsHelper
 
   def notification_icon(notification)
     subject_type = notification.subject_type
-    state = notification.user.github_app_authorized? ? notification.state : nil
+    state = notification.user.try(:github_app_authorized?) ? notification.state : nil
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
     subject_type_icon(subject_type)
@@ -168,17 +168,20 @@ module NotificationsHelper
     SUBJECT_TYPES[subject_type]
   end
 
-  def notification_icon_title(subject_type, state = nil)
-    return subject_type.underscore.humanize if state.blank?
-    "#{state.underscore.humanize} #{subject_type.underscore.humanize.downcase}"
+  def notification_icon_title(notification)
+    return "Draft #{notification.subject_type.underscore.humanize.downcase}" if notification.draft?
+    return notification.subject_type.underscore.humanize if notification.state.blank?
+    "#{notification.state.underscore.humanize} #{notification.subject_type.underscore.humanize.downcase}"
   end
 
-  def notification_icon_color(state)
+  def notification_icon_color(notification)
+    return unless notification.display_subject?
+    return 'text-draft' if notification.draft?
     {
       'open' => 'text-success',
       'closed' => 'text-danger',
       'merged' => 'text-subscribed'
-    }[state]
+    }[notification.state]
   end
 
   def reason_label(reason)
@@ -232,7 +235,11 @@ module NotificationsHelper
   end
 
   def sidebar_filter_link(active:, param:, value:, count: nil, except: nil, link_class: nil, path_params: nil, title: nil)
-    content_tag :li, class: (active ? 'nav-item active' : 'nav-item'), title: title do
+    css_class = 'nav-item'
+    css_class += ' active' if active
+    css_class += " #{param}-#{value}"
+
+    content_tag :li, class: css_class, title: title do
       active = (active && not_repo_in_active_org(param))
       path_params ||= filtered_params(param => (active ? nil : value)).except(except)
       link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
@@ -295,7 +302,7 @@ module NotificationsHelper
   end
 
   def subject_with_number(notification)
-    if notification.subject_type == 'Issue' || 'PullRequest'
+    if ['Issue', 'PullRequest'].include?(notification.subject_type)
       capture do
         concat content_tag(:span, "##{notification.subject_number}", class: "notification-number")
         concat " "
@@ -307,31 +314,33 @@ module NotificationsHelper
   end
 
   def notification_button(subject_type, state = nil)
-    state = nil unless display_subject?
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
     SUBJECT_TYPES[subject_type]
   end
 
-  def notification_button_title(subject_type, state = nil)
-    return subject_type.underscore.humanize if state.blank?
-    "#{state.underscore.humanize}"
+  def notification_button_title(notification)
+    return 'Draft' if notification.draft?
+    return notification.subject_type.underscore.humanize if notification.state.blank?
+    notification.state.underscore.humanize
   end
 
-  def notification_button_color(state)
+  def notification_button_color(notification)
+    return unless notification.display_subject?
+    return 'btn-draft' if notification.draft?
     {
-      'open' => 'btn-open',
-      'closed' => 'btn-closed',
+      'open' => 'btn-success',
+      'closed' => 'btn-danger',
       'merged' => 'btn-merged'
-    }[state]
+    }[notification.state]
   end
 
   def parse_markdown(str)
     return if str.blank?
-    GitHub::Markup.render('.md', str)
+    CommonMarker.render_html(str, :GITHUB_PRE_LANG, [:tagfilter, :autolink, :table, :strikethrough])
   end
 
   def notification_link(notification)
-    notification.display_thread? ? notification_url(notification, filtered_params) : notification.web_url
+    notification.display_thread? ? notification_path(notification, filtered_params) : notification.web_url
   end
 
   def display_thread?

@@ -15,11 +15,6 @@ namespace :tasks do
     Notification.subjectable.find_each{|n| n.update_subject(true); print '.' }
   end
 
-  desc "Sync repositories"
-  task sync_repos: :environment do
-    Notification.find_each{|n| n.update_repository(true); print '.' }
-  end
-
   desc "Clean up duplicate subjects"
   task deduplicate_subjects: :environment do
     duplicate_subject_urls = Subject.select(:url).group(:url).having("count(*) > 1").pluck(:url)
@@ -50,6 +45,15 @@ namespace :tasks do
 
   desc "Sync App Installations"
   task sync_installations: :environment do
-    AppInstallation.all.find_each(&:sync)
+    AppInstallation.sync_all
+  end
+
+  desc "cleanup unique-jobs cache"
+  task cleanup_unique_jobs: :environment do
+    Sidekiq.redis do |conn|
+      conn.keys('uniquejobs:*').each do |key|
+        conn.del(key)
+      end
+    end
   end
 end

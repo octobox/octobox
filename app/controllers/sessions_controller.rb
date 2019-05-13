@@ -5,7 +5,11 @@ class SessionsController < ApplicationController
   before_action :authorize_access!, only: :create
 
   def new
-    redirect_to '/auth/github'
+    if logged_in?
+      redirect_to root_path
+    else
+      redirect_to '/auth/github'
+    end
   end
 
   def create
@@ -15,7 +19,7 @@ class SessionsController < ApplicationController
     cookies.permanent.signed[:user_id] = {value: user.id, httponly: true}
 
     user.sync_notifications unless initial_sync?
-    redirect_to root_path
+    redirect_to request.env['omniauth.origin'] || root_path
   end
 
   def destroy

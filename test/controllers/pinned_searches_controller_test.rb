@@ -4,6 +4,7 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
   setup do
     stub_fetch_subject_enabled(value: false)
     stub_notifications_request
+    stub_comments_requests
     @user = create(:user)
   end
 
@@ -20,7 +21,7 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :redirect
     assert_redirected_to '/settings'
-    assert_equal @user.pinned_searches.count, 1
+    assert_equal @user.pinned_searches.count, 4
   end
 
   test 'will render edit saved search form' do
@@ -68,7 +69,7 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
     delete "/pinned_searches/#{pinned_search.id}"
     assert_response :redirect
     assert_redirected_to '/settings'
-    assert_equal @user.pinned_searches.count, 0
+    assert_equal @user.pinned_searches.count, 3
   end
 
   test 'will only delete saved searches owned by the current user' do
@@ -80,7 +81,7 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
       assert_response :not_found
     end
 
-    assert_equal other_user.pinned_searches.count, 1
+    assert_equal other_user.pinned_searches.count, 4
   end
 
   test 'will redirect index page requests to settings' do

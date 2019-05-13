@@ -85,7 +85,7 @@ class NotificationTest < ActiveSupport::TestCase
         archived: false,
         latest_comment_url: "https://api.github.com/repos/octobox/octobox/issues/comments/123"
       }.stringify_keys)
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
     assert notification.unread?
     refute notification.archived?
     assert_equal expected_attributes, notification.attributes
@@ -113,9 +113,33 @@ class NotificationTest < ActiveSupport::TestCase
     }.stringify_keys
     api_response = notifications_from_fixture('morty_notifications.json').second
     n = user.notifications.find_or_initialize_by(github_id: api_response[:id])
-    n.update_from_api_response(api_response, unarchive: true)
+    n.update_from_api_response(api_response)
     attributes = n.attributes
     assert_equal attributes, attributes.merge(expected_attributes)
+  end
+
+  test 'update_from_api_response creates a repository' do
+    stub_fetch_subject_enabled(value: false)
+
+    user = create(:user)
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+    notification.update_from_api_response(api_response)
+    notification.reload
+    refute_nil notification.repository
+    assert_equal notification.repository.full_name, 'octobox/octobox'
+  end
+
+  test 'update_from_api_response updates an existing repository' do
+    stub_fetch_subject_enabled(value: false)
+
+    user = create(:user)
+    api_response = notifications_from_fixture('morty_notifications.json').second
+    notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
+    create(:repository, github_id: api_response[:repository][:id], full_name: 'old/name')
+    notification.update_from_api_response(api_response)
+    notification.reload
+    refute_equal notification.repository.full_name, 'old/name'
   end
 
   test 'update_from_api_response does not create a subject when fetch_subject is disabled' do
@@ -124,7 +148,7 @@ class NotificationTest < ActiveSupport::TestCase
     user = create(:user)
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     assert_nil notification.subject
   end
@@ -140,7 +164,7 @@ class NotificationTest < ActiveSupport::TestCase
     user = create(:user)
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification = user.notifications.find_or_initialize_by(github_id: api_response[:id])
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     notification.reload
 
@@ -160,7 +184,7 @@ class NotificationTest < ActiveSupport::TestCase
     create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 1.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     refute_requested :get, subject.url
   end
@@ -178,7 +202,7 @@ class NotificationTest < ActiveSupport::TestCase
     create(:morty)
     subject = create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     assert_requested :get, subject.url
   end
@@ -195,7 +219,7 @@ class NotificationTest < ActiveSupport::TestCase
     notification = create(:morty_updated)
 
     assert_difference 'Subject.count' do
-      notification.update_from_api_response(api_response, unarchive: true)
+      notification.update_from_api_response(api_response)
     end
   end
 
@@ -210,7 +234,7 @@ class NotificationTest < ActiveSupport::TestCase
     notification = create(:morty_updated)
 
     assert_no_difference 'Subject.count' do
-      notification.update_from_api_response(api_response, unarchive: true)
+      notification.update_from_api_response(api_response)
     end
   end
 
@@ -231,7 +255,7 @@ class NotificationTest < ActiveSupport::TestCase
     create(:morty)
     subject = create(:subject, state: 'open', url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
-    notification.update_from_api_response(api_response, unarchive: true)
+    notification.update_from_api_response(api_response)
 
     subject.reload
     assert_equal 'merged', subject.state
@@ -254,5 +278,117 @@ class NotificationTest < ActiveSupport::TestCase
   test 'subject_number extracts the issue number from the subject url even if the owner or repo contains a number' do
     notification = build_stubbed(:notification, subject_url: 'https://github.com/octobox42/octobox42/issues/1109')
     assert_equal notification.subject_number, "1109"
+  end
+
+  test 'github_client uses the users personal access token when it is present' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = build(:user, personal_access_token: 'FAKE_PERSONAL_ACCESS_TOKEN')
+    stub_user_request(user: user)
+
+    notification = create(:notification, user: user)
+
+    assert_equal notification.github_client.access_token, 'FAKE_PERSONAL_ACCESS_TOKEN'
+  end
+
+  test 'github_client uses the users personal access token when it is present even if the Github App is installed for the repo' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = build(:user, personal_access_token: 'FAKE_PERSONAL_ACCESS_TOKEN', app_token: 'BAD_APP_TOKEN')
+    stub_user_request(user: user)
+
+    app_installation = create(:app_installation)
+    repository = create(:repository, app_installation: app_installation)
+    notification = create(:notification, user: user, repository: repository)
+
+    assert_equal notification.github_client.access_token, 'FAKE_PERSONAL_ACCESS_TOKEN'
+  end
+
+  test 'github_client uses the users access access token' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = create(:user, access_token: 'FAKE_ACCESS_TOKEN')
+
+    notification = create(:notification, user: user)
+
+    assert_equal notification.github_client.access_token, 'FAKE_ACCESS_TOKEN'
+  end
+
+  test 'github_client uses the app token when when the Github App is installed for the repo' do
+    stub_personal_access_tokens_enabled
+    stub_fetch_subject_enabled
+
+    user = create(:user, app_token: 'FAKE_APP_TOKEN', access_token: 'BAD_ACCESS_TOKEN')
+
+    app_installation = create(:app_installation)
+    repository = create(:repository, app_installation: app_installation)
+    notification = create(:notification, user: user, repository: repository)
+
+    assert_equal notification.github_client.access_token, 'FAKE_APP_TOKEN'
+  end
+
+  test 'private? is true if repository present and private' do
+    repository = create(:repository, private: true)
+    notification = create(:notification, repository: repository)
+
+    assert notification.private?
+  end
+
+  test 'private? is false if repository missing' do
+    notification = create(:notification, repository: nil)
+
+    refute notification.private?
+  end
+
+  test 'private? is false if repository present and public' do
+    repository = create(:repository, private: false)
+    notification = create(:notification, repository: repository)
+
+    refute notification.private?
+  end
+
+  test 'display? is true for legacy notifications' do
+    notification = create(:notification, repository: nil)
+    assert notification.display?
+  end
+
+  test 'display? is true for public notifications' do
+    repository = create(:repository, private: false)
+    notification = create(:notification, repository: repository)
+
+    assert notification.display?
+  end
+
+  test 'display? is true for private notifications on a non-octobox.io install' do
+    stub_env_var('OCTOBOX_IO', 'false')
+    repository = create(:repository, private: true)
+    notification = create(:notification, repository: repository)
+
+    assert notification.display?
+  end
+
+  test 'display? is true for private notifications with a paid app installation on octobx.io' do
+    stub_env_var('OCTOBOX_IO', 'true')
+
+    repository = create(:repository, private: true)
+    notification = create(:notification, repository: repository)
+    repository.stubs(:display_subject?).returns(true)
+
+    assert notification.display?
+  end
+
+  test 'display? is true for private notifications with a paid personal plan on octobx.io' do
+    stub_env_var('OCTOBOX_IO', 'true')
+
+    repository = create(:repository, private: true)
+    repository.stubs(:display_subject?).returns(false)
+    notification = create(:notification, repository: repository)
+    user = notification.user
+    user.stubs(:has_personal_plan?).returns(true)
+
+    assert notification.display?
   end
 end

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class NotificationsController < ApplicationController
+
   skip_before_action :authenticate_user!
   before_action :authenticate_web_or_api!
-  before_action :find_notification, only: [:star, :mark_read]
+  before_action :find_notification, only: [:star]
 
   # Return a listing of notifications, including a summary of unread repos, notification reasons, and notification types
   #
@@ -70,67 +71,72 @@ class NotificationsController < ApplicationController
   #   }
   #
   def index
-    scope = notifications_for_presentation.newest
-    @types                 = scope.reorder(nil).distinct.group(:subject_type).count
-    @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
-    @reasons               = scope.reorder(nil).distinct.group(:reason).count
-    @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
-
-    if display_subject?
-      @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
-      @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
-      @unlabelled            = scope.reorder(nil).unlabelled.count
-      @bot_notifications     = scope.reorder(nil).bot_author.count
-      @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
-      @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
-    end
-
-    scope = current_notifications(scope)
-    check_out_of_bounds(scope)
-
-    @unread_count = user_unread_count
-    @notifications = scope.page(page).per(per_page)
-    @total = @notifications.total_count
-
-    @cur_selected = [per_page, @total].min
+    load_and_count_notifications
   end
 
   def show
     scope = notifications_for_presentation.newest
-    @types                 = scope.reorder(nil).distinct.group(:subject_type).count
-    @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
-    @reasons               = scope.reorder(nil).distinct.group(:reason).count
-    @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
-
-    if display_subject?
-      @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
-      @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
-      @unlabelled            = scope.reorder(nil).unlabelled.count
-      @bot_notifications     = scope.reorder(nil).bot_author.count
-      @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
-      @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-      @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
-    end
-
-    scope = current_notifications(scope)
-    check_out_of_bounds(scope)
-
-    @unread_count = user_unread_count
-    @notifications = scope.page(page).per(per_page)
-    @total = @notifications.total_count
-
-    @cur_selected = [per_page, @total].min
+    scope = load_and_count_notifications(scope) unless request.xhr?
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
-    @notification = scope.find(params[:id])
-    @previous = ids[position-1] unless position-1 < 0
-    @next = ids[position+1] unless position+1 > ids.length
+    @notification = current_user.notifications.find(params[:id])
+    @previous = ids[position-1] unless position.nil? || position-1 < 0
+    @next = ids[position+1] unless position.nil? || position+1 > ids.length
 
-    @comments = @notification.subject.comments.order('created_at ASC')
+    if @notification.subject && @notification.subject.commentable?
+      comments_loaded = 5
+      @comments = @notification.subject.comments.order('created_at DESC').limit(comments_loaded).reverse
+      @comments_left_to_load = @notification.subject.comment_count - comments_loaded
+      @comments_left_to_load = 0 if @comments_left_to_load < 0
+    else
+      @comments = []
+    end
 
     render partial: "notifications/thread", layout: false if request.xhr?
+  end
+
+
+  def expand_comments
+
+    scope = notifications_for_presentation.newest
+    scope = load_and_count_notifications(scope) unless request.xhr?
+
+    ids = scope.pluck(:id)
+    position = ids.index(params[:id].to_i)
+    @notification = current_user.notifications.find(params[:id])
+    @previous = ids[position-1] unless position.nil? || position-1 < 0
+    @next = ids[position+1] unless position.nil? || position+1 > ids.length
+
+    @comments_left_to_load = 0
+
+    if @notification.subject
+      @comments = @notification.subject.comments.order('created_at ASC')
+    else
+      @comments = []
+    end
+
+    if request.xhr?
+      render partial: "notifications/comments", locals:{comments: @comments}, layout: false
+    else
+      render 'notifications/show'
+    end
+  end
+
+  def comment
+    subject = current_user.notifications.find(params[:id]).subject
+
+    if current_user.can_comment?(subject)
+      subject.comment(current_user, params[:comment][:body]) if subject.commentable?
+      if request.xhr?
+        render partial: "notifications/comments", locals:{comments: subject.comments.last}, layout: false
+      else
+        redirect_back fallback_location: notification_path
+      end
+    else
+      flash[:error] = 'Could not post your comment'
+      redirect_back fallback_location: notification_path
+    end
   end
 
   # Return a count for the number of unread notifications
@@ -230,20 +236,6 @@ class NotificationsController < ApplicationController
     end
   end
 
-  # Mark a notification as read
-  #
-  # :category: Notifications Actions
-  #
-  # ==== Example
-  #
-  # <code>POST notifications/:id/mark_read.json</code>
-  #   HEAD 204
-  #
-  def mark_read
-    @notification.update_columns unread: false
-    head :ok
-  end
-
   # Star a notification
   #
   # :category: Notifications Actions
@@ -306,6 +298,32 @@ class NotificationsController < ApplicationController
 
   private
 
+  def load_and_count_notifications(scope = notifications_for_presentation.newest)
+    @types                 = scope.reorder(nil).distinct.group(:subject_type).count
+    @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
+    @reasons               = scope.reorder(nil).distinct.group(:reason).count
+    @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
+
+    @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
+    @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
+    @unlabelled            = scope.reorder(nil).unlabelled.count
+    @bot_notifications     = scope.reorder(nil).bot_author.count
+    @draft                 = scope.reorder(nil).draft.count
+    @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
+    @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
+    @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
+
+    scope = current_notifications(scope)
+    check_out_of_bounds(scope)
+
+    @unread_count = user_unread_count
+    @pagy, @notifications = pagy(scope, items: per_page, size: [1,2,2,1])
+    @total = @pagy.count
+
+    @cur_selected = [per_page, @total].min
+    return scope
+  end
+
   def user_unread_count
     current_user.notifications.inbox.distinct.group(:unread).count.fetch(true){ 0 }
   end
@@ -319,7 +337,7 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status].each do |sub_scope|
+    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status, :draft].each do |sub_scope|
       next unless params[sub_scope].present?
       # This cast is required due to a bug in type casting
       # TODO: Rails 5.2 was supposed to fix this:
@@ -334,14 +352,14 @@ class NotificationsController < ApplicationController
       scope = scope.send(sub_scope, val)
     end
     scope = scope.unlabelled if params[:unlabelled].present?
-    scope = scope.bot_author if params[:bot].present?
+    scope = scope.bot_author(params[:bot]) if params[:bot].present?
     scope = scope.label(params[:label]) if params[:label].present?
     scope = scope.assigned(params[:assigned]) if params[:assigned].present?
     scope
   end
 
   def notifications_for_presentation
-    eager_load_relation = display_subject? ? [{subject: :labels}, {repository: {app_installation: {subscription_purchase: :subscription_plan}}}] : nil
+    eager_load_relation = [{subject: :labels}, {repository: {app_installation: {subscription_purchase: :subscription_plan}}}]
     scope = current_user.notifications.includes(eager_load_relation)
 
     @search = Search.new(scope: scope, query: params[:q], params: params)

@@ -16,7 +16,7 @@ class SyncNotificationsWorkerTest < ActiveSupport::TestCase
       SyncNotificationsWorker.perform_async(@user.id)
     end
 
-    assert_requested(@stubbed_user_notification_sync)
+    assert_requested(@stubbed_user_notification_sync, times: 2)
   end
 
   test 'enqueues one job per user at a time' do

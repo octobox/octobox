@@ -1,4 +1,4 @@
-require 'rdoc/task'
+require 'yard'
 
 namespace :api_docs do
   YARD::Rake::YardocTask.new :generate do |doc|

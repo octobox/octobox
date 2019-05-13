@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
   API_HEADER = 'X-Octobox-API'
 
   protect_from_forgery with: :exception, unless: -> { octobox_api_request? }
-  helper_method :current_user, :logged_in?, :initial_sync?, :display_subject?
+  helper_method :current_user, :logged_in?, :initial_sync?
   before_action :authenticate_user!
   before_action :check_access_token_present
 
@@ -24,9 +25,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def display_subject?
-    return true if Octobox.fetch_subject?
-    Octobox.config.github_app && current_user && current_user.github_app_authorized?
+  def check_octobox_io
+    redirect_to '/422', flash: {error: 'This page is only available on https://octobox.io'} unless Octobox.io?
   end
 
   def add_user_info_to_bugsnag(notification)

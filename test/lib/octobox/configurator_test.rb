@@ -15,6 +15,26 @@ class ConfiguratorTest < ActiveSupport::TestCase
     end
   end
 
+  test "config.scopes defaults to 'notifications'" do
+    assert_equal 'notifications', Octobox.config.scopes
+  end
+
+  test "when ENV['RESTRICTED_ACCESS_ENABLED'] is true, config.scopes includes read:org" do
+    stub_env_var('RESTRICTED_ACCESS_ENABLED', 'true')
+    assert_includes Octobox.config.scopes, 'read:org'
+  end
+
+  test "when ENV['FETCH_SUBJECT'] is true, config.scopes includes repo" do
+    stub_env_var('FETCH_SUBJECT', 'true')
+    assert_includes Octobox.config.scopes, 'repo'
+  end
+
+  test "when ENV['FETCH_SUBJECT'] is true and ENV['GITHUB_APP_ID'] is present, config.scopes does not include repo" do
+    stub_env_var('FETCH_SUBJECT', 'true')
+    stub_env_var('GITHUB_APP_ID', '12345')
+    refute_includes 'repo', Octobox.config.scopes
+  end
+
   test "when ENV['FETCH_SUBJECT'] is false, config.fetch_subject is false" do
     stub_env_var('FETCH_SUBJECT', 'false')
     assert_equal false, Octobox.config.fetch_subject

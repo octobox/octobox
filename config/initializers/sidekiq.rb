@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 if Octobox.background_jobs_enabled?
-  require 'sidekiq-scheduler'
+  require 'sidekiq-scheduler' if Octobox.config.sidekiq_schedule_enabled?
   require 'sidekiq-status'
 
   Sidekiq.configure_server do |config|

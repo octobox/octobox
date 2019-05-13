@@ -2,7 +2,7 @@ class AppInstallation < ApplicationRecord
   has_many :repositories, dependent: :destroy
   has_many :app_installation_permissions, dependent: :delete_all
   has_many :users, through: :app_installation_permissions
-  has_one :subscription_purchase, foreign_key: :account_id, primary_key: :account_id
+  has_one :subscription_purchase, foreign_key: :account_id, primary_key: :account_id, dependent: :destroy
 
   validates :github_id, presence: true, uniqueness: true
   validates :account_login, presence: true
@@ -44,7 +44,7 @@ class AppInstallation < ApplicationRecord
   end
 
   def private_repositories_enabled?
-    return true unless Octobox.octobox_io?
+    return true unless Octobox.io?
     subscription_purchase.try(:private_repositories_enabled?)
   end
 
@@ -64,6 +64,14 @@ class AppInstallation < ApplicationRecord
 
   def github_client
     Octobox.installation_client(self.github_id)
+  end
+
+  def write_issues?
+    permission_issues ? permission_issues == 'write' : false
+  end
+
+  def read_issues?
+    permission_issues ? ['read','write'].include?(permission_issues) : false
   end
 
   def self.sync_all

@@ -25,10 +25,33 @@ module Octobox
         Subject.sync(remote_subject.to_h.as_json)
       end
 
+      def github_client
+        if user.personal_access_token_enabled?
+          user.personal_access_token_client
+        elsif app_installation.present?
+          user.app_installation_client
+        else
+          user.access_token_client
+        end
+      end
+
+      def download_subject?
+        @download_subject ||= subjectable? && github_client && (Octobox.fetch_subject? || github_app_installed? || download_public_subjects?)
+      end
+
+      def download_public_subjects?
+        return false if private?
+        if Octobox.config.public_subject_rollout
+          updated_at > Octobox.config.public_subject_rollout
+        else
+          return true
+        end
+      end
+
       private
 
       def download_subject
-        user.subject_client.get(subject_url)
+        github_client.get(subject_url, accept: 'application/vnd.github.shadow-cat-preview')
 
       # If permissions changed and the user hasn't accepted, we get a 401
       # We may receive a 403 Forbidden or a 403 Not Available

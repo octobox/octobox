@@ -31,6 +31,16 @@ class HooksControllerTest < ActionController::TestCase
     assert_equal AppInstallation.count, 1
   end
 
+  test 'installation new_permissions_accepted webhook payload' do
+    stub_access_tokens_request
+    app = create(:app_installation, github_id: 293804, permission_pull_requests: 'read')
+    response = { status: 200, body: file_fixture('app_installation.json'), headers: { 'Content-Type' => 'application/json' } }
+    stub_request(:get, "https://api.github.com/app/installations/293804").and_return(response)
+    send_webhook 'installation', 'installation_update'
+    app.reload
+    assert_equal app.permission_pull_requests, "write"
+  end
+
   test 'issues webhook payload' do
     send_webhook 'issues'
     assert_equal Subject.count, 1
@@ -80,11 +90,12 @@ class HooksControllerTest < ActionController::TestCase
   end
 end
 
-def send_webhook(event_type)
+def send_webhook(event_type, fixture = nil)
+  fixture = event_type if fixture.nil?
   @request.headers['X-GitHub-Event'] = event_type
   Sidekiq::Testing.inline! do
     inline_sidekiq_status do
-      post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{event_type}.json")
+      post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}.json")
     end
   end
   assert_response :success

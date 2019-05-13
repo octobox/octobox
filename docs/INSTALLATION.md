@@ -82,13 +82,16 @@ Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`. With doc
 
 ## Local installation
 
-First things first, you'll need to install Ruby 2.5.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+First things first, you'll need to fork and clone Octobox repository to
+your local machine.
+
+Secondly, you'll need to install Ruby 2.6.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.5.3
-rbenv global 2.5.3
+rbenv install 2.6.3
+rbenv global 2.6.3
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
@@ -101,7 +104,7 @@ brew install postgres
 On Debian-based Linux distributions you can use apt-get to install Postgres:
 
 ```bash
-sudo apt-get install postgresql postgresql-contrib libpq-dev
+sudo apt-get install postgresql postgresql-contrib libpq-dev rbenv
 ```
 
 Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other
@@ -125,7 +128,7 @@ Now go and register a new [GitHub OAuth Application](https://github.com/settings
 
 If you're deploying this to production, just replace `http://localhost:3000` with your applications URL.
 
-Once you've created your application you can then then add the following to your `.env`:
+Once you've created your application you can then then create a new `.env` file and then add the following to your file:
 
 ```
 GITHUB_CLIENT_ID=yourclientidhere
@@ -224,6 +227,19 @@ server {
 }
 ```
 
+If you are using [Live updates](#live-updates) then you need to configure the websocket connection as well
+
+```bash
+location /cable {
+    proxy_pass http://localhost:3000/cable;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    add_header 'Access-Control-Allow-Origin' "$http_origin";
+    add_header 'Access-Control-Allow-Credentials' 'true';
+}
+```
+
 Note that this is only an example; there are numerous ways to configure Nginx
 depending on your circumstances. For example, in a production environment
 you'll also want to configure Nginx to serve static assets and pass all other
@@ -314,7 +330,7 @@ PERSONAL_ACCESS_TOKENS_ENABLED=1
 Once that is set, users can set a personal access token on the Settings page (found on the user drop-down menu).
 
 ## Limiting Access
-You can restrict access to your Octobox instance, and only allow members or a GitHub organization or team.  To limit access set the environment variable
+You can restrict access to your Octobox instance, and only allow members of a GitHub organization or team.  To limit access set the environment variable
 `RESTRICTED_ACCESS_ENABLED=1` then set either `GITHUB_ORGANIZATION_ID=<org_id_number>` `GITHUB_TEAM_ID=<team_id_number>`.
 
 You can get an organization's id with this curl command:
@@ -370,6 +386,10 @@ To enable this feature set the following environment variable:
 
 If you want this feature to work for private repositories, you'll need to [Customize the Scopes on GitHub](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
 
+As of 4th January 2019, Octobox can sync subjects from open source repositories without requiring `repo` scope. To limit the downloading of old open source subjects, add the current date to the `PUBLIC_SUBJECT_ROLLOUT` environment variable to minimize syncing of old notifications on large installations:
+
+    PUBLIC_SUBJECT_ROLLOUT=2019-01-04 12:30:00 UTC
+
 ## API Documentation
 
 API Documentation will be generated from the application's controllers using `bin/rake api_docs:generate`.
@@ -399,7 +419,7 @@ Then create a new GitHub App, <https://github.com/settings/apps/new>, with the f
 - Webhook secret: generate a password and paste it in here and save for later
 - Permissions:
   - Repository metadata: Read-only
-  - Issues: Read-only
+  - Issues: write
   - Pull Requests: Read-only
   - Commit statuses: Read-only
 - Subscribe to events: check all available options
@@ -411,6 +431,7 @@ Then add the following ENV variables to `.env` (or `heroku config:add` if you're
 - `GITHUB_APP_CLIENT_SECRET` - From the GitHub App "OAuth credentials" section labelled `Client secret`
 - `GITHUB_APP_ID` - From the GitHub App "About" section labelled `ID`
 - `GITHUB_APP_SLUG`-  - From the GitHub App "About" section labelled `Public link`, the last section of the url, i.e https://github.com/apps/my-octobox -> `my-octobox`
+- `GITHUB_APP_JWT`- - In the GitHub App "Private keys" section, generate a private key, which will cause a `.pem` file to be downloaded to your computer. This environment variable must contain the contents of the `.pem` file with newlines preserved.
 - `GITHUB_WEBHOOK_SECRET` - The Webhook secret if you generated one earlier
 
 Then start the rails app and visit <https://github.com/apps/my-octobox/installations/new> to install it on the orgs/repos you wish, it should log you into Octobox on completion of the install.
@@ -431,4 +452,4 @@ You can set the `OPEN_IN_SAME_TAB` environment variable, which will force all no
 
 Octobox has an experimental feature where it can live-update notifications when they change using websockets. Only notifications you are currently viewing will be updated, no rows will be added or removed dynamically.
 
-To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance.
+To enable this set the environment variable `PUSH_NOTIFICATIONS` to `true` and ensure you have redis configured for your instance. Also, set `WEBSOCKET_ALLOWED_ORIGINS` to Octobox base URL, e.g. `http://localhost` (it can take multiple values, e.g. `http://localhost,https://localhost`).

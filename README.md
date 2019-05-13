@@ -4,7 +4,7 @@ Octobox helps you manage your GitHub notifications efficiently so you can spend 
 
 - **Don't lose track** - Octobox adds an extra "archived" state to each notification so you can mark it as "done". If anything happens on an archived thread, issue or PR, Octobox will move it back into your inbox.
 
-- **Starred notifications** - Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily. 
+- **Starred notifications** - Let's be honest, you probably don't have a 'favourite' issue but Octobox lets you highlight important notifications with a star so you can come back and find them easily.
 
 - **Enhanced notifications** - Like notifications, but better. With issue/pull-request status, CI status, labels and more shown alongside basic title, organisation, repo and type information.
 
@@ -19,7 +19,7 @@ Octobox helps you manage your GitHub notifications efficiently so you can spend 
 ![Screenshot of  Octobox](app/assets/images/screenshot.png)
 
 [![Build Status](https://travis-ci.org/octobox/octobox.svg?branch=master)](https://travis-ci.org/octobox/octobox)
-[![View Performance Data on Skylight](https://badges.skylight.io/status/eLvcBBdLmV6k.svg)](https://oss.skylight.io/app/applications/eLvcBBdLmV6k)
+[![View performance data on Skylight](https://badges.skylight.io/typical/eLvcBBdLmV6k.svg)](https://oss.skylight.io/app/applications/eLvcBBdLmV6k)
 [![Docker](https://img.shields.io/docker/pulls/octoboxio/octobox.svg)](https://hub.docker.com/r/octoboxio/octobox/)
 [![Gitter](https://img.shields.io/gitter/room/octobox/octobox.svg)](https://gitter.im/octobox/octobox)
 [![OpenCollective](https://opencollective.com/octobox/backers/badge.svg)](#backers)
@@ -44,7 +44,6 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 	- [Web extension](#web-extension)
 - [Requirements](#requirements)
 - [Keyboard shortcuts](#keyboard-shortcuts)
-- [Alternatives](#alternatives)
 - [Contribute](#contribute)
 	- [Vulnerability disclosure](#vulnerability-disclosure)
 	- [Note on Patches/Pull Requests](#note-on-patchespull-requests)

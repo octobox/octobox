@@ -29,6 +29,13 @@ $notification-items: (
   border-top: none;
 }
 
+.notification-disabled{
+  opacity: 0.3;
+  &:hover{
+    opacity: 0.8;
+  }
+}
+
 .toggle-star {
   cursor: pointer;
 }
@@ -106,7 +113,6 @@ $notification-items: (
   }
   .notification-checkbox {
     label {
-      top: -16px;
       left: 5px;
     }
   }
@@ -128,12 +134,16 @@ $notification-items: (
         }
       }
     }
-    &:hover, &:focus{
-      .notification-date small{
-        display: none;
-      }
-      .buttons{
-        display: inline;
+    @media (hover: hover) {
+      &:hover, &:focus{
+        .notification-date{
+          small, .badge {
+            display: none;
+          }
+        }
+        .buttons{
+          display: inline;
+        }
       }
     }
   }
@@ -175,9 +185,13 @@ $notification-items: (
       .buttons{
         display: none;
       }
-      &:hover, &:focus{
-        .notification-date small{
-          display: inline;
+      @media (hover: hover) {
+        &:hover, &:focus{
+          .notification-date{
+            small, .badge{
+              display: inline;
+            }
+          }
         }
       }
     }
@@ -210,7 +224,7 @@ $notification-items: (
     .notification-subject-author,
     .notification-reason{
       display: block;
-      width: calc(100% - 6rem);
+      width: calc(100% - 8rem);
       position: relative;
       left: 40px
     }
@@ -235,12 +249,9 @@ $notification-items: (
   }
 }
 
-@include media-breakpoint-up(xxxl){
-  @include regular-table;
-}
+@include regular-table;
 
 @include media-breakpoint-down(xxl) {
-  @include regular-table;
   .flex-main.show-thread{
     @include remove-borders;
     @include responsive-table;

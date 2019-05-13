@@ -12,89 +12,68 @@
     <% if @previous %>
       <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "btn btn-sm previous btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
     <% else %>
-      <%= link_to octicon('chevron-left'), '#', class: "btn btn-sm previous btn-outline-light text-muted", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
+      <%= link_to octicon('chevron-left'), '#', class: "btn btn-sm previous btn-outline-secondary" %>
     <% end %>
     <% if @next %>
       <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "btn btn-sm next btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
     <% else %>
-      <%= link_to octicon('chevron-right'), '#', class: "btn btn-sm next btn-outline-light text-muted", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
+      <%= link_to octicon('chevron-right'), '#', class: "btn btn-sm next btn-outline-secondary" %>
     <% end %>
-    <button class='btn btn-sm closethread btn-outline-dark d-xxxl-none' data-toggle='tooltip' title='Close discussion'>
-      <%= octicon('x') %>
-    </button>
+    <%= link_to octicon('x'), root_path(filtered_params), class: 'btn btn-sm closethread btn-outline-dark d-xxxl-none', data:{toggle: 'tooltip'}, title: 'Close discussion' %>
   </div>
 </div>
 
-<div id='notification-thread' class="p-3" data-id='<%= @notification.id %>'>
+<div id='notification-thread' class="p-3 mb-5" data-id='<%= @notification.id %>' data-subject-id='<%= @notification.subject.id %>'>
 
-  <h2>
-    <button class='btn btn-sm <%= notification_button_color(@notification.state) if display_subject? %>'>
-      <%= octicon notification_icon(@notification), :height => 16, title: notification_icon_title(@notification.subject_type, @notification.state), data: {toggle: 'tooltip'} %>
-      <%= notification_button_title(@notification.subject_type, @notification.state) %>
-    </button>
-    <%= @notification.subject_title %> &nbsp
-    <%= link_to octicon('link-external', height: 32), @notification.web_url, target: '_blank', class: 'link' %>
-  </h2>
+  <div id='thread-subject'>
+    <%= render 'thread_subject', notification: @notification %>
+  </div>
 
-  <% if display_subject? %>
-      <% if @notification.subject %>
-        <%= notification_status(@notification.subject.status) %>
-        <%= link_to @notification.subject.author, root_path(filtered_params(author: @notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= @notification.subject_type.downcase %>
-      <% end %>
-  <% end %>
-
-  on <%= link_to @notification.repository_full_name, @notification.repo_url, class: 'text-muted', target: '_blank' %>
-
-  <%= time_ago_in_words(@notification.updated_at) %> ago.</span>
-
-  <%= link_to @notification.reason.humanize, root_path(filtered_params(reason: @notification.reason)), class: "badge badge-#{reason_label(@notification.reason)}" %>
   <% if @notification.subject %>
-    <% @notification.subject.labels.each do |label| %>
-      <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge", style: "background-color: ##{label.color}; color: #{label.text_color}" %>
-    <% end %>
+    <div class='discussion-thread'>
+      <% if @notification.subject.body %>
+        <div class="card-comment card mt-3">
+          <div class="card-header media d-flex align-items-center">
 
-    <% if @notification.subject.body %>
-      <div class="card-comment card mt-3">
-        <div class="card-header media d-flex align-items-center">
+            <%= image_tag(avatar_url(@notification.subject.author), width: 20, class: 'mr-3 align-self-center') %>
 
-          <%= image_tag(avatar_url(@notification.subject.author), width: 30, class: 'mr-3 align-self-center') %>
+            <div class='media-body text-muted'>
 
-          <div class='media-body text-muted'>
-
-            <b><%= link_to @notification.subject.author, Octobox.config.github_domain+'/'+@notification.subject.author_url_path, class: 'text-muted'%></b> commented <%= link_to time_ago_in_words(@notification.subject.created_at), @notification.web_url, class: 'text-muted', target: :blank %> ago.
+              <b><%= link_to @notification.subject.author, Octobox.config.github_domain+'/'+@notification.subject.author_url_path, class: 'text-muted'%></b> commented <span class='text-muted'><%= time_ago_in_words(@notification.subject.created_at) %></span> ago
+            </div>
+          </div>
+          <div class="card-body">
+            <article class="markdown-body">
+              <% if @notification.subject.body.present? %>
+                <%== parse_markdown(@notification.subject.body) %>
+              <% else %>
+                <p>
+                  <i>No description given.</i>
+                </p>
+              <% end %>
+            </article>
           </div>
         </div>
-        <div class="card-body">
-          <article class="markdown-body">
-            <%== parse_markdown(@notification.subject.body) %>
-          </article>
-        </div>
-      </div>
-    <% end %>
-
-    <% @comments.each_with_index do |comment, index| %>
-      <div id="<%= 'comment-'+comment.id.to_s %>" class="card-comment card mt-3 ">
-
-        <div class="card-header clickable media d-flex align-items-center text-muted" data-toggle='collapse' data-target=".comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
-
-          <%= image_tag(avatar_url(comment.author), width: 30, class: 'mr-3 align-self-center') %>
-
-          <div class='media-body'>
-            <b><%= link_to comment.author, Octobox.config.github_domain+'/'+comment.author_url_path, class: 'text-muted'%></b> commented <%= link_to time_ago_in_words(comment.created_at).to_s+' ago', comment.web_url, class: 'text-muted', target: :blank %>
-          </div>
-        </div>
-
-        <div class="<%= 'comment-'+comment.id.to_s %> card-body collapse <%= 'show' if comment.unread?(@notification) || @comments.length <= index + 1 %> ">
-          <%== parse_markdown(comment.body) %>
-        </div>
-      </div>
-    <% end %>
-
-    <% if @notification.subject.commentable? %>
-      <%= link_to @notification.subject.html_url+'#new_comment_field', target: :blank, class: 'btn btn-success mt-2 float-right' do %>
-        Reply on GitHub
-        <%= octicon('link-external', height: 18, class: 'ml-1') %>
       <% end %>
+      <% if @notification.subject.commentable? %>
+        <% if @comments_left_to_load > 0 %>
+          <div id='more-comments'>
+            <%= link_to expand_comments_notification_url, class: 'btn btn-secondary mt-3 expand_comments' do %>
+              <%= octicon('comment', height: 16, class: 'ml-1') %>
+              View <%= @comments_left_to_load %> more comments
+            <% end %>
+          </div>
+        <% end %>
+
+        <% @comments.each_with_index do |comment, index| %>
+          <%= render partial: 'comment', locals:{comment: comment, index: index} %>
+        <% end %>
+      <% end %>
+      
+    </div>
+
+    <% if current_user.can_comment?(@notification.subject)%>
+      <%= render partial: 'reply', locals: {notification: @notification} %>
     <% end %>
   <% end %>
 </div>

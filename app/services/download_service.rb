@@ -23,13 +23,8 @@ class DownloadService
 
   def download
     timestamp = Time.current
-
-    if user.last_synced_at
-      fetch_read_notifications
-      fetch_unread_notifications
-    else
-      new_user_fetch
-    end
+    fetch_new_notifications
+    fetch_all_notifications
     user.update_column(:last_synced_at, timestamp)
   end
 
@@ -45,42 +40,47 @@ class DownloadService
     client.notifications(params)
   end
 
-  def fetch_unread_notifications
+  def fetch_new_notifications
     headers = {cache_control: %w(no-store no-cache)}
     headers[:if_modified_since] = user.last_synced_at.iso8601 if user.last_synced_at.respond_to?(:iso8601)
-    notifications = fetch_notifications(params: {headers: headers})
-    process_notifications(notifications, unarchive: true)
+    notifications = fetch_notifications(params: {all: true, headers: headers})
+    process_notifications(notifications)
   end
 
-  def fetch_read_notifications
-    oldest_unread = user.notifications.unread(true).newest.select(:updated_at).last
-    if oldest_unread && oldest_unread.updated_at.respond_to?(:iso8601)
-      headers = {cache_control: %w(no-store no-cache)}
-      since = oldest_unread.updated_at - 1.second
-      notifications = fetch_notifications(params: {all: true, since: since.iso8601, headers: headers})
-      process_notifications(notifications)
-    end
+  def fetch_all_notifications
+    headers = {cache_control: %w(no-store no-cache)}
+    notifications = fetch_notifications(params: {all: true, headers: headers})
+    process_unread_state(notifications)
   end
 
-  def process_notifications(notifications, unarchive: false)
+  def process_notifications(notifications)
     return if notifications.blank?
-    eager_load_relation = Octobox.config.subjects_enabled? ? [:subject, :repository] : nil
+    eager_load_relation = Octobox.config.subjects_enabled? ? [:subject, :repository, :app_installation] : nil
     existing_notifications = user.notifications.includes(eager_load_relation).where(github_id: notifications.map(&:id))
-    notifications.reject{|n| !unarchive && n.unread }.each do |notification|
+    notifications.each do |notification|
       n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
       n = user.notifications.new(github_id: notification.id, archived: false) if n.nil?
       next unless n
       begin
-        n.update_from_api_response(notification, unarchive: unarchive)
+        n.update_from_api_response(notification)
       rescue ActiveRecord::RecordNotUnique
         nil
       end
     end
   end
 
-  def new_user_fetch
-    headers = {cache_control: %w(no-store no-cache)}
-    notifications = fetch_notifications(params: {all: true, headers: headers})
-    process_notifications(notifications, unarchive: true)
+  def process_unread_state(notifications)
+    return if notifications.blank?
+
+    existing_notifications = user.notifications.where(github_id: notifications.map(&:id)).select('id, github_id, unread')
+    notifications.each do |notification|
+      n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
+      next unless n
+      begin
+        n.update_column(:unread, notification['unread']) if n.unread != notification['unread']
+      rescue ActiveRecord::RecordNotUnique
+        nil
+      end
+    end
   end
 end

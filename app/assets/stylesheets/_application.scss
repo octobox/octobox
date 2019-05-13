@@ -20,6 +20,7 @@
 @import 'sidebar';
 @import 'notifications';
 @import 'dialogs';
+@import 'threads';
 
 .btn.disabled {
  pointer-events: all !important;
@@ -89,7 +90,6 @@
     position: relative;
   }
   label {
-    top: -14px;
     left: 10px;
   }
 }
@@ -129,6 +129,16 @@
 
 .blur-action {
   opacity: .5;
+}
+
+.collapsing {
+    -webkit-transition: all .1s ease-out;
+    -o-transition: all .1s ease-out;
+    transition: all .1s ease-out;
+}
+
+.card-header.collapsed{
+  border-bottom: 0;
 }
 
 @include media-breakpoint-down(lg){

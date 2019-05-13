@@ -21,6 +21,7 @@ class PersonalAccessTokenValidatorTest < ActiveSupport::TestCase
 
   test 'does not allow setting personal_access_token without being enabled' do
     stub_personal_access_tokens_enabled(value: false)
+    stub_user_request(user: @user, any_auth: true)
     assert_error_present(@user, PersonalAccessTokenValidator::ERRORS[:disallowed_tokens])
   end
 

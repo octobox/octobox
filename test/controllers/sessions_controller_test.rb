@@ -22,6 +22,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to '/auth/github'
   end
 
+  test 'GET #new redirects to /root if already logged in' do
+    sign_in_as(@user)
+    get '/login'
+    assert_redirected_to '/'
+  end
+
   test 'POST #create finds the GitHub user from the hash and redirects to the root_path' do
     OmniAuth.config.mock_auth[:github].uid = @user.github_id
     post '/auth/github/callback'

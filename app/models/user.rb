@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :app_installation_permissions, dependent: :delete_all
   has_many :app_installations, through: :app_installation_permissions
   has_many :pinned_searches, dependent: :delete_all
+  has_one :individual_subscription_purchase, foreign_key: :account_id, primary_key: :github_id, class_name: 'SubscriptionPurchase'
 
   ERRORS = {
     refresh_interval_size: [:refresh_interval, 'must be less than 1 day']
@@ -29,6 +30,8 @@ class User < ApplicationRecord
   scope :not_recently_synced, -> { where('last_synced_at < ?', 5.minutes.ago) }
   scope :with_access_token, -> { where.not(encrypted_access_token: nil) }
 
+  after_create :create_default_pinned_searches
+
   def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)
   end
@@ -40,6 +43,10 @@ class User < ApplicationRecord
   def refresh_interval=(val)
     val = nil if 0 == val
     super(val)
+  end
+
+  def has_personal_plan?
+    individual_subscription_purchase && individual_subscription_purchase.private_repositories_enabled?
   end
 
   # For users who had zero values set before 20170111185505_allow_null_for_last_synced_at_in_users.rb
@@ -88,18 +95,24 @@ class User < ApplicationRecord
   end
 
   def github_client
-    unless defined?(@github_client) && effective_access_token == @github_client.access_token
-      @github_client = Octokit::Client.new(access_token: effective_access_token, auto_paginate: true)
-    end
-    @github_client
+    personal_access_token_client || access_token_client
   end
 
-  def subject_client
-    Octokit::Client.new(access_token: subject_token, auto_paginate: true)
+  def personal_access_token_client
+    @personal_access_token_client ||= Octokit::Client.new(access_token: personal_access_token, auto_paginate: true) if personal_access_token_enabled?
   end
 
-  def subject_token
-    app_token || effective_access_token
+  def access_token_client
+    @access_token_client ||= Octokit::Client.new(access_token: access_token, auto_paginate: true) if access_token.present?
+  end
+
+  def comment_client(comment)
+    return app_installation_client if app_token.present? && comment.subject.repository.commentable?
+    return github_client
+  end
+
+  def app_installation_client
+    Octokit::Client.new(access_token: app_token, auto_paginate: true) if app_token.present?
   end
 
   def github_avatar_url
@@ -114,7 +127,7 @@ class User < ApplicationRecord
   end
 
   def effective_access_token
-    Octobox.personal_access_tokens_enabled? && personal_access_token.present? ? personal_access_token : access_token
+    github_client&.access_token
   end
 
   def masked_personal_access_token
@@ -122,9 +135,13 @@ class User < ApplicationRecord
     "#{'*' * 32}#{personal_access_token.slice(-8..-1)}"
   end
 
+  def personal_access_token_enabled?
+    Octobox.personal_access_tokens_enabled? && personal_access_token.present?
+  end
+
   def sync_app_installation_access
     return unless github_app_authorized?
-    remote_installs = subject_client.find_user_installations(accept: 'application/vnd.github.machine-man-preview+json')
+    remote_installs = app_installation_client.find_user_installations(accept: 'application/vnd.github.machine-man-preview+json')
     app_installations = AppInstallation.where(github_id: remote_installs[:installations].map(&:id))
     app_installations.each do |app_installation|
       app_installation_permissions.find_or_create_by(app_installation_id: app_installation.id)
@@ -132,5 +149,23 @@ class User < ApplicationRecord
     app_installation_ids = app_installations.map(&:id)
     removed_permissions = app_installation_permissions.reject{|ep| app_installation_ids.include?(ep.app_installation_id) }
     removed_permissions.each(&:destroy)
+  end
+
+  def has_app_installed?(subject)
+    subject.repository.app_installation_id && app_token
+  end
+
+  def can_comment?(subject)
+    return false unless subject.commentable?
+    return true if personal_access_token_enabled?
+    return true if Octobox.fetch_subject?
+    return true if github_app_authorized? && subject.repository.commentable?
+    return false
+  end
+
+  def create_default_pinned_searches 
+    pinned_searches.create(query: 'state:closed,merged archived:false', name: 'Archivable')
+    pinned_searches.create(query: 'type:pull_request state:open status:success archived:false', name: 'Mergeable')
+    pinned_searches.create(query: "type:pull_request author:#{github_login} inbox:true", name: 'My PRs')
   end
 end
