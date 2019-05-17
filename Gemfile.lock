@@ -114,7 +114,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.13.1)
       faraday (>= 0.7.4, < 1.0)
-    ffi (1.10.0)
+    ffi (1.11.0)
     formatador (0.2.5)
     fugit (1.2.1)
       et-orbi (~> 1.1, >= 1.1.8)
