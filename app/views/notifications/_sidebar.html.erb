@@ -30,7 +30,7 @@
 
 <% if current_user.pinned_searches.present? || any_active_filters? %>
   <ul class="nav nav-pills flex-column nav-filters">
-    <% current_user.pinned_searches.each do |pinned_search| %>
+    <% current_user.pinned_searches.sort_by(&:name).each do |pinned_search| %>
       <li role="presentation" class="nav-item pinned_search">
         <%= link_to root_path(q: pinned_search.query), { :class=>"nav-link #{'active' if search_query_matches?(@search.to_query, pinned_search.query)}", title: pinned_search.query } do %>
           <%= octicon 'search', height: 16, class: 'sidebar-icon' %>
