@@ -276,7 +276,7 @@ GEM
     request_store (1.4.1)
       rack (>= 1.4)
     rgb (0.1.0)
-    rubocop (0.69.0)
+    rubocop (0.70.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.6)
@@ -331,9 +331,9 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    skylight (4.0.1)
-      skylight-core (= 4.0.1)
-    skylight-core (4.0.1)
+    skylight (4.0.2)
+      skylight-core (= 4.0.2)
+    skylight-core (4.0.2)
       activesupport (>= 4.2.0)
     spring (2.0.2)
       activesupport (>= 4.2)
@@ -437,7 +437,7 @@ DEPENDENCIES
   sidekiq-status
   sidekiq-unique-jobs
   simplecov
-  skylight (= 4.0.1)
+  skylight (= 4.0.2)
   spring
   spring-watcher-listen
   sql_queries_count
