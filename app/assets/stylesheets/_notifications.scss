@@ -231,6 +231,7 @@ $notification-items: (
     .notification-subject {
       display: inline-block;
       .link {
+        word-break: break-all;
         overflow-wrap: break-word;
       }
       &:first-child .badge{

@@ -1,6 +1,5 @@
 module Octobox
   class OpenCollective
-    PERIOD = 1.month.ago
     INDIVIDUAL_COST_PER_PERIOD = 10
     ORGANISATION_COST_PER_PERIOD= 100
 
@@ -23,7 +22,7 @@ module Octobox
 
     def self.get_sub_names(transactions, cost)
       txs = transactions.select do |item|
-        Date.parse(item["lastTransactionAt"]) > PERIOD && item["github"].present?
+        Date.parse(item["lastTransactionAt"]) > 1.month.ago && item["github"].present?
       end
       # check for users who have made multiple donations in the last month that tipped the jar
       tx_groups = txs.group_by{|item| item["github"].presence}
@@ -44,16 +43,19 @@ module Octobox
       plan = SubscriptionPlan.find_by_name(plan_name)
       return Rails.logger.info("n\n\033[32m[#{Time.current}] ERROR -- Could not find plan named #{plan_name}\033[0m\n\n") if plan.nil?
 
-      # current_subs_purchases = plan.subscription_purchases.where(unit_count: 1) unless plan.nil?
-      #
-      # if current_subs_purchases
-      #   current_subs_purchases.each do |purchase|
-      #     unless subscriber_names.include? purchase.app_installation.account_login
-      #       purchase.update_attributes(unit_count: 0)
-      #       Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed open collective subscription purchase for #{purchase.app_installation.account_login}\033[0m\n\n")
-      #     end
-      #   end
-      # end
+      current_subs_purchases = plan.subscription_purchases.where(unit_count: 1) unless plan.nil?
+
+      if current_subs_purchases
+        current_subs_purchases.each do |purchase|
+
+          next if purchase.app_installation.nil?
+
+          unless subscriber_names.include? purchase.app_installation.account_login
+            purchase.update_attributes(unit_count: 0) unless purchase.next_billing_date.present? && purchase.next_billing_date > Time.now
+            Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed #{plan_name} for #{purchase.app_installation.account_login}\033[0m\n\n")
+          end
+        end
+      end
 
       subscriber_names.each do |subscriber|
         app_installation = AppInstallation.find_by_account_login(subscriber)
@@ -64,12 +66,13 @@ module Octobox
 
         if subscription_purchase.nil?
           app_installation.create_subscription_purchase(subscription_plan: plan, unit_count: 1)
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Added open collective subscription purchase for #{subscriber}\033[0m\n\n")
-        elsif subscription_purchase.unit_count.zero?
-          subscription_purchase.update_attributes(plan: plan, unit_count: 1)
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Restarted open collective subscription purchase for #{subscriber}\033[0m\n\n")
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Added #{plan_name} for #{subscriber}\033[0m\n\n")
+        elsif subscription_purchase.subscription_plan.name == plan_name && subscription_purchase.unit_count.zero?
+          subscription_purchase.update_attributes(unit_count: 1)
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Restarted #{plan_name} for #{subscriber}\033[0m\n\n")
         else
-          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Renewed open collective subscription purchase for #{subscriber}\033[0m\n\n")
+          subscription_purchase.update_attributes(subscription_plan: plan, unit_count: 1)
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Switched #{subscriber} to #{plan_name}\033[0m\n\n")
         end
       end
     end

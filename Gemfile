@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.6.2'
+ruby '2.6.3'
 
 gem 'rails', '~> 5.2'
 gem 'bootstrap'
@@ -47,6 +47,7 @@ group :development, :test do
   gem 'sql_queries_count'
   gem 'active_record_query_trace'
   gem 'rubocop', require: false
+  gem 'rubocop-performance'
 end
 
 group :test do
@@ -58,6 +59,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'action-cable-testing'
+  gem 'timecop'
 end
 
 group :development do
@@ -72,7 +74,7 @@ group :development do
 end
 
 group :production do
-  gem 'skylight', '4.0.0.beta2'
+  gem 'skylight', '4.0.2'
   gem 'lograge'
   gem 'puma_worker_killer'
   gem 'hirefire-resource'

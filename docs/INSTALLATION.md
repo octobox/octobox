@@ -85,13 +85,13 @@ Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
 First things first, you'll need to fork and clone Octobox repository to
 your local machine.
 
-Secondly, you'll need to install Ruby 2.6.2. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+Secondly, you'll need to install Ruby 2.6.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 2.6.2
-rbenv global 2.6.2
+rbenv install 2.6.3
+rbenv global 2.6.3
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
@@ -104,7 +104,7 @@ brew install postgres
 On Debian-based Linux distributions you can use apt-get to install Postgres:
 
 ```bash
-sudo apt-get install postgresql postgresql-contrib libpq-dev
+sudo apt-get install postgresql postgresql-contrib libpq-dev rbenv
 ```
 
 Now, let's install the gems from the `Gemfile` ("Gems" are synonymous with libraries in other

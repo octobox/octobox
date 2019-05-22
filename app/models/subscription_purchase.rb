@@ -1,6 +1,6 @@
 class SubscriptionPurchase < ApplicationRecord
   belongs_to :subscription_plan
-  belongs_to :app_installation, foreign_key: :account_id, primary_key: :account_id
+  belongs_to :app_installation, foreign_key: :account_id, primary_key: :account_id, optional: true
 
   validates :account_id, presence: true
   validates :subscription_plan_id, presence: true
