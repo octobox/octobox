@@ -51,36 +51,36 @@ class SearchParserTest < ActiveSupport::TestCase
   test 'has one operator with \'' do
     query = 'operator: \'123 is lol\''
     search = SearchParser.new query
-    assert_equal search[:operator], ['123 is lol']
+    assert_equal search[:operator], ["'123 is lol'"]
   end
 
   test 'has one operator with "' do
     query = 'operator: "123 is lol"'
     search = SearchParser.new query
-    assert_equal search[:operator], ['123 is lol']
+    assert_equal search[:operator], ['"123 is lol"']
   end
 
   test 'has multiple operators with "' do
     query = 'operator: "123 is lol" otheroperator: "12" operator: "other value"'
     search = SearchParser.new query
-    assert_equal search[:operator], ['123 is lol', 'other value']
+    assert_equal search[:operator], ['"123 is lol"', '"other value"']
   end
    #
   test 'has multiple operators with \'' do
     query = 'operator: \'123 is lol\' otheroperator: \'12\' operator: \'other value\''
     search = SearchParser.new query
-    assert_equal search[:operator], ['123 is lol', 'other value']
+    assert_equal search[:operator], ["'123 is lol'", "'other value'"]
   end
 
   test 'has multiple operators with \' and "' do
     query = 'operator: \'123 is " lol\' otheroperator: \'12\' operator: "other \' value"'
     search = SearchParser.new query
-    assert_equal search[:operator], ["123 is \" lol", "other ' value"]
+    assert_equal search[:operator], ["'123 is \" lol'", "\"other ' value\""]
   end
 
   test 'has multiple operators with \' and " return as array' do
     query = 'operator: \'123 is " lol\' otheroperator: \'12\' operator: "other \' value"'
-    values = ['123 is " lol', 'other \' value']
+    values = ['\'123 is " lol\'', '"other \' value"']
     search = SearchParser.new query
     assert_equal search[:operator], values
   end
