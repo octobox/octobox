@@ -24,7 +24,14 @@ class SearchParser
   end
 
   def [](key)
-    @operators[key.to_sym] || []
+    values = @operators[key.to_sym] || []
+    values.map do |value|
+      if ["'", '"'].include?(value[0])
+        value[1, value.length - 2]
+      else
+        value
+      end
+    end
   end
 
   def []=(key, value)
