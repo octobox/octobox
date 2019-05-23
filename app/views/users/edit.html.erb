@@ -32,7 +32,7 @@
               Search Query
             </th>
           </thead>
-          <% current_user.pinned_searches.each do |pinned_search| %>
+          <% current_user.pinned_searches.sort_by(&:name).each do |pinned_search| %>
             <tr>
               <td>
                 <%= pinned_search.name %>
