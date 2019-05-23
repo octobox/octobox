@@ -289,7 +289,7 @@ GEM
       i18n
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
-    rubyzip (1.2.2)
+    rubyzip (1.2.3)
     rufus-scheduler (3.6.0)
       fugit (~> 1.1, >= 1.1.6)
     safe_yaml (1.0.5)
