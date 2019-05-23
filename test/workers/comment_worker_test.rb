@@ -37,4 +37,12 @@ class CommentWorkerTest < ActiveSupport::TestCase
     end
   end
 
+  test 'Sets comment count to zero (not nill) when removing the first comment' do
+    stub_request(:post, "#{@comment.subject.url}/comments").
+      to_return({ status: 404})
+    assert @comment.subject.comment_count = 1
+    CommentWorker.new.perform(@comment.id, @user.id, @comment.subject.id)
+    assert @comment.subject.commentable?
+  end
+
 end

@@ -15,7 +15,6 @@ class SearchParser
     while (m = OPERATOR_EXPRESSION.match(query, offset))
       key = m[1].downcase.to_sym
       value = m[2]
-      value = value[1, value.length - 2] if ["'", '"'].include?(value[0])
       offset = m.end(2)
       @operators[key] ||= []
 
@@ -25,7 +24,14 @@ class SearchParser
   end
 
   def [](key)
-    @operators[key.to_sym] || []
+    values = @operators[key.to_sym] || []
+    values.map do |value|
+      if ["'", '"'].include?(value[0])
+        value[1, value.length - 2]
+      else
+        value
+      end
+    end
   end
 
   def []=(key, value)
