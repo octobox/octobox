@@ -74,9 +74,14 @@ class Search
       @parsed_query[filter] = Array(params[filter]).map(&:underscore)
     end
 
-    [:repo, :owner, :author, :label].each do |filter|
+    [:repo, :owner, :author].each do |filter|
       next if params[filter].blank?
       @parsed_query[filter] = Array(params[filter])
+    end
+
+    if params[:label].present?
+      label = params[:label].match?(/\:|\s/) ? "\"#{params[:label]}\"" : params[:label]
+      @parsed_query[:label] = Array(label)
     end
 
     @parsed_query[:assignee] = Array(params[:assigned]) if params[:assigned].present?
