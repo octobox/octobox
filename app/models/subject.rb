@@ -39,6 +39,12 @@ class Subject < ApplicationRecord
     push_to_channels if existing_labels != labels.to_a
   end
 
+  def update_review_requests(requested_reviewer_logins)
+    notifications.reason('review_requested').exclude_github_login(requested_reviewer_logins).update_all(
+      reason: 'team_review_requested'
+    )
+  end
+
   def sync_involved_users
     return unless Octobox.github_app?
     involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minutes, user_id) }
@@ -59,6 +65,8 @@ class Subject < ApplicationRecord
     comment_count = remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count']
     comment_count = subject.comment_count if comment_count.nil?
 
+    requested_reviewer_logins = Array(remote_subject['requested_reviewers'].try(:map) {|a| a['login'] })
+
     subject.update({
       repository_full_name: full_name,
       github_id: remote_subject['id'],
@@ -69,6 +77,7 @@ class Subject < ApplicationRecord
       updated_at: remote_subject['updated_at'] || Time.current,
       comment_count: comment_count,
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
+      requested_reviewers: ":#{requested_reviewer_logins.join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
       body: remote_subject['body'].try(:gsub, "\u0000", ''),
@@ -78,6 +87,7 @@ class Subject < ApplicationRecord
     return unless subject.persisted?
 
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
+    subject.update_review_requests(requested_reviewer_logins)
     subject.update_comments if Octobox.include_comments? && (subject.has_comments? || subject.pull_request?)
     subject.update_status
     subject.sync_involved_users if (subject.saved_changes.keys & subject.notifiable_fields).any?

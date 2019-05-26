@@ -40,6 +40,43 @@
   "assignees": [
 
   ],
+  "requested_reviewers": [
+    {
+      "login": "chrisarcand",
+      "id": 2430490,
+      "node_id": "MDQ6VXNlcjI0MzA0OTA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2430490?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chrisarcand",
+      "html_url": "https://github.com/chrisarcand",
+      "followers_url": "https://api.github.com/users/chrisarcand/followers",
+      "following_url": "https://api.github.com/users/chrisarcand/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chrisarcand/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chrisarcand/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chrisarcand/subscriptions",
+      "organizations_url": "https://api.github.com/users/chrisarcand/orgs",
+      "repos_url": "https://api.github.com/users/chrisarcand/repos",
+      "events_url": "https://api.github.com/users/chrisarcand/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chrisarcand/received_events",
+      "type": "User",
+      "site_admin": false
+    }
+  ],
+  "requested_teams": [
+    {
+      "name": "Cool Kids",
+      "id": 2471073,
+      "node_id": "MDQ6VGVhbTI0NzEwNzM=",
+      "slug": "cool-kids",
+      "description": "Where they are",
+      "privacy": "closed",
+      "url": "https://api.github.com/teams/2471073",
+      "html_url": "https://github.com/orgs/octobox/teams/cool-kids",
+      "members_url": "https://api.github.com/teams/2471073/members{/member}",
+      "repositories_url": "https://api.github.com/teams/2471073/repos",
+      "permission": "pull"
+    }
+  ],
   "milestone": null,
   "comments": 8,
   "created_at": "2016-12-19T21:30:41Z",

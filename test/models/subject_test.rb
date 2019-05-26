@@ -193,10 +193,22 @@ class SubjectTest < ActiveSupport::TestCase
     assert_equal ':andrew:', Subject.last.assignees
   end
 
-  test 'sync sets an empty assignees value when there are non present' do
+  test 'sync sets an empty assignees value when there are none present' do
     remote_subject = load_subject('subject_56.json')
     Subject.sync(remote_subject)
     assert_equal '::', Subject.last.assignees
+  end
+
+  test 'sync sets the requested reviewers' do
+    remote_subject = load_subject('subject_57.json')
+    Subject.sync(remote_subject)
+    assert_equal ':andrew:', Subject.last.requested_reviewers
+  end
+
+  test 'sync sets an empty reviewers value when there are none present' do
+    remote_subject = load_subject('subject_56.json')
+    Subject.sync(remote_subject)
+    assert_equal '::', Subject.last.requested_reviewers
   end
 
   test 'sync sets the locked value' do

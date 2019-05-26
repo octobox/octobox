@@ -29,6 +29,7 @@ module Octobox
         scope :is_private, ->(is_private = true) { joins(:repository).where('repositories.private = ?', is_private) }
         scope :unlabelled, -> { labelable.with_subject.left_outer_joins(:labels).where(labels: {id: nil})}
         scope :with_subject,-> { includes(:subject).where.not(subjects: { url: nil }) }
+        scope :github_login, ->(github_login) { joins(:user).where(users: { github_login: github_login }) }
 
         scope :repo, lambda { |repo_names|
           repo_names = [repo_names] if repo_names.is_a?(String)

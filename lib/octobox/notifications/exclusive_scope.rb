@@ -10,6 +10,7 @@ module Octobox
         scope :exclude_reason, ->(reason)       { where.not(reason: reason) }
         scope :not_locked,     -> { joins(:subject).where(subjects: { locked: false }) }
         scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }
+        scope :exclude_github_login, ->(github_login) { joins(:user).where.not(users: { github_login: github_login }) }
 
         scope :exclude_repo, lambda { |repo_names|
           repo_names = [repo_names] if repo_names.is_a?(String)
