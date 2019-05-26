@@ -124,9 +124,9 @@
 
 <% if @reasons.any? %>
   <ul class="nav nav-pills flex-column nav-filters">
-    <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
+    <% @reasons.each do |reason, count| %>
       <%= reason_filter_link reason, count do %>
-        <%= octicon 'primitive-dot', height: 24, class: "sidebar-icon text-#{reason_label(reason)}" %>
+        <%= octicon reason_octicon(reason), height: 24, class: "sidebar-icon text-#{reason_label(reason)}" %>
         <%= reason.underscore.humanize %>
       <% end %>
     <% end %>

@@ -1,4 +1,9 @@
 module NotificationsHelper
+  REASON_OCTICON = {
+    'review_requested'      => 'person',
+    'team_review_requested' => 'organization'
+  }.freeze
+
   REASON_LABELS = {
     'comment'        => 'primary',
     'author'         => 'success',
@@ -194,6 +199,10 @@ module NotificationsHelper
       'closed' => 'text-danger',
       'merged' => 'text-subscribed'
     }[notification.state]
+  end
+
+  def reason_octicon(reason)
+    REASON_OCTICON.fetch(reason, 'primitive-dot')
   end
 
   def reason_label(reason)

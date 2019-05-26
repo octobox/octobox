@@ -301,9 +301,7 @@ class NotificationsController < ApplicationController
   def load_and_count_notifications(scope = notifications_for_presentation.newest)
     @types                 = scope.reorder(nil).distinct.group(:subject_type).count
     @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
-    @reasons               = scope.reorder(nil).distinct.group(:reason).count
     @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
-
     @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
     @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
     @unlabelled            = scope.reorder(nil).unlabelled.count
@@ -312,6 +310,11 @@ class NotificationsController < ApplicationController
     @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
     @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
     @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
+
+    # We explicitly order review requests first because they are visually
+    # distinct from the other reason types in the sidebar.
+    @reasons = scope.reorder(nil).distinct.group(:reason)
+      .order("reason = 'review_requested' DESC, reason = 'team_review_requested' DESC, reason ASC").count
 
     scope = current_notifications(scope)
     check_out_of_bounds(scope)
