@@ -155,6 +155,17 @@ class Notification < ApplicationRecord
 
   def update_from_api_response(api_response)
     attrs = Notification.attributes_from_api_response(api_response)
+
+    # IF the API response reason is 'review_requested'
+    # AND the current state of the notification is 'team_review_requested' (Octobox-specific)
+    # THEN the value here will always be overwritten, normally.
+    # BUT deciding between these two reasons is based off of the state of the
+    #   subject, which needs to be updated first. In addition, the subject won't
+    #   be synced if the notification has recently been updated.
+    # THEREFORE we ignore this value, leaving the responsibility of updating this notification
+    #   with the correct reason for later.
+    attrs.delete(:reason) if attrs[:reason] == 'review_requested' && self.reason == 'team_review_requested'
+
     self.attributes = attrs
     self.archived = false if archived.nil? # fixup existing records where archived is nil
     unarchive_if_updated

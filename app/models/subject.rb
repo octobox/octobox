@@ -40,8 +40,23 @@ class Subject < ApplicationRecord
   end
 
   def update_review_requests(requested_reviewer_logins)
+    # All review request notifications for this subject NOT owned by a user
+    # explicitly present in the requested reviewers can assume the reason for
+    # the notification is a team review request.
     notifications.reason('review_requested').exclude_github_login(requested_reviewer_logins).update_all(
       reason: 'team_review_requested'
+    )
+
+    # All team review request notifications for this subject owned by a user
+    # now explicitly present in the requested reviewers can assume the reason
+    # for the notification is an explicit review request. This means the user received
+    # a team review request and *then* an explicit individual one - so we show the latter.
+    #
+    # See Notification#update_from_api_response for more info.
+    notifications.reason('team_review_requested').github_login(requested_reviewer_logins).update_all(
+      reason: 'review_requested',
+      updated_at: DateTime.now,
+      archived: false
     )
   end
 
