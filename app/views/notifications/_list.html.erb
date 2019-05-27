@@ -31,6 +31,12 @@
     <% end %>
     <%= archive_selected_button unless archive_selected? %>
     <%= unarchive_selected_button unless inbox_selected? %>
+
+    <div class="btn-group snooze_selected hidden-button">
+      <%= snooze_selected_button %>
+      <%= render 'snooze' %>
+    </div>
+
     <%= mute_selected_button %>
     <%= mark_read_selected_button %>
     <%= delete_selected_button unless inbox_selected? %>

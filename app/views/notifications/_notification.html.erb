@@ -20,6 +20,8 @@
   <td class='notification-archived align-middle'>
     <% if notification.archived? %>
       <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
+    <% elsif notification.snoozed? %>
+      <%= octicon 'clock', height: 16, data: { toggle: 'tooltip' }, title: "Snoozed for #{distance_of_time_in_words(Time.now, notification.snooze_until) }" %>
     <% end %>
   </td>
 
@@ -126,6 +128,14 @@
           <%= octicon('archive', height: 15) %>
         <% end %>
       <% end %>
+
+      <div class="btn-group align-top">
+        <a class='mr-1 mt-0' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= octicon('clock', height: 15) %>
+        </a>
+        <%= render 'notifications/snooze' %>
+      </div>
+
       <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute', 'data-confirm': "Are you sure you want to mute?") do %>
         <%= octicon('mute', height: 15) %>
       <% end %>

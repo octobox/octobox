@@ -45,13 +45,14 @@ Rails.application.routes.draw do
       post :mark_read_selected
       get  :unread_count
       post :delete_selected
+      post :snooze_selected
     end
 
     member do
       get  :show
       post :star
       get  :expand_comments
-      post :comment 
+      post :comment
     end
   end
 

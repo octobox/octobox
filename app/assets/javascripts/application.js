@@ -45,6 +45,7 @@ $(document).on('click', 'button.delete', Octobox.deleteThread);
 $(document).on('click', 'button.delete_selected', Octobox.deleteSelected);
 $(document).on('click', 'button.mark_read_selected', Octobox.markReadSelected);
 $(document).on('click', 'button.closethread', Octobox.closeThread);
+$(document).on('click', '.submit_snooze_selected', Octobox.snoozeSelected);
 
 $(document).on('click', 'tr.notification', Octobox.moveCursorToClickedRow);
 $(document).on('click', '[data-toggle="offcanvas"]', Octobox.toggleOffCanvas);

@@ -5,6 +5,10 @@
     </button>
     <%= archive_button unless archive_selected? %>
     <%= unarchive_button unless inbox_selected? %>
+    <div class="btn-group snooze_selected">
+      <%= snooze_button %>
+      <%= render 'notifications/snooze' %>
+    </div>
     <%= mute_button %>
     <%= delete_button %>
   </div>
@@ -69,7 +73,7 @@
           <%= render partial: 'comment', locals:{comment: comment, index: index} %>
         <% end %>
       <% end %>
-      
+
     </div>
 
     <% if current_user.can_comment?(@notification.subject)%>

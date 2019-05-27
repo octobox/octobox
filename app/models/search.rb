@@ -31,7 +31,9 @@ class Search
     res = res.exclude_status(exclude_status) if exclude_status.present?
     res = res.starred(starred) unless starred.nil?
     res = res.archived(archived) unless archived.nil?
+    res = res.snoozed(snoozed) unless snoozed.nil?
     res = res.archived(!inbox) unless inbox.nil?
+    res = res.snoozed(!inbox) unless inbox.nil?
     res = res.unread(unread) unless unread.nil?
     res = res.bot_author(bot_author) unless bot_author.nil?
     res = res.unlabelled unless unlabelled.nil?
@@ -52,22 +54,22 @@ class Search
   end
 
   def inbox_selected?
-    inbox == true && archived != true
+    inbox == true && archived != true && snoozed != true
   end
 
   def archive_selected?
-    inbox != true && archived == true
+    inbox != true && archived == true && snoozed != true
   end
 
   private
 
   def convert(params)
-    [:starred, :unlabelled, :bot].each do |param|
+    [:starred, :unlabelled, :bot, :snoozed].each do |param|
       @parsed_query[param] = ['true'] if params[param].present?
     end
 
     @parsed_query[:archived] = ['true'] if params[:archive].present?
-    @parsed_query[:inbox] = ['true'] if params[:archive].blank? && params[:starred].blank? && params[:q].blank?
+    @parsed_query[:inbox] = ['true'] if params[:archive].blank? && params[:starred].blank? && params[:snoozed].blank? && params[:q].blank?
 
     [:reason, :type, :unread, :state, :is_private, :draft].each do |filter|
       next if params[filter].blank?
@@ -157,6 +159,10 @@ class Search
 
   def exclude_author
     parsed_query[:'-author']
+  end
+
+  def snoozed
+    boolean_prefix(:snoozed)
   end
 
   def unread

@@ -58,11 +58,12 @@ module NotificationsHelper
       assigned:        params[:assigned],
       is_private:      params[:is_private],
       status:          params[:status],
+      snoozed:         params[:snoozed]
     }
   end
 
   def inbox_selected?
-    !archive_selected? && !starred_selected? && !showing_search_results?
+    !archive_selected? && !starred_selected? && !showing_search_results? && !snoozed_selected?
   end
 
   def archive_selected?
@@ -71,6 +72,10 @@ module NotificationsHelper
 
   def starred_selected?
     filters[:starred].present?
+  end
+
+  def snoozed_selected?
+    filters[:snoozed].present?
   end
 
   def showing_search_results?
@@ -86,7 +91,7 @@ module NotificationsHelper
   end
 
   def bucket_param_keys
-    [:archive, :starred]
+    [:archive, :starred, :snoozed]
   end
 
   def filter_param_keys
@@ -117,6 +122,10 @@ module NotificationsHelper
     function_button("Unarchive", 'inbox', "archive_toggle unarchive", 'Unarchive notification', false)
   end
 
+  def snooze_button
+    function_button("Snooze", 'clock', "dropdown-toggle", 'Select snooze time', false, data_toggle: 'dropdown')
+  end
+
   def mute_selected_button
     function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items')
   end
@@ -137,6 +146,10 @@ module NotificationsHelper
     function_button("Delete selected", 'trashcan', "delete_selected", 'Delete selected items')
   end
 
+  def snooze_selected_button
+    function_button("Snooze selected", 'clock', "dropdown-toggle", 'Select snooze time', false, data_toggle: 'dropdown')
+  end
+
   def select_all_button(cur_selected, total)
     button_tag(type: 'button', class: "select_all btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': "Number of items selected") do
       octicon('check', height: 16) +
@@ -146,8 +159,8 @@ module NotificationsHelper
     end if cur_selected < total
   end
 
-  def function_button(title, octicon, css_class, tooltip, hidden=true)
-    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark #{'hidden-button' if hidden}", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
+  def function_button(title, octicon, css_class, tooltip, hidden=true, data_toggle: 'tooltip', data_content: nil)
+    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark #{'hidden-button' if hidden}", 'data-toggle': data_toggle, 'data-placement': "bottom", 'title': tooltip, 'data-content': data_content ) do
       octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-xl-inline-block ml-1')
     end
   end

@@ -236,6 +236,24 @@ class NotificationsController < ApplicationController
     end
   end
 
+  # Snooze a notification
+  #
+  # :category: Notifications Actions
+  #
+  # ==== Example
+  #
+  # <code>POST notifications/:id/snooze_selected.json</code>
+  #   HEAD 204
+  #
+  def snooze_selected
+    Notification.snooze(selected_notifications, snooze_params)
+    if request.xhr?
+      head :ok
+    else
+      redirect_back fallback_location: root_path
+    end
+  end
+
   # Star a notification
   #
   # :category: Notifications Actions
@@ -370,6 +388,8 @@ class NotificationsController < ApplicationController
       scope.starred
     elsif params[:archive].present?
       scope.archived
+    elsif params[:snoozed].present?
+      scope.snoozed
     else
       scope.inbox
     end
@@ -421,5 +441,9 @@ class NotificationsController < ApplicationController
 
   def per_page_cookie
     Integer(cookies[:per_page]) rescue nil
+  end
+
+  def snooze_params
+    params.permit(:id, :duration, :id => [])
   end
 end

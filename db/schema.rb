@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_06_173231) do
+ActiveRecord::Schema.define(version: 2019_05_27_194557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -70,15 +70,16 @@ ActiveRecord::Schema.define(version: 2019_04_06_173231) do
     t.string "subject_type"
     t.string "reason"
     t.boolean "unread"
-    t.datetime "updated_at", null: false
     t.string "last_read_at"
     t.string "url"
     t.boolean "archived", default: false
     t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "starred", default: false
     t.string "repository_owner_name", default: ""
     t.string "latest_comment_url"
     t.datetime "muted_at"
+    t.datetime "snooze_until"
     t.index ["muted_at"], name: "index_notifications_on_muted_at"
     t.index ["repository_full_name"], name: "index_notifications_on_repository_full_name"
     t.index ["subject_url"], name: "index_notifications_on_subject_url"
@@ -171,7 +172,7 @@ ActiveRecord::Schema.define(version: 2019_04_06_173231) do
     t.string "encrypted_app_token"
     t.string "encrypted_app_token_iv"
     t.string "theme", default: "light"
-    t.boolean "display_comments", default: false
+    t.boolean "display_comments", default: true
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end

@@ -130,6 +130,18 @@ class Notification < ApplicationRecord
     end
   end
 
+  def self.snooze(notifications, snooze_params)
+    return if snooze_params[:duration].to_i.zero?
+    notifications.update_all(
+      snooze_until: Time.now.advance(:seconds => snooze_params[:duration].to_i)
+    )
+    mark_read(notifications)
+  end
+
+  def snoozed?
+    snooze_until.present? && snooze_until > Time.now
+  end
+
   def expanded_subject_url
     return subject_url unless display_subject?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
