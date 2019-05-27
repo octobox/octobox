@@ -1058,24 +1058,24 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'Do not include snoozed notifications when fetching notifcations index page' do
-   sign_in_as(@user)
-   Notification.destroy_all
-   notification1 = create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
-   notification2 = create(:notification, user: @user, subject_type: 'Issue', snooze_until: 5.hour.ago)
-   notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
-   notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+    sign_in_as(@user)
+    Notification.destroy_all
+    create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
+    create(:notification, user: @user, subject_type: 'Issue', snooze_until: 5.hour.ago)
+    create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:notification, user: @user, subject_type: 'PullRequest')
 
-   get '/'
-   assert_equal assigns(:notifications).length, 3
- end
+    get '/'
+    assert_equal assigns(:notifications).length, 3
+  end
 
  test 'show snoozed notifications for search results' do
    sign_in_as(@user)
    Notification.destroy_all
-   notification1 = create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
-   notification2 = create(:notification, user: @user, subject_type: 'Issue', snooze_until: 5.hour.ago)
-   notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
-   notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+   create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
+   create(:notification, user: @user, subject_type: 'Issue', snooze_until: 5.hour.ago)
+   create(:notification, user: @user, subject_type: 'PullRequest')
+   create(:notification, user: @user, subject_type: 'PullRequest')
    get '/?q=snoozed%3Atrue'
    assert_equal assigns(:notifications).length, 1
  end
@@ -1083,10 +1083,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
  test 'show snoozed notifications from sidebar link' do
    sign_in_as(@user)
    Notification.destroy_all
-   notification1 = create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
-   notification2 = create(:notification, user: @user, subject_type: 'Issue', snooze_until: 1.minute.ago)
-   notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
-   notification4 = create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 1.minute.from_now)
+   create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
+   create(:notification, user: @user, subject_type: 'Issue', snooze_until: 1.minute.ago)
+   create(:notification, user: @user, subject_type: 'PullRequest')
+   create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 1.minute.from_now)
 
    get '/?snoozed=true'
    assert_equal assigns(:notifications).length, 2
@@ -1097,8 +1097,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
    Notification.destroy_all
    notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
    notification2 = create(:notification, user: @user, subject_type: 'Issue')
-   notification3 = create(:notification, user: @user, subject_type: 'PullRequest')
-   notification4 = create(:notification, user: @user, subject_type: 'PullRequest')
+   create(:notification, user: @user, subject_type: 'PullRequest')
+   create(:notification, user: @user, subject_type: 'PullRequest')
 
    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
 
