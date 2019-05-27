@@ -50,8 +50,9 @@ module Octobox
 
           next if purchase.app_installation.nil?
 
-          unless subscriber_names.include? purchase.app_installation.account_login
-            purchase.update(unit_count: 0) unless purchase.next_billing_date.present? && purchase.next_billing_date > Time.now
+          next if subscriber_names.include? purchase.app_installation.account_login
+          unless purchase.next_billing_date.present? && purchase.next_billing_date > Time.now
+            purchase.update(unit_count: 0) 
             Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed #{plan_name} for #{purchase.app_installation.account_login}\033[0m\n\n")
           end
         end
