@@ -245,7 +245,7 @@ class SubjectTest < ActiveSupport::TestCase
 
     Subject.sync(remote_subject)
 
-    assert_equal 10, Subject.last.comment_count
+    assert_equal 10, Subject.last.comments.count
   end
 
   test 'sync does not update comments when subject is not persisted' do
