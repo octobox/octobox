@@ -196,6 +196,7 @@ class Subject < ApplicationRecord
     reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
     reviews.each do |review|
         reviews.concat download_comments_for_review(review) if review[:body].empty?
+        reviews.delete(review)
     end
     return reviews
   rescue Octokit::ClientError => e
