@@ -95,6 +95,10 @@ class Subject < ApplicationRecord
     !comment_count.nil?
   end
 
+  def pull_request?
+    url.match?(/pull/i)
+  end
+
   def update_status
     if sha.present?
       remote_status = download_status
@@ -115,6 +119,10 @@ class Subject < ApplicationRecord
 
   def update_comments
     remote_comments = download_comments
+    if pull_request?
+      remote_comments.concat download_reviews
+      remote_comments.concat download_review_comments
+    end
     return unless remote_comments.present?
     remote_comments.each do |remote_comment|
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
@@ -174,11 +182,28 @@ class Subject < ApplicationRecord
     nil
   end
 
+  #example https://api.github.com/repos/octobox/octobox/issues/1141/comments
   def download_comments
     return unless github_client
     github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
     nil
+  end
+
+  #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews
+  def donwload_reviews
+    return unless github_client && pull_request?
+    github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
+  rescue Octokit::ClientError => e
+      nil
+  end
+
+  #example https://api.github.com/repos/octobox/octobox/pulls/1141/comments
+  def donwload_review_comments
+    return unless github_client && pull_request?
+    github_client.get(url + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
+  rescue Octokit::ClientError => e
+      nil
   end
 
   def github_client
