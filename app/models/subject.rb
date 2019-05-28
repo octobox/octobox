@@ -191,7 +191,7 @@ class Subject < ApplicationRecord
   end
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews
-  def donwload_reviews
+  def download_reviews
     return unless github_client && pull_request?
     github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
@@ -199,7 +199,7 @@ class Subject < ApplicationRecord
   end
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/comments
-  def donwload_review_comments
+  def download_review_comments
     return unless github_client && pull_request?
     github_client.get(url + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
