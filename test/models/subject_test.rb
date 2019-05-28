@@ -228,19 +228,24 @@ class SubjectTest < ActiveSupport::TestCase
     assert_equal 1, Subject.count
   end
 
-  test 'sync updates reviews and review when the subject is a pull request' do
+  test 'sync updates reviews and review comemnts when the subject is a pull request' do
     remote_subject = load_subject('subject_58.json')
+    remote_review = load_subject('subject_58_reviews.json').last
+
     Octobox.expects(:include_comments?).returns(true)
     Subject.any_instance.expects(:update_comments)
 
     reviews = { status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } }
+    comments_for_review = { status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } }
     review_comments = { status: 200, body: file_fixture('subject_58_review_comments.json'), headers: { 'Content-Type' => 'application/json' } }
 
     stub_request(:get, remote_subject["url"]+'/reviews').and_return(reviews)
     stub_request(:get, remote_subject["url"]+'/comments').and_return(review_comments)
+    stub_request(:get, remote_review["pull_request_url"]+'/reviews/'+remote_review["id"].to_s).and_return(comments_for_review)
 
     Subject.sync(remote_subject)
-    assert_equal 11, Subject.last.comment_count
+
+    assert_equal 10, Subject.last.comment_count
   end
 
   test 'sync does not update comments when subject is not persisted' do
