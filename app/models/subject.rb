@@ -78,7 +78,7 @@ class Subject < ApplicationRecord
     return unless subject.persisted?
 
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
-    subject.update_comments if Octobox.include_comments? && subject.has_comments?
+    subject.update_comments if Octobox.include_comments? && (subject.has_comments? | subject.pull_request?)
     subject.update_status
     subject.sync_involved_users if (subject.saved_changes.keys & subject.notifiable_fields).any?
   end
