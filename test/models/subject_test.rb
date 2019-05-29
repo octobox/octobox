@@ -236,7 +236,7 @@ class SubjectTest < ActiveSupport::TestCase
     Subject.any_instance.expects(:update_comments)
 
     reviews = { status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } }
-    comments_for_review = { status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } }
+    comments_for_review = { status: 200, body: file_fixture('subject_58_comments_for_review.json'), headers: { 'Content-Type' => 'application/json' } }
     review_comments = { status: 200, body: file_fixture('subject_58_review_comments.json'), headers: { 'Content-Type' => 'application/json' } }
 
     stub_request(:get, remote_subject["url"]+'/reviews').and_return(reviews)
