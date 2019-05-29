@@ -136,7 +136,7 @@ GEM
     guard-minitest (2.4.6)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    hashdiff (0.3.9)
+    hashdiff (0.4.0)
     hashie (3.6.0)
     hirefire-resource (0.7.1)
     i18n (1.6.0)
