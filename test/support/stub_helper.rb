@@ -131,6 +131,6 @@ module StubHelper
   end
 
   def stub_include_comments(value: true)
-    Octobox.config.stubs(:include_comments?).returns(value)
+    Octobox.config.stubs(:include_comments).returns(value)
   end
 end
