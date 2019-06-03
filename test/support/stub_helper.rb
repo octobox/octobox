@@ -129,4 +129,8 @@ module StubHelper
   def stub_background_jobs_enabled(value: true)
     Octobox.config.stubs(:background_jobs_enabled).returns(value)
   end
+
+  def stub_include_comments(value: true)
+    Octobox.config.stubs(:include_comments?).returns(value)
+  end
 end
