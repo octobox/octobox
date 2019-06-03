@@ -87,6 +87,14 @@ class Subject < ApplicationRecord
     where(repository_full_name: repository_full_name).find_by_sha(sha)&.update_status
   end
 
+  def self.sync_comments(remote_subject)
+    subject = Subject.find_by(url: remote_subject['url'])
+    Subject.sync(remote_subject) if subject.nil? 
+    return if subject.nil? 
+    
+    subject.update_comments
+  end
+
   def has_comments?
      comment_count && comment_count > 0
   end
