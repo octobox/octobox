@@ -369,7 +369,7 @@
     "created_at": "2019-05-28T13:10:58Z",
     "updated_at": "2019-05-28T13:10:58Z",
     "author_association": "MEMBER",
-    "body": "Pushing it to docker hub didn't really work 🤔 "
+    "body": "Pushing it to docker hub didn't really work"
   },
   {
     "url": "https://api.github.com/repos/octobox/octobox/issues/comments/496510181",
