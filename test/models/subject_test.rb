@@ -37,8 +37,8 @@ class SubjectTest < ActiveSupport::TestCase
     remote_subject = load_subject('merged_pull_request.json')
 
     user = create(:user)
-    notification = create(:notification, subject_url:remote_subject['url'], user: user)
-    subject = create(:subject, url: remote_subject['url'])
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
 
     Subject.sync(remote_subject)
     subject = Subject.first
@@ -110,8 +110,8 @@ class SubjectTest < ActiveSupport::TestCase
     remote_subject = load_subject('merged_pull_request.json')
     
     user = create(:user)
-    notification = create(:notification, subject_url:remote_subject['url'], user: user)
-    subject = create(:subject, url: remote_subject['url'])
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
 
     refute_empty remote_subject['merged_at']
     Subject.sync(remote_subject)
@@ -211,8 +211,8 @@ class SubjectTest < ActiveSupport::TestCase
     remote_subject = load_subject('merged_pull_request.json')
 
     user = create(:user)
-    notification = create(:notification, subject_url:remote_subject['url'], user: user)
-    subject = create(:subject, url: remote_subject['url'])
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
 
     Subject.sync(remote_subject)
     assert_equal '84b4e75e5f627d34f7a85982bda7b260f34db4dd', Subject.last.sha
@@ -231,8 +231,8 @@ class SubjectTest < ActiveSupport::TestCase
     remote_subject['body'] << "\u0000" # create null terminated string
 
     user = create(:user)
-    notification = create(:notification, subject_url:remote_subject['url'], user: user)
-    subject = create(:subject, url: remote_subject['url'])
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
 
     Subject.sync(remote_subject)
     assert_equal 'Fixed this thing', Subject.last.body
@@ -267,8 +267,8 @@ class SubjectTest < ActiveSupport::TestCase
     remote_review = load_subject('subject_58_reviews.json').last
 
     user = create(:user)
-    notification = create(:notification, subject_url:remote_subject['url'], user: user)
-    subject = create(:subject, url: remote_subject['url'])
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
 
     stub_request(:get, remote_subject["url"].gsub('/pulls/', '/issues/') + '/comments?since')
         .to_return({ status: 200, body: file_fixture('subject_58_comments.json'), headers: { 'Content-Type' => 'application/json' } })
