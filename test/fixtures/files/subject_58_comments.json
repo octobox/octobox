@@ -214,7 +214,7 @@
     "created_at": "2018-11-02T01:56:53Z",
     "updated_at": "2018-11-02T01:58:03Z",
     "author_association": "MEMBER",
-    "body": "Followup: I just looked and it seems that you can't actually specify separate build targets to automatically build on Docker Hub, furthering the thought that we shouldn't bother providing anything but production images. 👍 \r\n\r\nWe should definitely start building images on tagged releases as you say, will follow up with that after this PR is approved and merged 💞 "
+    "body": "Followup: I just looked and it seems that you can't actually specify separate build targets to automatically build on Docker Hub, furthering the thought that we shouldn't bother providing anything but production images. We should definitely start building images on tagged releases as you say, will follow up with that after this PR is approved and merged"
   },
   {
     "url": "https://api.github.com/repos/octobox/octobox/issues/comments/440989442",
