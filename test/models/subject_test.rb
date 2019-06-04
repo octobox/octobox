@@ -32,7 +32,14 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync updates comment_count of a pull request' do
+    stub_comments_requests
+
     remote_subject = load_subject('merged_pull_request.json')
+
+    user = create(:user)
+    notification = create(:notification, subject_url:remote_subject['url'], user: user)
+    subject = create(:subject, url: remote_subject['url'])
+
     Subject.sync(remote_subject)
     subject = Subject.first
     assert_equal 0, subject.comment_count
@@ -98,7 +105,14 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync sets the state when the subject is merged' do
+    stub_comments_requests
+    
     remote_subject = load_subject('merged_pull_request.json')
+    
+    user = create(:user)
+    notification = create(:notification, subject_url:remote_subject['url'], user: user)
+    subject = create(:subject, url: remote_subject['url'])
+
     refute_empty remote_subject['merged_at']
     Subject.sync(remote_subject)
     assert_equal 'merged', Subject.last.state
@@ -192,7 +206,14 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync sets the sha' do
+    stub_comments_requests
+
     remote_subject = load_subject('merged_pull_request.json')
+
+    user = create(:user)
+    notification = create(:notification, subject_url:remote_subject['url'], user: user)
+    subject = create(:subject, url: remote_subject['url'])
+
     Subject.sync(remote_subject)
     assert_equal '84b4e75e5f627d34f7a85982bda7b260f34db4dd', Subject.last.sha
   end
@@ -204,8 +225,15 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync sets the body' do
+    stub_comments_requests
+
     remote_subject = load_subject('merged_pull_request.json')
     remote_subject['body'] << "\u0000" # create null terminated string
+
+    user = create(:user)
+    notification = create(:notification, subject_url:remote_subject['url'], user: user)
+    subject = create(:subject, url: remote_subject['url'])
+
     Subject.sync(remote_subject)
     assert_equal 'Fixed this thing', Subject.last.body
   end
@@ -242,19 +270,20 @@ class SubjectTest < ActiveSupport::TestCase
     notification = create(:notification, subject_url:remote_subject['url'], user: user)
     subject = create(:subject, url: remote_subject['url'])
 
-    reviews = { status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } }
-    comments = { status: 200, body: file_fixture('subject_58_comments.json'), headers: { 'Content-Type' => 'application/json' } }
-    comments_for_review = { status: 200, body: file_fixture('subject_58_comments_for_review.json'), headers: { 'Content-Type' => 'application/json' } }
-    review_comments = { status: 200, body: file_fixture('subject_58_review_comments.json'), headers: { 'Content-Type' => 'application/json' } }
-
-    stub_request(:get, remote_subject["url"].gsub('/pulls/', '/issues/') + '/comments?since').and_return(comments)
-    stub_request(:get, remote_subject["url"]+'/comments').and_return(review_comments)
-    stub_request(:get, remote_subject["url"]+'/reviews').and_return(reviews)
-    stub_request(:get, remote_review["pull_request_url"]+'/reviews/'+remote_review["id"].to_s).and_return(comments_for_review)
+    stub_request(:get, remote_subject["url"].gsub('/pulls/', '/issues/') + '/comments?since')
+        .to_return({ status: 200, body: file_fixture('subject_58_comments.json'), headers: { 'Content-Type' => 'application/json' } })
+    stub_request(:get, remote_subject["url"]+'/comments?since')
+      .to_return({ status: 200, body: file_fixture('subject_58_review_comments.json'), headers: { 'Content-Type' => 'application/json' } })
+    stub_request(:get, remote_subject["url"]+'/reviews?since')
+      .to_return({ status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } })
+    stub_request(:get, remote_review["pull_request_url"]+'/reviews/'+remote_review["id"].to_s)
+      .to_return({ status: 200, body: file_fixture('subject_58_comments_for_review.json'), headers: { 'Content-Type' => 'application/json' } })
+    stub_request(:get, 'https://api.github.com/repos/octobox/octobox/commits/afb682800db14cdb23b27b2cef8bec1723ab99cb/status')
+      .to_return({ status: 200, body: file_fixture('subject_58_status.json'), headers: { 'Content-Type' => 'application/json' } })
 
     Subject.sync(remote_subject)
 
-    assert_equal 10, Subject.last.comments.count
+    assert_equal 24, Subject.last.comments.count
   end
 
   test 'sync does not update comments when subject is not persisted' do

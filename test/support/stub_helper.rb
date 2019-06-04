@@ -63,6 +63,10 @@ module StubHelper
 
     stub_request(:get, /\/comments\?since\z/)
       .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
+    stub_request(:get, /\/reviews\?since\z/)
+      .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
+    stub_request(:get, /\/commits\/\w*\/status/)
+    .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
   end
 
   def stub_access_tokens_request(extra_headers: {})
