@@ -2,6 +2,11 @@
 require 'test_helper'
 
 class SubjectTest < ActiveSupport::TestCase
+
+  setup do
+    stub_include_comments
+  end
+
   test 'sync_status updates the status of subject' do
     sha = 'a10867b14bb761a232cd80139fbd4c0d33264240'
     user = create(:user)
@@ -229,19 +234,23 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync updates reviews and review comemnts when the subject is a pull request' do
+
     remote_subject = load_subject('subject_58.json')
     remote_review = load_subject('subject_58_reviews.json').last
 
+    user = create(:user)
+    notification = create(:notification, subject_url:remote_subject['url'], user: user)
+    subject = create(:subject, url: remote_subject['url'])
+
     reviews = { status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } }
+    comments = { status: 200, body: file_fixture('subject_58_comments.json'), headers: { 'Content-Type' => 'application/json' } }
     comments_for_review = { status: 200, body: file_fixture('subject_58_comments_for_review.json'), headers: { 'Content-Type' => 'application/json' } }
     review_comments = { status: 200, body: file_fixture('subject_58_review_comments.json'), headers: { 'Content-Type' => 'application/json' } }
 
-    stub_request(:get, remote_subject["url"]+'/reviews').and_return(reviews)
+    stub_request(:get, remote_subject["url"].gsub('/pulls/', '/issues/') + '/comments?since').and_return(comments)
     stub_request(:get, remote_subject["url"]+'/comments').and_return(review_comments)
+    stub_request(:get, remote_subject["url"]+'/reviews').and_return(reviews)
     stub_request(:get, remote_review["pull_request_url"]+'/reviews/'+remote_review["id"].to_s).and_return(comments_for_review)
-
-    Octobox.expects(:include_comments?).returns(true)
-    Subject.any_instance.expects(:update_comments)
 
     Subject.sync(remote_subject)
 
