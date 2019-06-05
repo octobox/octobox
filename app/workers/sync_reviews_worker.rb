@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SyncCommentsWorker
+class SyncReviewsWorker
   include Sidekiq::Worker
   sidekiq_options queue: :sync_subjects, unique: :until_and_while_executing
 
