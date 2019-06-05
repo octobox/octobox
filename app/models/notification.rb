@@ -179,7 +179,7 @@ class Notification < ApplicationRecord
 
   def upgrade_required?
     return nil unless repository.present?
-    repository.private? && !repository.required_plan_available?
+    repository.private? && !(repository.required_plan_available? || user.has_personal_plan?)
   end
 
   def prerender?
