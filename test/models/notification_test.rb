@@ -391,4 +391,30 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert notification.display?
   end
+
+  test 'upgrade is required for notifications without a purchase' do
+    stub_env_var('OCTOBOX_IO', 'true')
+
+    repository = create(:repository, private: true)
+    repository.stubs(:required_plan_available?).returns(false)
+
+    notification = create(:notification, repository: repository)
+    user = notification.user
+
+    assert notification.upgrade_required?
+
+  end
+
+  test 'upgrade is not required for users with a personal plan' do
+    stub_env_var('OCTOBOX_IO', 'true')
+
+    repository = create(:repository, private: true)
+    repository.stubs(:required_plan_available?).returns(false)
+
+    notification = create(:notification, repository: repository)
+    user = notification.user
+    user.stubs(:has_personal_plan?).returns(true)
+
+    refute notification.upgrade_required?
+  end
 end
