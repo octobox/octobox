@@ -138,6 +138,7 @@ class Subject < ApplicationRecord
         comment.body = remote_comment.body.try(:gsub, "\u0000", '')
         comment.author_association = remote_comment.author_association
         comment.created_at = remote_comment.created_at
+        comment.review_state = remote_comment.state if remote_comment.state
         comment.save
       end
     end
@@ -203,8 +204,10 @@ class Subject < ApplicationRecord
     return unless github_client && pull_request?
     reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
     reviews.each do |review|
-        reviews.concat download_comments_for_review(review) if review[:body].empty?
+      if review[:state] == "COMMENTED"
+        reviews.concat download_comments_for_review(review) 
         reviews.delete(review)
+      end
     end
     return reviews
   rescue Octokit::ClientError => e
