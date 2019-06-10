@@ -58,6 +58,29 @@ module StubHelper
     stub_request(method, url).to_return(response)
   end
 
+  def stub_review_requests(remote_subject: nil, remote_reviews: nil, extra_headers: {})
+    
+    headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)    
+    
+    if remote_subject.nil? || remote_reviews.nil?
+      remote_subject = Oj.load(File.open(file_fixture('subject_58.json')))
+      remote_reviews = Oj.load(File.open(file_fixture('subject_58_reviews.json')))
+    end
+    
+    stub_request(:get, remote_subject["url"].gsub('/pulls/', '/issues/') + '/comments?since')
+        .to_return({ status: 200, body: file_fixture('subject_58_comments.json'), headers: headers })
+    stub_request(:get, remote_subject["url"]+'/comments?since')
+      .to_return({ status: 200, body: file_fixture('subject_58_review_comments.json'), headers: headers })
+    stub_request(:get, remote_subject["url"]+'/reviews?since')
+      .to_return({ status: 200, body: file_fixture('subject_58_reviews.json'), headers: headers })
+    remote_reviews.each do |review|
+      stub_request(:get, review["pull_request_url"]+'/reviews/'+review["id"].to_s+'/comments?since')
+        .to_return({ status: 200, body: file_fixture("subject_58_review_#{review["id"]}.json"), headers: headers })
+    end
+    stub_request(:get, 'https://api.github.com/repos/octobox/octobox/commits/afb682800db14cdb23b27b2cef8bec1723ab99cb/status')
+      .to_return({ status: 200, body: file_fixture('subject_58_status.json'), headers: { 'Content-Type' => 'application/json' } })
+  end
+
   def stub_comments_requests(extra_headers: {})
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 

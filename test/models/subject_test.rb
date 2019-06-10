@@ -263,22 +263,12 @@ class SubjectTest < ActiveSupport::TestCase
 
   test 'sync updates reviews and review comemnts when the subject is a pull request' do
     remote_subject = load_subject('subject_58.json')
-    remote_review = load_subject('subject_58_reviews.json').last
+    remote_reviews = load_subject('subject_58_reviews.json')
+    stub_review_requests
 
     user = create(:user)
     create(:notification, subject_url:remote_subject['url'], user: user)
     create(:subject, url: remote_subject['url'])
-
-    stub_request(:get, remote_subject["url"].gsub('/pulls/', '/issues/') + '/comments?since')
-        .to_return({ status: 200, body: file_fixture('subject_58_comments.json'), headers: { 'Content-Type' => 'application/json' } })
-    stub_request(:get, remote_subject["url"]+'/comments?since')
-      .to_return({ status: 200, body: file_fixture('subject_58_review_comments.json'), headers: { 'Content-Type' => 'application/json' } })
-    stub_request(:get, remote_subject["url"]+'/reviews?since')
-      .to_return({ status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } })
-    stub_request(:get, remote_review["pull_request_url"]+'/reviews/'+remote_review["id"].to_s+'/comments?since')
-      .to_return({ status: 200, body: file_fixture('subject_58_comments_for_review.json'), headers: { 'Content-Type' => 'application/json' } })
-    stub_request(:get, 'https://api.github.com/repos/octobox/octobox/commits/afb682800db14cdb23b27b2cef8bec1723ab99cb/status')
-      .to_return({ status: 200, body: file_fixture('subject_58_status.json'), headers: { 'Content-Type' => 'application/json' } })
 
     Subject.sync(remote_subject)
 
@@ -287,20 +277,12 @@ class SubjectTest < ActiveSupport::TestCase
 
   test 'review states are saved is there is a review with a state' do
     remote_subject = load_subject('subject_58.json')
-    remote_review = load_subject('subject_58_reviews.json').last
+    remote_reviews = load_subject('subject_58_reviews.json')
+    stub_review_requests
 
     user = create(:user)
     create(:notification, subject_url:remote_subject['url'], user: user)
     create(:subject, url: remote_subject['url'])
-
-    stub_request(:get, remote_subject["url"].gsub('/pulls/', '/issues/') + '/comments?since')
-        .to_return({ status: 200, body: file_fixture('subject_58_comments.json'), headers: { 'Content-Type' => 'application/json' } })
-    stub_request(:get, remote_subject["url"]+'/comments?since')
-      .to_return({ status: 200, body: file_fixture('subject_58_review_comments.json'), headers: { 'Content-Type' => 'application/json' } })
-    stub_request(:get, remote_subject["url"]+'/reviews?since')
-      .to_return({ status: 200, body: file_fixture('subject_58_reviews.json'), headers: { 'Content-Type' => 'application/json' } })
-    stub_request(:get, remote_review["pull_request_url"]+'/reviews/'+remote_review["id"].to_s+'/comments?since')
-      .to_return({ status: 200, body: file_fixture('subject_58_comments_for_review.json'), headers: { 'Content-Type' => 'application/json' } })
 
     Subject.sync_comments(remote_subject)    
 
