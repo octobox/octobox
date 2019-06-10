@@ -135,6 +135,7 @@ class Subject < ApplicationRecord
     remote_comments.each do |remote_comment|
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
         comment.author = remote_comment.user.login
+        comment.url = remote_comment.url
         comment.body = remote_comment.body.try(:gsub, "\u0000", '')
         comment.author_association = remote_comment.author_association
         comment.created_at = remote_comment.created_at
@@ -204,8 +205,8 @@ class Subject < ApplicationRecord
     return unless github_client && pull_request?
     reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
     reviews.each do |review|
+      reviews.concat download_comments_for_review(review)
       if review[:state] == "COMMENTED"
-        reviews.concat download_comments_for_review(review) 
         reviews.delete(review)
       end
     end
