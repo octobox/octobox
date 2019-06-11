@@ -1,0 +1,100 @@
+[
+  {
+    "id": 230248819,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzMDI0ODgxOQ==",
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/230248819",
+    "pull_request_review_id": 170944330,
+    "diff_hunk": "@@ -1,45 +1,78 @@\n-FROM ruby:2.5.3-alpine\n+FROM ruby:2.5.3-alpine as base\n \n ENV APP_ROOT /usr/src/app\n WORKDIR $APP_ROOT\n \n-# =============================================\n-# System layer\n-\n-# Will invalidate cache as soon as the Gemfile changes\n-COPY Gemfile Gemfile.lock $APP_ROOT/\n-\n-# * Setup system\n-# * Install Ruby dependencies\n-RUN apk add --update \\\n-    build-base \\\n+RUN apk add --no-cache \\\n     netcat-openbsd \\\n     git \\\n     nodejs \\\n     postgresql-dev \\\n     mysql-dev \\\n     tzdata \\\n-    curl-dev \\\n- && rm -rf /var/cache/apk/* \\\n+    curl-dev\n+\n+# Will invalidate cache as soon a the Gemfile changes\n+COPY Gemfile Gemfile.lock $APP_ROOT/\n+\n+# * Setup system\n+# * Install common Ruby dependencies\n+RUN apk add --no-cache build-base \\\n  && bundle config --global frozen 1 \\\n- && bundle install --without test --jobs 2 \\\n- && gem install foreman\n+ && bundle install \\\n+    --without development test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && gem install foreman \\\n+ && apk del build-base\n \n-# ========================================================\n-# Application layer\n+# Startup\n+CMD [\"bin/docker-start\"]\n+\n+####################\n+\n+FROM base as development\n+\n+# * Install development dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with development \\\n+    --without test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n \n # Copy application code\n COPY . $APP_ROOT\n \n-# Precompile assets for a production environment.\n-# This is done to include assets in production images on Dockerhub.\n-RUN RAILS_ENV=production bundle exec rake assets:precompile\n-\n # * Generate the docs\n # * Make files OpenShift conformant\n RUN RAILS_ENV=development bin/rails api_docs:generate \\\n- && chgrp -R 0 $APP_ROOT \\\n+ && chown -R 1000:0 $APP_ROOT \\\n  && chmod -R g=u $APP_ROOT\n \n-# Startup\n-CMD [\"bin/docker-start\"]\n+USER 1000",
+    "path": "Dockerfile",
+    "position": 76,
+    "original_position": 76,
+    "commit_id": "37b4de4df6d933cb5bceb63135d275064e5fcd90",
+    "user": {
+      "login": "chrisarcand",
+      "id": 2430490,
+      "node_id": "MDQ6VXNlcjI0MzA0OTA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2430490?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chrisarcand",
+      "html_url": "https://github.com/chrisarcand",
+      "followers_url": "https://api.github.com/users/chrisarcand/followers",
+      "following_url": "https://api.github.com/users/chrisarcand/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chrisarcand/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chrisarcand/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chrisarcand/subscriptions",
+      "organizations_url": "https://api.github.com/users/chrisarcand/orgs",
+      "repos_url": "https://api.github.com/users/chrisarcand/repos",
+      "events_url": "https://api.github.com/users/chrisarcand/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chrisarcand/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "From the docs... \r\n\r\n> The USER instruction sets the user name (or UID) and optionally the user group (or GID) to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile.\r\n\r\nDoesn't that mean this should be before all the other commands in each section?",
+    "created_at": "2018-11-02T01:28:45Z",
+    "updated_at": "2019-05-28T12:51:36Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r230248819",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "MEMBER",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/230248819"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r230248819"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e"
+  },
+  {
+    "id": 230248933,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzMDI0ODkzMw==",
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/230248933",
+    "pull_request_review_id": 170944330,
+    "diff_hunk": "@@ -0,0 +1,25 @@\n+version: '3.4'",
+    "path": "docker-compose-dev.yml",
+    "position": null,
+    "original_position": 1,
+    "commit_id": "37b4de4df6d933cb5bceb63135d275064e5fcd90",
+    "user": {
+      "login": "chrisarcand",
+      "id": 2430490,
+      "node_id": "MDQ6VXNlcjI0MzA0OTA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2430490?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chrisarcand",
+      "html_url": "https://github.com/chrisarcand",
+      "followers_url": "https://api.github.com/users/chrisarcand/followers",
+      "following_url": "https://api.github.com/users/chrisarcand/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chrisarcand/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chrisarcand/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chrisarcand/subscriptions",
+      "organizations_url": "https://api.github.com/users/chrisarcand/orgs",
+      "repos_url": "https://api.github.com/users/chrisarcand/repos",
+      "events_url": "https://api.github.com/users/chrisarcand/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chrisarcand/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Why is this file added? An old artifact from before I did my own PR where the separate dev compose file was removed? Is this necessary?",
+    "created_at": "2018-11-02T01:29:42Z",
+    "updated_at": "2019-05-28T12:51:36Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r230248933",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "MEMBER",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/230248933"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r230248933"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e"
+  }
+]

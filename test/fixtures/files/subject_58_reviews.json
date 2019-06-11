@@ -37,44 +37,5 @@
     },
     "submitted_at": "2018-11-02T01:33:48Z",
     "commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e"
-  },
-  {
-    "id": 172586974,
-    "node_id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MTcyNTg2OTc0",
-    "user": {
-      "login": "NiR-",
-      "id": 557933,
-      "node_id": "MDQ6VXNlcjU1NzkzMw==",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/557933?v=4",
-      "gravatar_id": "",
-      "url": "https://api.github.com/users/NiR-",
-      "html_url": "https://github.com/NiR-",
-      "followers_url": "https://api.github.com/users/NiR-/followers",
-      "following_url": "https://api.github.com/users/NiR-/following{/other_user}",
-      "gists_url": "https://api.github.com/users/NiR-/gists{/gist_id}",
-      "starred_url": "https://api.github.com/users/NiR-/starred{/owner}{/repo}",
-      "subscriptions_url": "https://api.github.com/users/NiR-/subscriptions",
-      "organizations_url": "https://api.github.com/users/NiR-/orgs",
-      "repos_url": "https://api.github.com/users/NiR-/repos",
-      "events_url": "https://api.github.com/users/NiR-/events{/privacy}",
-      "received_events_url": "https://api.github.com/users/NiR-/received_events",
-      "type": "User",
-      "site_admin": false
-    },
-    "body": "",
-    "state": "COMMENTED",
-    "html_url": "https://github.com/octobox/octobox/pull/1141#pullrequestreview-172586974",
-    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
-    "author_association": "CONTRIBUTOR",
-    "_links": {
-      "html": {
-        "href": "https://github.com/octobox/octobox/pull/1141#pullrequestreview-172586974"
-      },
-      "pull_request": {
-        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
-      }
-    },
-    "submitted_at": "2018-11-07T16:45:05Z",
-    "commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e"
   }
 ]
