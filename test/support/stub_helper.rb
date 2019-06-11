@@ -77,7 +77,7 @@ module StubHelper
       stub_request(:get, review["pull_request_url"]+'/reviews/'+review["id"].to_s+'/comments?since')
         .to_return({ status: 200, body: file_fixture("subject_58_review_#{review["id"]}.json"), headers: headers })
     end
-    stub_request(:get, 'https://api.github.com/repos/octobox/octobox/commits/afb682800db14cdb23b27b2cef8bec1723ab99cb/status')
+    stub_request(:get, /\/commits\/\w*\/status/)
       .to_return({ status: 200, body: file_fixture('subject_58_status.json'), headers: { 'Content-Type' => 'application/json' } })
   end
 

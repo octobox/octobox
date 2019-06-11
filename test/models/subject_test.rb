@@ -263,7 +263,6 @@ class SubjectTest < ActiveSupport::TestCase
 
   test 'sync updates reviews and review comemnts when the subject is a pull request' do
     remote_subject = load_subject('subject_58.json')
-    remote_reviews = load_subject('subject_58_reviews.json')
     stub_review_requests
 
     user = create(:user)
@@ -277,7 +276,6 @@ class SubjectTest < ActiveSupport::TestCase
 
   test 'review states are saved is there is a review with a state' do
     remote_subject = load_subject('subject_58.json')
-    remote_reviews = load_subject('subject_58_reviews.json')
     stub_review_requests
 
     user = create(:user)
