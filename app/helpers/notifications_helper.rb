@@ -40,7 +40,7 @@ module NotificationsHelper
   }
 
   COMMENT_STATUS_OCTICON = {
-    'APPROVE' => 'check',
+    'APPROVED' => 'check',
     'CHANGES_REQUESTED' => 'x',
     'COMMENTED' => 'primitive-dot'
   }

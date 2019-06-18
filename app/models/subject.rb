@@ -136,9 +136,11 @@ class Subject < ApplicationRecord
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
         comment.author = remote_comment.user.login
         comment.url = remote_comment.url
+        comment.url = remote_comment.url
         comment.body = remote_comment.body.try(:gsub, "\u0000", '')
         comment.author_association = remote_comment.author_association
         comment.created_at = remote_comment.created_at
+        comment.created_at = remote_comment.submitted_at if remote_comment.submitted_at
         comment.review_state = remote_comment.state if remote_comment.state
         comment.save
       end
