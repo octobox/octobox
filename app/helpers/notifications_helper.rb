@@ -39,6 +39,12 @@ module NotificationsHelper
     'pending' => 'primitive-dot'
   }
 
+  COMMENT_STATUS = {
+    'APPROVED' => 'success',
+    'CHANGES_REQUESTED' => 'error',
+    'COMMENTED' => 'pending'
+  }
+
   COMMENT_STATUS_OCTICON = {
     'APPROVED' => 'check',
     'CHANGES_REQUESTED' => 'x',
@@ -306,8 +312,8 @@ module NotificationsHelper
   def comment_status(status)
     return unless status.present?
     content_tag(:span,
-      octicon(COMMENT_STATUS_OCTICON[status], height: 16, class: status),
-      class: "badge badge-light badge-pr #{status}",
+      octicon(COMMENT_STATUS_OCTICON[status], height: 16, class: COMMENT_STATUS[status]),
+      class: "badge badge-light #{COMMENT_STATUS[status]}",
       title: status.humanize,
       data: {toggle: 'tooltip'}
     )
