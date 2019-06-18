@@ -145,6 +145,7 @@ class Subject < ApplicationRecord
         comment.save
       end
     end
+    comment_count = comments.count
   end
 
   def comment(user, comment_body)
