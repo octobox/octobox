@@ -56,8 +56,6 @@ group :test do
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
-  gem 'selenium-webdriver'
-  gem 'capybara'
   gem 'action-cable-testing'
   gem 'timecop'
 end
