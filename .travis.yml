@@ -19,7 +19,7 @@ before_script:
   - mysql -u root -e 'create database octobox_test;' || true
 
 script:
-  - RAILS_ENV=test bundle exec rake --trace rubocop db:migrate test:skip_visuals
+  - RAILS_ENV=test bundle exec rake --trace rubocop db:migrate test
 
 bundler_args: --without development production --deployment --jobs=3 --retry=3
 
