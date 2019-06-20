@@ -171,7 +171,7 @@ ActiveRecord::Schema.define(version: 2019_04_06_173231) do
     t.string "encrypted_app_token"
     t.string "encrypted_app_token_iv"
     t.string "theme", default: "light"
-    t.boolean "display_comments", default: false
+    t.boolean "display_comments", default: true
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["github_id"], name: "index_users_on_github_id", unique: true
   end
