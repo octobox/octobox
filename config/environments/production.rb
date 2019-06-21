@@ -87,4 +87,8 @@ Rails.application.configure do
   config.lograge.enabled = true
 
   config.skylight.probes += %w(redis) if ENV['SKYLIGHT_AUTHENTICATION'].present?
+
+  # force to use SSL
+  config.force_ssl = true
+
 end
