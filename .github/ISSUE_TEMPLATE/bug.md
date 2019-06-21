@@ -8,6 +8,8 @@ about: Create a report to help us improve Octobox
 Are you experiencing this issue in octobox.io or your own instance?
  - [ ] octobox.io
  - [ ] My instance
+ 
+If your issue is related to an Octobox.io subscription purchase please ensure you have installed the [Octobox GitHub App](https://github.com/apps/octobox) for the repositories concerned.
 
 🐞 **Problem**
 <!--- Provide a detailed description of the change or addition you are proposing -->

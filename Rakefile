@@ -7,21 +7,6 @@ Rails.application.load_tasks
 
 Rake::Task['assets:precompile'].enhance ['api_docs:generate']
 
-task 'test:skip_visuals' => 'test:prepare' do
-  ['channels', 'controllers', 'integration', 'helpers', 'lib', 'models',
-   'services', 'validators', 'workers'].each do |name|
-    $: << 'test'
-    Rails::TestUnit::Runner.rake_run(["test/#{name}"])
-  end
-end
-
-task 'test:visuals' => 'test:prepare' do
-  $: << "test"
-  Rails::TestUnit::Runner.rake_run(["test/visuals"])
-end
-
-task(:default).clear.enhance ['test:skip_visuals']
-
 if %w[development test].include? Rails.env
   require 'rubocop/rake_task'
   RuboCop::RakeTask.new

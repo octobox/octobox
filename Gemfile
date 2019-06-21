@@ -56,8 +56,6 @@ group :test do
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
-  gem 'selenium-webdriver'
-  gem 'capybara'
   gem 'timecop'
 end
 
@@ -73,7 +71,7 @@ group :development do
 end
 
 group :production do
-  gem 'skylight', '4.0.2'
+  gem 'skylight', '4.1.0'
   gem 'lograge'
   gem 'puma_worker_killer'
   gem 'hirefire-resource'
