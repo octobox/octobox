@@ -70,7 +70,7 @@ GEM
     bugsnag (6.11.1)
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
-    bullet (6.0.0)
+    bullet (6.0.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.0.1)
@@ -214,11 +214,11 @@ GEM
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    public_suffix (3.1.0)
+    public_suffix (3.1.1)
     puma (3.12.1)
-    puma_worker_killer (0.1.0)
+    puma_worker_killer (0.1.1)
       get_process_mem (~> 0.2)
-      puma (>= 2.7, < 4)
+      puma (>= 2.7, < 5)
     raabro (1.1.6)
     rack (2.0.7)
     rack-canonical-host (0.2.3)
@@ -265,7 +265,7 @@ GEM
     request_store (1.4.1)
       rack (>= 1.4)
     rgb (0.1.0)
-    rubocop (0.71.0)
+    rubocop (0.72.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.6)
@@ -316,9 +316,9 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    skylight (4.1.0)
-      skylight-core (= 4.1.0)
-    skylight-core (4.1.0)
+    skylight (4.1.2)
+      skylight-core (= 4.1.2)
+    skylight-core (4.1.2)
       activesupport (>= 4.2.0)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
@@ -360,7 +360,7 @@ GEM
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
-    yard (0.9.19)
+    yard (0.9.20)
 
 PLATFORMS
   ruby
@@ -417,7 +417,7 @@ DEPENDENCIES
   sidekiq-status
   sidekiq-unique-jobs
   simplecov
-  skylight (= 4.1.0)
+  skylight (= 4.1.2)
   spring
   spring-watcher-listen
   sql_queries_count
