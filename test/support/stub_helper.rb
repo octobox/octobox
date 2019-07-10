@@ -58,11 +58,38 @@ module StubHelper
     stub_request(method, url).to_return(response)
   end
 
+  def stub_review_requests(remote_subject: nil, remote_reviews: nil, extra_headers: {})
+    
+    headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)    
+    
+    if remote_subject.nil? || remote_reviews.nil?
+      remote_subject = Oj.load(File.open(file_fixture('subject_58.json')))
+      remote_reviews = Oj.load(File.open(file_fixture('subject_58_reviews.json')))
+    end
+    
+    stub_request(:get, remote_subject["url"].gsub('/pulls/', '/issues/') + '/comments?since')
+        .to_return({ status: 200, body: file_fixture('subject_58_comments.json'), headers: headers })
+    stub_request(:get, remote_subject["url"]+'/comments?since')
+      .to_return({ status: 200, body: file_fixture('subject_58_review_comments.json'), headers: headers })
+    stub_request(:get, remote_subject["url"]+'/reviews?since')
+      .to_return({ status: 200, body: file_fixture('subject_58_reviews.json'), headers: headers })
+    remote_reviews.each do |review|
+      stub_request(:get, review["pull_request_url"]+'/reviews/'+review["id"].to_s+'/comments?since')
+        .to_return({ status: 200, body: file_fixture("subject_58_review_#{review["id"]}.json"), headers: headers })
+    end
+    stub_request(:get, /\/commits\/\w*\/status/)
+      .to_return({ status: 200, body: file_fixture('subject_58_status.json'), headers: { 'Content-Type' => 'application/json' } })
+  end
+
   def stub_comments_requests(extra_headers: {})
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 
     stub_request(:get, /\/comments\?since\z/)
       .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
+    stub_request(:get, /\/reviews\?since\z/)
+      .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
+    stub_request(:get, /\/commits\/\w*\/status/)
+    .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
   end
 
   def stub_access_tokens_request(extra_headers: {})
@@ -128,5 +155,9 @@ module StubHelper
 
   def stub_background_jobs_enabled(value: true)
     Octobox.config.stubs(:background_jobs_enabled).returns(value)
+  end
+
+  def stub_include_comments(value: true)
+    Octobox.config.stubs(:include_comments).returns(value)
   end
 end

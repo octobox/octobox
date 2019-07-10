@@ -1,0 +1,41 @@
+[
+  {
+    "id": 170944330,
+    "node_id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MTcwOTQ0MzMw",
+    "user": {
+      "login": "chrisarcand",
+      "id": 2430490,
+      "node_id": "MDQ6VXNlcjI0MzA0OTA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2430490?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chrisarcand",
+      "html_url": "https://github.com/chrisarcand",
+      "followers_url": "https://api.github.com/users/chrisarcand/followers",
+      "following_url": "https://api.github.com/users/chrisarcand/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chrisarcand/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chrisarcand/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chrisarcand/subscriptions",
+      "organizations_url": "https://api.github.com/users/chrisarcand/orgs",
+      "repos_url": "https://api.github.com/users/chrisarcand/repos",
+      "events_url": "https://api.github.com/users/chrisarcand/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chrisarcand/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Looking good! I haven't tried running it end to end but have enough feedback to address first:\r\n\r\n* Regarding the Docker Hub image and how images should be tailored per-environment, I generally agree but have tried to keep it 'backwards compatible' in that we've always supported dev environments in the images we provide. However, I really do think it makes sense to the image be a production-only environment and I don't really think we want to deal with providing multiple images. I'm still learning here so if there's an easy way to do it, sure - otherwise as long as @andrew is cool with it I'm all for just providing production images on Docker Hub.\r\n* It seems like some documentation might need updating, especially with the above consideration. To give Octobox a try in development at this point you'd need to pull down the repo and make your own image anyway, so some docs should be changed and I think the override file could probably just be removed, too.  \r\n",
+    "state": "CHANGES_REQUESTED",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#pullrequestreview-170944330",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "MEMBER",
+    "_links": {
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#pullrequestreview-170944330"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "submitted_at": "2018-11-02T01:33:48Z",
+    "commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e"
+  }
+]
