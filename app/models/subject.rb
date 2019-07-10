@@ -200,7 +200,7 @@ class Subject < ApplicationRecord
     return unless github_client
     github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
-    nil
+    []
   end
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews
