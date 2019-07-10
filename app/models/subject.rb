@@ -127,7 +127,7 @@ class Subject < ApplicationRecord
 
   def update_comments
     remote_comments = download_comments
-    if pull_request?
+    if pull_request? && remote_comments
       remote_comments.concat download_reviews
       remote_comments.concat download_review_comments
     end
@@ -197,7 +197,7 @@ class Subject < ApplicationRecord
 
   #example https://api.github.com/repos/octobox/octobox/issues/1141/comments
   def download_comments
-    return unless github_client
+    return [] unless github_client
     github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
     []
