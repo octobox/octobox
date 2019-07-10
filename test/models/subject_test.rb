@@ -2,6 +2,11 @@
 require 'test_helper'
 
 class SubjectTest < ActiveSupport::TestCase
+
+  setup do
+    stub_include_comments
+  end
+
   test 'sync_status updates the status of subject' do
     sha = 'a10867b14bb761a232cd80139fbd4c0d33264240'
     user = create(:user)
@@ -27,7 +32,14 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync updates comment_count of a pull request' do
+    stub_comments_requests
+
     remote_subject = load_subject('merged_pull_request.json')
+
+    user = create(:user)
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
+
     Subject.sync(remote_subject)
     subject = Subject.first
     assert_equal 0, subject.comment_count
@@ -93,7 +105,14 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync sets the state when the subject is merged' do
+    stub_comments_requests
+    
     remote_subject = load_subject('merged_pull_request.json')
+    
+    user = create(:user)
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
+
     refute_empty remote_subject['merged_at']
     Subject.sync(remote_subject)
     assert_equal 'merged', Subject.last.state
@@ -187,7 +206,14 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync sets the sha' do
+    stub_comments_requests
+
     remote_subject = load_subject('merged_pull_request.json')
+
+    user = create(:user)
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
+
     Subject.sync(remote_subject)
     assert_equal '84b4e75e5f627d34f7a85982bda7b260f34db4dd', Subject.last.sha
   end
@@ -199,8 +225,15 @@ class SubjectTest < ActiveSupport::TestCase
   end
 
   test 'sync sets the body' do
+    stub_comments_requests
+
     remote_subject = load_subject('merged_pull_request.json')
     remote_subject['body'] << "\u0000" # create null terminated string
+
+    user = create(:user)
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
+
     Subject.sync(remote_subject)
     assert_equal 'Fixed this thing', Subject.last.body
   end
@@ -226,6 +259,33 @@ class SubjectTest < ActiveSupport::TestCase
     Subject.any_instance.expects(:update_comments)
     Subject.sync(remote_subject)
     assert_equal 1, Subject.count
+  end
+
+  test 'sync updates reviews and review comemnts when the subject is a pull request' do
+    remote_subject = load_subject('subject_58.json')
+    stub_review_requests
+
+    user = create(:user)
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
+
+    Subject.sync(remote_subject)
+
+    assert_equal 24, Subject.last.comments.count
+  end
+
+  test 'review states are saved is there is a review with a state' do
+    remote_subject = load_subject('subject_58.json')
+    stub_review_requests
+
+    user = create(:user)
+    create(:notification, subject_url:remote_subject['url'], user: user)
+    create(:subject, url: remote_subject['url'])
+
+    Subject.sync_comments(remote_subject)    
+
+    assert_equal 1, Comment.where(review_state: "CHANGES_REQUESTED").count
+
   end
 
   test 'sync does not update comments when subject is not persisted' do
