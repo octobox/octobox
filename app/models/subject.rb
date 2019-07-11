@@ -89,9 +89,9 @@ class Subject < ApplicationRecord
 
   def self.sync_comments(remote_subject)
     subject = Subject.find_by(url: remote_subject['url'])
-    Subject.sync(remote_subject) if subject.nil? 
-    return if subject.nil? 
-    
+    Subject.sync(remote_subject) if subject.nil?
+    return if subject.nil?
+
     subject.update_comments
   end
 
@@ -127,7 +127,7 @@ class Subject < ApplicationRecord
 
   def update_comments
     remote_comments = download_comments
-    if pull_request?
+    if pull_request? && remote_comments
       remote_comments.concat download_reviews
       remote_comments.concat download_review_comments
     end
@@ -197,15 +197,15 @@ class Subject < ApplicationRecord
 
   #example https://api.github.com/repos/octobox/octobox/issues/1141/comments
   def download_comments
-    return unless github_client
+    return [] unless github_client
     github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
-    nil
+    []
   end
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews
   def download_reviews
-    return unless github_client && pull_request?
+    return [] unless github_client && pull_request?
     reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
     reviews.map { |review|
       if review[:state] == "COMMENTED"
@@ -215,23 +215,23 @@ class Subject < ApplicationRecord
     }
     return reviews
   rescue Octokit::ClientError => e
-      nil
+    []
   end
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews/172586974/comments
   def download_comments_for_review(review)
-    return unless github_client
+    return [] unless github_client
     reviews = github_client.get(review['pull_request_url'] + '/reviews/' + review['id'].to_s + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
-      nil
+    []
   end
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/comments
   def download_review_comments
-    return unless github_client && pull_request?
+    return [] unless github_client && pull_request?
     github_client.get(url + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
-      nil
+    []
   end
 
   def github_client
