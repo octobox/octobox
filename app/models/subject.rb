@@ -205,7 +205,7 @@ class Subject < ApplicationRecord
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews
   def download_reviews
-    return unless github_client && pull_request?
+    return [] unless github_client && pull_request?
     reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
     reviews.map { |review|
       if review[:state] == "COMMENTED"
@@ -220,7 +220,7 @@ class Subject < ApplicationRecord
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews/172586974/comments
   def download_comments_for_review(review)
-    return unless github_client
+    return [] unless github_client
     reviews = github_client.get(review['pull_request_url'] + '/reviews/' + review['id'].to_s + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
     []
@@ -228,7 +228,7 @@ class Subject < ApplicationRecord
 
   #example https://api.github.com/repos/octobox/octobox/pulls/1141/comments
   def download_review_comments
-    return unless github_client && pull_request?
+    return [] unless github_client && pull_request?
     github_client.get(url + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
     []
