@@ -416,6 +416,7 @@ Then create a new GitHub App, <https://github.com/settings/apps/new>, with the f
 - Webhook URL: The domain plus `/hooks/github`, i.e. http://myoctoboxdomain.com/hooks/github
 - Webhook secret: generate a password and paste it in here and save for later
 - Permissions:
+  - Organization members: Read-only (only needed if your organization has private members)
   - Repository metadata: Read-only
   - Issues: write
   - Pull Requests: Read-only
