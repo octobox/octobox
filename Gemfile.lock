@@ -129,7 +129,7 @@ GEM
       minitest (>= 3.0)
     hashdiff (0.4.0)
     hashie (3.6.0)
-    hirefire-resource (0.7.1)
+    hirefire-resource (0.7.2)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.3)
