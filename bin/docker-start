@@ -2,7 +2,7 @@
 set -e
 
 db_host=${OCTOBOX_DATABASE_HOST:-database.service.octobox.internal}
-while ! nc -z $db_host 5432; do
+while ! nc -z $db_host ${OCTOBOX_DATABASE_PORT:-5432}; do
   echo "Waiting for database to be available..."
   sleep 1
 done

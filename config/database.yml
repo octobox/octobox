@@ -4,6 +4,7 @@ default: &default
   username: <%= DatabaseConfig.username %>
   password: <%= DatabaseConfig.password %>
   host:     <%= DatabaseConfig.host %>
+  port:     <%= DatabaseConfig.port %>
 
 development:
   <<: *default
