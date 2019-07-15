@@ -159,7 +159,7 @@ class DatabaseConfigTest < ActiveSupport::TestCase
 
   test 'port is specified properly' do
     set_env('DATABASE_URL', DB_URL) do
-      assert_equal 'port', DatabaseConfig.port
+      assert_equal 1234, DatabaseConfig.port
     end
 
     set_env('OCTOBOX_DATABASE_PORT', 1234) do |val|
