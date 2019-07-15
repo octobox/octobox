@@ -80,6 +80,15 @@ module DatabaseConfig
       end
     end
 
+    # Port for the database
+    # Overridden by DATABASE_URL
+    #
+    def port
+      database_url_or_fallback('port') do
+        ENV.fetch('OCTOBOX_DATABASE_PORT') { 5432 }
+      end
+    end
+
     # Connection Pool count for the database
     #
     def connection_pool
