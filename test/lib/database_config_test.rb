@@ -162,7 +162,7 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       assert_equal 1234, DatabaseConfig.port
     end
 
-    set_env('OCTOBOX_DATABASE_PORT', 1234) do |val|
+    set_env('OCTOBOX_DATABASE_PORT', "1234") do |val|
       assert_equal val, DatabaseConfig.port
     end
   end
