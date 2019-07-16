@@ -199,7 +199,7 @@ class Subject < ApplicationRecord
   def download_comments
     return [] unless github_client
     github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
-  rescue Octokit::ClientError, Octokit::InternalServerError => e
+  rescue Octokit::ClientError => e
     []
   end
 
@@ -214,7 +214,7 @@ class Subject < ApplicationRecord
       end
     }
     return reviews
-  rescue Octokit::ClientError, Octokit::InternalServerError => e
+  rescue Octokit::ClientError => e
     []
   end
 
