@@ -199,7 +199,7 @@ class Subject < ApplicationRecord
   def download_comments
     return [] unless github_client
     github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
-  rescue Octokit::ClientError => e
+  rescue Octokit::ClientError, Octokit::InternalServerError => e
     []
   end
 
@@ -214,7 +214,7 @@ class Subject < ApplicationRecord
       end
     }
     return reviews
-  rescue Octokit::ClientError => e
+  rescue Octokit::ClientError, Octokit::InternalServerError => e
     []
   end
 
@@ -222,7 +222,7 @@ class Subject < ApplicationRecord
   def download_comments_for_review(review)
     return [] unless github_client
     reviews = github_client.get(review['pull_request_url'] + '/reviews/' + review['id'].to_s + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
-  rescue Octokit::ClientError => e
+  rescue Octokit::ClientError, Octokit::InternalServerError => e
     []
   end
 
@@ -230,7 +230,7 @@ class Subject < ApplicationRecord
   def download_review_comments
     return [] unless github_client && pull_request?
     github_client.get(url + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
-  rescue Octokit::ClientError => e
+  rescue Octokit::ClientError, Octokit::InternalServerError => e
     []
   end
 
