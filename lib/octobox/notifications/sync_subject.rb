@@ -36,7 +36,7 @@ module Octobox
       end
 
       def download_subject?
-        @download_subject ||= subjectable? && github_client && (Octobox.fetch_subject? || github_app_installed? || download_public_subjects?)
+        @download_subject ||= user.present? && subjectable? && github_client && (Octobox.fetch_subject? || github_app_installed? || download_public_subjects?)
       end
 
       def download_public_subjects?
