@@ -54,13 +54,29 @@ function generate_png {
         HEIGHT=$SIZE
     fi
 
+    RADIUS=$(expr ${SIZE} \* 10 / 57)
+
     if [ ! -z "$DIR" ]
     then 
-        echo "$DIR/$NAME.${SIZE}.png"
-        $CONVERT_CMD "$SOURCE" -resize ${WIDTH}x${HEIGHT}! -crop ${WIDTH}x${HEIGHT}+0+0 -alpha on "$PWD/$DIR/$NAME.${SIZE}.png"
+        echo "$DIR/$NAME.${SIZE}.png with radius of ${RADIUS}"
+        $CONVERT_CMD "$SOURCE" \
+          -resize ${WIDTH}x${HEIGHT}! \
+          -crop ${WIDTH}x${HEIGHT}+0+0 \
+           \( +clone  -alpha extract \
+            -draw "fill black polygon 0,0 0,${RADIUS} ${RADIUS},0 fill white circle ${RADIUS},${RADIUS} ${RADIUS},0" \
+            \( +clone -flip \) -compose Multiply -composite \
+            \( +clone -flop \) -compose Multiply -composite \
+           \) -alpha off -compose CopyOpacity -composite  "$PWD/$DIR/$NAME.${SIZE}.png"
     else
-        echo "$NAME-${SIZE}x${SIZE}.png"
-        $CONVERT_CMD "$SOURCE" -resize ${WIDTH}x${HEIGHT}! -crop ${WIDTH}x${HEIGHT}+0+0 -alpha on "$PWD/$NAME-${SIZE}x${SIZE}.png"
+        echo "$NAME-${SIZE}x${SIZE}.png with radius of ${RADIUS}"
+           $CONVERT_CMD "$SOURCE" \
+          -resize ${WIDTH}x${HEIGHT}! \
+          -crop ${WIDTH}x${HEIGHT}+0+0 \
+           \( +clone  -alpha extract \
+            -draw "fill black polygon 0,0 0,${RADIUS} ${RADIUS},0 fill white circle ${RADIUS},${RADIUS} ${RADIUS},0" \
+            \( +clone -flip \) -compose Multiply -composite \
+            \( +clone -flop \) -compose Multiply -composite \
+           \) -alpha off -compose CopyOpacity -composite  "$PWD/$NAME-${SIZE}x${SIZE}.png"
     fi
 } 
 
