@@ -56,7 +56,7 @@ body {
 .flex-thread {
   flex: 1;
   min-width: 0;
-  overflow: auto;
+  overflow-x: hidden;
   .text-content{
     h1, h2{
       padding-top: $spacer * 3

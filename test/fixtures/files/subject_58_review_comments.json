@@ -1,0 +1,499 @@
+[
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/229329812",
+    "pull_request_review_id": 169803664,
+    "id": 229329812,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIyOTMyOTgxMg==",
+    "diff_hunk": "@@ -1,45 +1,81 @@\n-FROM ruby:2.5.3-alpine\n+FROM ruby:2.5.3-alpine as base\n \n ENV APP_ROOT /usr/src/app\n WORKDIR $APP_ROOT\n \n-# =============================================\n-# System layer\n-\n-# Will invalidate cache as soon as the Gemfile changes\n-COPY Gemfile Gemfile.lock $APP_ROOT/\n-\n-# * Setup system\n-# * Install Ruby dependencies\n-RUN apk add --update \\\n-    build-base \\\n+RUN apk add --no-cache \\\n     netcat-openbsd \\\n     git \\\n     nodejs \\\n     postgresql-dev \\\n     mysql-dev \\\n     tzdata \\\n-    curl-dev \\\n- && rm -rf /var/cache/apk/* \\\n+    curl-dev\n+\n+# Will invalidate cache as soon a the Gemfile changes\n+COPY Gemfile Gemfile.lock $APP_ROOT/\n+\n+# * Setup system\n+# * Install common Ruby dependencies\n+RUN apk add --no-cache build-base \\\n  && bundle config --global frozen 1 \\\n- && bundle install --without test --jobs 2 \\\n- && gem install foreman\n+ && bundle install \\\n+    --without development test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && gem install foreman \\\n+ && apk del build-base\n \n-# ========================================================\n-# Application layer\n+# Startup\n+CMD [\"bin/docker-start\"]\n+\n+####################\n+\n+FROM base as development\n+\n+# * Install development dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with development \\\n+    --without test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n \n # Copy application code\n COPY . $APP_ROOT\n \n-# Precompile assets for a production environment.\n-# This is done to include assets in production images on Dockerhub.\n-RUN RAILS_ENV=production bundle exec rake assets:precompile\n-\n # * Generate the docs\n # * Make files OpenShift conformant\n RUN RAILS_ENV=development bin/rails api_docs:generate \\\n- && chgrp -R 0 $APP_ROOT \\\n+ && chown -R 1000:0 $APP_ROOT \\\n  && chmod -R g=u $APP_ROOT\n \n-# Startup\n-CMD [\"bin/docker-start\"]\n+USER 1000\n+\n+####################\n+\n+FROM base as production\n+\n+# * Install production dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with production \\\n+    --without development test \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n+\n+# Copy application code\n+COPY . $APP_ROOT/\n+\n+# Precompile assets for a production environment.\n+# This is done to include assets in production images on Dockerhub.\n+RUN RAILS_ENV=production rake assets:precompile \\\n+ && rm -rf /usr/src/app/tmp/cache/\n+\n+RUN RAILS_ENV=production rake assets:precompile \\",
+    "path": "Dockerfile",
+    "position": null,
+    "original_position": 98,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "e407f8b984323589aad255d3142ff30b68e34857",
+    "user": {
+      "login": "andrew",
+      "id": 1060,
+      "node_id": "MDQ6VXNlcjEwNjA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1060?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/andrew",
+      "html_url": "https://github.com/andrew",
+      "followers_url": "https://api.github.com/users/andrew/followers",
+      "following_url": "https://api.github.com/users/andrew/following{/other_user}",
+      "gists_url": "https://api.github.com/users/andrew/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/andrew/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/andrew/subscriptions",
+      "organizations_url": "https://api.github.com/users/andrew/orgs",
+      "repos_url": "https://api.github.com/users/andrew/repos",
+      "events_url": "https://api.github.com/users/andrew/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/andrew/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Looks like this line might have been duplicated in the rebase?",
+    "created_at": "2018-10-30T14:30:14Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r229329812",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "MEMBER",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/229329812"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r229329812"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    }
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/229607020",
+    "pull_request_review_id": 170143578,
+    "id": 229607020,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIyOTYwNzAyMA==",
+    "diff_hunk": "@@ -1,45 +1,81 @@\n-FROM ruby:2.5.3-alpine\n+FROM ruby:2.5.3-alpine as base\n \n ENV APP_ROOT /usr/src/app\n WORKDIR $APP_ROOT\n \n-# =============================================\n-# System layer\n-\n-# Will invalidate cache as soon as the Gemfile changes\n-COPY Gemfile Gemfile.lock $APP_ROOT/\n-\n-# * Setup system\n-# * Install Ruby dependencies\n-RUN apk add --update \\\n-    build-base \\\n+RUN apk add --no-cache \\\n     netcat-openbsd \\\n     git \\\n     nodejs \\\n     postgresql-dev \\\n     mysql-dev \\\n     tzdata \\\n-    curl-dev \\\n- && rm -rf /var/cache/apk/* \\\n+    curl-dev\n+\n+# Will invalidate cache as soon a the Gemfile changes\n+COPY Gemfile Gemfile.lock $APP_ROOT/\n+\n+# * Setup system\n+# * Install common Ruby dependencies\n+RUN apk add --no-cache build-base \\\n  && bundle config --global frozen 1 \\\n- && bundle install --without test --jobs 2 \\\n- && gem install foreman\n+ && bundle install \\\n+    --without development test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && gem install foreman \\\n+ && apk del build-base\n \n-# ========================================================\n-# Application layer\n+# Startup\n+CMD [\"bin/docker-start\"]\n+\n+####################\n+\n+FROM base as development\n+\n+# * Install development dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with development \\\n+    --without test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n \n # Copy application code\n COPY . $APP_ROOT\n \n-# Precompile assets for a production environment.\n-# This is done to include assets in production images on Dockerhub.\n-RUN RAILS_ENV=production bundle exec rake assets:precompile\n-\n # * Generate the docs\n # * Make files OpenShift conformant\n RUN RAILS_ENV=development bin/rails api_docs:generate \\\n- && chgrp -R 0 $APP_ROOT \\\n+ && chown -R 1000:0 $APP_ROOT \\\n  && chmod -R g=u $APP_ROOT\n \n-# Startup\n-CMD [\"bin/docker-start\"]\n+USER 1000\n+\n+####################\n+\n+FROM base as production\n+\n+# * Install production dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with production \\\n+    --without development test \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n+\n+# Copy application code\n+COPY . $APP_ROOT/\n+\n+# Precompile assets for a production environment.\n+# This is done to include assets in production images on Dockerhub.\n+RUN RAILS_ENV=production rake assets:precompile \\\n+ && rm -rf /usr/src/app/tmp/cache/\n+\n+RUN RAILS_ENV=production rake assets:precompile \\",
+    "path": "Dockerfile",
+    "position": null,
+    "original_position": 98,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "e407f8b984323589aad255d3142ff30b68e34857",
+    "user": {
+      "login": "NiR-",
+      "id": 557933,
+      "node_id": "MDQ6VXNlcjU1NzkzMw==",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/557933?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/NiR-",
+      "html_url": "https://github.com/NiR-",
+      "followers_url": "https://api.github.com/users/NiR-/followers",
+      "following_url": "https://api.github.com/users/NiR-/following{/other_user}",
+      "gists_url": "https://api.github.com/users/NiR-/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/NiR-/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/NiR-/subscriptions",
+      "organizations_url": "https://api.github.com/users/NiR-/orgs",
+      "repos_url": "https://api.github.com/users/NiR-/repos",
+      "events_url": "https://api.github.com/users/NiR-/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/NiR-/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Oh indeed, that was a rebase mistake. It's now fixed.",
+    "created_at": "2018-10-31T08:54:19Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r229607020",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "CONTRIBUTOR",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/229607020"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r229607020"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "in_reply_to_id": 229329812
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/230248819",
+    "pull_request_review_id": 170944330,
+    "id": 230248819,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzMDI0ODgxOQ==",
+    "diff_hunk": "@@ -1,45 +1,78 @@\n-FROM ruby:2.5.3-alpine\n+FROM ruby:2.5.3-alpine as base\n \n ENV APP_ROOT /usr/src/app\n WORKDIR $APP_ROOT\n \n-# =============================================\n-# System layer\n-\n-# Will invalidate cache as soon as the Gemfile changes\n-COPY Gemfile Gemfile.lock $APP_ROOT/\n-\n-# * Setup system\n-# * Install Ruby dependencies\n-RUN apk add --update \\\n-    build-base \\\n+RUN apk add --no-cache \\\n     netcat-openbsd \\\n     git \\\n     nodejs \\\n     postgresql-dev \\\n     mysql-dev \\\n     tzdata \\\n-    curl-dev \\\n- && rm -rf /var/cache/apk/* \\\n+    curl-dev\n+\n+# Will invalidate cache as soon a the Gemfile changes\n+COPY Gemfile Gemfile.lock $APP_ROOT/\n+\n+# * Setup system\n+# * Install common Ruby dependencies\n+RUN apk add --no-cache build-base \\\n  && bundle config --global frozen 1 \\\n- && bundle install --without test --jobs 2 \\\n- && gem install foreman\n+ && bundle install \\\n+    --without development test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && gem install foreman \\\n+ && apk del build-base\n \n-# ========================================================\n-# Application layer\n+# Startup\n+CMD [\"bin/docker-start\"]\n+\n+####################\n+\n+FROM base as development\n+\n+# * Install development dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with development \\\n+    --without test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n \n # Copy application code\n COPY . $APP_ROOT\n \n-# Precompile assets for a production environment.\n-# This is done to include assets in production images on Dockerhub.\n-RUN RAILS_ENV=production bundle exec rake assets:precompile\n-\n # * Generate the docs\n # * Make files OpenShift conformant\n RUN RAILS_ENV=development bin/rails api_docs:generate \\\n- && chgrp -R 0 $APP_ROOT \\\n+ && chown -R 1000:0 $APP_ROOT \\\n  && chmod -R g=u $APP_ROOT\n \n-# Startup\n-CMD [\"bin/docker-start\"]\n+USER 1000",
+    "path": "Dockerfile",
+    "position": 76,
+    "original_position": 76,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e",
+    "user": {
+      "login": "chrisarcand",
+      "id": 2430490,
+      "node_id": "MDQ6VXNlcjI0MzA0OTA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2430490?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chrisarcand",
+      "html_url": "https://github.com/chrisarcand",
+      "followers_url": "https://api.github.com/users/chrisarcand/followers",
+      "following_url": "https://api.github.com/users/chrisarcand/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chrisarcand/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chrisarcand/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chrisarcand/subscriptions",
+      "organizations_url": "https://api.github.com/users/chrisarcand/orgs",
+      "repos_url": "https://api.github.com/users/chrisarcand/repos",
+      "events_url": "https://api.github.com/users/chrisarcand/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chrisarcand/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "From the docs... \r\n\r\n> The USER instruction sets the user name (or UID) and optionally the user group (or GID) to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile.\r\n\r\nDoesn't that mean this should be before all the other commands in each section?",
+    "created_at": "2018-11-02T01:28:45Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r230248819",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "MEMBER",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/230248819"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r230248819"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    }
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/230248933",
+    "pull_request_review_id": 170944330,
+    "id": 230248933,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzMDI0ODkzMw==",
+    "diff_hunk": "@@ -0,0 +1,25 @@\n+version: '3.4'",
+    "path": "docker-compose-dev.yml",
+    "position": null,
+    "original_position": 1,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e",
+    "user": {
+      "login": "chrisarcand",
+      "id": 2430490,
+      "node_id": "MDQ6VXNlcjI0MzA0OTA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2430490?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chrisarcand",
+      "html_url": "https://github.com/chrisarcand",
+      "followers_url": "https://api.github.com/users/chrisarcand/followers",
+      "following_url": "https://api.github.com/users/chrisarcand/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chrisarcand/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chrisarcand/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chrisarcand/subscriptions",
+      "organizations_url": "https://api.github.com/users/chrisarcand/orgs",
+      "repos_url": "https://api.github.com/users/chrisarcand/repos",
+      "events_url": "https://api.github.com/users/chrisarcand/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chrisarcand/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Why is this file added? An old artifact from before I did my own PR where the separate dev compose file was removed? Is this necessary?",
+    "created_at": "2018-11-02T01:29:42Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r230248933",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "MEMBER",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/230248933"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r230248933"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    }
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/230251052",
+    "pull_request_review_id": 170947089,
+    "id": 230251052,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzMDI1MTA1Mg==",
+    "diff_hunk": "@@ -0,0 +1,25 @@\n+version: '3.4'",
+    "path": "docker-compose-dev.yml",
+    "position": null,
+    "original_position": 1,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e",
+    "user": {
+      "login": "chrisarcand",
+      "id": 2430490,
+      "node_id": "MDQ6VXNlcjI0MzA0OTA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2430490?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/chrisarcand",
+      "html_url": "https://github.com/chrisarcand",
+      "followers_url": "https://api.github.com/users/chrisarcand/followers",
+      "following_url": "https://api.github.com/users/chrisarcand/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chrisarcand/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/chrisarcand/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chrisarcand/subscriptions",
+      "organizations_url": "https://api.github.com/users/chrisarcand/orgs",
+      "repos_url": "https://api.github.com/users/chrisarcand/repos",
+      "events_url": "https://api.github.com/users/chrisarcand/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/chrisarcand/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "(to combine my feedback of 'we should just provide production images', if we do that I believe the target added in this file should just be edited in the existing compose file and this file removed)",
+    "created_at": "2018-11-02T01:49:54Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r230251052",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "MEMBER",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/230251052"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r230251052"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "in_reply_to_id": 230248933
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/231585140",
+    "pull_request_review_id": 172586974,
+    "id": 231585140,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzMTU4NTE0MA==",
+    "diff_hunk": "@@ -0,0 +1,25 @@\n+version: '3.4'",
+    "path": "docker-compose-dev.yml",
+    "position": null,
+    "original_position": 1,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e",
+    "user": {
+      "login": "NiR-",
+      "id": 557933,
+      "node_id": "MDQ6VXNlcjU1NzkzMw==",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/557933?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/NiR-",
+      "html_url": "https://github.com/NiR-",
+      "followers_url": "https://api.github.com/users/NiR-/followers",
+      "following_url": "https://api.github.com/users/NiR-/following{/other_user}",
+      "gists_url": "https://api.github.com/users/NiR-/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/NiR-/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/NiR-/subscriptions",
+      "organizations_url": "https://api.github.com/users/NiR-/orgs",
+      "repos_url": "https://api.github.com/users/NiR-/repos",
+      "events_url": "https://api.github.com/users/NiR-/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/NiR-/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Indeed, it's an old artifact, my bad.\r\n\r\n> the target added in this file should just be edited in the existing compose file\r\n\r\nIf developers have to update their `docker-compose.yml` file to run dev versions, this will not be really practical as it'll be marked as an \"unstage change\" by git. This might introduce too much friction. However, we can use an env var, defined in `.env`, so people can easily switch to any env.",
+    "created_at": "2018-11-07T16:45:04Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r231585140",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "CONTRIBUTOR",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/231585140"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r231585140"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "in_reply_to_id": 230248933
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/233879042",
+    "pull_request_review_id": 175394228,
+    "id": 233879042,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzMzg3OTA0Mg==",
+    "diff_hunk": "@@ -0,0 +1,25 @@\n+version: '3.4'",
+    "path": "docker-compose-dev.yml",
+    "position": null,
+    "original_position": 1,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e",
+    "user": {
+      "login": "nesl247",
+      "id": 1037526,
+      "node_id": "MDQ6VXNlcjEwMzc1MjY=",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1037526?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/nesl247",
+      "html_url": "https://github.com/nesl247",
+      "followers_url": "https://api.github.com/users/nesl247/followers",
+      "following_url": "https://api.github.com/users/nesl247/following{/other_user}",
+      "gists_url": "https://api.github.com/users/nesl247/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/nesl247/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/nesl247/subscriptions",
+      "organizations_url": "https://api.github.com/users/nesl247/orgs",
+      "repos_url": "https://api.github.com/users/nesl247/repos",
+      "events_url": "https://api.github.com/users/nesl247/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/nesl247/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "My recommendation is to have `docker-compose.yml` only include what is useful in EVERY environment, and add a `docker-compose.override.yml.dist` file which is designed for environment specific purposes, with defaults for development. Users then copy it to `docker-compose.override.yml` and make any changes necessary. You add the `.dist` to `.gitignore` and then it won't show up as an unstaged change.",
+    "created_at": "2018-11-15T15:06:46Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r233879042",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "NONE",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/233879042"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r233879042"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "in_reply_to_id": 230248933
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/236070121",
+    "pull_request_review_id": 178078695,
+    "id": 236070121,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzNjA3MDEyMQ==",
+    "diff_hunk": "@@ -1,45 +1,78 @@\n-FROM ruby:2.5.3-alpine\n+FROM ruby:2.5.3-alpine as base\n \n ENV APP_ROOT /usr/src/app\n WORKDIR $APP_ROOT\n \n-# =============================================\n-# System layer\n-\n-# Will invalidate cache as soon as the Gemfile changes\n-COPY Gemfile Gemfile.lock $APP_ROOT/\n-\n-# * Setup system\n-# * Install Ruby dependencies\n-RUN apk add --update \\\n-    build-base \\\n+RUN apk add --no-cache \\\n     netcat-openbsd \\\n     git \\\n     nodejs \\\n     postgresql-dev \\\n     mysql-dev \\\n     tzdata \\\n-    curl-dev \\\n- && rm -rf /var/cache/apk/* \\\n+    curl-dev\n+\n+# Will invalidate cache as soon a the Gemfile changes\n+COPY Gemfile Gemfile.lock $APP_ROOT/\n+\n+# * Setup system\n+# * Install common Ruby dependencies\n+RUN apk add --no-cache build-base \\\n  && bundle config --global frozen 1 \\\n- && bundle install --without test --jobs 2 \\\n- && gem install foreman\n+ && bundle install \\\n+    --without development test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && gem install foreman \\\n+ && apk del build-base\n \n-# ========================================================\n-# Application layer\n+# Startup\n+CMD [\"bin/docker-start\"]\n+\n+####################\n+\n+FROM base as development\n+\n+# * Install development dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with development \\\n+    --without test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n \n # Copy application code\n COPY . $APP_ROOT\n \n-# Precompile assets for a production environment.\n-# This is done to include assets in production images on Dockerhub.\n-RUN RAILS_ENV=production bundle exec rake assets:precompile\n-\n # * Generate the docs\n # * Make files OpenShift conformant\n RUN RAILS_ENV=development bin/rails api_docs:generate \\\n- && chgrp -R 0 $APP_ROOT \\\n+ && chown -R 1000:0 $APP_ROOT \\\n  && chmod -R g=u $APP_ROOT\n \n-# Startup\n-CMD [\"bin/docker-start\"]\n+USER 1000",
+    "path": "Dockerfile",
+    "position": 76,
+    "original_position": 76,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e",
+    "user": {
+      "login": "NiR-",
+      "id": 557933,
+      "node_id": "MDQ6VXNlcjU1NzkzMw==",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/557933?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/NiR-",
+      "html_url": "https://github.com/NiR-",
+      "followers_url": "https://api.github.com/users/NiR-/followers",
+      "following_url": "https://api.github.com/users/NiR-/following{/other_user}",
+      "gists_url": "https://api.github.com/users/NiR-/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/NiR-/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/NiR-/subscriptions",
+      "organizations_url": "https://api.github.com/users/NiR-/orgs",
+      "repos_url": "https://api.github.com/users/NiR-/repos",
+      "events_url": "https://api.github.com/users/NiR-/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/NiR-/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Unfortunately this would mean running apk with user 1000 and that won't work. Since `bundle install` commands are all surrounded by apk commands, the only place where we can set the `USER` is at the end of each target.\r\n\r\nHowever, AFAIK bundler and RubyGems does not have the same security issue than, for instance, npm: there's no external code run during installation phase, so I believe there's no reason for the build environment to be compromised (from that vector). In the end, it's only there to not run Octobox as a root user, as this is considered a bad practice (see [here](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user)).",
+    "created_at": "2018-11-25T11:45:17Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r236070121",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "CONTRIBUTOR",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/236070121"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r236070121"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "in_reply_to_id": 230248819
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/236238181",
+    "pull_request_review_id": 178268406,
+    "id": 236238181,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzNjIzODE4MQ==",
+    "diff_hunk": "@@ -1,45 +1,78 @@\n-FROM ruby:2.5.3-alpine\n+FROM ruby:2.5.3-alpine as base\n \n ENV APP_ROOT /usr/src/app\n WORKDIR $APP_ROOT\n \n-# =============================================\n-# System layer\n-\n-# Will invalidate cache as soon as the Gemfile changes\n-COPY Gemfile Gemfile.lock $APP_ROOT/\n-\n-# * Setup system\n-# * Install Ruby dependencies\n-RUN apk add --update \\\n-    build-base \\\n+RUN apk add --no-cache \\\n     netcat-openbsd \\\n     git \\\n     nodejs \\\n     postgresql-dev \\\n     mysql-dev \\\n     tzdata \\\n-    curl-dev \\\n- && rm -rf /var/cache/apk/* \\\n+    curl-dev\n+\n+# Will invalidate cache as soon a the Gemfile changes\n+COPY Gemfile Gemfile.lock $APP_ROOT/\n+\n+# * Setup system\n+# * Install common Ruby dependencies\n+RUN apk add --no-cache build-base \\\n  && bundle config --global frozen 1 \\\n- && bundle install --without test --jobs 2 \\\n- && gem install foreman\n+ && bundle install \\\n+    --without development test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && gem install foreman \\\n+ && apk del build-base\n \n-# ========================================================\n-# Application layer\n+# Startup\n+CMD [\"bin/docker-start\"]\n+\n+####################\n+\n+FROM base as development\n+\n+# * Install development dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with development \\\n+    --without test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n \n # Copy application code\n COPY . $APP_ROOT\n \n-# Precompile assets for a production environment.\n-# This is done to include assets in production images on Dockerhub.\n-RUN RAILS_ENV=production bundle exec rake assets:precompile\n-\n # * Generate the docs\n # * Make files OpenShift conformant\n RUN RAILS_ENV=development bin/rails api_docs:generate \\\n- && chgrp -R 0 $APP_ROOT \\\n+ && chown -R 1000:0 $APP_ROOT \\\n  && chmod -R g=u $APP_ROOT\n \n-# Startup\n-CMD [\"bin/docker-start\"]\n+USER 1000",
+    "path": "Dockerfile",
+    "position": 76,
+    "original_position": 76,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e",
+    "user": {
+      "login": "andrew",
+      "id": 1060,
+      "node_id": "MDQ6VXNlcjEwNjA=",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1060?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/andrew",
+      "html_url": "https://github.com/andrew",
+      "followers_url": "https://api.github.com/users/andrew/followers",
+      "following_url": "https://api.github.com/users/andrew/following{/other_user}",
+      "gists_url": "https://api.github.com/users/andrew/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/andrew/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/andrew/subscriptions",
+      "organizations_url": "https://api.github.com/users/andrew/orgs",
+      "repos_url": "https://api.github.com/users/andrew/repos",
+      "events_url": "https://api.github.com/users/andrew/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/andrew/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Rubygems does actually allow for arbitrary code execution during installation via the option to build native extensions: http://blog.costan.us/2008/11/post-install-post-update-scripts-for.html although it requires jumping through more hoops than with npm.",
+    "created_at": "2018-11-26T12:40:40Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r236238181",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "MEMBER",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/236238181"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r236238181"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "in_reply_to_id": 230248819
+  },
+  {
+    "url": "https://api.github.com/repos/octobox/octobox/pulls/comments/236316022",
+    "pull_request_review_id": 178366342,
+    "id": 236316022,
+    "node_id": "MDI0OlB1bGxSZXF1ZXN0UmV2aWV3Q29tbWVudDIzNjMxNjAyMg==",
+    "diff_hunk": "@@ -1,45 +1,78 @@\n-FROM ruby:2.5.3-alpine\n+FROM ruby:2.5.3-alpine as base\n \n ENV APP_ROOT /usr/src/app\n WORKDIR $APP_ROOT\n \n-# =============================================\n-# System layer\n-\n-# Will invalidate cache as soon as the Gemfile changes\n-COPY Gemfile Gemfile.lock $APP_ROOT/\n-\n-# * Setup system\n-# * Install Ruby dependencies\n-RUN apk add --update \\\n-    build-base \\\n+RUN apk add --no-cache \\\n     netcat-openbsd \\\n     git \\\n     nodejs \\\n     postgresql-dev \\\n     mysql-dev \\\n     tzdata \\\n-    curl-dev \\\n- && rm -rf /var/cache/apk/* \\\n+    curl-dev\n+\n+# Will invalidate cache as soon a the Gemfile changes\n+COPY Gemfile Gemfile.lock $APP_ROOT/\n+\n+# * Setup system\n+# * Install common Ruby dependencies\n+RUN apk add --no-cache build-base \\\n  && bundle config --global frozen 1 \\\n- && bundle install --without test --jobs 2 \\\n- && gem install foreman\n+ && bundle install \\\n+    --without development test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && gem install foreman \\\n+ && apk del build-base\n \n-# ========================================================\n-# Application layer\n+# Startup\n+CMD [\"bin/docker-start\"]\n+\n+####################\n+\n+FROM base as development\n+\n+# * Install development dependencies\n+RUN apk add --no-cache build-base \\\n+ && bundle install \\\n+    --with development \\\n+    --without test production \\\n+    --jobs $(grep -c ^processor /proc/cpuinfo) \\\n+ && apk del build-base\n \n # Copy application code\n COPY . $APP_ROOT\n \n-# Precompile assets for a production environment.\n-# This is done to include assets in production images on Dockerhub.\n-RUN RAILS_ENV=production bundle exec rake assets:precompile\n-\n # * Generate the docs\n # * Make files OpenShift conformant\n RUN RAILS_ENV=development bin/rails api_docs:generate \\\n- && chgrp -R 0 $APP_ROOT \\\n+ && chown -R 1000:0 $APP_ROOT \\\n  && chmod -R g=u $APP_ROOT\n \n-# Startup\n-CMD [\"bin/docker-start\"]\n+USER 1000",
+    "path": "Dockerfile",
+    "position": 76,
+    "original_position": 76,
+    "commit_id": "afb682800db14cdb23b27b2cef8bec1723ab99cb",
+    "original_commit_id": "ba106e28f6620cde1c60283a6167da99a3f9284e",
+    "user": {
+      "login": "NiR-",
+      "id": 557933,
+      "node_id": "MDQ6VXNlcjU1NzkzMw==",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/557933?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/NiR-",
+      "html_url": "https://github.com/NiR-",
+      "followers_url": "https://api.github.com/users/NiR-/followers",
+      "following_url": "https://api.github.com/users/NiR-/following{/other_user}",
+      "gists_url": "https://api.github.com/users/NiR-/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/NiR-/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/NiR-/subscriptions",
+      "organizations_url": "https://api.github.com/users/NiR-/orgs",
+      "repos_url": "https://api.github.com/users/NiR-/repos",
+      "events_url": "https://api.github.com/users/NiR-/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/NiR-/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "body": "Ha too bad :/ I'm not really sure what to do then. I tried to find out articles about \"dockerizing\" ruby apps, but almost none talks about `USER` instruction. The only one I found using this instruction, does so after installing the dependencies (see [here](https://blog.kontena.io/dockerizing-ruby-application#exampleapplication)).\r\n\r\nDo you think this is not an issue in the end, or should I do the required changes to not run bundler as root (that would mean we couldn't install/deinstall build-tools before/after running bundler)?",
+    "created_at": "2018-11-26T16:05:17Z",
+    "updated_at": "2019-05-28T10:29:06Z",
+    "html_url": "https://github.com/octobox/octobox/pull/1141#discussion_r236316022",
+    "pull_request_url": "https://api.github.com/repos/octobox/octobox/pulls/1141",
+    "author_association": "CONTRIBUTOR",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/comments/236316022"
+      },
+      "html": {
+        "href": "https://github.com/octobox/octobox/pull/1141#discussion_r236316022"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/octobox/octobox/pulls/1141"
+      }
+    },
+    "in_reply_to_id": 230248819
+  }
+]

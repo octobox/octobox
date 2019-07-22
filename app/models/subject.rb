@@ -78,7 +78,7 @@ class Subject < ApplicationRecord
     return unless subject.persisted?
 
     subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
-    subject.update_comments if Octobox.include_comments? && subject.has_comments?
+    subject.update_comments if Octobox.include_comments? && (subject.has_comments? || subject.pull_request?)
     subject.update_status
     subject.sync_involved_users if (subject.saved_changes.keys & subject.notifiable_fields).any?
   end
@@ -87,12 +87,24 @@ class Subject < ApplicationRecord
     where(repository_full_name: repository_full_name).find_by_sha(sha)&.update_status
   end
 
+  def self.sync_comments(remote_subject)
+    subject = Subject.find_by(url: remote_subject['url'])
+    Subject.sync(remote_subject) if subject.nil?
+    return if subject.nil?
+
+    subject.update_comments
+  end
+
   def has_comments?
      comment_count && comment_count > 0
   end
 
   def commentable?
     !comment_count.nil?
+  end
+
+  def pull_request?
+    url.match?(/pull/i)
   end
 
   def update_status
@@ -115,16 +127,25 @@ class Subject < ApplicationRecord
 
   def update_comments
     remote_comments = download_comments
+    if pull_request? && remote_comments
+      remote_comments.concat download_reviews
+      remote_comments.concat download_review_comments
+    end
     return unless remote_comments.present?
     remote_comments.each do |remote_comment|
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
         comment.author = remote_comment.user.login
+        comment.url = remote_comment.url
+        comment.url = remote_comment.url
         comment.body = remote_comment.body.try(:gsub, "\u0000", '')
         comment.author_association = remote_comment.author_association
         comment.created_at = remote_comment.created_at
+        comment.created_at = remote_comment.submitted_at if remote_comment.submitted_at
+        comment.review_state = remote_comment.state if remote_comment.state
         comment.save
       end
     end
+    comment_count = comments.count
   end
 
   def comment(user, comment_body)
@@ -174,11 +195,43 @@ class Subject < ApplicationRecord
     nil
   end
 
+  #example https://api.github.com/repos/octobox/octobox/issues/1141/comments
   def download_comments
-    return unless github_client
+    return [] unless github_client
     github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
-    nil
+    []
+  end
+
+  #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews
+  def download_reviews
+    return [] unless github_client && pull_request?
+    reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
+    reviews.map { |review|
+      if review[:state] == "COMMENTED"
+        reviews.concat download_comments_for_review(review)
+        reviews.delete(review)
+      end
+    }
+    return reviews
+  rescue Octokit::ClientError => e
+    []
+  end
+
+  #example https://api.github.com/repos/octobox/octobox/pulls/1141/reviews/172586974/comments
+  def download_comments_for_review(review)
+    return [] unless github_client
+    reviews = github_client.get(review['pull_request_url'] + '/reviews/' + review['id'].to_s + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
+  rescue Octokit::ClientError, Octokit::InternalServerError => e
+    []
+  end
+
+  #example https://api.github.com/repos/octobox/octobox/pulls/1141/comments
+  def download_review_comments
+    return [] unless github_client && pull_request?
+    github_client.get(url + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
+  rescue Octokit::ClientError, Octokit::InternalServerError => e
+    []
   end
 
   def github_client
