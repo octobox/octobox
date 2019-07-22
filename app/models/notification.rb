@@ -8,7 +8,7 @@ class Notification < ApplicationRecord
   SUBJECTABLE_TYPES = SUBJECT_TYPE_COMMIT_RELEASE + SUBJECT_TYPE_ISSUE_REQUEST
 
   if DatabaseConfig.is_postgres?
-    include PgSearch
+    include PgSearch::Model
     pg_search_scope :search_by_subject_title,
                     against: :subject_title,
                     order_within_rank: 'notifications.updated_at DESC',
