@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <div id='notification-thread' class="p-3 mb-5" data-id='<%= @notification.id %>' data-subject-id='<%= @notification.subject.id %>'>
+  <div id='notification-thread' class="p-3 mb-5" data-id='<%= @notification.id %>' data-subject-id='<%= @notification.subject.try(:id) %>'>
 
     <div id='thread-subject'>
       <%= render 'thread_subject', notification: @notification %>
@@ -70,7 +70,7 @@
             <%= render partial: 'comment', locals:{comment: comment, index: index} %>
           <% end %>
         <% end %>
-        
+
       </div>
 
       <% if current_user.can_comment?(@notification.subject)%>
