@@ -134,7 +134,7 @@ class Subject < ApplicationRecord
     return unless remote_comments.present?
     remote_comments.each do |remote_comment|
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
-        comment.author = remote_comment.user.login
+        comment.author = remote_comment.user.try(:login)
         comment.url = remote_comment.url
         comment.url = remote_comment.url
         comment.body = remote_comment.body.try(:gsub, "\u0000", '')
