@@ -207,6 +207,7 @@ class Subject < ApplicationRecord
   def download_reviews
     return [] unless github_client && pull_request?
     reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
+    return [] unless reviews.present?
     reviews.map { |review|
       if review[:state] == "COMMENTED"
         reviews.concat download_comments_for_review(review)
