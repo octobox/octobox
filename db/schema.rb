@@ -126,6 +126,7 @@ ActiveRecord::Schema.define(version: 2020_06_19_095214) do
     t.text "body"
     t.integer "comment_count"
     t.boolean "draft", default: false
+    t.string "requested_reviewers", default: "::"
     t.index ["repository_full_name"], name: "index_subjects_on_repository_full_name"
     t.index ["url"], name: "index_subjects_on_url"
   end

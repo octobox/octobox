@@ -55,6 +55,7 @@ class Subject < ApplicationRecord
       updated_at: remote_subject['updated_at'] || Time.current,
       comment_count: extract_comment_count_from_remote_subject(remote_subject) || comment_count,
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
+      requested_reviewers: ":#{Array(remote_subject['requested_reviewers'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
       body: remote_subject['body'].try(:gsub, "\u0000", ''),
