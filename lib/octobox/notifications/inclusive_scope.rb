@@ -73,6 +73,12 @@ module Octobox
             assignees.map { |assignee| Subject.arel_table[:assignees].matches("%:#{assignee}:%") }.reduce(:or)
           )
         }
+
+        scope :requested_reviewers, ->(reviewers) {
+          joins(:subject).where(
+            Array(reviewers).map { |reviewer| Subject.arel_table[:requested_reviewers].matches("%:#{reviewer}:%") }.reduce(:or)
+          )
+        }
       end
     end
   end

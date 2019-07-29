@@ -66,6 +66,16 @@
   <% end %>
 </ul>
 
+
+<% if @review_requested > 0 %>
+  <ul class="nav nav-pills flex-column nav-filters">
+    <%= filter_link :requested_reviewers, current_user.github_login, @review_requested do %>
+      <%= octicon 'clippy', height: 16, class: "sidebar-icon text-warning" %>
+      Awaiting My Review
+    <% end %>
+  </ul>
+<% end %>
+
 <% if @states.keys.compact.any? %>
   <ul class="nav nav-pills flex-column nav-filters">
     <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
