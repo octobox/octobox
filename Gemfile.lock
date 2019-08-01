@@ -267,7 +267,7 @@ GEM
     request_store (1.4.1)
       rack (>= 1.4)
     rgb (0.1.0)
-    rubocop (0.73.0)
+    rubocop (0.74.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.6)
