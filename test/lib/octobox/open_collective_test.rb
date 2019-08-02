@@ -22,7 +22,7 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 			names = Octobox::OpenCollective.get_sub_names(transactions, 10)
 
 			assert_equal names.length, 4
-			assert names.include?('tom')
+			assert names.include?('tom-bruijn')
 		end
 	end
 

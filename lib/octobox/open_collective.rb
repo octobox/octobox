@@ -32,7 +32,7 @@ module Octobox
       end
 
       subscriber_names = subscriptions.map do |name, _transactions|
-        rz = name.match(/github.com\/(\w+)/i) if name
+        rz = name.match(/github.com\/([\w\-]+)/i) if name
         rz[1] if rz
       end.compact
 
@@ -51,7 +51,7 @@ module Octobox
           next if purchase.app_installation.nil?
           next if subscriber_names.include? purchase.app_installation.account_login
           unless purchase.next_billing_date.present? && purchase.next_billing_date > Time.now
-            purchase.update_attributes(unit_count: 0) 
+            purchase.update_attributes(unit_count: 0)
             Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed #{plan_name} for #{purchase.app_installation.account_login}\033[0m\n\n")
           end
         end
