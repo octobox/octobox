@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    action-cable-testing (0.5.0)
+    action-cable-testing (0.6.0)
       actioncable (>= 5.0)
     actioncable (5.2.3)
       actionpack (= 5.2.3)
