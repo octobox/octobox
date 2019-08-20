@@ -67,7 +67,7 @@ class User < ApplicationRecord
       token_field => auth_hash.dig('credentials', 'token')
     }
 
-    update_attributes!(github_attributes)
+    update!(github_attributes)
   end
 
   def syncing?
@@ -163,7 +163,7 @@ class User < ApplicationRecord
     return false
   end
 
-  def create_default_pinned_searches 
+  def create_default_pinned_searches
     pinned_searches.create(query: 'state:closed,merged archived:false', name: 'Archivable')
     pinned_searches.create(query: 'type:pull_request state:open status:success archived:false', name: 'Mergeable')
     pinned_searches.create(query: "type:pull_request author:#{github_login} inbox:true", name: 'My PRs')

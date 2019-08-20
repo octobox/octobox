@@ -12,7 +12,7 @@ class AppInstallation < ApplicationRecord
     remote_repositories.each do |remote_repository|
       repository = Repository.find_or_create_by(github_id: remote_repository['id'])
 
-      repository.update_attributes({
+      repository.update({
         full_name: remote_repository['full_name'],
         private: remote_repository['private'],
         owner: remote_repository['full_name'].split('/').first,
@@ -50,7 +50,7 @@ class AppInstallation < ApplicationRecord
 
   def sync
     remote_installation = Octobox.github_app_client.installation(github_id, accept: 'application/vnd.github.machine-man-preview+json')
-    update_attributes(AppInstallation.map_from_api(remote_installation))
+    update(AppInstallation.map_from_api(remote_installation))
   rescue Octokit::NotFound
     destroy
   end
@@ -78,7 +78,7 @@ class AppInstallation < ApplicationRecord
     remote_installations = Octobox.github_app_client.find_app_installations(accept: 'application/vnd.github.machine-man-preview+json')
     remote_installations.each do |remote_installation|
       app_installation = AppInstallation.find_or_initialize_by(github_id: remote_installation.id)
-      app_installation.update_attributes(AppInstallation.map_from_api(remote_installation))
+      app_installation.update(AppInstallation.map_from_api(remote_installation))
     end
   end
 

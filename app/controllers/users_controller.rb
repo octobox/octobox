@@ -41,7 +41,7 @@ class UsersController < ApplicationController
   #   HEAD OK
   #
   def update
-    if current_user.update_attributes(update_user_params)
+    if current_user.update(update_user_params)
       if params[:user][:regenerate_api_token]
         current_user.regenerate_api_token
       end
