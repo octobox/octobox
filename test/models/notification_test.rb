@@ -417,4 +417,19 @@ class NotificationTest < ActiveSupport::TestCase
 
     refute notification.upgrade_required?
   end
+
+  test 'deletes subject when deleted' do
+    subject = create(:subject)
+    notification = create(:notification, subject: subject)
+    notification.destroy
+    assert Subject.where(id: subject.id).empty?
+  end
+
+  test 'doesnt deletes subject when deleted if subject is referenced by other notifications' do
+    subject = create(:subject)
+    notification = create(:notification, subject: subject)
+    notification2 = create(:notification, subject: subject)
+    notification.destroy
+    refute Subject.where(id: subject.id).empty?
+  end
 end

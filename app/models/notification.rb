@@ -8,7 +8,7 @@ class Notification < ApplicationRecord
   SUBJECTABLE_TYPES = SUBJECT_TYPE_COMMIT_RELEASE + SUBJECT_TYPE_ISSUE_REQUEST
 
   if DatabaseConfig.is_postgres?
-    include PgSearch
+    include PgSearch::Model
     pg_search_scope :search_by_subject_title,
                     against: :subject_title,
                     order_within_rank: 'notifications.updated_at DESC',
@@ -36,6 +36,7 @@ class Notification < ApplicationRecord
   validates :archived, inclusion: [true, false]
 
   after_update :push_if_changed
+  after_destroy :clean_up_subject
 
   class << self
     def attributes_from_api_response(api_response)
@@ -220,5 +221,9 @@ class Notification < ApplicationRecord
       repo.last_synced_at = Time.current
       repo.save
     end
+  end
+
+  def clean_up_subject
+    subject.destroy if subject && subject.notifications.empty?
   end
 end

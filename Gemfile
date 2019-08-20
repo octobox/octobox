@@ -48,6 +48,7 @@ group :development, :test do
   gem 'active_record_query_trace'
   gem 'rubocop', require: false
   gem 'rubocop-performance'
+  gem 'rubocop-rails'
 end
 
 group :test do
