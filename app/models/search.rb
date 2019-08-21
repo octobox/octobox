@@ -2,6 +2,12 @@ class Search
   attr_accessor :parsed_query
   attr_accessor :scope
 
+  def self.initialize_for_saved_search(query:, user:, params: {})
+    eager_load_relation = [{subject: :labels}, {repository: {app_installation: {subscription_purchase: :subscription_plan}}}]
+    scope = user.notifications.includes(eager_load_relation)
+    Search.new(query: query, scope: scope, params: params)
+  end
+
   def initialize(query: '', scope:, params: {})
     @parsed_query = SearchParser.new(query)
     @scope = scope
