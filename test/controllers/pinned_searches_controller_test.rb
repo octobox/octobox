@@ -97,4 +97,25 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to '/settings'
   end
+
+  test 'will show json for json format' do
+    pinned_search = create(:pinned_search, user: @user)
+
+    sign_in_as(@user)
+    get "/pinned_searches/#{pinned_search.id}.json"
+    assert_response :success
+
+    expected_attributes = {
+      'id'      => pinned_search.id,
+      'user_id' => pinned_search.user_id,
+      'query'   => pinned_search.query,
+      'name'    => pinned_search.name,
+      'count'   => 0,
+    }
+    actual_response = JSON.parse(@response.body)
+    expected_attributes.each do |attribute, value|
+      assert_equal value, actual_response[attribute],
+        "Expected pinned_search.#{attribute} to be #{value}, but it was #{actual_response[value]}. Full response: #{actual_response}"
+    end
+  end
 end

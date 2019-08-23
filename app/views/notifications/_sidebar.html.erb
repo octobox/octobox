@@ -37,6 +37,8 @@
           <%= pinned_search.name %>
           <% if search_query_matches?(@search.to_query, pinned_search.query) %>
             <span class="badge badge-light"><%= @total %></span>
+          <% else %>
+            <span class="badge badge-light pinned-search-count" data-url="<%= pinned_search_path(pinned_search, format: 'json') %>"><%= octicon 'sync', height: 12, class: 'spinning' %></span>
           <% end %>
         <% end %>
       </li>

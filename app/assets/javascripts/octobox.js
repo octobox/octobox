@@ -4,6 +4,15 @@ var Octobox = (function() {
     $(".js-select_all").click();
   };
 
+  var updatePinnedSearchCounts = function(pinned_search) {
+    var pinned_search = $(pinned_search);
+    $.get(pinned_search.data('url'), function(data) {
+      pinned_search.html(data.count);
+    }).fail(function() {
+      pinned_search.remove(); // Remove the total value if there's an error
+    });
+  }
+
   var moveCursorToClickedRow = function(event) {
     // Don't event.preventDefault(), since we want the
     // normal clicking behavior for links, starring, etc
@@ -384,6 +393,11 @@ var Octobox = (function() {
       recoverPreviousCursorPosition();
       setAutoSyncTimer();
     }
+
+    // Unread counts for pinned searches
+    $("span.pinned-search-count").each(function() {
+      updatePinnedSearchCounts(this);
+    });
 
     // Sync Handling
     if($(".js-is_syncing").length){ refreshOnSync() }
