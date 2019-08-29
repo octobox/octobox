@@ -287,6 +287,8 @@ module NotificationsHelper
   end
 
   def search_query_matches?(query, other_query)
+    query = Search.new(query: query, scope: {}).to_query
+    other_query = Search.new(query: other_query, scope: {}).to_query
     query.split(' ').sort == other_query.split(' ').sort
   end
 
