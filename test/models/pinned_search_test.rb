@@ -25,5 +25,9 @@ class PinnedSearchTest < ActiveSupport::TestCase
     @pinned_search.query = "inbox: true state: open unread: true reason: team_mention"
     @pinned_search.save
     assert_equal "inbox:true state:open unread:true reason:team_mention", @pinned_search.query
+
+    # Make sure the before_validation actually works
+    search = PinnedSearch.find(@pinned_search.id)
+    assert_equal "inbox:true state:open unread:true reason:team_mention", search.query
   end
 end
