@@ -20,4 +20,10 @@ class PinnedSearchTest < ActiveSupport::TestCase
     @pinned_search.user_id = nil
     refute @pinned_search.valid?
   end
+
+  test 'formats query on save' do
+    @pinned_search.query = "inbox: true state: open unread: true reason: team_mention"
+    @pinned_search.save
+    assert_equal "inbox:true state:open unread:true reason:team_mention", @pinned_search.query
+  end
 end
