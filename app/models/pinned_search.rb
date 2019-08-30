@@ -6,7 +6,7 @@ class PinnedSearch < ApplicationRecord
   validates :query, presence: true
   validates :name, presence: true
 
-  before_commit :format_query, on: [:create, :update]
+  before_validation :format_query, on: [:create, :update]
 
   def format_query
     return unless self.query.present?
