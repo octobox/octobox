@@ -125,7 +125,7 @@ GEM
     git (1.5.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    guard (2.15.0)
+    guard (2.15.1)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
       lumberjack (>= 1.0.12, < 2.0)
@@ -311,11 +311,11 @@ GEM
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
     shellany (0.0.1)
-    sidekiq (5.2.7)
-      connection_pool (~> 2.2, >= 2.2.2)
-      rack (>= 1.5.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+    sidekiq (6.0.0)
+      connection_pool (>= 2.2.2)
+      rack (>= 2.0.0)
+      rack-protection (>= 2.0.0)
+      redis (>= 4.1.0)
     sidekiq-scheduler (3.0.0)
       redis (>= 3, < 5)
       rufus-scheduler (~> 3.2)
@@ -451,4 +451,4 @@ RUBY VERSION
    ruby 2.6.3p62
 
 BUNDLED WITH
-   2.0.1
+   2.0.2
