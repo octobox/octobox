@@ -159,6 +159,8 @@ objects:
             value: "${OCTOBOX_SIDEKIQ_SCHEDULE_ENABLED}"
           - name: RAILS_MAX_THREADS
             value: "${RAILS_MAX_THREADS}"
+          - name: ALLOW_ALL_HOSTNAMES
+            value: "true"
           - name: PORT
             value: "3000"
           resources:
@@ -167,7 +169,7 @@ objects:
           ports:
           - containerPort: 3000
         - name: redis
-          image: centos/redis-32-centos7:3.2
+          image: redis:4.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             initialDelaySeconds: 30
@@ -177,7 +179,7 @@ objects:
             limits:
               memory: ${MEMORY_LIMIT_REDIS}
           volumeMounts:
-            - mountPath: /var/lib/redis/data
+            - mountPath: /data
               name: redis-data
         restartPolicy: Always
         volumes:
