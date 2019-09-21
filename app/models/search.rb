@@ -33,6 +33,10 @@ class Search
     res = res.exclude_author(exclude_author) if exclude_author.present?
     res = res.assigned(assignee) if assignee.present?
     res = res.exclude_assigned(exclude_assignee) if exclude_assignee.present?
+    res = res.review_requested(review_requested) if review_requested.present?
+    res = res.exclude_review_requested(exclude_review_requested) if exclude_review_requested.present?
+    res = res.team_review_requested(team_review_requested) if team_review_requested.present?
+    res = res.exclude_team_review_requested(exclude_team_review_requested) if exclude_team_review_requested.present?
     res = res.status(status) if status.present?
     res = res.exclude_status(exclude_status) if exclude_status.present?
     res = res.starred(starred) unless starred.nil?
@@ -91,6 +95,8 @@ class Search
     end
 
     @parsed_query[:assignee] = Array(params[:assigned]) if params[:assigned].present?
+    @parsed_query[:review_requested] = Array(params[:review_requested]) if params[:review_requested].present?
+    @parsed_query[:team_review_requested] = Array(params[:team_review_requested]) if params[:team_review_requested].present?
   end
 
   def lock_conditionally(scope)
@@ -207,6 +213,22 @@ class Search
 
   def exclude_assignee
     parsed_query[:'-assignee']
+  end
+
+  def review_requested
+    parsed_query[:review_requested]
+  end
+
+  def exclude_review_requested
+    parsed_query[:'-review_requested']
+  end
+
+  def team_review_requested
+    parsed_query[:team_review_requested]
+  end
+
+  def exclude_team_review_requested
+    parsed_query[:'-team_review_requested']
   end
 
   def status
