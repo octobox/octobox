@@ -74,9 +74,23 @@ module Octobox
           )
         }
 
-        scope :requested_reviewers, ->(reviewers) {
+        scope :review_requested, ->(reviewers) {
           joins(:subject).where(
             Array(reviewers).map { |reviewer| Subject.arel_table[:requested_reviewers].matches("%:#{reviewer}:%") }.reduce(:or)
+          )
+        }
+
+        scope :team_review_requested, ->(fully_qualified_teams) {
+          teams = Array(fully_qualified_teams).map do |team_identifier|
+            org, name = team_identifier.split("/")
+            { organization: org, name: name }
+          end
+
+          joins(:subject).where(
+            teams.map { |team|
+              arel_table[:repository_owner_name].matches(team[:organization])
+                .and(Subject.arel_table[:requested_teams].matches("%:#{team[:name]}:%"))
+            }.reduce(:or)
           )
         }
       end

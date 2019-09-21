@@ -304,7 +304,7 @@ class NotificationsController < ApplicationController
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
     @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
 
-    @review_requested      = scope.reorder(nil).distinct.requested_reviewers(current_user.github_login).count
+    @review_requested      = scope.reorder(nil).distinct.review_requested(current_user.github_login).count
     @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
     @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
     @unlabelled            = scope.reorder(nil).unlabelled.count
@@ -338,14 +338,14 @@ class NotificationsController < ApplicationController
   end
 
   def current_notifications(scope = notifications_for_presentation)
-    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status, :draft, :requested_reviewers].each do |sub_scope|
+    [:repo, :reason, :type, :unread, :owner, :state, :author, :is_private, :status, :draft, :review_requested, :team_review_requested].each do |sub_scope|
       next unless params[sub_scope].present?
       # This cast is required due to a bug in type casting
       # TODO: Rails 5.2 was supposed to fix this:
       # https://github.com/rails/rails/commit/68fe6b08ee72cc47263e0d2c9ff07f75c4b42761
       # but it seems that the issue persists when using MySQL
       # https://github.com/rails/rails/issues/32624
-      if sub_scope == :reason || :requested_reviewers
+      if sub_scope == :reason || :review_requested || :team_review_requested
         val = params[sub_scope].split(',')
       else
         val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
