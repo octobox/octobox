@@ -266,6 +266,18 @@ class SubjectTest < ActiveSupport::TestCase
     assert_equal '::', Subject.last.requested_reviewers
   end
 
+  test 'sync sets the requested teams' do
+    remote_subject = load_subject('subject_56.json')
+    Subject.sync(remote_subject)
+    assert_equal ':cool-kids:', Subject.last.requested_reviewers
+  end
+
+  test 'sync sets an empty requested teams value when there are none present' do
+    remote_subject = load_subject('subject_57.json')
+    Subject.sync(remote_subject)
+    assert_equal '::', Subject.last.requested_reviewers
+  end
+
   test 'sync sets the locked value' do
     remote_subject = load_fixture('subject_56.json')
     subject = create(:subject)
