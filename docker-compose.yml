@@ -53,7 +53,7 @@ services:
       - POSTGRES_PASSWORD=development
 
   redis.service.octobox.internal:
-    image: redis:3.2-alpine
+    image: redis:4.0-alpine
     networks:
       - internal
 
