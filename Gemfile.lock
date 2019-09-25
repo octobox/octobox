@@ -184,7 +184,7 @@ GEM
     multipart-post (2.1.1)
     mysql2 (0.5.2)
     nenv (0.3.0)
-    nio4r (2.5.1)
+    nio4r (2.5.2)
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     notiffany (0.1.3)
