@@ -1,10 +1,10 @@
 <div class="container user-settings">
   <div class="w-100 d-flex justify-content-between">
-    <h1 class="pt-3">Settings</h1>
+    <h1 class="pt-3"><%= t('users.titles.settings') %></h1>
     <div>
       <% if @latest_git_sha %>
         <p class="settings-sha">
-          Version:
+          <%= t('users.labels.version') %>
           <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank', rel: "noopener", title: "Current Git commit SHA" %>
           <%= link_to Octobox.config.source_repo + "/compare/#{@latest_git_sha}..master", target: '_blank', rel: "noopener", title: "Compare with latest commits on master" do %>
             <%= octicon 'git-compare', height: 16, class:'text-default' %>
@@ -17,7 +17,7 @@
 
   <div class="card mb-3" id='pinned-searches'>
     <h5 class="card-header">
-      Pinned Searches
+      <%= t('users.titles.pinned_searches') %>
     </h5>
     <div class="card-body">
       <p>Pin your favorite searches to the sidebar so you can access them quickly</p>
@@ -106,7 +106,7 @@
     <div class='d-flex flex-column flex-md-row'>
       <div class="card w-100 mr-3 mb-3">
         <h5 class="card-header">
-          Theme
+          <%= t('users.titles.theme') %>
         </h5>
         <div class="card-body">
           <div class="form-group">
@@ -138,7 +138,7 @@
 
   <div class="card mb-3">
     <h5 class="card-header">
-      Octobox API Access
+      <%= t('users.titles.octobox_api_access') %>
     </h5>
     <div class="card-body">
       <p>This is your API Token for Octobox access. Keep it safe and do not commit it to version control.</p>
@@ -163,7 +163,7 @@
 
   <div class="card mb-3">
     <h5 class="card-header">
-      Manage Oauth Access
+      <%= t('users.titles.manage_oauth_access') %>
     </h5>
     <div class="card-body">
       <p>Octobox can only show notifications for Organisations that you've granted it access to via GitHub</p>
@@ -279,7 +279,7 @@
 
   <div class="card mb-3">
     <h5 class="card-header">
-      Statistics
+      <%= t('users.titles.statistics') %>
     </h5>
     <div class="card-body">
       <p>
@@ -338,7 +338,7 @@
 
   <div class="card">
     <h5 class="card-header bg-danger text-white">
-      Danger zone
+      <%= t('users.titles.danger_zone') %>      
     </h5>
     <div class="card-body">
       <p>Deleting your Octobox account permanently removes all data associated with your user from Octobox's database.</p>

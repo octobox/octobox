@@ -38,3 +38,14 @@ en:
           billion: B
           trillion: T
           quadrillion: Q
+  users:
+    titles:
+      settings: 'Settings'
+      pinned_searches: 'Pinned Searches'
+      theme: 'Theme'
+      octobox_api_access: 'Octobox API Access'
+      manage_oauth_access: 'Manage Oauth Access'
+      statistics: 'Statistics'
+      danger_zone: 'Danger zone'
+    labels:
+      version: 'Version:'
