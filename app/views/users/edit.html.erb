@@ -58,7 +58,7 @@
       <% if Octobox.refresh_interval_enabled? %>
         <div class="card mb-3">
           <h5 class="card-header">
-            Automatic Refresh Interval
+            <%= t('users.titles.automatic_refresh_interval') %>
           </h5>
           <div class="card-body">
             <div class="form-group">
@@ -66,7 +66,7 @@
 
               <p>
                 <em>
-                  Auto refresh every N minutes when you are viewing notifications. If blank, no auto refreshes will occur.
+                  <%= t('users.notices.automatic_refresh_interval') %>
                 </em>
               </p>
               <%= submit_tag t('crud_actions.save'), class: 'btn btn-primary' %>
@@ -79,20 +79,19 @@
       <% if Octobox.personal_access_tokens_enabled? %>
         <div class="card mb-3">
           <h5 class="card-header">
-            Personal Access Token
+            <%= t('users.titles.personal_access_token') %>
           </h5>
           <div class="card-body">
             <div class="form-group">
               <%= f.label :personal_access_token, "Personal Access Token" %>
               <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
-              <span class="help-block">Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token that was generated when you logged in.  There is no need to set this unless you have a specific reason.
-              </span>
+              <span class="help-block"><%= t('users.notices.personal_access_token_impact') %></span>
             </div>
             <div class="form-group">
               <div class="checkbox">
                 <label>
                   <input type="checkbox" autocomplete="off" name="clear_personal_access_token" id="clear_personal_access_token"/>
-                  Clear personal access token
+                  <%= t('users.labels.clear_personal_access_token') %>
                 </label>
               </div>
             </div>

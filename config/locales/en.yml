@@ -57,7 +57,9 @@ en:
       pin_a_search: 'Pin a search:'
       most_active_repos: 'Most active repositories'
       most_active_owners: 'Most active owners'
+      clear_personal_access_token: 'Clear personal access token'
     notices:
+      automatic_refresh_interval: 'Auto refresh every N minutes when you are viewing notifications. If blank, no auto refreshes will occur.'
       pin_favorites: 'Pin your favorite searches to the sidebar so you can access them quickly'
       octobox_api_token: 'This is your API Token for Octobox access. Keep it safe and do not commit it to version control.'
       notifications_for_orgs_with_access: "Octobox can only show notifications for Organisations that you've granted it access to via GitHub"
@@ -66,8 +68,10 @@ en:
       deleting_account_removes_all_data: "Deleting your Octobox account permanently removes all data associated with your user from Octobox's database."
       subsequent_logins: "Once you have deleted your account, logging in again will create a new account associated with your GitHub user and load existing notifications."
       regenerate_api_token: 'None, please click the button to regenerate your token'
+      personal_access_token_impact: 'Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token that was generated when you logged in. There is no need to set this unless you have a specific reason.'
     titles:
       settings: 'Settings'
+      automatic_refresh_interval: 'Automatic Refresh Interval'
       pinned_searches: 'Pinned Searches'
       theme: 'Theme'
       octobox_api_access: 'Octobox API Access'
@@ -75,3 +79,4 @@ en:
       manage_oauth_access: 'Manage Oauth Access'
       statistics: 'Statistics'
       danger_zone: 'Danger zone'
+      personal_access_token: 'Personal Access Token'
