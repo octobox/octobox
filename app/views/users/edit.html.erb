@@ -145,18 +145,18 @@
 
       <ul class="list-inline">
         <li class="list-inline-item">
-          <button onclick="document.getElementById('api_token').classList.remove('d-none'); this.parentNode.classList.add('d-none')" class="btn btn-outline-dark">Show API Token</button>
+          <button onclick="document.getElementById('api_token').classList.remove('d-none'); this.parentNode.classList.add('d-none')" class="btn btn-outline-dark"><%= t('users.actions.show_api_token') %></button>
         </li>
         <li class="list-inline-item">
           <%= form_tag current_user, method: :put do %>
             <%= hidden_field_tag 'user[regenerate_api_token]', '1' %>
-            <%= submit_tag "Regenerate Token", class: 'btn btn-outline-dark' %>
+            <%= submit_tag t('users.actions.regenerate_api_token'), class: 'btn btn-outline-dark' %>
           <% end %>
         </li>
       </ul>
 
       <div id="api_token" class="card card-body bg-light d-none">
-        <code><%= current_user.api_token || 'None, please click the button to regenerate your token' %></code>
+        <code><%= current_user.api_token || t('users.notices.regenerate_api_token') %></code>
       </div>
     </div>
   </div>
