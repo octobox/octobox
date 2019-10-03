@@ -64,6 +64,7 @@ en:
       pinned_searches: 'Pinned Searches'
       theme: 'Theme'
       octobox_api_access: 'Octobox API Access'
+      open_notifications: 'Open notifications'
       manage_oauth_access: 'Manage Oauth Access'
       statistics: 'Statistics'
       danger_zone: 'Danger zone'
