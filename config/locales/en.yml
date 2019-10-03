@@ -48,6 +48,8 @@ en:
       delete_account: 'Delete my Octobox account'
       show_api_token: 'Show API Token'
       regenerate_api_token: 'Regenerate Token'
+      manage_oauth_access: 'Manage Oauth Access'
+      manage_app_access: 'Manage App Access'
     labels:
       version: 'Version:'
       name: 'Name'
