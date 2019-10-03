@@ -20,7 +20,7 @@
       <%= t('users.titles.pinned_searches') %>
     </h5>
     <div class="card-body">
-      <p>Pin your favorite searches to the sidebar so you can access them quickly</p>
+      <p><%= t('users.notices.pin_favorites') %></p>
 
       <% if current_user.pinned_searches.any? %>
         <table class='table table-responsive-sm border-bottom'>
@@ -69,8 +69,8 @@
                   Auto refresh every N minutes when you are viewing notifications. If blank, no auto refreshes will occur.
                 </em>
               </p>
-              <%= submit_tag 'Save', class: 'btn btn-primary' %>
-              <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+              <%= submit_tag t('crud_actions.save'), class: 'btn btn-primary' %>
+              <%= link_to t('crud_actions.cancel'), root_path, class: 'btn btn-light' %>
             </div>
           </div>
         </div>
@@ -96,8 +96,8 @@
                 </label>
               </div>
             </div>
-            <%= submit_tag 'Save', class: 'btn btn-primary' %>
-            <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+            <%= submit_tag t('crud_actions.save'), class: 'btn btn-primary' %>
+            <%= link_to t('crud_actions.cancel'), root_path, class: 'btn btn-light' %>
           </div>
         </div>
       <% end %>
@@ -113,8 +113,8 @@
             <%= f.select :theme, [['Light', 'light'], ['Dark', 'dark']], {}, class: 'form-control' %>
           </div>
 
-          <%= submit_tag 'Save', class: 'btn btn-primary' %>
-          <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+          <%= submit_tag t('crud_actions.save'), class: 'btn btn-primary' %>
+          <%= link_to t('crud_actions.cancel'), root_path, class: 'btn btn-light' %>
         </div>
       </div>
 
@@ -128,8 +128,8 @@
               <%= f.select :display_comments, [['On GitHub', 'false'], ['On Octobox', 'true']], {}, class: 'form-control' %>
             </div>
 
-            <%= submit_tag 'Save', class: 'btn btn-primary' %>
-            <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+            <%= submit_tag t('crud_actions.save'), class: 'btn btn-primary' %>
+            <%= link_to t('crud_actions.cancel'), root_path, class: 'btn btn-light' %>
           </div>
         </div>
       <% end %>
@@ -141,7 +141,7 @@
       <%= t('users.titles.octobox_api_access') %>
     </h5>
     <div class="card-body">
-      <p>This is your API Token for Octobox access. Keep it safe and do not commit it to version control.</p>
+      <p><%= t('users.notices.octobox_api_token') %></p>
 
       <ul class="list-inline">
         <li class="list-inline-item">
@@ -166,8 +166,8 @@
       <%= t('users.titles.manage_oauth_access') %>
     </h5>
     <div class="card-body">
-      <p>Octobox can only show notifications for Organisations that you've granted it access to via GitHub</p>
-      <p>If you've been added to a new Organisation you may need to enable or request access for Octobox to sync notifications for those repositories.</p>
+      <p><%= t('users.notices.notifications_for_orgs_with_access') %></p>
+      <p><%= t('users.notices.enable_or_request_access') %></p>
       <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_client_id}", class: 'btn btn-outline-dark' do %>
         <%= octicon 'tools' %>&nbsp;
         Manage Oauth Access
@@ -283,7 +283,7 @@
     </h5>
     <div class="card-body">
       <p>
-        <%= pluralize @total, 'notification' %> synced since you started using Octobox
+        <%= pluralize @total, 'notification' %> <%= t('users.notices.synced_notications') %>
         <span title='Signed up on <%= current_user.created_at.to_s(:long) %> UTC'>
           <%= pluralize(((Time.current - current_user.created_at)/ 1.day).round, 'day') %> ago.
         </span>
@@ -338,14 +338,14 @@
 
   <div class="card">
     <h5 class="card-header bg-danger text-white">
-      <%= t('users.titles.danger_zone') %>      
+      <%= t('users.titles.danger_zone') %>
     </h5>
     <div class="card-body">
-      <p>Deleting your Octobox account permanently removes all data associated with your user from Octobox's database.</p>
-      <p>Once you have deleted your account, logging in again will create a new account associated with your GitHub user and load existing notifications.</p>
+      <p><%= t('users.notices.deleting_account_removes_all_data') %></p>
+      <p><%= t('users.notices.subsequent_logins') %></p>
       <%= link_to current_user, method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure you want to do this?' } do %>
         <%= octicon 'trashcan', class: 'inverse' %>&nbsp;
-        Delete my Octobox account
+        <%= t('users.actions.delete_account') %>
       <% end %>
     </div>
   </div>

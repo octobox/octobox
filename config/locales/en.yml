@@ -39,6 +39,8 @@ en:
           trillion: T
           quadrillion: Q
   users:
+    actions:
+      delete_account: 'Delete my Octobox account'
     titles:
       settings: 'Settings'
       pinned_searches: 'Pinned Searches'
@@ -49,3 +51,14 @@ en:
       danger_zone: 'Danger zone'
     labels:
       version: 'Version:'
+    notices:
+      pin_favorites: 'Pin your favorite searches to the sidebar so you can access them quickly'
+      octobox_api_token: 'This is your API Token for Octobox access. Keep it safe and do not commit it to version control.'
+      notifications_for_orgs_with_access: "Octobox can only show notifications for Organisations that you've granted it access to via GitHub"
+      enable_or_request_access: "If you've been added to a new Organisation you may need to enable or request access for Octobox to sync notifications for those repositories."
+      synced_notications: 'synced since you started using Octobox'
+      deleting_account_removes_all_data: "Deleting your Octobox account permanently removes all data associated with your user from Octobox's database."
+      subsequent_logins: "Once you have deleted your account, logging in again will create a new account associated with your GitHub user and load existing notifications."
+  crud_actions:
+    save: 'Save'
+    cancel: 'Cancel'
