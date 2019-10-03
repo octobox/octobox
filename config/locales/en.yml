@@ -55,6 +55,8 @@ en:
       name: 'Name'
       search_query: 'Search Query'
       pin_a_search: 'Pin a search:'
+      most_active_repos: 'Most active repositories'
+      most_active_owners: 'Most active owners'
     notices:
       pin_favorites: 'Pin your favorite searches to the sidebar so you can access them quickly'
       octobox_api_token: 'This is your API Token for Octobox access. Keep it safe and do not commit it to version control.'

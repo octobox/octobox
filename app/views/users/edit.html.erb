@@ -293,7 +293,7 @@
           <div class="col-md">
             <table class='table table-sm table-responsive-sm'>
               <thead>
-                <th class='border-top-0' colspan="2">Most active repositories</th>
+                <th class='border-top-0' colspan="2"><%= t('users.labels.most_active_repos') %></th>
               </thead>
               <tbody>
                 <% @most_active_repos.each do |repository_full_name, count| %>
@@ -315,7 +315,7 @@
           <div class="col-md">
             <table class='table table-sm table-responsive-sm'>
               <thead>
-                <th class='border-top-0' colspan="2">Most active owners</th>
+                <th class='border-top-0' colspan="2"><%= t('users.labels.most_active_owners') %></th>
               </thead>
               <tbody>
                 <% @most_active_orgs.each do |repository_owner_name, count| %>
