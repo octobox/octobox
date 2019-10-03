@@ -23,6 +23,8 @@ en:
   crud_actions:
     save: 'Save'
     cancel: 'Cancel'
+    edit: 'Edit'
+    delete: 'Delete'
   exceptions:
     octokit:
       unauthorized: 'Your GitHub token seems to be invalid'
@@ -46,6 +48,9 @@ en:
       delete_account: 'Delete my Octobox account'
     labels:
       version: 'Version:'
+      name: 'Name'
+      search_query: 'Search Query'
+      pin_a_search: 'Pin a search:'
     notices:
       pin_favorites: 'Pin your favorite searches to the sidebar so you can access them quickly'
       octobox_api_token: 'This is your API Token for Octobox access. Keep it safe and do not commit it to version control.'

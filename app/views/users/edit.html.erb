@@ -26,10 +26,10 @@
         <table class='table table-responsive-sm border-bottom'>
           <thead>
             <th>
-              Name
+              <%= t('users.labels.name') %>
             </th>
             <th colspan="2">
-              Search Query
+              <%= t('users.labels.search_query') %>
             </th>
           </thead>
           <% current_user.pinned_searches.sort_by(&:name).each do |pinned_search| %>
@@ -41,14 +41,14 @@
                 <%= pinned_search.query %>
               </td>
               <td>
-                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: 'Edit', data: {toggle: 'tooltip'}, class: 'mr-2' %>
-                <%= link_to octicon('trashcan'), pinned_search_path(pinned_search), title: 'Delete', data: {toggle: 'tooltip'}, method: :delete %>
+                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: t('crud_actions.edit'), data: {toggle: 'tooltip'}, class: 'mr-2' %>
+                <%= link_to octicon('trashcan'), pinned_search_path(pinned_search), title: t('crud_actions.delete'), data: {toggle: 'tooltip'}, method: :delete %>
               </td>
             </tr>
           <% end %>
         </table>
       <% end %>
-      <p><strong>Pin a search:</strong></p>
+      <p><strong><%= t('users.labels.pin_a_search') %></strong></p>
       <%= render 'pinned_searches/form' %>
     </div>
   </div>
