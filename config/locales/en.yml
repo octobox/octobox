@@ -20,6 +20,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  crud_actions:
+    save: 'Save'
+    cancel: 'Cancel'
   exceptions:
     octokit:
       unauthorized: 'Your GitHub token seems to be invalid'
@@ -41,14 +44,6 @@ en:
   users:
     actions:
       delete_account: 'Delete my Octobox account'
-    titles:
-      settings: 'Settings'
-      pinned_searches: 'Pinned Searches'
-      theme: 'Theme'
-      octobox_api_access: 'Octobox API Access'
-      manage_oauth_access: 'Manage Oauth Access'
-      statistics: 'Statistics'
-      danger_zone: 'Danger zone'
     labels:
       version: 'Version:'
     notices:
@@ -59,6 +54,11 @@ en:
       synced_notications: 'synced since you started using Octobox'
       deleting_account_removes_all_data: "Deleting your Octobox account permanently removes all data associated with your user from Octobox's database."
       subsequent_logins: "Once you have deleted your account, logging in again will create a new account associated with your GitHub user and load existing notifications."
-  crud_actions:
-    save: 'Save'
-    cancel: 'Cancel'
+    titles:
+      settings: 'Settings'
+      pinned_searches: 'Pinned Searches'
+      theme: 'Theme'
+      octobox_api_access: 'Octobox API Access'
+      manage_oauth_access: 'Manage Oauth Access'
+      statistics: 'Statistics'
+      danger_zone: 'Danger zone'
