@@ -50,6 +50,8 @@ en:
       regenerate_api_token: 'Regenerate Token'
       manage_oauth_access: 'Manage Oauth Access'
       manage_app_access: 'Manage App Access'
+      login_to_github_app: 'Login to the GitHub App'
+      install_github_app: 'Install GitHub App'
     labels:
       version: 'Version:'
       name: 'Name'
@@ -58,6 +60,10 @@ en:
       most_active_repos: 'Most active repositories'
       most_active_owners: 'Most active owners'
       clear_personal_access_token: 'Clear personal access token'
+      account: 'Account'
+      repos: 'Repos'
+      billing: 'Billing'
+      settings: 'Settings'
     notices:
       automatic_refresh_interval: 'Auto refresh every N minutes when you are viewing notifications. If blank, no auto refreshes will occur.'
       pin_favorites: 'Pin your favorite searches to the sidebar so you can access them quickly'
@@ -69,7 +75,13 @@ en:
       subsequent_logins: "Once you have deleted your account, logging in again will create a new account associated with your GitHub user and load existing notifications."
       regenerate_api_token: 'None, please click the button to regenerate your token'
       personal_access_token_impact: 'Setting a personal access token will cause Octobox to authenticate with this token instead of the OAuth token that was generated when you logged in. There is no need to set this unless you have a specific reason.'
+      connect_to_github_account: 'Connect your GitHub account to the Octobox App to enable every installation for your notifications'
+      extra_features_and_data: 'The Octobox GitHub App enables extra features and data for repositories that have it installed:'
+      issues_and_pull_request_data: 'Pull in status, labels, authors and assignees on issues and pull requests'
+      private_repo_data: 'Full support for private repositories'
+      sync_automatically: 'Sync new and updated notifications automatically'
     titles:
+      app_installations: 'GitHub App Installations'
       settings: 'Settings'
       automatic_refresh_interval: 'Automatic Refresh Interval'
       pinned_searches: 'Pinned Searches'

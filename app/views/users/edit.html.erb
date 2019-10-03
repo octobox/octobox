@@ -184,19 +184,19 @@
   <% if Octobox.github_app? %>
     <div class="card mb-3">
       <h5 class="card-header">
-        GitHub App Installations
+        <%= t('users.titles.app_installations') %>
       </h5>
       <div class="card-body">
         <% if current_user.app_installations.any? %>
           <table class='table table-responsive-sm'>
             <thead>
               <tr>
-                <th class='border-top-0'>Account</th>
-                <th class='border-top-0'>Repos</th>
+                <th class='border-top-0'><%= t('users.labels.account') %></th>
+                <th class='border-top-0'><%= t('users.labels.repos') %></th>
                 <% if Octobox.io? %>
-                  <th class='border-top-0' colspan='2'>Billing</th>
+                  <th class='border-top-0' colspan='2'><%= t('users.labels.billing') %></th>
                 <% end %>
-                <th class='border-top-0'>Settings</th>
+                <th class='border-top-0'><%= t('users.labels.settings') %></th>
               </tr>
             </thead>
             <tbody>
@@ -259,19 +259,19 @@
         <% end %>
         <% unless current_user.github_app_authorized? %>
           <p>
-            Connect your GitHub account to the Octobox App to enable every installation for your notifications
+            <%= t('users.notices.connect_to_github_account') %>
           </p>
-          <p><%= link_to 'Login to the GitHub App', '/auth/githubapp', class: 'btn btn-info' %></p>
+          <p><%= link_to t('users.actions.login_to_github_app'), '/auth/githubapp', class: 'btn btn-info' %></p>
         <% end %>
         <p>
-          The Octobox GitHub App enables extra features and data for repositories that have it installed:
+          <%= t('users.notices.extra_features_and_data') %>
         </p>
         <ul>
-          <li>Pull in status, labels, authors and assignees on issues and pull requests</li>
-          <li>Full support for private repositories</li>
-          <li>Sync new and updated notifications automatically</li>
+          <li><%= t('users.notices.issues_and_pull_request_data') %></li>
+          <li><%= t('users.notices.private_repo_data') %></li>
+          <li><%= t('users.notices.sync_automatically') %></li>
         </ul>
-        <%= link_to 'Install GitHub App', Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
+        <%= link_to t('users.actions.install_github_app'), Octobox.config.app_install_url, class: 'btn btn-primary', target: '_blank', rel: 'noopener' %>
       </div>
     </div>
   <% end %>
