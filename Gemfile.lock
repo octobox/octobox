@@ -62,7 +62,7 @@ GEM
     ast (2.4.0)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
-    autoprefixer-rails (9.6.1.1)
+    autoprefixer-rails (9.6.5)
       execjs
     better_errors (2.5.1)
       coderay (>= 1.0.0)
