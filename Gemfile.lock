@@ -213,7 +213,7 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
-    pagy (3.5.1)
+    pagy (3.6.0)
     parallel (1.17.0)
     parser (2.6.4.1)
       ast (~> 2.4.0)
