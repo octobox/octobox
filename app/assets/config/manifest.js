@@ -1,3 +1,4 @@
 //= link_tree ../images
-//= link_directory ../javascripts .js
-//= link_directory ../stylesheets .css
+//= link dark.scss
+//= link light.scss
+//= link application.js
