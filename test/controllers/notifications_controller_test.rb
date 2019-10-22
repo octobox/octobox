@@ -437,6 +437,19 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [notification_count, 20].min, json["pagination"]["per_page"]
   end
 
+  test 'renders author for notifications in json' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user, subject_type: 'Issue')
+    create(:subject, notifications: [notification], author: 'andrew')
+
+    get notifications_path(format: :json)
+
+    assert_response :success
+    json = Oj.load(response.body)
+    found_notification = json["notifications"].find { |n| n["id"] == notification.id }
+    assert found_notification["subject"]["author"]
+  end
+
   test 'renders pagination info for zero notifications in json' do
     sign_in_as(@user)
     Notification.destroy_all
