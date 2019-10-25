@@ -85,4 +85,12 @@ Rails.application.configure do
   config.lograge.enabled = true
 
   config.skylight.probes += %w(redis) if ENV['SKYLIGHT_AUTHENTICATION'].present?
+
+  if ENV['ALLOW_ALL_HOSTNAMES'].present?
+    # Allow any hostname
+    config.hosts.clear
+  end
+
+  # Check for specific host configuration to allow a reverse proxy setup
+  config.hosts << ENV['ALLOW_HOSTNAME'] if ENV['ALLOW_HOSTNAME'].present?
 end
