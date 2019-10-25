@@ -44,9 +44,7 @@ class Subject < ApplicationRecord
     involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minutes, user_id) }
   end
 
-  def self.sync(remote_subject)
-    subject = Subject.find_or_create_by(url: remote_subject['url'])
-
+  def sync(remote_subject)
     # webhook payloads don't always have 'repository' info
     if remote_subject['repository']
       full_name = remote_subject['repository']['full_name']
@@ -56,10 +54,10 @@ class Subject < ApplicationRecord
       full_name = extract_full_name(remote_subject['url'])
     end
 
-    comment_count = remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count']
-    comment_count = subject.comment_count if comment_count.nil?
+    updated_comment_count = remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count']
+    updated_comment_count = comment_count if updated_comment_count.nil?
 
-    subject.update({
+    update({
       repository_full_name: full_name,
       github_id: remote_subject['id'],
       state: remote_subject['merged_at'].present? ? 'merged' : remote_subject['state'],
@@ -67,7 +65,7 @@ class Subject < ApplicationRecord
       html_url: remote_subject['html_url'],
       created_at: remote_subject['created_at'] || Time.current,
       updated_at: remote_subject['updated_at'] || Time.current,
-      comment_count: comment_count,
+      comment_count: updated_comment_count,
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
@@ -75,12 +73,17 @@ class Subject < ApplicationRecord
       draft: remote_subject['draft']
     })
 
-    return unless subject.persisted?
+    return unless persisted?
 
-    subject.update_labels(remote_subject['labels']) if remote_subject['labels'].present?
-    subject.update_comments if Octobox.include_comments? && (subject.has_comments? || subject.pull_request?)
-    subject.update_status
-    subject.sync_involved_users if (subject.saved_changes.keys & subject.notifiable_fields).any?
+    update_labels(remote_subject['labels']) if remote_subject['labels'].present?
+    update_comments if Octobox.include_comments? && (has_comments? || pull_request?)
+    update_status
+    sync_involved_users if (saved_changes.keys & notifiable_fields).any?
+  end
+
+  def self.sync(remote_subject)
+    subject = Subject.find_or_create_by(url: remote_subject['url'])
+    subject.sync(remote_subject)
   end
 
   def self.sync_status(sha, repository_full_name)
@@ -243,7 +246,7 @@ class Subject < ApplicationRecord
     end
   end
 
-  def self.extract_full_name(url)
+  def extract_full_name(url)
     url.match(/\/repos\/([\w.-]+\/[\w.-]+)\//)[1]
   end
 
