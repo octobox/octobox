@@ -32,6 +32,7 @@ json.notifications do
       json.type notification.subject_type
       json.draft notification.draft?
       json.state notification.state
+      json.author notification.subject.author if notification.display_subject? && notification.subject
     end
 
     json.repo do
