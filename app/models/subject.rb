@@ -45,27 +45,15 @@ class Subject < ApplicationRecord
   end
 
   def sync(remote_subject)
-    # webhook payloads don't always have 'repository' info
-    if remote_subject['repository']
-      full_name = remote_subject['repository']['full_name']
-    elsif remote_subject['full_name']
-      full_name = remote_subject['full_name']
-    else
-      full_name = extract_full_name(remote_subject['url'])
-    end
-
-    updated_comment_count = remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count']
-    updated_comment_count = comment_count if updated_comment_count.nil?
-
     update({
-      repository_full_name: full_name,
+      repository_full_name: extract_full_name_from_remote_subject(remote_subject),
       github_id: remote_subject['id'],
       state: remote_subject['merged_at'].present? ? 'merged' : remote_subject['state'],
       author: remote_subject.fetch('user', {})['login'],
       html_url: remote_subject['html_url'],
       created_at: remote_subject['created_at'] || Time.current,
       updated_at: remote_subject['updated_at'] || Time.current,
-      comment_count: updated_comment_count,
+      comment_count: extract_comment_count_from_remote_subject(remote_subject) || comment_count,
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
@@ -246,8 +234,23 @@ class Subject < ApplicationRecord
     end
   end
 
+  def extract_full_name_from_remote_subject(remote_subject)
+    # webhook payloads don't always have 'repository' info
+    if remote_subject['repository']
+      remote_subject['repository']['full_name']
+    elsif remote_subject['full_name']
+      remote_subject['full_name']
+    else
+      extract_full_name(remote_subject['url'])
+    end
+  end
+
   def extract_full_name(url)
     url.match(/\/repos\/([\w.-]+\/[\w.-]+)\//)[1]
+  end
+
+  def extract_comment_count_from_remote_subject(remote_subject)
+    remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count']
   end
 
   def involved_user_ids
