@@ -196,10 +196,10 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    octicons (9.2.0)
+    octicons (9.3.0)
       nokogiri (>= 1.6.3.1)
-    octicons_helper (9.2.0)
-      octicons (= 9.2.0)
+    octicons_helper (9.3.0)
+      octicons (= 9.3.0)
       rails
     octokit (4.14.0)
       sawyer (~> 0.8.0, >= 0.5.3)
