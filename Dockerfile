@@ -18,7 +18,6 @@ RUN apk add --update \
     git \
     nodejs \
     postgresql-dev \
-    mysql-dev \
     tzdata \
     curl-dev \
  && rm -rf /var/cache/apk/* \

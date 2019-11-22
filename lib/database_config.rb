@@ -1,5 +1,5 @@
 module DatabaseConfig
-  SUPPORTED_ADAPTERS = %w(mysql2 postgresql)
+  SUPPORTED_ADAPTERS = %w(postgresql)
 
   class << self
     # The current adapter being used
@@ -56,9 +56,7 @@ module DatabaseConfig
     #
     def username
       database_url_or_fallback('username') do
-        default = if is_mysql?
-                    'root'
-                  elsif Rails.env.production?
+        default = if Rails.env.production?
                     'octobox'
                   else
                     ''
@@ -72,11 +70,7 @@ module DatabaseConfig
     #
     def encoding
       database_url_or_fallback('encoding') do
-        if is_mysql?
-          'utf8mb4'
-        else
-          'unicode'
-        end
+        'unicode'
       end
     end
 
@@ -95,14 +89,6 @@ module DatabaseConfig
       database_url_or_fallback('pool') do
         ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i
       end.to_i
-    end
-
-    def is_mysql?
-      adapter.downcase == 'mysql2'
-    end
-
-    def is_postgres?
-      adapter.downcase == 'postgresql'
     end
 
     private

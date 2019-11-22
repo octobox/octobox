@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class DatabaseConfigTest < ActiveSupport::TestCase
-  DB_URL = "mysql2://user:password2@host.com:1234/database_name?pool=15&encoding=db_url_encoding"
+  DB_URL = "postgresql://user:password2@host.com:1234/database_name?pool=15&encoding=db_url_encoding"
 
   test 'chooses the right DB' do
     if ENV['DATABASE']
@@ -13,11 +13,7 @@ class DatabaseConfigTest < ActiveSupport::TestCase
 
   test 'adapter is specified properly' do
     set_env('DATABASE_URL', DB_URL) do
-      assert_equal 'mysql2', DatabaseConfig.adapter
-    end
-
-    set_env('DATABASE', 'mysql2') do
-      assert_equal 'mysql2', DatabaseConfig.adapter
+      assert_equal 'postgresql', DatabaseConfig.adapter
     end
 
     set_env('DATABASE', 'postgresql') do
@@ -34,10 +30,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
   test 'username is specified properly' do
     set_env('DATABASE_URL', DB_URL) do
       assert_equal 'user', DatabaseConfig.username
-    end
-
-    set_env('DATABASE', 'mysql2') do
-      assert_equal 'root', DatabaseConfig.username
     end
 
     set_env('DATABASE', 'postgresql') do
@@ -59,10 +51,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       assert_equal 'db_url_encoding', DatabaseConfig.encoding
     end
 
-    set_env('DATABASE', 'mysql2') do
-      assert_equal 'utf8mb4', DatabaseConfig.encoding
-    end
-
     set_env('DATABASE', 'postgresql') do
       assert_equal 'unicode', DatabaseConfig.encoding
     end
@@ -71,10 +59,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
   test 'password is specified properly' do
     set_env('DATABASE_URL', DB_URL) do
       assert_equal 'password2', DatabaseConfig.password
-    end
-
-    set_env('DATABASE', 'mysql2') do
-      assert_equal '', DatabaseConfig.password
     end
 
     set_env('DATABASE', 'postgresql') do
@@ -91,10 +75,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       assert_equal 15, DatabaseConfig.connection_pool
     end
 
-    set_env('DATABASE', 'mysql2') do
-      assert_equal 5, DatabaseConfig.connection_pool
-    end
-
     set_env('DATABASE', 'postgresql') do
       assert_equal 5, DatabaseConfig.connection_pool
     end
@@ -107,10 +87,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
   test 'database_name is specified properly' do
     set_env('DATABASE_URL', DB_URL) do
       assert_equal 'database_name', DatabaseConfig.database_name('test')
-    end
-
-    set_env('DATABASE', 'mysql2') do
-      assert_equal 'octobox_test', DatabaseConfig.database_name('test')
     end
 
     set_env('DATABASE', 'postgresql') do
@@ -131,29 +107,8 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       assert_equal 'localhost', DatabaseConfig.host
     end
 
-    set_env('DATABASE', 'mysql2') do
-      assert_equal 'localhost', DatabaseConfig.host
-    end
-
     set_env('OCTOBOX_DATABASE_HOST', '127.0.0.1') do |val|
       assert_equal val, DatabaseConfig.host
-    end
-  end
-
-  test 'is_mysql? and is_postgres?' do
-    set_env('DATABASE_URL', DB_URL) do
-      assert DatabaseConfig.is_mysql?, 'was not mysql, it should have been'
-      refute DatabaseConfig.is_postgres?, 'was postgres, it should not have been'
-    end
-
-    set_env('DATABASE', 'postgresql') do
-      assert DatabaseConfig.is_postgres?, 'was not postgres, it should have been'
-      refute DatabaseConfig.is_mysql?, 'was mysql, it should not have been'
-    end
-
-    set_env('DATABASE', 'mysql2') do
-      assert DatabaseConfig.is_mysql?, 'was not mysql, it should have been'
-      refute DatabaseConfig.is_postgres?, 'was postgres, it should not have been'
     end
   end
 

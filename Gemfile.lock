@@ -181,7 +181,6 @@ GEM
     multi_json (1.14.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
-    mysql2 (0.5.2)
     nenv (0.3.0)
     nio4r (2.5.2)
     nokogiri (1.10.5)
@@ -409,7 +408,6 @@ DEPENDENCIES
   lograge
   minitest
   mocha
-  mysql2
   octicons_helper
   octokit
   oj
