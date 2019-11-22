@@ -1,5 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
+require: rubocop-rails
+
 AllCops:
   DisabledByDefault: true
   TargetRubyVersion: 2.6
@@ -1038,11 +1040,11 @@ Style/UnlessElse:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-else-with-unless'
   Enabled: false
 
-Style/UnneededCapitalW:
+Style/RedundantCapitalW:
   Description: 'Checks for %W when interpolation is not needed.'
   Enabled: false
 
-Style/UnneededPercentQ:
+Style/RedundantPercentQ:
   Description: 'Checks for %q/%Q when single quotes or double quotes would do.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#percent-q'
   Enabled: false
