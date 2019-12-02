@@ -7,23 +7,17 @@ class Notification < ApplicationRecord
 
   SUBJECTABLE_TYPES = SUBJECT_TYPE_COMMIT_RELEASE + SUBJECT_TYPE_ISSUE_REQUEST
 
-  if DatabaseConfig.is_postgres?
-    include PgSearch::Model
-    pg_search_scope :search_by_subject_title,
-                    against: :subject_title,
-                    order_within_rank: 'notifications.updated_at DESC',
-                    using: {
-                      tsearch: {
-                        prefix: true,
-                        negation: true,
-                        dictionary: "english"
-                      }
+  include PgSearch::Model
+  pg_search_scope :search_by_subject_title,
+                  against: :subject_title,
+                  order_within_rank: 'notifications.updated_at DESC',
+                  using: {
+                    tsearch: {
+                      prefix: true,
+                      negation: true,
+                      dictionary: "english"
                     }
-  else
-    def self.search_by_subject_title(title)
-      where('subject_title like ?', "%#{title}%")
-    end
-  end
+                  }
 
   belongs_to :user
   belongs_to :subject, foreign_key: :subject_url, primary_key: :url, optional: true

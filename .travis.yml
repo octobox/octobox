@@ -11,12 +11,10 @@ addons:
 
 services:
   - postgresql
-  - mysql
   - redis
 
 before_script:
   - psql -c 'create database "octobox_test";' -U postgres || true
-  - mysql -u root -e 'create database octobox_test;' || true
 
 script:
   - RAILS_ENV=test bundle exec rake --trace rubocop db:migrate test
@@ -24,11 +22,6 @@ script:
 bundler_args: --without development production --deployment --jobs=3 --retry=3
 
 cache: bundler
-
-env:
-  matrix:
-    - DATABASE=mysql2
-    - DATABASE=postgresql
 
 notifications:
   email: false
