@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class DatabaseConfigTest < ActiveSupport::TestCase
-  DB_URL = "postgresql://user:password2@host.com:1234/database_name?pool=15&encoding=db_url_encoding"
+  DB_URL = "postgresql://user:password2@host.com:1234/database_name?pool=15&encoding=db_url_encoding&timeout=1000"
 
   test 'chooses the right DB' do
     if ENV['DATABASE']
@@ -109,6 +109,20 @@ class DatabaseConfigTest < ActiveSupport::TestCase
 
     set_env('OCTOBOX_DATABASE_HOST', '127.0.0.1') do |val|
       assert_equal val, DatabaseConfig.host
+    end
+  end
+
+  test 'timeout is specified properly' do
+    set_env('DATABASE_URL', DB_URL) do
+      assert_equal 1000, DatabaseConfig.timeout
+    end
+
+    set_env('DATABASE', 'postgresql') do
+      assert_equal 10000, DatabaseConfig.timeout
+    end
+
+    set_env('OCTOBOX_STATEMENT_TIMEOUT', 5000) do |val|
+      assert_equal val, DatabaseConfig.timeout
     end
   end
 
