@@ -11,7 +11,7 @@ class CommentWorker
         subject.comment_on_github(comment, user) 
       rescue Octokit::NotFound, Octokit::Unauthorized, Octokit::Forbidden
         comment.try(:destroy)
-      rescue Faraday::ClientError => exception
+      rescue Faraday::Error => exception
         handle_exception(exception, user)
       end
     else
