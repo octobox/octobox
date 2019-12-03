@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   rescue_from Octokit::AbuseDetected, Octokit::TooManyRequests do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.octokit.rate_limit"))
   end
-  rescue_from Faraday::ClientError do |exception|
+  rescue_from Faraday::Error do |exception|
     handle_exception(exception, :service_unavailable, I18n.t("exceptions.faraday.connection_failed"))
   end
 
