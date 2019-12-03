@@ -5,6 +5,8 @@ default: &default
   password: <%= DatabaseConfig.password %>
   host:     <%= DatabaseConfig.host %>
   port:     <%= DatabaseConfig.port %>
+  variables:
+     statement_timeout: <%= DatabaseConfig.timeout %>
 
 development:
   <<: *default
