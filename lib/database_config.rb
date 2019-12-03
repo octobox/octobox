@@ -91,6 +91,12 @@ module DatabaseConfig
       end.to_i
     end
 
+    def timeout
+      database_url_or_fallback('timeout') do
+        ENV.fetch("OCTOBOX_STATEMENT_TIMEOUT") { 10000 }.to_i
+      end.to_i
+    end
+
     private
 
     def database_url_or_fallback(var)
