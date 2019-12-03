@@ -15,7 +15,7 @@ Lint/AssignmentInCondition:
     - 'app/channels/application_cable/connection.rb'
 
 # Offense count: 3
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - 'app/models/notification.rb'
     - 'config/application.rb'
