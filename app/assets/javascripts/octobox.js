@@ -257,7 +257,11 @@ var Octobox = (function() {
     if($("a.js-sync.js-async").length) {
       $.get("/notifications/sync.json", refreshOnSync);
     } else {
+      if(!$(".js-sync .octicon").hasClass("spinning")){
+        $(".js-sync .octicon").addClass("spinning");
+      }
       Turbolinks.visit($("a.js-sync").attr("href"))
+      $(".sync .octicon").removeClass("spinning");
     }
   };
 
