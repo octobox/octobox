@@ -33,9 +33,7 @@ gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
 gem 'commonmarker'
-
-# Supported databases
-gem 'pg', '1.1.4', require: false
+gem 'pg', '1.1.4'
 
 group :development, :test do
   gem 'byebug', platform: :mri
