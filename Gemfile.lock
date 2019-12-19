@@ -88,7 +88,7 @@ GEM
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
     coderay (1.1.2)
-    commonmarker (0.20.1)
+    commonmarker (0.20.2)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
