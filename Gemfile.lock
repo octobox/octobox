@@ -214,7 +214,7 @@ GEM
     parallel (1.19.1)
     parser (2.6.5.0)
       ast (~> 2.4.0)
-    pg (1.1.4)
+    pg (1.2.0)
     pg_search (2.3.0)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
@@ -411,7 +411,7 @@ DEPENDENCIES
   oj
   omniauth-github
   pagy
-  pg (= 1.1.4)
+  pg (= 1.2.0)
   pg_search
   puma
   puma_worker_killer

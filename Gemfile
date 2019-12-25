@@ -33,7 +33,7 @@ gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
 gem 'commonmarker'
-gem 'pg', '1.1.4'
+gem 'pg', '1.2.0'
 
 group :development, :test do
   gem 'byebug', platform: :mri
