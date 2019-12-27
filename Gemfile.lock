@@ -212,7 +212,7 @@ GEM
       omniauth (~> 1.9)
     pagy (3.7.1)
     parallel (1.19.1)
-    parser (2.6.5.0)
+    parser (2.7.0.0)
       ast (~> 2.4.0)
     pg (1.2.0)
     pg_search (2.3.1)
