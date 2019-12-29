@@ -131,6 +131,7 @@ class Notification < ApplicationRecord
   end
 
   def web_url
+    print "expanded_subject_url ", expanded_subject_url, "\n"
     Octobox::SubjectUrlParser.new(expanded_subject_url, latest_comment_url: latest_comment_url)
       .to_html_url
   end
