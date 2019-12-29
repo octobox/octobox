@@ -18,7 +18,7 @@ module Octobox
       @github_api_prefix = github_api_prefix
       @github_domain = github_domain
       @latest_comment_url = latest_comment_url
-
+      print "url ", url, "\n"
       raise ArgumentError, "Unidentifiable URL: '#{url}'" unless html_url? || api_url?
     end
 
