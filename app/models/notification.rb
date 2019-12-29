@@ -126,7 +126,8 @@ class Notification < ApplicationRecord
   end
 
   def expanded_subject_url
-    print "display_subject", display_subject?, "\n"
+    print "display_subject ", display_subject?, "\n"
+    print "subject.try(:html_url) ", subject.try(:html_url), "\n"
     return subject_url unless display_subject?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
   end
