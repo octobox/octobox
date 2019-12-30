@@ -1014,7 +1014,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     notification1 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], comment_count: nil)
-
+    sleep(1)
     get notification_path(notification1)
 
     assert_response :success
@@ -1025,6 +1025,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     notification1 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], comment_count: nil)
+    sleep(1)
     get notification_path(notification1)
 
     assert_response :success
@@ -1036,6 +1037,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification = create(:notification, user: @user)
     subject = create(:subject, notifications: [notification], comment_count: 10)
     10.times.each { create(:comment, subject: subject)}
+    sleep(1)
     get notification_path(notification)
     assert_equal assigns(:comments).length, 5
   end
@@ -1045,7 +1047,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification = create(:notification, user: @user)
     subject = create(:subject, notifications: [notification], comment_count: 10)
     10.times.each { create(:comment, subject: subject) }
-
+    sleep(1)
     get expand_comments_notification_path(notification)
     assert_response :success
     assert_template 'notifications/_thread'
