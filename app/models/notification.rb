@@ -126,14 +126,11 @@ class Notification < ApplicationRecord
   end
 
   def expanded_subject_url
-    print "display_subject ", display_subject?, "\n"
-    print "subject.try(:html_url) ", subject.try(:html_url), "\n"
     return subject_url unless display_subject?
     subject.try(:html_url) || subject_url # Use the sync'd HTML URL if possible, else the API one
   end
 
   def web_url
-    print "expanded_subject_url ", expanded_subject_url, "\n"
     Octobox::SubjectUrlParser.new(expanded_subject_url, latest_comment_url: latest_comment_url)
       .to_html_url
   end
