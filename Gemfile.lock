@@ -373,7 +373,7 @@ GEM
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
-    yard (0.9.22)
+    yard (0.9.23)
     zeitwerk (2.2.2)
 
 PLATFORMS
