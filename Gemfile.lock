@@ -229,7 +229,7 @@ GEM
       get_process_mem (~> 0.2)
       puma (>= 2.7, < 5)
     raabro (1.1.6)
-    rack (2.0.8)
+    rack (2.1.1)
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
