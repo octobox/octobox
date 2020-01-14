@@ -72,5 +72,4 @@ group :production do
   gem 'skylight', '4.2.0'
   gem 'lograge'
   gem 'puma_worker_killer'
-  gem 'hirefire-resource'
 end
