@@ -328,9 +328,9 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    skylight (4.2.0)
-      skylight-core (= 4.2.0)
-    skylight-core (4.2.0)
+    skylight (4.2.1)
+      skylight-core (= 4.2.1)
+    skylight-core (4.2.1)
       activesupport (>= 4.2.0)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
@@ -428,7 +428,7 @@ DEPENDENCIES
   sidekiq-status
   sidekiq-unique-jobs
   simplecov
-  skylight (= 4.2.0)
+  skylight (= 4.2.1)
   spring
   spring-watcher-listen
   sql_queries_count
