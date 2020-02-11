@@ -53,6 +53,7 @@ class Repository < ApplicationRecord
 
   def sync_subjects_in_foreground
     subject_urls = notifications.subjectable.distinct.pluck(:subject_url)
+    return unless app_installation
     client = app_installation.github_client
     subject_urls.each do |subject_url|
       begin
