@@ -332,7 +332,7 @@ GEM
     simplecov (0.18.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
-    simplecov-html (0.12.0)
+    simplecov-html (0.12.1)
     skylight (4.2.1)
       skylight-core (= 4.2.1)
     skylight-core (4.2.1)
