@@ -43,9 +43,6 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
   gem 'active_record_query_trace'
-  gem 'rubocop', require: false
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
 end
 
 group :test do
