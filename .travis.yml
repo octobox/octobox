@@ -13,7 +13,7 @@ before_script:
   - psql -c 'create database "octobox_test";' -U postgres || true
 
 script:
-  - RAILS_ENV=test bundle exec rake --trace rubocop db:migrate test
+  - RAILS_ENV=test bundle exec rake --trace db:migrate test
 
 bundler_args: --without development production --deployment --jobs=3 --retry=3
 

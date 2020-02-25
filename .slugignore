@@ -16,7 +16,6 @@ coverage/
 docker-compose.yml
 docker-compose-dev.yml
 .travis.yml
-.rubocop.yml
 .env.example
 .eslintignore
 .eslintrc
