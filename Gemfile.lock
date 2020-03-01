@@ -218,7 +218,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (4.0.3)
-    puma (4.3.2)
+    puma (4.3.3)
       nio4r (~> 2.0)
     puma_worker_killer (0.1.1)
       get_process_mem (~> 0.2)
