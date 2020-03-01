@@ -168,4 +168,12 @@ class User < ApplicationRecord
     pinned_searches.create(query: 'type:pull_request state:open status:success archived:false', name: 'Mergeable')
     pinned_searches.create(query: "type:pull_request author:#{github_login} inbox:true", name: 'My PRs')
   end
+
+  def import_notifications(data)
+    data.each do |new_notification|
+      n = self.notifications.find_or_initialize_by(github_id: new_notification['github_id'])
+      n.attributes = new_notification.except('id', 'user_id')
+      n.save(touch: false) if n.changed?
+    end
+  end
 end

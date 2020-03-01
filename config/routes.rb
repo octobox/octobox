@@ -69,6 +69,8 @@ Rails.application.routes.draw do
   resources :pinned_searches
 
   get '/settings', to: 'users#edit'
+  get '/export', to: 'users#export'
+  post '/import', to: 'users#import'
   resources :users, only: [:update, :destroy] do
     collection do
       scope format: true, constraints: { format: 'json' } do
