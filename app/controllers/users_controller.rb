@@ -83,6 +83,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def export
+    send_data current_user.notifications.to_json, :type => 'application/json; header=present', :disposition => "attachment; filename=octobox.json"
+  end
+
+  def import
+    data = JSON.parse(params[:file].read)
+    current_user.import_notifications(data)
+    flash[:success] = "Import complete"
+    redirect_to root_path
+  end
+
   private
 
   def ensure_correct_user

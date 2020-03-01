@@ -335,6 +335,31 @@
     </div>
   </div>
 
+  <div class="card mb-3">
+    <h5 class="card-header">
+      <%= t('users.titles.export_import') %>
+    </h5>
+    <div class="card-body">
+      <p><%= t('users.notices.export_import') %></p>
+      <%= link_to export_path, class: 'btn btn-outline-dark' do %>
+        <%= octicon 'cloud-download' %>&nbsp;
+        <%= t('users.actions.export') %>
+      <% end %>
+      <% unless Octobox.io? %>
+
+        <%= form_tag import_path, class: 'd-inline', multipart: true do %>
+          <label class="btn btn-outline-dark mt-2">
+            <%= octicon 'cloud-upload' %>&nbsp;
+            <%= t('users.actions.import') %>
+          <span style="display:none;">
+            <%= file_field_tag :file, required: true, onchange: "form.submit();" %>
+          </span>
+          </label>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
   <div class="card">
     <h5 class="card-header bg-danger text-white">
       <%= t('users.titles.danger_zone') %>

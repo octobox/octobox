@@ -52,6 +52,8 @@ en:
       manage_app_access: 'Manage App Access'
       login_to_github_app: 'Login to the GitHub App'
       install_github_app: 'Install GitHub App'
+      export: 'Export notifications'
+      import: 'Import notifications'
     labels:
       version: 'Version:'
       name: 'Name'
@@ -80,6 +82,7 @@ en:
       issues_and_pull_request_data: 'Pull in status, labels, authors and assignees on issues and pull requests'
       private_repo_data: 'Full support for private repositories'
       sync_automatically: 'Sync new and updated notifications automatically'
+      export_import: 'Here you can export your notification data as JSON and import notifications into another Octobox instance'
     titles:
       app_installations: 'GitHub App Installations'
       settings: 'Settings'
@@ -92,3 +95,4 @@ en:
       statistics: 'Statistics'
       danger_zone: 'Danger zone'
       personal_access_token: 'Personal Access Token'
+      export_import: 'Export and Import'
