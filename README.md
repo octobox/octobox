@@ -38,7 +38,6 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-	- [Octobox.io](#octoboxio)
 	- [Install](#install)
 	- [Desktop usage](#desktop-usage)
 	- [Web extension](#web-extension)
@@ -52,12 +51,6 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 - [Copyright](#copyright)
 
 ## Getting Started
-
-### Octobox.io
-
-You can use Octobox right now at [octobox.io](https://octobox.io), a shared instance hosted by the Octobox team.
-
-**Note:** octobox.io has Personal Access Tokens ([#185](https://github.com/octobox/octobox/pull/185)) intentionally disabled.
 
 ### Install
 
