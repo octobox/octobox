@@ -159,7 +159,7 @@ class User < ApplicationRecord
     return false unless subject.commentable?
     return true if personal_access_token_enabled?
     return true if Octobox.fetch_subject?
-    return true if github_app_authorized? && subject.repository.commentable?
+    return true if github_app_authorized? && subject.repository && subject.repository.commentable?
     return false
   end
 

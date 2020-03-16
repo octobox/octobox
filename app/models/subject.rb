@@ -79,6 +79,7 @@ class Subject < ApplicationRecord
   end
 
   def self.sync_comments(remote_subject)
+    return if remote_subject.nil?
     subject = Subject.find_by(url: remote_subject['url'])
     Subject.sync(remote_subject) if subject.nil?
     return if subject.nil?
@@ -200,7 +201,7 @@ class Subject < ApplicationRecord
     reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
     return [] unless reviews.present?
     reviews.map { |review|
-      if review[:state] == "COMMENTED"
+      if review && review[:state] == "COMMENTED"
         reviews.concat download_comments_for_review(review)
         reviews.delete(review)
       end
