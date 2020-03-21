@@ -54,4 +54,4 @@ See the comment thread right from within the Octobox interface, either in a thre
 
 ## Private discussions
 
-GitHub used to have this years and years ago. The additonal context and social engagement is often useful for projects of globally distributed, disparate contributors. This might be implemented alongside 'reply on GitHub' functions as part of the above.
+GitHub used to have this years and years ago. The additional context and social engagement is often useful for projects of globally distributed, disparate contributors. This might be implemented alongside 'reply on GitHub' functions as part of the above.

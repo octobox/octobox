@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class User < ApplicationRecord
-  attr_encrypted :access_token, key: Octobox.config.attr_encyrption_key
-  attr_encrypted :personal_access_token, key: Octobox.config.attr_encyrption_key
-  attr_encrypted :app_token, key: Octobox.config.attr_encyrption_key
+  attr_encrypted :access_token, key: Octobox.config.attr_encryption_key
+  attr_encrypted :personal_access_token, key: Octobox.config.attr_encryption_key
+  attr_encrypted :app_token, key: Octobox.config.attr_encryption_key
 
   has_secure_token :api_token
   has_many :notifications, dependent: :delete_all
