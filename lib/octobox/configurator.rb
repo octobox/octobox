@@ -1,6 +1,6 @@
 module Octobox
   class Configurator
-    def attr_encyrption_key
+    def attr_encryption_key
       @key ||= begin
         key = ENV['OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY']
 

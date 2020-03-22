@@ -48,7 +48,7 @@ SearchSuggestion = {
     var searchSuggestionFound = false;
     timestampIndex.openCursor(null, 'prev').onsuccess = function(event) {
       var cursor = event.target.result;
-      // if there is still another cursor to go, keep runing this code
+      // if there is still another cursor to go, keep running this code
       if (cursor) {
         searchSuggestionFound = true;
         // create a list item to put each data item inside when displaying it
