@@ -126,7 +126,7 @@ var Octobox = (function() {
     window.current_id = undefined;
 
     $(document).keydown(function(e) {
-      // disable shortcuts for the seach and comment
+      // disable shortcuts for the search and comment
       if ($("#help-box").length && !["search-box","comment_body"].includes(e.target.id)  && !e.ctrlKey && !e.metaKey) {
         var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShortcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }

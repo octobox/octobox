@@ -424,9 +424,9 @@ Then start the rails app and visit <https://github.com/apps/my-octobox/installat
 
 n.b. you will be required to log into the oauth app (to allow access to the notifications scope), followed by the github app (to allow access to installed app data).
 
-To process events recieved from the webhook, ensure you have a sidekiq worker running as well as the rails server: `$ bundle exec sidekiq -C config/sidekiq.yml`
+To process events received from the webhook, ensure you have a sidekiq worker running as well as the rails server: `$ bundle exec sidekiq -C config/sidekiq.yml`
 
-If you wish to run the GitHub app locally and still recieve webhook events, use a service like <https://ngrok.com> to create a public url (`https://my-octobx.ngrok.com`) and use instead of http://localhost:3000 for all oauth and GitHub app config urls.
+If you wish to run the GitHub app locally and still receive webhook events, use a service like <https://ngrok.com> to create a public url (`https://my-octobx.ngrok.com`) and use instead of http://localhost:3000 for all oauth and GitHub app config urls.
 
 ## Open links in the same tab
 
