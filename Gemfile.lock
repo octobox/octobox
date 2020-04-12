@@ -214,7 +214,7 @@ GEM
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     popper_js (1.16.0)
-    pry (0.13.0)
+    pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (4.0.4)
