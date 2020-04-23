@@ -256,8 +256,8 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
-    involved_users = users.with_access_token.not_recently_synced
-    involved_users += repository.users.with_access_token.not_recently_synced if repository.present?
+    involved_users = users.with_access_token.not_recently_synced.active
+    involved_users += repository.users.with_access_token.not_recently_synced.active if repository.present?
     involved_users.uniq.reject(&:syncing?).map(&:id)
   end
 
