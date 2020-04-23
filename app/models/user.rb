@@ -27,8 +27,9 @@ class User < ApplicationRecord
   }
   validates_with PersonalAccessTokenValidator
 
-  scope :not_recently_synced, -> { where('last_synced_at < ?', 5.minutes.ago) }
+  scope :not_recently_synced, -> { where('users.last_synced_at < ?', 5.minutes.ago) }
   scope :with_access_token, -> { where.not(encrypted_access_token: nil) }
+  scope :active, -> { where('users.updated_at > ?', 1.month.ago) }
 
   after_create :create_default_pinned_searches
 
