@@ -83,7 +83,7 @@ GEM
     bullet (6.1.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
-    byebug (11.1.2)
+    byebug (11.1.3)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
     coderay (1.1.2)
