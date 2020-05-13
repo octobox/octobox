@@ -63,7 +63,7 @@ GEM
       encryptor (~> 3.0.0)
     autoprefixer-rails (9.7.6)
       execjs
-    better_errors (2.7.0)
+    better_errors (2.7.1)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
