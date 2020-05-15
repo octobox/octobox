@@ -266,4 +266,7 @@ $notification-items: (
 
 a span.notification-number {
   font-weight: normal;
+  // Looks more tabular, while allowing overflow.
+  display: inline-block;
+  min-width: 3rem;
 }
