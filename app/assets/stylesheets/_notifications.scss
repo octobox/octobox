@@ -19,9 +19,19 @@ $notification-items: (
       }
     }
   }
-  .active {
-    font-weight: bold;
-    background-color: mix($list-group-action-active-bg, $body-bg, 50%);
+  tr {
+    &:not(.active) {
+      background-color: mix($list-group-action-active-bg, $body-bg, 50%);
+      .notification-subject .link {
+        color: $text-muted;
+      }
+    }
+    @media (hover: hover) {
+      &:hover, &:focus {
+        box-shadow: 0 1px 5px rgba(27, 31, 35, .15);
+        background: $list-group-action-active-bg;
+      }
+    }
   }
 }
 
@@ -163,13 +173,6 @@ $notification-items: (
     tbody{
       width:100%
     }
-    &.table > tbody > tr.active {
-      background: $list-group-action-active-bg;
-      &:hover {
-        background: $list-group-action-active-bg;
-      }
-
-    }
     &.table > tbody > tr > td {
       border: none;
       padding: 0;
@@ -266,4 +269,7 @@ $notification-items: (
 
 a span.notification-number {
   font-weight: normal;
+  // Looks more tabular, while allowing overflow.
+  display: inline-block;
+  min-width: 3rem;
 }
