@@ -163,8 +163,14 @@ $notification-items: (
     tbody{
       width:100%
     }
-    &.table > tbody > tr.active {
-      background: $list-group-action-active-bg;
+    &.table > tbody > tr {
+      // Be less "eye-catching" when inactive.
+      &:not(.active) {
+        background-color: mix($list-group-action-active-bg, $body-bg, 50%);
+        .notification-subject .link {
+          color: $text-muted;
+        }
+      }
       &:hover {
         background: $list-group-action-active-bg;
       }
