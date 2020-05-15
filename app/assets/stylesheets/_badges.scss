@@ -32,19 +32,10 @@
 }
 
 .badge-pr {
+  background-color: transparent;
   &.success {
-    background-color: transparent;
     .octicon {
       fill: $notification-open;
-    }
-  }
-  &.failure, &.pending, &.error {
-    background-color: $list-group-bg;
-    .active & {
-      background-color: $list-group-action-active-bg;
-    }
-    .notification:hover & {
-      background-color: transparent;
     }
   }
   &.pending .octicon {
