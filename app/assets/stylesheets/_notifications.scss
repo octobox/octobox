@@ -254,6 +254,10 @@ $notification-items: (
       top: 10px;
       right: 10px;
     }
+    .notification-number {
+      display: initial;
+      min-width: auto;
+    }
   }
 }
 
