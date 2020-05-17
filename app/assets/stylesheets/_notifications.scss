@@ -132,6 +132,10 @@ $notification-items: (
       max-width: 10rem;
       overflow: hidden;
     }
+    .notification-number {
+      display: inline-block;
+      min-width: 3rem;
+    }
     .notification-date{
       min-width: 5.5em;
       text-align: right;
@@ -269,7 +273,4 @@ $notification-items: (
 
 a span.notification-number {
   font-weight: normal;
-  // Looks more tabular, while allowing overflow.
-  display: inline-block;
-  min-width: 3rem;
 }
