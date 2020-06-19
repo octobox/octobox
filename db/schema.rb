@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_10_092010) do
+ActiveRecord::Schema.define(version: 2020_06_19_095214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 2019_06_10_092010) do
     t.bigint "subject_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "github_id"
+    t.bigint "github_id"
     t.index ["name"], name: "index_labels_on_name"
     t.index ["subject_id"], name: "index_labels_on_subject_id"
   end
