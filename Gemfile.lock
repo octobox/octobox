@@ -61,7 +61,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
-    autoprefixer-rails (9.7.6)
+    autoprefixer-rails (9.8.1)
       execjs
     better_errors (2.7.1)
       coderay (>= 1.0.0)
