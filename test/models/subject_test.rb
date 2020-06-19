@@ -16,7 +16,7 @@ class SubjectTest < ActiveSupport::TestCase
 
     label = subject.labels.first
     assert_equal true, label.present?
-    assert_equal 1023072455, label.github_id
+    assert_equal 2147484814, label.github_id
     assert_equal "080bcc", label.color
     assert_equal ":carrot: :carrot:", label.name
     assert_equal 1, subject.labels.count
@@ -24,7 +24,7 @@ class SubjectTest < ActiveSupport::TestCase
 
   test 'update_labels updates labels' do
     subject = create(:subject)
-    create(:label, subject: subject, github_id: "1023072455")
+    create(:label, subject: subject, github_id: "2147484814")
     labels = [load_fixture("label.json")["label"]]
     assert_equal 1, subject.labels.count
 
@@ -32,7 +32,7 @@ class SubjectTest < ActiveSupport::TestCase
 
     label = subject.labels.first.reload
     assert_equal true, label.present?
-    assert_equal 1023072455, label.github_id
+    assert_equal 2147484814, label.github_id
     assert_equal "080bcc", label.color
     assert_equal ":carrot: :carrot:", label.name
     assert_equal 1, subject.labels.count
@@ -343,7 +343,7 @@ class SubjectTest < ActiveSupport::TestCase
     create(:notification, subject_url:remote_subject['url'], user: user)
     create(:subject, url: remote_subject['url'])
 
-    Subject.sync_comments(remote_subject)    
+    Subject.sync_comments(remote_subject)
 
     assert_equal 1, Comment.where(review_state: "CHANGES_REQUESTED").count
 
