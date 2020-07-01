@@ -228,8 +228,6 @@ GEM
     rack-canonical-host (1.0.0)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
-    rack-protection (2.0.8.1)
-      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.3.2)
@@ -288,11 +286,10 @@ GEM
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
     shellany (0.0.1)
-    sidekiq (6.0.7)
+    sidekiq (6.1.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      rack-protection (>= 2.0.0)
-      redis (>= 4.1.0)
+      redis (>= 4.2.0)
     sidekiq-scheduler (3.0.1)
       e2mmap
       redis (>= 3, < 5)
