@@ -140,7 +140,7 @@ GEM
       minitest (>= 3.0)
     hashdiff (1.0.1)
     hashie (4.1.0)
-    i18n (1.8.3)
+    i18n (1.8.4)
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
