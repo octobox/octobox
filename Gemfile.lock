@@ -382,7 +382,7 @@ DEPENDENCIES
   lograge
   minitest
   mocha
-  octicons_helper
+  octicons_helper (= 9.6.0)
   octokit
   oj
   omniauth-github
