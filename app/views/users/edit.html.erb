@@ -119,16 +119,29 @@
 
       <% if Octobox.config.subjects_enabled? && Octobox.config.include_comments %>
         <div class="w-100 mb-3 card">
+<<<<<<< HEAD
           <h5 class="card-header">
             <%= t('users.titles.open_notifications') %>
+=======
+          <div class='ribbon info'>
+            <span>Beta</span>
+          </div>
+          <h5 class="card-header">
+            Open notifications
+>>>>>>> upstream/NiR--improve-dockerfile
           </h5>
           <div class="card-body">
             <div class="form-group">
               <%= f.select :display_comments, [['On GitHub', 'false'], ['On Octobox', 'true']], {}, class: 'form-control' %>
             </div>
 
+<<<<<<< HEAD
             <%= submit_tag t('crud_actions.save'), class: 'btn btn-primary' %>
             <%= link_to t('crud_actions.cancel'), root_path, class: 'btn btn-light' %>
+=======
+            <%= submit_tag 'Save', class: 'btn btn-primary' %>
+            <%= link_to 'Cancel', root_path, class: 'btn btn-light' %>
+>>>>>>> upstream/NiR--improve-dockerfile
           </div>
         </div>
       <% end %>
@@ -191,10 +204,17 @@
           <table class='table table-responsive-sm'>
             <thead>
               <tr>
+<<<<<<< HEAD
                 <th class='border-top-0'><%= t('users.labels.account') %></th>
                 <th class='border-top-0'><%= t('users.labels.repos') %></th>
                 <% if Octobox.io? %>
                   <th class='border-top-0' colspan='2'><%= t('users.labels.billing') %></th>
+=======
+                <th class='border-top-0'>Account</th>
+                <th class='border-top-0'>Repos</th>
+                <% if Octobox.io? %>
+                  <th class='border-top-0' colspan='2'>Billing</th>
+>>>>>>> upstream/NiR--improve-dockerfile
                 <% end %>
                 <th class='border-top-0'><%= t('users.labels.settings') %></th>
               </tr>

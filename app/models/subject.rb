@@ -44,16 +44,40 @@ class Subject < ApplicationRecord
     involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minutes, user_id) }
   end
 
+<<<<<<< HEAD
   def sync(remote_subject)
     update({
       repository_full_name: extract_full_name_from_remote_subject(remote_subject),
+=======
+  def self.sync(remote_subject)
+    subject = Subject.find_or_create_by(url: remote_subject['url'])
+
+    # webhook payloads don't always have 'repository' info
+    if remote_subject['repository']
+      full_name = remote_subject['repository']['full_name']
+    elsif remote_subject['full_name']
+      full_name = remote_subject['full_name']
+    else
+      full_name = extract_full_name(remote_subject['url'])
+    end
+
+    comment_count = remote_subject['comments'] || remote_subject.fetch('commit', {})['comment_count']
+    comment_count = subject.comment_count if comment_count.nil?
+
+    subject.update({
+      repository_full_name: full_name,
+>>>>>>> upstream/NiR--improve-dockerfile
       github_id: remote_subject['id'],
       state: remote_subject['merged_at'].present? ? 'merged' : remote_subject['state'],
       author: remote_subject.fetch('user', {})['login'],
       html_url: remote_subject['html_url'],
       created_at: remote_subject['created_at'] || Time.current,
       updated_at: remote_subject['updated_at'] || Time.current,
+<<<<<<< HEAD
       comment_count: extract_comment_count_from_remote_subject(remote_subject) || comment_count,
+=======
+      comment_count: comment_count,
+>>>>>>> upstream/NiR--improve-dockerfile
       assignees: ":#{Array(remote_subject['assignees'].try(:map) {|a| a['login'] }).join(':')}:",
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
@@ -127,9 +151,13 @@ class Subject < ApplicationRecord
     remote_comments.each do |remote_comment|
       next if remote_comment.nil?
       comments.find_or_create_by(github_id: remote_comment.id) do |comment|
+<<<<<<< HEAD
         comment.author = remote_comment.user.try(:login)
         comment.url = remote_comment.url
         comment.url = remote_comment.url
+=======
+        comment.author = remote_comment.user.login
+>>>>>>> upstream/NiR--improve-dockerfile
         comment.body = remote_comment.body.try(:gsub, "\u0000", '')
         comment.author_association = remote_comment.author_association
         comment.created_at = remote_comment.created_at
@@ -139,6 +167,24 @@ class Subject < ApplicationRecord
       end
     end
     comment_count = comments.count
+  end
+
+  def comment(user, comment_body)
+    return if comment_body.nil? || comment_body.empty?
+    comment = comments.create(author: user.github_login, body: comment_body)
+    CommentWorker.perform_async_if_configured(comment.id, user.id, self.id)
+  end
+
+  def comment_on_github(comment, user)
+    return if comment.body.empty?
+
+    client = user.comment_client(comment)
+
+    remote_comment = client.post url.gsub('/pulls/', '/issues/') + '/comments', {body: comment.body}
+    comment.github_id = remote_comment.id
+    comment.author_association = remote_comment.author_association
+    comment.created_at = remote_comment.created_at
+    comment.save
   end
 
   def comment(user, comment_body)
@@ -190,7 +236,11 @@ class Subject < ApplicationRecord
 
   #example https://api.github.com/repos/octobox/octobox/issues/1141/comments
   def download_comments
+<<<<<<< HEAD
     return [] unless github_client
+=======
+    return unless github_client
+>>>>>>> upstream/NiR--improve-dockerfile
     github_client.get(url.gsub('/pulls/', '/issues/') + '/comments', since: comments.order('created_at ASC').last.try(:created_at))
   rescue Octokit::ClientError => e
     []
@@ -231,6 +281,7 @@ class Subject < ApplicationRecord
   def github_client
     if app_installation.present?
       app_installation.github_client
+<<<<<<< HEAD
     else
       users.with_access_token.first&.github_client
     end
@@ -244,6 +295,10 @@ class Subject < ApplicationRecord
       remote_subject['full_name']
     else
       extract_full_name(remote_subject['url'])
+=======
+    else
+      users.with_access_token.first&.github_client
+>>>>>>> upstream/NiR--improve-dockerfile
     end
   end
 
@@ -256,8 +311,13 @@ class Subject < ApplicationRecord
   end
 
   def involved_user_ids
+<<<<<<< HEAD
     involved_users = users.with_access_token.not_recently_synced.active
     involved_users += repository.users.with_access_token.not_recently_synced.active if repository.present?
+=======
+    involved_users = users.with_access_token.not_recently_synced
+    involved_users += repository.users.with_access_token.not_recently_synced if repository.present?
+>>>>>>> upstream/NiR--improve-dockerfile
     involved_users.uniq.reject(&:syncing?).map(&:id)
   end
 

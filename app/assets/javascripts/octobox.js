@@ -4,6 +4,7 @@ var Octobox = (function() {
     $(".js-select_all").click();
   };
 
+<<<<<<< HEAD
   var updatePinnedSearchCounts = function(pinned_search) {
     var pinned_search = $(pinned_search);
     $.get(pinned_search.data('url'), function(data) {
@@ -13,6 +14,8 @@ var Octobox = (function() {
     });
   }
 
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
   var moveCursorToClickedRow = function(event) {
     // Don't event.preventDefault(), since we want the
     // normal clicking behavior for links, starring, etc
@@ -126,7 +129,11 @@ var Octobox = (function() {
     window.current_id = undefined;
 
     $(document).keydown(function(e) {
+<<<<<<< HEAD
       // disable shortcuts for the search and comment
+=======
+      // disable shortcuts for the seach and comment
+>>>>>>> upstream/NiR--improve-dockerfile
       if ($("#help-box").length && !["search-box","comment_body"].includes(e.target.id)  && !e.ctrlKey && !e.metaKey) {
         var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShortcuts)[e.which] ;
         if (shortcutFunction) { shortcutFunction(e) }

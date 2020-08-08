@@ -58,6 +58,7 @@ module StubHelper
     stub_request(method, url).to_return(response)
   end
 
+<<<<<<< HEAD
   def stub_review_requests(remote_subject: nil, remote_reviews: nil, extra_headers: {})
     
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)    
@@ -81,12 +82,17 @@ module StubHelper
       .to_return({ status: 200, body: file_fixture('subject_58_status.json'), headers: { 'Content-Type' => 'application/json' } })
   end
 
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
   def stub_comments_requests(extra_headers: {})
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 
     stub_request(:get, /\/comments\?since\z/)
+<<<<<<< HEAD
       .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
     stub_request(:get, /\/reviews\?since\z/)
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
       .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })
     stub_request(:get, /\/commits\/\w*\/status/)
     .to_return({ status: 200, body: file_fixture('comments.json'), headers: headers })

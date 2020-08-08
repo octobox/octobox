@@ -26,7 +26,11 @@ module Octobox
     config.eager_load_paths << Rails.root.join("lib")
     config.exceptions_app = routes
 
+<<<<<<< HEAD
     config.load_defaults '6.0'
+=======
+    config.load_defaults '5.2'
+>>>>>>> upstream/NiR--improve-dockerfile
 
     unless File.basename($0) == 'rake' || File.basename($0) == 'rails' || secrets.secret_key_base.length >= 32
       raise "SECRET_KEY_BASE should be a random key of at least 32 chars."

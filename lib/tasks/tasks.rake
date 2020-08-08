@@ -48,11 +48,14 @@ namespace :tasks do
     AppInstallation.sync_all
   end
 
+<<<<<<< HEAD
   desc "Update all users to display comments in Octobox"
   task display_comments: :environment do
     User.update_all(display_comments: true)
   end
 
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
   desc "cleanup unique-jobs cache"
   task cleanup_unique_jobs: :environment do
     Sidekiq.redis do |conn|

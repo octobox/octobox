@@ -20,11 +20,14 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+<<<<<<< HEAD
   crud_actions:
     save: 'Save'
     cancel: 'Cancel'
     edit: 'Edit'
     delete: 'Delete'
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
   exceptions:
     octokit:
       unauthorized: 'Your GitHub token seems to be invalid'

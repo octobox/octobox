@@ -37,6 +37,7 @@ class CommentWorkerTest < ActiveSupport::TestCase
     end
   end
 
+<<<<<<< HEAD
   test 'Sets comment count to zero (not nill) when removing the first comment' do
     stub_request(:post, "#{@comment.subject.url}/comments").
       to_return({ status: 404})
@@ -45,4 +46,6 @@ class CommentWorkerTest < ActiveSupport::TestCase
     assert @comment.subject.commentable?
   end
 
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
 end

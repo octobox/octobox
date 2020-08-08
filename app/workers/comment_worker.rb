@@ -11,7 +11,11 @@ class CommentWorker
         subject.comment_on_github(comment, user) 
       rescue Octokit::NotFound, Octokit::Unauthorized, Octokit::Forbidden
         comment.try(:destroy)
+<<<<<<< HEAD
       rescue Faraday::Error => exception
+=======
+      rescue Faraday::ClientError => exception
+>>>>>>> upstream/NiR--improve-dockerfile
         handle_exception(exception, user)
       end
     else

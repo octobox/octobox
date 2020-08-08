@@ -32,7 +32,11 @@ module Octobox
       end
 
       subscriber_names = subscriptions.map do |name, _transactions|
+<<<<<<< HEAD
         rz = name.match(/github.com\/([\w\-]+)/i) if name
+=======
+        rz = name.match(/github.com\/(\w+)/i) if name
+>>>>>>> upstream/NiR--improve-dockerfile
         rz[1] if rz
       end.compact
 
@@ -50,9 +54,14 @@ module Octobox
 
           next if purchase.app_installation.nil?
 
+<<<<<<< HEAD
           next if subscriber_names.include? purchase.app_installation.account_login
           unless purchase.next_billing_date.present? && purchase.next_billing_date > Time.now
             purchase.update(unit_count: 0)
+=======
+          unless subscriber_names.include? purchase.app_installation.account_login
+            purchase.update_attributes(unit_count: 0) unless purchase.next_billing_date.present? && purchase.next_billing_date > Time.now
+>>>>>>> upstream/NiR--improve-dockerfile
             Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Removed #{plan_name} for #{purchase.app_installation.account_login}\033[0m\n\n")
           end
         end
@@ -69,10 +78,17 @@ module Octobox
           app_installation.create_subscription_purchase(subscription_plan: plan, unit_count: 1)
           Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Added #{plan_name} for #{subscriber}\033[0m\n\n")
         elsif subscription_purchase.subscription_plan.name == plan_name && subscription_purchase.unit_count.zero?
+<<<<<<< HEAD
           subscription_purchase.update(unit_count: 1)
           Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Restarted #{plan_name} for #{subscriber}\033[0m\n\n")
         else
           subscription_purchase.update(subscription_plan: plan, unit_count: 1)
+=======
+          subscription_purchase.update_attributes(unit_count: 1)
+          Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Restarted #{plan_name} for #{subscriber}\033[0m\n\n")
+        else
+          subscription_purchase.update_attributes(subscription_plan: plan, unit_count: 1)
+>>>>>>> upstream/NiR--improve-dockerfile
           Rails.logger.info("n\n\033[32m[#{Time.current}] INFO -- Switched #{subscriber} to #{plan_name}\033[0m\n\n")
         end
       end

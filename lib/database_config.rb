@@ -56,7 +56,13 @@ module DatabaseConfig
     #
     def username
       database_url_or_fallback('username') do
+<<<<<<< HEAD
         default = if Rails.env.production?
+=======
+        default = if is_mysql?
+                    'root'
+                  elsif Rails.env.production?
+>>>>>>> upstream/NiR--improve-dockerfile
                     'octobox'
                   else
                     ''

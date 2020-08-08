@@ -36,7 +36,11 @@ module Octobox
       end
 
       def download_subject?
+<<<<<<< HEAD
         @download_subject ||= user.present? && subjectable? && github_client && (Octobox.fetch_subject? || github_app_installed? || download_public_subjects?)
+=======
+        @download_subject ||= subjectable? && github_client && (Octobox.fetch_subject? || github_app_installed? || download_public_subjects?)
+>>>>>>> upstream/NiR--improve-dockerfile
       end
 
       def download_public_subjects?

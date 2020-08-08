@@ -11,8 +11,11 @@
 #   policy.object_src  :none
 #   policy.script_src  :self, :https
 #   policy.style_src   :self, :https
+<<<<<<< HEAD
 #   # If you are using webpack-dev-server then specify webpack-dev-server host
 #   policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035" if Rails.env.development?
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
 
 #   # Specify URI for violation reports
 #   # policy.report_uri "/csp-violation-report-endpoint"

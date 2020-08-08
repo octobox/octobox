@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .gitignore
 README.md
 
@@ -21,3 +22,20 @@ docker-compose-dev.yml
 .eslintrc
 
 app.json
+=======
+# ignore everything by default
+*
+
+!app/
+!bin/
+!config/
+!db/
+!lib/
+!public/
+!config.ru
+!Gemfile
+!Gemfile.lock
+!LICENSE.txt
+!Rakefile
+!README.md
+>>>>>>> upstream/NiR--improve-dockerfile

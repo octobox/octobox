@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_06_19_095214) do
+=======
+ActiveRecord::Schema.define(version: 2019_04_06_173231) do
+>>>>>>> upstream/NiR--improve-dockerfile
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"

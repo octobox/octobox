@@ -22,7 +22,11 @@ class OpenCollectiveTest < ActiveSupport::TestCase
 			names = Octobox::OpenCollective.get_sub_names(transactions, 10)
 
 			assert_equal names.length, 4
+<<<<<<< HEAD
 			assert names.include?('tom-bruijn')
+=======
+			assert names.include?('tom')
+>>>>>>> upstream/NiR--improve-dockerfile
 		end
 	end
 

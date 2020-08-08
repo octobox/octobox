@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+<<<<<<< HEAD
     actioncable (6.0.3.2)
       actionpack (= 6.0.3.2)
       nio4r (~> 2.0)
@@ -52,10 +53,53 @@ GEM
       activerecord (= 6.0.3.2)
       marcel (~> 0.3.1)
     activesupport (6.0.3.2)
+=======
+    action-cable-testing (0.5.0)
+      actioncable (>= 5.0)
+    actioncable (5.2.3)
+      actionpack (= 5.2.3)
+      nio4r (~> 2.0)
+      websocket-driver (>= 0.6.1)
+    actionmailer (5.2.3)
+      actionpack (= 5.2.3)
+      actionview (= 5.2.3)
+      activejob (= 5.2.3)
+      mail (~> 2.5, >= 2.5.4)
+      rails-dom-testing (~> 2.0)
+    actionpack (5.2.3)
+      actionview (= 5.2.3)
+      activesupport (= 5.2.3)
+      rack (~> 2.0)
+      rack-test (>= 0.6.3)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    actionview (5.2.3)
+      activesupport (= 5.2.3)
+      builder (~> 3.1)
+      erubi (~> 1.4)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_record_query_trace (1.6.2)
+    activejob (5.2.3)
+      activesupport (= 5.2.3)
+      globalid (>= 0.3.6)
+    activemodel (5.2.3)
+      activesupport (= 5.2.3)
+    activerecord (5.2.3)
+      activemodel (= 5.2.3)
+      activesupport (= 5.2.3)
+      arel (>= 9.0)
+    activestorage (5.2.3)
+      actionpack (= 5.2.3)
+      activerecord (= 5.2.3)
+      marcel (~> 0.3.1)
+    activesupport (5.2.3)
+>>>>>>> upstream/NiR--improve-dockerfile
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+<<<<<<< HEAD
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
@@ -91,10 +135,59 @@ GEM
       ruby-enum (~> 0.5)
     concurrent-ruby (1.1.6)
     connection_pool (2.2.3)
+=======
+    addressable (2.6.0)
+      public_suffix (>= 2.0.2, < 4.0)
+    arel (9.0.0)
+    ast (2.4.0)
+    attr_encrypted (3.1.0)
+      encryptor (~> 3.0.0)
+    autoprefixer-rails (9.5.1.1)
+      execjs
+    better_errors (2.5.1)
+      coderay (>= 1.0.0)
+      erubi (>= 1.0.0)
+      rack (>= 0.9.0)
+    bindex (0.7.0)
+    binding_of_caller (0.8.0)
+      debug_inspector (>= 0.0.1)
+    bootsnap (1.4.4)
+      msgpack (~> 1.0)
+    bootstrap (4.3.1)
+      autoprefixer-rails (>= 9.1.0)
+      popper_js (>= 1.14.3, < 2)
+      sassc-rails (>= 2.0.0)
+    brakeman (4.5.1)
+    bugsnag (6.11.1)
+      concurrent-ruby (~> 1.0)
+    builder (3.2.3)
+    bullet (6.0.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
+    byebug (11.0.1)
+    capybara (3.19.1)
+      addressable
+      mini_mime (>= 0.1.3)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (~> 1.2)
+      xpath (~> 3.2)
+    childprocess (1.0.1)
+      rake (< 13.0)
+    chronic_duration (0.10.6)
+      numerizer (~> 0.1.1)
+    coderay (1.1.2)
+    commonmarker (0.20.1)
+      ruby-enum (~> 0.5)
+    concurrent-ruby (1.1.5)
+    connection_pool (2.2.2)
+>>>>>>> upstream/NiR--improve-dockerfile
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
     debug_inspector (0.0.3)
+<<<<<<< HEAD
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
@@ -103,10 +196,21 @@ GEM
     encryptor (3.0.0)
     erubi (1.9.0)
     et-orbi (1.2.4)
+=======
+    docile (1.3.1)
+    dotenv (2.7.2)
+    dotenv-rails (2.7.2)
+      dotenv (= 2.7.2)
+      railties (>= 3.2, < 6.1)
+    encryptor (3.0.0)
+    erubi (1.8.0)
+    et-orbi (1.2.1)
+>>>>>>> upstream/NiR--improve-dockerfile
       tzinfo
     ethon (0.12.0)
       ffi (>= 1.3.0)
     execjs (2.7.0)
+<<<<<<< HEAD
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
     faraday (1.0.1)
@@ -123,6 +227,22 @@ GEM
       ffi (~> 1.0)
     git (1.7.0)
       rchardet (~> 1.8)
+=======
+    factory_bot (5.0.2)
+      activesupport (>= 4.2.0)
+    faraday (0.15.4)
+      multipart-post (>= 1.2, < 3)
+    faraday_middleware (0.13.1)
+      faraday (>= 0.7.4, < 1.0)
+    ffi (1.10.0)
+    formatador (0.2.5)
+    fugit (1.2.1)
+      et-orbi (~> 1.1, >= 1.1.8)
+      raabro (~> 1.1)
+    gemoji (3.0.1)
+    get_process_mem (0.2.3)
+    git (1.5.0)
+>>>>>>> upstream/NiR--improve-dockerfile
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     guard (2.16.2)
@@ -138,6 +258,7 @@ GEM
     guard-minitest (2.4.6)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
+<<<<<<< HEAD
     hashdiff (1.0.1)
     hashie (4.1.0)
     i18n (1.8.5)
@@ -154,6 +275,28 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.10)
     local_time (2.1.0)
     lograge (0.11.2)
+=======
+    hashdiff (0.3.9)
+    hashie (3.6.0)
+    hirefire-resource (0.7.1)
+    i18n (1.6.0)
+      concurrent-ruby (~> 1.0)
+    jaro_winkler (1.5.2)
+    jbuilder (2.9.0)
+      activesupport (>= 4.2.0)
+    jquery-rails (4.3.3)
+      rails-dom-testing (>= 1, < 3)
+      railties (>= 4.2.0)
+      thor (>= 0.14, < 2.0)
+    json (2.2.0)
+    jwt (2.1.0)
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
+    local_time (2.1.0)
+    lograge (0.11.0)
+>>>>>>> upstream/NiR--improve-dockerfile
       actionpack (>= 4)
       activesupport (>= 4)
       railties (>= 4)
@@ -166,6 +309,7 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
+<<<<<<< HEAD
     method_source (1.0.0)
     mimemagic (0.3.5)
     mini_mime (1.0.2)
@@ -181,6 +325,26 @@ GEM
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     notiffany (0.1.3)
+=======
+    metaclass (0.0.4)
+    method_source (0.9.2)
+    mimemagic (0.3.3)
+    mini_mime (1.0.1)
+    mini_portile2 (2.4.0)
+    minitest (5.11.3)
+    mocha (1.8.0)
+      metaclass (~> 0.0.1)
+    msgpack (1.2.10)
+    multi_json (1.13.1)
+    multi_xml (0.6.0)
+    multipart-post (2.1.0)
+    mysql2 (0.5.2)
+    nenv (0.3.0)
+    nio4r (2.3.1)
+    nokogiri (1.10.3)
+      mini_portile2 (~> 2.4.0)
+    notiffany (0.1.1)
+>>>>>>> upstream/NiR--improve-dockerfile
       nenv (~> 0.1)
       shellany (~> 0.0)
     numerizer (0.1.1)
@@ -190,6 +354,7 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
+<<<<<<< HEAD
     octicons (9.6.0)
       nokogiri (>= 1.6.3.1)
     octicons_helper (9.6.0)
@@ -201,6 +366,18 @@ GEM
     oj (3.10.8)
     omniauth (1.9.1)
       hashie (>= 3.4.6)
+=======
+    octicons (8.5.0)
+      nokogiri (>= 1.6.3.1)
+    octicons_helper (8.5.0)
+      octicons (= 8.5.0)
+      rails
+    octokit (4.14.0)
+      sawyer (~> 0.8.0, >= 0.5.3)
+    oj (3.7.12)
+    omniauth (1.9.0)
+      hashie (>= 3.4.6, < 3.7.0)
+>>>>>>> upstream/NiR--improve-dockerfile
       rack (>= 1.6.2, < 3)
     omniauth-github (1.4.0)
       omniauth (~> 1.5)
@@ -208,6 +385,7 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
+<<<<<<< HEAD
     pagy (3.8.3)
     pg (1.2.3)
     pg_search (2.3.2)
@@ -277,6 +455,93 @@ GEM
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
+=======
+    pagy (3.2.0)
+    parallel (1.17.0)
+    parser (2.6.3.0)
+      ast (~> 2.4.0)
+    pg (1.1.4)
+    pg_search (2.1.7)
+      activerecord (>= 4.2)
+      activesupport (>= 4.2)
+    popper_js (1.14.5)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    public_suffix (3.0.3)
+    puma (3.12.1)
+    puma_worker_killer (0.1.0)
+      get_process_mem (~> 0.2)
+      puma (>= 2.7, < 4)
+    raabro (1.1.6)
+    rack (2.0.7)
+    rack-canonical-host (0.2.3)
+      addressable (> 0, < 3)
+      rack (>= 1.0.0, < 3)
+    rack-protection (2.0.5)
+      rack
+    rack-test (1.1.0)
+      rack (>= 1.0, < 3)
+    rails (5.2.3)
+      actioncable (= 5.2.3)
+      actionmailer (= 5.2.3)
+      actionpack (= 5.2.3)
+      actionview (= 5.2.3)
+      activejob (= 5.2.3)
+      activemodel (= 5.2.3)
+      activerecord (= 5.2.3)
+      activestorage (= 5.2.3)
+      activesupport (= 5.2.3)
+      bundler (>= 1.3.0)
+      railties (= 5.2.3)
+      sprockets-rails (>= 2.0.0)
+    rails-controller-testing (1.0.4)
+      actionpack (>= 5.0.1.x)
+      actionview (>= 5.0.1.x)
+      activesupport (>= 5.0.1.x)
+    rails-dom-testing (2.0.3)
+      activesupport (>= 4.2.0)
+      nokogiri (>= 1.6)
+    rails-html-sanitizer (1.0.4)
+      loofah (~> 2.2, >= 2.2.2)
+    railties (5.2.3)
+      actionpack (= 5.2.3)
+      activesupport (= 5.2.3)
+      method_source
+      rake (>= 0.8.7)
+      thor (>= 0.19.0, < 2.0)
+    rainbow (3.0.0)
+    rake (12.3.2)
+    rb-fsevent (0.10.3)
+    rb-inotify (0.10.0)
+      ffi (~> 1.0)
+    redis (4.1.1)
+    regexp_parser (1.4.0)
+    request_store (1.4.1)
+      rack (>= 1.4)
+    rgb (0.1.0)
+    rubocop (0.69.0)
+      jaro_winkler (~> 1.5.1)
+      parallel (~> 1.10)
+      parser (>= 2.6)
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-performance (1.2.0)
+      rubocop (>= 0.68.0)
+    ruby-enum (0.7.2)
+      i18n
+    ruby-progressbar (1.10.0)
+    ruby_dep (1.5.0)
+    rubyzip (1.2.2)
+    rufus-scheduler (3.6.0)
+      fugit (~> 1.1, >= 1.1.6)
+    safe_yaml (1.0.5)
+    sassc (2.0.1)
+      ffi (~> 1.9)
+      rake
+    sassc-rails (2.1.1)
+>>>>>>> upstream/NiR--improve-dockerfile
       railties (>= 4.0.0)
       sassc (>= 2.0)
       sprockets (> 3.0)
@@ -285,6 +550,7 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
+<<<<<<< HEAD
     shellany (0.0.1)
     sidekiq (6.1.1)
       connection_pool (>= 2.2.2)
@@ -292,11 +558,24 @@ GEM
       redis (>= 4.2.0)
     sidekiq-scheduler (3.0.1)
       e2mmap
+=======
+    selenium-webdriver (3.142.2)
+      childprocess (>= 0.5, < 2.0)
+      rubyzip (~> 1.2, >= 1.2.2)
+    shellany (0.0.1)
+    sidekiq (5.2.7)
+      connection_pool (~> 2.2, >= 2.2.2)
+      rack (>= 1.5.0)
+      rack-protection (>= 1.5.0)
+      redis (>= 3.3.5, < 5)
+    sidekiq-scheduler (3.0.0)
+>>>>>>> upstream/NiR--improve-dockerfile
       redis (>= 3, < 5)
       rufus-scheduler (~> 3.2)
       sidekiq (>= 3)
       thwait
       tilt (>= 1.4.0)
+<<<<<<< HEAD
     sidekiq-status (1.1.4)
       chronic_duration
       sidekiq (>= 3.0)
@@ -307,6 +586,23 @@ GEM
     skylight (4.3.1)
       skylight-core (= 4.3.1)
     skylight-core (4.3.1)
+=======
+    sidekiq-status (1.1.2)
+      chronic_duration
+      sidekiq (>= 3.0)
+    sidekiq-unique-jobs (6.0.13)
+      concurrent-ruby (~> 1.0, >= 1.0.5)
+      sidekiq (>= 4.0, < 7.0)
+      thor (~> 0)
+    simplecov (0.16.1)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
+    skylight (4.0.1)
+      skylight-core (= 4.0.1)
+    skylight-core (4.0.1)
+>>>>>>> upstream/NiR--improve-dockerfile
       activesupport (>= 4.2.0)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
@@ -323,11 +619,17 @@ GEM
       rails (> 3.0.0)
     thor (0.20.3)
     thread_safe (0.3.6)
+<<<<<<< HEAD
     thwait (0.2.0)
       e2mmap
     tilt (2.0.10)
     timecop (0.9.1)
     turbolinks (5.2.1)
+=======
+    tilt (2.0.9)
+    timecop (0.9.1)
+    turbolinks (5.2.0)
+>>>>>>> upstream/NiR--improve-dockerfile
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
     typhoeus (1.4.0)
@@ -336,6 +638,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
+<<<<<<< HEAD
     uniform_notifier (1.13.0)
     web-console (4.0.4)
       actionview (>= 6.0.0)
@@ -343,19 +646,37 @@ GEM
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
     webmock (3.8.3)
+=======
+    unicode-display_width (1.6.0)
+    uniform_notifier (1.12.1)
+    web-console (3.7.0)
+      actionview (>= 5.0)
+      activemodel (>= 5.0)
+      bindex (>= 0.4.0)
+      railties (>= 5.0)
+    webmock (3.5.1)
+>>>>>>> upstream/NiR--improve-dockerfile
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
+<<<<<<< HEAD
     websocket-extensions (0.1.5)
     yard (0.9.25)
     zeitwerk (2.4.0)
+=======
+    websocket-extensions (0.1.3)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
+    yard (0.9.19)
+>>>>>>> upstream/NiR--improve-dockerfile
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  action-cable-testing
   active_record_query_trace
   attr_encrypted
   better_errors
@@ -366,6 +687,10 @@ DEPENDENCIES
   bugsnag
   bullet
   byebug
+<<<<<<< HEAD
+=======
+  capybara
+>>>>>>> upstream/NiR--improve-dockerfile
   commonmarker
   dotenv-rails
   factory_bot
@@ -374,6 +699,7 @@ DEPENDENCIES
   git
   guard
   guard-minitest
+  hirefire-resource
   jbuilder
   jquery-rails
   jwt
@@ -387,7 +713,11 @@ DEPENDENCIES
   oj
   omniauth-github
   pagy
+<<<<<<< HEAD
   pg (= 1.2.3)
+=======
+  pg (= 1.1.4)
+>>>>>>> upstream/NiR--improve-dockerfile
   pg_search
   puma
   puma_worker_killer
@@ -396,12 +726,22 @@ DEPENDENCIES
   rails-controller-testing
   rake
   rgb
+<<<<<<< HEAD
+=======
+  rubocop
+  rubocop-performance
+>>>>>>> upstream/NiR--improve-dockerfile
   sassc-rails
   sidekiq
   sidekiq-scheduler
   sidekiq-status
   sidekiq-unique-jobs
+<<<<<<< HEAD
   skylight (= 4.3.1)
+=======
+  simplecov
+  skylight (= 4.0.1)
+>>>>>>> upstream/NiR--improve-dockerfile
   spring
   spring-watcher-listen
   sql_queries_count
@@ -414,7 +754,14 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
+<<<<<<< HEAD
    ruby 2.7.1p83
 
 BUNDLED WITH
    2.1.4
+=======
+   ruby 2.6.3p62
+
+BUNDLED WITH
+   2.0.1
+>>>>>>> upstream/NiR--improve-dockerfile

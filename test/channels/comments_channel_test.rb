@@ -43,7 +43,11 @@ class CommentsChannelTest < ActionCable::Channel::TestCase
     assert_has_stream "comments:#{subject.id}"
 
     assert_broadcasts(subject, 1) do
+<<<<<<< HEAD
       comment.update(body: "A new body")
+=======
+      comment.update_attributes(body: "A new body")
+>>>>>>> upstream/NiR--improve-dockerfile
     end
 
   end

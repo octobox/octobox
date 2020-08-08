@@ -65,20 +65,29 @@ Octobox uses [`encrypted_attr`](https://github.com/attr-encrypted/attr_encrypted
 
 Therefore to install and launch Octobox, you must provide a 32 byte encryption key as the env var `OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY`
 
-Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
+Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`. With docker: `docker run --rm -it akerouanton/octobox:latest bin/rails secret | cut -c1-32`.
 
 ## Local installation
 
 First things first, you'll need to fork and clone Octobox repository to
 your local machine.
 
+<<<<<<< HEAD
 Secondly, you'll need to install Ruby 2.7.1. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+=======
+Secondly, you'll need to install Ruby 2.6.3. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+>>>>>>> upstream/NiR--improve-dockerfile
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
+<<<<<<< HEAD
 rbenv install 2.7.1
 rbenv global 2.7.1
+=======
+rbenv install 2.6.3
+rbenv global 2.6.3
+>>>>>>> upstream/NiR--improve-dockerfile
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
@@ -136,19 +145,11 @@ First, [install Docker](https://docs.docker.com/engine/installation/). If you've
 
 > If you have Windows Home Edition, you'll need to download and run [Docker Toolbox](https://www.docker.com/products/docker-toolbox).
 
+Then, you have to [install docker-compose](https://docs.docker.com/compose/install/).
+
 ### Trying out Octobox
 
-If you're just giving Octobox a try, you can simply download the
-`docker-compose.yml` file from
-[here](https://raw.githubusercontent.com/octobox/octobox/master/docker-compose.yml), then run:
-
-```bash
-$ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up --build
-```
-
-This will pull the latest image from Docker Hub and set everything up! Octobox will be running in a development configuration on [http://localhost:3000](http://localhost:3000).
-
-**Note**: You can add environment variables such as `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to a `.env` file instead of supplying them directly on the command-line.
+If you're just giving Octobox a try, check out the production configuration below.
 
 ### Configuring a development environment
 
@@ -161,24 +162,34 @@ that, you can override the `docker-compose.yml` configuration by adding a
 version: '3'
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    env:
+      - FETCH_SUBJECT=true
+      - CUSTOM_ENV=...
 ```
 
 Using `docker-compose up` automatically merges the override file in to the base configuration.
+For more about override files and merging configurations, see [https://docs.docker.com/compose/extends/](https://docs.docker.com/compose/extends/)
 
 ### Configuring a production environment
 
-The `docker-compose.yml` file provided is for a _development_ configuration;
-there are are a number of things you'll want to configure differently for
-production use, like setting the Rails application for production and setting
-up a reverse proxy such as Apache or Nginx to serve static assets. You can use the
-`docker-compose.yml` file as an example to write your own or simply override
-the existing configuration with `docker-compose.override.yml`. Both the
-override file and `docker-compose.production.yml` are gitignored.
+The `docker-compose.yml` file provided at the root of the project is for a
+_development_ configuration only. However, you can download the example
+`docker-compose.yml` file from [here](https://raw.githubusercontent.com/octobox/octobox/master/docs/examples/docker-compose.yml).
+It's specifically tailored for production use.
 
-For more about override files and merging configurations, see [https://docs.docker.com/compose/extends/](https://docs.docker.com/compose/extends/)
+Then you have to set up environment variables to configure Octobox. For that, you
+can use the example .env file available [here](https://raw.githubusercontent.com/octobox/octobox/master/docs/examples/.env.example).
+It contains the full list of environment variables available to configure
+Octobox, but only the minimal set of configurations are enabled.
+
+Finally, run:
+
+```bash
+$ docker-compose up -d
+```
+
+This will pull the latest image from Docker Hub and set everything up! Octobox
+will be available on [http://localhost:80](http://localhost:80).
 
 ### Upgrading docker image:
 
@@ -372,15 +383,22 @@ To enable this feature set the following environment variable:
 If you want this feature to work for private repositories, you'll need to [Customize the Scopes on GitHub](#customizing-the-scopes-on-github) adding `repo` scope to allow Octobox to get subject information for private issues and pull requests.
 
 As of 4th January 2019, Octobox can sync subjects from open source repositories without requiring `repo` scope. To limit the downloading of old open source subjects, add the current date to the `PUBLIC_SUBJECT_ROLLOUT` environment variable to minimize syncing of old notifications on large installations:
+<<<<<<< HEAD
+
+    PUBLIC_SUBJECT_ROLLOUT=2019-01-04 12:30:00 UTC
+
+## API Documentation
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
 
     PUBLIC_SUBJECT_ROLLOUT=2019-01-04 12:30:00 UTC
 
 ## API Documentation
 
-API Documentation will be generated from the application's controllers using `bin/rake api_docs:generate`. Once generated it will be automatically listed in the Header dropdown.
+API Documentation will be generated from the application's controllers using `bin/rake api_docs:generate`.
+It's provided with the development environment (see above), but it's not included in the production image available through the Docker Hub.
 
-This is included by default in the container build using `Dockerfile`. To include in your build, simply run the command listed above before deploy.
-
+To include in your build, simply run the command listed above before deploy.
 
 ## Google Analytics
 

@@ -359,7 +359,14 @@ class NotificationsController < ApplicationController
   end
 
   def notifications_for_presentation
+<<<<<<< HEAD
     @search = Search.initialize_for_saved_search(query: params[:q], user: current_user, params: params)
+=======
+    eager_load_relation = [{subject: :labels}, {repository: {app_installation: {subscription_purchase: :subscription_plan}}}]
+    scope = current_user.notifications.includes(eager_load_relation)
+
+    @search = Search.new(scope: scope, query: params[:q], params: params)
+>>>>>>> upstream/NiR--improve-dockerfile
 
     if params[:q].present?
       @search.results

@@ -30,7 +30,10 @@ class Notification < ApplicationRecord
   validates :archived, inclusion: [true, false]
 
   after_update :push_if_changed
+<<<<<<< HEAD
   after_destroy :clean_up_subject
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
 
   class << self
     def attributes_from_api_response(api_response)
@@ -181,6 +184,10 @@ class Notification < ApplicationRecord
     unread? and !['closed', 'merged'].include?(state) and !display_thread?
   end
 
+  def prerender?
+    unread? and !['closed', 'merged'].include?(state) and !display_thread?
+  end
+
   def subject_number
     subject_url.scan(/\d+$/).first
   end
@@ -215,9 +222,12 @@ class Notification < ApplicationRecord
       repo.last_synced_at = Time.current
       repo.save
     end
+<<<<<<< HEAD
   end
 
   def clean_up_subject
     subject.destroy if subject && subject.notifications.empty?
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
   end
 end

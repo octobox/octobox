@@ -33,6 +33,8 @@ class User < ApplicationRecord
 
   after_create :create_default_pinned_searches
 
+  after_create :create_default_pinned_searches
+
   def admin?
     Octobox.config.github_admin_ids.include?(github_id.to_s)
   end
@@ -160,15 +162,24 @@ class User < ApplicationRecord
     return false unless subject.commentable?
     return true if personal_access_token_enabled?
     return true if Octobox.fetch_subject?
+<<<<<<< HEAD
     return true if github_app_authorized? && subject.repository && subject.repository.commentable?
     return false
   end
 
   def create_default_pinned_searches
+=======
+    return true if github_app_authorized? && subject.repository.commentable?
+    return false
+  end
+
+  def create_default_pinned_searches 
+>>>>>>> upstream/NiR--improve-dockerfile
     pinned_searches.create(query: 'state:closed,merged archived:false', name: 'Archivable')
     pinned_searches.create(query: 'type:pull_request state:open status:success archived:false', name: 'Mergeable')
     pinned_searches.create(query: "type:pull_request author:#{github_login} inbox:true", name: 'My PRs')
   end
+<<<<<<< HEAD
 
   def import_notifications(data)
     data.each do |new_notification|
@@ -177,4 +188,6 @@ class User < ApplicationRecord
       n.save(touch: false) if n.changed?
     end
   end
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
 end

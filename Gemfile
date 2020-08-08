@@ -1,5 +1,9 @@
 source 'https://rubygems.org'
+<<<<<<< HEAD
 ruby '2.7.1'
+=======
+ruby '2.6.3'
+>>>>>>> upstream/NiR--improve-dockerfile
 
 gem 'rails', '6.0.3.2'
 gem 'bootstrap'
@@ -33,7 +37,14 @@ gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
 gem 'commonmarker'
+<<<<<<< HEAD
 gem 'pg', '1.2.3'
+=======
+
+# Supported databases
+gem 'mysql2', require: false
+gem 'pg', '1.1.4', require: false
+>>>>>>> upstream/NiR--improve-dockerfile
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -43,6 +54,8 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
   gem 'active_record_query_trace'
+  gem 'rubocop', require: false
+  gem 'rubocop-performance'
 end
 
 group :test do
@@ -50,6 +63,12 @@ group :test do
   gem 'webmock'
   gem 'mocha'
   gem 'minitest'
+<<<<<<< HEAD
+=======
+  gem 'selenium-webdriver'
+  gem 'capybara'
+  gem 'action-cable-testing'
+>>>>>>> upstream/NiR--improve-dockerfile
   gem 'timecop'
 end
 
@@ -65,7 +84,12 @@ group :development do
 end
 
 group :production do
+<<<<<<< HEAD
   gem 'skylight', '4.3.1'
+=======
+  gem 'skylight', '4.0.1'
+>>>>>>> upstream/NiR--improve-dockerfile
   gem 'lograge'
   gem 'puma_worker_killer'
+  gem 'hirefire-resource'
 end

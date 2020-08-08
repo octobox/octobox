@@ -16,7 +16,11 @@
       "image":"https://www.gravatar.com/avatar/7ec6225799eb41729a06a0f82d1c6f5c?default=404",
       "email":null,
       "twitter":null,
+<<<<<<< HEAD
       "github":"https://github.com/tom-bruijn",
+=======
+      "github":"https://github.com/tom",
+>>>>>>> upstream/NiR--improve-dockerfile
       "website":null
    },
    {
@@ -36,7 +40,11 @@
       "image":null,
       "email":null,
       "twitter":"https://twitter.com/tombruijn",
+<<<<<<< HEAD
       "github":"https://github.com/tom-bruijn",
+=======
+      "github":"https://github.com/tom",
+>>>>>>> upstream/NiR--improve-dockerfile
       "website":"http://tomdebruijn.com"
    },
    {
@@ -98,4 +106,8 @@
       "github":"https://github.com/alex",
       "website":null
    }
+<<<<<<< HEAD
 ]
+=======
+]
+>>>>>>> upstream/NiR--improve-dockerfile

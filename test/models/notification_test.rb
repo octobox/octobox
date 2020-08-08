@@ -391,6 +391,7 @@ class NotificationTest < ActiveSupport::TestCase
 
     assert notification.display?
   end
+<<<<<<< HEAD
 
   test 'upgrade is required for notifications without a purchase' do
     stub_env_var('OCTOBOX_IO', 'true')
@@ -432,4 +433,6 @@ class NotificationTest < ActiveSupport::TestCase
     notification.destroy
     refute Subject.where(id: subject.id).empty?
   end
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
 end

@@ -125,6 +125,7 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       assert_equal val, DatabaseConfig.timeout
     end
   end
+<<<<<<< HEAD
 
   test 'port is specified properly' do
     set_env('DATABASE_URL', DB_URL) do
@@ -135,4 +136,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       assert_equal val, DatabaseConfig.port
     end
   end
+=======
+>>>>>>> upstream/NiR--improve-dockerfile
 end
