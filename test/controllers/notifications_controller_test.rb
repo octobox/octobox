@@ -1069,4 +1069,55 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to notification_path(notification)
     assert_equal notification.subject.comments.count, 1
   end
+
+  test 'Do not include snoozed notifications when fetching notifcations index page' do
+    sign_in_as(@user)
+    Notification.destroy_all
+    create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
+    create(:notification, user: @user, subject_type: 'Issue', snooze_until: 5.hour.ago)
+    create(:notification, user: @user, subject_type: 'PullRequest')
+    create(:notification, user: @user, subject_type: 'PullRequest')
+
+    get '/'
+    assert_equal assigns(:notifications).length, 3
+  end
+
+ test 'show snoozed notifications for search results' do
+   sign_in_as(@user)
+   Notification.destroy_all
+   create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
+   create(:notification, user: @user, subject_type: 'Issue', snooze_until: 5.hour.ago)
+   create(:notification, user: @user, subject_type: 'PullRequest')
+   create(:notification, user: @user, subject_type: 'PullRequest')
+   get '/?q=snoozed%3Atrue'
+   assert_equal assigns(:notifications).length, 1
+ end
+
+ test 'show snoozed notifications from sidebar link' do
+   sign_in_as(@user)
+   Notification.destroy_all
+   create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 5.hour.from_now)
+   create(:notification, user: @user, subject_type: 'Issue', snooze_until: 1.minute.ago)
+   create(:notification, user: @user, subject_type: 'PullRequest')
+   create(:notification, user: @user, subject_type: 'PullRequest', snooze_until: 1.minute.from_now)
+
+   get '/?snoozed=true'
+   assert_equal assigns(:notifications).length, 2
+ end
+
+ test 'snooze notifications for given time and duration' do
+   sign_in_as(@user)
+   Notification.destroy_all
+   notification1 = create(:notification, user: @user, subject_type: 'PullRequest')
+   notification2 = create(:notification, user: @user, subject_type: 'Issue')
+   create(:notification, user: @user, subject_type: 'PullRequest')
+   create(:notification, user: @user, subject_type: 'PullRequest')
+
+   stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+
+   post '/notifications/snooze_selected', params: { id: [notification1.id, notification2.id], duration: "5", unit: "days" }, xhr: true
+
+   assert notification1.reload.snooze_until.present?
+   assert notification2.reload.snooze_until.present?
+ end
 end

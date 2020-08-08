@@ -26,6 +26,15 @@
       <% end %>
     <% end %>
   </li>
+  <li role="presentation" class="nav-item">
+    <%= link_to root_path(snoozed: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if snoozed_selected?}" } do %>
+      <%= octicon 'clock', height: 16, class: 'sidebar-icon' %>
+      Snoozed
+      <% if snoozed_selected? %>
+        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
+      <% end %>
+    <% end %>
+  </li>
 </ul>
 
 <% if current_user.pinned_searches.present? || any_active_filters? %>

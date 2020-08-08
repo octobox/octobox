@@ -340,7 +340,7 @@ var Octobox = (function() {
 
   var changeArchive = function() {
     if ( hasMarkedRows() ) {
-      $("button.archive_selected, button.unarchive_selected, button.mute_selected, button.delete_selected").show().css("display", "inline-block");
+      $("button.archive_selected, button.unarchive_selected, button.mute_selected, button.delete_selected, .snooze_selected").show().css("display", "inline-block");
       if ( !hasMarkedRows(true) ) {
         $(".js-select_all").prop("checked", true).prop("indeterminate", false);
         $("button.select_all").show().css("display", "inline-block");
@@ -350,7 +350,7 @@ var Octobox = (function() {
       }
     } else {
       $(".js-select_all").prop("checked", false).prop("indeterminate", false);
-      $("button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all, button.delete_selected").hide();
+      $("button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all, button.delete_selected, .snooze_selected").hide();
     }
     var marked_unread_length = getMarkedRows().filter(".active").length;
     if ( marked_unread_length > 0 ) {
@@ -484,6 +484,21 @@ var Octobox = (function() {
       } else {
         $('#more-comments').html(data)
       }
+    });
+    return false;
+  }
+
+  var snoozeSelected = function(value){
+    console.log('snooze')
+    if (getDisplayedRows().length === 0) return;
+
+    var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    console.log(getMarkedOrCurrentRows())
+    var duration = $(this).data('duration')
+
+    $.post( "/notifications/snooze_selected" + location.search, { "id[]": ids, "duration": duration } ).done(function() {
+      resetCursorAfterRowsRemoved(ids);
+      updateFavicon();
     });
     return false;
   }
@@ -692,6 +707,7 @@ var Octobox = (function() {
     deleteSelected: deleteSelected,
     deleteThread: deleteThread,
     viewThread: viewThread,
-    expandComments: expandComments
+    expandComments: expandComments,
+    snoozeSelected: snoozeSelected
   }
 })();

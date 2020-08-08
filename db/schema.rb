@@ -11,10 +11,14 @@
 # It's strongly recommended that you check this file into your version control system.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2020_06_19_095214) do
 =======
 ActiveRecord::Schema.define(version: 2019_04_06_173231) do
 >>>>>>> upstream/NiR--improve-dockerfile
+=======
+ActiveRecord::Schema.define(version: 2019_05_27_194557) do
+>>>>>>> origin/snooze
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -85,6 +89,7 @@ ActiveRecord::Schema.define(version: 2019_04_06_173231) do
     t.string "repository_owner_name", default: ""
     t.string "latest_comment_url"
     t.datetime "muted_at"
+    t.datetime "snooze_until"
     t.index ["muted_at"], name: "index_notifications_on_muted_at"
     t.index ["repository_full_name"], name: "index_notifications_on_repository_full_name"
     t.index ["subject_url"], name: "index_notifications_on_subject_url"
