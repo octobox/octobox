@@ -76,7 +76,7 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    brakeman (4.9.0)
+    brakeman (4.9.1)
     bugsnag (6.17.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
