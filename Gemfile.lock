@@ -265,7 +265,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rchardet (1.8.0)
-    redis (4.2.1)
+    redis (4.2.2)
     request_store (1.5.0)
       rack (>= 1.4)
     rgb (0.1.0)
