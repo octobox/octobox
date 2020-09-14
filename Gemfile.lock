@@ -142,7 +142,7 @@ GEM
     hashie (4.1.0)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
-    jbuilder (2.10.0)
+    jbuilder (2.10.1)
       activesupport (>= 5.0.0)
     jquery-rails (4.4.0)
       rails-dom-testing (>= 1, < 3)
