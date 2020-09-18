@@ -91,8 +91,7 @@ GEM
       ruby-enum (~> 0.5)
     concurrent-ruby (1.1.7)
     connection_pool (2.2.3)
-    crack (0.4.3)
-      safe_yaml (~> 1.0.0)
+    crack (0.4.4)
     crass (1.0.6)
     debug_inspector (0.0.3)
     dotenv (2.7.6)
@@ -273,7 +272,6 @@ GEM
       i18n
     rufus-scheduler (3.6.0)
       fugit (~> 1.1, >= 1.1.6)
-    safe_yaml (1.0.5)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
