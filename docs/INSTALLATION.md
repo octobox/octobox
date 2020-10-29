@@ -48,10 +48,6 @@ Heroku will ask you to provide an OAuth client ID and secret, which you can get 
 
 For more help with setting up an OAuth application on GitHub, see below.
 
-After deploying the app to heroku, enable the `runtime-dyno-metadata` feature to enable the changelog feature:
-
-    heroku labs:enable runtime-dyno-metadata
-
 ## Deployment to OpenShift Online
 
 Octobox can be easily installed to [OpenShift Online](https://www.openshift.com/pricing/index.html), too.

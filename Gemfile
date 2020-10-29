@@ -19,7 +19,6 @@ gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
 gem 'rake', require: false
-gem 'git'
 gem 'rgb'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'

@@ -1,17 +1,6 @@
 <div class="container user-settings">
   <div class="w-100 d-flex justify-content-between">
     <h1 class="pt-3"><%= t('users.titles.settings') %></h1>
-    <div>
-      <% if @latest_git_sha %>
-        <p class="settings-sha">
-          <%= t('users.labels.version') %>
-          <%= link_to @latest_git_sha[0..6], Octobox.config.source_repo + "/commit/#{@latest_git_sha}", target: '_blank', rel: "noopener", title: "Current Git commit SHA" %>
-          <%= link_to Octobox.config.source_repo + "/compare/#{@latest_git_sha}..master", target: '_blank', rel: "noopener", title: "Compare with latest commits on master" do %>
-            <%= octicon 'git-compare', height: 16, class:'text-default' %>
-          <% end %>
-        </p>
-      <% end %>
-    </div>
   </div>
   <hr>
 
