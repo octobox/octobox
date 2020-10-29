@@ -300,7 +300,7 @@ GEM
     sidekiq-status (1.1.4)
       chronic_duration
       sidekiq (>= 3.0)
-    sidekiq-unique-jobs (6.0.24)
+    sidekiq-unique-jobs (6.0.25)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 4.0, < 7.0)
       thor (>= 0.20, < 2.0)
