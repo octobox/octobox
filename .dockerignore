@@ -1,8 +1,12 @@
+.git
+.github
 .gitignore
 README.md
 
 log
 tmp
+test
+vendor
 openshift/
 coverage/
 .bundle
