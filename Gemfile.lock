@@ -100,7 +100,7 @@ GEM
       railties (>= 3.2)
     e2mmap (0.1.0)
     encryptor (3.0.0)
-    erubi (1.9.0)
+    erubi (1.10.0)
     et-orbi (1.2.4)
       tzinfo
     ethon (0.12.0)
