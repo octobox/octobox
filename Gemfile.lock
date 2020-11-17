@@ -208,7 +208,7 @@ GEM
       omniauth (~> 1.9)
     pagy (3.9.0)
     pg (1.2.3)
-    pg_search (2.3.4)
+    pg_search (2.3.5)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     popper_js (1.16.0)
