@@ -105,7 +105,7 @@ module DatabaseConfig
     end
 
     def database_url_config
-      ActiveRecord::ConnectionAdapters::ConnectionSpecification::ConnectionUrlResolver.new(ENV['DATABASE_URL']).to_hash
+      ActiveRecord::DatabaseConfigurations::ConnectionUrlResolver.new(ENV['DATABASE_URL']).to_hash.stringify_keys
     end
   end
 end
