@@ -117,7 +117,7 @@ GEM
       ruby2_keywords
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
-    ffi (1.13.1)
+    ffi (1.14.1)
     formatador (0.2.5)
     fugit (1.4.1)
       et-orbi (~> 1.1, >= 1.1.8)
