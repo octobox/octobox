@@ -204,7 +204,11 @@ GEM
     octokit (4.20.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
+<<<<<<< HEAD
     oj (3.11.0)
+=======
+    oj (3.10.18)
+>>>>>>> 42e16e39 (Ruby 3.0)
     omniauth (1.9.1)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
@@ -357,7 +361,7 @@ GEM
     zeitwerk (2.4.2)
 
 PLATFORMS
-  ruby
+  x86_64-darwin-20
 
 DEPENDENCIES
   active_record_query_trace
@@ -398,6 +402,7 @@ DEPENDENCIES
   rails (= 6.1.1)
   rails-controller-testing
   rake
+  rexml
   rgb
   sassc-rails
   sidekiq
@@ -417,7 +422,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 3.0.0p0
 
 BUNDLED WITH
-   2.1.4
+   2.2.3
