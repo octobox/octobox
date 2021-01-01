@@ -97,7 +97,7 @@ GEM
     connection_pool (2.2.3)
     crack (0.4.4)
     crass (1.0.6)
-    debug_inspector (0.0.3)
+    debug_inspector (1.0.0)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
