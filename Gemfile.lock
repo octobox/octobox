@@ -362,6 +362,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-linux-musl
 
 DEPENDENCIES
   active_record_query_trace
