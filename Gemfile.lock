@@ -117,7 +117,7 @@ GEM
       faraday-net_http (~> 1.0)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
-    faraday-net_http (1.0.0)
+    faraday-net_http (1.0.1)
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     ffi (1.14.2)
