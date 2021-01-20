@@ -278,7 +278,7 @@ GEM
     rgb (0.1.0)
     ruby-enum (0.8.0)
       i18n
-    ruby2_keywords (0.0.2)
+    ruby2_keywords (0.0.4)
     rufus-scheduler (3.7.0)
       fugit (~> 1.1, >= 1.1.6)
     sassc (2.4.0)
