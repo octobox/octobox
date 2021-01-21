@@ -84,7 +84,7 @@ GEM
     bugsnag (6.19.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
-    bullet (6.1.2)
+    bullet (6.1.3)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
@@ -93,7 +93,7 @@ GEM
     coderay (1.1.3)
     commonmarker (0.21.0)
       ruby-enum (~> 0.5)
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.8)
     connection_pool (2.2.3)
     crack (0.4.5)
       rexml
