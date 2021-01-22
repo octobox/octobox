@@ -91,9 +91,9 @@ GEM
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
     coderay (1.1.3)
-    commonmarker (0.21.0)
+    commonmarker (0.21.1)
       ruby-enum (~> 0.5)
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.8)
     connection_pool (2.2.3)
     crack (0.4.5)
       rexml
