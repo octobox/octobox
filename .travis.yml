@@ -18,7 +18,7 @@ before_script:
 script:
   - RAILS_ENV=test bundle exec rake --trace db:migrate test
 
-bundler_args: --without development production --deployment --jobs=3 --retry=3
+bundler_args: --without development production --jobs=3 --retry=3
 
 cache: bundler
 
