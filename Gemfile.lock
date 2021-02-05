@@ -74,7 +74,7 @@ GEM
     bindex (0.8.1)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
-    bootsnap (1.7.0)
+    bootsnap (1.7.1)
       msgpack (~> 1.0)
     bootstrap (4.6.0)
       autoprefixer-rails (>= 9.1.0)
@@ -316,7 +316,7 @@ GEM
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 5.0, < 7.0)
       thor (>= 0.20, < 2.0)
-    skylight (5.0.0.beta4)
+    skylight (5.0.0.beta5)
       activesupport (>= 5.2.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
@@ -410,7 +410,7 @@ DEPENDENCIES
   sidekiq-scheduler
   sidekiq-status
   sidekiq-unique-jobs
-  skylight (~> 5.0.0.beta4)
+  skylight (~> 5.0.0.beta5)
   spring
   spring-watcher-listen
   sql_queries_count
