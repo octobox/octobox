@@ -330,7 +330,7 @@ GEM
     thwait (0.2.0)
       e2mmap
     tilt (2.0.10)
-    timecop (0.9.2)
+    timecop (0.9.3)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
