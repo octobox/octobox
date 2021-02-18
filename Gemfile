@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '3.0.0'
 
-gem 'rails', '6.1.1'
+gem 'rails', '6.1.3'
 gem 'bootstrap'
 gem 'attr_encrypted'
 gem 'jquery-rails'
@@ -21,7 +21,7 @@ gem 'jbuilder'
 gem 'rake', require: false
 gem 'rgb'
 gem 'sidekiq'
-gem 'sidekiq-unique-jobs'
+gem 'sidekiq-unique-jobs', '6.0.25'
 gem 'sidekiq-scheduler', require: false
 gem 'rack-canonical-host'
 gem 'sidekiq-status'
