@@ -51,6 +51,10 @@
         Author: <%= params[:author] %>
       <% end %>
 
+      <%= filter_option :number do %>
+        Number: <%= params[:number] %>
+      <% end %>
+
       <%= filter_option :assigned do %>
         Assigned: <%= params[:assigned] %>
       <% end %>

@@ -56,6 +56,7 @@ module NotificationsHelper
       reason:          params[:reason],
       unread:          params[:unread],
       repo:            params[:repo],
+      number:          params[:number],
       type:            params[:type],
       archive:         params[:archive],
       starred:         params[:starred],
