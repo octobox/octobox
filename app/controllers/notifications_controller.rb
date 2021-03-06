@@ -292,7 +292,7 @@ class NotificationsController < ApplicationController
     if current_user.syncing?
       render json: {}, status: :locked
     else
-      render json: { error: Sidekiq::Status::get(current_user.sync_job_id, :exception) }, status: :ok
+      render json: { error: Sidekiq::Status.get(current_user.sync_job_id, :exception) }, status: :ok
     end
   end
 
