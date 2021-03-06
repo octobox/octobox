@@ -23,11 +23,11 @@ module Octobox
     def github_api_prefix
       return @github_domain_api_prefix if defined?(@github_domain_api_prefix)
 
-      if github_domain != 'https://github.com'
-        @github_domain_api_prefix = "#{github_domain}/api/v3"
+      @github_domain_api_prefix = if github_domain != 'https://github.com'
+        "#{github_domain}/api/v3"
       else
-        @github_domain_api_prefix = "https://api.github.com"
-      end
+        "https://api.github.com"
+                                  end
     end
 
     def scopes

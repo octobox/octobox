@@ -110,11 +110,11 @@ class NotificationsController < ApplicationController
 
     @comments_left_to_load = 0
 
-    if @notification.subject
-      @comments = @notification.subject.comments.order('created_at ASC')
+    @comments = if @notification.subject
+      @notification.subject.comments.order('created_at ASC')
     else
-      @comments = []
-    end
+      []
+                end
 
     if request.xhr?
       render partial: "notifications/comments", locals:{comments: @comments}, layout: false
@@ -344,11 +344,11 @@ class NotificationsController < ApplicationController
       # https://github.com/rails/rails/commit/68fe6b08ee72cc47263e0d2c9ff07f75c4b42761
       # but it seems that the issue persists when using MySQL
       # https://github.com/rails/rails/issues/32624
-      if sub_scope == :reason
-        val = params[sub_scope].split(',')
+      val = if sub_scope == :reason
+        params[sub_scope].split(',')
       else
-        val = scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
-      end
+        scope.klass.type_for_attribute(sub_scope.to_s).cast(params[sub_scope])
+            end
       scope = scope.send(sub_scope, val)
     end
     scope = scope.unlabelled if params[:unlabelled].present?
