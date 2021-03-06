@@ -201,12 +201,12 @@ class Subject < ApplicationRecord
     return [] unless github_client && pull_request?
     reviews = github_client.get(url + '/reviews', since: comments.order('created_at ASC').last.try(:created_at))
     return [] unless reviews.present?
-    reviews.map { |review|
+    reviews.map do |review|
       if review && review[:state] == "COMMENTED"
         reviews.concat download_comments_for_review(review)
         reviews.delete(review)
       end
-    }
+    end
     return reviews
   rescue Octokit::ClientError => e
     []
