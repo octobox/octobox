@@ -263,7 +263,6 @@ class Search
     boolean_prefix(:draft)
   end
 
-  private
 
   def boolean_prefix(name)
     return nil unless parsed_query[name].present?
