@@ -159,7 +159,7 @@ var Octobox = (function() {
   };
 
   var mute = function(ids){
-    var result = confirm("Are you sure you want to mute?");
+    var result = localStorage.noConfirmMute || confirm("Are you sure you want to mute?");
     if (result) {
       $.post( "/notifications/mute_selected" + location.search, { "id[]": ids})
       .done(function() {
