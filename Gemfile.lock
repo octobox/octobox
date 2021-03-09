@@ -403,7 +403,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-scheduler
   sidekiq-status
-  sidekiq-unique-jobs
+  sidekiq-unique-jobs (= 6.0.25)
   skylight (~> 5.0.0.beta5)
   spring
   spring-watcher-listen
