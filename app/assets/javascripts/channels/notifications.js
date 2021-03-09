@@ -2,7 +2,6 @@ $(document).on("turbolinks:load", function () {
   if ($("meta[name='push_notifications']").length >0) {
     App.notifications = App.cable.subscriptions.create("NotificationsChannel", {
       received: function(data) {
-        console.log(data)
         var el = '#notification-'+data.id;
         if($(el).length) {
           var selected = $(el).has("input:checked");
