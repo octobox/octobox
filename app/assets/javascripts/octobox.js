@@ -1,5 +1,13 @@
 var Octobox = (function() {
 
+  var maybeConfirm = function(message){
+    if($('body.disable_confirmations').length){
+      return true
+    } else {
+      return confirm(message);
+    }
+  }
+
   var checkSelectAll = function() {
     $(".js-select_all").click();
   };
@@ -159,7 +167,7 @@ var Octobox = (function() {
   };
 
   var mute = function(ids){
-    var result = confirm("Are you sure you want to mute?");
+    var result = maybeConfirm("Are you sure you want to mute?");
     if (result) {
       $.post( "/notifications/mute_selected" + location.search, { "id[]": ids})
       .done(function() {
@@ -421,7 +429,7 @@ var Octobox = (function() {
   };
 
   var deleteNotifications = function(ids){
-    var result = confirm("Are you sure you want to delete?");
+    var result = maybeConfirm("Are you sure you want to delete?");
     if (result) {
       $.post("/notifications/delete_selected" + location.search, {"id[]": ids})
       .done(function() {

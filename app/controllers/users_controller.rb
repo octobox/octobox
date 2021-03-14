@@ -46,7 +46,7 @@ class UsersController < ApplicationController
       end
 
       respond_to do |format|
-        format.html { redirect_back(fallback_location: root_path) }
+        format.html { redirect_back(fallback_location: root_path, notice: 'Settings updated') }
         format.json { head :ok }
       end
     else
@@ -115,6 +115,6 @@ class UsersController < ApplicationController
       params[:user][:personal_access_token] = nil
     end
 
-    params.require(:user).permit(:personal_access_token, :refresh_interval, :theme, :display_comments)
+    params.require(:user).permit(:personal_access_token, :refresh_interval, :theme, :display_comments, :disable_confirmations)
   end
 end
