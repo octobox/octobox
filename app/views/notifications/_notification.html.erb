@@ -126,11 +126,11 @@
           <%= octicon('archive', height: 15) %>
         <% end %>
       <% end %>
-      <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute', 'data-confirm': "Are you sure you want to mute?") do %>
+      <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute', 'data-confirm': confirmation("Are you sure you want to mute?", notification)) do %>
         <%= octicon('mute', height: 15) %>
       <% end %>
       <% if notification.archived? %>
-        <%= link_to(delete_selected_notifications_path(id: notification.id), class: 'ml-1', method: :post, 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Delete', 'data-confirm': "Are you sure you want to delete?") do %>
+        <%= link_to(delete_selected_notifications_path(id: notification.id), class: 'ml-1', method: :post, 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Delete', 'data-confirm': confirmation("Are you sure you want to delete?", notification)) do %>
           <%= octicon('trashcan', height: 15) %>
         <% end %>
       <% end %>
