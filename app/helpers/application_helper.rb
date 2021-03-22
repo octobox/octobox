@@ -61,6 +61,6 @@ module ApplicationHelper
   end
 
   def confirmation(message, notification)
-    notification.user.disable_confirmations? ? nil : message
+    notification.user.try(:disable_confirmations?) ? nil : message
   end
 end
