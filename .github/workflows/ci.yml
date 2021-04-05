@@ -1,0 +1,53 @@
+name: CI
+
+on: [push]
+
+jobs:
+  verify:
+    name: Build
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: octobox
+          POSTGRES_DB: octobox_test
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis
+        ports:
+        - 6379:6379
+        options: --entrypoint redis-server
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependent libraries
+        run: sudo apt-get install libpq-dev
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+          bundler-cache: true
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+          POSTGRES_DB: octobox_test
+          POSTGRES_USER: octobox
+          POSTGRES_PASSWORD: postgres
+          OCTOBOX_DATABASE_PASSWORD: postgres
+          OCTOBOX_DATABASE_USERNAME: octobox
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+        run: bundle exec rake db:create db:migrate test

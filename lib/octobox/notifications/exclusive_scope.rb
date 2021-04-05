@@ -32,6 +32,12 @@ module Octobox
           )
         }
 
+        scope :exclude_number, ->(subject_numbers)  {
+          joins(:subject).where.not(
+            subject_numbers.map { |subject_number| arel_table[:subject_url].matches("%/#{subject_number}") }.reduce(:or)
+          )
+        }
+
         scope :exclude_state, ->(states)  {
           states = [states] if states.is_a?(String)
           joins(:subject).where.not(

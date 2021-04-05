@@ -31,6 +31,8 @@ class Search
     res = res.exclude_state(exclude_state) if exclude_state.present?
     res = res.author(author) if author.present?
     res = res.exclude_author(exclude_author) if exclude_author.present?
+    res = res.number(number) if number.present?
+    res = res.exclude_number(exclude_number) if exclude_number.present?
     res = res.assigned(assignee) if assignee.present?
     res = res.exclude_assigned(exclude_assignee) if exclude_assignee.present?
     res = res.status(status) if status.present?
@@ -80,7 +82,7 @@ class Search
       @parsed_query[filter] = Array(params[filter]).map(&:underscore)
     end
 
-    [:repo, :owner, :author].each do |filter|
+    [:repo, :owner, :author, :number].each do |filter|
       next if params[filter].blank?
       @parsed_query[filter] = Array(params[filter])
     end
@@ -163,6 +165,14 @@ class Search
 
   def exclude_author
     parsed_query[:'-author']
+  end
+
+  def number
+    parsed_query[:number]
+  end
+
+  def exclude_number
+    parsed_query[:'-number']
   end
 
   def unread

@@ -50,4 +50,9 @@ class SearchTest < ActiveSupport::TestCase
     search = Search.new(query: 'inbox:true', scope: Notification.all, params: {draft: 'true'})
     assert_equal search.to_query, 'inbox:true draft:true'
   end
+
+  test 'converts number params to number prefix without changing it' do
+    search = Search.new(query: 'inbox:true', scope: Notification.all, params: {number: '123'})
+    assert_equal search.to_query, 'inbox:true number:123'
+  end
 end

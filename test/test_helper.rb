@@ -14,8 +14,6 @@ Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
 
 FactoryBot.find_definitions
 
-puts "We are using #{ActiveRecord::Base.connection.adapter_name}"
-
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all

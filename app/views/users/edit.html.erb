@@ -92,7 +92,7 @@
     <% end %>
 
     <div class='d-flex flex-column flex-md-row'>
-      <div class="card w-100 mr-3 mb-3">
+      <div class="card w-100 mb-3 <%= 'mr-3' if Octobox.config.subjects_enabled? && Octobox.config.include_comments %>">
         <h5 class="card-header">
           <%= t('users.titles.theme') %>
         </h5>
@@ -121,6 +121,25 @@
           </div>
         </div>
       <% end %>
+    </div>
+
+    <div class='d-flex flex-column flex-md-row'>
+      <div class="card w-100 mb-3">
+        <h5 class="card-header">
+          <%= t('users.titles.advanced') %>
+        </h5>
+        <div class="card-body">
+          <div class="form-check mb-3">
+            <label class='col-form-label'>
+              <%= f.check_box :disable_confirmations, class: 'form-check-input' %>
+              Disable confirmations when muting and deleting
+            </label>
+          </div>
+
+          <%= submit_tag t('crud_actions.save'), class: 'btn btn-primary' %>
+          <%= link_to t('crud_actions.cancel'), root_path, class: 'btn btn-light' %>
+        </div>
+      </div>
     </div>
   <% end %>
 
