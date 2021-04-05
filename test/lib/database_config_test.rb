@@ -32,10 +32,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
       assert_equal 'user', DatabaseConfig.username
     end
 
-    set_env('DATABASE', 'postgresql') do
-      assert_equal '', DatabaseConfig.username
-    end
-
     set_env('OCTOBOX_DATABASE_USERNAME', 'my_username') do |val|
       assert_equal val, DatabaseConfig.username
     end
@@ -59,10 +55,6 @@ class DatabaseConfigTest < ActiveSupport::TestCase
   test 'password is specified properly' do
     set_env('DATABASE_URL', DB_URL) do
       assert_equal 'password2', DatabaseConfig.password
-    end
-
-    set_env('DATABASE', 'postgresql') do
-      assert_equal '', DatabaseConfig.password
     end
 
     set_env('OCTOBOX_DATABASE_PASSWORD', 'my_password') do |val|
