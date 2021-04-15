@@ -81,6 +81,9 @@ GEM
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
     brakeman (5.0.0)
+    brpoplpush-redis_script (0.1.2)
+      concurrent-ruby (~> 1.0, >= 1.0.5)
+      redis (>= 1.0, <= 5.0)
     bugsnag (6.20.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
@@ -94,7 +97,7 @@ GEM
     commonmarker (0.21.2)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.1.8)
-    connection_pool (2.2.4)
+    connection_pool (2.2.5)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -305,9 +308,10 @@ GEM
     sidekiq-status (1.1.4)
       chronic_duration
       sidekiq (>= 3.0)
-    sidekiq-unique-jobs (6.0.25)
+    sidekiq-unique-jobs (7.0.8)
+      brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
-      sidekiq (>= 4.0, < 7.0)
+      sidekiq (>= 5.0, < 7.0)
       thor (>= 0.20, < 2.0)
     skylight (5.0.1)
       activesupport (>= 5.2.0)
@@ -401,7 +405,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-scheduler
   sidekiq-status
-  sidekiq-unique-jobs (= 6.0.25)
+  sidekiq-unique-jobs (= 7.0.8)
   skylight (~> 5.0.0.beta5)
   spring
   spring-watcher-listen
