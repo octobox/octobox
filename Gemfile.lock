@@ -94,7 +94,7 @@ GEM
     commonmarker (0.21.2)
       ruby-enum (~> 0.5)
     concurrent-ruby (1.1.8)
-    connection_pool (2.2.4)
+    connection_pool (2.2.5)
     crack (0.4.5)
       rexml
     crass (1.0.6)
