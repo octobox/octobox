@@ -203,7 +203,7 @@ GEM
     octicons_helper (9.6.0)
       octicons (= 9.6.0)
       rails
-    octokit (4.20.0)
+    octokit (4.21.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.11.5)
