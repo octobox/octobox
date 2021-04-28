@@ -313,7 +313,7 @@ GEM
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 4.0, < 7.0)
       thor (>= 0.20, < 2.0)
-    skylight (5.0.1)
+    skylight (5.1.0.beta)
       activesupport (>= 5.2.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
@@ -406,7 +406,7 @@ DEPENDENCIES
   sidekiq-scheduler
   sidekiq-status
   sidekiq-unique-jobs (= 6.0.25)
-  skylight (~> 5.0.0.beta5)
+  skylight (~> 5.1.0.beta)
   spring
   spring-watcher-listen
   sql_queries_count
