@@ -367,7 +367,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootsnap
-  bootstrap
+  bootstrap (= 4.6.0)
   brakeman
   bugsnag
   bullet
