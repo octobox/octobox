@@ -76,9 +76,9 @@ GEM
       debug_inspector (>= 0.0.1)
     bootsnap (1.7.5)
       msgpack (~> 1.0)
-    bootstrap (4.6.0)
+    bootstrap (5.0.0)
       autoprefixer-rails (>= 9.1.0)
-      popper_js (>= 1.14.3, < 2)
+      popper_js (>= 2.9.2, < 3)
       sassc-rails (>= 2.0.0)
     brakeman (5.0.1)
     bugsnag (6.20.0)
@@ -221,7 +221,7 @@ GEM
     pg_search (2.3.5)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
-    popper_js (1.16.0)
+    popper_js (2.9.2)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -367,7 +367,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootsnap
-  bootstrap (= 4.6.0)
+  bootstrap (= 5.0.0)
   brakeman
   bugsnag
   bullet
