@@ -110,7 +110,7 @@ GEM
       tzinfo
     ethon (0.14.0)
       ffi (>= 1.15.0)
-    execjs (2.7.0)
+    execjs (2.8.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     faraday (1.4.1)
