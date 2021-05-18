@@ -10,7 +10,7 @@ $notification-items: (
 );
 
 .table-notifications {
-  td{
+  td {
     padding: 0.6rem;
     &.notification-archived, .notification-repo{
       padding: 0;
@@ -20,6 +20,11 @@ $notification-items: (
     }
   }
   tr {
+    &.active {
+      .thread-link {
+        font-weight: bold;
+      }
+    }
     &:not(.active) {
       background-color: mix($list-group-action-active-bg, $body-bg, 50%);
       .notification-subject .link {
