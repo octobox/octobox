@@ -55,4 +55,9 @@ class SearchTest < ActiveSupport::TestCase
     search = Search.new(query: 'inbox:true', scope: Notification.all, params: {number: '123'})
     assert_equal search.to_query, 'inbox:true number:123'
   end
+
+  test 'converts archive query without adding index:true' do
+    search = Search.new(query: 'type:release archived:true', scope: Notification.all, params: {})
+    assert_equal search.to_query, 'type:release archived:true'
+  end
 end
