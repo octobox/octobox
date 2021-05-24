@@ -128,7 +128,7 @@ GEM
     faraday-net_http_persistent (1.1.0)
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
-    ffi (1.15.0)
+    ffi (1.15.1)
     formatador (0.2.5)
     fugit (1.4.5)
       et-orbi (~> 1.1, >= 1.1.8)
