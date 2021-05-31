@@ -180,7 +180,8 @@ GEM
     marcel (1.0.1)
     method_source (1.0.0)
     mini_mime (1.0.3)
-    mini_portile2 (2.5.1)
+    mini_portile2 (2.5.2)
+      net-ftp (~> 0.1)
     minitest (5.14.4)
     mocha (1.12.0)
     msgpack (1.4.2)
@@ -188,6 +189,10 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     nenv (0.3.0)
+    net-ftp (0.1.2)
+      net-protocol
+      time
+    net-protocol (0.1.0)
     nio4r (2.5.7)
     nokogiri (1.11.5)
       mini_portile2 (~> 2.5.0)
@@ -336,6 +341,7 @@ GEM
     thwait (0.2.0)
       e2mmap
     tilt (2.0.10)
+    time (0.1.0)
     timecop (0.9.4)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
