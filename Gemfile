@@ -35,10 +35,7 @@ gem 'commonmarker'
 gem 'pg', '1.2.3'
 
 group :development, :test do
-  gem 'byebug', platform: :mri
   gem 'dotenv-rails'
-  gem 'guard'
-  gem 'guard-minitest'
   gem 'rails-controller-testing'
   gem 'sql_queries_count'
   gem 'active_record_query_trace'

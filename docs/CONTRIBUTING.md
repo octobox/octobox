@@ -16,7 +16,6 @@ Want to contribute to Octobox? That's great! Here are a couple of guidelines tha
  * Fork the project.
  * Make your feature addition or bug fix.
  * Add tests for it. This is important so we don't break it in a future version unintentionally.
-   * You can use `bundle exec guard` if you'd like the relevant tests to automatically run each time a file is modified.
  * Send a pull request. Bonus points for topic branches.
 
 ## Setup instructions
