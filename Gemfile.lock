@@ -165,7 +165,7 @@ GEM
     mini_mime (1.0.3)
     mini_portile2 (2.5.3)
     minitest (5.14.4)
-    mocha (1.12.0)
+    mocha (1.13.0)
     msgpack (1.4.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
