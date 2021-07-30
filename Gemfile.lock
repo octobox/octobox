@@ -210,7 +210,7 @@ GEM
       activesupport (>= 5.2)
     popper_js (1.16.0)
     public_suffix (4.0.6)
-    puma (5.3.2)
+    puma (5.4.0)
       nio4r (~> 2.0)
     puma_worker_killer (0.3.1)
       get_process_mem (~> 0.2)
