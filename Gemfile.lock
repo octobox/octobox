@@ -81,7 +81,7 @@ GEM
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
     brakeman (5.1.1)
-    bugsnag (6.21.0)
+    bugsnag (6.22.1)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.4)
