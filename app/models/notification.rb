@@ -36,6 +36,7 @@ class Notification < ApplicationRecord
     def attributes_from_api_response(api_response)
       attrs = DownloadService::API_ATTRIBUTE_MAP.map do |attr, path|
         value = api_response.to_h.dig(*path)
+        value = value.dup if value.frozen?
         value.delete!("\u0000") if value.is_a?(String)
         [attr, value]
       end.to_h
