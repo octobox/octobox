@@ -133,7 +133,7 @@ GEM
     faraday_middleware (1.1.0)
       faraday (~> 1.0)
     ffi (1.15.3)
-    fugit (1.5.0)
+    fugit (1.5.1)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
     gemoji (3.0.1)
