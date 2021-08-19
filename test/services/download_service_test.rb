@@ -57,10 +57,10 @@ class DownloadServiceTest < ActiveSupport::TestCase
   test "#download will update and unarchive a notification" do
     stub_fetch_subject_enabled(value: false)
     expected_attributes =  build_expected_attributes(notifications_from_fixture('morty_notifications.json'))
-                             .find{|n| n['github_id'] == 420}
+                             .find{|n| n['github_id'] == 2147650093}
     stub_notifications_request(body: file_fixture('morty_notifications.json'))
     user = create(:morty)
-    notification = user.notifications.find_by_github_id(420)
+    notification = user.notifications.find_by_github_id(2147650093)
     assert notification.archived?
     refute notification.unread?
     user.download_service.download

@@ -14,6 +14,9 @@ Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
 
 FactoryBot.find_definitions
 
+require 'oj'
+Oj.default_options = Oj.default_options.merge(cache_str: -1)
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all

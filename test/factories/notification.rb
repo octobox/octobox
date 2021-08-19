@@ -25,7 +25,7 @@ FactoryBot.define do
 
     factory :morty_updated do
       unread { false }
-      github_id { 420 }
+      github_id { 2147650093 }
       url { "https://api.github.com/notifications/threads/420" }
       subject_url { "https://api.github.com/repos/octobox/octobox/issues/56" }
       archived { true }
