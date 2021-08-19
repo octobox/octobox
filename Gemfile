@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '3.0.1'
+ruby '3.0.2'
 
 gem 'rails', '6.1.3.2'
 gem 'bootstrap', '4.6.0'
