@@ -168,7 +168,7 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (1.0.1)
     method_source (1.0.0)
-    mini_mime (1.1.0)
+    mini_mime (1.1.1)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
     mocha (1.13.0)
@@ -205,7 +205,7 @@ GEM
     omniauth-oauth2 (1.7.1)
       oauth2 (~> 1.4)
       omniauth (>= 1.9, < 3)
-    pagy (4.10.2)
+    pagy (4.11.0)
     pg (1.2.3)
     pg_search (2.3.5)
       activerecord (>= 5.2)
@@ -247,7 +247,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.1)
+    rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
     railties (6.1.4.1)
       actionpack (= 6.1.4.1)
@@ -382,7 +382,7 @@ DEPENDENCIES
   rake
   rgb
   sassc-rails
-  sidekiq
+  sidekiq (= 6.2.1)
   sidekiq-scheduler
   sidekiq-status
   sidekiq-unique-jobs (= 6.0.25)
