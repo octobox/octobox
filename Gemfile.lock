@@ -180,6 +180,8 @@ GEM
     nokogiri (1.12.4)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
+    nokogiri (1.12.4-x86_64-linux)
+      racc (~> 1.4)
     numerizer (0.1.1)
     oauth2 (1.4.7)
       faraday (>= 0.8, < 2.0)
@@ -343,6 +345,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   active_record_query_trace
