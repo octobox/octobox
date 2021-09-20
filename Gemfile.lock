@@ -104,7 +104,7 @@ GEM
     e2mmap (0.1.0)
     encryptor (3.0.0)
     erubi (1.10.0)
-    et-orbi (1.2.4)
+    et-orbi (1.2.5)
       tzinfo
     ethon (0.14.0)
       ffi (>= 1.15.0)
