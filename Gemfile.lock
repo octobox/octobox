@@ -291,7 +291,7 @@ GEM
       sidekiq (>= 3)
       thwait
       tilt (>= 1.4.0)
-    sidekiq-status (2.0.2)
+    sidekiq-status (2.1.0)
       chronic_duration
       sidekiq (>= 5.0)
     sidekiq-unique-jobs (6.0.25)
