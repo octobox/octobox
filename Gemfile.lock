@@ -81,7 +81,7 @@ GEM
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
     brakeman (5.1.1)
-    bugsnag (6.22.1)
+    bugsnag (6.23.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.5)
@@ -166,7 +166,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    marcel (1.0.1)
+    marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.1)
     minitest (5.14.4)
@@ -289,7 +289,7 @@ GEM
       sidekiq (>= 3)
       thwait
       tilt (>= 1.4.0)
-    sidekiq-status (2.0.2)
+    sidekiq-status (2.1.0)
       chronic_duration
       sidekiq (>= 5.0)
     sidekiq-unique-jobs (6.0.25)
