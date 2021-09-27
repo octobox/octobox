@@ -20,7 +20,7 @@ gem 'pg_search'
 gem 'jbuilder'
 gem 'rake', require: false
 gem 'rgb'
-gem 'sidekiq', '6.2.1'
+gem 'sidekiq', '6.2.2'
 gem 'sidekiq-unique-jobs', '6.0.25'
 gem 'sidekiq-scheduler', require: false
 gem 'rack-canonical-host'

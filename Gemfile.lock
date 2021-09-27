@@ -280,7 +280,7 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    sidekiq (6.2.1)
+    sidekiq (6.2.2)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -385,7 +385,7 @@ DEPENDENCIES
   rake
   rgb
   sassc-rails
-  sidekiq (= 6.2.1)
+  sidekiq (= 6.2.2)
   sidekiq-scheduler
   sidekiq-status
   sidekiq-unique-jobs (= 6.0.25)
