@@ -17,7 +17,7 @@ module NotificationsHelper
   }
 
   SUBJECT_TYPES = {
-    'RepositoryInvitation'         => 'mail-read',
+    'RepositoryInvitation'         => 'mail',
     'Issue'                        => 'issue-opened',
     'PullRequest'                  => 'git-pull-request',
     'Commit'                       => 'git-commit',
@@ -36,7 +36,7 @@ module NotificationsHelper
     'success' => 'check',
     'failure' => 'x',
     'error' => 'alert',
-    'pending' => 'primitive-dot'
+    'pending' => 'dot-fill'
   }
 
   COMMENT_STATUS = {
@@ -48,7 +48,7 @@ module NotificationsHelper
   COMMENT_STATUS_OCTICON = {
     'APPROVED' => 'check',
     'CHANGES_REQUESTED' => 'x',
-    'COMMENTED' => 'primitive-dot'
+    'COMMENTED' => 'dot-fill'
   }
 
   def filters
@@ -119,7 +119,7 @@ module NotificationsHelper
   end
 
   def delete_button
-    function_button("Delete", 'trashcan', "delete", 'Delete notification', false)
+    function_button("Delete", 'trash', "delete", 'Delete notification', false)
   end
 
   def archive_button
@@ -147,7 +147,7 @@ module NotificationsHelper
   end
 
   def delete_selected_button
-    function_button("Delete selected", 'trashcan', "delete_selected", 'Delete selected items')
+    function_button("Delete selected", 'trash', "delete_selected", 'Delete selected items')
   end
 
   def select_all_button(cur_selected, total)

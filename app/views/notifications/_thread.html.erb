@@ -1,7 +1,7 @@
 <div class="card card-thread">
   <div class='d-flex card-header sticky-top justify-content-between'>
     <div>
-      <button class="btn btn-sm btn-outline-dark toggle-star <%=@notification.starred ? 'star-active' : 'star-inactive' %>" data-id= <%=@notification.id%> title=<%= @notification.starred ? 'Remove star' : 'Star'%> data-toggle='tooltip'>
+      <button class="btn btn-sm btn-outline-dark toggle-star <%=@notification.starred ? 'star-active' : 'star-inactive' %>" data-id= <%=@notification.id%> title=<%= @notification.starred ? 'Remove star' : 'star'%> data-toggle='tooltip'>
         <%= octicon 'star', height: 18%>
       </button>
       <%= archive_button unless archive_selected? %>

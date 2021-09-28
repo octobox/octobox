@@ -65,7 +65,7 @@
           <% end %>
           <% if current_user.admin? %>
             <%= link_to admin_path, class: 'dropdown-item' do %>
-              <%= octicon 'gist-secret', height: 16, class: 'text-muted' %>
+              <%= octicon 'tools', height: 16, class: 'text-muted' %>
               Admin
             <% end %>
             <% if Octobox.background_jobs_enabled? %>
@@ -92,7 +92,7 @@
             <% end %>
           <% end %>
           <%= link_to "/settings", class: 'dropdown-item' do %>
-            <%= octicon 'settings', height: 16, class: 'text-muted' %>
+            <%= octicon 'gear', height: 16, class: 'text-muted' %>
             Settings
           <% end %>
           <div class="dropdown-divider d-md-none"></div>
