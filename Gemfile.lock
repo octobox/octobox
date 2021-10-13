@@ -106,7 +106,7 @@ GEM
     erubi (1.10.0)
     et-orbi (1.2.5)
       tzinfo
-    ethon (0.14.0)
+    ethon (0.15.0)
       ffi (>= 1.15.0)
     execjs (2.8.1)
     factory_bot (6.2.0)
