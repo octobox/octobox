@@ -1,4 +1,4 @@
 require 'pagy/extras/headers'
-Pagy::VARS[:items] = 20
+Pagy::DEFAULT[:items] = 20
 require 'pagy/extras/overflow'
-Pagy::VARS[:overflow] = :last_page
+Pagy::DEFAULT[:overflow] = :last_page
