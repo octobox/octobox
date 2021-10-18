@@ -2,7 +2,7 @@
 
 class SyncLabelWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :sync_subjects, unique: :until_and_while_executing
+  sidekiq_options queue: :sync_subjects, lock: :until_and_while_executing
 
   def perform(payload)
     repository = Repository.find_by_github_id(payload['repository']['id'])
