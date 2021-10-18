@@ -13,3 +13,7 @@ updates:
   - dependency-name: rails
     versions:
     - ">= 0.a, < 1"
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "daily"
