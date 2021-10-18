@@ -12,8 +12,6 @@ if Octobox.background_jobs_enabled?
         Sidekiq::Scheduler.reload_schedule!
       end
     end
-    Sidekiq::Status.configure_server_middleware config, expiration: 60.minutes
-    Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
 
     config.client_middleware do |chain|
       chain.add SidekiqUniqueJobs::Middleware::Client
@@ -23,23 +21,23 @@ if Octobox.background_jobs_enabled?
       chain.add SidekiqUniqueJobs::Middleware::Server
     end
 
-    SidekiqUniqueJobs::Server.configure(config)
-
-    config.death_handlers << ->(job, _ex) do
-      SidekiqUniqueJobs::Digests.del(digest: job['unique_digest']) if job['unique_digest']
-    end
+    Sidekiq::Status.configure_server_middleware config, expiration: 60.minutes
+    Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
 
     if Rails.env.production?
       config.logger.level = Logger::WARN
     end
+
+    SidekiqUniqueJobs::Server.configure(config)
   end
 
   Sidekiq.configure_client do |config|
     config.redis = { url: Octobox.config.redis_url }
-    Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
 
     config.client_middleware do |chain|
       chain.add SidekiqUniqueJobs::Middleware::Client
     end
+
+    Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
   end
 end
