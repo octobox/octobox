@@ -2,7 +2,7 @@
 
 class MarketplacePurchaseWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :marketplace, unique: :until_and_while_executing
+  sidekiq_options queue: :marketplace, lock: :until_and_while_executing
 
   def perform(payload)
     purchase = SubscriptionPurchase.find_or_initialize_by(account_id: payload['marketplace_purchase']['account']['id'])
