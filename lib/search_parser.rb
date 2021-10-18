@@ -1,9 +1,6 @@
 # frozen_string_literal: true
-# Simplified version of https://github.com/marcelocf/searrrch/blob/f2825e26/lib/searrrch.rb
 
 class SearchParser
-  OPERATOR_EXPRESSION = /(\-?\w+):[\ 　]?([\w\p{Han}\p{Katakana}\p{Hiragana}\p{Hangul}ー\.\-,\/]+|(["'])(\\?.)*?\3)/
-
   attr_accessor :freetext
   attr_accessor :operators
 
@@ -11,16 +8,36 @@ class SearchParser
     query = query.to_s
     @operators = {}
 
-    offset = 0
-    while (m = OPERATOR_EXPRESSION.match(query, offset))
-      key = m[1].downcase.to_sym
-      value = m[2]
-      offset = m.end(2)
-      @operators[key] ||= []
+    groups = query.split(/(\-?\w+)(:)/).compact_blank.in_groups_of(3)
 
-      value.split(',').each{ |v| @operators[key] << v }
+    groups.each_with_index do |group, i|
+      if group.length == 3 && group[1] == ':'
+        key = group[0].downcase.to_sym
+        value = group[2].strip
+        @operators[key] ||= []
+
+        if i == groups.length - 1
+          # if last group, split last item in group and add extras to free text
+          if value[0] == "'"
+            parts = value.split("'")
+            value = parts[1]
+            @freetext = parts[2].to_s.strip
+          elsif value[0] == '"'
+            parts = value.split('"')
+            value = parts[1]
+            @freetext = parts[2].to_s.strip
+          else
+            parts = value.split(' ')
+            value = parts[0]
+            @freetext = parts.drop(1).to_a.join(' ').strip
+          end
+        end
+
+        value.split(',').each{ |v| @operators[key] << v }
+      else
+        @freetext = group.join(' ').strip
+      end
     end
-    @freetext = query[offset, query.length].strip
   end
 
   def [](key)
