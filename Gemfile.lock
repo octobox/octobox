@@ -183,6 +183,8 @@ GEM
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
+    nokogiri (1.12.5-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     numerizer (0.1.1)
@@ -346,6 +348,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-darwin-20
   x86_64-linux
 
 DEPENDENCIES
@@ -384,6 +387,7 @@ DEPENDENCIES
   rails (= 6.1.4.1)
   rails-controller-testing
   rake
+  rexml
   rgb
   sassc-rails
   sidekiq
@@ -402,7 +406,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 3.0.2p107
 
 BUNDLED WITH
-   2.1.4
+   2.2.22

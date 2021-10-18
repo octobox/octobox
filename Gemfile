@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.7.2'
+ruby '3.0.2'
 
 gem 'rails', '6.1.4.1'
 gem 'bootstrap', '4.6.0'
@@ -33,6 +33,7 @@ gem 'oj'
 gem 'yard', require: false
 gem 'commonmarker'
 gem 'pg', '1.2.3'
+gem 'rexml'
 
 group :development, :test do
   gem 'dotenv-rails'
