@@ -16,14 +16,10 @@ class SearchParser
         value = group[2].strip
         @operators[key] ||= []
 
+        # if last group, split last item in group and add extras to free text
         if i == groups.length - 1
-          # if last group, split last item in group and add extras to free text
-          if value[0] == "'"
-            parts = value.split("'")
-            value = parts[1]
-            @freetext = parts[2].to_s.strip
-          elsif value[0] == '"'
-            parts = value.split('"')
+          if ["'", '"'].include?(value[0])
+            parts = value.split(value[0])
             value = parts[1]
             @freetext = parts[2].to_s.strip
           else
