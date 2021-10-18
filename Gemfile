@@ -53,7 +53,6 @@ group :development do
   gem 'web-console'
   gem 'listen'
   gem 'spring'
-  gem 'spring-watcher-listen'
   gem 'brakeman'
   gem 'bullet'
   gem 'binding_of_caller'
