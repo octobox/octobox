@@ -1,6 +1,6 @@
 class CommentWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :comments, unique: :until_and_while_executing
+  sidekiq_options queue: :comments, lock: :until_and_while_executing
 
   def perform(comment_id, user_id, subject_id)
     comment = Comment.find_by_id(comment_id)
