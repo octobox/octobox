@@ -1,5 +1,5 @@
 <% if pagy.pages > 1 %>
-  <% link = pagy_link_proc(pagy, 'class="page-link"') -%>
+  <% link = pagy_link_proc(pagy, link_extra: 'class="page-link"') -%>
   <nav aria-label="pager"  class="pagy-bootstrap-nav pagination" role="navigation">
     <ul class="pagination">
       <% if pagy.prev -%>

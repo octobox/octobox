@@ -5,7 +5,7 @@ require 'timeout'
 class SyncNotificationsWorker
   include Sidekiq::Worker
   include Sidekiq::Status::Worker
-  sidekiq_options queue: :sync_notifications, unique: :until_executed
+  sidekiq_options queue: :sync_notifications, lock: :until_executed
 
   TIMEOUT = 5.minutes.to_i
 

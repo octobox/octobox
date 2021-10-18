@@ -20,8 +20,8 @@ gem 'pg_search'
 gem 'jbuilder'
 gem 'rake', require: false
 gem 'rgb'
-gem 'sidekiq', '6.2.1'
-gem 'sidekiq-unique-jobs', '6.0.25'
+gem 'sidekiq'
+gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler', require: false
 gem 'rack-canonical-host'
 gem 'sidekiq-status'
@@ -54,7 +54,6 @@ group :development do
   gem 'web-console'
   gem 'listen'
   gem 'spring'
-  gem 'spring-watcher-listen'
   gem 'brakeman'
   gem 'bullet'
   gem 'binding_of_caller'
