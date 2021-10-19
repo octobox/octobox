@@ -152,6 +152,51 @@ class NotificationsController < ApplicationController
     render json: { 'count' => user_unread_count }
   end
 
+  # Find a notification by it's subject url
+  #
+  # ==== Parameters
+  #
+  # * +:url+ - github url of subject
+  #
+  # ==== Example
+  #
+  # <code>GET notifications/lookup.json</code>
+  # {
+  #    "id" : 29,
+  #    "github_id" :  320,
+  #    "reason" :  "mention",
+  #    "unread" :  true,
+  #    "archived" :  false,
+  #    "starred" :  false,
+  #    "url" : "https://api.github.com/notifications/threads/320",
+  #    "web_url" : "https://github.com/octobox/octobox/pull/320",
+  #    "last_read_at" : "2017-02-20 22:26:11 UTC",
+  #    "created_at" : "2017-02-22T15:49:33.750Z",
+  #    "updated_at" : "2017-02-22T15:40:21.000Z",
+  #    "subject":{
+  #       "title" : "Add JSON API",
+  #       "url" : "https://api.github.com/repos/octobox/octobox/pulls/320",
+  #       "type" : "PullRequest",
+  #       "state" : "merged"
+  #    },
+  #    "repo":{
+  #       "id": 320,
+  #       "name" : "octobox/octobox",
+  #       "owner" : "octobox",
+  #       "repo_url" : "https://github.com/octobox/octobox"
+  #    }
+  # }
+  #
+  def lookup
+    if params[:url].present?
+      url = Octobox::SubjectUrlParser.new(params[:url]).to_api_url
+      @notification = current_user.notifications.where(subject_url: url).first
+      render json: {} if @notification.nil?
+    else
+      render json: {}
+    end
+  end
+
   # Mute selected notifications, this will also archive them
   #
   # :category: Notifications Actions
