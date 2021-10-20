@@ -28,6 +28,20 @@ class SubjectUrlParserTest < ActiveSupport::TestCase
     assert_equal "https://github.com/octokit/octokit.rb/issues/123#issuecomment-1", with_comment.to_html_url
   end
 
+  test "to_api_url correctly coverts an HTML commit URL to an api one" do
+    url = "https://github.com/octocat/Hello-World/issues/123"
+    parsed_url = Octobox::SubjectUrlParser.new(url)
+
+    assert_equal "https://api.github.com/repos/octocat/Hello-World/issues/123", parsed_url.to_api_url
+  end
+
+  test "to_api_url correctly identifies and doesn't convert an already api url" do
+    url = "https://api.github.com/repos/octocat/Hello-World/issues/123"
+    parsed_url = Octobox::SubjectUrlParser.new(url)
+
+    assert_equal "https://api.github.com/repos/octocat/Hello-World/issues/123", parsed_url.to_api_url
+  end
+
   test "it correctly identifies an API pull request URL" do
     parser = Octobox::SubjectUrlParser.new("https://api.github.com/repos/octocat/Hello-World/pulls/1347")
     assert parser.api_url?
