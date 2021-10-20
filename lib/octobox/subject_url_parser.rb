@@ -37,6 +37,16 @@ module Octobox
       html_url
     end
 
+    def to_api_url
+      if html_url?
+        url.gsub(github_domain, "#{github_api_prefix}/repos")
+          .gsub('/pull/', '/pulls/')
+          .gsub('/commit/', '/commits/')
+      else
+        url
+      end
+    end
+
     def html_url?
       /#{github_domain}/ =~ url
     end
