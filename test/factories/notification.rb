@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence(:github_id, 1000000) { |n| n }
     repository_id { 930405 }
     repository_full_name { "octobox/octobox" }
-    repository_owner_name { "andrew" }
+    repository_owner_name { "octobox" }
     subject_title { "Test" }
     sequence(:subject_url) { |n| "https://api.github.com/repos/#{repository_full_name}/issues/#{n}" }
     subject_type { "Issue" }
