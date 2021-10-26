@@ -104,6 +104,7 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     get "/pinned_searches/#{pinned_search.id}.json"
     assert_response :success
+    assert_template 'pinned_searches/show', file: 'pinned_searches/show.json.jbuilder'
 
     expected_attributes = {
       'id'      => pinned_search.id,
