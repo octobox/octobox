@@ -119,4 +119,16 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
         "Expected pinned_search.#{attribute} to be #{value}, but it was #{actual_response[value]}. Full response: #{actual_response}"
     end
   end
+
+  test 'will list pinned_searches as json for json format' do
+    pinned_search = create(:pinned_search, user: @user)
+
+    sign_in_as(@user)
+    get "/pinned_searches.json"
+    assert_response :success
+    assert_template 'pinned_searches/index', file: 'pinned_searches/index.json.jbuilder'
+
+    actual_response = JSON.parse(@response.body)
+    assert_equal actual_response.length, 1
+  end
 end

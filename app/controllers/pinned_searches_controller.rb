@@ -32,7 +32,12 @@ class PinnedSearchesController < ApplicationController
   end
 
   def index
-    redirect_to settings_path
+    respond_to do |format|
+      format.html { redirect_to settings_path }
+      format.json do
+        @pinned_searches = current_user.pinned_searches
+      end
+    end
   end
 
   def show
