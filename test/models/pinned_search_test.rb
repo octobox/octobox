@@ -30,4 +30,10 @@ class PinnedSearchTest < ActiveSupport::TestCase
     search = PinnedSearch.find(@pinned_search.id)
     assert_equal "inbox:true state:open unread:true reason:team_mention", search.query
   end
+
+  test 'results returns an array of notifications' do
+    @user = create(:user)
+    @notification = create(:notification, user: @user)
+    assert_equal [@notification], @pinned_search.results(@user)
+  end
 end

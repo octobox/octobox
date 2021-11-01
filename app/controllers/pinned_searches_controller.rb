@@ -32,7 +32,12 @@ class PinnedSearchesController < ApplicationController
   end
 
   def index
-    redirect_to settings_path
+    respond_to do |format|
+      format.html { redirect_to settings_path }
+      format.json do
+        @pinned_searches = current_user.pinned_searches
+      end
+    end
   end
 
   def show
@@ -40,7 +45,6 @@ class PinnedSearchesController < ApplicationController
       format.html { redirect_to settings_path }
       format.json do
         @pinned_search = current_user.pinned_searches.find(params[:id])
-        @search = Search.initialize_for_saved_search(query: @pinned_search.query, user: current_user)
       end
     end
   end

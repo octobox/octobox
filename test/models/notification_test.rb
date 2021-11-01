@@ -108,7 +108,7 @@ class NotificationTest < ActiveSupport::TestCase
       url: 'https://api.github.com/notifications/threads/421',
       archived: false,
       starred: false,
-      repository_owner_name: 'andrew',
+      repository_owner_name: 'octobox',
       updated_at: Time.zone.parse('2016-12-19T22:00:00Z')
     }.stringify_keys
     api_response = notifications_from_fixture('morty_notifications.json').second
