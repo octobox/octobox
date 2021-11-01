@@ -11,6 +11,7 @@ json.(
   :last_read_at,
   :created_at,
   :updated_at,
+  :muted_at
 )
 
 json.subject do
