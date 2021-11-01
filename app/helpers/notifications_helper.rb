@@ -173,7 +173,9 @@ module NotificationsHelper
     subject_type = notification.subject_type
     state = notification.user.try(:github_app_authorized?) ? notification.state : nil
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
+    return 'git-pull-request-draft' if subject_type == 'PullRequest' && notification.draft?
     return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
+    return 'git-pull-request-closed' if subject_type == 'PullRequest' && state == 'closed'
     subject_type_icon(subject_type)
   end
 
