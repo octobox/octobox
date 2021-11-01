@@ -190,6 +190,7 @@ module NotificationsHelper
   def notification_icon_color(notification)
     return unless notification.display_subject?
     return 'text-draft' if notification.draft?
+    return 'text-subscribed' if notification.state == 'closed' && notification.subject_type == 'Issue'
     {
       'open' => 'text-success',
       'closed' => 'text-danger',
