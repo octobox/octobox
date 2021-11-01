@@ -305,7 +305,7 @@ module NotificationsHelper
   def notification_status(status)
     return unless status.present?
     content_tag(:span,
-      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: status),
+      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 24, class: status),
       class: "badge badge-light badge-pr #{status}",
       title: status.humanize,
       data: {toggle: 'tooltip'}
@@ -315,7 +315,7 @@ module NotificationsHelper
   def comment_status(status)
     return unless status.present?
     content_tag(:span,
-      octicon(COMMENT_STATUS_OCTICON[status], height: 16, class: COMMENT_STATUS[status]),
+      octicon(COMMENT_STATUS_OCTICON[status], height: 24, class: COMMENT_STATUS[status]),
       class: "badge badge-light #{COMMENT_STATUS[status]}",
       title: status.humanize,
       data: {toggle: 'tooltip'}
@@ -323,7 +323,7 @@ module NotificationsHelper
   end
 
   def sidebar_notification_status(status)
-    octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
+    octicon(NOTIFICATION_STATUS_OCTICON[status], height: 24, class: "sidebar-icon #{status}")
   end
 
   def subject_with_number(notification)
