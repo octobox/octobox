@@ -69,7 +69,7 @@ $notification-items: (
   input[type=checkbox]:not(:checked) + label {
     &::before, &::after {
       background-color: $body-bg;
-      border: 1px solid $icon-star-stroke;
+      border: 1px solid #aaa;
       border-radius: .25rem;
     }
   }

@@ -19,7 +19,7 @@
   </li>
   <li role="presentation" class="nav-item">
     <%= link_to root_path(starred: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if starred_selected?}" } do %>
-      <%= octicon 'star', height: 16, class: 'sidebar-icon star-active' %>
+      <%= octicon 'star-fill', height: 16, class: 'sidebar-icon star-active' %>
       Starred
       <% if starred_selected? %>
         <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>

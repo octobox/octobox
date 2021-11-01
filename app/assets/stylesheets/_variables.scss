@@ -42,9 +42,6 @@ $text-colors: (
 );
 
 $icon-private-repo-color: #dbab09 !default;
-$icon-star-fill: none !default;
-$icon-star-stroke: #aaa !default;
-$icon-star-hover-fill: $icon-star-stroke !default;
-$icon-star-hover-stroke: $icon-star-stroke !default;
+$icon-star-fill: #aaa !default;
+$icon-star-hover-fill: $icon-star-fill !default;
 $icon-star-active-fill: #f0ad4e !default;
-$icon-star-active-stroke: $icon-star-active-fill !default;
