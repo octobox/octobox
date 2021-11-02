@@ -63,4 +63,9 @@ module ApplicationHelper
   def confirmation(message, notification)
     notification.user.try(:disable_confirmations?) ? nil : message
   end
+
+  def svg(name)
+    file_path = "#{Rails.root}/app/assets/images/#{name}.svg"
+    return File.read(file_path).html_safe if File.exists?(file_path)
+  end
 end
