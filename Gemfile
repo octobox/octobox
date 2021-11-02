@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '3.0.2'
 
 gem 'rails', '6.1.4.1'
-gem 'bootstrap', '4.6.0'
+gem 'bootstrap', '5.1.0'
 gem 'attr_encrypted'
 gem 'jquery-rails'
 gem 'pagy'
