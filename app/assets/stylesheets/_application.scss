@@ -99,7 +99,7 @@
 }
 
 .spinning{
-  animation: spin 1s infinite steps(90);
+  animation: spin 1s infinite steps(90) reverse;
 }
 
 .screenshot{
