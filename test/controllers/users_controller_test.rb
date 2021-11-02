@@ -34,6 +34,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'displays settings page' do
     sign_in_as(@user)
     get settings_path
+    assert_response :success
     assert_template 'users/edit'
   end
 

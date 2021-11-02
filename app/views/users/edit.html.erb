@@ -182,7 +182,7 @@
 
       <% if Octobox.github_app? && current_user.github_app_authorized? %>
         <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.secrets.github_app_client_id}", class: 'btn btn-outline-dark' do %>
-          <%= octicon 'octoface' %>&nbsp;
+          <%= octicon 'mark-github' %>&nbsp;
           <%= t('users.actions.manage_app_access') %>
         <% end %>
       <% end %>
