@@ -18,7 +18,7 @@ class IndexPageTest < ActionDispatch::IntegrationTest
 
   test 'index page without login is home page' do
     get root_path
-    assert_select "a[href=?]", login_path, text: 'Sign in'
+    assert_select "a[href=?]", '/auth/github', text: 'Sign in'
     assert_select 'h1', text: 'Octobox'
     assert_select 'h3', text: 'Untangle your GitHub Notifications'
     assert_select 'h3', text: 'Sound like you?'

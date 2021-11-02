@@ -34,6 +34,7 @@ gem 'yard', require: false
 gem 'commonmarker'
 gem 'pg', '1.2.3'
 gem 'rexml'
+gem 'omniauth-rails_csrf_protection'
 
 group :development, :test do
   gem 'dotenv-rails'
