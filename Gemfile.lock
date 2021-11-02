@@ -203,12 +203,13 @@ GEM
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.13.9)
-    omniauth (1.9.1)
+    omniauth (2.0.4)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
-    omniauth-github (1.4.0)
-      omniauth (~> 1.5)
-      omniauth-oauth2 (>= 1.4.0, < 2.0)
+      rack-protection
+    omniauth-github (2.0.0)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.7.1)
     omniauth-oauth2 (1.7.1)
       oauth2 (~> 1.4)
       omniauth (>= 1.9, < 3)
@@ -230,6 +231,8 @@ GEM
     rack-canonical-host (1.0.0)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
+    rack-protection (2.1.0)
+      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.1.4.1)
@@ -377,7 +380,7 @@ DEPENDENCIES
   octicons_helper
   octokit
   oj
-  omniauth-github (= 1.4.0)
+  omniauth-github (= 2.0.0)
   pagy
   pg (= 1.2.3)
   pg_search
