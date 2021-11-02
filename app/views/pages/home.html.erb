@@ -3,7 +3,7 @@
     <span class='mr-1'>More Info</span>
     <%= octicon 'question', height: 22 %>
   <% end %>
-  <%= link_to login_path, class: 'btn btn-dark m-3 float-right' do %>
+  <%= link_to '/auth/github', class: 'btn btn-dark m-3 float-right', method: :post do %>
     <span class='mr-1'>Sign in</span>
     <%= octicon 'mark-github', height: 22 %>
   <% end %>

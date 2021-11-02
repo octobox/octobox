@@ -9,7 +9,7 @@ gem 'pagy'
 gem 'local_time'
 gem 'octicons_helper'
 gem 'octokit'
-gem 'omniauth-github', '1.4.0'
+gem 'omniauth-github', '2.0.0'
 gem 'puma'
 gem 'sassc-rails'
 gem 'turbolinks'
@@ -34,6 +34,7 @@ gem 'yard', require: false
 gem 'commonmarker'
 gem 'pg', '1.2.3'
 gem 'rexml'
+gem 'omniauth-rails_csrf_protection'
 
 group :development, :test do
   gem 'dotenv-rails'

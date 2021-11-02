@@ -17,9 +17,9 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
   end
 
-  test 'GET #new redirects to /auth/github' do
+  test 'GET #new renders login page' do
     get '/login'
-    assert_redirected_to '/auth/github'
+    assert_template 'sessions/new'
   end
 
   test 'GET #new redirects to /root if already logged in' do
