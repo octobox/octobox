@@ -1,6 +1,6 @@
 <nav class='navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-md'>
   <a class="navbar-brand" href="/" title='Octobox'>
-    <%= octobox_reverse_icon(18) %>
+    <%= svg('infinitacle-reverse') %>
   </a>
   <div class="position-relative dropdown">
     <div>
@@ -44,7 +44,7 @@
           </a>
         <% else %>
           <a href="https://opencollective.com/octobox/" class='opencollective btn btn-sm' target='_blank' rel="noopener" aria-label='Support Octobox on OpenCollective'>
-            <%= octicon 'gift', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %>
+            <%= octicon 'heart', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %>
           </a>
         <% end %>
       </li>
@@ -65,7 +65,7 @@
           <% end %>
           <% if current_user.admin? %>
             <%= link_to admin_path, class: 'dropdown-item' do %>
-              <%= octicon 'gist-secret', height: 16, class: 'text-muted' %>
+              <%= octicon 'tools', height: 16, class: 'text-muted' %>
               Admin
             <% end %>
             <% if Octobox.background_jobs_enabled? %>
@@ -92,11 +92,11 @@
             <% end %>
           <% end %>
           <%= link_to "/settings", class: 'dropdown-item' do %>
-            <%= octicon 'settings', height: 16, class: 'text-muted' %>
+            <%= octicon 'gear', height: 16, class: 'text-muted' %>
             Settings
           <% end %>
           <div class="dropdown-divider d-md-none"></div>
-          <a class="d-md-none" href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener"><%= octicon 'gift', height: 16, class: 'text-muted' %> Donate</a>
+          <a class="d-md-none" href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener"><%= octicon 'heart', height: 16, class: 'text-muted' %> Donate</a>
           <div class="dropdown-divider"></div>
           <%= link_to logout_path, class: 'dropdown-item' do %>
             <%= octicon 'sign-out', height: 16, class: 'text-muted' %>

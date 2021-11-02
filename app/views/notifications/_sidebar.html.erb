@@ -19,7 +19,7 @@
   </li>
   <li role="presentation" class="nav-item">
     <%= link_to root_path(starred: true, per_page: params[:per_page]), { :class=>"nav-link #{'active' if starred_selected?}" } do %>
-      <%= octicon 'star', height: 16, class: 'sidebar-icon star-active' %>
+      <%= octicon 'star-fill', height: 16, class: 'sidebar-icon star-active' %>
       Starred
       <% if starred_selected? %>
         <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
@@ -56,12 +56,12 @@
 
 <ul class="nav nav-pills flex-column nav-filters">
   <%= filter_link :unread, false, @unread_notifications[false] do %>
-      <%= octicon 'mail-read', height: 16, class: 'sidebar-icon' %>
+      <%= octicon 'eye', height: 16, class: 'sidebar-icon' %>
       Read
   <% end %>
 
   <%= filter_link :unread, true, @unread_notifications[true] do %>
-      <%= octicon 'mail', height: 16, class: 'sidebar-icon' %>
+      <%= octicon 'eye-closed', height: 16, class: 'sidebar-icon' %>
       Unread
   <% end %>
 </ul>
@@ -71,13 +71,13 @@
     <% @states.sort_by{|state, count| state.to_s }.reverse_each do |state, count| %>
       <% next if state.nil? %>
       <%= filter_link :state, state, count do %>
-        <%= octicon 'primitive-square', height: 24, class: "sidebar-icon text-#{state_label(state)}" %>
+        <%= octicon 'square-fill', height: 24, class: "sidebar-icon text-#{state_label(state)}" %>
         <%= state.underscore.humanize %>
       <% end %>
     <% end %>
     <% if @draft > 0 %>
       <%= filter_link :draft, true, @draft do %>
-        <%= octicon 'primitive-square', height: 24, class: "sidebar-icon text-draft" %>
+        <%= octicon 'square-fill', height: 24, class: "sidebar-icon text-draft" %>
         Draft
       <% end %>
     <% end %>
@@ -128,7 +128,7 @@
   <ul class="nav nav-pills flex-column nav-filters">
     <% @reasons.sort_by{|reason, count| reason.downcase }.each do |reason, count| %>
       <%= reason_filter_link reason, count do %>
-        <%= octicon 'primitive-dot', height: 24, class: "sidebar-icon text-#{reason_label(reason)}" %>
+        <%= octicon 'dot-fill', height: 24, class: "sidebar-icon text-#{reason_label(reason)}" %>
         <%= reason.underscore.humanize %>
       <% end %>
     <% end %>

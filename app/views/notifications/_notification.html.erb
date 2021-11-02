@@ -14,7 +14,7 @@
     </div>
   </td>
   <td class='notification-star align-middle'>
-    <%= octicon 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'Star' %>
+    <%= octicon notification.starred ? 'star-fill' : 'star', height: 18, class: "toggle-star #{notification.starred ? 'star-active' : 'star-inactive'}", data: { id: notification.id, toggle: 'tooltip' }, title: notification.starred ? 'Remove star' : 'star' %>
   </td>
 
   <td class='notification-archived align-middle'>
@@ -131,7 +131,7 @@
       <% end %>
       <% if notification.archived? %>
         <%= link_to(delete_selected_notifications_path(id: notification.id), class: 'ml-1', method: :post, 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Delete', 'data-confirm': confirmation("Are you sure you want to delete?", notification)) do %>
-          <%= octicon('trashcan', height: 15) %>
+          <%= octicon('trash', height: 15) %>
         <% end %>
       <% end %>
     </span>

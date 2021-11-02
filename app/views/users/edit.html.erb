@@ -31,7 +31,7 @@
               </td>
               <td>
                 <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: t('crud_actions.edit'), data: {toggle: 'tooltip'}, class: 'mr-2' %>
-                <%= link_to octicon('trashcan'), pinned_search_path(pinned_search), title: t('crud_actions.delete'), data: {toggle: 'tooltip'}, method: :delete %>
+                <%= link_to octicon('trash'), pinned_search_path(pinned_search), title: t('crud_actions.delete'), data: {toggle: 'tooltip'}, method: :delete %>
               </td>
             </tr>
           <% end %>
@@ -350,14 +350,14 @@
     <div class="card-body">
       <p><%= t('users.notices.export_import') %></p>
       <%= link_to export_path, class: 'btn btn-outline-dark' do %>
-        <%= octicon 'cloud-download' %>&nbsp;
+        <%= octicon 'desktop-download' %>&nbsp;
         <%= t('users.actions.export') %>
       <% end %>
       <% unless Octobox.io? %>
 
         <%= form_tag import_path, class: 'd-inline', multipart: true do %>
           <label class="btn btn-outline-dark mt-2">
-            <%= octicon 'cloud-upload' %>&nbsp;
+            <%= octicon 'upload' %>&nbsp;
             <%= t('users.actions.import') %>
           <span style="display:none;">
             <%= file_field_tag :file, required: true, onchange: "form.submit();" %>
@@ -376,7 +376,7 @@
       <p><%= t('users.notices.deleting_account_removes_all_data') %></p>
       <p><%= t('users.notices.subsequent_logins') %></p>
       <%= link_to current_user, method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure you want to do this?' } do %>
-        <%= octicon 'trashcan', class: 'inverse' %>&nbsp;
+        <%= octicon 'trash', class: 'inverse' %>&nbsp;
         <%= t('users.actions.delete_account') %>
       <% end %>
     </div>

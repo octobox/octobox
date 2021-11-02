@@ -1,17 +1,17 @@
 <div class='container readable pt-5'>
 
-	<h1 class="text-center"><%= octobox_round(80) %> Octobox</h1>
+	<h1 class="text-center"><%= svg('infinitacle-round') %> Octobox</h1>
 
 	<h3 class='pt-3 text-center'>One product, two ways to pay</h3>
   <p class='pt-3 text-large'>Octobox is <b>free for open source</b> projects. We have paid-for plans for access to private projects for you or your organisation which can be paid for in two ways:
-	
+
   <div class='d-flex flex-column flex-lg-row pt-3 justify-content-center'>
 		<%= render('opencollective')%>
 		<%= render('github')%>
 	</div>
 
-  <p class='mt-2'>In order to take advantage of paid-access feature you will need to install the <a href='<%= Octobox.config.app_install_url %>' target="_blank">Octobox GitHub App</a> on each repository or organisation you'd like to enable. This may require additional authorisation. 
-	
+  <p class='mt-2'>In order to take advantage of paid-access feature you will need to install the <a href='<%= Octobox.config.app_install_url %>' target="_blank">Octobox GitHub App</a> on each repository or organisation you'd like to enable. This may require additional authorisation.
+
 	<h2 id='why' class='text-center mb-5 pt-3'>What... Why?</h2>
 
 	<h5>An experiment in open source sustainability</h5>

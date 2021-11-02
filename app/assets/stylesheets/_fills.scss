@@ -119,12 +119,10 @@ svg{
 
 @mixin star-active{
   fill: $icon-star-active-fill !important;
-  stroke: $icon-star-active-stroke !important;
 }
 
 @mixin star-fill{
   fill: $icon-star-fill;
-  stroke: $icon-star-stroke;
   cursor: pointer;
   .star-active{
     @include star-active;

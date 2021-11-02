@@ -18,7 +18,7 @@
       background-color: $red;
       a{
         color: color-yiq($red);
-        fill: color-yiq($red);  
+        fill: color-yiq($red);
         svg{
           fill: color-yiq($red);
         }
@@ -59,9 +59,12 @@
   display: inline-block;
   margin-right: 5px;
   width: 18px;
-  &.octicon-primitive-dot, &.octicon-primitive-square {
+  &.octicon-dot-fill, &.octicon-square-fill {
     margin-top: -3px;
     margin-bottom: -3px;
+    margin-left: -3px;
+    margin-right: 2px;
+    width: 24px;
   }
 }
 

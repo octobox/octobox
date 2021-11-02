@@ -17,7 +17,7 @@ module NotificationsHelper
   }
 
   SUBJECT_TYPES = {
-    'RepositoryInvitation'         => 'mail-read',
+    'RepositoryInvitation'         => 'mail',
     'Issue'                        => 'issue-opened',
     'PullRequest'                  => 'git-pull-request',
     'Commit'                       => 'git-commit',
@@ -36,7 +36,7 @@ module NotificationsHelper
     'success' => 'check',
     'failure' => 'x',
     'error' => 'alert',
-    'pending' => 'primitive-dot'
+    'pending' => 'dot-fill'
   }
 
   COMMENT_STATUS = {
@@ -48,7 +48,7 @@ module NotificationsHelper
   COMMENT_STATUS_OCTICON = {
     'APPROVED' => 'check',
     'CHANGES_REQUESTED' => 'x',
-    'COMMENTED' => 'primitive-dot'
+    'COMMENTED' => 'dot-fill'
   }
 
   def filters
@@ -119,7 +119,7 @@ module NotificationsHelper
   end
 
   def delete_button
-    function_button("Delete", 'trashcan', "delete", 'Delete notification', false)
+    function_button("Delete", 'trash', "delete", 'Delete notification', false)
   end
 
   def archive_button
@@ -147,7 +147,7 @@ module NotificationsHelper
   end
 
   def delete_selected_button
-    function_button("Delete selected", 'trashcan', "delete_selected", 'Delete selected items')
+    function_button("Delete selected", 'trash', "delete_selected", 'Delete selected items')
   end
 
   def select_all_button(cur_selected, total)
@@ -173,7 +173,9 @@ module NotificationsHelper
     subject_type = notification.subject_type
     state = notification.user.try(:github_app_authorized?) ? notification.state : nil
     return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
+    return 'git-pull-request-draft' if subject_type == 'PullRequest' && notification.draft?
     return 'git-merge' if subject_type == 'PullRequest' && state == 'merged'
+    return 'git-pull-request-closed' if subject_type == 'PullRequest' && state == 'closed'
     subject_type_icon(subject_type)
   end
 
@@ -190,6 +192,7 @@ module NotificationsHelper
   def notification_icon_color(notification)
     return unless notification.display_subject?
     return 'text-draft' if notification.draft?
+    return 'text-subscribed' if notification.state == 'closed' && notification.subject_type == 'Issue'
     {
       'open' => 'text-success',
       'closed' => 'text-danger',
@@ -305,7 +308,7 @@ module NotificationsHelper
   def notification_status(status)
     return unless status.present?
     content_tag(:span,
-      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: status),
+      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 24, class: status),
       class: "badge badge-light badge-pr #{status}",
       title: status.humanize,
       data: {toggle: 'tooltip'}
@@ -315,7 +318,7 @@ module NotificationsHelper
   def comment_status(status)
     return unless status.present?
     content_tag(:span,
-      octicon(COMMENT_STATUS_OCTICON[status], height: 16, class: COMMENT_STATUS[status]),
+      octicon(COMMENT_STATUS_OCTICON[status], height: 24, class: COMMENT_STATUS[status]),
       class: "badge badge-light #{COMMENT_STATUS[status]}",
       title: status.humanize,
       data: {toggle: 'tooltip'}
@@ -323,7 +326,7 @@ module NotificationsHelper
   end
 
   def sidebar_notification_status(status)
-    octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: "sidebar-icon #{status}")
+    octicon(NOTIFICATION_STATUS_OCTICON[status], height: 24, class: "sidebar-icon #{status}")
   end
 
   def subject_with_number(notification)
