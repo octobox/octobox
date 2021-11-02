@@ -28,18 +28,6 @@ module ApplicationHelper
     content_tag :span, octicon('shield'), class: 'btn btn-sm btn-link repo-scope d-inline-block', title: 'Requires repo scope', data: {toggle:'modal', target:'#repo-scope'} unless Octobox.fetch_subject? || Octobox.personal_access_tokens_enabled?
   end
 
-  def octobox_icon(height=16)
-    image_tag('infinitacle.svg', alt: "Octobox", height: height)
-  end
-
-  def octobox_reverse_icon(height=16)
-    image_tag('infinitacle-reverse.svg', alt: "Octobox", height: height)
-  end
-
-  def octobox_round(height=80)
-    image_tag('infinitacle-round.svg', alt: "Logo", height: height)
-  end
-
   def used_by_orgs
     %w(kubernetes facebook nodejs angular Microsoft google
        elastic src-d alphagov vuejs rails algolia
