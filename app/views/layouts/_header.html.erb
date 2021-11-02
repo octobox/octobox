@@ -44,7 +44,7 @@
           </a>
         <% else %>
           <a href="https://opencollective.com/octobox/" class='opencollective btn btn-sm' target='_blank' rel="noopener" aria-label='Support Octobox on OpenCollective'>
-            <%= octicon 'gift', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %>
+            <%= octicon 'heart', height: 16, data: {toggle: "tooltip", placement: "bottom"}, title: 'Support Octobox on OpenCollective' %>
           </a>
         <% end %>
       </li>
@@ -96,7 +96,7 @@
             Settings
           <% end %>
           <div class="dropdown-divider d-md-none"></div>
-          <a class="d-md-none" href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener"><%= octicon 'gift', height: 16, class: 'text-muted' %> Donate</a>
+          <a class="d-md-none" href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener"><%= octicon 'heart', height: 16, class: 'text-muted' %> Donate</a>
           <div class="dropdown-divider"></div>
           <%= link_to logout_path, class: 'dropdown-item' do %>
             <%= octicon 'sign-out', height: 16, class: 'text-muted' %>
