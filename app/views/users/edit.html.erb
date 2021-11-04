@@ -269,7 +269,7 @@
           <p>
             <%= t('users.notices.connect_to_github_account') %>
           </p>
-          <p><%= link_to t('users.actions.login_to_github_app'), '/auth/githubapp', class: 'btn btn-info' %></p>
+          <p><%= link_to t('users.actions.login_to_github_app'), '/auth/githubapp', class: 'btn btn-info', method: :post %></p>
         <% end %>
         <p>
           <%= t('users.notices.extra_features_and_data') %>
