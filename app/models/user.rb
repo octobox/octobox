@@ -177,4 +177,17 @@ class User < ApplicationRecord
       n.save(touch: false) if n.changed?
     end
   end
+
+  def import_issues
+    # TODO handle the stanard Octokit exceptions
+    # TODO this will need more oauth permissions
+    github_client.issues(nil, filter: 'all').each do |remote_subject|
+      Repository.sync(remote_subject[:repository].to_h.as_json)
+      # TODO see if it's a pull request and change the root url if so
+      json = remote_subject.to_h.as_json
+      json['url'] = json['pull_request']['url'] if json['pull_request']
+      s = Subject.sync(json)
+      s.create_notification_for(self) if s
+    end
+  end
 end

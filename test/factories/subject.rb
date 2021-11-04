@@ -7,5 +7,6 @@ FactoryBot.define do
     author { 'andrew' }
     repository_full_name { 'octobox/octobox' }
     comment_count { 0 }
+    sequence(:title) { |n| "issue number #{n}" }
   end
 end

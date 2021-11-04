@@ -58,7 +58,8 @@ class Subject < ApplicationRecord
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
       body: remote_subject['body'].try(:gsub, "\u0000", ''),
-      draft: remote_subject['draft']
+      draft: remote_subject['draft'],
+      title: remote_subject['title']
     })
 
     return unless persisted?
@@ -67,6 +68,7 @@ class Subject < ApplicationRecord
     update_comments if Octobox.include_comments? && (has_comments? || pull_request?)
     update_status
     sync_involved_users if (saved_changes.keys & notifiable_fields).any?
+    return self
   end
 
   def self.sync(remote_subject)
@@ -165,6 +167,20 @@ class Subject < ApplicationRecord
 
   def push_to_channels
     notifications.includes({:subject => :labels}, :repository, {:user => :individual_subscription_purchase}).find_each(&:push_to_channel) if (saved_changes.keys & pushable_fields).any?
+  end
+
+  def create_notification_for(user)
+    n = user.notifications.find_or_initialize_by(subject_url: url)
+    n.attributes = {
+      repository_id: repository.github_id,
+      repository_full_name: repository_full_name,
+      repository_owner_name: repository.owner,
+      subject_title: title,
+      subject_type: (pull_request? ? 'PullRequest' : 'Issue'),
+      reason: 'manual', # TODO this can be smarter, set to 'author' if author == user.github_login, assigned if assignees includes user.github_login etc 
+      unread: true
+    }
+    n.save if n.changed?
   end
 
   private

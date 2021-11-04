@@ -432,4 +432,9 @@ class NotificationTest < ActiveSupport::TestCase
     notification.destroy
     refute Subject.where(id: subject.id).empty?
   end
+
+  test 'notification can be missing their github_id' do
+    notification = create(:notification, github_id: nil)
+    assert notification.valid?
+  end
 end
