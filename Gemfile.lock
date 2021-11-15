@@ -216,7 +216,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.0)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    pagy (5.3.0)
+    pagy (5.3.1)
     pg (1.2.3)
     pg_search (2.3.5)
       activerecord (>= 5.2)
