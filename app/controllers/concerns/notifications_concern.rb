@@ -2,6 +2,24 @@ module NotificationsConcern
   extend ActiveSupport::Concern
 
   def load_and_count_notifications(scope = notifications_for_presentation.newest)
+    count_notifications(scope)
+    @unread_count = user_unread_count
+    load_notifications(scope)
+  end
+
+  def load_notifications(scope = notifications_for_presentation.newest)
+    scope = current_notifications(scope)
+    check_out_of_bounds(scope)
+
+
+    @pagy, @notifications = pagy(scope, items: per_page, size: [1,2,2,1])
+    @total = @pagy.count
+
+    @cur_selected = [per_page, @total].min
+    return scope
+  end
+
+  def count_notifications(scope)
     @types                 = scope.reorder(nil).distinct.group(:subject_type).count
     @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
     @reasons               = scope.reorder(nil).distinct.group(:reason).count
@@ -15,16 +33,6 @@ module NotificationsConcern
     @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
     @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
     @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
-
-    scope = current_notifications(scope)
-    check_out_of_bounds(scope)
-
-    @unread_count = user_unread_count
-    @pagy, @notifications = pagy(scope, items: per_page, size: [1,2,2,1])
-    @total = @pagy.count
-
-    @cur_selected = [per_page, @total].min
-    return scope
   end
 
   def user_unread_count

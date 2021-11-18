@@ -99,7 +99,6 @@ class NotificationsController < ApplicationController
 
 
   def expand_comments
-
     scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 

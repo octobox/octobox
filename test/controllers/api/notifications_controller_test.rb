@@ -22,6 +22,12 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test 'will render 401 if authenticated via a cookie as json' do
+    sign_in_as(@user)
+    get api_notifications_path(format: :json)
+    assert_response :unauthorized
+  end
+
   test 'shows archived search results by default' do
     5.times.each { create(:notification, user: @user, archived: true, subject_title:'release-1') }
     get '/api/notifications?q=release', headers: { 'Authorization' => "Bearer #{@user.api_token}" }

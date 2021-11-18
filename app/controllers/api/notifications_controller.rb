@@ -4,7 +4,7 @@ class Api::NotificationsController < Api::ApplicationController
   before_action :authenticate_user!
 
   def index
-    load_and_count_notifications
+    load_notifications
   end
 
   def star
