@@ -96,7 +96,6 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'archives defaults value to true' do
-
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
 
@@ -109,7 +108,6 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'mutes multiple notifications' do
-
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
@@ -294,7 +292,6 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'search results can filter to exclude a repo' do
-
     @user.notifications.delete_all
     create(:notification, user: @user, repository_full_name: 'a/b')
     create(:notification, user: @user, repository_full_name: 'b/c')
@@ -319,7 +316,6 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'search results can filter by multiple owners' do
-
     @user.notifications.delete_all
     create(:notification, user: @user, repository_owner_name: 'andrew')
     create(:notification, user: @user, repository_owner_name: 'octobox')
@@ -328,7 +324,6 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'search results can filter to exclude owner' do
-
     @user.notifications.delete_all
     create(:notification, user: @user, repository_owner_name: 'andrew')
     create(:notification, user: @user, repository_owner_name: 'octobox')
@@ -642,14 +637,12 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'ignores the per_page cookie' do
-    get '/api/notifications?per_page=100'
+    get '/?per_page=100'
     get '/api/notifications'
     assert_equal assigns(:per_page), nil
   end
 
   test 'archives false Unarchives the notifications' do
-
-
     notification1 = create(:notification, user: @user, archived: true)
     create(:notification, user: @user, archived: true)
     stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
