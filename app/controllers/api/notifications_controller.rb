@@ -64,4 +64,10 @@ class Api::NotificationsController < Api::ApplicationController
     selected_notifications.delete_all
     head :ok
   end
+
+  private
+
+  def per_page_cookie
+    nil
+  end
 end
