@@ -11,6 +11,27 @@ require 'admin_constraint'
 Rails.application.routes.draw do
   root to: 'notifications#index'
 
+  namespace :api do
+    resources :notifications, defaults: { format: 'json' } do
+      collection do
+        post :archive_selected
+        post :sync
+        get  :sync
+        get  :syncing
+        post :syncing
+        post :mute_selected
+        post :mark_read_selected
+        get  :unread_count
+        get  :lookup
+        post :delete_selected
+      end
+
+      member do
+        post :star
+      end
+    end
+  end
+
   get '/404', to: 'errors#not_found'
   get '/422', to: 'errors#unprocessable'
   get '/500', to: 'errors#internal'
@@ -52,7 +73,7 @@ Rails.application.routes.draw do
       get  :show
       post :star
       get  :expand_comments
-      post :comment 
+      post :comment
     end
   end
 
