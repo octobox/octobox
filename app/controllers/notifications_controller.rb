@@ -24,7 +24,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>GET notifications.json</code>
+  # <code>GET api/notifications.json</code>
   #
   #   {
   #      "pagination" : {
@@ -75,6 +75,7 @@ class NotificationsController < ApplicationController
     load_and_count_notifications
   end
 
+  # @private doesn't have an api yet
   def show
     scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
@@ -97,7 +98,7 @@ class NotificationsController < ApplicationController
     render partial: "notifications/thread", layout: false if request.xhr?
   end
 
-
+  # @private doesn't have an api yet
   def expand_comments
     scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
@@ -123,6 +124,7 @@ class NotificationsController < ApplicationController
     end
   end
 
+  # @private doesn't have an api yet
   def comment
     subject = current_user.notifications.find(params[:id]).subject
 
@@ -145,7 +147,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>GET notifications/unread_count.json</code>
+  # <code>GET api/notifications/unread_count.json</code>
   #   { "count" : 1 }
   #
   def unread_count
@@ -160,7 +162,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>GET notifications/lookup.json</code>
+  # <code>GET api/notifications/lookup.json</code>
   # {
   #    "id" : 29,
   #    "github_id" :  320,
@@ -207,7 +209,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>POST notifications/mute_selected.json?id=all</code>
+  # <code>POST api/notifications/mute_selected.json?id=all</code>
   #   HEAD 204
   #
   def mute_selected
@@ -229,7 +231,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>POST notifications/archive_selected.json?id=all</code>
+  # <code>POST api/notifications/archive_selected.json?id=all</code>
   #   HEAD 204
   #
   def archive_selected
@@ -251,7 +253,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>POST notifications/mark_read_selected.json?id=all</code>
+  # <code>POST api/notifications/mark_read_selected.json?id=all</code>
   #   HEAD 204
   #
   def mark_read_selected
@@ -269,7 +271,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>POST notifications/delete_selected.json?id=all</code>
+  # <code>POST api/notifications/delete_selected.json?id=all</code>
   #   HEAD 204
   #
   def delete_selected
@@ -287,7 +289,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>POST notifications/:id/star.json</code>
+  # <code>POST api/notifications/:id/star.json</code>
   #   HEAD 204
   #
   def star
@@ -301,7 +303,7 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>POST notifications/sync.json</code>
+  # <code>POST api/notifications/sync.json</code>
   #   HEAD 204
   #
   def sync
@@ -327,10 +329,10 @@ class NotificationsController < ApplicationController
   #
   # ==== Example
   #
-  # <code>POST notifications/syncing.json</code>
+  # <code>POST api/notifications/syncing.json</code>
   #   {} 204 (ok)
   #
-  # <code>POST notifications/syncing.json</code>
+  # <code>POST api/notifications/syncing.json</code>
   #   {} 423 (locked)
   #
   def syncing
