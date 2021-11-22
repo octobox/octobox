@@ -639,13 +639,13 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test "doesn't set the per_page cookie" do
     get '/api/notifications?per_page=100'
-    assert_equal nil, cookies[:per_page]
+    assert_nil cookies[:per_page]
   end
 
   test 'ignores the per_page cookie' do
     get '/?per_page=100'
     get '/api/notifications'
-    assert_equal assigns(:per_page), nil
+    assert_nil assigns(:per_page)
   end
 
   test 'archives false Unarchives the notifications' do
