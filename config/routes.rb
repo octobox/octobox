@@ -30,6 +30,14 @@ Rails.application.routes.draw do
         post :star
       end
     end
+
+    resources :users, only: [:update, :destroy], defaults: { format: 'json' } do
+      collection do
+        scope format: true, constraints: { format: 'json' } do
+          get :profile
+        end
+      end
+    end
   end
 
   get '/404', to: 'errors#not_found'
