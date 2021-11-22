@@ -232,7 +232,7 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     json = Oj.load(response.body)
     notification_count = Notification.inbox.where(user: @user).count
     assert_equal notification_count, json["pagination"]["total_notifications"]
-    assert_equal 0, json["pagination"]["page"]
+    assert_equal 1, json["pagination"]["page"]
     assert_equal (notification_count.to_f / 20).ceil, json["pagination"]["total_pages"]
     assert_equal [notification_count, 20].min, json["pagination"]["per_page"]
   end
@@ -259,7 +259,7 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     json = Oj.load(response.body)
     assert_equal 0, json["pagination"]["total_notifications"]
-    assert_equal 0, json["pagination"]["page"]
+    assert_equal 1, json["pagination"]["page"]
     assert_equal 0, json["pagination"]["total_pages"]
     assert_equal 0, json["pagination"]["per_page"]
   end

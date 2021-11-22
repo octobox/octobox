@@ -104,7 +104,7 @@ module NotificationsConcern
   end
 
   def page
-    @page ||= params[:page].to_i rescue 1
+    @page ||= page_param
   end
 
   def per_page
@@ -121,6 +121,11 @@ module NotificationsConcern
     cookies[:per_page] = per_page
 
     per_page
+  end
+
+  def page_param
+    pge = Integer(params[:page]) rescue 1
+    pge < 1 ? 1 : pge
   end
 
   def per_page_param
