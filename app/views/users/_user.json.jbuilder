@@ -1,9 +1,0 @@
-json.(
-  user,
-  :id,
-  :github_id,
-  :github_login,
-  :last_synced_at,
-  :created_at,
-  :updated_at
-)

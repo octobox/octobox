@@ -4,7 +4,9 @@ class UsersController < ApplicationController
 
   before_action :ensure_correct_user
 
-  def profile; end
+  def profile
+    render 'api/users/profile'
+  end
 
   def edit
     repo_counts = current_user.notifications.group(:repository_full_name).count

@@ -8,6 +8,10 @@ class NotificationsController < ApplicationController
 
   def index
     load_and_count_notifications
+    respond_to do |format|
+      format.html
+      format.json { render 'api/notifications/index' }
+    end
   end
 
   def show
@@ -82,6 +86,7 @@ class NotificationsController < ApplicationController
       url = Octobox::SubjectUrlParser.new(params[:url]).to_api_url
       @notification = current_user.notifications.where(subject_url: url).first
       render json: {} if @notification.nil?
+      render 'api/notifications/lookup'
     else
       render json: {}
     end

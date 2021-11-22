@@ -11,6 +11,6 @@ json.unread_repositories @unread_repositories
 
 json.notifications do
   json.array! @notifications do |notification|
-    json.partial! notification
+    json.partial! 'api/notifications/notification', notification: notification
   end
 end
