@@ -7,8 +7,8 @@ namespace :api_docs do
                    "--output-dir", "public/docs",
                    "--no-private"]
     doc.files = [
-      "app/controllers/notifications_controller.rb",
-      "app/controllers/users_controller.rb"
+      "app/controllers/api/notifications_controller.rb",
+      "app/controllers/api/users_controller.rb"
     ]
   end
 end
