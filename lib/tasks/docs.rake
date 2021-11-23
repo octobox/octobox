@@ -8,6 +8,7 @@ namespace :api_docs do
                    "--no-private"]
     doc.files = [
       "app/controllers/api/notifications_controller.rb",
+      "app/controllers/api/pinned_searches_controller.rb",
       "app/controllers/api/users_controller.rb"
     ]
   end

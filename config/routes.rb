@@ -38,6 +38,8 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :pinned_searches, defaults: { format: 'json' }
   end
 
   get '/404', to: 'errors#not_found'

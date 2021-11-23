@@ -36,6 +36,7 @@ class PinnedSearchesController < ApplicationController
       format.html { redirect_to settings_path }
       format.json do
         @pinned_searches = current_user.pinned_searches
+        render 'api/pinned_searches/index'
       end
     end
   end
@@ -45,6 +46,7 @@ class PinnedSearchesController < ApplicationController
       format.html { redirect_to settings_path }
       format.json do
         @pinned_search = current_user.pinned_searches.find(params[:id])
+        render 'api/pinned_searches/show'
       end
     end
   end
