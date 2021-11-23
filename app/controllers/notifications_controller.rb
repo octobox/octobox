@@ -85,8 +85,11 @@ class NotificationsController < ApplicationController
     if params[:url].present?
       url = Octobox::SubjectUrlParser.new(params[:url]).to_api_url
       @notification = current_user.notifications.where(subject_url: url).first
-      render json: {} if @notification.nil?
-      render 'api/notifications/lookup'
+      if @notification.nil?
+        render json: {}
+      else
+        render 'api/notifications/lookup'
+      end
     else
       render json: {}
     end
