@@ -21,7 +21,7 @@ require "net/http"
 require "uri"
 
 base_url = "https://<url>"
-url = URI.parse("#{base_url}/notifications.json")
+url = URI.parse("#{base_url}/api/notifications.json")
 
 req = Net::HTTP::Get.new(url.path)
 req.add_field("Authorization", "Bearer #{token}")
