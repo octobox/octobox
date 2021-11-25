@@ -2,33 +2,67 @@
   <div class="w-100 d-flex justify-content-between">
     <h1 class="pt-3">Octobox Browser Extension</h1>
   </div>
+  <p>Integrate Octobox directly into your GitHub workflow with this browser extension.</p>
+
+  <p>Directly manage and triage through your Octobox inbox from your GitHub issues and pull requests. You can star, archive and mute notifications without needing to leave the page and quickly jump to the next and previous notifications in your inbox with a single click.</p>
   <hr>
 
-  <div class="card mb-3" id='login-extension'>
-    <h5 class="card-header">
-      Enable extension access
-    </h5>
-    <div class="card-body">
-      <p>Login into the browser extension to give it access to your Octobox account</p>
+  <% if true || Octobox.io? %>
+    <div class="card mb-3 d-none" id='login-extension'>
+      <h5 class="card-header">
+        Enable extension access
+      </h5>
+      <div class="card-body">
+        <p>Login into the browser extension to give it access to your Octobox account</p>
 
-      <%= link_to '#', class: 'btn btn-primary', onclick: "document.dispatchEvent(new CustomEvent('octobox:enable', {detail: {api_token:'#{current_user.api_token}', return_to: '#{@return_to}'}}))" do %>
-        <span class='mr-1'>Enable extension</span>
-        <%= octicon 'plug', height: 22 %>
-      <% end %>
+        <%= link_to '#', class: 'btn btn-primary', onclick: "document.dispatchEvent(new CustomEvent('octobox:enable', {detail: {api_token:'#{current_user.api_token}', return_to: '#{@return_to}'}}))" do %>
+          <span class='mr-1'>Enable extension</span>
+          <%= octicon 'plug', height: 22 %>
+        <% end %>
+      </div>
     </div>
-  </div>
-  <!-- TODO toggle enable/install depending on if you have the extension installed -->
-  <!-- TODO handle case where you have the extension installed and enabled -->
-  <!-- TODO this only works on octobox.io at the moment -->
-  <div class="card mb-3" id='install-extension'>
-    <h5 class="card-header">
-      Install Extension
-    </h5>
-    <div class="card-body">
-      <p>Install the browser extension</p>
-      <p>chrome store link</p>
-      <p>firefox store link</p>
-      <p>github link</p>
+
+    <div class="card mb-3 d-none" id='installed-extension'>
+      <h5 class="card-header">
+        Extension installed and authorized
+      </h5>
+      <div class="card-body">
+        <p>You're all installed and ready to go!</p>
+
+        <%= link_to @return_to, class:'btn btn-primary' do %>
+        <span class='mr-1'>Go to GitHub</span>
+        <%= octicon 'mark-github', height: 22 %>
+        <% end %>
+      </div>
     </div>
-  </div>
+
+    <div class="card mb-3" id='install-extension'>
+      <h5 class="card-header">
+        Install Extension
+      </h5>
+      <div class="card-body">
+        <p>Install the Octobox Browser Extension from:</p>
+        <ul>
+          <li>
+            <%= link_to 'The Google Chrome Extension Store', 'https://chrome.google.com/webstore/detail/octobox/dpbajpnhgagfneijghelgldegjblinkc' %>
+          </li>
+          <li>
+            <%= link_to 'The Firefox Extension Store', 'https://addons.mozilla.org/addon/octobox/' %>
+          </li>
+        </ul>
+        or manually build it from source on GitHub: <%= link_to 'github.com/octobox/extension','https://github.com/octobox/extension' %>
+      </div>
+    </div>
+  <% else %>
+    <div class="card mb-3">
+      <h5 class="card-header">
+        It's not quite ready yet
+      </h5>
+      <div class="card-body">
+        <p>The browser extension currently only works on Octobox.io and GitHub.com</p>
+
+        <p>Subscribe and comment this issue on GitHub for support of other octobox instances: <%= link_to 'github.com/octobox/extension/issues/2', 'https://github.com/octobox/extension/issues/2' %> </p>
+      </div>
+    </div>
+  <% end %>
 </div>
