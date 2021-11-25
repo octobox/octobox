@@ -1,0 +1,34 @@
+<div class="container user-settings">
+  <div class="w-100 d-flex justify-content-between">
+    <h1 class="pt-3">Octobox Browser Extension</h1>
+  </div>
+  <hr>
+
+  <div class="card mb-3" id='login-extension'>
+    <h5 class="card-header">
+      Enable extension access
+    </h5>
+    <div class="card-body">
+      <p>Login into the browser extension to give it access to your Octobox account</p>
+
+      <%= link_to '#', class: 'btn btn-primary', onclick: "document.dispatchEvent(new CustomEvent('octobox:enable', {detail: {api_token:'#{current_user.api_token}', return_to: '#{@return_to}'}}))" do %>
+        <span class='mr-1'>Enable extension</span>
+        <%= octicon 'plug', height: 22 %>
+      <% end %>
+    </div>
+  </div>
+  <!-- TODO toggle enable/install depending on if you have the extension installed -->
+  <!-- TODO handle case where you have the extension installed and enabled -->
+  <!-- TODO this only works on octobox.io at the moment -->
+  <div class="card mb-3" id='install-extension'>
+    <h5 class="card-header">
+      Install Extension
+    </h5>
+    <div class="card-body">
+      <p>Install the browser extension</p>
+      <p>chrome store link</p>
+      <p>firefox store link</p>
+      <p>github link</p>
+    </div>
+  </div>
+</div>

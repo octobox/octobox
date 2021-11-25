@@ -8,6 +8,10 @@ class UsersController < ApplicationController
     render 'api/users/profile'
   end
 
+  def extension
+    @return_to = params[:return_to].presence || Octobox.config.github_domain
+  end
+
   def edit
     repo_counts = current_user.notifications.group(:repository_full_name).count
     @total = repo_counts.sum(&:last)
