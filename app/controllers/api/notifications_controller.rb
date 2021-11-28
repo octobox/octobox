@@ -256,7 +256,12 @@ class Api::NotificationsController < Api::ApplicationController
 
   private
 
-  def per_page_cookie
-    nil
+  def restrict_per_page
+    per_page = per_page_param || DEFAULT_PER_PAGE
+
+    return DEFAULT_PER_PAGE if per_page < 1
+    raise ActiveRecord::RecordNotFound if per_page > 100
+
+    per_page
   end
 end
