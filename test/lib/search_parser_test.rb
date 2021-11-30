@@ -96,4 +96,16 @@ class SearchParserTest < ActiveSupport::TestCase
     search = SearchParser.new query
     assert_equal search[:'-repo'], ['octobox/octobox','foo/bar']
   end
+
+  test 'allows : within quotes' do
+    query = 'label: "kind: bug"'
+    search = SearchParser.new query
+    assert_equal ['kind: bug'], search[:'label']
+  end
+
+  test 'allows - within quotes' do
+    query = 'label:"created-by:Next.js team"'
+    search = SearchParser.new query
+    assert_equal ['created-by:Next.js team'], search[:'label']
+  end
 end
