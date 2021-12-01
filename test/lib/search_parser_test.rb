@@ -73,14 +73,14 @@ class SearchParserTest < ActiveSupport::TestCase
   end
 
   test 'has multiple operators with \' and "' do
-    query = 'operator: \'123 is " lol\' otheroperator: \'12\' operator: "other \' value"'
+    query = 'operator: \'123 is lol\' otheroperator: \'12\' operator: "other value"'
     search = SearchParser.new query
-    assert_equal search[:operator], ["123 is \" lol", "other ' value"]
+    assert_equal search[:operator], ["123 is lol", "other value"]
   end
 
   test 'has multiple operators with \' and " return as array' do
-    query = 'operator: \'123 is " lol\' otheroperator: \'12\' operator: "other \' value"'
-    values = ['123 is " lol', 'other \' value']
+    query = 'operator: \'123 is lol\' otheroperator: \'12\' operator: "other value"'
+    values = ['123 is lol', 'other value']
     search = SearchParser.new query
     assert_equal search[:operator], values
   end

@@ -8,32 +8,24 @@ class SearchParser
     query = query.to_s
     @operators = {}
 
-    groups = query.split(/(\-?\w+)(:)/).compact_blank.in_groups_of(3)
+    ss = StringScanner.new(query)
 
-    groups.each_with_index do |group, i|
-      if group.length == 3 && group[1] == ':'
-        key = group[0].downcase.to_sym
-        value = group[2].strip
+    loop do
+      # scan for key
+      ss.scan_until(/([^'"]?\-?\w+):\s?/)
+      if ss.captures
+        key = ss.captures[0].strip.to_sym
         @operators[key] ||= []
 
-        # if last group, split last item in group and add extras to free text
-        if i == groups.length - 1
-          if ["'", '"'].include?(value[0])
-            parts = value.split(value[0])
-            value = parts[1]
-            @freetext = parts[2].to_s.strip
-          else
-            parts = value.split(' ')
-            value = parts[0]
-            @freetext = parts.drop(1).to_a.join(' ').strip
-          end
-        end
-
-        value.split(',').each{ |v| @operators[key] << v }
+        # scan for value
+        value = ss.scan(/(("|')[^"']+('|")|(\+))|[^"'\s]+/)
+        value.split(',').each{ |v| @operators[key] << v.strip }
       else
-        @freetext = group.join(' ').strip
+        break
       end
     end
+
+    @freetext = ss.rest.strip
   end
 
   def [](key)
