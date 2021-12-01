@@ -104,7 +104,7 @@ class SearchParserTest < ActiveSupport::TestCase
   end
 
   test 'allows - within quotes' do
-    query = 'label:"created-by:Next.js team"'
+    query = 'label:"created-by: Next.js team"'
     search = SearchParser.new query
     assert_equal ['created-by: Next.js team'], search[:'label']
   end
