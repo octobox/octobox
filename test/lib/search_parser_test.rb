@@ -73,14 +73,14 @@ class SearchParserTest < ActiveSupport::TestCase
   end
 
   test 'has multiple operators with \' and "' do
-    query = 'operator: \'123 is " lol\' otheroperator: \'12\' operator: "other \' value"'
+    query = 'operator: \'123 is lol\' otheroperator: \'12\' operator: "other value"'
     search = SearchParser.new query
-    assert_equal search[:operator], ["123 is \" lol", "other ' value"]
+    assert_equal search[:operator], ["123 is lol", "other value"]
   end
 
   test 'has multiple operators with \' and " return as array' do
-    query = 'operator: \'123 is " lol\' otheroperator: \'12\' operator: "other \' value"'
-    values = ['123 is " lol', 'other \' value']
+    query = 'operator: \'123 is lol\' otheroperator: \'12\' operator: "other value"'
+    values = ['123 is lol', 'other value']
     search = SearchParser.new query
     assert_equal search[:operator], values
   end
@@ -95,5 +95,17 @@ class SearchParserTest < ActiveSupport::TestCase
     query = '-repo:octobox/octobox,foo/bar'
     search = SearchParser.new query
     assert_equal search[:'-repo'], ['octobox/octobox','foo/bar']
+  end
+
+  test 'allows : within quotes' do
+    query = 'label: "kind: bug"'
+    search = SearchParser.new query
+    assert_equal ['kind: bug'], search[:'label']
+  end
+
+  test 'allows - within quotes' do
+    query = 'label:"created-by: Next.js team"'
+    search = SearchParser.new query
+    assert_equal ['created-by: Next.js team'], search[:'label']
   end
 end
