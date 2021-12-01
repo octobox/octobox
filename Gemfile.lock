@@ -84,7 +84,7 @@ GEM
     brpoplpush-redis_script (0.1.2)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       redis (>= 1.0, <= 5.0)
-    bugsnag (6.24.0)
+    bugsnag (6.24.1)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (6.1.5)
