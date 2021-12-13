@@ -12,7 +12,7 @@ module NotificationsConcern
     check_out_of_bounds(scope)
 
 
-    @pagy, @notifications = pagy(scope, items: per_page, size: [1,2,2,1])
+    @pagy, @notifications = pagy(scope, items: per_page, page: page_param, size: [1,2,2,1])
     @total = @pagy.count
 
     @cur_selected = [per_page, @total].min
@@ -115,7 +115,7 @@ module NotificationsConcern
 
   def restrict_per_page
     per_page = per_page_param || per_page_cookie || DEFAULT_PER_PAGE
-
+    
     return DEFAULT_PER_PAGE if per_page < 1
     raise ActiveRecord::RecordNotFound if per_page > 100
     cookies[:per_page] = per_page
