@@ -1108,4 +1108,12 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal '{}', response.body
   end
+
+  test 'gracefully handles page number 0' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+
+    get '/?page=0'
+    assert_response :success
+  end
 end
