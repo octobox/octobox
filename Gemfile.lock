@@ -173,7 +173,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
-    minitest (5.14.4)
+    minitest (5.15.0)
     mocha (1.13.0)
     msgpack (1.4.2)
     multi_json (1.15.0)
