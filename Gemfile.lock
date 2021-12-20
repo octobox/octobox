@@ -87,9 +87,6 @@ GEM
     bugsnag (6.24.1)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
-    bullet (6.1.5)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.11)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
     coderay (1.1.3)
@@ -336,7 +333,6 @@ GEM
       concurrent-ruby (~> 1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
-    uniform_notifier (1.14.2)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -368,7 +364,6 @@ DEPENDENCIES
   bootstrap (= 4.6.0)
   brakeman
   bugsnag
-  bullet
   commonmarker
   dotenv-rails
   factory_bot
