@@ -57,7 +57,6 @@ group :development do
   gem 'listen'
   gem 'spring'
   gem 'brakeman'
-  gem 'bullet'
   gem 'binding_of_caller'
   gem 'better_errors'
 end
