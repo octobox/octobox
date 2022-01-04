@@ -36,6 +36,7 @@ gem 'commonmarker'
 gem 'pg', '1.2.3'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
+gem 'psych', '~> 3.0'
 
 group :development, :test do
   gem 'dotenv-rails'
