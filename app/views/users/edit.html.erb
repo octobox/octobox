@@ -291,7 +291,7 @@
     <div class="card-body">
       <p>
         <%= pluralize @total, 'notification' %> <%= t('users.notices.synced_notications') %>
-        <span title='Signed up on <%= current_user.created_at.to_s(:long) %> UTC'>
+        <span title='Signed up on <%= current_user.created_at.to_formatted_s(:long) %> UTC'>
           <%= pluralize(((Time.current - current_user.created_at)/ 1.day).round, 'day') %> ago.
         </span>
       </p>
