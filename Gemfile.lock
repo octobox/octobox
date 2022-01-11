@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/jasonrudolph/attr_encrypted.git
+  revision: 8e48539299245901be40b95e5ccbab68ec772d3c
+  branch: rails-7
+  specs:
+    attr_encrypted (3.1.0)
+      encryptor (~> 3.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -69,8 +77,6 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    attr_encrypted (3.1.0)
-      encryptor (~> 3.0.0)
     autoprefixer-rails (10.4.0.0)
       execjs (~> 2)
     better_errors (2.9.1)
@@ -387,7 +393,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_record_query_trace
-  attr_encrypted
+  attr_encrypted!
   better_errors
   binding_of_caller
   bootsnap
