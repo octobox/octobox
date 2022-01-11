@@ -9,11 +9,11 @@
       <div class="card shadow-sm mb-3">
         <div class="card-content">
           <div class="card-body">
-            <div class="media d-flex">
-              <div class="align-self-center">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
                 <%= octicon 'organization', height: 50 %>
               </div>
-              <div class="media-body text-right">
+              <div class="flex-grow-1 ms-3" text-right">
                 <h3>
                   <%= number_to_human User.fast_total %>
                 </h3>
@@ -29,11 +29,11 @@
       <div class="card shadow-sm  mb-3">
         <div class="card-content">
           <div class="card-body">
-            <div class="media d-flex">
-              <div class="align-self-center">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
                 <%= octicon 'inbox', height: 50 %>
               </div>
-              <div class="media-body text-right">
+              <div class="flex-grow-1 ms-3" text-right">
                 <h3>
                   <%= number_to_human Notification.fast_total %>
                 </h3>
@@ -49,11 +49,11 @@
       <div class="card shadow-sm  mb-3">
         <div class="card-content">
           <div class="card-body">
-            <div class="media d-flex">
-              <div class="align-self-center">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
                 <%= octicon 'git-pull-request', height: 50 %>
               </div>
-              <div class="media-body text-right">
+              <div class="flex-grow-1 ms-3" text-right">
                 <h3>
                   <%= number_to_human Subject.fast_total %>
                 </h3>
@@ -69,11 +69,11 @@
       <div class="card shadow-sm  mb-3">
         <div class="card-content">
           <div class="card-body">
-            <div class="media d-flex">
-              <div class="align-self-center">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
                 <%= octicon 'repo', height: 50 %>
               </div>
-              <div class="media-body text-right">
+              <div class="flex-grow-1 ms-3" text-right">
                 <h3>
                   <%= number_to_human Repository.fast_total %>
                 </h3>
@@ -89,11 +89,11 @@
       <div class="card shadow-sm  mb-3">
         <div class="card-content">
           <div class="card-body">
-            <div class="media d-flex">
-              <div class="align-self-center">
+            <div class="d-flex">
+              <div class="flex-shrink-0">
                 <%= octicon 'search', height: 50 %>
               </div>
-              <div class="media-body text-right">
+              <div class="flex-grow-1 ms-3" text-right">
                 <h3>
                   <%= number_to_human PinnedSearch.count %>
                 </h3>
@@ -110,11 +110,11 @@
         <div class="card shadow-sm  mb-3">
           <div class="card-content">
             <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center">
+              <div class="d-flex">
+                <div class="flex-shrink-0">
                   <%= octicon 'comment-discussion', height: 50 %>
                 </div>
-                <div class="media-body text-right">
+                <div class="flex-grow-1 ms-3" text-right">
                   <h3>
                     <%= number_to_human Comment.fast_total %>
                   </h3>
@@ -132,11 +132,11 @@
         <div class="card shadow-sm  mb-3">
           <div class="card-content">
             <div class="card-body">
-              <div class="media d-flex">
-                <div class="align-self-center">
+              <div class="d-flex">
+                <div class="flex-shrink-0">
                   <%= octicon 'briefcase', height: 50 %>
                 </div>
-                <div class="media-body text-right">
+                <div class="flex-grow-1 ms-3" text-right">
                   <h3>
                     <%= number_to_human AppInstallation.count %>
                   </h3>
@@ -153,11 +153,11 @@
           <div class="card shadow-sm  mb-3">
             <div class="card-content">
               <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
+                <div class="d-flex">
+                  <div class="flex-shrink-0">
                     <%= octicon 'hubot', height: 50 %>
                   </div>
-                  <div class="media-body text-right">
+                  <div class="flex-grow-1 ms-3" text-right">
                     <h3>
                       <%= number_to_human SubscriptionPurchase.active.count %>
                     </h3>
@@ -173,11 +173,11 @@
           <div class="card shadow-sm  mb-3">
             <div class="card-content">
               <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
+                <div class="d-flex">
+                  <div class="flex-shrink-0">
                     <%= octicon 'gift', height: 50 %>
                   </div>
-                  <div class="media-body text-right">
+                  <div class="flex-grow-1 ms-3" text-right">
                     <h3 title='<%= SubscriptionPurchase.active.free_trial.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
                       <%= number_to_human SubscriptionPurchase.active.free_trial.count %>
                     </h3>
@@ -193,11 +193,11 @@
           <div class="card shadow-sm  mb-3">
             <div class="card-content">
               <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
+                <div class="d-flex">
+                  <div class="flex-shrink-0">
                     <%= octicon 'jersey', height: 50, class: 'success' %>
                   </div>
-                  <div class="media-body text-right">
+                  <div class="flex-grow-1 ms-3" text-right">
                     <h3 title='<%= SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
                       <%= number_to_human SubscriptionPurchase.active.not_free_trial.paid.count %>
                     </h3>
@@ -213,11 +213,11 @@
           <div class="card shadow-sm  mb-3">
             <div class="card-content">
               <div class="card-body">
-                <div class="media d-flex">
-                  <div class="align-self-center">
+                <div class="d-flex">
+                  <div class="flex-shrink-0">
                     <%= octicon 'package', height: 50 %>
                   </div>
-                  <div class="media-body text-right">
+                  <div class="flex-grow-1 ms-3" text-right">
                     <h3 title='ARR like a Pirate'>
                       $<%= number_to_human SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.subscription_plan.monthly_price_in_cents}.reduce(:+)/100 %>
                     </h3>

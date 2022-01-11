@@ -27,9 +27,9 @@ svg{
   & svg{
     fill: color-yiq($background);
   }
-  @include hover {
-    fill: color-yiq($hover-background);
-  }
+  // @include hover {
+  //   fill: color-yiq($hover-background);
+  // }
   &.disabled,
   &.disabled svg,
   &:disabled,

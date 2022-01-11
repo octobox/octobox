@@ -12,8 +12,8 @@ body {
 
 .turbolinks-progress-bar {
   height: 2px !important;
-  background-color: theme-color("primary") !important;
-  box-shadow: 0 0 10px rgba(theme-color("primary"), 0.7) !important;
+  background-color: map-get($theme-colors, 'primary') !important;
+  box-shadow: 0 0 10px rgba(map-get($theme-colors, 'primary'), 0.7) !important;
 }
 
 .flex-header {
@@ -132,7 +132,7 @@ body {
   }
 }
 
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(sm) {
   @include responsive;
   .flex-main.show-thread{
     display:none;

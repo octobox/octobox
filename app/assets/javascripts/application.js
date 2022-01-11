@@ -3,13 +3,7 @@
 //= require turbolinks
 //= require local-time
 //= require popper
-//= require bootstrap/util
-//= require bootstrap/collapse
-//= require bootstrap/alert
-//= require bootstrap/tooltip
-//= require bootstrap/dropdown
-//= require bootstrap/modal
-//= require bootstrap/popover
+//= require bootstrap
 //= require_tree .
 
 var db;
