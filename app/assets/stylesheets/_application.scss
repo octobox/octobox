@@ -86,8 +86,9 @@
 .select-all {
   padding-left: 6px;
   margin-right: 14px;
-  input {
+  .form-check-input {
     position: relative;
+    margin: 5px;
   }
   label {
     left: 10px;

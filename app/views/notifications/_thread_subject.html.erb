@@ -19,7 +19,7 @@ on <%= link_to notification.repository_full_name, notification.repo_url, class: 
 
 <div class='d-flex justify-content-between mt-2'>
   <div class='labels'>
-    <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "badge badge-#{reason_label(notification.reason)}" %>
+    <%= link_to notification.reason.humanize, root_path(filtered_params(reason: notification.reason)), class: "badge bg-#{reason_label(notification.reason)}" %>
     <% if notification.subject %>
       <% notification.subject.labels.each do |label| %>
         <%= link_to emojify(label.name), root_path(filtered_params(label: label.name)), class: "badge", style: "background-color: ##{label.color}; color: #{label.text_color}" %>

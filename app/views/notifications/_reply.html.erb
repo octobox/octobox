@@ -2,7 +2,7 @@
 	<div class='card-header'>
 		<%= image_tag current_user.github_avatar_url + "?size=20", width: 20, class: 'img-rounded navbar-avatar', alt: '' %>
 	</div>
-	<div class='card-body justify-content-right'>
+	<div class='card-body justify-content-end'>
 		<%= text_area(:comment, :body, class: 'form-control', placeholder: 'Leave a comment') %>
 		<%= submit_tag("Comment", class: 'btn mt-2 ms-2 btn-success float-end') %>
 		<%= link_to "View on GitHub", @notification.subject.html_url, class:"btn btn-light mt-2 float-end", target: "_blank"%>

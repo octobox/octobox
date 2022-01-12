@@ -65,15 +65,26 @@ $notification-items: (
   white-space: nowrap;
 }
 
-// .custom-checkbox {
-//   input[type=checkbox]:not(:checked) + label {
-//     &::before, &::after {
-//       background-color: $body-bg;
-//       border: 1px solid #aaa;
-//       border-radius: .25rem;
-//     }
-//   }
-// }
+a{
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: underline;
+}
+
+.form-check {
+  .form-check-input{
+    margin-left: -13px;
+    margin-top: 6px;
+  }
+  input[type=checkbox]:not(:checked) + label {
+    &::before, &::after {
+      background-color: $body-bg;
+      border: 1px solid #aaa;
+      border-radius: .25rem;
+    }
+  }
+}
 
 @mixin add-borders{
   .table-notifications tr td:first-child {
@@ -245,6 +256,7 @@ $notification-items: (
       .link {
         word-break: break-all;
         overflow-wrap: break-word;
+        text-decoration: none;
       }
       &:first-child .badge{
         display: block;

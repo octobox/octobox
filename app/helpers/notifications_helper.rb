@@ -261,9 +261,9 @@ module NotificationsHelper
       link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
         yield
         if active && not_repo_in_active_org(param)
-          concat content_tag(:span, octicon('x', :height => 16), class: 'badge badge-light')
+          concat content_tag(:span, octicon('x', :height => 16), class: 'badge bg-light text-dark')
         elsif count.present?
-          concat content_tag(:span, count, class: 'badge badge-light')
+          concat content_tag(:span, count, class: 'badge bg-light text-dark')
         end
       end
     end
@@ -309,7 +309,7 @@ module NotificationsHelper
     return unless status.present?
     content_tag(:span,
       octicon(NOTIFICATION_STATUS_OCTICON[status], height: 24, class: status),
-      class: "badge badge-light badge-pr #{status}",
+      class: "badge bg-light text-dark bg-pr #{status}",
       title: status.humanize,
       data: {toggle: 'tooltip'}
     )
@@ -319,7 +319,7 @@ module NotificationsHelper
     return unless status.present?
     content_tag(:span,
       octicon(COMMENT_STATUS_OCTICON[status], height: 24, class: COMMENT_STATUS[status]),
-      class: "badge badge-light #{COMMENT_STATUS[status]}",
+      class: "badge bg-light text-dark #{COMMENT_STATUS[status]}",
       title: status.humanize,
       data: {toggle: 'tooltip'}
     )

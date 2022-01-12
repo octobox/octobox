@@ -13,7 +13,9 @@
     }
     .nav-link{
       border-radius: 0;
+      text-decoration: none;
     }
+    
     &.type-RepositoryVulnerabilityAlert{
       background-color: $red;
       a{

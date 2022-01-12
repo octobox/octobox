@@ -6,7 +6,7 @@
           <%= @per_page %>
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-right text-end">
+        <ul class="dropdown-menu dropdown-menu-end text-end">
           <% %w(10 20 40 60 80 100).map do |pagination_interval| %>
             <%= link_to pagination_interval, root_path(filtered_params(per_page: pagination_interval.to_i)), class: "dropdown-item #{'active' if @per_page == pagination_interval.to_i}" %>
           <% end %>
@@ -20,9 +20,9 @@
       <%= octicon 'three-bars', :height => 16 %>
     </button>
     <% if @notifications.to_a.any? %>
-      <div class="custom-control custom-checkbox select-all d-inline-block">
-        <input id="select_all" type="checkbox" autocomplete="off" class='custom-control-input js-select_all' aria-label='Select All'>
-        <%= label_tag "select_all", '', class: "custom-control-label" %>
+      <div class="form-check select-all d-inline-block">
+        <input id="select_all" type="checkbox" autocomplete="off" class='form-check-input js-select_all' aria-label='Select All'>
+        <%= label_tag "select_all", '', class: "form-check-label" %>
       </div>
       <%= select_all_button(@cur_selected, @total) %>
     <% end %>

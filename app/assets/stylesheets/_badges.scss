@@ -1,7 +1,7 @@
-.badge-success, .badge-dark, .badge-danger{
+.bg-success, .bg-dark, .bg-danger{
   cursor: default;
 }
-.badge-subscribed, .badge-merged{
+.bg-subscribed, .bg-merged{
   background-color: $label-subscribed-color;
   color: $label-subscribed-text-color;
   &[href]:hover, &[href]:focus {
@@ -11,7 +11,7 @@
   }
 }
 
-.badge-team_mention{
+.bg-team_mention{
   background-color: $label-team_mention-color;
   color: $label-team_mention-text-color;
   &[href]:hover, &[href]:focus {
@@ -21,7 +21,7 @@
   }
 }
 
-.badge-security_alert{
+.bg-security_alert{
   background-color: $label-security_alert-color;
   color: $label-security_alert-text-color;
   &[href]:hover, &[href]:focus {
@@ -31,7 +31,7 @@
   }
 }
 
-.badge-pr {
+.bg-pr {
   background-color: transparent;
   &.success {
     .octicon {

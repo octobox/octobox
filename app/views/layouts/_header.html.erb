@@ -54,7 +54,7 @@
             <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar', alt: '' %>
           </span>
         </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
           <%= link_to "#{Octobox.config.github_domain}", class: 'dropdown-item', target: "_blank", rel: "noopener" do %>
             <%= octicon 'mark-github', height: 16, class: 'text-muted' %>
             GitHub Dashboard
