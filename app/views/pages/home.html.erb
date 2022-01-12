@@ -1,10 +1,10 @@
 <div class='not-a-nav sticky-top'>
-  <%= link_to documentation_path, class: 'btn btn-dark m-3 float-left' do %>
-    <span class='mr-1'>More Info</span>
+  <%= link_to documentation_path, class: 'btn btn-dark m-3 float-start' do %>
+    <span class='me-1'>More Info</span>
     <%= octicon 'question', height: 22 %>
   <% end %>
-  <%= link_to '/auth/github', class: 'btn btn-dark m-3 float-right', method: :post do %>
-    <span class='mr-1'>Sign in</span>
+  <%= link_to '/auth/github', class: 'btn btn-dark m-3 float-end', method: :post do %>
+    <span class='me-1'>Sign in</span>
     <%= octicon 'mark-github', height: 22 %>
   <% end %>
 </div>
@@ -12,7 +12,7 @@
   <h1 class="text-center"><%= svg('infinitacle-round') %> <span class='align-middle'>Octobox</span></h1>
   <h3 class='text-center pt-3'>Untangle your GitHub Notifications</h3>
   <% if Octobox.io? %>
-    <h5 class='text-center font-weight-light'>
+    <h5 class='text-center fw-light'>
         <%= number_to_human Notification.fast_total, precision: 2 %> notifications managed, and counting &#8230
     </h5>
   <% end %>
@@ -29,7 +29,7 @@
   <div id='dont-lose-track' class="card shadow-sm mb-3">
     <div class="card-body">
       <div class="d-flex">
-        <div class="flex-shrink-0 mr-4">
+        <div class="flex-shrink-0 me-4">
           <%= octicon 'inbox', height: 50 %>
         </div>
         <div class="flex-grow-1 ms-3">
@@ -42,7 +42,7 @@
   <div id='filter-all-the-things' class="card shadow-sm mb-3">
     <div class="card-body">
       <div class="d-flex">
-        <div class="flex-shrink-0 mr-4">
+        <div class="flex-shrink-0 me-4">
           <%= octicon 'search', height: 50 %>
         </div>
         <div class="flex-grow-1 ms-3">
@@ -55,7 +55,7 @@
   <div id='enhanced-notifications' class="card shadow-sm mb-3">
     <div class="card-body">
       <div class="d-flex">
-        <div class="flex-shrink-0 mr-4">
+        <div class="flex-shrink-0 me-4">
           <%= octicon 'sync', height: 50 %>
         </div>
         <div class="flex-grow-1 ms-3">
@@ -79,7 +79,7 @@
 
     <div class='text-center'>
       <%= link_to Octobox.config.app_url, class: 'btn btn-lg btn-dark' do %>
-        <span class='mr-1'>Install the GitHub App</span>
+        <span class='me-1'>Install the GitHub App</span>
         <%= octicon 'briefcase', height: 22 %>
       <% end %>
     </div>
@@ -98,7 +98,7 @@
     <div class="row mt-4">
       <div class="col">
         <% used_by_orgs.each do |org| %>
-          <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block mr-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
+          <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block me-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
         <% end %>
       </div>
     </div>

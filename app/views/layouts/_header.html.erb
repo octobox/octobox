@@ -4,11 +4,11 @@
   </a>
   <div class="position-relative dropdown">
     <div>
-      <button class="btn btn-dark navbar-toggler search-toggler" type="button" data-toggle="collapse" data-target="#search" aria-controls="search" aria-expanded="false" aria-label="Toggle search">
+      <button class="btn btn-dark navbar-toggler search-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#search" aria-controls="search" aria-expanded="false" aria-label="Toggle search">
         <span class="sr-only">Toggle search</span>
         <%= octicon 'search', height: 16, class: 'text-muted' %>
       </button>
-      <button id='navbarnav_toggle' class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button id='navbarnav_toggle' class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="sr-only">Toggle navigation</span>
         <% if current_user %>
           <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, height:32, class: 'img-rounded navbar-avatar', alt: '' %>
@@ -23,7 +23,7 @@
       <div class="search-sugguestion-section d-inline-flex justify-content-between align-items-center w-100">
         <div class="search-input-box position-relative d-flex align-items-center w-100">
           <%= text_field_tag 'q', @search.to_query, placeholder: 'Search...', class: 'custom-input form-control', id: 'search-box', 'aria-label' => 'Search', :autocomplete => "off" %>
-          <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-toggle="modal" data-target="#search-help">
+          <div class="btn btn-sm btn-link search-help d-none d-md-block" title='Search Cheat Sheet' data-bs-toggle="modal" data-bs-target="#search-help">
             <%= octicon 'question', :height => 16 %>
           </div>
           <div class="search-sugguestion-section d-inline-flex justify-content-between align-items-center">
@@ -39,7 +39,7 @@
       <li class="nav-item nav-link d-none d-md-block">
         <% if Octobox.io? && !current_user.github_app_authorized? %>
           <a href="<%= Octobox.config.app_url %>" class='btn btn-sm btn-outline-light'>
-            <%= octicon 'briefcase', height: 16, class: 'mr-1' %>
+            <%= octicon 'briefcase', height: 16, class: 'me-1' %>
             Install the GitHub App
           </a>
         <% else %>
@@ -49,7 +49,7 @@
         <% end %>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle d-none d-md-block" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle d-none d-md-block" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="navbar-avatar-fixed-width">
             <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar', alt: '' %>
           </span>

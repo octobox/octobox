@@ -1,22 +1,22 @@
 <div class="card card-notifications justify-content-between">
   <div class="card-header sticky-top">
     <% if @notifications.to_a.any? %>
-      <div class="per-page btn-group float-right d-block" data-toggle="tooltip" data-placement="left" title="Notifications per page">
-        <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <div class="per-page btn-group float-end d-block" data-bs-toggle="tooltip" data-bs-placement="left" title="Notifications per page">
+        <button type="button" class="btn btn-sm btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <%= @per_page %>
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-right text-right">
+        <ul class="dropdown-menu dropdown-menu-right text-end">
           <% %w(10 20 40 60 80 100).map do |pagination_interval| %>
             <%= link_to pagination_interval, root_path(filtered_params(per_page: pagination_interval.to_i)), class: "dropdown-item #{'active' if @per_page == pagination_interval.to_i}" %>
           <% end %>
         </ul>
       </div>
     <% end %>
-    <div class="btn btn-sm btn-link help float-right d-none d-md-inline-block" data-toggle="modal" data-target="#help-box">
+    <div class="btn btn-sm btn-link help float-end d-none d-md-inline-block" data-bs-toggle="modal" data-bs-target="#help-box">
       <%= svg('keyboard') %>
     </div>
-    <button id='sidebar_toggle' type="button" class="d-inline-block d-lg-none btn btn-sm btn-outline-dark" data-toggle="offcanvas" aria-label='Toggle sidebar'>
+    <button id='sidebar_toggle' type="button" class="d-inline-block d-lg-none btn btn-sm btn-outline-dark" data-bs-toggle="offcanvas" aria-label='Toggle sidebar'>
       <%= octicon 'three-bars', :height => 16 %>
     </button>
     <% if @notifications.to_a.any? %>
@@ -26,7 +26,7 @@
       </div>
       <%= select_all_button(@cur_selected, @total) %>
     <% end %>
-    <%= link_to sync_notifications_path(filters), class: "btn btn-sm btn-outline-dark js-sync #{'js-async' if Octobox.background_jobs_enabled?}", 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'data-turbolinks' => false, 'data-animation' => 'false', 'data-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync' do %>
+    <%= link_to sync_notifications_path(filters), class: "btn btn-sm btn-outline-dark js-sync #{'js-async' if Octobox.background_jobs_enabled?}", 'data-bs-toggle' => 'tooltip', 'data-bs-placement' => 'bottom', 'data-turbolinks' => false, 'data-bs-animation' => 'false', 'data-bs-position' => 'bottom', 'title' => 'Sync', 'aria-label' => 'Sync' do %>
       <%= octicon 'sync', height: 16, class: "#{'spinning' if initial_sync? || current_user.syncing?}" %>
     <% end %>
     <%= archive_selected_button unless archive_selected? %>
@@ -62,7 +62,7 @@
         <p>
           <%= link_to sync_notifications_path(filters), method: :post, class: 'btn btn-outline-secondary sync' do %>
             <%= octicon 'sync', height: 18 %>
-            <span class='ml-1'>Refresh</span>
+            <span class='ms-1'>Refresh</span>
           <% end %>
         </p>
         <% unless current_user.notifications.any? %>

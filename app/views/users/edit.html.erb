@@ -30,7 +30,7 @@
                 <%= pinned_search.query %>
               </td>
               <td>
-                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: t('crud_actions.edit'), data: {toggle: 'tooltip'}, class: 'mr-2' %>
+                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: t('crud_actions.edit'), data: {toggle: 'tooltip'}, class: 'me-2' %>
                 <%= link_to octicon('trash'), pinned_search_path(pinned_search), title: t('crud_actions.delete'), data: {toggle: 'tooltip'}, method: :delete %>
               </td>
             </tr>
@@ -92,7 +92,7 @@
     <% end %>
 
     <div class='d-flex flex-column flex-md-row'>
-      <div class="card w-100 mb-3 <%= 'mr-3' if Octobox.config.subjects_enabled? && Octobox.config.include_comments %>">
+      <div class="card w-100 mb-3 <%= 'me-3' if Octobox.config.subjects_enabled? && Octobox.config.include_comments %>">
         <h5 class="card-header">
           <%= t('users.titles.theme') %>
         </h5>
@@ -212,7 +212,7 @@
                 <% next if app_installation.account_type == 'User' && app_installation.account_login != current_user.github_login %>
                 <tr>
                   <td class="align-middle">
-                    <%= image_tag app_installation.github_avatar_url+ "?size=50", width: 25, height: 25, class: 'pull-left mr-1' %>
+                    <%= image_tag app_installation.github_avatar_url+ "?size=50", width: 25, height: 25, class: 'pull-left me-1' %>
                     <%= app_installation.account_login %>
                   </td>
                   <td class="align-middle">

@@ -1,9 +1,9 @@
 <h2 class='text-capitalize'>
   <%= notification.subject_title %>
-  <span class='text-muted font-weight-light'> #<%= notification.subject_number %> </span>
+  <span class='text-muted fw-light'> #<%= notification.subject_number %> </span>
 </h2>
 
-<%= link_to notification.web_url, target: '_blank', class: "btn btn-sm #{notification_button_color(notification)} mr-2" do %>
+<%= link_to notification.web_url, target: '_blank', class: "btn btn-sm #{notification_button_color(notification)} me-2" do %>
   <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
   <%= notification_button_title(notification) %>
 <% end %>

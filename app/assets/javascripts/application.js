@@ -41,7 +41,7 @@ $(document).on('click', 'button.mark_read_selected', Octobox.markReadSelected);
 $(document).on('click', 'button.closethread', Octobox.closeThread);
 
 $(document).on('click', 'tr.notification', Octobox.moveCursorToClickedRow);
-$(document).on('click', '[data-toggle="offcanvas"]', Octobox.toggleOffCanvas);
+$(document).on('click', '[data-bs-toggle="offcanvas"]', Octobox.toggleOffCanvas);
 
 $(document).on('click', 'a.js-sync', function(e) {
   e.preventDefault(e);
