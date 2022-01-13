@@ -228,7 +228,7 @@ GEM
       actionview
       octicons (= 16.2.0)
       railties
-    octokit (4.21.0)
+    octokit (4.22.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     oj (3.13.11)
