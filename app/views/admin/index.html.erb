@@ -13,7 +13,7 @@
               <div class="flex-shrink-0">
                 <%= octicon 'organization', height: 50 %>
               </div>
-              <div class="flex-grow-1 ms-3" text-end">
+              <div class="flex-grow-1 ms-3 text-end">
                 <h3>
                   <%= number_to_human User.fast_total %>
                 </h3>
@@ -33,7 +33,7 @@
               <div class="flex-shrink-0">
                 <%= octicon 'inbox', height: 50 %>
               </div>
-              <div class="flex-grow-1 ms-3" text-end">
+              <div class="flex-grow-1 ms-3 text-end">
                 <h3>
                   <%= number_to_human Notification.fast_total %>
                 </h3>
@@ -53,7 +53,7 @@
               <div class="flex-shrink-0">
                 <%= octicon 'git-pull-request', height: 50 %>
               </div>
-              <div class="flex-grow-1 ms-3" text-end">
+              <div class="flex-grow-1 ms-3 text-end">
                 <h3>
                   <%= number_to_human Subject.fast_total %>
                 </h3>
@@ -73,7 +73,7 @@
               <div class="flex-shrink-0">
                 <%= octicon 'repo', height: 50 %>
               </div>
-              <div class="flex-grow-1 ms-3" text-end">
+              <div class="flex-grow-1 ms-3 text-end">
                 <h3>
                   <%= number_to_human Repository.fast_total %>
                 </h3>
@@ -93,7 +93,7 @@
               <div class="flex-shrink-0">
                 <%= octicon 'search', height: 50 %>
               </div>
-              <div class="flex-grow-1 ms-3" text-end">
+              <div class="flex-grow-1 ms-3 text-end">
                 <h3>
                   <%= number_to_human PinnedSearch.count %>
                 </h3>
@@ -114,7 +114,7 @@
                 <div class="flex-shrink-0">
                   <%= octicon 'comment-discussion', height: 50 %>
                 </div>
-                <div class="flex-grow-1 ms-3" text-end">
+                <div class="flex-grow-1 ms-3 text-end">
                   <h3>
                     <%= number_to_human Comment.fast_total %>
                   </h3>
@@ -136,7 +136,7 @@
                 <div class="flex-shrink-0">
                   <%= octicon 'briefcase', height: 50 %>
                 </div>
-                <div class="flex-grow-1 ms-3" text-end">
+                <div class="flex-grow-1 ms-3 text-end">
                   <h3>
                     <%= number_to_human AppInstallation.count %>
                   </h3>
@@ -157,7 +157,7 @@
                   <div class="flex-shrink-0">
                     <%= octicon 'hubot', height: 50 %>
                   </div>
-                  <div class="flex-grow-1 ms-3" text-end">
+                  <div class="flex-grow-1 ms-3 text-end">
                     <h3>
                       <%= number_to_human SubscriptionPurchase.active.count %>
                     </h3>
@@ -177,7 +177,7 @@
                   <div class="flex-shrink-0">
                     <%= octicon 'gift', height: 50 %>
                   </div>
-                  <div class="flex-grow-1 ms-3" text-end">
+                  <div class="flex-grow-1 ms-3 text-end">
                     <h3 title='<%= SubscriptionPurchase.active.free_trial.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
                       <%= number_to_human SubscriptionPurchase.active.free_trial.count %>
                     </h3>
@@ -197,7 +197,7 @@
                   <div class="flex-shrink-0">
                     <%= octicon 'jersey', height: 50, class: 'success' %>
                   </div>
-                  <div class="flex-grow-1 ms-3" text-end">
+                  <div class="flex-grow-1 ms-3 text-end">
                     <h3 title='<%= SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
                       <%= number_to_human SubscriptionPurchase.active.not_free_trial.paid.count %>
                     </h3>
@@ -217,7 +217,7 @@
                   <div class="flex-shrink-0">
                     <%= octicon 'package', height: 50 %>
                   </div>
-                  <div class="flex-grow-1 ms-3" text-end">
+                  <div class="flex-grow-1 ms-3 text-end">
                     <h3 title='ARR like a Pirate'>
                       $<%= number_to_human SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.subscription_plan.monthly_price_in_cents}.reduce(:+)/100 %>
                     </h3>

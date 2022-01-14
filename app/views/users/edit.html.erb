@@ -30,8 +30,8 @@
                 <%= pinned_search.query %>
               </td>
               <td>
-                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: t('crud_actions.edit'), data: {toggle: 'tooltip'}, class: 'me-2' %>
-                <%= link_to octicon('trash'), pinned_search_path(pinned_search), title: t('crud_actions.delete'), data: {toggle: 'tooltip'}, method: :delete %>
+                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: t('crud_actions.edit'), data: {"bs-toggle": 'tooltip'}, class: 'me-2' %>
+                <%= link_to octicon('trash'), pinned_search_path(pinned_search), title: t('crud_actions.delete'), data: {"bs-toggle": 'tooltip'}, method: :delete %>
               </td>
             </tr>
           <% end %>
@@ -72,14 +72,14 @@
           </h5>
           <div class="card-body">
             <div class="form-group">
-              <%= f.label :personal_access_token, "Personal Access Token" %>
+              <%= f.label :personal_access_token, "Personal Access Token", class: 'form-label' %>
               <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
               <span class="help-block"><%= t('users.notices.personal_access_token_impact') %></span>
             </div>
             <div class="form-group">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" autocomplete="off" name="clear_personal_access_token" id="clear_personal_access_token"/>
+                  <input type="checkbox" autocomplete="off" name="clear_personal_access_token" id="clear_personal_access_token" class="me-1"/>
                   <%= t('users.labels.clear_personal_access_token') %>
                 </label>
               </div>
@@ -129,9 +129,9 @@
           <%= t('users.titles.advanced') %>
         </h5>
         <div class="card-body">
-          <div class="form-check mb-3">
-            <label class='col-form-label'>
-              <%= f.check_box :disable_confirmations, class: 'form-check-input' %>
+          <div class="mb-3">
+            <%= f.check_box :disable_confirmations, class: 'me-1' %>
+            <label class='form-check-label' for="user_disable_confirmations">  
               Disable confirmations when muting and deleting
             </label>
           </div>

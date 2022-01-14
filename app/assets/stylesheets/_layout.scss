@@ -34,7 +34,7 @@ body {
 }
 
 .alert{
-  .close{
+  .btn-close{
     line-height: inherit;
     font-size: inherit;
   }
@@ -88,7 +88,7 @@ body {
   text-align: center;
   color: $text-muted;
   a{
-    color: color-yiq($body-bg);
+    color: color-contrast($body-bg);
   }
 }
 

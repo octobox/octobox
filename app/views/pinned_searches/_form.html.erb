@@ -1,16 +1,16 @@
 <%= form_for @pinned_search do |f| %>
-  <div class="form-row">
-    <div class="col">
-      <div class="form-group string required pinned_search_name">
+  <div class="row g-3 align-items-center">
+    <div class="col-auto">
+      <div class="string required pinned_search_name">
         <input class="form-control string required" required="required" aria-required="true" placeholder="Name" type="text" name="pinned_search[name]" id="pinned_search_name" value="<%= f.object.name %>"/>
       </div>
     </div>
-    <div class="col">
-      <div class="form-group string required pinned_search_query">
+    <div class="col-auto">
+      <div class="string required pinned_search_query">
         <input class="form-control string required" required="required" aria-required="true" placeholder="Search Query" type="text" name="pinned_search[query]" id="pinned_search_query" value="<%= f.object.query %>" />
       </div>
     </div>
-    <div class="col">
+    <div class="col-auto">
       <input type="submit" name="commit" value="Save" class="btn btn-primary" data-bs-disable-with="Save" />
     </div>
   </div>

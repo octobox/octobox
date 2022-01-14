@@ -98,7 +98,7 @@
     <div class="row mt-4">
       <div class="col">
         <% used_by_orgs.each do |org| %>
-          <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block me-2 mb-3', title: org, data: {toggle: 'tooltip'} %>
+          <%= image_tag "https://github.com/#{org}.png?w=120", width: 60, height: 60, class: 'inline-block me-2 mb-3', title: org, data: {"bs-toggle": 'tooltip'} %>
         <% end %>
       </div>
     </div>

@@ -27,26 +27,26 @@
     <td class='notification-icon align-middle <%= notification_icon_color(notification) %>'>
       <% if Octobox.github_app? && notification.subjectable? %>
         <% if notification.repository.try(:github_app_installed?) && !notification.user.try(:github_app_authorized?) %>
-          <a tabindex="0" class="" role="button" data-toggle="popover" title="Login to the GitHub App" data-content="<%= render 'notifications/login_prompt' %>">
+          <a tabindex="0" class="" role="button" data-bs-toggle="popover" title="Login to the GitHub App" data-content="<%= render 'notifications/login_prompt' %>">
             <%= octicon notification_icon(notification), :height => 16 %>
           </a>
         <% elsif !notification.repository.try(:github_app_installed?) %>
-          <a tabindex="0" class="" role="button" data-toggle="popover" title="Get more info for this <%= notification_icon_title(notification).downcase %>" data-content="<%= render 'notifications/app_prompt', notification: notification %>">
+          <a tabindex="0" class="" role="button" data-bs-toggle="popover" title="Get more info for this <%= notification_icon_title(notification).downcase %>" data-content="<%= render 'notifications/app_prompt', notification: notification %>">
             <%= octicon notification_icon(notification), :height => 16 %>
           </a>
         <% elsif Octobox.io? && notification.upgrade_required? %>
-          <a tabindex="0" class="" role="button" data-toggle="popover" title="Subscribe Now" data-content="<%= render 'notifications/private_repos' %>">
+          <a tabindex="0" class="" role="button" data-bs-toggle="popover" title="Subscribe Now" data-content="<%= render 'notifications/private_repos' %>">
             <%= octicon notification_icon(notification), :height => 16 %>
           </a>
         <% else %>
-          <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
+          <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {"bs-toggle": 'tooltip'} %>
         <% end %>
       <% else %>
-        <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {toggle: 'tooltip'} %>
+        <%= octicon notification_icon(notification), :height => 16, title: notification_icon_title(notification), data: {"bs-toggle": 'tooltip'} %>
       <% end %>
     </td>
     <td class='notification-subject'>
-      <%= link_to notification_link(notification), target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: "link #{'thread-link' if notification.display_thread?}", onclick: "Octobox.markRead(#{notification.id})", data:{toggle:(notification.display_thread? ? 'showthread' : nil)}, title: notification.title do %>
+      <%= link_to notification_link(notification), target: (Octobox.config.open_in_same_tab ? nil : '_blank'), rel: "noopener", class: "link #{'thread-link' if notification.display_thread?}", onclick: "Octobox.markRead(#{notification.id})", data:{"bs-toggle":(notification.display_thread? ? 'showthread' : nil)}, title: notification.title do %>
           <%= subject_with_number(notification) %>
           <%= octicon('link-external', class:'text-primary') unless notification.display_thread? %>
       <% end %>
@@ -73,7 +73,7 @@
       <% if notification.display_subject? %>
         <% if notification.subject && notification.subject.author %>
           <small>
-            <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', title: 'Author', data: {toggle: 'tooltip'} %>
+            <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', title: 'Author', data: {"bs-toggle": 'tooltip'} %>
           </small>
         <% end %>
       <% end %>
@@ -118,19 +118,19 @@
 
     <span class='buttons'>
       <% if notification.archived? %>
-        <%= link_to(archive_selected_notifications_path(id: notification.id, value: false), method: :post, class: 'me-1', 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Unarchive' ) do %>
+        <%= link_to(archive_selected_notifications_path(id: notification.id, value: false), method: :post, class: 'me-1', 'data-bs-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Unarchive' ) do %>
           <%= octicon('inbox', height: 15) %>
         <% end %>
       <% else %>
-        <%= link_to(archive_selected_notifications_path(id: notification.id), method: :post, class: 'me-1', 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Archive' ) do %>
+        <%= link_to(archive_selected_notifications_path(id: notification.id), method: :post, class: 'me-1', 'data-bs-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Archive' ) do %>
           <%= octicon('archive', height: 15) %>
         <% end %>
       <% end %>
-      <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute', 'data-confirm': confirmation("Are you sure you want to mute?", notification)) do %>
+      <%= link_to(mute_selected_notifications_path(id: notification.id), method: :post,  'data-bs-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Mute', 'data-confirm': confirmation("Are you sure you want to mute?", notification)) do %>
         <%= octicon('mute', height: 15) %>
       <% end %>
       <% if notification.archived? %>
-        <%= link_to(delete_selected_notifications_path(id: notification.id), class: 'ms-1', method: :post, 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Delete', 'data-confirm': confirmation("Are you sure you want to delete?", notification)) do %>
+        <%= link_to(delete_selected_notifications_path(id: notification.id), class: 'ms-1', method: :post, 'data-bs-toggle': "tooltip", 'data-placement': "bottom", 'title': 'Delete', 'data-confirm': confirmation("Are you sure you want to delete?", notification)) do %>
           <%= octicon('trash', height: 15) %>
         <% end %>
       <% end %>

@@ -577,7 +577,7 @@ var Octobox = (function() {
     var alert_html = [
       "<div class='flex-header header-flash-messages'>",
       "  <div class='alert alert-" + type + " fade show'>",
-      "    <button class='close' data-bs-dismiss='alert'>x</button>",
+      "    <button class='btn-close' data-bs-dismiss='alert'>x</button>",
              message,
       "  </div>",
       "</div>"

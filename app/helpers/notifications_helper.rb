@@ -311,7 +311,7 @@ module NotificationsHelper
       octicon(NOTIFICATION_STATUS_OCTICON[status], height: 24, class: status),
       class: "badge bg-light text-dark bg-pr #{status}",
       title: status.humanize,
-      data: {toggle: 'tooltip'}
+      data: {"bs-toggle": 'tooltip'}
     )
   end
 
@@ -321,7 +321,7 @@ module NotificationsHelper
       octicon(COMMENT_STATUS_OCTICON[status], height: 24, class: COMMENT_STATUS[status]),
       class: "badge bg-light text-dark #{COMMENT_STATUS[status]}",
       title: status.humanize,
-      data: {toggle: 'tooltip'}
+      data: {"bs-toggle": 'tooltip'}
     )
   end
 
