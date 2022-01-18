@@ -72,12 +72,14 @@ $input-group-addon-bg:                  $gray-700 !default;
 $custom-file-color:                 $gray-500 !default;
 $custom-file-border-color:          $gray-700 !default;
 
+
 // Dropdowns
 
 $dropdown-bg:                       mix($body-bg, $white, 95%) !default;
 $dropdown-border-color:             mix($body-bg, $white, 80%) !default;
 $dropdown-divider-bg:               mix($body-bg, $white, 80%) !default;
 
+$form-select-indicator-color:       $white !default;
 $dropdown-link-color:               $white !default;
 $dropdown-link-hover-color:         $white !default;
 $dropdown-link-hover-bg:            $primary !default;
