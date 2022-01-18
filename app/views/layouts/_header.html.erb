@@ -4,12 +4,10 @@
   </a>
   <div class="position-relative dropdown">
     <div>
-      <button class="btn btn-dark navbar-toggler search-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#search" aria-controls="search" aria-expanded="false" aria-label="Toggle search">
-        <span class="sr-only">Toggle search</span>
+        <span class="visually-hidden">Toggle search</span>
         <%= octicon 'search', height: 16, class: 'text-muted' %>
       </button>
-      <button id='navbarnav_toggle' class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="sr-only">Toggle navigation</span>
+        <span class="visually-hidden">Toggle navigation</span>
         <% if current_user %>
           <%= image_tag current_user.github_avatar_url + "?size=64", width: 32, height:32, class: 'img-rounded navbar-avatar', alt: '' %>
         <% else %>
