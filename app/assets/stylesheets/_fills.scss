@@ -22,14 +22,11 @@ svg{
 }
 
 // add svg support for tbs buttons
-@mixin button-variant($background, $border, $hover-background: darken($background, 7.5%), $hover-border: darken($border, 10%), $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
+@mixin button-fill-variant($background, $border, $hover-background: darken($background, 7.5%), $hover-border: darken($border, 10%), $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
   fill: color-contrast($background);
   & svg{
     fill: color-contrast($background);
   }
-  // @include hover {
-  //   fill: color-contrast($hover-background);
-  // }
   &.disabled,
   &.disabled svg,
   &:disabled,
@@ -43,7 +40,7 @@ svg{
     fill: color-contrast($active-background);
   }
 }
-@mixin button-outline-variant($color, $color-hover: color-contrast($color), $active-background: $color, $active-border: $color) {
+@mixin button-fill-outline-variant($color, $color-hover: color-contrast($color), $active-background: $color, $active-border: $color) {
   fill: $color;
   & svg{
     fill: $color;
@@ -68,11 +65,13 @@ svg{
 @each $color, $value in $theme-colors {
   .btn-#{$color} {
     @include button-variant($value, $value);
+    @include button-fill-variant($value, $value);
   }
 }
 @each $color, $value in $theme-colors {
   .btn-outline-#{$color} {
     @include button-outline-variant($value);
+    @include button-fill-outline-variant($value, $value);
   }
 }
 
