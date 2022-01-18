@@ -394,7 +394,7 @@ var Octobox = (function() {
   var initialize = function() {
     enableTooltips();
     enablePopOvers();
-    console.log('hello')
+
     setViewportHeight();
     window.addEventListener('resize', setViewportHeight);
 

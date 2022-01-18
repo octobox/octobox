@@ -3,7 +3,7 @@
 //= require turbolinks
 //= require local-time
 //= require popper
-//= require bootstrap
+//= require bootstrap_custom
 //= require_tree .
 
 var db;
