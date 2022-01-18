@@ -113,7 +113,7 @@
           </h5>
           <div class="card-body">
             <div class="form-group">
-              <%= f.select :display_comments, [['On GitHub', 'false'], ['On Octobox', 'true']], {}, class: 'form-control' %>
+              <%= f.select :display_comments, [['On GitHub', 'false'], ['On Octobox', 'true']], {}, class: 'form-select' %>
             </div>
 
             <%= submit_tag t('crud_actions.save'), class: 'btn btn-primary' %>
