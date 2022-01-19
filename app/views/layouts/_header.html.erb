@@ -1,4 +1,4 @@
-<nav class='navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-md'>
+<nav class='navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-sm'>
   <a class="navbar-brand" href="/" title='Octobox'>
     <%= svg('infinitacle-reverse') %>
   </a>
@@ -49,7 +49,7 @@
         <% end %>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle d-none d-md-block" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle d-none d-sm-block" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="navbar-avatar-fixed-width">
             <%= image_tag current_user.github_avatar_url + "?size=40", width: 20, class: 'img-rounded navbar-avatar', alt: '' %>
           </span>
@@ -96,7 +96,7 @@
             Settings
           <% end %>
           <div class="dropdown-divider d-md-none"></div>
-          <a class="d-md-none" href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener"><%= octicon 'heart', height: 16, class: 'text-muted' %> Donate</a>
+          <a class="d-md-none dropdown-item" href="https://opencollective.com/octobox/" class='opencollective' target='_blank' rel="noopener"><%= octicon 'heart', height: 16, class: 'text-muted' %> Donate</a>
           <div class="dropdown-divider"></div>
           <%= link_to logout_path, class: 'dropdown-item' do %>
             <%= octicon 'sign-out', height: 16, class: 'text-muted' %>
