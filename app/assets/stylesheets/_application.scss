@@ -22,6 +22,10 @@
 @import 'dialogs';
 @import 'threads';
 
+.table {
+  --bs-table-accent-bg: transparent!important;
+}
+
 .btn.disabled {
  pointer-events: all !important;
 }
