@@ -195,7 +195,7 @@
               <div class="card-body">
                 <div class="d-flex">
                   <div class="flex-shrink-0">
-                    <%= octicon 'jersey', height: 50, class: 'success' %>
+                    <%= octicon 'people', height: 50, class: 'success' %>
                   </div>
                   <div class="flex-grow-1 ms-3 text-end">
                     <h3 title='<%= SubscriptionPurchase.active.not_free_trial.paid.map{|sp| sp.app_installation.try(:account_login) }.join(', ') %>'>
