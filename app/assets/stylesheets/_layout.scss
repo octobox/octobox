@@ -132,7 +132,7 @@ body {
   }
 }
 
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-down(md) {
   @include responsive;
   .flex-main.show-thread{
     display:none;

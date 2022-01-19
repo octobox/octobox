@@ -16,7 +16,7 @@
     <div class="btn btn-sm btn-link help float-end d-none d-md-inline-block" data-bs-toggle="modal" data-bs-target="#help-box">
       <%= svg('keyboard') %>
     </div>
-    <button id='sidebar_toggle' type="button" class="d-inline-block d-lg-none btn btn-sm btn-outline-dark" data-bs-toggle="offcanvas" aria-label='Toggle sidebar'>
+    <button id='sidebar_toggle' type="button" class="d-inline-block d-md-none btn btn-sm btn-outline-dark" data-bs-toggle="offcanvas" aria-label='Toggle sidebar'>
       <%= octicon 'three-bars', :height => 16 %>
     </button>
     <% if @notifications.to_a.any? %>

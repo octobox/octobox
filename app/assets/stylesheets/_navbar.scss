@@ -115,7 +115,7 @@
   width: 100% !important;
 }
 
-@include media-breakpoint-only(xs) {
+@include media-breakpoint-down(md) {
   .navbar{
     form {
       border-top: none;
