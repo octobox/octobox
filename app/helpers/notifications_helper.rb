@@ -14,7 +14,7 @@ module NotificationsHelper
     'open'   => 'success',
     'closed' => 'danger',
     'merged' => 'subscribed'
-  }
+  }.freeze
 
   SUBJECT_TYPES = {
     'RepositoryInvitation'         => 'mail',
@@ -30,26 +30,26 @@ module NotificationsHelper
     failure: "failure",
     error: "error",
     pending: "pending"
-  }
+  }.freeze
 
   NOTIFICATION_STATUS_OCTICON = {
     'success' => 'check',
     'failure' => 'x',
     'error' => 'alert',
     'pending' => 'dot-fill'
-  }
+  }.freeze
 
   COMMENT_STATUS = {
     'APPROVED' => 'success',
     'CHANGES_REQUESTED' => 'error',
     'COMMENTED' => 'pending'
-  }
+  }.freeze
 
   COMMENT_STATUS_OCTICON = {
     'APPROVED' => 'check',
     'CHANGES_REQUESTED' => 'x',
     'COMMENTED' => 'dot-fill'
-  }
+  }.freeze
 
   def filters
     {
@@ -308,8 +308,8 @@ module NotificationsHelper
   def notification_status(status)
     return unless status.present?
     content_tag(:span,
-      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 24, class: status),
-      class: "badge bg-light text-dark bg-pr #{status}",
+      octicon(NOTIFICATION_STATUS_OCTICON[status], height: 16, class: status),
+      class: "#{status}",
       title: status.humanize,
       data: {"bs-toggle": 'tooltip'}
     )
