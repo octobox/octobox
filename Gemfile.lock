@@ -388,7 +388,7 @@ GEM
     websocket-extensions (0.1.5)
     yard (0.9.27)
       webrick (~> 1.7.0)
-    zeitwerk (2.5.3)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   arm64-darwin-21
