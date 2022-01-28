@@ -160,7 +160,7 @@ GEM
       activesupport (>= 5.0)
     hashdiff (1.0.1)
     hashie (5.0.0)
-    i18n (1.9.0)
+    i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     io-wait (0.2.1)
     jbuilder (2.11.5)
@@ -249,7 +249,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.0)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    pagy (5.9.1)
+    pagy (5.9.2)
       activesupport
     pg (1.3.0)
     pg_search (2.3.6)
