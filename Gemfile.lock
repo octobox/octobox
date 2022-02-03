@@ -307,7 +307,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    redis (4.5.1)
+    redis (4.6.0)
     request_store (1.5.1)
       rack (>= 1.4)
     rexml (3.2.5)
