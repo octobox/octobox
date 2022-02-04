@@ -13,6 +13,8 @@ $(document).on("turbolinks:load", function () {
         if($('#notification-thread').attr('data-id') == data.id){
           $('#thread-subject').html(data.subject);
         }
+
+        Octobox.updateAllPinnedSearchCounts();
       }
     });
   }
