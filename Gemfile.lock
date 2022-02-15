@@ -160,7 +160,7 @@ GEM
       activesupport (>= 5.0)
     hashdiff (1.0.1)
     hashie (5.0.0)
-    i18n (1.9.1)
+    i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     io-wait (0.2.1)
     jbuilder (2.11.5)
