@@ -269,7 +269,7 @@ GEM
     rack-canonical-host (1.1.0)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
-    rack-protection (2.1.0)
+    rack-protection (2.2.0)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
