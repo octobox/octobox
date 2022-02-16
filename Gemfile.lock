@@ -191,7 +191,7 @@ GEM
     mini_portile2 (2.7.1)
     minitest (5.15.0)
     mocha (1.13.0)
-    msgpack (1.4.4)
+    msgpack (1.4.5)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
