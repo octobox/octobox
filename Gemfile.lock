@@ -1,6 +1,6 @@
 GIT
-  remote: https://github.com/jasonrudolph/attr_encrypted.git
-  revision: 8e48539299245901be40b95e5ccbab68ec772d3c
+  remote: https://github.com/octobox/attr_encrypted.git
+  revision: e33d91b059031cabaf065ce8c3899dc3699d003d
   branch: rails-7
   specs:
     attr_encrypted (3.1.0)
@@ -456,4 +456,4 @@ RUBY VERSION
    ruby 3.1.0p0
 
 BUNDLED WITH
-   2.3.4
+   2.3.7
