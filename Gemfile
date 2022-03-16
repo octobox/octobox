@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 ruby '3.1.0'
 
-gem 'rails', '7.0.1'
+gem 'rails', '7.0.2.3'
 gem 'bootstrap', '5.1.3'
-gem 'attr_encrypted', git: 'https://github.com/jasonrudolph/attr_encrypted.git', branch: 'rails-7'
+gem 'attr_encrypted', git: 'https://github.com/octobox/attr_encrypted.git', branch: 'rails-7'
 gem 'jquery-rails'
 gem 'pagy'
 gem 'local_time'
@@ -33,7 +33,7 @@ gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
 gem 'commonmarker'
-gem 'pg', '1.2.3'
+gem 'pg', '1.3.4'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
 gem 'psych', '~> 3.0'
@@ -63,7 +63,7 @@ group :development do
 end
 
 group :production do
-  gem 'skylight', '~> 5.2.0.beta2'
+  gem 'skylight', '~> 5.3.1'
   gem 'lograge'
   gem 'puma_worker_killer'
 end

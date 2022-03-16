@@ -28,11 +28,11 @@ jobs:
         options: --entrypoint redis-server
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - name: Install dependent libraries
         run: sudo apt-get install libpq-dev
       - name: Set up Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3.0.0
         with:
           node-version: 15
       - name: Set up Ruby

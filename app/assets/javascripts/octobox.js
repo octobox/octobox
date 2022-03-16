@@ -21,6 +21,12 @@ var Octobox = (function() {
     });
   }
 
+  var updateAllPinnedSearchCounts = function(){
+    $("span.pinned-search-count").each(function() {
+      updatePinnedSearchCounts(this);
+    });
+  }
+
   var moveCursorToClickedRow = function(event) {
     // Don't event.preventDefault(), since we want the
     // normal clicking behavior for links, starring, etc
@@ -407,9 +413,7 @@ var Octobox = (function() {
     }
 
     // Unread counts for pinned searches
-    $("span.pinned-search-count").each(function() {
-      updatePinnedSearchCounts(this);
-    });
+    updateAllPinnedSearchCounts();
 
     // Sync Handling
     if($(".js-is_syncing").length){ refreshOnSync() }
@@ -693,6 +697,7 @@ var Octobox = (function() {
     deleteSelected: deleteSelected,
     deleteThread: deleteThread,
     viewThread: viewThread,
-    expandComments: expandComments
+    expandComments: expandComments,
+    updateAllPinnedSearchCounts: updateAllPinnedSearchCounts
   }
 })();
