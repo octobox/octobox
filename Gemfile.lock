@@ -92,7 +92,7 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    brakeman (5.2.1)
+    brakeman (5.2.2)
     brpoplpush-redis_script (0.1.2)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       redis (>= 1.0, <= 5.0)
