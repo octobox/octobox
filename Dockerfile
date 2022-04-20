@@ -1,4 +1,4 @@
-FROM ruby:3.1.0-alpine
+FROM ruby:3.1.2-alpine
 
 ENV APP_ROOT /usr/src/app
 ENV OCTOBOX_DATABASE_PORT 5432
