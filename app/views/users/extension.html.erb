@@ -16,7 +16,7 @@
         <p>Login into the browser extension to give it access to your Octobox account</p>
 
         <%= link_to '#', class: 'btn btn-primary', onclick: "document.dispatchEvent(new CustomEvent('octobox:enable', {detail: {api_token:'#{current_user.api_token}', return_to: '#{@return_to}'}}))" do %>
-          <span class='mr-1'>Enable extension</span>
+          <span class='me-1'>Enable extension</span>
           <%= octicon 'plug', height: 22 %>
         <% end %>
       </div>
@@ -30,7 +30,7 @@
         <p>You're all installed and ready to go!</p>
 
         <%= link_to @return_to, class:'btn btn-primary' do %>
-        <span class='mr-1'>Go to GitHub</span>
+        <span class='me-1'>Go to GitHub</span>
         <%= octicon 'mark-github', height: 22 %>
         <% end %>
       </div>

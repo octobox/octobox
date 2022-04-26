@@ -13,14 +13,16 @@
     }
     .nav-link{
       border-radius: 0;
+      text-decoration: none;
     }
+    
     &.type-RepositoryVulnerabilityAlert{
       background-color: $red;
       a{
-        color: color-yiq($red);
-        fill: color-yiq($red);
+        color: color-contrast($red);
+        fill: color-contrast($red);
         svg{
-          fill: color-yiq($red);
+          fill: color-contrast($red);
         }
       }
     }

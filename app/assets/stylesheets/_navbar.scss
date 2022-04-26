@@ -39,6 +39,13 @@
 .navbar-toggler {
   border: none;
   padding: 0;
+  background-color: transparent;
+  svg{
+    fill: #fff;
+  }
+  &:hover,&:active,&:focus{
+    background-color: transparent;
+  }
 }
 .search-toggler {
   padding: 6px 10px 7px;
@@ -115,7 +122,7 @@
   width: 100% !important;
 }
 
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-down(md) {
   .navbar{
     form {
       border-top: none;

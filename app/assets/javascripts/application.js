@@ -3,13 +3,7 @@
 //= require turbolinks
 //= require local-time
 //= require popper
-//= require bootstrap/util
-//= require bootstrap/collapse
-//= require bootstrap/alert
-//= require bootstrap/tooltip
-//= require bootstrap/dropdown
-//= require bootstrap/modal
-//= require bootstrap/popover
+//= require bootstrap_custom
 //= require_tree .
 
 var db;
@@ -47,7 +41,7 @@ $(document).on('click', 'button.mark_read_selected', Octobox.markReadSelected);
 $(document).on('click', 'button.closethread', Octobox.closeThread);
 
 $(document).on('click', 'tr.notification', Octobox.moveCursorToClickedRow);
-$(document).on('click', '[data-toggle="offcanvas"]', Octobox.toggleOffCanvas);
+$(document).on('click', '[data-bs-toggle="offcanvas"]', Octobox.toggleOffCanvas);
 
 $(document).on('click', 'a.js-sync', function(e) {
   e.preventDefault(e);

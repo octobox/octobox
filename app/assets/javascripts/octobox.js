@@ -96,14 +96,14 @@ var Octobox = (function() {
   var enableTooltips = function() {
     if(!("ontouchstart" in window))
     {
-      $("[data-toggle='tooltip']").tooltip();
+      $("[data-bs-toggle='tooltip']").tooltip();
     }
   };
 
   var enablePopOvers = function() {
     var showTimer;
 
-    $('[data-toggle="popover"]').popover({ trigger: "manual" , html: true})
+    $('[data-bs-toggle="popover"]').popover({ trigger: "manual" , html: true})
     .on("mouseenter", function () {
       if (showTimer) {
         clearTimeout(showTimer);
@@ -581,7 +581,7 @@ var Octobox = (function() {
     var alert_html = [
       "<div class='flex-header header-flash-messages'>",
       "  <div class='alert alert-" + type + " fade show'>",
-      "    <button class='close' data-dismiss='alert'>x</button>",
+      "    <button class='btn-close' data-bs-dismiss='alert'>x</button>",
              message,
       "  </div>",
       "</div>"

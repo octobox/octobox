@@ -13,11 +13,12 @@ module ApplicationHelper
 
   def flash_messages
     return unless flash.any?
-    concat(content_tag(:div, class: "flex-header header-flash-messages") do
+    concat(content_tag(:div, class: "flex-header header-flash-messages", role: "alert") do
       flash.each do |msg_type, message|
-        concat(content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} fade show") do
-          concat content_tag(:button, octicon('x'), class: 'close', data: { dismiss: 'alert' })
+        concat(content_tag(:div, message, class: "alert alert-dismissible #{bootstrap_class_for(msg_type)} fade show") do
+          
           concat message.html_safe
+          concat content_tag(:button, '', class: 'btn-close', data: { "bs-dismiss": 'alert' })
         end)
       end
     end)
@@ -25,7 +26,7 @@ module ApplicationHelper
   end
 
   def repo_scope_modal
-    content_tag :span, octicon('shield'), class: 'btn btn-sm btn-link repo-scope d-inline-block', title: 'Requires repo scope', data: {toggle:'modal', target:'#repo-scope'} unless Octobox.fetch_subject? || Octobox.personal_access_tokens_enabled?
+    content_tag :span, octicon('shield'), class: 'btn btn-sm btn-link repo-scope d-inline-block', title: 'Requires repo scope', data: {"bs-toggle":'modal', target:'#repo-scope'} unless Octobox.fetch_subject? || Octobox.personal_access_tokens_enabled?
   end
 
   def used_by_orgs

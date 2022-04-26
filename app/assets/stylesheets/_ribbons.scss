@@ -14,7 +14,7 @@
    font-weight: bold; line-height: 20px;
    transform: rotate(45deg);
    width: 125px; display: block;
-   background: theme-color('info');
+   background: map-get($theme-colors, 'info');
    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
    position: absolute;
    top: 26px; right: -25px;

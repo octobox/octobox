@@ -81,7 +81,7 @@ SearchSuggestion = {
   // create a delete button inside each list item, giving it an event handler
   // so that it runs the deleteButton()  when clicked
   createDeleteButtonElement: function(suggestion) {
-    return "<div class='badge badge-light search-remove-btn btn' data-suggestion='"+suggestion+"'><svg height='16' class='octicon octicon-x' data-suggestion='"+suggestion+"' viewBox='0 0 12 16' version='1.1' width='12' aria-hidden='true'><path data-suggestion='"+suggestion+"' fill-rule='evenodd' d='M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z'></path></svg></div>";
+    return "<div class='badge bg-light text-dark search-remove-btn btn' data-suggestion='"+suggestion+"'><svg height='16' class='octicon octicon-x' data-suggestion='"+suggestion+"' viewBox='0 0 12 16' version='1.1' width='12' aria-hidden='true'><path data-suggestion='"+suggestion+"' fill-rule='evenodd' d='M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z'></path></svg></div>";
   },
 
   addToSearchBox: function(event) {

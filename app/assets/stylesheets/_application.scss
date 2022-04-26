@@ -22,6 +22,10 @@
 @import 'dialogs';
 @import 'threads';
 
+.table {
+  --bs-table-accent-bg: transparent!important;
+}
+
 .btn.disabled {
  pointer-events: all !important;
 }
@@ -43,7 +47,7 @@
 }
 
 .blockquote{
-  border-left: 3px solid theme-color('secondary');
+  border-left: 3px solid map-get($theme-colors, 'secondary');
 }
 
 .card-notifications, .card-thread{
@@ -86,8 +90,9 @@
 .select-all {
   padding-left: 6px;
   margin-right: 14px;
-  input {
+  .form-check-input {
     position: relative;
+    margin: 5px;
   }
   label {
     left: 10px;
@@ -141,8 +146,29 @@
   border-bottom: 0;
 }
 
-@include media-breakpoint-down(lg){
+@include media-breakpoint-down(md){
   .not-a-nav{
     background-color: $body-bg;
   }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-inline .form-control {
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -5px;
+  margin-left: -5px;
+}
+
+label {
+  margin-bottom: 0.5rem;
 }
