@@ -6,7 +6,7 @@ module Octobox
       included do
         scope :unmuted,        -> { where("muted_at IS NULL") }
         scope :exclude_type,   ->(subject_type) { where.not(subject_type: subject_type) }
-        scope :exclude_status, ->(status)       { joins(:subject).where("subjects.status is NULL or subjects.status != ?", status) }
+        scope :exclude_status, ->(status)       { joins(:subject).where("subjects.status is NULL or subjects.status not in (?)", Array(status)) }
         scope :exclude_reason, ->(reason)       { where.not(reason: reason) }
         scope :not_locked,     -> { joins(:subject).where(subjects: { locked: false }) }
         scope :without_subject, -> { includes(:subject).where(subjects: { url: nil }) }

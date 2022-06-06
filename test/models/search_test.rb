@@ -60,4 +60,9 @@ class SearchTest < ActiveSupport::TestCase
     search = Search.new(query: 'type:release archived:true', scope: Notification.all, params: {})
     assert_equal search.to_query, 'type:release archived:true'
   end
+
+  test 'Allow rejecting multiple statuses' do
+    search = Search.new(query: '-status:merged -status:closed', scope: Notification.all, params: {})
+    assert_equal search.results.length, 0
+  end
 end
