@@ -224,10 +224,10 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    octicons (17.0.0)
-    octicons_helper (17.0.0)
+    octicons (17.3.0)
+    octicons_helper (17.3.0)
       actionview
-      octicons (= 17.0.0)
+      octicons (= 17.3.0)
       railties
     octokit (4.24.0)
       faraday (>= 1, < 3)
@@ -323,7 +323,7 @@ GEM
     sawyer (0.9.2)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
-    sidekiq (6.4.2)
+    sidekiq (6.5.0)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -335,7 +335,7 @@ GEM
     sidekiq-status (2.1.3)
       chronic_duration
       sidekiq (>= 5.0)
-    sidekiq-unique-jobs (7.1.15)
+    sidekiq-unique-jobs (7.1.25)
       brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 5.0, < 8.0)
