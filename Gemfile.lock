@@ -342,7 +342,7 @@ GEM
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 5.0, < 8.0)
       thor (>= 0.20, < 3.0)
-    skylight (5.3.2)
+    skylight (5.3.3)
       activesupport (>= 5.2.0)
     spring (4.0.0)
     sprockets (4.1.1)
@@ -437,7 +437,7 @@ DEPENDENCIES
   sidekiq-scheduler
   sidekiq-status
   sidekiq-unique-jobs
-  skylight (~> 5.3.2)
+  skylight (~> 5.3.3)
   spring
   sql_queries_count
   timecop
