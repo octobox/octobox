@@ -110,9 +110,9 @@ GEM
     crass (1.0.6)
     debug_inspector (1.1.0)
     digest (3.1.0)
-    dotenv (2.7.6)
-    dotenv-rails (2.7.6)
-      dotenv (= 2.7.6)
+    dotenv (2.8.0)
+    dotenv-rails (2.8.0)
+      dotenv (= 2.8.0)
       railties (>= 3.2)
     encryptor (3.0.0)
     erubi (1.10.0)
@@ -248,7 +248,7 @@ GEM
       omniauth (~> 2.0)
     pagy (5.10.1)
       activesupport
-    pg (1.4.1)
+    pg (1.4.2)
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
@@ -421,7 +421,7 @@ DEPENDENCIES
   omniauth-github (= 2.0.0)
   omniauth-rails_csrf_protection
   pagy
-  pg (= 1.4.1)
+  pg (= 1.4.2)
   pg_search
   psych (~> 3.0)
   puma
