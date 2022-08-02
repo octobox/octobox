@@ -49,14 +49,14 @@ class AppInstallation < ApplicationRecord
   end
 
   def sync
-    remote_installation = Octobox.github_app_client.installation(github_id, accept: 'application/vnd.github.machine-man-preview+json')
+    remote_installation = Octobox.github_app_client.installation(github_id)
     update(AppInstallation.map_from_api(remote_installation))
   rescue Octokit::NotFound
     destroy
   end
 
   def sync_repositories
-    remote_repositories = github_client.list_app_installation_repositories(accept: 'application/vnd.github.machine-man-preview+json').repositories
+    remote_repositories = github_client.list_app_installation_repositories.repositories
     add_repositories(remote_repositories)
   rescue Octokit::ClientError
     nil
@@ -75,7 +75,7 @@ class AppInstallation < ApplicationRecord
   end
 
   def self.sync_all
-    remote_installations = Octobox.github_app_client.find_app_installations(accept: 'application/vnd.github.machine-man-preview+json')
+    remote_installations = Octobox.github_app_client.find_app_installations
     remote_installations.each do |remote_installation|
       app_installation = AppInstallation.find_or_initialize_by(github_id: remote_installation.id)
       app_installation.update(AppInstallation.map_from_api(remote_installation))
