@@ -248,7 +248,7 @@ GEM
       omniauth (~> 2.0)
     pagy (5.10.1)
       activesupport
-    pg (1.4.2)
+    pg (1.4.3)
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
@@ -421,7 +421,7 @@ DEPENDENCIES
   omniauth-github (= 2.0.0)
   omniauth-rails_csrf_protection
   pagy
-  pg (= 1.4.2)
+  pg (= 1.4.3)
   pg_search
   psych (~> 3.0)
   puma
