@@ -46,6 +46,17 @@
   border-left: 3px solid theme-color('secondary');
 }
 
+.card-body blockquote {
+  margin: 0 0 1rem;
+  line-height: 2rem;
+  background: var(--light);
+}
+
+.card-body blockquote p {
+  margin: 0;
+  padding: 1rem;
+}
+
 .card-notifications, .card-thread{
   margin-bottom: 20px;
   border-radius: 0;
