@@ -345,7 +345,7 @@ GEM
     snaky_hash (2.0.0)
       hashie
       version_gem (~> 1.1)
-    spring (4.0.0)
+    spring (4.1.0)
     sprockets (4.1.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
