@@ -50,4 +50,4 @@ jobs:
           OCTOBOX_DATABASE_PASSWORD: postgres
           OCTOBOX_DATABASE_USERNAME: octobox
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
-        run: bundle exec rake db:create db:migrate test
+        run: bundle exec rails db:test:prepare test
