@@ -191,7 +191,7 @@ GEM
     msgpack (1.5.6)
     multi_xml (0.6.0)
     multipart-post (2.2.3)
-    net-imap (0.3.0)
+    net-imap (0.3.1)
       net-protocol
     net-pop (0.1.2)
       net-protocol
