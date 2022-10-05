@@ -10,7 +10,7 @@
 
 <% if notification.subject %>
   <%= notification_status(notification.subject.status) %>
-  <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= notification.subject_type.downcase %>
+  <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= notification.subject_type.underscore.humanize.downcase %>
 <% end %>
 
 on <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
