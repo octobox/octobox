@@ -19,6 +19,7 @@ class SearchParser
 
         # scan for value
         value = ss.scan(/(("|')[^"']+('|")|(\+))|[^"'\s]+/)
+        break if value.nil?
         value.split(',').each{ |v| @operators[key] << v.strip }
       else
         break

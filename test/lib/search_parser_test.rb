@@ -108,4 +108,10 @@ class SearchParserTest < ActiveSupport::TestCase
     search = SearchParser.new query
     assert_equal ['created-by: Next.js team'], search[:'label']
   end
+  
+  test 'gracefully handles empty argument' do
+    query = 'inbox:true label:'
+    search = SearchParser.new query
+    assert_equal [], search[:'label']
+  end
 end
