@@ -351,7 +351,7 @@ GEM
       rails (> 3.0.0)
     thor (1.2.1)
     tilt (2.0.11)
-    timecop (0.9.5)
+    timecop (0.9.6)
     timeout (0.3.0)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
