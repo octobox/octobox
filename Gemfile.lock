@@ -250,7 +250,8 @@ GEM
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     popper_js (1.16.1)
-    psych (3.3.4)
+    psych (5.0.1)
+      stringio
     public_suffix (5.0.1)
     puma (6.0.0)
       nio4r (~> 2.0)
@@ -352,6 +353,7 @@ GEM
       sprockets (>= 3.0.0)
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
+    stringio (3.0.3)
     thor (1.2.1)
     tilt (2.0.11)
     timecop (0.9.6)
@@ -420,7 +422,7 @@ DEPENDENCIES
   pagy
   pg (= 1.4.5)
   pg_search
-  psych (~> 3.3)
+  psych (~> 5.0)
   puma
   puma_worker_killer
   rack-canonical-host
