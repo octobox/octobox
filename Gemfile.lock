@@ -251,7 +251,7 @@ GEM
       activesupport (>= 5.2)
     popper_js (1.16.1)
     psych (3.3.4)
-    public_suffix (5.0.0)
+    public_suffix (5.0.1)
     puma (6.0.0)
       nio4r (~> 2.0)
     puma_worker_killer (0.3.1)
