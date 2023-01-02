@@ -68,13 +68,13 @@ Protip: To generate a key, you can use `bin/rails secret | cut -c1-32`
 First things first, you'll need to fork and clone Octobox repository to
 your local machine.
 
-Secondly, you'll need to install Ruby 3.1.2. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
+Secondly, you'll need to install Ruby 3.2.0. I recommend using the excellent [rbenv](https://github.com/rbenv/rbenv),
 and [ruby-build](https://github.com/rbenv/ruby-build):
 
 ```bash
 brew install rbenv ruby-build
-rbenv install 3.1.2
-rbenv global 3.1.2
+rbenv install 3.2.0
+rbenv global 3.2.0
 ```
 
 Next, you'll need to make sure that you have PostgreSQL installed. This can be
