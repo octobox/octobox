@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '3.1.2'
+ruby '3.2.0'
 
 gem 'rails', '7.0.4'
 gem 'bootstrap', '4.6.0'
@@ -37,6 +37,7 @@ gem 'pg', '1.4.5'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
 gem 'psych', '~> 3.3'
+gem 'nokogiri', '1.14.0.rc1'
 
 group :development, :test do
   gem 'dotenv-rails'

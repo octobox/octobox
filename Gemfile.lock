@@ -206,14 +206,14 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.8)
-    nokogiri (1.13.10)
+    nokogiri (1.14.0.rc1)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.13.10-arm64-darwin)
+    nokogiri (1.14.0.rc1-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.10-x86_64-darwin)
+    nokogiri (1.14.0.rc1-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.10-x86_64-linux)
+    nokogiri (1.14.0.rc1-x86_64-linux)
       racc (~> 1.4)
     numerizer (0.1.1)
     oauth2 (2.0.9)
@@ -414,6 +414,7 @@ DEPENDENCIES
   lograge
   minitest
   mocha
+  nokogiri (= 1.14.0.rc1)
   octicons_helper
   octokit
   oj
@@ -448,7 +449,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.2.0p0
 
 BUNDLED WITH
-   2.3.19
+   2.4.2
