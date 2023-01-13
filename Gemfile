@@ -37,7 +37,7 @@ gem 'pg', '1.4.5'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
 gem 'psych', '~> 3.3'
-gem 'nokogiri', '1.14.0.rc1'
+gem 'nokogiri', '1.14.0'
 
 group :development, :test do
   gem 'dotenv-rails'
