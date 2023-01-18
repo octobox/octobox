@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '3.2.0'
 
-gem 'rails', '7.0.4'
+gem 'rails', '7.0.4.1'
 gem 'bootstrap', '4.6.0'
 gem 'attr_encrypted', git: 'https://github.com/octobox/attr_encrypted.git', branch: 'rails-7'
 gem 'jquery-rails'
