@@ -155,7 +155,7 @@ GEM
     gemoji (3.0.1)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
     hashie (5.0.0)
