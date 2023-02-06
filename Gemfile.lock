@@ -355,7 +355,7 @@ GEM
       sprockets (>= 3.0.0)
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
-    stringio (3.0.4)
+    stringio (3.0.5)
     thor (1.2.1)
     tilt (2.0.11)
     timecop (0.9.6)
