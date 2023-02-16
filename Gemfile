@@ -21,7 +21,7 @@ gem 'pg_search'
 gem 'jbuilder'
 gem 'rake', require: false
 gem 'rgb'
-gem 'sidekiq', '6.5.8'
+gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
 gem 'sidekiq-scheduler', require: false
 gem 'rack-canonical-host'
@@ -37,7 +37,7 @@ gem 'pg', '1.4.5'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
 gem 'psych', '~> 5.1'
-gem 'nokogiri', '1.14.2'
+gem 'nokogiri'
 
 group :development, :test do
   gem 'dotenv-rails'

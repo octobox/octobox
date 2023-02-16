@@ -2,7 +2,6 @@ require 'sidekiq/testing'
 require 'sidekiq_unique_jobs/testing'
 
 Sidekiq::Testing.fake!
-Sidekiq.logger = nil
 Octobox.config.background_jobs_enabled = true
 
 def inline_sidekiq_status
