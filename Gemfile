@@ -33,7 +33,7 @@ gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
 gem 'commonmarker'
-gem 'pg', '1.4.5'
+gem 'pg'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
 gem 'psych', '~> 5.1'
