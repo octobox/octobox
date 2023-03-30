@@ -152,7 +152,7 @@ GEM
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
-    gemoji (3.0.1)
+    gemoji (4.1.0)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
     globalid (1.1.0)
@@ -406,7 +406,7 @@ DEPENDENCIES
   factory_bot
   faraday
   faraday_middleware
-  gemoji (< 4)
+  gemoji (< 5)
   jbuilder
   jquery-rails
   jwt
