@@ -77,19 +77,19 @@ $notification-items: (
 
 @mixin add-borders{
   .table-notifications tr td:first-child {
-    border-left: 1px solid $list-group-bg;
+    border-left: 5px solid $list-group-bg;
   }
   .table-notifications tr.active td:first-child {
-    border-left: 1px solid $list-group-action-active-bg;
+    border-left: 5px solid $list-group-action-active-bg;
   }
   .table-notifications tr:hover td:first-child {
-    border-left: 1px solid $list-group-action-hover-color;
+    border-left: 5px solid $list-group-action-hover-color;
   }
   .table-notifications tr.active:hover td:first-child {
-    border-left: 1px solid $list-group-action-hover-color;
+    border-left: 5px solid $list-group-action-hover-color;
   }
   td.current {
-    border-left: 1px solid $list-group-active-border-color !important;
+    border-left: 5px solid $list-group-active-border-color !important;
   }
 }
 
