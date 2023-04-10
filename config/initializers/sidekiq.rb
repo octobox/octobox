@@ -21,8 +21,8 @@ if Octobox.background_jobs_enabled?
       chain.add SidekiqUniqueJobs::Middleware::Server
     end
 
-    Sidekiq::Status.configure_server_middleware config, expiration: 60.minutes
-    Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
+    Sidekiq::Status.configure_server_middleware config, expiration: 60.minutes.to_i
+    Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes.to_i
 
     if Rails.env.production?
       config.logger.level = Logger::WARN
@@ -38,6 +38,6 @@ if Octobox.background_jobs_enabled?
       chain.add SidekiqUniqueJobs::Middleware::Client
     end
 
-    Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes
+    Sidekiq::Status.configure_client_middleware config, expiration: 60.minutes.to_i
   end
 end
