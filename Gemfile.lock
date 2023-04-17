@@ -262,9 +262,9 @@ GEM
     raabro (1.4.0)
     racc (1.6.2)
     rack (2.2.6.4)
-    rack-canonical-host (1.1.0)
+    rack-canonical-host (1.2.0)
       addressable (> 0, < 3)
-      rack (>= 1.0.0, < 3)
+      rack (>= 1, < 4)
     rack-protection (3.0.6)
       rack
     rack-test (2.1.0)
