@@ -244,7 +244,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    pagy (6.0.3)
+    pagy (6.0.4)
     pg (1.5.3)
     pg_search (2.3.6)
       activerecord (>= 5.2)
@@ -334,7 +334,7 @@ GEM
       rufus-scheduler (~> 3.2)
       sidekiq (>= 6, < 8)
       tilt (>= 1.4.0)
-    sidekiq-status (3.0.2)
+    sidekiq-status (3.0.3)
       chronic_duration
       sidekiq (>= 6.0, < 8)
     sidekiq-unique-jobs (8.0.2)
