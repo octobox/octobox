@@ -334,7 +334,7 @@ GEM
       rufus-scheduler (~> 3.2)
       sidekiq (>= 6, < 8)
       tilt (>= 1.4.0)
-    sidekiq-status (3.0.2)
+    sidekiq-status (3.0.3)
       chronic_duration
       sidekiq (>= 6.0, < 8)
     sidekiq-unique-jobs (8.0.2)
