@@ -103,7 +103,7 @@ GEM
       numerizer (~> 0.1.1)
     commonmarker (0.23.9)
     concurrent-ruby (1.2.2)
-    connection_pool (2.4.0)
+    connection_pool (2.4.1)
     crack (0.4.5)
       rexml
     crass (1.0.6)
