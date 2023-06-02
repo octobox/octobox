@@ -313,7 +313,7 @@ GEM
     rgb (0.1.0)
     rouge (4.1.1)
     ruby2_keywords (0.0.5)
-    rufus-scheduler (3.8.2)
+    rufus-scheduler (3.9.0)
       fugit (~> 1.1, >= 1.1.6)
     sassc (2.4.0)
       ffi (~> 1.9)
