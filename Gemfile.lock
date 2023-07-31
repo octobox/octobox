@@ -321,7 +321,7 @@ GEM
       connection_pool
     request_store (1.5.1)
       rack (>= 1.4)
-    rexml (3.2.5)
+    rexml (3.2.6)
     rgb (0.1.0)
     rouge (4.1.2)
     ruby2_keywords (0.0.5)
