@@ -351,7 +351,7 @@ GEM
     sidekiq-status (3.0.3)
       chronic_duration
       sidekiq (>= 6.0, < 8)
-    skylight (5.3.4)
+    skylight (6.0.0)
       activesupport (>= 5.2.0)
     snaky_hash (2.0.1)
       hashie
@@ -448,7 +448,7 @@ DEPENDENCIES
   sidekiq-scheduler
   sidekiq-status
   sidekiq-unique-jobs!
-  skylight (~> 5.3.4)
+  skylight (~> 6.0.0)
   spring
   sql_queries_count
   timecop
