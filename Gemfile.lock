@@ -368,7 +368,7 @@ GEM
       rails (> 3.0.0)
     stringio (3.0.8)
     thor (1.2.2)
-    tilt (2.2.0)
+    tilt (2.3.0)
     timecop (0.9.8)
     timeout (0.4.0)
     turbolinks (5.2.1)
