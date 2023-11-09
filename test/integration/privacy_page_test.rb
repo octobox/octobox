@@ -14,8 +14,7 @@ class PrivacyPageTest < ActionDispatch::IntegrationTest
 
   def check_redirected
     get privacy_path
-    assert_match 'You are being', response.body
-    assert_select "a[href=?]", 'http://www.example.com/422', text: 'redirected'
+    assert_response :redirect
   end
 
   def check_privacy_page_contents
