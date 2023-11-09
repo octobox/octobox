@@ -11,6 +11,12 @@ ensure
   Sidekiq::Status.unstub(:status)
 end
 
+NULL_LOGGER = Logger.new(IO::NULL)
+cfg = Sidekiq::Config.new
+cfg.logger = NULL_LOGGER
+cfg.logger.level = Logger::WARN
+Sidekiq.instance_variable_set :@config, cfg
+
 module SidekiqMinitestSupport
   def after_teardown
     Sidekiq::Worker.clear_all
