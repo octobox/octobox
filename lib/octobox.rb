@@ -62,7 +62,7 @@ module Octobox
       payload = {
         iat: Time.now.to_i,
         exp: Time.now.to_i + (10 * 60),
-        iss: Rails.application.secrets.github_app_id
+        iss: Rails.application.credentials.github_app_id
       }
 
       JWT.encode(payload, private_key, "RS256")

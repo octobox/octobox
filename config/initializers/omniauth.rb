@@ -12,15 +12,15 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   token_url     = "#{Octobox.config.github_domain}/login/oauth/access_token"
 
   provider :github,
-           Rails.application.secrets.github_client_id,
-           Rails.application.secrets.github_client_secret,
+           Rails.application.credentials.github_client_id,
+           Rails.application.credentials.github_client_secret,
            client_options: { site: site, authorize_url: authorize_url, token_url: token_url },
            scope: Octobox.config.scopes
 
   if Octobox.github_app?
     provider :github_app,
-            Rails.application.secrets.github_app_client_id,
-            Rails.application.secrets.github_app_client_secret,
+            Rails.application.credentials.github_app_client_id,
+            Rails.application.credentials.github_app_client_secret,
             client_options: { site: site, authorize_url: authorize_url, token_url: token_url }
   end
 end

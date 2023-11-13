@@ -4,7 +4,7 @@ module Octobox
     ORGANISATION_COST_PER_PERIOD= 100
 
     def self.load_transaction(transaction_id)
-      Oj.load(Typhoeus.get("https://api.opencollective.com/v1/collectives/octobox/transactions/#{transaction_id}?apiKey=#{Rails.application.secrets.open_collective_api_key}").body)
+      Oj.load(Typhoeus.get("https://api.opencollective.com/v1/collectives/octobox/transactions/#{transaction_id}?apiKey=#{Rails.application.credentials.open_collective_api_key}").body)
     end
 
     def self.sync

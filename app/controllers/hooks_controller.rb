@@ -42,7 +42,7 @@ class HooksController < ApplicationController
   HMAC_DIGEST = OpenSSL::Digest.new('sha1')
 
   def authenticate_github_request!
-    secret = Rails.application.secrets.github_webhook_secret
+    secret = Rails.application.credentials.github_webhook_secret
 
     return unless secret.present?
 
