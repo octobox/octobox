@@ -58,7 +58,8 @@ class Subject < ApplicationRecord
       locked: remote_subject['locked'],
       sha: remote_subject.fetch('head', {})['sha'],
       body: remote_subject['body'].try(:gsub, "\u0000", ''),
-      draft: remote_subject['draft']
+      draft: remote_subject['draft'],
+      title: remote_subject['title']
     })
 
     return unless persisted?
