@@ -175,13 +175,13 @@
     <div class="card-body">
       <p><%= t('users.notices.notifications_for_orgs_with_access') %></p>
       <p><%= t('users.notices.enable_or_request_access') %></p>
-      <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.credentials.github_client_id}", class: 'btn btn-outline-dark' do %>
+      <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Octobox.config.github_client_id}", class: 'btn btn-outline-dark' do %>
         <%= octicon 'tools' %>&nbsp;
         <%= t('users.actions.manage_oauth_access') %>
       <% end %>
 
       <% if Octobox.github_app? && current_user.github_app_authorized? %>
-        <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Rails.application.credentials.github_app_client_id}", class: 'btn btn-outline-dark' do %>
+        <%= link_to "#{Octobox.config.github_domain}/settings/connections/applications/#{Octobox.config.github_app_client_id}", class: 'btn btn-outline-dark' do %>
           <%= octicon 'mark-github' %>&nbsp;
           <%= t('users.actions.manage_app_access') %>
         <% end %>

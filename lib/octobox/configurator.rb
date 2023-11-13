@@ -188,6 +188,42 @@ module Octobox
     end
     attr_writer :public_subject_rollout
 
+    def github_webhook_secret
+      Rails.application.credentials.github_webhook_secret || ENV['GITHUB_WEBHOOK_SECRET']
+    end
+
+    def github_app_client_id
+      Rails.application.credentials.github_app_client_id || ENV['GITHUB_APP_CLIENT_ID']
+    end
+
+    def github_app_client_secret
+      Rails.application.credentials.github_app_client_secret || ENV['GITHUB_APP_CLIENT_SECRET']
+    end
+
+    def github_app_id
+      Rails.application.credentials.github_app_id || ENV['GITHUB_APP_ID']
+    end
+
+    def github_client_id
+      Rails.application.credentials.github_client_id || ENV['GITHUB_CLIENT_ID']
+    end
+
+    def github_client_secret
+      Rails.application.credentials.github_client_secret || ENV['GITHUB_CLIENT_SECRET']
+    end
+
+    def google_analytics_id
+      Rails.application.credentials.google_analytics_id || ENV['GOOGLE_ANALYTICS_ID']
+    end
+
+    def bugsnag_js_api_key
+      Rails.application.credentials.bugsnag_js_api_key || ENV['BUGSNAG_JS_API_KEY']
+    end
+
+    def open_collective_api_key
+      Rails.application.credentials.open_collective_api_key || ENV['OPEN_COLLECTIVE_API_KEY']
+    end
+
     private
 
     def env_boolean(env_var_name)

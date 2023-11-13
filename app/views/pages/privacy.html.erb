@@ -62,7 +62,7 @@
       Cookies are small amounts of text stored on your computer's web browser that can be written by websites and read by websites. They can also be shared between websites. We use cookies to store some information about your current session, this enables us to do things like keep you logged into the website between pages. Cookies are also used by third-party providers:
     </p>
 
-    <% if Rails.application.credentials.google_analytics_id.present? %>
+    <% if Octobox.config.google_analytics_id.present? %>
       <h3>Analytics</h3>
       <p>
         We use Google Analytics to collect information about how people use this site. Google Analytics stores information such as what pages you visit, how long you are on the site, how you got here, what you click on, and information about your web browser. Your computer's IP address is masked (only a portion is stored) and personal information is only reported in aggregate. We do not allow Google to use or share our analytics data for any purpose besides providing us with analytics information.
