@@ -35,7 +35,7 @@ var Octobox = (function() {
     // Don't event.preventDefault(), since we want the
     // normal clicking behavior for links, starring, etc
     var oldCurrent = getCurrentRow();
-    var target = $(event.target);
+    var target = event.target;
 
     setRowCurrent(oldCurrent, false);
     setRowCurrent(target, true);
@@ -59,7 +59,7 @@ var Octobox = (function() {
 
       var old_link = document.getElementById("favicon-count");
       if ( old_link ) {
-        $(old_link).remove();
+        oldLink.parentNode.removeChild(oldLink);
       }
 
       var canvas = document.createElement("canvas"),
@@ -100,7 +100,8 @@ var Octobox = (function() {
   var enableTooltips = function() {
     if(!("ontouchstart" in window))
     {
-      $("[data-toggle='tooltip']").tooltip();
+      // needs bootstrap 5 upgrade to be able to remove jquery
+      $("[data-toggle='tooltip']").tooltip(); 
     }
   };
 
