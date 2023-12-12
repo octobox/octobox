@@ -19,7 +19,8 @@ var subscribeToComments = function(){
 
 if (document.querySelectorAll("meta[name='push_notifications']").length >0) {
   document.addEventListener("turbolinks:load", function() {
-    if(document.getElementById('thread').matches(':visible')){
+    var threadElement = document.getElementById('thread');
+    if(threadElement && threadElement.matches(':visible')){
       subscribeToComments();
     }
   });
