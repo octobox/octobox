@@ -1,5 +1,5 @@
 //= require jquery3
-//= require jquery_ujs
+//= require rails-ujs
 //= require turbolinks
 //= require local-time
 //= require popper
