@@ -700,9 +700,6 @@ var Octobox = (function() {
   var lastCheckedNotification = null;
 
   return {
-    getCurrentRow: getCurrentRow,
-    setRowCurrent: setRowCurrent,
-
     moveCursorToClickedRow: moveCursorToClickedRow,
     checkAll: checkAll,
     muteThread: muteThread,
