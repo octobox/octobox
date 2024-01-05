@@ -125,7 +125,11 @@ GEM
     builder (3.2.4)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
-    commonmarker (0.23.10)
+    commonmarker (1.0.4)
+      rb_sys (~> 0.9)
+    commonmarker (1.0.4-arm64-darwin)
+    commonmarker (1.0.4-x86_64-darwin)
+    commonmarker (1.0.4-x86_64-linux)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crack (0.4.5)
@@ -225,14 +229,14 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.3.0)
     mutex_m (0.2.0)
-    net-imap (0.4.9)
+    net-imap (0.4.9.1)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-smtp (0.4.0)
+    net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.0)
     nokogiri (1.16.0)
@@ -341,13 +345,14 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rb_sys (0.9.86)
     rdoc (6.6.2)
       psych (>= 4.0.0)
     redis (5.0.8)
       redis-client (>= 0.17.0)
     redis-client (0.19.1)
       connection_pool
-    reline (0.4.1)
+    reline (0.4.2)
       io-console (~> 0.5)
     request_store (1.5.1)
       rack (>= 1.4)
