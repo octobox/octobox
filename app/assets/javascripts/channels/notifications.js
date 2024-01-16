@@ -1,17 +1,17 @@
-$(document).on("turbolinks:load", function () {
-  if ($("meta[name='push_notifications']").length >0) {
+document.addEventListener("turbolinks:load", function () {
+  if (document.querySelectorAll("meta[name='push_notifications']").length > 0) {
     App.notifications = App.cable.subscriptions.create("NotificationsChannel", {
       received: function(data) {
         var el = '#notification-'+data.id;
-        if($(el).length) {
-          var selected = $(el).has("input:checked");
-          $(el)[0].outerHTML = data.notification;
-          if (selected.length) {
-            $(el).find("input[type=checkbox]").prop('checked', true);
+        if(document.querySelectorAll(el).length) {
+          var selected = document.querySelector(el).querySelector("input:checked");
+          document.querySelector(el).outerHTML = data.notification;
+          if (selected) {
+            document.querySelector(el).querySelector("input[type=checkbox]").checked = true;
           }
         }
-        if($('#notification-thread').attr('data-id') == data.id){
-          $('#thread-subject').html(data.subject);
+        if(document.querySelector('#notification-thread').getAttribute('data-id') == data.id){
+          document.querySelector('#thread-subject').innerHTML = data.subject;
         }
 
         Octobox.updateAllPinnedSearchCounts();

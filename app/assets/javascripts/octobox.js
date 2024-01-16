@@ -1,29 +1,33 @@
 var Octobox = (function() {
 
   var maybeConfirm = function(message){
-    if($('body.disable_confirmations').length){
-      return true
+    if(document.body.classList.contains('disable_confirmations')) {
+      return true;
     } else {
       return confirm(message);
     }
   }
 
   var checkSelectAll = function() {
-    $(".js-select_all").click();
+    if(selectAllElement = document.querySelector(".js-select_all")) {
+      selectAllElement.click();
+    }
   };
 
   var updatePinnedSearchCounts = function(pinned_search) {
-    var pinned_search = $(pinned_search);
-    $.get(pinned_search.data('url'), function(data) {
-      pinned_search.html(data.count);
-    }).fail(function() {
-      pinned_search.remove(); // Remove the total value if there's an error
-    });
+    fetch(pinned_search.dataset.url)
+      .then(response => response.json())
+      .then(data => {
+        pinned_search.innerHTML = data.count;
+      })
+      .catch(() => {
+        pinned_search.remove(); // Remove the total value if there's an error
+      });
   }
 
   var updateAllPinnedSearchCounts = function(){
-    $("span.pinned-search-count").each(function() {
-      updatePinnedSearchCounts(this);
+    document.querySelectorAll("span.pinned-search-count").forEach(function(element) {
+      updatePinnedSearchCounts(element);
     });
   }
 
@@ -31,16 +35,16 @@ var Octobox = (function() {
     // Don't event.preventDefault(), since we want the
     // normal clicking behavior for links, starring, etc
     var oldCurrent = getCurrentRow();
-    var target = $(event.target);
+    var target = event.target;
 
     setRowCurrent(oldCurrent, false);
     setRowCurrent(target, true);
   };
 
   var updateFavicon = function () {
-    $.get( "/notifications/unread_count", function(data) {
-      setFavicon(data.count)
-    });
+    fetch("/notifications/unread_count")
+      .then(response => response.json())
+      .then(data => setFavicon(data.count));
   };
 
   var setFavicon = function(count) {
@@ -55,7 +59,7 @@ var Octobox = (function() {
 
       var old_link = document.getElementById("favicon-count");
       if ( old_link ) {
-        $(old_link).remove();
+        oldLink.parentNode.removeChild(oldLink);
       }
 
       var canvas = document.createElement("canvas"),
@@ -96,7 +100,8 @@ var Octobox = (function() {
   var enableTooltips = function() {
     if(!("ontouchstart" in window))
     {
-      $("[data-toggle='tooltip']").tooltip();
+      // needs bootstrap 5 upgrade to be able to remove jquery
+      $("[data-toggle='tooltip']").tooltip(); 
     }
   };
 
@@ -156,12 +161,19 @@ var Octobox = (function() {
   };
 
   var checkAll = function() {
-    var checked = $(".js-select_all").prop("checked")
-    getDisplayedRows().find("input").prop("checked", checked).trigger("change");
+    var checked = document.querySelector(".js-select_all").checked;
+    getDisplayedRows().forEach(row => {
+      var input = row.querySelector("input");
+      if(input) {
+        input.checked = checked;
+        var event = new Event('change');
+        input.dispatchEvent(event);
+      }
+    });
   };
 
   var muteThread = function() {
-    var id = $('#notification-thread').data('id');
+    var id = document.querySelector('#notification-thread').dataset.id;
     mute(id);
   } ;
 
@@ -202,7 +214,7 @@ var Octobox = (function() {
   };
 
   var toggleArchive = function() {
-    if ($(".archive_toggle").hasClass("archive_selected")) {
+    if (document.querySelector(".archive_toggle").classList.contains("archive_selected")) {
       archiveSelected()
     } else {
       unarchiveSelected()
@@ -222,12 +234,12 @@ var Octobox = (function() {
   }
 
   var archiveThread = function(){
-    var id = $('#notification-thread').data('id');
+    var id = document.querySelector('#notification-thread').dataset.id;
     archive([id], true);
   }
 
   var unarchiveThread = function(){
-    var id = $('#notification-thread').data('id');
+    var id = document.querySelector('#notification-thread').dataset.id;
     archive([id], false);
   }
 
@@ -298,8 +310,8 @@ var Octobox = (function() {
 
   var markRowCurrent = function(row) {
     // Clicking a row marks it current
-    $(".current.js-current").removeClass("current js-current");
-    row.find("td").first().addClass("current js-current");
+    document.querySelector(".current.js-current").classList.remove("current", "js-current");
+    row.querySelector("td").classList.add("current", "js-current");
   };
 
   var initShiftClickCheckboxes = function() {
@@ -331,7 +343,7 @@ var Octobox = (function() {
   };
 
   var toggleStarClick = function(row) {
-    star(row.data("id"))
+    star(row.dataset.id)
   };
 
   var star = function(id){
@@ -505,7 +517,7 @@ var Octobox = (function() {
   // private methods
 
   var getDisplayedRows = function() {
-    return $(".js-table-notifications tr.notification")
+    return document.querySelectorAll(".js-table-notifications tr.notification");
   };
 
   var getMarkedRows = function(unmarked) {
@@ -524,7 +536,7 @@ var Octobox = (function() {
   };
 
   var getCurrentRow = function() {
-    return getDisplayedRows().has("td.js-current");
+    return Array.from(getDisplayedRows()).find(row => row.querySelector("td.js-current") !== null);
   };
 
   var getMarkedOrCurrentRows = function() {
@@ -640,14 +652,18 @@ var Octobox = (function() {
   };
 
   var setRowCurrent = function(row, add) {
-    var classes = "current js-current";
-    var td = row.find("td.notification-checkbox");
-    add ? td.addClass(classes) : td.removeClass(classes);
+    var classes = ["current", "js-current"];
+    var td = row.querySelector("td.notification-checkbox");
+    if (add) {
+      classes.forEach(cls => td.classList.add(cls));
+    } else {
+      classes.forEach(cls => td.classList.remove(cls));
+    }
   };
 
   var moveCursor = function(upOrDown) {
     var oldCurrent = getCurrentRow();
-    var target = upOrDown === "up" ? oldCurrent.next() : oldCurrent.prev();
+    var target = upOrDown === "up" ? oldCurrent.previousElementSibling : oldCurrent.nextElementSibling;
     if(target.length > 0) {
       setRowCurrent(oldCurrent, false);
       setRowCurrent(target, true);
