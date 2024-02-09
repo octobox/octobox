@@ -352,7 +352,7 @@ GEM
       connection_pool
     reline (0.4.2)
       io-console (~> 0.5)
-    request_store (1.5.1)
+    request_store (1.6.0)
       rack (>= 1.4)
     rexml (3.2.6)
     rgb (0.1.0)
