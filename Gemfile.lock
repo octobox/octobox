@@ -138,8 +138,7 @@ GEM
     dotenv-rails (3.1.0)
       dotenv (= 3.1.0)
       railties (>= 6.1)
-    drb (2.2.0)
-      ruby2_keywords
+    drb (2.2.1)
     encryptor (3.0.0)
     erubi (1.12.0)
     et-orbi (1.2.7)
