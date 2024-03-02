@@ -1,0 +1,669 @@
+openapi: '3.0.2'
+info:
+  title: "Octobox"
+  description: "Octobox helps you manage your GitHub notifications efficiently so you can spend more time getting things done. It provides several features to manage GitHub notifications, including archived states, starred noticiations, extended filtering, and pinned searches."
+  version: "1" #unsure here
+  termsOfService: "https://octobox.io/terms"
+  contact:
+    name: "Octobox API"
+    url: "https:/octobox.io"
+    # email: ""
+  license:
+    name: "GNU AFFERO GENERAL PUBLIC LICENSE"
+    url: "https://github.com/octobox/octobox?tab=AGPL-3.0-1-ov-file#readme"
+servers:
+  - url: "http://localhost:3000"
+    description: "For local development/testing"
+  - url: "http://octobox.io" # Is this the correct server name?
+tags:
+  - name: Notifications
+    description: "Return and process notifications"
+  - name: Users
+    description: "Return and modify user profile information"
+  - name: Pinned Searches
+    description: "Create, return, and modify pinned searches"
+externalDocs:
+  description: Octobox Documentation
+  url: https://octobox.io/documentation
+security:
+  - BearerAuth: []
+  - ApiKeyAuth: []
+paths:
+  /api/notifications/archive_selected.json:
+    post:
+      tags:
+        - Notifications
+      summary: "Archive notifications."
+      description: "Archive GitHub notifications. You can choose to archive all notifications or only selected ones."
+      operationId: ArchiveNotifications
+      parameters:
+        - name: id
+          in: query
+          description: "**Notification ID.** _Example: 1_. You can select a single notification ID or an array of IDs to archive. If ID is set to ‘all’, all notifications will be archived."
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        204:
+          description: Archive successful.
+                
+  /api/notifications/delete_selected.json:
+    delete:
+      tags:
+        - Notifications
+      summary: "Delete notifications."
+      description: "Delete GitHub notifications. You can choose to delete all notifications or only selected ones."
+      operationId: DeleteNotifications
+      parameters:
+        - name: id
+          in: query
+          description: "**Notification ID.** _Example: 1_. You can select a single notification ID or an array of IDs to delete. If ID is set to ‘all’, all of your notifications will be deleted."
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        204:
+          description: Deletion successful.
+
+  /api/notifications.json:
+    get:
+      tags:
+        - Notifications
+      summary: "Return notifications."
+      description: "Return a list of notifications and associated data for the user. See the example response below for the data that will be returned."
+      operationId: ReturnNotifications
+      parameters:
+        - name: page
+          in: query
+          description: "**Search page.** _Example: 1_. You can request a specific page of notifications using this parameter."
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          description: "**Results per page.** _Example: 100._ You can identify the number of results to include per page. The default value is 20, and the maximum value is 100."
+          schema:
+            type: integer
+            maximum: 100
+        - name: starred
+          in: query
+          description: "**Return starred notifications.** _Example: true_. You can return only your starred notifications."
+          schema:
+            type: boolean
+        - name: archive
+          in: query
+          description: "**Return archived notifications.** _Example: true_. You can use this parameter to return only notifications that you have archived."
+          schema:
+            type: boolean
+        - name: q
+          in: query
+          description: "**Search by subject title.** _Example: 'Improve Rest API Docs.'_ You can use this parameter to search for a notification using its subject title."
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notifications'
+
+  /api/notifications/lookup.json:
+    get:
+      tags:
+        - Notifications
+      summary: "Find notification by subject URL."
+      description: "Return a notification using its subject URL."
+      operationId: ReturnNotificationBySubject
+      parameters:
+        - name: url
+          in: query
+          description: "GitHub subject URL. _Example: https://github.com/{user}/{subject-URL}_."
+          schema:
+            type: string
+      responses:
+          200:
+            description: Search successful.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/subject-url-response'
+    
+  /api/notifications/mark_read_selected.json:
+    get:
+      tags:
+        - Notifications
+      summary: "Mark notifications as read."
+      description: "Mark notifications as read. You can choose to mark all notifications as read, or only selected ones."
+      operationId: MarkRead
+      parameters:
+        - name: id
+          in: query
+          description: "**Notification ID.** _Example: 1_. You can select a single notification ID or an array of IDs to mark as read. If ID is set to ‘all’, all notifications will be marked as read."
+          schema:
+            type: array
+            items: 
+              type: string
+      responses:
+        204:
+          description: Notifications successfully marked as read.
+  /api/notifications/mute_selected.json:
+    post:
+      tags:
+        - Notifications
+      summary: "Mute notifications."
+      description: "Mute notifications. You can choose to mute all notifications or only selected ones. Muting notifications will also archive them."
+      operationId: MuteNotifications
+      parameters:
+        - name: id
+          in: query
+          description: "**Notification ID.** _Example: 1_. You can select a single notification ID or an array of IDs to mute. If ID is set to ‘all’, all notifications will be muted. Muting notifications will also archive them."
+          schema:
+            type: array
+            items: 
+              type: string
+      responses:
+        204:
+          description: Mute successful.
+
+  
+  /api/notifications/{id}/star.json:
+    post: 
+      tags:
+        - Notifications
+      summary: "Change a notification's star status."
+      description: "Star or un-star a notification based on the current status of the notification. If the notification is currently not starred, a star will be applied. If it is currently starred, the star will be removed. "
+      operationId: StarNotification
+      parameters:
+        - name: id
+          description: "**Notification ID.** _Example: 1_. Note that this parameter only accepts a single notification ID.  "
+          required: true
+          in: path
+          schema:
+            type: string
+
+      responses:
+        204: 
+          description: Star state-change successful.
+                
+  /api/notifications/sync.json: # I couldn't get this to output a 204 code in terminal. Maybe it's because I'm using Docker/doing local testing?
+    post:
+      tags:
+        - Notifications
+      description: "Initiate sync with GitHub."
+      summary: "Sync with GitHub."
+      operationId: SyncCheck
+      responses:
+        204:
+          description: Sync successful.
+    
+  /api/notifications/syncing.json: # I also couldn't get this to work using CURL. It just seemed to put out the whole HTML file.
+    post:
+      tags:
+        - Notifications
+      description: "Check whether Octobox is synchronizing notifications with GitHub."
+      summary: Check GitHub sync.
+      operationId: Syncing
+      responses:
+        204:
+          description: Octobox is syncing to GitHub.
+        423:
+          description: The resource is locked and can't be accessed.
+  
+  /api/notifications/unread_count.json:
+    get:
+      tags:
+        - Notifications
+      description: "Return the number of unread notifications.."
+      summary: "Return unread notification count."
+      operationId: ReturnUnreadCount
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                title: Count
+                type: object
+                properties:
+                  count:
+                    description: The mumber of unread notifications.
+                    type: number
+                    example: 1
+
+
+#PinnedSearchesController
+  /api/pinned_searches.json:
+    post: # I couldn't get this to work using CURL. Maybe it's because I'm using Docker/doing local testing? The JSON in the current documentation was throwing me a bit, too, and I had a hard time validating it. I don't think the example response is currently correct.
+      tags:
+        - Pinned Searches
+      summary: "Create a pinned search."
+      description: "Create a pinned search to navigate GitHub more efficiently."
+      operationId: CreatePinnedSearch
+      parameters:
+        - name: query
+          in: query
+          description: "**Search query.** The search query string to save as a pinned search. _Example_: 'API'" 
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: "**Display name.** _Example: API Projects._ The display name for the pinned search."
+          schema:
+            type: string
+      responses:
+        200:
+          description: Pinned search successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create-pinned-search'
+
+    get:
+      tags:
+        - Pinned Searches
+      summary: "Return pinned searches."
+      description: "Return a list of your pinned searches."
+      operationId: ReturnPinnedSearches
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/return-pinned-searches' 
+                
+  /api/pinned_searches/{id}.json:
+  
+    delete:
+      summary: "Delete a pinned search."
+      description: "Delete a pinned search that you no longer need."
+      operationId: DeletePinnedSearch
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "**Pinned Search Id.** _Example: 35778_. The ID of the pinned search you would like to delete."
+          schema:
+            type: number
+      tags:
+        - Pinned Searches
+      responses:
+        200:
+          description: Pinned search deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Successful delete.
+                example: HEAD OK
+    get:
+      tags:
+        - Pinned Searches
+      summary: "Return a single pinned search."
+      description: "Return a single pinned search using its pinned search ID."
+      operationId: ReturnPinnedSearch
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "**Pinned Search Id.** _Example: 35778. The ID of the pinned search you would like to get."
+          schema:
+            type: number
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/return-pinned-search'
+    patch: # I couldn't get this to work using CURL. Maybe it's because I'm using Docker/doing local testing? The JSON in the current documentation was throwing me a bit, too, and I had a hard time validating it. I don't think the example response is currently correct.
+      tags:
+        - Pinned Searches
+      summary: "Update a pinned search."
+      description: "Update a pinned search. You can update the search query string and/or the display name of the search."
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "**Pinned Search Id.** _Example: 35778._ The ID of the pinned search you would like to update."
+          schema:
+            type: number
+        - name: query
+          in: query
+          description: "**Search query string.** _Example: owner:octobox inbox:true._ The text that should be patched to the search query string of the pinned search."
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: "**Display name.** _Example: work._ The display name of the search. The text that should be patched to the display name of the pinned search."
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create-pinned-search'
+# UsersController
+  /api/users/profile.json:
+    get:
+      tags:
+      - Users
+      summary: "Return user profile."
+      description: "Return user profile information for the current user. Only the current user profile can be returned."
+      operationId: ReturnUserProfile
+      responses:
+        200:
+          description: User profile successfully returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+  /api/users/{id}.json:
+    patch:
+      tags:
+        - Users
+      summary: "Update user profile."
+      description: "Allows users to update their user profile. Only the current user profile will be updated."
+      operationId: UpdateUser
+      parameters:
+        - name: id
+          in: path
+          description: "**GitHub user ID.** _Example: 1234351._"
+          required: true
+          schema:
+            type: number
+        - name: personal_access_token
+          in: query
+          description: "**The user's personal access token.**"
+          schema:
+            type: string
+        - name: refresh_interval
+          in: query
+          description: "**Refresh interval.** _Example: 60000._ The refresh interval on which a sync should be initiated while viewing the app. _Unit: milliseconds._"
+          schema:
+            type: number
+      responses:
+      
+       200:
+          description: Update successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/patch-response'
+    delete:
+      tags:
+        - Users
+      summary: "Delete user profile."
+      description: "Delete the user profile. Only the current user profile will be deleted."
+      operationId: DeleteUser
+      parameters:
+        - name: id
+          in: path
+          description: "**GitHub user ID.** _Example: 1234351._"
+          required: true
+          schema:
+            type: number
+      responses:
+        200:
+          description: Deletion successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/profile'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Octobox-API
+  schemas:
+    profile:
+      title: User Information
+      type: object
+      properties:
+        id:
+          type: number
+          description: The user ID.
+          example: 1
+        github_id:
+          type: number
+          description: The GitHub ID
+          example: 3074765
+        github_login:
+          type: string
+          description: The user's GitHub login
+          example: "jules2689"
+        last_synced_at:
+          type: string
+          description: The date and time of the last sync.
+          example: "2017-02-22T15:49:32.104Z"
+        created_at:
+          type: string
+          description: The date and time of creation.
+          example: "2017-02-22T15:49:32.104Z"
+        updated_at:
+          type: string
+          description: The date and time of the last update.
+          example: "2017-02-22T15:49:32.104Z"
+
+    patch-response:
+      title: Patch Response
+      type: object
+      properties:
+        refresh_interval:
+          description: The refresh interval on which a sync should be initiated (while viewing the app). In milliseconds.
+          type: number
+          example: 60000
+    
+    create-pinned-search:
+      title: Post or Patch Pinned Search
+      type: object
+      properties:
+        id:
+          type: number
+          description: The search ID.
+          example: 35778
+        user_id:
+          type: number
+          description: The User ID.
+          example: 11741
+        query:
+          type: string
+          description: The search query.
+          example: "owner:octobox inbox:true"
+        name:
+          type: string
+          description: The search name.
+          example: "Work"
+        count:
+          type: number
+          description: The count.
+          example: 0
+        created_at:
+          type: string
+          description: The date and time of creation.
+          example: "2021-11-23T19:48:39.953Z"
+        updated_at:
+          type: string
+          description: The date and time of update.
+          example: "2021-11-23T19:48:39.953Z"
+          
+    return-pinned-searches:
+      title: Return Pinned Searches
+      type: object
+      properties:
+        pinned_searches:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              user_id:
+                type: integer
+              query:
+                type: string
+              name:
+                type: string
+              count:
+                type: integer
+              created_at:
+                type: string
+              updated_at:
+                type: string
+                
+    return-pinned-search:
+      title: Return a Pinned Search
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        query:
+          type: string
+        name:
+          type: string
+        count:
+          type: integer
+        created_at:
+          type: string
+        updated_at:
+          type: string
+          
+          
+    notifications:
+      title: Notifications
+      type: object
+      properties:
+        pagination:
+          type: object
+          properties:
+            total_notifications:
+              type: integer
+            page:
+              type: integer
+            total_pages:
+              type: integer
+            per_page:
+              type: integer
+        types:
+          type: object
+          properties:
+            PullRequest:
+              type: integer
+        reasons:
+          type: object
+          properties:
+            mention:
+              type: integer
+        unread_repositories:
+          type: object
+          properties:
+            octobox/octobox:
+              type: integer
+        notifications:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              github_id:
+                type: integer
+              reason:
+                type: string
+              unread:
+                type: boolean
+              archived:
+                type: boolean
+              starred:
+                type: boolean
+              url:
+                type: string
+              web_url:
+                type: string
+              last_read_at:
+                type: string
+              created_at:
+                type: string
+              updated_at:
+                type: string
+              subject:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  url:
+                    type: string
+                  type:
+                    type: string
+                  state:
+                    type: string
+              repo:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  owner:
+                    type: string
+                  repo_url:
+                    type: string
+
+    subject-url-response:
+      title: Subject URL Response
+      type: object
+      properties:
+        id:
+          type: integer
+        github_id:
+          type: integer
+        reason:
+          type: string
+        unread:
+          type: boolean
+        archived:
+          type: boolean
+        starred:
+          type: boolean
+        url:
+          type: string
+        web_url:
+          type: string
+        last_read_at:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        subject:
+          type: object
+          properties:
+            title:
+              type: string
+            url:
+              type: string
+            type:
+              type: string
+            state:
+              type: string
+        repo:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            owner:
+              type: string
+            repo_url:
+              type: string
