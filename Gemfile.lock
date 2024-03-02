@@ -1,15 +1,4 @@
 GIT
-  remote: https://github.com/mhenrixon/sidekiq-unique-jobs
-  revision: b31e80bc5542188573614adfa77a834a7268ccdf
-  ref: b31e80b
-  specs:
-    sidekiq-unique-jobs (8.0.3)
-      brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
-      concurrent-ruby (~> 1.0, >= 1.0.5)
-      sidekiq (>= 7.0.0, < 8.0.0)
-      thor (>= 1.0, < 3.0)
-
-GIT
   remote: https://github.com/octobox/attr_encrypted.git
   revision: e33d91b059031cabaf065ce8c3899dc3699d003d
   branch: rails-7
@@ -383,6 +372,11 @@ GEM
     sidekiq-status (3.0.3)
       chronic_duration
       sidekiq (>= 6.0, < 8)
+    sidekiq-unique-jobs (8.0.4)
+      brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
+      concurrent-ruby (~> 1.0, >= 1.0.5)
+      sidekiq (>= 7.0.0, < 8.0.0)
+      thor (>= 1.0, < 3.0)
     skylight (6.0.4)
       activesupport (>= 5.2.0)
     snaky_hash (2.0.1)
@@ -480,7 +474,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-scheduler
   sidekiq-status
-  sidekiq-unique-jobs!
+  sidekiq-unique-jobs (= 8.0.4)
   skylight (~> 6.0.4)
   spring
   sql_queries_count
