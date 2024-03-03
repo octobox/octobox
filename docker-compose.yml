@@ -44,7 +44,7 @@ services:
       - redis.service.octobox.internal
 
   database.service.octobox.internal:
-    image: postgres:9.6-alpine
+    image: postgres:16-alpine
     volumes:
       - pg_data:/var/lib/postgresql/data
     networks:
@@ -53,7 +53,7 @@ services:
       - POSTGRES_PASSWORD=development
 
   redis.service.octobox.internal:
-    image: redis:4.0-alpine
+    image: redis:7-alpine
     networks:
       - internal
 
