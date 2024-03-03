@@ -38,6 +38,7 @@ gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
 gem 'psych'
 gem 'nokogiri'
+gem 'redis'
 
 group :development, :test do
   gem 'dotenv-rails'
