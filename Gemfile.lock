@@ -106,9 +106,6 @@ GEM
       sassc-rails (>= 2.0.0)
     brakeman (6.1.2)
       racc
-    brpoplpush-redis_script (0.1.3)
-      concurrent-ruby (~> 1.0, >= 1.0.5)
-      redis (>= 1.0, < 6)
     bugsnag (6.26.3)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
@@ -205,7 +202,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    marcel (1.0.3)
+    marcel (1.0.4)
     mini_mime (1.1.5)
     mini_portile2 (2.8.5)
     minitest (5.22.2)
@@ -266,8 +263,8 @@ GEM
     omniauth-rails_csrf_protection (1.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    pagy (7.0.7)
-    pg (1.5.5)
+    pagy (7.0.8)
+    pg (1.5.6)
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
@@ -335,8 +332,6 @@ GEM
       ffi (~> 1.0)
     rdoc (6.6.2)
       psych (>= 4.0.0)
-    redis (5.1.0)
-      redis-client (>= 0.17.0)
     redis-client (0.20.0)
       connection_pool
     reline (0.4.3)
@@ -372,8 +367,7 @@ GEM
     sidekiq-status (3.0.3)
       chronic_duration
       sidekiq (>= 6.0, < 8)
-    sidekiq-unique-jobs (8.0.4)
-      brpoplpush-redis_script (> 0.1.1, <= 2.0.0)
+    sidekiq-unique-jobs (8.0.10)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 7.0.0, < 8.0.0)
       thor (>= 1.0, < 3.0)
@@ -474,7 +468,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-scheduler
   sidekiq-status
-  sidekiq-unique-jobs (= 8.0.4)
+  sidekiq-unique-jobs
   skylight (~> 6.0.4)
   spring
   sql_queries_count
