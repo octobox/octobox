@@ -167,7 +167,7 @@ Using `docker-compose up` automatically merges the override file in to the base 
 ### Configuring a production environment
 
 The `docker-compose.yml` file provided is for a _development_ configuration;
-there are are a number of things you'll want to configure differently for
+there are a number of things you'll want to configure differently for
 production use, like setting the Rails application for production and setting
 up a reverse proxy such as Apache or Nginx to serve static assets. You can use the
 `docker-compose.yml` file as an example to write your own or simply override
