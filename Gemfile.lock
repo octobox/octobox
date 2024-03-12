@@ -127,7 +127,7 @@ GEM
     drb (2.2.1)
     encryptor (3.0.0)
     erubi (1.12.0)
-    et-orbi (1.2.7)
+    et-orbi (1.2.8)
       tzinfo
     ethon (0.16.0)
       ffi (>= 1.15.0)
