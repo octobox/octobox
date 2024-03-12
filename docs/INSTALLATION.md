@@ -422,7 +422,7 @@ n.b. you will be required to log into the oauth app (to allow access to the noti
 
 To process events received from the webhook, ensure you have a sidekiq worker running as well as the rails server: `$ bundle exec sidekiq -C config/sidekiq.yml`
 
-If you wish to run the GitHub app locally and still receive webhook events, use a service like <https://ngrok.com> to create a public url (`https://my-octobx.ngrok.com`) and use instead of http://localhost:3000 for all oauth and GitHub app config urls.
+If you wish to run the GitHub app locally and still receive webhook events, use a service like [tunnelmole](https://tunnelmole.com/docs) or [ngrok](https://ngrok.com) to create a public url (e.g. `https://my-octobx.tunnelmole.net` / `https://my-octobx.ngrok.com`) and use instead of http://localhost:3000 for all oauth and GitHub app config urls. Tunnelmole is the open source option, ngrok is a popular closed source tool.
 
 ## Open links in the same tab
 
