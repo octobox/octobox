@@ -424,7 +424,7 @@ components:
       in: header
       name: X-Octobox-API
   schemas:
-    profile:
+    User:
       title: User Information
       type: object
       properties:
