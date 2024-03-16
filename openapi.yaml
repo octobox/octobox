@@ -14,7 +14,7 @@ info:
 servers:
   - url: "http://localhost:3000"
     description: "For local development/testing"
-  - url: "http://octobox.io" # Is this the correct server name?
+  - url: "https://octobox.io"
 tags:
   - name: Notifications
     description: "Return and process notifications"
