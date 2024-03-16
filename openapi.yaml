@@ -10,7 +10,7 @@ info:
     # email: ""
   license:
     name: "GNU AFFERO GENERAL PUBLIC LICENSE"
-    url: "https://github.com/octobox/octobox?tab=AGPL-3.0-1-ov-file#readme"
+    url: "https://github.com/octobox/octobox/blob/master/LICENSE.txt"
 servers:
   - url: "http://localhost:3000"
     description: "For local development/testing"
