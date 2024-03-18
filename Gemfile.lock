@@ -342,7 +342,7 @@ GEM
       rack (>= 1.4)
     rexml (3.2.6)
     rgb (0.1.0)
-    rouge (4.2.0)
+    rouge (4.2.1)
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
