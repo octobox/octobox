@@ -79,7 +79,22 @@ class Notification < ApplicationRecord
   def self.archive(notifications, value)
     value = value ? ActiveRecord::Type::Boolean.new.cast(value) : true
     notifications.update_all(archived: value)
-    mark_read(notifications)
+    user = notifications.first.try(:user)
+    ArchiveWorker.perform_async_if_configured(user.id, notifications.map(&:github_id)) if user && value
+  end
+
+  def self.archive_on_github(user, notification_ids)
+    conn = user.github_client.client_without_redirects
+    manager = Typhoeus::Hydra.new(max_concurrency: Octobox.config.max_concurrency)
+    begin
+      conn.in_parallel(manager) do
+        notification_ids.each do |id|
+            conn.delete "notifications/threads/#{id}"
+        end
+      end
+    rescue Octokit::Forbidden, Octokit::NotFound, Octokit::Unauthorized
+      # one or more notifications are for repos the user no longer has access to
+    end
   end
 
   def self.mark_read(notifications)
