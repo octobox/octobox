@@ -195,7 +195,7 @@ paths:
       summary: "Sync with GitHub."
       operationId: SyncCheck
       responses:
-        204:
+        200:
           description: Sync successful.
     
   /api/notifications/syncing.json: # I also couldn't get this to work using CURL. It just seemed to put out the whole HTML file.
@@ -206,10 +206,8 @@ paths:
       summary: Check GitHub sync.
       operationId: Syncing
       responses:
-        204:
+        200:
           description: Octobox is syncing to GitHub.
-        423:
-          description: The resource is locked and can't be accessed.
   
   /api/notifications/unread_count.json:
     get:
@@ -235,30 +233,25 @@ paths:
 
 #PinnedSearchesController
   /api/pinned_searches.json:
-    post: # I couldn't get this to work using CURL. Maybe it's because I'm using Docker/doing local testing? The JSON in the current documentation was throwing me a bit, too, and I had a hard time validating it. I don't think the example response is currently correct.
+    post:
       tags:
         - Pinned Searches
       summary: "Create a pinned search."
       description: "Create a pinned search to navigate GitHub more efficiently."
       operationId: CreatePinnedSearch
-      parameters:
-        - name: query
-          in: query
-          description: "**Search query.** The search query string to save as a pinned search. _Example_: 'API'" 
-          schema:
-            type: string
-        - name: name
-          in: query
-          description: "**Display name.** _Example: API Projects._ The display name for the pinned search."
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/write-pinned-search'
+            
       responses:
         200:
           description: Pinned search successfully created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/create-pinned-search'
+                $ref: '#/components/schemas/pinned-search'
 
     get:
       tags:
@@ -272,7 +265,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/return-pinned-searches' 
+                type: array
+                items:
+                  $ref: '#/components/schemas/pinned-search'
                 
   /api/pinned_searches/{id}.json:
   
@@ -317,8 +312,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/return-pinned-search'
-    patch: # I couldn't get this to work using CURL. Maybe it's because I'm using Docker/doing local testing? The JSON in the current documentation was throwing me a bit, too, and I had a hard time validating it. I don't think the example response is currently correct.
+                $ref: '#/components/schemas/pinned-search'
+    patch:
       tags:
         - Pinned Searches
       summary: "Update a pinned search."
@@ -330,23 +325,18 @@ paths:
           description: "**Pinned Search Id.** _Example: 35778._ The ID of the pinned search you would like to update."
           schema:
             type: number
-        - name: query
-          in: query
-          description: "**Search query string.** _Example: owner:octobox inbox:true._ The text that should be patched to the search query string of the pinned search."
-          schema:
-            type: string
-        - name: name
-          in: query
-          description: "**Display name.** _Example: work._ The display name of the search. The text that should be patched to the display name of the pinned search."
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/write-pinned-search'
       responses:
         200:
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/create-pinned-search'
+                $ref: '#/components/schemas/pinned-search'
 # UsersController
   /api/users/profile.json:
     get:
@@ -361,7 +351,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/profile'
+                $ref: '#/components/schemas/user'
   /api/users/{id}.json:
     patch:
       tags:
@@ -393,7 +383,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/patch-response'
+                $ref: '#/components/schemas/refresh-setting'
     delete:
       tags:
         - Users
@@ -413,7 +403,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/profile'
+                $ref: '#/components/schemas/user'
+                
 components:
   securitySchemes:
     BearerAuth:
@@ -424,7 +415,7 @@ components:
       in: header
       name: X-Octobox-API
   schemas:
-    User:
+    user:
       title: User Information
       type: object
       properties:
@@ -453,8 +444,8 @@ components:
           description: The date and time of the last update.
           example: "2017-02-22T15:49:32.104Z"
 
-    patch-response:
-      title: Patch Response
+    refresh-setting:
+      title: Refresh Setting
       type: object
       properties:
         refresh_interval:
@@ -462,8 +453,20 @@ components:
           type: number
           example: 60000
     
-    create-pinned-search:
+    write-pinned-search:
       title: Post or Patch Pinned Search
+      type: object
+      properties:
+        query:
+          type: string
+          example: foo
+        name:
+          type: string
+          example: bar
+      
+    
+    pinned-search:
+      title: Return Pinned Search
       type: object
       properties:
         id:
@@ -494,50 +497,6 @@ components:
           type: string
           description: The date and time of update.
           example: "2021-11-23T19:48:39.953Z"
-          
-    return-pinned-searches:
-      title: Return Pinned Searches
-      type: object
-      properties:
-        pinned_searches:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-              user_id:
-                type: integer
-              query:
-                type: string
-              name:
-                type: string
-              count:
-                type: integer
-              created_at:
-                type: string
-              updated_at:
-                type: string
-                
-    return-pinned-search:
-      title: Return a Pinned Search
-      type: object
-      properties:
-        id:
-          type: integer
-        user_id:
-          type: integer
-        query:
-          type: string
-        name:
-          type: string
-        count:
-          type: integer
-        created_at:
-          type: string
-        updated_at:
-          type: string
-          
           
     notifications:
       title: Notifications
@@ -572,52 +531,47 @@ components:
         notifications:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: integer
-              github_id:
-                type: integer
-              reason:
-                type: string
-              unread:
-                type: boolean
-              archived:
-                type: boolean
-              starred:
-                type: boolean
-              url:
-                type: string
-              web_url:
-                type: string
-              last_read_at:
-                type: string
-              created_at:
-                type: string
-              updated_at:
-                type: string
-              subject:
-                type: object
-                properties:
-                  title:
-                    type: string
-                  url:
-                    type: string
-                  type:
-                    type: string
-                  state:
-                    type: string
-              repo:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  owner:
-                    type: string
-                  repo_url:
-                    type: string
+           "$ref": "#/components/schemas/notification"
+    
+    notification:
+      title: Notification
+      type: object
+      properties:
+        id:
+          type: integer
+        github_id:
+          type: integer
+        reason:
+          type: string
+        unread:
+          type: boolean
+        archived:
+          type: boolean
+        starred:
+          type: boolean
+        url:
+          type: string
+        web_url:
+          type: string
+        last_read_at:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        subject:
+          "$ref": "#/components/schemas/subject"
+        repo:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            owner:
+              type: string
+            repo_url:
+              type: string
 
     subject-url-response:
       title: Subject URL Response
@@ -645,17 +599,8 @@ components:
           type: string
         updated_at:
           type: string
-        subject:
-          type: object
-          properties:
-            title:
-              type: string
-            url:
-              type: string
-            type:
-              type: string
-            state:
-              type: string
+        subject: 
+          "$ref": "#/components/schemas/subject"
         repo:
           type: object
           properties:
@@ -667,3 +612,16 @@ components:
               type: string
             repo_url:
               type: string
+
+    subject:
+      title: Subject
+      type: object
+      properties:
+        title:
+          type: string
+        url:
+          type: string
+        type:
+          type: string
+        state:
+          type: string
