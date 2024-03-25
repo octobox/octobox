@@ -562,16 +562,7 @@ components:
         subject:
           "$ref": "#/components/schemas/subject"
         repo:
-          type: object
-          properties:
-            id:
-              type: integer
-            name:
-              type: string
-            owner:
-              type: string
-            repo_url:
-              type: string
+          "$ref": "#/components/schemas/repo"
 
     subject-url-response:
       title: Subject URL Response
@@ -624,4 +615,15 @@ components:
         type:
           type: string
         state:
+          type: string
+    repo:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        owner:
+          type: string
+        repo_url:
           type: string
