@@ -67,10 +67,10 @@ module Octobox
         scope :label, ->(label_names) {
           label_names = [label_names] if label_names.is_a?(String)
 
+          # Multiple labels can be matched with one notification so we need to use a distinct query.
           joins(:labels).where(
             label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
-          )
-
+          ).distinct
         }
 
         scope :assigned, ->(assignees) {

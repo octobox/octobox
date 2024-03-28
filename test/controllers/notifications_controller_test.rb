@@ -734,6 +734,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal assigns(:notifications).length, 2
   end
 
+  test 'search results can filter by multiple labels with distinct items' do
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user)
+    subject1 = create(:subject, notifications: [notification1])
+    create(:label, subject: subject1, name: 'bug')
+    create(:label, subject: subject1, name: 'feature')
+    get '/?q=label%3Abug%2Cfeature'
+    assert_equal assigns(:notifications).length, 1
+  end
+
   test 'search results can filter to exclude label' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user)
