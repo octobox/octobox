@@ -104,7 +104,7 @@ module StubHelper
     stub_comments_requests
     headers  = { 'Content-Type' => 'application/json' }.merge(extra_headers)
 
-    stub_request(:get, /https:\/\/api.github.com\/repos\/octobox\/octobox\z/)
+    stub_request(:get, /https:\/\/api\.github\.com\/repos\/octobox\/octobox\z/)
       .to_return({ status: 200, body: file_fixture('repository.json'), headers: headers })
   end
 

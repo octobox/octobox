@@ -171,7 +171,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }, xhr: true
 
@@ -188,7 +188,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { id: ['all'], value: true }, xhr: true
 
@@ -906,7 +906,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
     notification1 = create(:notification, user: @user, archived: true)
     create(:notification, user: @user, archived: true)
-    stub_request(:patch, /https:\/\/api.github.com\/notifications\/threads/)
+    
 
     post '/notifications/archive_selected', params: { id: [notification1.id], value: false }, xhr: true
 
