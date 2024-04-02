@@ -6,7 +6,7 @@ class Api::PinnedSearchesController < Api::ApplicationController
   #
   # ==== Example
   #
-  # <code>POST api/pinned_searchesjson</code>
+  # <code>POST api/pinned_searches.json</code>
   #   { "pinned_search" : { "query" : "owner:octobox inbox:true", "name" : "Work" } }
   #
   #   {
