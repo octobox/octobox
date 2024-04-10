@@ -336,7 +336,7 @@ GEM
       redis-client (>= 0.17.0)
     redis-client (0.21.1)
       connection_pool
-    reline (0.5.0)
+    reline (0.5.1)
       io-console (~> 0.5)
     request_store (1.6.0)
       rack (>= 1.4)
