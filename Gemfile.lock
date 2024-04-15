@@ -204,7 +204,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.5)
+    mini_portile2 (2.8.6)
     minitest (5.22.3)
     mocha (2.2.0)
       ruby2_keywords (>= 0.0.5)
