@@ -111,7 +111,11 @@ GEM
     builder (3.2.4)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
-    commonmarker (0.23.10)
+    commonmarker (1.1.0)
+      rb_sys (~> 0.9)
+    commonmarker (1.1.0-arm64-darwin)
+    commonmarker (1.1.0-x86_64-darwin)
+    commonmarker (1.1.0-x86_64-linux)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
     crack (1.0.0)
@@ -330,6 +334,7 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rb_sys (0.9.97)
     rdoc (6.6.3.1)
       psych (>= 4.0.0)
     redis (5.2.0)
@@ -434,7 +439,7 @@ DEPENDENCIES
   bootstrap (= 4.6.2)
   brakeman
   bugsnag
-  commonmarker (= 0.23.10)
+  commonmarker (= 1.1.0)
   dotenv-rails
   factory_bot
   faraday
