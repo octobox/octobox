@@ -211,9 +211,9 @@ GEM
     msgpack (1.7.2)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
-    multipart-post (2.4.0)
+    multipart-post (2.4.1)
     mutex_m (0.2.0)
-    net-imap (0.4.10)
+    net-imap (0.4.11)
       date
       net-protocol
     net-pop (0.1.2)
@@ -222,7 +222,7 @@ GEM
       timeout
     net-smtp (0.5.0)
       net-protocol
-    nio4r (2.7.1)
+    nio4r (2.7.3)
     nokogiri (1.16.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -240,10 +240,10 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
-    octicons (19.8.0)
-    octicons_helper (19.8.0)
+    octicons (19.9.0)
+    octicons_helper (19.9.0)
       actionview
-      octicons (= 19.8.0)
+      octicons (= 19.9.0)
       railties
     octokit (8.1.0)
       base64
@@ -280,7 +280,7 @@ GEM
       puma (>= 2.7)
     raabro (1.4.0)
     racc (1.7.3)
-    rack (3.0.10)
+    rack (3.0.11)
     rack-canonical-host (1.3.0)
       addressable (> 0, < 3)
       rack (>= 1.6, < 4)
@@ -337,7 +337,7 @@ GEM
       redis-client (>= 0.22.0)
     redis-client (0.22.1)
       connection_pool
-    reline (0.5.5)
+    reline (0.5.6)
       io-console (~> 0.5)
     request_store (1.7.0)
       rack (>= 1.4)
@@ -455,7 +455,7 @@ DEPENDENCIES
   oj
   omniauth-github (= 2.0.1)
   omniauth-rails_csrf_protection
-  pagy
+  pagy (= 7.0.11)
   pg
   pg_search
   psych
@@ -488,4 +488,4 @@ RUBY VERSION
    ruby 3.3.0p31
 
 BUNDLED WITH
-   2.5.6
+   2.5.10
