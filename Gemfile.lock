@@ -261,7 +261,7 @@ GEM
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
-    omniauth-rails_csrf_protection (1.0.1)
+    omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     pagy (7.0.11)
