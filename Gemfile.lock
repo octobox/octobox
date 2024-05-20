@@ -329,7 +329,7 @@ GEM
       zeitwerk (~> 2.6)
     rake (13.2.1)
     rb-fsevent (0.11.2)
-    rb-inotify (0.10.1)
+    rb-inotify (0.11.1)
       ffi (~> 1.0)
     rdoc (6.6.3.1)
       psych (>= 4.0.0)
