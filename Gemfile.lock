@@ -343,7 +343,7 @@ GEM
       rack (>= 1.4)
     rexml (3.2.8)
       strscan (>= 3.0.9)
-    rgb (0.1.0)
+    rgb (0.1.2)
     rouge (4.2.1)
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.9.1)
