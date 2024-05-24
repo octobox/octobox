@@ -106,7 +106,7 @@ GEM
       sassc-rails (>= 2.0.0)
     brakeman (6.1.2)
       racc
-    bugsnag (6.26.4)
+    bugsnag (6.27.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     chronic_duration (0.10.6)
