@@ -93,7 +93,7 @@
 </div>
 
 <div class="d-flex justify-content-center">
-  <%== render 'pagination', pagy: @pagy %>
+  <%== pagy_bootstrap_nav @pagy if @pagy.pages > 1 %>
 </div>
 
 <%= render 'layouts/footer' %>
