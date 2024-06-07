@@ -108,7 +108,7 @@ GEM
       racc
     bugsnag (6.27.0)
       concurrent-ruby (~> 1.0)
-    builder (3.2.4)
+    builder (3.3.0)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
     commonmarker (0.23.10)
