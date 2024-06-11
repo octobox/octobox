@@ -344,7 +344,7 @@ GEM
       io-console (~> 0.5)
     request_store (1.7.0)
       rack (>= 1.4)
-    rexml (3.2.9)
+    rexml (3.3.0)
       strscan
     rgb (0.1.2)
     rouge (4.2.1)
