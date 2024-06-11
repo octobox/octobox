@@ -248,8 +248,7 @@ GEM
       actionview
       octicons (= 19.9.0)
       railties
-    octokit (8.1.0)
-      base64
+    octokit (9.0.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
     oj (3.16.4)
