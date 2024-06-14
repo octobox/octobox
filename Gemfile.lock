@@ -346,7 +346,7 @@ GEM
     rexml (3.3.0)
       strscan
     rgb (0.1.2)
-    rouge (4.2.1)
+    rouge (4.3.0)
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
