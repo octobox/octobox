@@ -106,7 +106,7 @@ GEM
       sassc-rails (>= 2.0.0)
     brakeman (6.1.2)
       racc
-    bugsnag (6.27.0)
+    bugsnag (6.27.1)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
     chronic_duration (0.10.6)
@@ -126,7 +126,7 @@ GEM
       railties (>= 6.1)
     drb (2.2.1)
     encryptor (3.0.0)
-    erubi (1.12.0)
+    erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
     ethon (0.16.0)
@@ -176,7 +176,7 @@ GEM
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
-    irb (1.13.1)
+    irb (1.13.2)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jbuilder (2.12.0)
@@ -209,14 +209,14 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
     minitest (5.23.1)
-    mocha (2.3.0)
+    mocha (2.4.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.7.2)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
     mutex_m (0.2.0)
-    net-imap (0.4.12)
+    net-imap (0.4.13)
       date
       net-protocol
     net-pop (0.1.2)
@@ -226,14 +226,14 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.5)
+    nokogiri (1.16.6)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.5-arm64-darwin)
+    nokogiri (1.16.6-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.5-x86_64-darwin)
+    nokogiri (1.16.6-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.5-x86_64-linux)
+    nokogiri (1.16.6-x86_64-linux)
       racc (~> 1.4)
     numerizer (0.1.1)
     oauth2 (2.0.9)
@@ -274,7 +274,7 @@ GEM
     popper_js (1.16.1)
     psych (5.1.2)
       stringio
-    public_suffix (5.0.5)
+    public_suffix (5.1.1)
     puma (6.4.2)
       nio4r (~> 2.0)
     puma_worker_killer (0.3.1)
@@ -346,7 +346,7 @@ GEM
     rexml (3.3.0)
       strscan
     rgb (0.1.2)
-    rouge (4.2.1)
+    rouge (4.3.0)
     ruby2_keywords (0.0.5)
     rufus-scheduler (3.9.1)
       fugit (~> 1.1, >= 1.1.6)
@@ -392,11 +392,11 @@ GEM
       sprockets (>= 3.0.0)
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
-    stringio (3.1.0)
+    stringio (3.1.1)
     strscan (3.1.0)
     thor (1.3.1)
     tilt (2.3.0)
-    timecop (0.9.9)
+    timecop (0.9.10)
     timeout (0.4.1)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
@@ -422,7 +422,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     yard (0.9.36)
-    zeitwerk (2.6.15)
+    zeitwerk (2.6.16)
 
 PLATFORMS
   arm64-darwin-21
@@ -492,4 +492,4 @@ RUBY VERSION
    ruby 3.3.0p31
 
 BUNDLED WITH
-   2.5.11
+   2.5.13
