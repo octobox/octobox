@@ -272,9 +272,9 @@ GEM
     ostruct (0.6.0)
     pagy (8.6.3)
     pg (1.5.7)
-    pg_search (2.3.6)
-      activerecord (>= 5.2)
-      activesupport (>= 5.2)
+    pg_search (2.3.7)
+      activerecord (>= 6.1)
+      activesupport (>= 6.1)
     popper_js (1.16.1)
     psych (5.1.2)
       stringio
