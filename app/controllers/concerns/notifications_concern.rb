@@ -12,7 +12,7 @@ module NotificationsConcern
     check_out_of_bounds(scope)
 
 
-    @pagy, @notifications = pagy(scope, items: per_page, page: page_param, size: [1,2,2,1])
+    @pagy, @notifications = pagy(scope, limit: per_page, page: page_param)
     @total = @pagy.count
 
     @cur_selected = [per_page, @total].min
