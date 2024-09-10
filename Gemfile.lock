@@ -248,7 +248,7 @@ GEM
     octokit (9.1.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
-    oj (3.16.5)
+    oj (3.16.6)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     omniauth (2.1.2)
