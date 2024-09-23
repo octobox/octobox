@@ -130,7 +130,7 @@ GEM
     execjs (2.9.1)
     factory_bot (6.5.0)
       activesupport (>= 5.0.0)
-    faraday (1.10.3)
+    faraday (1.10.4)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
