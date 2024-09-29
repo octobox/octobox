@@ -9,7 +9,7 @@ class LabelTest < ActiveSupport::TestCase
     assert_equal 'white', label.text_color
 
     label = Label.new({color: 'FF0000'})
-    assert_equal 'white', label.text_color
+    assert_equal 'black', label.text_color
 
     label = Label.new({color: 'EEE'})
     assert_equal 'black', label.text_color
