@@ -265,7 +265,7 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     ostruct (0.6.0)
-    pagy (9.1.0)
+    pagy (9.1.1)
     pg (1.5.9)
     pg_search (2.3.7)
       activerecord (>= 6.1)
