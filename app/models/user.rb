@@ -100,11 +100,11 @@ class User < ApplicationRecord
   end
 
   def personal_access_token_client
-    @personal_access_token_client ||= Octokit::Client.new(access_token: personal_access_token, auto_paginate: true) if personal_access_token_enabled?
+    Octokit::Client.new(access_token: personal_access_token, auto_paginate: true) if personal_access_token_enabled?
   end
 
   def access_token_client
-    @access_token_client ||= Octokit::Client.new(access_token: access_token, auto_paginate: true) if access_token.present?
+    Octokit::Client.new(access_token: access_token, auto_paginate: true) if access_token.present?
   end
 
   def comment_client(comment)
