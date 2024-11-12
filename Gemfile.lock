@@ -170,7 +170,7 @@ GEM
       ffi (~> 1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    hashdiff (1.1.1)
+    hashdiff (1.1.2)
     hashie (5.0.0)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
