@@ -32,7 +32,7 @@ gem 'bugsnag'
 gem 'jwt'
 gem 'oj'
 gem 'yard', require: false
-gem 'commonmarker', '0.23.10'
+gem 'commonmarker', '2.0.1'
 gem 'pg'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
