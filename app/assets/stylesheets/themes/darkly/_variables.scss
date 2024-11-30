@@ -146,6 +146,7 @@ $progress-bg:                       $gray-700 !default;
 // List group
 
 $list-group-bg:                     $card-bg !default;
+$list-group-hover-bg:               darken($primary, 15%) !default;
 $list-group-border-color:           lighten($body-bg, 15%) !default;
 $list-group-action-active-bg:				lighten($body-bg, 20%) !default;
 $list-group-active-border-color:    $white !default;
