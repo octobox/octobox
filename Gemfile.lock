@@ -410,7 +410,7 @@ GEM
     uglifier (4.2.1)
       execjs (>= 0.3.0, < 3)
     uri (1.0.2)
-    useragent (0.16.10)
+    useragent (0.16.11)
     version_gem (1.1.4)
     web-console (4.2.1)
       actionview (>= 6.0.0)
