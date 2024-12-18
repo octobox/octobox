@@ -273,7 +273,7 @@ GEM
       activerecord (>= 6.1)
       activesupport (>= 6.1)
     popper_js (1.16.1)
-    psych (5.2.1)
+    psych (5.2.2)
       date
       stringio
     public_suffix (6.0.1)
