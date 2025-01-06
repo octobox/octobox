@@ -421,7 +421,8 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    websocket-driver (0.7.6)
+    websocket-driver (0.7.7)
+      base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     yard (0.9.37)
