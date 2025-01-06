@@ -52,7 +52,7 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    active_record_query_trace (1.8.2)
+    active_record_query_trace (1.8.3)
       activerecord (>= 6.0.0)
     activejob (8.0.1)
       activesupport (= 8.0.1)
