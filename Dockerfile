@@ -1,4 +1,5 @@
-FROM ruby:3.3.6-alpine
+### Build stage
+FROM ruby:3.3.6-alpine AS builder
 
 ENV APP_ROOT /usr/src/app
 ENV OCTOBOX_DATABASE_PORT 5432
@@ -43,5 +44,11 @@ RUN RAILS_ENV=development bin/rails api_docs:generate \
  && chgrp -R 0 $APP_ROOT \
  && chmod -R g=u $APP_ROOT
 
+### Runtime stage
+FROM ruby:3.3.5-alpine
+ENV APP_ROOT /usr/src/app
+ENV OCTOBOX_DATABASE_PORT 5432
+COPY --from=builder /$APP_ROOT /$APP_ROOT
+WORKDIR $APP_ROOT
 # Startup
 CMD ["bin/docker-start"]
