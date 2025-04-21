@@ -392,8 +392,9 @@ GEM
       hashie
       version_gem (~> 1.1, >= 1.1.1)
     spring (4.3.0)
-    sprockets (4.2.1)
+    sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
+      logger
       rack (>= 2.2.4, < 4)
     sprockets-rails (3.5.2)
       actionpack (>= 6.1)
