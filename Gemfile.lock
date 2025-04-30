@@ -111,7 +111,7 @@ GEM
       numerizer (~> 0.1.1)
     commonmarker (0.23.10)
     concurrent-ruby (1.3.5)
-    connection_pool (2.5.2)
+    connection_pool (2.5.3)
     crack (1.0.0)
       bigdecimal
       rexml
