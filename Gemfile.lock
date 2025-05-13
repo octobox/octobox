@@ -375,10 +375,9 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
-    sidekiq-scheduler (5.0.6)
+    sidekiq-scheduler (6.0.0)
       rufus-scheduler (~> 3.2)
-      sidekiq (>= 6, < 8)
-      tilt (>= 1.4.0, < 3)
+      sidekiq (>= 7.3, < 9)
     sidekiq-status (3.0.3)
       chronic_duration
       sidekiq (>= 6.0, < 8)
