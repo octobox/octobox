@@ -122,7 +122,7 @@ GEM
     dotenv-rails (3.1.8)
       dotenv (= 3.1.8)
       railties (>= 6.1)
-    drb (2.2.1)
+    drb (2.2.3)
     encryptor (3.0.0)
     erb (5.0.1)
     erubi (1.13.1)
