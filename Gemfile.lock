@@ -390,9 +390,9 @@ GEM
       thor (>= 1.0, < 3.0)
     skylight (6.0.4)
       activesupport (>= 5.2.0)
-    snaky_hash (2.0.1)
-      hashie
-      version_gem (~> 1.1, >= 1.1.1)
+    snaky_hash (2.0.3)
+      hashie (>= 0.1.0, < 6)
+      version_gem (>= 1.1.8, < 3)
     spring (4.3.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
