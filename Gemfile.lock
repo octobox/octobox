@@ -131,7 +131,7 @@ GEM
     ethon (0.16.0)
       ffi (>= 1.15.0)
     execjs (2.10.0)
-    factory_bot (6.5.3)
+    factory_bot (6.5.4)
       activesupport (>= 6.1.0)
     faraday (1.10.4)
       faraday-em_http (~> 1.0)
