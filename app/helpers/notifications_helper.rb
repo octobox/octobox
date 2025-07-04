@@ -364,7 +364,15 @@ module NotificationsHelper
 
   def parse_markdown(str)
     return if str.blank?
-    CommonMarker.render_html(str, :GITHUB_PRE_LANG, [:tagfilter, :autolink, :table, :strikethrough])
+    Commonmarker.to_html(str, options: {
+      render: { github_pre_lang: true },
+      extension: {
+        tagfilter: true,
+        autolink: true,
+        table: true,
+        strikethrough: true
+      }
+    })
   end
 
   def notification_link(notification)
