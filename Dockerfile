@@ -22,6 +22,7 @@ RUN apk add --update \
     curl-dev \
     yaml-dev \
     libffi-dev \
+    gcompat \
  && rm -rf /var/cache/apk/* \
  && gem update --system \
  && gem install bundler foreman \
