@@ -32,7 +32,7 @@ module Octobox
                  else
                    url
                  end
-      html_url << latest_comment_anchor
+      html_url += latest_comment_anchor
 
       html_url
     end
@@ -80,7 +80,7 @@ module Octobox
     end
 
     def latest_comment_anchor
-      return "" unless comment_id.present?
+      return "".dup unless comment_id.present?
 
       if pull_request? || issue? then "#issuecomment-#{comment_id}"
       elsif commit? then "#commitcomment-#{comment_id}"

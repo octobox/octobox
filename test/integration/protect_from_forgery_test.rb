@@ -17,5 +17,6 @@ class ProtectFromForgeryTest < ActionDispatch::IntegrationTest
 
   test "doesn't raise an exception if request is made with custom API header" do
     post "/notifications/sync.json", headers: { ApplicationController::API_HEADER => 'true' }
+    assert_response :unauthorized
   end
 end

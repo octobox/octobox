@@ -37,7 +37,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
     stub_notifications_request(
       url: 'https://api.github.com/notifications?per_page=100'
     )
-    download_service.download
+    assert_nothing_raised { download_service.download }
   end
 
   test '#download will create new notification' do
@@ -94,6 +94,6 @@ class DownloadServiceTest < ActiveSupport::TestCase
       url: 'https://api.github.com/notifications?per_page=100',
       body: ''
     )
-    download_service.download
+    assert_nothing_raised { download_service.download }
   end
 end

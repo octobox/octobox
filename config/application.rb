@@ -28,6 +28,8 @@ module Octobox
 
     config.load_defaults '7.1'
 
+    config.active_support.to_time_preserves_timezone = :zone
+
     unless File.basename($0) == 'rake' || File.basename($0) == 'rails' || secret_key_base.length >= 32
       raise "SECRET_KEY_BASE should be a random key of at least 32 chars."
     end

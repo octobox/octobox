@@ -49,7 +49,7 @@ class NotificationTest < ActiveSupport::TestCase
   end
 
   test '#mute doesnt fail if there is no notifications given' do
-    Notification.mute([])
+    assert_nothing_raised { Notification.mute([]) }
   end
 
   test '#mark_read marks multiple notifications as read' do
@@ -70,7 +70,7 @@ class NotificationTest < ActiveSupport::TestCase
   test '#mark_read doesnt fail if nothing is to be marked as read' do
     user = create(:user)
     notification1 = create(:notification, user: user, unread: false)
-    Notification.mark_read([notification1])
+    assert_nothing_raised { Notification.mark_read([notification1]) }
   end
 
   test 'update_from_api_response updates attributes' do
