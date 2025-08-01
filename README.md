@@ -46,6 +46,7 @@ Octobox adds an extra "archived" state to each notification so you can mark it a
 	- [Requirements](#requirements)
 	- [Viewing comment threads](#viewing-comment-threads)
 	- [Keyboard shortcuts](#keyboard-shortcuts)
+	- [API Documentation](#api-documentation)
 	- [Backers](#backers)
 	- [Sponsors](#sponsors)
 	- [Contribute](#contribute)
@@ -104,6 +105,15 @@ You can use keyboard shortcuts to navigate and perform certain actions:
  - `o` or `Enter` - Open current notification in a new window
 
 Press `?` for the help menu.
+
+## API Documentation
+
+Octobox provides a REST API for managing notifications, users, and pinned searches. The complete API specification is available as an OpenAPI document:
+
+- **[OpenAPI Specification](https://github.com/octobox/octobox/blob/master/openapi.yaml)** - Complete API reference with examples
+- **[Interactive API Explorer](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/octobox/octobox/master/openapi.yaml)** - Try the API directly in your browser
+
+The API supports Bearer token authentication and covers all major Octobox functionality including notification management, user settings, and pinned search operations.
 
 ## Backers
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/octobox#backer)]

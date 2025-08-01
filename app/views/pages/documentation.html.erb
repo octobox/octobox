@@ -225,7 +225,16 @@
         <h2 id='api'>API Documentation</h2>
         <hr>
         <p>
-          Access to the <a href='/docs/'>Octobox API</a> requires a key which you can generate and regenerate from the <%= link_to 'settings page', settings_path %>.
+          Octobox provides a REST API for managing notifications, users, and pinned searches. Access to the API requires a key which you can generate and regenerate from the <%= link_to 'settings page', settings_path %>.
+        </p>
+        <h3>API Reference</h3>
+        <ul>
+          <li><strong><a href="https://github.com/octobox/octobox/blob/master/openapi.yaml">OpenAPI Specification</a></strong> - Complete API reference with examples and schemas</li>
+          <li><strong><a href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/octobox/octobox/master/openapi.yaml">Interactive API Explorer</a></strong> - Try the API directly in your browser</li>
+          <li><a href='/docs/'>API docs</a> - API documentation</li>
+        </ul>
+        <p>
+          The API supports Bearer token authentication and covers all major Octobox functionality including notification management, user settings, and pinned search operations.
         </p>
 
         <h2 id='support'>Support</h2>
