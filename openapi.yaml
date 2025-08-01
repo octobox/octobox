@@ -187,7 +187,7 @@ paths:
         204: 
           description: Star state-change successful.
                 
-  /api/notifications/sync.json: # I couldn't get this to output a 204 code in terminal. Maybe it's because I'm using Docker/doing local testing?
+  /api/notifications/sync.json:
     post:
       tags:
         - Notifications
@@ -197,17 +197,42 @@ paths:
       responses:
         200:
           description: Sync successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+        503:
+          description: Service unavailable - sync failed due to GitHub API issues or network problems.
     
-  /api/notifications/syncing.json: # I also couldn't get this to work using CURL. It just seemed to put out the whole HTML file.
-    post:
+  /api/notifications/syncing.json:
+    get:
       tags:
         - Notifications
       description: "Check whether Octobox is synchronizing notifications with GitHub."
-      summary: Check GitHub sync.
+      summary: "Check GitHub sync status."
       operationId: Syncing
       responses:
         200:
-          description: Octobox is syncing to GitHub.
+          description: Octobox is not currently syncing.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    nullable: true
+                    description: Any error from the last sync job
+                example:
+                  error: null
+        423:
+          description: Octobox is currently syncing with GitHub.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
   
   /api/notifications/unread_count.json:
     get:
