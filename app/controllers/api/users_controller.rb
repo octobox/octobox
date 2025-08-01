@@ -42,7 +42,7 @@ include UsersConcern
       end
       head :ok
     else
-      render json: { errors: current_user.errors.full_messages.to_sentence }, status: :unprocessable_entity
+      render json: { errors: current_user.errors.full_messages.to_sentence }, status: :unprocessable_content
     end
   end
 

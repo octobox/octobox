@@ -157,6 +157,6 @@ class ApiUsersControllerTest < ActionDispatch::IntegrationTest
     patch api_user_url(@user, format: :json), params: {user: {refresh_interval: -60_000}}, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
     @user.reload
     assert_nil @user.refresh_interval
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 end

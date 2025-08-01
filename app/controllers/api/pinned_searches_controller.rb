@@ -24,7 +24,7 @@ class Api::PinnedSearchesController < Api::ApplicationController
     if @pinned_search.save
       render 'show'
     else
-      render json: { errors: @pinned_search.errors.full_messages.to_sentence }, status: :unprocessable_entity
+      render json: { errors: @pinned_search.errors.full_messages.to_sentence }, status: :unprocessable_content
     end
   end
 
@@ -53,7 +53,7 @@ class Api::PinnedSearchesController < Api::ApplicationController
     if @pinned_search.update(pinned_search_params)
       render 'show'
     else
-      render json: { errors: @pinned_search.errors.full_messages.to_sentence }, status: :unprocessable_entity
+      render json: { errors: @pinned_search.errors.full_messages.to_sentence }, status: :unprocessable_content
     end
   end
 
