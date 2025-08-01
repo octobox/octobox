@@ -1,12 +1,12 @@
 openapi: '3.0.2'
 info:
   title: "Octobox"
-  description: "Octobox helps you manage your GitHub notifications efficiently so you can spend more time getting things done. It provides several features to manage GitHub notifications, including archived states, starred noticiations, extended filtering, and pinned searches."
+  description: "Octobox helps you manage your GitHub notifications efficiently so you can spend more time getting things done. It provides several features to manage GitHub notifications, including archived states, starred notifications, extended filtering, and pinned searches."
   version: "1.0.0"
   termsOfService: "https://octobox.io/terms"
   contact:
     name: "Octobox API"
-    url: "https:/octobox.io"
+    url: "https://octobox.io"
     # email: ""
   license:
     name: "GNU AFFERO GENERAL PUBLIC LICENSE"
@@ -251,7 +251,7 @@ paths:
                 type: object
                 properties:
                   count:
-                    description: The mumber of unread notifications.
+                    description: The number of unread notifications.
                     type: number
                     example: 1
 
