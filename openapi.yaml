@@ -2,7 +2,7 @@ openapi: '3.0.2'
 info:
   title: "Octobox"
   description: "Octobox helps you manage your GitHub notifications efficiently so you can spend more time getting things done. It provides several features to manage GitHub notifications, including archived states, starred noticiations, extended filtering, and pinned searches."
-  version: "1" #unsure here
+  version: "1.0.0"
   termsOfService: "https://octobox.io/terms"
   contact:
     name: "Octobox API"
