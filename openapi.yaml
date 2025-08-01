@@ -45,7 +45,7 @@ paths:
             items:
               type: string
       responses:
-        204:
+        200:
           description: Archive successful.
                 
   /api/notifications/delete_selected.json:
@@ -64,7 +64,7 @@ paths:
             items:
               type: string
       responses:
-        204:
+        200:
           description: Deletion successful.
 
   /api/notifications.json:
@@ -146,7 +146,7 @@ paths:
             items: 
               type: string
       responses:
-        204:
+        200:
           description: Notifications successfully marked as read.
   /api/notifications/mute_selected.json:
     post:
@@ -164,7 +164,7 @@ paths:
             items: 
               type: string
       responses:
-        204:
+        200:
           description: Mute successful.
 
   
@@ -184,7 +184,7 @@ paths:
             type: string
 
       responses:
-        204: 
+        200: 
           description: Star state-change successful.
                 
   /api/notifications/sync.json:
@@ -312,12 +312,6 @@ paths:
       responses:
         200:
           description: Pinned search deleted successfully.
-          content:
-            application/json:
-              schema:
-                type: string
-                description: Successful delete.
-                example: HEAD OK
     get:
       tags:
         - Pinned Searches
