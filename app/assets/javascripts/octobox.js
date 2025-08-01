@@ -1,29 +1,44 @@
 var Octobox = (function() {
+  
+  // DOM Cache for performance
+  var DOM = {
+    get selectAll() { return document.querySelector(".js-select_all"); },
+    get tableNotifications() { return document.querySelector(".js-table-notifications"); },
+    get searchBox() { return document.getElementById("search-box"); },
+    get notificationThread() { return document.querySelector('#notification-thread'); },
+    get thread() { return document.getElementById('thread'); },
+    get helpBox() { return document.getElementById("help-box"); },
+    get syncIcon() { return document.querySelector(".js-sync .octicon"); }
+  };
 
   var maybeConfirm = function(message){
-    if($('body.disable_confirmations').length){
-      return true
+    if(document.body.classList.contains('disable_confirmations')) {
+      return true;
     } else {
       return confirm(message);
     }
   }
 
   var checkSelectAll = function() {
-    $(".js-select_all").click();
+    if(DOM.selectAll) {
+      DOM.selectAll.click();
+    }
   };
 
   var updatePinnedSearchCounts = function(pinned_search) {
-    var pinned_search = $(pinned_search);
-    $.get(pinned_search.data('url'), function(data) {
-      pinned_search.html(data.count);
-    }).fail(function() {
-      pinned_search.remove(); // Remove the total value if there's an error
-    });
+    fetch(pinned_search.dataset.url)
+      .then(response => response.json())
+      .then(data => {
+        pinned_search.innerHTML = data.count;
+      })
+      .catch(() => {
+        pinned_search.remove(); // Remove the total value if there's an error
+      });
   }
 
   var updateAllPinnedSearchCounts = function(){
-    $("span.pinned-search-count").each(function() {
-      updatePinnedSearchCounts(this);
+    document.querySelectorAll("span.pinned-search-count").forEach(function(element) {
+      updatePinnedSearchCounts(element);
     });
   }
 
@@ -31,16 +46,16 @@ var Octobox = (function() {
     // Don't event.preventDefault(), since we want the
     // normal clicking behavior for links, starring, etc
     var oldCurrent = getCurrentRow();
-    var target = $(event.target);
+    var target = event.target;
 
     setRowCurrent(oldCurrent, false);
     setRowCurrent(target, true);
   };
 
   var updateFavicon = function () {
-    $.get( "/notifications/unread_count", function(data) {
-      setFavicon(data.count)
-    });
+    fetch("/notifications/unread_count")
+      .then(response => response.json())
+      .then(data => setFavicon(data.count));
   };
 
   var setFavicon = function(count) {
@@ -55,7 +70,7 @@ var Octobox = (function() {
 
       var old_link = document.getElementById("favicon-count");
       if ( old_link ) {
-        $(old_link).remove();
+        old_link.parentNode.removeChild(old_link);
       }
 
       var canvas = document.createElement("canvas"),
@@ -96,7 +111,8 @@ var Octobox = (function() {
   var enableTooltips = function() {
     if(!("ontouchstart" in window))
     {
-      $("[data-toggle='tooltip']").tooltip();
+      // needs bootstrap 5 upgrade to be able to remove jquery
+      $("[data-toggle='tooltip']").tooltip(); 
     }
   };
 
@@ -151,23 +167,30 @@ var Octobox = (function() {
       if(["search-box", "comment_body"].includes(e.target.id) && e.which === 27) shortcuts[27](e);
 
       // post comment form on CMD-enter
-      if(["comment_body"].includes(e.target.id) && (e.metaKey || e.ctrlKey) && e.which == 13) $('#reply').submit();
+      if(["comment_body"].includes(e.target.id) && (e.metaKey || e.ctrlKey) && e.which == 13) document.getElementById('reply').submit();
     });
   };
 
   var checkAll = function() {
-    var checked = $(".js-select_all").prop("checked")
-    getDisplayedRows().find("input").prop("checked", checked).trigger("change");
+    var checked = DOM.selectAll.checked;
+    getDisplayedRows().forEach(row => {
+      var input = row.querySelector("input");
+      if(input) {
+        input.checked = checked;
+        var event = new Event('change');
+        input.dispatchEvent(event);
+      }
+    });
   };
 
   var muteThread = function() {
-    var id = $('#notification-thread').data('id');
+    var id = DOM.notificationThread.dataset.id;
     mute(id);
   } ;
 
   var muteSelected = function() {
     if (getDisplayedRows().length === 0) return;
-    if ( $(".js-table-notifications tr").length === 0 ) return;
+    if ( document.querySelectorAll(".js-table-notifications tr").length === 0 ) return;
     var ids = getIdsFromRows(getMarkedOrCurrentRows());
     mute(ids);
   };
@@ -175,12 +198,29 @@ var Octobox = (function() {
   var mute = function(ids){
     var result = maybeConfirm("Are you sure you want to mute?");
     if (result) {
-      $.post( "/notifications/mute_selected" + location.search, { "id[]": ids})
-      .done(function() {
-        resetCursorAfterRowsRemoved(ids);
-        updateFavicon();
+      const formData = new FormData();
+      if (Array.isArray(ids)) {
+        ids.forEach(id => formData.append('id[]', id));
+      } else {
+        formData.append('id[]', ids);
+      }
+      
+      fetch("/notifications/mute_selected" + location.search, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        }
       })
-      .fail(function(){
+      .then(response => {
+        if (response.ok) {
+          resetCursorAfterRowsRemoved(ids);
+          updateFavicon();
+        } else {
+          throw new Error('Request failed');
+        }
+      })
+      .catch(() => {
         notify("Could not mute notification(s)", "danger");
       });
     }
@@ -189,20 +229,47 @@ var Octobox = (function() {
   var markReadSelected = function() {
     if (getDisplayedRows().length === 0) return;
     var rows = getMarkedOrCurrentRows();
-    rows.addClass("blur-action");
-    $.post("/notifications/mark_read_selected" + location.search, {"id[]": getIdsFromRows(rows)})
-    .done(function () {
-      rows.removeClass("blur-action");
-      rows.removeClass("active");
-      updateFavicon();
+    
+    // Add blur-action class to rows
+    if (Array.isArray(rows)) {
+      rows.forEach(row => row.classList.add("blur-action"));
+    } else {
+      rows.classList.add("blur-action");
+    }
+    
+    const formData = new FormData();
+    const ids = getIdsFromRows(rows);
+    ids.forEach(id => formData.append('id[]', id));
+    
+    fetch("/notifications/mark_read_selected" + location.search, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      }
     })
-    .fail(function(){
-        notify("Could not mark notification(s) read", "danger");
+    .then(response => {
+      if (response.ok) {
+        // Remove blur-action and active classes from rows
+        if (Array.isArray(rows)) {
+          rows.forEach(row => {
+            row.classList.remove("blur-action", "active");
+          });
+        } else {
+          rows.classList.remove("blur-action", "active");
+        }
+        updateFavicon();
+      } else {
+        throw new Error('Request failed');
+      }
+    })
+    .catch(() => {
+      notify("Could not mark notification(s) read", "danger");
     });
   };
 
   var toggleArchive = function() {
-    if ($(".archive_toggle").hasClass("archive_selected")) {
+    if (document.querySelector(".archive_toggle").classList.contains("archive_selected")) {
       archiveSelected()
     } else {
       unarchiveSelected()
@@ -222,48 +289,74 @@ var Octobox = (function() {
   }
 
   var archiveThread = function(){
-    var id = $('#notification-thread').data('id');
+    var id = DOM.notificationThread.dataset.id;
     archive([id], true);
   }
 
   var unarchiveThread = function(){
-    var id = $('#notification-thread').data('id');
+    var id = DOM.notificationThread.dataset.id;
     archive([id], false);
   }
 
   var archive = function(ids, value){
-    $.post( "/notifications/archive_selected" + location.search, { "id[]": ids, "value": value } )
-    .done(function() {
-      resetCursorAfterRowsRemoved(ids);
-      updateFavicon();
+    const formData = new FormData();
+    if (Array.isArray(ids)) {
+      ids.forEach(id => formData.append('id[]', id));
+    } else {
+      formData.append('id[]', ids);
+    }
+    formData.append('value', value);
+    
+    fetch("/notifications/archive_selected" + location.search, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      }
     })
-    .fail(function(){
+    .then(response => {
+      if (response.ok) {
+        resetCursorAfterRowsRemoved(ids);
+        updateFavicon();
+      } else {
+        throw new Error('Request failed');
+      }
+    })
+    .catch(() => {
       notify("Could not archive notification(s)", "danger");
     });
   }
 
   var toggleSelectAll = function() {
-    $.map($("button.select_all > span"), function( val, i ) {
-      $(val).toggleClass("bold")
+    document.querySelectorAll("button.select_all > span").forEach(function(span) {
+      span.classList.toggle("bold");
     });
-    $("button.select_all").toggleClass("all_selected")
+    document.querySelector("button.select_all").classList.toggle("all_selected");
   };
 
   var refreshOnSync = function() {
-    if(!$(".js-sync .octicon").hasClass("spinning")){
-      $(".js-sync .octicon").addClass("spinning");
+    const syncIcon = document.querySelector(".js-sync .octicon");
+    if(!syncIcon.classList.contains("spinning")){
+      syncIcon.classList.add("spinning");
     }
 
-    $.ajax({"url": "/notifications/syncing.json", data: {}, error: function(xhr, status) {
-        setTimeout(refreshOnSync, 2000)
-      }, success: function(data, status, xhr) {
-        if (data["error"] != null) {
-          $(".sync .octicon").removeClass("spinning");
-          notify(data["error"], "danger")
-        } else {
-          Turbolinks.visit("/"+location.search);
-        }
+    fetch("/notifications/syncing.json", {
+      method: 'GET',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
       }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data["error"] != null) {
+        document.querySelector(".sync .octicon").classList.remove("spinning");
+        notify(data["error"], "danger");
+      } else {
+        Turbolinks.visit("/"+location.search);
+      }
+    })
+    .catch(() => {
+      setTimeout(refreshOnSync, 2000);
     });
   };
 
@@ -298,8 +391,8 @@ var Octobox = (function() {
 
   var markRowCurrent = function(row) {
     // Clicking a row marks it current
-    $(".current.js-current").removeClass("current js-current");
-    row.find("td").first().addClass("current js-current");
+    document.querySelector(".current.js-current").classList.remove("current", "js-current");
+    row.querySelector("td").classList.add("current", "js-current");
   };
 
   var initShiftClickCheckboxes = function() {
@@ -331,7 +424,7 @@ var Octobox = (function() {
   };
 
   var toggleStarClick = function(row) {
-    star(row.data("id"))
+    star(row.dataset.id)
   };
 
   var star = function(id){
@@ -505,17 +598,20 @@ var Octobox = (function() {
   // private methods
 
   var getDisplayedRows = function() {
-    return $(".js-table-notifications tr.notification")
+    return document.querySelectorAll(".js-table-notifications tr.notification");
   };
 
   var getMarkedRows = function(unmarked) {
     // gets all marked rows (or unmarked rows if unmarked is true)
-    return unmarked ? getDisplayedRows().has("input:not(:checked)") : getDisplayedRows().has("input:checked")
+    const rows = Array.from(getDisplayedRows());
+    return unmarked 
+      ? rows.filter(row => !row.querySelector("input:checked"))
+      : rows.filter(row => row.querySelector("input:checked"));
   };
 
   var getIdsFromRows = function(rows) {
-    return $("button.select_all").hasClass("all_selected") ?
-      "all" : $.map(rows, function(row) {return $(row).find("input").val()})
+    return document.querySelector("button.select_all").classList.contains("all_selected") ?
+      "all" : Array.from(rows).map(function(row) {return row.querySelector("input").value})
   };
 
   var hasMarkedRows = function(unmarked) {
@@ -524,7 +620,7 @@ var Octobox = (function() {
   };
 
   var getCurrentRow = function() {
-    return getDisplayedRows().has("td.js-current");
+    return Array.from(getDisplayedRows()).find(row => row.querySelector("td.js-current") !== null);
   };
 
   var getMarkedOrCurrentRows = function() {
@@ -640,15 +736,19 @@ var Octobox = (function() {
   };
 
   var setRowCurrent = function(row, add) {
-    var classes = "current js-current";
-    var td = row.find("td.notification-checkbox");
-    add ? td.addClass(classes) : td.removeClass(classes);
+    var classes = ["current", "js-current"];
+    var td = row.querySelector("td.notification-checkbox");
+    if (add) {
+      classes.forEach(cls => td.classList.add(cls));
+    } else {
+      classes.forEach(cls => td.classList.remove(cls));
+    }
   };
 
   var moveCursor = function(upOrDown) {
     var oldCurrent = getCurrentRow();
-    var target = upOrDown === "up" ? oldCurrent.next() : oldCurrent.prev();
-    if(target.length > 0) {
+    var target = upOrDown === "up" ? oldCurrent.previousElementSibling : oldCurrent.nextElementSibling;
+    if(target && target.tagName) {
       setRowCurrent(oldCurrent, false);
       setRowCurrent(target, true);
       scrollToCursor();
