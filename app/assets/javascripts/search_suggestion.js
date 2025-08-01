@@ -86,9 +86,9 @@ SearchSuggestion = {
 
   addToSearchBox: function(event) {
     var queryString = event.target.getAttribute('aria-label');
-    $("#search-box").val(queryString);
+    document.getElementById("search-box").value = queryString;
     SearchSuggestion.hideSearchSuggestion();
-    $("#search").submit()
+    document.getElementById("search").submit();
   },
 
   addSearchString: function(searchQuery) {
@@ -138,12 +138,11 @@ SearchSuggestion = {
   },
 
   hideSearchSuggestion: function() {
-    $("#search-sugguestion-list").removeClass('d-flex');
+    document.getElementById("search-sugguestion-list").classList.remove('d-flex');
   },
 
   unblur: function(e) {
-    var container = $("#search-sugguestion-list");
-    if (!container.is(e.target) && container.has(e.target).length === 0) {
+    if (!e.target.matches('#search-sugguestion-list')) {
       SearchSuggestion.hideSearchSuggestion();
     }
   }
