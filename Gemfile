@@ -65,7 +65,7 @@ group :development do
 end
 
 group :production do
-  gem 'skylight', '~> 6.0.4'
+  gem 'skylight', '~> 7.0.0'
   gem 'lograge'
   gem 'puma_worker_killer'
 end
