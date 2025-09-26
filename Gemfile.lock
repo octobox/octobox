@@ -392,9 +392,11 @@ GEM
     sidekiq-scheduler (6.0.1)
       rufus-scheduler (~> 3.2)
       sidekiq (>= 7.3, < 9)
-    sidekiq-status (3.0.3)
+    sidekiq-status (4.0.0)
+      base64
       chronic_duration
-      sidekiq (>= 6.0, < 8)
+      logger
+      sidekiq (>= 7, < 9)
     sidekiq-unique-jobs (8.0.11)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 7.0.0, < 9.0.0)
