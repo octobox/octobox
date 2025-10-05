@@ -34,6 +34,8 @@ FROM ruby:3.4.5-alpine
 
 ENV APP_ROOT=/usr/src/app
 ENV OCTOBOX_DATABASE_PORT=5432
+ENV RUBY_YJIT_ENABLE=1
+ENV LD_PRELOAD=/usr/lib/libjemalloc.so.2
 WORKDIR $APP_ROOT
 
 # =============================================
@@ -52,6 +54,7 @@ RUN apk add --update \
     postgresql-dev \
     tzdata \
     gcompat \
+    jemalloc \
  && rm -rf /var/cache/apk/* \
  && gem update --system \
  && gem install bundler foreman \
