@@ -39,6 +39,7 @@ gem 'omniauth-rails_csrf_protection'
 gem 'psych'
 gem 'nokogiri'
 gem 'redis'
+gem 'rack-cors'
 
 group :development, :test do
   gem 'dotenv-rails'
