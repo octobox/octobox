@@ -127,7 +127,7 @@ GEM
       railties (>= 6.1)
     drb (2.2.3)
     encryptor (3.0.0)
-    erb (5.0.2)
+    erb (5.0.3)
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
