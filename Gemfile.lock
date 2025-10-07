@@ -284,7 +284,7 @@ GEM
       activerecord (>= 6.1)
       activesupport (>= 6.1)
     popper_js (1.16.1)
-    pp (0.6.2)
+    pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
     psych (5.2.6)
