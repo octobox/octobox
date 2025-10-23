@@ -114,7 +114,7 @@ GEM
     commonmarker (2.5.0-x86_64-linux)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
-    crack (1.0.0)
+    crack (1.0.1)
       bigdecimal
       rexml
     crass (1.0.6)
