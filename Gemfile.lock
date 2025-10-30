@@ -120,7 +120,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    date (3.4.1)
+    date (3.5.0)
     debug_inspector (1.2.0)
     dotenv (3.1.8)
     dotenv-rails (3.1.8)
