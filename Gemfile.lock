@@ -494,7 +494,7 @@ DEPENDENCIES
   oj
   omniauth-github (= 2.0.1)
   omniauth-rails_csrf_protection
-  pagy
+  pagy (~> 9.4.0)
   pg
   pg_search
   psych
