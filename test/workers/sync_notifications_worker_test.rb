@@ -38,9 +38,12 @@ class SyncNotificationsWorkerTest < ActiveSupport::TestCase
 
   test 'gracefully handles failed sync and stores exception' do
     User.any_instance.stubs(:sync_notifications_in_foreground).raises(Octokit::BadGateway)
-    job_id = SyncNotificationsWorker.perform_async(@user.id)
-    SyncNotificationsWorker.drain
-    assert_equal 'Octokit::BadGateway', Sidekiq::Status::get(job_id, :exception)
+
+    Sidekiq::Testing.inline! do
+      job_id = SyncNotificationsWorker.perform_async(@user.id)
+      assert_equal 'Octokit::BadGateway', Sidekiq::Status::get(job_id, :exception)
+    end
+
     refute_requested(@stubbed_user_notification_sync)
   end
 
