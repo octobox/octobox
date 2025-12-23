@@ -227,7 +227,7 @@ GEM
     multi_xml (0.7.2)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
-    net-imap (0.6.0)
+    net-imap (0.6.2)
       date
       net-protocol
     net-pop (0.1.2)
@@ -433,7 +433,7 @@ GEM
     thor (1.4.0)
     tilt (2.6.1)
     timecop (0.9.10)
-    timeout (0.5.0)
+    timeout (0.6.0)
     tsort (0.2.0)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
