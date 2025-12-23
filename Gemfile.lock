@@ -131,7 +131,7 @@ GEM
       railties (>= 6.1)
     drb (2.2.3)
     encryptor (3.0.0)
-    erb (6.0.0)
+    erb (6.0.1)
     erubi (1.13.1)
     et-orbi (1.4.0)
       tzinfo
@@ -363,7 +363,7 @@ GEM
       ffi (~> 1.0)
     rb_sys (0.9.119)
       rake-compiler-dock (= 1.10.0)
-    rdoc (6.17.0)
+    rdoc (7.0.2)
       erb
       psych (>= 4.0.0)
       tsort
@@ -427,7 +427,7 @@ GEM
       sprockets (>= 3.0.0)
     sql_queries_count (0.0.1)
       rails (> 3.0.0)
-    stringio (3.1.9)
+    stringio (3.2.0)
     thor (1.4.0)
     tilt (2.6.1)
     timecop (0.9.10)
