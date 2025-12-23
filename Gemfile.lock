@@ -221,7 +221,7 @@ GEM
     mini_portile2 (2.8.9)
     minitest (6.0.0)
       prism (~> 1.5)
-    mocha (2.8.2)
+    mocha (3.0.1)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
     multi_xml (0.7.2)
