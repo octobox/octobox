@@ -365,7 +365,7 @@ GEM
       ffi (~> 1.0)
     rb_sys (0.9.123)
       rake-compiler-dock (= 1.10.0)
-    rdoc (7.0.2)
+    rdoc (7.0.3)
       erb
       psych (>= 4.0.0)
       tsort
