@@ -220,7 +220,8 @@ GEM
     marcel (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.27.0)
+    minitest (6.0.1)
+      prism (~> 1.5)
     mocha (3.0.1)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
@@ -293,6 +294,7 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
+    prism (1.7.0)
     psych (5.3.1)
       date
       stringio
@@ -491,7 +493,7 @@ DEPENDENCIES
   listen
   local_time (= 2.1.0)
   lograge
-  minitest (< 6)
+  minitest (< 7)
   mocha
   nokogiri
   octicons_helper
