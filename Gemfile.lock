@@ -55,8 +55,7 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    active_record_query_trace (1.8.3)
-      activerecord (>= 6.0.0)
+    active_record_query_trace (1.6.1)
     activejob (8.1.1)
       activesupport (= 8.1.1)
       globalid (>= 0.3.6)
@@ -140,29 +139,25 @@ GEM
     execjs (2.10.0)
     factory_bot (6.5.6)
       activesupport (>= 6.1.0)
-    faraday (1.10.4)
+    faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
-      faraday-httpclient (~> 1.0)
-      faraday-multipart (~> 1.0)
+      faraday-httpclient (~> 1.0.1)
       faraday-net_http (~> 1.0)
-      faraday-net_http_persistent (~> 1.0)
+      faraday-net_http_persistent (~> 1.1)
       faraday-patron (~> 1.0)
       faraday-rack (~> 1.0)
-      faraday-retry (~> 1.0)
+      multipart-post (>= 1.2, < 3)
       ruby2_keywords (>= 0.0.4)
     faraday-em_http (1.0.0)
     faraday-em_synchrony (1.0.1)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.2.0)
-      multipart-post (~> 2.0)
     faraday-net_http (1.0.2)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
-    faraday-retry (1.0.3)
     faraday_middleware (1.2.1)
       faraday (~> 1.0)
     ffi (1.17.2)
@@ -530,7 +525,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-  ruby 3.4.7
+  ruby 4.0.0
 
 BUNDLED WITH
   4.0.1
