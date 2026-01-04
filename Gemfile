@@ -40,6 +40,7 @@ gem 'psych'
 gem 'nokogiri'
 gem 'redis'
 gem 'rack-cors'
+gem 'benchmark'
 
 group :development, :test do
   gem 'dotenv-rails'
@@ -63,7 +64,6 @@ group :development do
   gem 'brakeman'
   gem 'binding_of_caller'
   gem 'better_errors'
-  gem 'benchmark'
 end
 
 group :production do
