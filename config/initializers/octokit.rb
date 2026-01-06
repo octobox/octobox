@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 require Rails.root.join('lib/octobox')
-require 'typhoeus/adapters/faraday'
+require 'faraday/typhoeus'
+require 'faraday/retry'
+require 'faraday/gzip'
 
 Octokit.configure do |c|
   c.api_endpoint = Octobox.config.github_api_prefix
@@ -10,8 +12,8 @@ end
 Octokit.middleware = Faraday::RackBuilder.new do |builder|
   builder.use Octokit::Middleware::FollowRedirects
   builder.use Octokit::Response::RaiseError
-  builder.use FaradayMiddleware::Gzip
-  builder.use :instrumentation
+  builder.use Faraday::Gzip::Middleware
+  builder.use Faraday::Request::Instrumentation
   builder.request :retry
   builder.adapter :typhoeus
 end
