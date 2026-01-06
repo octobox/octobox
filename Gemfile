@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '3.4.7'
+ruby '4.0.0'
 
 gem 'rails', '8.1.1'
 gem 'bootstrap', '4.6.2'
@@ -14,8 +14,10 @@ gem 'puma'
 gem 'sassc-rails'
 gem 'turbolinks'
 gem 'typhoeus'
-gem 'faraday_middleware'
-gem 'faraday'
+gem 'faraday', '>= 2'
+gem 'faraday-retry'
+gem 'faraday-typhoeus'
+gem 'faraday-gzip'
 gem 'uglifier'
 gem 'pg_search'
 gem 'jbuilder'
@@ -40,6 +42,7 @@ gem 'psych'
 gem 'nokogiri'
 gem 'redis'
 gem 'rack-cors'
+gem 'benchmark'
 
 group :development, :test do
   gem 'dotenv-rails'
@@ -61,9 +64,7 @@ group :development do
   gem 'listen'
   gem 'spring'
   gem 'brakeman'
-  gem 'binding_of_caller'
   gem 'better_errors'
-  gem 'benchmark'
 end
 
 group :production do
