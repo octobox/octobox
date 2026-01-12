@@ -148,6 +148,11 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test 'mark_read_selected returns 405 for GET requests' do
+    get '/api/notifications/mark_read_selected', headers: { 'Authorization' => "Bearer #{@user.api_token}" }
+    assert_response :method_not_allowed
+  end
+
   test 'marks read all notifications' do
 
     Notification.destroy_all

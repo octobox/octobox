@@ -21,6 +21,7 @@ Rails.application.routes.draw do
         post :syncing
         post :mute_selected
         post :mark_read_selected
+        get  :mark_read_selected, to: proc { [405, {'Content-Type' => 'application/json'}, ['{"error":"Method Not Allowed - use POST"}']] }
         get  :unread_count
         get  :lookup
         post :delete_selected
