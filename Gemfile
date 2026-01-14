@@ -55,7 +55,6 @@ group :test do
   gem 'factory_bot'
   gem 'webmock'
   gem 'mocha'
-  gem 'minitest', '< 6'
   gem 'timecop'
 end
 
