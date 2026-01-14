@@ -96,7 +96,7 @@ GEM
       rouge (>= 1.0.0)
     bigdecimal (4.0.1)
     bindex (0.8.1)
-    bootsnap (1.20.1)
+    bootsnap (1.21.0)
       msgpack (~> 1.2)
     bootstrap (4.6.2)
       autoprefixer-rails (>= 9.1.0)
@@ -350,7 +350,7 @@ GEM
       ffi (~> 1.0)
     rb_sys (0.9.124)
       rake-compiler-dock (= 1.11.0)
-    rdoc (7.0.3)
+    rdoc (7.1.0)
       erb
       psych (>= 4.0.0)
       tsort
@@ -394,7 +394,7 @@ GEM
       chronic_duration
       logger
       sidekiq (>= 7, < 9)
-    sidekiq-unique-jobs (8.0.12)
+    sidekiq-unique-jobs (8.0.13)
       concurrent-ruby (~> 1.0, >= 1.0.5)
       sidekiq (>= 7.0.0, < 9.0.0)
       thor (>= 1.0, < 3.0)
@@ -521,4 +521,4 @@ RUBY VERSION
   ruby 4.0.0
 
 BUNDLED WITH
-  4.0.1
+  4.0.3
