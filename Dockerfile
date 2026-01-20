@@ -1,4 +1,4 @@
-FROM ruby:4.0.0-alpine AS builder
+FROM ruby:4.0.1-alpine AS builder
 
 ENV APP_ROOT=/usr/src/app
 WORKDIR $APP_ROOT
@@ -30,7 +30,7 @@ RUN apk add --update \
  && bundle config set force_ruby_platform true \
  && bundle install --jobs 2
 
-FROM ruby:4.0.0-alpine
+FROM ruby:4.0.1-alpine
 
 ENV APP_ROOT=/usr/src/app
 ENV OCTOBOX_DATABASE_PORT=5432
