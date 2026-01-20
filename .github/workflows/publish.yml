@@ -4,16 +4,21 @@ on:
   release:
     types: [published]
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   push_to_registries:
     name: Push Docker image to multiple registries
     runs-on: ubuntu-latest
     permissions:
-      packages: write
-      contents: read
+      packages: write # Required to push to GitHub Container Registry
+      contents: read # Required to checkout the repository
     steps:
       - name: Check out the repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
         with:
           persist-credentials: false
 

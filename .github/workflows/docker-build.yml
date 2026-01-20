@@ -6,16 +6,22 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   docker-build:
     name: Docker Build Test
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read # Required to checkout the repository
 
     steps:
       - name: Check out the repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
         with:
           persist-credentials: false
 

@@ -2,12 +2,18 @@ name: CI
 
 on: [push]
 
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
     name: Build
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read # Required to checkout the repository
 
     services:
       postgres:
@@ -30,17 +36,17 @@ jobs:
         options: --entrypoint redis-server
 
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8
         with:
           persist-credentials: false
       - name: Install dependent libraries
         run: sudo apt-get install libpq-dev
       - name: Set up Node
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238
         with:
           node-version: 20
       - name: Set up Ruby
-        uses: ruby/setup-ruby@80740b3b13bf9857e28854481ca95a84e78a2bdf # v1.284.0
+        uses: ruby/setup-ruby@80740b3b13bf9857e28854481ca95a84e78a2bdf
         with:
           bundler-cache: true
 
