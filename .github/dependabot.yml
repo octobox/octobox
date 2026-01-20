@@ -5,6 +5,8 @@ updates:
   schedule:
     interval: daily
     time: "07:00"
+  cooldown:
+    default-days: 7
   open-pull-requests-limit: 99
   allow:
   - dependency-type: direct
@@ -17,3 +19,5 @@ updates:
   directory: "/"
   schedule:
     interval: "daily"
+  cooldown:
+    default-days: 7
