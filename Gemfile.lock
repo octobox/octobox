@@ -103,7 +103,7 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.16.1, < 2)
       sassc-rails (>= 2.0.0)
-    brakeman (7.1.2)
+    brakeman (8.0.1)
       racc
     bugsnag (6.29.0)
       concurrent-ruby (~> 1.0)
