@@ -123,6 +123,8 @@ GEM
       playwright-ruby-client (>= 1.16.0)
     chronic_duration (0.10.6)
       numerizer (~> 0.1.1)
+    commonmarker (2.6.3)
+      rb_sys (~> 0.9)
     commonmarker (2.6.3-arm64-darwin)
     commonmarker (2.6.3-x86_64-darwin)
     commonmarker (2.6.3-x86_64-linux)
@@ -222,6 +224,7 @@ GEM
       mime-types-data (~> 3.2025, >= 3.2025.0507)
     mime-types-data (3.2026.0203)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.9)
     minitest (6.0.1)
       prism (~> 1.5)
     mocha (3.0.1)
@@ -241,6 +244,9 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
+    nokogiri (1.19.0)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.19.0-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.0-x86_64-darwin)
@@ -364,9 +370,12 @@ GEM
       tsort (>= 0.2)
       zeitwerk (~> 2.6)
     rake (13.3.1)
+    rake-compiler-dock (1.11.0)
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
+    rb_sys (0.9.124)
+      rake-compiler-dock (= 1.11.0)
     rdoc (7.1.0)
       erb
       psych (>= 4.0.0)
@@ -472,6 +481,7 @@ GEM
 PLATFORMS
   arm64-darwin-21
   arm64-darwin-24
+  ruby
   x86_64-darwin-20
   x86_64-linux
 
