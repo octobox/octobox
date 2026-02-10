@@ -41,9 +41,9 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def toggle_notification_checkbox(notification_id)
-    checkbox = find("#notification-#{notification_id} .custom-checkbox input", visible: :all)
+    checkbox = find("#notification-#{notification_id} .form-check input", visible: :all)
     checked = checkbox.checked?
-    page.execute_script("var cb = document.querySelector('#notification-#{notification_id} .custom-checkbox input'); cb.checked = #{!checked}; cb.dispatchEvent(new Event('change')); Octobox.changeArchive()")
+    page.execute_script("var cb = document.querySelector('#notification-#{notification_id} .form-check input'); cb.checked = #{!checked}; cb.dispatchEvent(new Event('change')); Octobox.changeArchive()")
   end
 
   def toggle_select_all

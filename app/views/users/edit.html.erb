@@ -30,8 +30,8 @@
                 <%= pinned_search.query %>
               </td>
               <td>
-                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: t('crud_actions.edit'), data: {toggle: 'tooltip'}, class: 'mr-2' %>
-                <%= link_to octicon('trash'), pinned_search_path(pinned_search), title: t('crud_actions.delete'), data: {toggle: 'tooltip'}, method: :delete %>
+                <%= link_to octicon('pencil'), edit_pinned_search_path(pinned_search), title: t('crud_actions.edit'), data: {'bs-toggle': 'tooltip'}, class: 'me-2' %>
+                <%= link_to octicon('trash'), pinned_search_path(pinned_search), title: t('crud_actions.delete'), data: {'bs-toggle': 'tooltip'}, method: :delete %>
               </td>
             </tr>
           <% end %>
@@ -74,7 +74,7 @@
             <div class="form-group">
               <%= f.label :personal_access_token, "Personal Access Token" %>
               <%= f.text_field :personal_access_token, value: nil, placeholder: current_user.masked_personal_access_token, class: 'form-control' %>
-              <span class="help-block"><%= t('users.notices.personal_access_token_impact') %></span>
+              <span class="form-text"><%= t('users.notices.personal_access_token_impact') %></span>
             </div>
             <div class="form-group">
               <div class="checkbox">
@@ -92,7 +92,7 @@
     <% end %>
 
     <div class='d-flex flex-column flex-md-row'>
-      <div class="card w-100 mb-3 <%= 'mr-3' if Octobox.config.subjects_enabled? && Octobox.config.include_comments %>">
+      <div class="card w-100 mb-3 <%= 'me-3' if Octobox.config.subjects_enabled? && Octobox.config.include_comments %>">
         <h5 class="card-header">
           <%= t('users.titles.theme') %>
         </h5>
@@ -212,7 +212,7 @@
                 <% next if app_installation.account_type == 'User' && app_installation.account_login != current_user.github_login %>
                 <tr>
                   <td class="align-middle">
-                    <%= image_tag app_installation.github_avatar_url+ "?size=50", width: 25, height: 25, class: 'pull-left mr-1' %>
+                    <%= image_tag app_installation.github_avatar_url+ "?size=50", width: 25, height: 25, class: 'float-start me-1' %>
                     <%= app_installation.account_login %>
                   </td>
                   <td class="align-middle">

@@ -1,15 +1,15 @@
 <div id="<%= 'comment-'+comment.id.to_s %>" class="card-comment card mt-3 ">
 
-  <div class="card-header clickable media d-flex align-items-center text-muted <%='collapsed' if @notification && !comment.unread?(@notification) && !(@comments.length <= index + 1) %>" data-toggle='collapse' data-target=".comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
+  <div class="card-header clickable d-flex align-items-center text-muted <%='collapsed' if @notification && !comment.unread?(@notification) && !(@comments.length <= index + 1) %>" data-bs-toggle='collapse' data-bs-target=".comment-<%= comment.id.to_s%>" aria-expanded='false' aria-controls="comment-<%= comment.id.to_s%>">
 
-    <%= image_tag(avatar_url(comment.author), width: 20, class: 'mr-3 align-self-center') %>
+    <%= image_tag(avatar_url(comment.author), width: 20, class: 'me-3 align-self-center') %>
 
-    <div class='media-body'>
+    <div class='flex-grow-1'>
       <% if comment.review_state.present? %>
         <%= comment_status(comment.review_state) %>
       <% end %>
       <b><%= link_to comment.author, Octobox.config.github_domain+'/'+comment.author_url_path, class: 'text-muted', target: '_blank', rel: "noopener" %></b> <%= comment.review_state.nil? ? 'commented' : 'reviewed' %> <span class=''text-muted> <%=time_ago_in_words(comment.created_at).to_s %> ago</span>
-      <%= octicon 'sync', height: 14, class: "spinning float-right" if !comment.github_id %>
+      <%= octicon 'sync', height: 14, class: "spinning float-end" if !comment.github_id %>
     </div>
   </div>
 
