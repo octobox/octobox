@@ -135,6 +135,36 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/octobox/sponsor/8/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/octobox/sponsor/9/website" target="_blank"><img src="https://opencollective.com/octobox/sponsor/9/avatar.svg"></a>
 
+## Testing
+
+Run the full test suite with:
+
+```bash
+bundle exec rails test
+```
+
+### System tests (browser tests)
+
+System tests run in a real browser using [Playwright](https://playwright.dev/) via `capybara-playwright-driver`. They test interactive behavior like keyboard shortcuts, checkbox selection, and AJAX actions.
+
+One-time setup:
+
+```bash
+npx playwright install chromium
+```
+
+Run system tests:
+
+```bash
+bundle exec rails test:system
+```
+
+To watch tests in a visible browser window:
+
+```bash
+HEADLESS=false bundle exec rails test:system
+```
+
 ## Contribute
 
 Please do! The source code is hosted at [GitHub](https://github.com/octobox/octobox). If you want something, [open an issue](https://github.com/octobox/octobox/issues/new) or a pull request.
