@@ -158,7 +158,7 @@ document.addEventListener('click', function(event) {
 });
 
 document.addEventListener('click', function(event) {
-  if(event.target.matches('[data-toggle="offcanvas"]')) {
+  if(event.target.matches('[data-bs-toggle="offcanvas"]')) {
     Octobox.toggleOffCanvas();
   }
 });
