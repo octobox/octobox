@@ -56,6 +56,8 @@ group :test do
   gem 'webmock'
   gem 'mocha'
   gem 'timecop'
+  gem 'capybara'
+  gem 'capybara-playwright-driver'
 end
 
 group :development do
