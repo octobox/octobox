@@ -14,6 +14,9 @@
 // Layout & components
 @import "bootstrap/root";
 @import "bootstrap/reboot";
+
+// Restore BS4 behavior: no default underline on links
+a { text-decoration: none; }
 @import "bootstrap/type";
 @import "bootstrap/grid";
 @import "bootstrap/tables";
