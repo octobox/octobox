@@ -43,7 +43,7 @@
 }
 
 .blockquote{
-  border-left: 3px solid theme-color('secondary');
+  border-left: 3px solid map-get($theme-colors, 'secondary');
 }
 
 .card-body blockquote {
@@ -77,7 +77,7 @@
 }
 
 .card-header{
-  background: mix($black, $card-bg, 3%);
+  background: var(--bs-tertiary-bg);
   &.sticky-top{
     padding: 6px 8px;
     border-radius: 0;
@@ -92,14 +92,8 @@
 }
 
 .select-all {
-  padding-left: 6px;
+  margin-left: 5px;
   margin-right: 14px;
-  input {
-    position: relative;
-  }
-  label {
-    left: 10px;
-  }
 }
 
 @keyframes spin {
@@ -149,7 +143,7 @@
   border-bottom: 0;
 }
 
-@include media-breakpoint-down(lg){
+@include media-breakpoint-down(xl){
   .not-a-nav{
     background-color: $body-bg;
   }

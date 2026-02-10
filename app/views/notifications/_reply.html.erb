@@ -4,8 +4,8 @@
 	</div>
 	<div class='card-body justify-content-right'>
 		<%= text_area(:comment, :body, class: 'form-control', placeholder: 'Leave a comment') %>
-		<%= submit_tag("Comment", class: 'btn mt-2 ml-2 btn-success float-right') %>
-		<%= link_to "View on GitHub", @notification.subject.html_url, class:"btn btn-light mt-2 float-right", target: "_blank"%>
+		<%= submit_tag("Comment", class: 'btn mt-2 ms-2 btn-success float-end') %>
+		<%= link_to "View on GitHub", @notification.subject.html_url, class:"btn btn-light mt-2 float-end", target: "_blank"%>
  		<%= hidden_field(:id, @notification.id) %>
  	</div>
 <% end %>

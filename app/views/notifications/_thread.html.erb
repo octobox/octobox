@@ -1,7 +1,7 @@
 <div class="card card-thread">
   <div class='d-flex card-header sticky-top justify-content-between'>
     <div>
-      <button class="btn btn-sm btn-outline-dark toggle-star <%=@notification.starred ? 'star-active' : 'star-inactive' %>" data-id= <%=@notification.id%> title=<%= @notification.starred ? 'Remove star' : 'star'%> data-toggle='tooltip'>
+      <button class="btn btn-sm btn-outline-dark toggle-star <%=@notification.starred ? 'star-active' : 'star-inactive' %>" data-id= <%=@notification.id%> title=<%= @notification.starred ? 'Remove star' : 'star'%> data-bs-toggle='tooltip'>
         <%= octicon 'star', height: 18%>
       </button>
       <%= archive_button unless archive_selected? %>
@@ -11,16 +11,16 @@
     </div>
     <div>
       <% if @previous %>
-        <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "btn btn-sm previous btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Previous notification' %>
+        <%= link_to octicon('chevron-left'), notification_path(filtered_params(id: @previous)), class: "btn btn-sm previous btn-outline-dark", data:{'bs-toggle':'tooltip', 'bs-placement':'auto'}, title:'Previous notification' %>
       <% else %>
         <%= link_to octicon('chevron-left'), '#', class: "btn btn-sm previous btn-outline-secondary" %>
       <% end %>
       <% if @next %>
-        <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "btn btn-sm next btn-outline-dark", data:{toggle:'tooltip', placement:'auto'}, title:'Next notification' %>
+        <%= link_to octicon('chevron-right'), notification_path(filtered_params(id: @next)), class: "btn btn-sm next btn-outline-dark", data:{'bs-toggle':'tooltip', 'bs-placement':'auto'}, title:'Next notification' %>
       <% else %>
         <%= link_to octicon('chevron-right'), '#', class: "btn btn-sm next btn-outline-secondary" %>
       <% end %>
-      <%= link_to octicon('x'), root_path(filtered_params), class: 'btn btn-sm closethread btn-outline-dark d-xxxl-none', data:{toggle: 'tooltip'}, title: 'Close discussion' %>
+      <%= link_to octicon('x'), root_path(filtered_params), class: 'btn btn-sm closethread btn-outline-dark d-xxxl-none', data:{'bs-toggle': 'tooltip'}, title: 'Close discussion' %>
     </div>
   </div>
 
@@ -34,11 +34,11 @@
       <div class='discussion-thread'>
         <% if @notification.subject.body %>
           <div class="card-comment card mt-3">
-            <div class="card-header media d-flex align-items-center">
+            <div class="card-header d-flex align-items-center">
 
-              <%= image_tag(avatar_url(@notification.subject.author), width: 20, class: 'mr-3 align-self-center') %>
+              <%= image_tag(avatar_url(@notification.subject.author), width: 20, class: 'me-3 align-self-center') %>
 
-              <div class='media-body text-muted'>
+              <div class='flex-grow-1 text-muted'>
 
                 <b><%= link_to @notification.subject.author, Octobox.config.github_domain+'/'+@notification.subject.author_url_path, class: 'text-muted'%></b> commented <span class='text-muted'><%= time_ago_in_words(@notification.subject.created_at) %></span> ago
               </div>
@@ -60,7 +60,7 @@
           <% if @comments_left_to_load > 0 %>
             <div id='more-comments'>
               <%= link_to expand_comments_notification_url, class: 'btn btn-secondary mt-3 expand_comments' do %>
-                <%= octicon('comment', height: 16, class: 'ml-1') %>
+                <%= octicon('comment', height: 16, class: 'ms-1') %>
                 View <%= @comments_left_to_load %> more comments and reviews
               <% end %>
             </div>

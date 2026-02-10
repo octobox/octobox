@@ -8,20 +8,20 @@
   }
   &.navbar-light, &.bg-light{
     #search input{
-      background: rgba($navbar-light-color,0.125);
-      color: $navbar-light-color
+      background: rgba($black, 0.08);
+      color: rgba($black, 0.65);
     }
     .opencollective svg, .search-help svg, .octobox-icon svg{
-      fill: $navbar-light-color;
+      fill: rgba($black, 0.65);
     }
   }
   &.navbar-dark, &.bg-dark {
     #search input{
-      background: rgba($navbar-dark-color,0.125);
-      color: $navbar-dark-color
+      background: rgba($white, 0.08);
+      color: rgba($white, 0.55);
     }
     .opencollective svg, .search-help svg, .octobox-icon svg{
-      fill: $navbar-dark-color;
+      fill: rgba($white, 0.55);
     }
   }
 }
@@ -115,7 +115,7 @@
   width: 100% !important;
 }
 
-@include media-breakpoint-down(sm) {
+@include media-breakpoint-down(md) {
   .navbar{
     form {
       border-top: none;
@@ -149,35 +149,35 @@
     &.navbar-dark{
       .dropdown-menu{
         > a, svg{
-          color: $navbar-dark-color;
-          fill: $navbar-dark-color;
+          color: rgba($white, 0.55);
+          fill: rgba($white, 0.55);
           &:hover,
           &:hover svg,
           &:focus,
           &:focus svg
            {
-            color: $navbar-dark-hover-color;
-            fill: $navbar-dark-hover-color;
+            color: rgba($white, 0.75);
+            fill: rgba($white, 0.75);
             background-color: transparent;
           }
         }
         > .dropdown-divider {
-          border-top-color: $navbar-dark-color;
+          border-top-color: rgba($white, 0.55);
         }
       }
     }
     &.navbar-light{
       .dropdown-menu{
         > a{
-          color: $navbar-light-color;
+          color: rgba($black, 0.65);
           &:hover,
           &:focus {
-            color: $navbar-light-hover-color;
+            color: rgba($black, 0.8);
             background-color: transparent;
           }
         }
         > .dropdown-divider {
-          border-top-color: $navbar-light-color;
+          border-top-color: rgba($black, 0.65);
         }
       }
     }

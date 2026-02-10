@@ -4,7 +4,7 @@
       <%= octicon 'inbox', height: 16, class: 'sidebar-icon text-primary' %>
       Inbox
       <% if @search.inbox_selected? %>
-        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
+        <span class="badge bg-light text-dark"><%= @unread_notifications.sum(&:last) %></span>
       <% end %>
     <% end %>
   </li>
@@ -13,7 +13,7 @@
       <%= octicon 'check', height: 16, class: 'sidebar-icon text-success' %>
       Archive
       <% if @search.archive_selected? %>
-        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
+        <span class="badge bg-light text-dark"><%= @unread_notifications.sum(&:last) %></span>
       <% end %>
     <% end %>
   </li>
@@ -22,7 +22,7 @@
       <%= octicon 'star-fill', height: 16, class: 'sidebar-icon star-active' %>
       Starred
       <% if starred_selected? %>
-        <span class="badge badge-light"><%= @unread_notifications.sum(&:last) %></span>
+        <span class="badge bg-light text-dark"><%= @unread_notifications.sum(&:last) %></span>
       <% end %>
     <% end %>
   </li>
@@ -36,9 +36,9 @@
           <%= octicon 'search', height: 16, class: 'sidebar-icon' %>
           <%= pinned_search.name %>
           <% if search_query_matches?(@search.to_query, pinned_search.query) %>
-            <span class="badge badge-light"><%= @total %></span>
+            <span class="badge bg-light text-dark"><%= @total %></span>
           <% else %>
-            <span class="badge badge-light pinned-search-count" data-url="<%= pinned_search_path(pinned_search, format: 'json') %>"><%= octicon 'sync', height: 12, class: 'spinning' %></span>
+            <span class="badge bg-light text-dark pinned-search-count" data-url="<%= pinned_search_path(pinned_search, format: 'json') %>"><%= octicon 'sync', height: 12, class: 'spinning' %></span>
           <% end %>
         <% end %>
       </li>

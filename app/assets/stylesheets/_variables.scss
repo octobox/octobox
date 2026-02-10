@@ -34,7 +34,7 @@ $label-security_alert-text-color: #fff !default;
 $text-draft-color: #888 !default;
 
 $text-colors: (
-	"light": theme-color("light"),
+	"light": map-get($theme-colors, "light"),
 	"subscribed": $label-subscribed-color,
 	"team_mention": $label-team_mention-color,
 	"security_alert": $label-security_alert-color,

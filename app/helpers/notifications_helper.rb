@@ -151,17 +151,17 @@ module NotificationsHelper
   end
 
   def select_all_button(cur_selected, total)
-    button_tag(type: 'button', class: "select_all btn btn-sm btn-outline-dark hidden-button", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': "Number of items selected") do
+    button_tag(type: 'button', class: "select_all btn btn-sm btn-outline-dark hidden-button", 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': "Number of items selected") do
       octicon('check', height: 16) +
-        content_tag(:span, " #{cur_selected}", class: 'bold d-none d-md-inline-block ml-1') +
+        content_tag(:span, " #{cur_selected}", class: 'bold d-none d-md-inline-block ms-1') +
         " | " +
         content_tag(:span, " #{total}", class: 'd-none d-md-inline-block')
     end if cur_selected < total
   end
 
   def function_button(title, octicon, css_class, tooltip, hidden=true)
-    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark #{'hidden-button' if hidden}", 'data-toggle': "tooltip", 'data-placement': "bottom", 'title': tooltip ) do
-      octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-xl-inline-block ml-1')
+    button_tag(type: 'button', class: "#{css_class} btn btn-sm btn-outline-dark #{'hidden-button' if hidden}", 'data-bs-toggle': "tooltip", 'data-bs-placement': "bottom", 'title': tooltip ) do
+      octicon(octicon, height: 16) + content_tag(:span, "#{title}", class: 'd-none d-xl-inline-block ms-1')
     end
   end
 
@@ -261,9 +261,9 @@ module NotificationsHelper
       link_to root_path(path_params), class: (active ? "nav-link active filter #{link_class}" : "nav-link filter #{link_class}") do
         yield
         if active && not_repo_in_active_org(param)
-          concat content_tag(:span, octicon('x', :height => 16), class: 'badge badge-light')
+          concat content_tag(:span, octicon('x', :height => 16), class: 'badge bg-light text-dark')
         elsif count.present?
-          concat content_tag(:span, count, class: 'badge badge-light')
+          concat content_tag(:span, count, class: 'badge bg-light text-dark')
         end
       end
     end
@@ -309,9 +309,9 @@ module NotificationsHelper
     return unless status.present?
     content_tag(:span,
       octicon(NOTIFICATION_STATUS_OCTICON[status], height: 24, class: status),
-      class: "badge badge-light badge-pr #{status}",
+      class: "badge bg-light text-dark badge-pr #{status}",
       title: status.humanize,
-      data: {toggle: 'tooltip'}
+      data: {'bs-toggle': 'tooltip'}
     )
   end
 
@@ -319,9 +319,9 @@ module NotificationsHelper
     return unless status.present?
     content_tag(:span,
       octicon(COMMENT_STATUS_OCTICON[status], height: 24, class: COMMENT_STATUS[status]),
-      class: "badge badge-light #{COMMENT_STATUS[status]}",
+      class: "badge bg-light text-dark #{COMMENT_STATUS[status]}",
       title: status.humanize,
-      data: {toggle: 'tooltip'}
+      data: {'bs-toggle': 'tooltip'}
     )
   end
 

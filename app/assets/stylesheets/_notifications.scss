@@ -26,7 +26,7 @@ $notification-items: (
       }
     }
     &:not(.active) {
-      background-color: mix($list-group-action-active-bg, $body-bg, 50%);
+      background-color: var(--bs-tertiary-bg);
       .notification-subject .link {
         color: $text-muted;
       }
@@ -65,7 +65,7 @@ $notification-items: (
   white-space: nowrap;
 }
 
-.custom-checkbox {
+.form-check {
   input[type=checkbox]:not(:checked) + label {
     &::before, &::after {
       background-color: $body-bg;
@@ -268,14 +268,14 @@ $notification-items: (
 
 @include regular-table;
 
-@include media-breakpoint-down(xxl) {
+@include media-breakpoint-down(xxxl) {
   .flex-main.show-thread{
     @include remove-borders;
     @include responsive-table;
   }
 }
 
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(lg) {
   @include remove-borders;
   @include responsive-table;
 }

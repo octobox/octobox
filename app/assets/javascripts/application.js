@@ -1,15 +1,8 @@
-//= require jquery3
-//= require jquery_ujs
+//= require rails-ujs
 //= require turbolinks
 //= require local-time
 //= require popper
-//= require bootstrap/util
-//= require bootstrap/collapse
-//= require bootstrap/alert
-//= require bootstrap/tooltip
-//= require bootstrap/dropdown
-//= require bootstrap/modal
-//= require bootstrap/popover
+//= require bootstrap
 //= require_tree .
 
 var db;
@@ -154,7 +147,7 @@ document.addEventListener('click', function(event) {
 });
 
 document.addEventListener('click', function(event) {
-  if(event.target.matches('[data-toggle="offcanvas"]')) {
+  if(event.target.matches('[data-bs-toggle="offcanvas"]')) {
     Octobox.toggleOffCanvas();
   }
 });

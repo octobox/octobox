@@ -124,41 +124,48 @@ var Octobox = (function() {
   var enableTooltips = function() {
     if(!("ontouchstart" in window))
     {
-      // Bootstrap 4 requires jQuery for tooltip plugin
-      $("[data-toggle='tooltip']").tooltip();
+      document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function(el) {
+        new bootstrap.Tooltip(el);
+      });
     }
   };
 
   var enablePopOvers = function() {
-    // Bootstrap 4 requires jQuery for popover plugin
     var showTimer;
 
-    $('[data-toggle="popover"]').popover({ trigger: "manual" , html: true})
-    .on("mouseenter", function () {
-      if (showTimer) {
-        clearTimeout(showTimer);
-      }
+    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(function(el) {
+      var popover = new bootstrap.Popover(el, { trigger: "manual", html: true });
 
-      var _this = this;
-      showTimer = setTimeout(function () {
-        showTimer = undefined
-        $(_this).popover("show");
-        $(".popover").on("mouseleave", function () {
-            $(_this).popover('hide');
-        });
-      }, 500);
-    }).on("mouseleave", function () {
-      if (showTimer) {
-        clearTimeout(showTimer);
-        return;
-      }
-
-      var _this = this;
-      setTimeout(function () {
-        if (!$(".popover:hover").length) {
-          $(_this).popover("hide");
+      el.addEventListener("mouseenter", function() {
+        if (showTimer) {
+          clearTimeout(showTimer);
         }
-      }, 300);
+
+        var _this = this;
+        showTimer = setTimeout(function() {
+          showTimer = undefined;
+          popover.show();
+          var popoverEl = document.querySelector(".popover");
+          if (popoverEl) {
+            popoverEl.addEventListener("mouseleave", function() {
+              popover.hide();
+            });
+          }
+        }, 500);
+      });
+
+      el.addEventListener("mouseleave", function() {
+        if (showTimer) {
+          clearTimeout(showTimer);
+          return;
+        }
+
+        setTimeout(function() {
+          if (!document.querySelector(".popover:hover")) {
+            popover.hide();
+          }
+        }, 300);
+      });
     });
   }
 
@@ -410,14 +417,14 @@ var Octobox = (function() {
 
   var initShiftClickCheckboxes = function() {
     // Remove any existing listeners to avoid duplicates
-    document.querySelectorAll(".notification-checkbox .custom-checkbox").forEach(el => {
+    document.querySelectorAll(".notification-checkbox .form-check").forEach(el => {
       el.replaceWith(el.cloneNode(true));
     });
 
     // handle shift+click multiple check
-    var notificationCheckboxes = Array.from(document.querySelectorAll(".notification-checkbox .custom-checkbox input"));
+    var notificationCheckboxes = Array.from(document.querySelectorAll(".notification-checkbox .form-check input"));
 
-    var checkboxContainers = document.querySelectorAll(".notification-checkbox .custom-checkbox");
+    var checkboxContainers = document.querySelectorAll(".notification-checkbox .form-check");
 
     checkboxContainers.forEach(checkboxContainer => {
       checkboxContainer.addEventListener('click', function(e) {
@@ -868,8 +875,11 @@ var Octobox = (function() {
   };
 
   var openModal = function() {
-    // Bootstrap 4 requires jQuery for modal plugin
-    $("#help-box").modal({ keyboard: false });
+    var helpBox = document.getElementById("help-box");
+    if (helpBox) {
+      var modal = bootstrap.Modal.getOrCreateInstance(helpBox, { keyboard: false });
+      modal.show();
+    }
   };
 
   var focusSearchInput = function(e) {
@@ -894,7 +904,7 @@ var Octobox = (function() {
     var alert_html = [
       "<div class='flex-header header-flash-messages'>",
       "  <div class='alert alert-" + type + " fade show'>",
-      "    <button class='close' data-dismiss='alert'>x</button>",
+      "    <button class='btn-close' data-bs-dismiss='alert'></button>",
              message,
       "  </div>",
       "</div>"
@@ -910,8 +920,8 @@ var Octobox = (function() {
   var escPressed = function(e) {
     var helpBox = document.getElementById("help-box");
     if (helpBox && helpBox.classList.contains("show")) {
-      // Bootstrap 4 requires jQuery for modal hide
-      $("#help-box").modal("hide");
+      var modal = bootstrap.Modal.getInstance(helpBox);
+      if (modal) modal.hide();
     } else if(document.querySelector(".flex-main") && document.querySelector(".flex-main").classList.contains("show-thread")){
       closeThread();
     } else if(document.activeElement === document.getElementById("search-box")) {
