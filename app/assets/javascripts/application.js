@@ -1,19 +1,8 @@
+//= require rails-ujs
 //= require turbolinks
 //= require local-time
-//= require bootstrap-global-this-define
 //= require popper
-//= require bootstrap/dom/data
-//= require bootstrap/dom/event-handler
-//= require bootstrap/dom/manipulator
-//= require bootstrap/dom/selector-engine
-//= require bootstrap/base-component
-//= require bootstrap/collapse
-//= require bootstrap/alert
-//= require bootstrap/tooltip
-//= require bootstrap/dropdown
-//= require bootstrap/modal
-//= require bootstrap/popover
-//= require bootstrap-global-this-undefine
+//= require bootstrap-sprockets
 //= require_tree .
 
 var db;
