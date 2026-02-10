@@ -16,7 +16,7 @@ gem 'typhoeus'
 gem 'faraday', '>= 2'
 gem 'faraday-retry'
 gem 'faraday-typhoeus'
-gem 'uglifier'
+gem 'terser'
 gem 'pg_search'
 gem 'jbuilder'
 gem 'rake', require: false
