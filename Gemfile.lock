@@ -154,9 +154,6 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-gzip (3.1.0)
-      faraday (>= 2.0, < 3)
-      zlib (~> 3.0)
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
     faraday-retry (2.4.0)
@@ -476,7 +473,6 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.38)
     zeitwerk (2.7.4)
-    zlib (3.2.2)
 
 PLATFORMS
   arm64-darwin-21
@@ -500,7 +496,6 @@ DEPENDENCIES
   dotenv-rails
   factory_bot
   faraday (>= 2)
-  faraday-gzip
   faraday-retry
   faraday-typhoeus
   gemoji (< 4)
