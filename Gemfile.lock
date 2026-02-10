@@ -97,7 +97,7 @@ GEM
       rouge (>= 1.0.0)
     bigdecimal (4.0.1)
     bindex (0.8.1)
-    bootsnap (1.21.1)
+    bootsnap (1.22.0)
       msgpack (~> 1.2)
     bootstrap (4.6.2)
       autoprefixer-rails (>= 9.1.0)
