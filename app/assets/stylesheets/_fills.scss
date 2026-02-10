@@ -11,7 +11,7 @@ svg{
     fill: $value !important;
   }
   .#{$color}-text-color, .#{$color}-text-color svg{
-      fill: color-yiq($value) !important;
+      fill: color-contrast($value) !important;
   }
 }
 @each $color, $value in $theme-colors{
@@ -23,27 +23,27 @@ svg{
 
 // add svg support for tbs buttons
 @mixin button-variant($background, $border, $hover-background: darken($background, 7.5%), $hover-border: darken($border, 10%), $active-background: darken($background, 10%), $active-border: darken($border, 12.5%)) {
-  fill: color-yiq($background);
+  fill: color-contrast($background);
   & svg{
-    fill: color-yiq($background);
+    fill: color-contrast($background);
   }
-  @include hover {
-    fill: color-yiq($hover-background);
+  &:hover {
+    fill: color-contrast($hover-background);
   }
   &.disabled,
   &.disabled svg,
   &:disabled,
   &:disabled svg {
-    fill: color-yiq($background);
+    fill: color-contrast($background);
   }
 
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active
   .show > &.dropdown-toggle {
-    fill: color-yiq($active-background);
+    fill: color-contrast($active-background);
   }
 }
-@mixin button-outline-variant($color, $color-hover: color-yiq($color), $active-background: $color, $active-border: $color) {
+@mixin button-outline-variant($color, $color-hover: color-contrast($color), $active-background: $color, $active-border: $color) {
   fill: $color;
   & svg{
     fill: $color;
@@ -62,7 +62,7 @@ svg{
   &:not(:disabled):not(.disabled):active,
   &:not(:disabled):not(.disabled).active
   .show > &.dropdown-toggle {
-    fill: color-yiq($active-background);
+    fill: color-contrast($active-background);
   }
 }
 @each $color, $value in $theme-colors {
@@ -85,9 +85,9 @@ svg{
 }
 
 @mixin badge-variant($bg) {
-  color: color-yiq($bg);
+  color: color-contrast($bg);
   & svg{
-    fill: color-yiq($bg);
+    fill: color-contrast($bg);
   }
 }
 

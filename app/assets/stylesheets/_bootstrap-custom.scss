@@ -1,13 +1,17 @@
 /*!
- * Bootstrap v4.1.3 (https://getbootstrap.com/)
- * Copyright 2011-2018 The Bootstrap Authors
- * Copyright 2011-2018 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * Bootstrap v5.3 (https://getbootstrap.com/)
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
+// Configuration
 @import "bootstrap/functions";
 @import "bootstrap/variables";
+@import "bootstrap/variables-dark";
+@import "bootstrap/maps";
 @import "bootstrap/mixins";
+@import "bootstrap/utilities";
+
+// Layout & components
 @import "bootstrap/root";
 @import "bootstrap/reboot";
 @import "bootstrap/type";
@@ -28,7 +32,10 @@
 @import "bootstrap/close";
 @import "bootstrap/modal";
 @import "bootstrap/tooltip";
-@import "bootstrap/utilities";
-@import "bootstrap/media";
 @import "bootstrap/popover";
-@import "bootstrap/custom-forms";
+
+// Helpers
+@import "bootstrap/helpers";
+
+// Utilities
+@import "bootstrap/utilities/api";

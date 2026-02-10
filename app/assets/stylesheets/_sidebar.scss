@@ -1,5 +1,5 @@
 .nav-filters {
-  border-top: 1px solid $nav-divider-color;
+  border-top: 1px solid $border-color;
   margin: 4px 0;
   padding: 4px 0 0;
 
@@ -17,10 +17,10 @@
     &.type-RepositoryVulnerabilityAlert{
       background-color: $red;
       a{
-        color: color-yiq($red);
-        fill: color-yiq($red);
+        color: color-contrast($red);
+        fill: color-contrast($red);
         svg{
-          fill: color-yiq($red);
+          fill: color-contrast($red);
         }
       }
     }
