@@ -283,6 +283,7 @@ GEM
     omniauth-rails_csrf_protection (2.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
+    ostruct (0.6.3)
     pagy (9.4.0)
     pg (1.6.3)
     pg (1.6.3-arm64-darwin)
@@ -510,6 +511,7 @@ DEPENDENCIES
   oj
   omniauth-github (= 2.0.1)
   omniauth-rails_csrf_protection
+  ostruct
   pagy (~> 9.4.0)
   pg
   pg_search
