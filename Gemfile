@@ -32,6 +32,7 @@ gem 'bootsnap', require: false
 gem 'bugsnag'
 gem 'jwt'
 gem 'oj'
+gem 'ostruct'
 gem 'yard', require: false
 gem 'commonmarker', '2.6.3'
 gem 'pg'
