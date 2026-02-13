@@ -136,7 +136,7 @@ First, [install Docker](https://docs.docker.com/engine/installation/). If you've
 
 If you're just giving Octobox a try, you can simply download the
 `docker-compose.yml` file from
-[here](https://raw.githubusercontent.com/octobox/octobox/master/docker-compose.yml), then run:
+[here](https://raw.githubusercontent.com/octobox/octobox/main/docker-compose.yml), then run:
 
 ```bash
 $ GITHUB_CLIENT_ID=yourclientid GITHUB_CLIENT_SECRET=yourclientsecret docker-compose up --build

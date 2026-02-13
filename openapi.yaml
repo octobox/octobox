@@ -10,7 +10,7 @@ info:
     # email: ""
   license:
     name: "GNU AFFERO GENERAL PUBLIC LICENSE"
-    url: "https://github.com/octobox/octobox/blob/master/LICENSE.txt"
+    url: "https://github.com/octobox/octobox/blob/main/LICENSE.txt"
 servers:
   - url: "http://localhost:3000"
     description: "For local development/testing"

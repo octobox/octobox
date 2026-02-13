@@ -6,7 +6,7 @@ module Octobox
 
     def generate
       puts "Updating the repository"
-      system("git fetch origin master 2>&1 > /dev/null")
+      system("git fetch origin main 2>&1 > /dev/null")
 
       puts "=" * 80
       puts "We will be be basing this release on:"
