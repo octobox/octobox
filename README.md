@@ -110,8 +110,8 @@ Press `?` for the help menu.
 
 Octobox provides a REST API for managing notifications, users, and pinned searches. The complete API specification is available as an OpenAPI document:
 
-- **[OpenAPI Specification](https://github.com/octobox/octobox/blob/master/openapi.yaml)** - Complete API reference with examples
-- **[Interactive API Explorer](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/octobox/octobox/master/openapi.yaml)** - Try the API directly in your browser
+- **[OpenAPI Specification](https://github.com/octobox/octobox/blob/main/openapi.yaml)** - Complete API reference with examples
+- **[Interactive API Explorer](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/octobox/octobox/main/openapi.yaml)** - Try the API directly in your browser
 
 The API supports Bearer token authentication and covers all major Octobox functionality including notification management, user settings, and pinned search operations.
 

@@ -3,7 +3,7 @@ name: ❓ Questions/Help
 about: As a support question
 ---
 
-<!-- Having trouble installing? Be sure to check out the installation docs! https://github.com/octobox/octobox/blob/master/docs/INSTALLATION.md -->
+<!-- Having trouble installing? Be sure to check out the installation docs! https://github.com/octobox/octobox/blob/main/docs/INSTALLATION.md -->
 
 Are you experiencing this issue in octobox.io or your own instance?
  - [ ] octobox.io
