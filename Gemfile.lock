@@ -445,7 +445,7 @@ GEM
     thor (1.5.0)
     tilt (2.7.0)
     timecop (0.9.10)
-    timeout (0.6.0)
+    timeout (0.6.1)
     tsort (0.2.0)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
