@@ -207,7 +207,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.25.0)
+    loofah (2.25.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.9.0)
@@ -262,10 +262,10 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0, >= 2.0.3)
       version_gem (~> 1.1, >= 1.1.9)
-    octicons (19.22.0)
-    octicons_helper (19.22.0)
+    octicons (19.22.1)
+    octicons_helper (19.22.1)
       actionview
-      octicons (= 19.22.0)
+      octicons (= 19.22.1)
       railties
     octokit (10.0.0)
       faraday (>= 1, < 3)
