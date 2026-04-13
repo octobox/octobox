@@ -148,7 +148,7 @@ GEM
     ethon (0.18.0)
       ffi (>= 1.15.0)
       logger
-    execjs (2.10.0)
+    execjs (2.10.1)
     factory_bot (6.5.6)
       activesupport (>= 6.1.0)
     faraday (2.14.1)
