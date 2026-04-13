@@ -88,6 +88,40 @@ class HooksControllerTest < ActionController::TestCase
     send_webhook 'repository'
     assert_equal Repository.count, 1
   end
+
+  test 'accepts webhook with valid signature when secret is configured' do
+    Octobox.config.stubs(:github_webhook_secret).returns('mysecret')
+    body = File.read("#{Rails.root}/test/fixtures/github_webhooks/github_app_authorization.json")
+
+    @request.headers['X-Hub-Signature'] = "sha1=#{OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), 'mysecret', body)}"
+    @request.headers['X-GitHub-Event'] = 'github_app_authorization'
+    post :create, body: body
+
+    assert_response :success
+  end
+
+  test 'rejects webhook with invalid signature when secret is configured' do
+    Octobox.config.stubs(:github_webhook_secret).returns('mysecret')
+    body = File.read("#{Rails.root}/test/fixtures/github_webhooks/github_app_authorization.json")
+
+    @request.headers['X-Hub-Signature'] = "sha1=#{'0' * 40}"
+    @request.headers['X-GitHub-Event'] = 'github_app_authorization'
+
+    assert_raises ActiveSupport::MessageVerifier::InvalidSignature do
+      post :create, body: body
+    end
+  end
+
+  test 'rejects webhook with missing signature header when secret is configured' do
+    Octobox.config.stubs(:github_webhook_secret).returns('mysecret')
+    body = File.read("#{Rails.root}/test/fixtures/github_webhooks/github_app_authorization.json")
+
+    @request.headers['X-GitHub-Event'] = 'github_app_authorization'
+
+    assert_raises ActiveSupport::MessageVerifier::InvalidSignature do
+      post :create, body: body
+    end
+  end
 end
 
 def send_webhook(event_type, fixture = nil)
