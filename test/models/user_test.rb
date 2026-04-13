@@ -237,4 +237,78 @@ class UserTest < ActiveSupport::TestCase
     assert_equal @app_user.comment_client(comment).access_token, @app_user.app_token
   end
 
+  test '#import_notifications updates allowed fields on existing notifications' do
+    notification = create(:notification, user: @user, archived: false, starred: false, unread: true)
+
+    @user.import_notifications([{
+      'github_id' => notification.github_id,
+      'archived' => true,
+      'starred' => true,
+      'unread' => false,
+      'muted_at' => '2026-01-01T00:00:00Z',
+      'last_read_at' => '2026-01-01T00:00:00Z'
+    }])
+
+    notification.reload
+    assert notification.archived
+    assert notification.starred
+    refute notification.unread
+    refute_nil notification.muted_at
+  end
+
+  test '#import_notifications ignores subject_url' do
+    notification = create(:notification, user: @user)
+    original_subject_url = notification.subject_url
+
+    @user.import_notifications([{
+      'github_id' => notification.github_id,
+      'subject_url' => 'https://api.github.com/repos/victim-org/private-repo/issues/1',
+      'archived' => true
+    }])
+
+    notification.reload
+    assert_equal original_subject_url, notification.subject_url
+    assert notification.archived
+  end
+
+  test '#import_notifications ignores repository_full_name' do
+    notification = create(:notification, user: @user)
+    original_repo = notification.repository_full_name
+
+    @user.import_notifications([{
+      'github_id' => notification.github_id,
+      'repository_full_name' => 'victim-org/private-repo'
+    }])
+
+    notification.reload
+    assert_equal original_repo, notification.repository_full_name
+  end
+
+  test '#import_notifications does not create records for unknown github_ids' do
+    assert_no_difference 'Notification.count' do
+      @user.import_notifications([{
+        'github_id' => 999999999,
+        'subject_url' => 'https://api.github.com/repos/victim-org/private-repo/issues/1',
+        'archived' => true
+      }])
+    end
+  end
+
+  test '#import_notifications cannot link to another users subject' do
+    victim = create(:user)
+    victim_subject = create(:subject, url: 'https://api.github.com/repos/victim-org/secret/issues/42', body: 'private issue body')
+    create(:notification, user: victim, subject_url: victim_subject.url)
+
+    attacker_notification = create(:notification, user: @user, subject_url: 'https://api.github.com/repos/attacker/repo/issues/1')
+
+    @user.import_notifications([{
+      'github_id' => attacker_notification.github_id,
+      'subject_url' => victim_subject.url
+    }])
+
+    attacker_notification.reload
+    assert_equal 'https://api.github.com/repos/attacker/repo/issues/1', attacker_notification.subject_url
+    assert_nil attacker_notification.subject
+  end
+
 end
