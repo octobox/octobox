@@ -169,7 +169,7 @@ GEM
     fugit (1.12.1)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
-    gemoji (3.0.1)
+    gemoji (4.1.0)
     get_process_mem (1.0.0)
       bigdecimal (>= 2.0)
       ffi (~> 1.0)
@@ -501,7 +501,7 @@ DEPENDENCIES
   faraday (>= 2)
   faraday-retry
   faraday-typhoeus
-  gemoji (< 4)
+  gemoji (< 5)
   jbuilder
   jquery-rails
   jwt
