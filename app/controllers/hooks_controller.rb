@@ -47,7 +47,7 @@ class HooksController < ApplicationController
     return unless secret.present?
 
     expected_signature = "sha1=#{OpenSSL::HMAC.hexdigest(HMAC_DIGEST, secret, request_body)}"
-    if signature_header != expected_signature
+    unless ActiveSupport::SecurityUtils.secure_compare(signature_header.to_s, expected_signature)
       raise ActiveSupport::MessageVerifier::InvalidSignature
     end
   end
