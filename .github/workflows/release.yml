@@ -16,14 +16,30 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      tag: ${{ steps.create.outputs.tag }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
           persist-credentials: false
 
       - name: Create release
+        id: create
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           tag=$(date +"%B-%Y" | tr '[:upper:]' '[:lower:]')
           gh release create "$tag" --target "$GITHUB_SHA" --generate-notes --title "$tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: release
+    permissions:
+      packages: write
+      contents: read
+    uses: ./.github/workflows/publish.yml
+    with:
+      tag: ${{ needs.release.outputs.tag }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

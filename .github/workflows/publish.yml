@@ -3,6 +3,21 @@ name: Publish Docker image
 on:
   release:
     types: [published]
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+    secrets:
+      DOCKER_USERNAME:
+        required: true
+      DOCKER_PASSWORD:
+        required: true
+  workflow_dispatch:
+    inputs:
+      tag:
+        required: true
+        type: string
 
 permissions: {}
 
@@ -20,6 +35,7 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         with:
+          ref: ${{ inputs.tag || github.ref }}
           persist-credentials: false
 
       - name: Log in to Docker Hub
@@ -42,6 +58,9 @@ jobs:
           images: |
             octoboxio/octobox
             ghcr.io/${{ github.repository }}
+          tags: |
+            type=ref,event=tag
+            type=raw,value=${{ inputs.tag }},enable=${{ inputs.tag != '' }}
       
       - name: Build and push Docker images
         uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f
