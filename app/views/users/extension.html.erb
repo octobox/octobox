@@ -7,7 +7,7 @@
   <p>Directly manage and triage through your Octobox inbox from your GitHub issues and pull requests. You can star, archive and mute notifications without needing to leave the page and quickly jump to the next and previous notifications in your inbox with a single click.</p>
   <hr>
 
-  <% if true || Octobox.io? %>
+  <% if Octobox.io? %>
     <div class="card mb-3 d-none" id='login-extension'>
       <h5 class="card-header">
         Enable extension access
@@ -15,7 +15,7 @@
       <div class="card-body">
         <p>Login into the browser extension to give it access to your Octobox account</p>
 
-        <%= link_to '#', class: 'btn btn-primary', onclick: "document.dispatchEvent(new CustomEvent('octobox:enable', {detail: {api_token:'#{current_user.api_token}', return_to: '#{@return_to}'}}))" do %>
+        <%= link_to '#', class: 'btn btn-primary js-enable-extension', data: { api_token: current_user.api_token, return_to: @return_to } do %>
           <span class='mr-1'>Enable extension</span>
           <%= octicon 'plug', height: 22 %>
         <% end %>

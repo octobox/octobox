@@ -47,6 +47,18 @@ document.addEventListener('click', function(e) {
 
 document.addEventListener('mouseup', SearchSuggestion.unblur);
 
+document.addEventListener('click', function(e) {
+  var link = e.target.closest('.js-enable-extension');
+  if (!link) return;
+  e.preventDefault();
+  document.dispatchEvent(new CustomEvent('octobox:enable', {
+    detail: {
+      api_token: link.dataset.apiToken,
+      return_to: link.dataset.returnTo
+    }
+  }));
+});
+
 // Checkbox handling is now done in initShiftClickCheckboxes
 
 document.addEventListener('change', function(e) {

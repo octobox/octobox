@@ -9,7 +9,13 @@ class UsersController < ApplicationController
   end
 
   def extension
-    @return_to = params[:return_to].presence || Octobox.config.github_domain
+    @return_to = safe_return_to(params[:return_to])
+  end
+
+  def safe_return_to(url)
+    domain = Octobox.config.github_domain
+    return domain unless url.present? && url.start_with?("#{domain}/")
+    url
   end
 
   def edit

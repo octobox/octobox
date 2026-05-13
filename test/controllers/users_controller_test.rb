@@ -51,6 +51,57 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'extension page allows return_to on the configured github domain' do
+    Octobox.stubs(:io?).returns(true)
+    sign_in_as(@user)
+    get '/extension', params: { return_to: 'https://github.com/octobox/octobox/issues/1' }
+    assert_response :success
+    assert_equal 'https://github.com/octobox/octobox/issues/1', assigns(:return_to)
+  end
+
+  test 'extension page rejects javascript: return_to' do
+    Octobox.stubs(:io?).returns(true)
+    sign_in_as(@user)
+    get '/extension', params: { return_to: 'javascript:alert(1)' }
+    assert_response :success
+    assert_equal Octobox.config.github_domain, assigns(:return_to)
+  end
+
+  test 'extension page rejects lookalike domain in return_to' do
+    Octobox.stubs(:io?).returns(true)
+    sign_in_as(@user)
+    get '/extension', params: { return_to: 'https://github.com.evil.com/foo' }
+    assert_response :success
+    assert_equal Octobox.config.github_domain, assigns(:return_to)
+  end
+
+  test 'extension page falls back to github domain when return_to is blank' do
+    Octobox.stubs(:io?).returns(true)
+    sign_in_as(@user)
+    get '/extension'
+    assert_response :success
+    assert_equal Octobox.config.github_domain, assigns(:return_to)
+  end
+
+  test 'extension page does not render inline onclick' do
+    Octobox.stubs(:io?).returns(true)
+    sign_in_as(@user)
+    get '/extension', params: { return_to: 'https://github.com/octobox/octobox' }
+    assert_response :success
+    refute_includes response.body, 'onclick'
+    assert_select 'a.js-enable-extension[data-api-token=?]', @user.api_token
+    assert_select 'a.js-enable-extension[data-return-to=?]', 'https://github.com/octobox/octobox'
+  end
+
+  test 'extension page go-to-github link uses validated return_to' do
+    Octobox.stubs(:io?).returns(true)
+    sign_in_as(@user)
+    get '/extension', params: { return_to: 'javascript:alert(1)' }
+    assert_response :success
+    assert_select '#installed-extension a.btn-primary[href=?]', Octobox.config.github_domain
+    assert_select 'a[href^="javascript:"]', false
+  end
+
   test 'updates api_token' do
     sign_in_as(@user)
     token = @user.api_token
