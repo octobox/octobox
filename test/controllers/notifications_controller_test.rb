@@ -1126,4 +1126,57 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get '/?page=0'
     assert_response :success
   end
+
+  test 'thread view hides subject body when display? is false' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    create(:subject, url: notification.subject_url, body: 'secret private content')
+
+    Notification.any_instance.stubs(:display?).returns(false)
+
+    get notification_path(notification)
+    assert_response :success
+    refute_includes response.body, 'secret private content'
+    assert_select '.discussion-thread', false
+  end
+
+  test 'thread view shows subject body when display? is true' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    create(:subject, url: notification.subject_url, body: 'visible content')
+
+    Notification.any_instance.stubs(:display?).returns(true)
+
+    get notification_path(notification)
+    assert_response :success
+    assert_includes response.body, 'visible content'
+  end
+
+  test 'thread view shows upgrade prompt when display? is false and subject exists' do
+    Octobox.stubs(:io?).returns(true)
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    create(:subject, url: notification.subject_url, body: 'paywalled content')
+
+    Notification.any_instance.stubs(:display?).returns(false)
+
+    get notification_path(notification)
+    assert_response :success
+    refute_includes response.body, 'paywalled content'
+    assert_select 'a[href=?]', pricing_path
+  end
+
+  test 'thread subject hides author and labels when display? is false' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, url: notification.subject_url, author: 'secretauthor')
+    create(:label, subject: subject, name: 'secretlabel')
+
+    Notification.any_instance.stubs(:display?).returns(false)
+
+    get notification_path(notification)
+    assert_response :success
+    refute_includes response.body, 'secretauthor'
+    refute_includes response.body, 'secretlabel'
+  end
 end

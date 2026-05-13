@@ -30,7 +30,7 @@
       <%= render 'thread_subject', notification: @notification %>
     </div>
 
-    <% if @notification.subject %>
+    <% if @notification.subject && @notification.display? %>
       <div class='discussion-thread'>
         <% if @notification.subject.body %>
           <div class="card-comment card mt-3">
@@ -76,6 +76,12 @@
       <% if current_user.can_comment?(@notification.subject)%>
         <%= render partial: 'reply', locals: {notification: @notification} %>
       <% end %>
+    <% elsif @notification.subject %>
+      <div class='card mt-3'>
+        <div class='card-body'>
+          <%= render 'notifications/private_repos' %>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>

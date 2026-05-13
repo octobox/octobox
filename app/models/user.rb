@@ -170,10 +170,13 @@ class User < ApplicationRecord
     pinned_searches.create(query: "type:pull_request author:#{github_login} inbox:true", name: 'My PRs')
   end
 
+  IMPORTABLE_NOTIFICATION_FIELDS = %w[archived starred unread muted_at last_read_at].freeze
+
   def import_notifications(data)
     data.each do |new_notification|
-      n = self.notifications.find_or_initialize_by(github_id: new_notification['github_id'])
-      n.attributes = new_notification.except('id', 'user_id')
+      n = self.notifications.find_by(github_id: new_notification['github_id'])
+      next unless n
+      n.attributes = new_notification.slice(*IMPORTABLE_NOTIFICATION_FIELDS)
       n.save(touch: false) if n.changed?
     end
   end
