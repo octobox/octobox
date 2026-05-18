@@ -34,7 +34,7 @@ gem 'jwt'
 gem 'oj'
 gem 'ostruct'
 gem 'yard', require: false
-gem 'commonmarker', '2.8.1'
+gem 'commonmarker', '2.8.2'
 gem 'pg'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
