@@ -99,7 +99,7 @@ GEM
       rouge (>= 1.0.0)
     bigdecimal (4.1.2)
     bindex (0.8.1)
-    bootsnap (1.24.4)
+    bootsnap (1.24.5)
       msgpack (~> 1.2)
     bootstrap (4.6.2)
       autoprefixer-rails (>= 9.1.0)
@@ -188,7 +188,7 @@ GEM
       prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jbuilder (2.15.0)
+    jbuilder (2.15.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     jquery-rails (4.6.1)
@@ -218,7 +218,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    marcel (1.1.0)
+    marcel (1.2.1)
     matrix (0.4.3)
     mime-types (3.7.0)
       logger
@@ -312,7 +312,7 @@ GEM
       date
       stringio
     public_suffix (7.0.5)
-    puma (8.0.1)
+    puma (8.0.2)
       nio4r (~> 2.0)
     puma_worker_killer (1.0.0)
       bigdecimal (>= 2.0)
@@ -433,7 +433,7 @@ GEM
     snaky_hash (2.0.4)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
-    spring (4.5.0)
+    spring (4.6.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -476,8 +476,8 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yard (0.9.43)
-    zeitwerk (2.8.1)
+    yard (0.9.44)
+    zeitwerk (2.8.2)
 
 PLATFORMS
   arm64-darwin-21
@@ -549,7 +549,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-  ruby 4.0.1
+  ruby 4.0.5
 
 BUNDLED WITH
-  4.0.4
+  4.0.12
