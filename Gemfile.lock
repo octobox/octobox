@@ -265,10 +265,10 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0, >= 2.0.4)
       version_gem (~> 1.1, >= 1.1.9)
-    octicons (19.28.0)
-    octicons_helper (19.28.0)
+    octicons (19.28.1)
+    octicons_helper (19.28.1)
       actionview
-      octicons (= 19.28.0)
+      octicons (= 19.28.1)
       railties
     octokit (10.0.0)
       faraday (>= 1, < 3)
