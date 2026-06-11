@@ -18,7 +18,7 @@ class NotificationsController < ApplicationController
     scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 
-    ids = scope.pluck(:id)
+    ids = scope.pluck(:updated_at, :id).map(&:last)
     position = ids.index(params[:id].to_i)
     @notification = current_user.notifications.find(params[:id])
     @previous = ids[position-1] unless position.nil? || position-1 < 0
@@ -40,7 +40,7 @@ class NotificationsController < ApplicationController
     scope = notifications_for_presentation.newest
     scope = load_and_count_notifications(scope) unless request.xhr?
 
-    ids = scope.pluck(:id)
+    ids = scope.pluck(:updated_at, :id).map(&:last)
     position = ids.index(params[:id].to_i)
     @notification = current_user.notifications.find(params[:id])
     @previous = ids[position-1] unless position.nil? || position-1 < 0
