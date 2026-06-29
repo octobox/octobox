@@ -307,7 +307,7 @@ GEM
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
     popper_js (1.16.1)
-    pp (0.6.3)
+    pp (0.6.4)
       prettyprint
     prettyprint (0.2.0)
     prism (1.9.0)
