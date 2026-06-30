@@ -25,4 +25,18 @@ class AppInstallationTest < ActiveSupport::TestCase
     @app_installation.account_id = nil
     refute @app_installation.valid?
   end
+
+  test 'supports large GitHub account ids' do
+    large_github_id = 2_147_483_648
+    app_installation = create(
+      :app_installation,
+      app_id: large_github_id,
+      account_id: large_github_id,
+      target_id: large_github_id
+    )
+
+    assert_equal large_github_id, app_installation.app_id
+    assert_equal large_github_id, app_installation.account_id
+    assert_equal large_github_id, app_installation.target_id
+  end
 end
