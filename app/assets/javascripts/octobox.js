@@ -75,7 +75,9 @@ var Octobox = (function() {
         return response.json();
       })
       .then(data => setFavicon(data.count))
-      .catch(() => {});
+      .catch(() => {
+        // favicon is cosmetic; keep the current count/title on error
+      });
   };
 
   var setFavicon = function(count) {
