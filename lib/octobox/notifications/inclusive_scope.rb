@@ -67,10 +67,13 @@ module Octobox
         scope :label, ->(label_names) {
           label_names = [label_names] if label_names.is_a?(String)
 
-          # Multiple labels can be matched with one notification so we need to use a distinct query.
-          joins(:labels).where(
-            label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
-          ).distinct
+          # Multiple labels can match one notification. Joining labels on the outer
+          # relation and applying .distinct forces every caller's ORDER BY/SELECT to
+          # include the order columns (PG rejects SELECT DISTINCT ... ORDER BY <col>
+          # when <col> isn't selected). Push the join into an IN subquery instead so
+          # callers can pluck and order freely.
+          condition = label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
+          where(id: reorder(nil).joins(:labels).where(condition).select(:id))
         }
 
         scope :assigned, ->(assignees) {

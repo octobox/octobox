@@ -1179,4 +1179,24 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     refute_includes response.body, 'secretauthor'
     refute_includes response.body, 'secretlabel'
   end
+
+  test 'show with a label filter does not raise on pluck' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, url: notification.subject_url)
+    create(:label, subject: subject, name: 'bug')
+
+    get notification_path(notification, q: 'label:bug')
+    assert_response :success
+  end
+
+  test 'show with a label filter and subject sort does not raise on pluck' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, url: notification.subject_url)
+    create(:label, subject: subject, name: 'bug')
+
+    get notification_path(notification, q: 'label:bug sort:subject')
+    assert_response :success
+  end
 end
