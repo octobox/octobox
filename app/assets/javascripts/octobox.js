@@ -360,8 +360,13 @@ var Octobox = (function() {
 
     if(asyncSyncLink) {
       fetch("/notifications/sync.json")
-        .then(response => response.json())
-        .then(data => refreshOnSync(data))
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Request failed");
+          }
+
+          refreshOnSync();
+        })
         .catch(error => {
           console.error('Sync failed:', error);
           notify("Sync failed", "danger");
