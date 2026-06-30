@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
     cookies.permanent.signed[:user_id] = {value: user.id, httponly: true}
 
     user.sync_notifications unless initial_sync?
-    redirect_to request.env['omniauth.origin'] || root_path
+    redirect_to url_from(request.env['omniauth.origin']) || root_path
   end
 
   def destroy

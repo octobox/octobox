@@ -42,6 +42,36 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
+  test 'POST #create redirects to a relative omniauth origin' do
+    OmniAuth.config.mock_auth[:github].uid = @user.github_id
+    OmniAuth.config.before_callback_phase { |env| env['omniauth.origin'] = '/settings' }
+
+    post '/auth/github/callback'
+    assert_redirected_to '/settings'
+  ensure
+    OmniAuth.config.before_callback_phase = nil
+  end
+
+  test 'POST #create ignores an absolute omniauth origin' do
+    OmniAuth.config.mock_auth[:github].uid = @user.github_id
+    OmniAuth.config.before_callback_phase { |env| env['omniauth.origin'] = 'https://evil.com' }
+
+    post '/auth/github/callback'
+    assert_redirected_to root_path
+  ensure
+    OmniAuth.config.before_callback_phase = nil
+  end
+
+  test 'POST #create ignores a protocol-relative omniauth origin' do
+    OmniAuth.config.mock_auth[:github].uid = @user.github_id
+    OmniAuth.config.before_callback_phase { |env| env['omniauth.origin'] = '//evil.com' }
+
+    post '/auth/github/callback'
+    assert_redirected_to root_path
+  ensure
+    OmniAuth.config.before_callback_phase = nil
+  end
+
   test 'POST #create forces the user to sync their notifications if they have synced before' do
     OmniAuth.config.mock_auth[:github].uid = @user.github_id
 
