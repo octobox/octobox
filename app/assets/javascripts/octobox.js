@@ -331,8 +331,17 @@ var Octobox = (function() {
     }
 
     fetch("/notifications/syncing.json")
-    .then(response => response.json())
+    .then(response => {
+      if (response.status === 423) {
+        setTimeout(refreshOnSync, 2000);
+        return null;
+      }
+
+      return response.json();
+    })
     .then(data => {
+      if (data == null) return;
+
       if (data["error"] != null) {
         var icon = document.querySelector(".sync .octicon");
         if (icon) icon.classList.remove("spinning");
