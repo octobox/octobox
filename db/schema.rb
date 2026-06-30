@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_21_191013) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_30_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -24,12 +24,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_191013) do
 
   create_table "app_installations", force: :cascade do |t|
     t.bigint "github_id"
-    t.integer "app_id"
+    t.bigint "app_id"
     t.string "account_login"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.string "account_type"
     t.string "target_type"
-    t.integer "target_id"
+    t.bigint "target_id"
     t.string "permission_pull_requests"
     t.string "permission_issues"
     t.datetime "created_at", precision: nil, null: false
@@ -131,7 +131,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_191013) do
   end
 
   create_table "subscription_plans", force: :cascade do |t|
-    t.integer "github_id"
+    t.bigint "github_id"
     t.string "name"
     t.string "description"
     t.integer "monthly_price_in_cents"
@@ -146,7 +146,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_191013) do
 
   create_table "subscription_purchases", force: :cascade do |t|
     t.integer "subscription_plan_id"
-    t.integer "account_id"
+    t.bigint "account_id"
     t.string "billing_cycle"
     t.integer "unit_count"
     t.boolean "on_free_trial"
