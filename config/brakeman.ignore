@@ -1,0 +1,118 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "07389f494eca4e1e8ac020f8b0761549ab1295c67a4bdf7e63fd08871934d7ba",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "lib/octobox/changelog.rb",
+      "line": 60,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`git log --oneline --pretty=format:\"%s\" --abbrev-commit #{previous_release}..#{current_sha} 2> /dev/null`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Octobox::Changelog",
+        "method": "messages"
+      },
+      "user_input": "previous_release",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": "previous_release and current_sha come from git output, not user input. Release-notes script, not web-reachable."
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "4d2147c3a1a4e4a170531f8f8e948a78015737864b72be09b8315bfb4a8c6834",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/notifications/_thread.html.erb",
+      "line": 49,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "parse_markdown(current_user.notifications.find(params[:id]).subject.body)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "NotificationsController",
+          "method": "expand_comments",
+          "line": 60,
+          "file": "app/controllers/notifications_controller.rb",
+          "rendered": {
+            "name": "notifications/show",
+            "file": "app/views/notifications/show.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "notifications/show",
+          "line": 14,
+          "file": "app/views/notifications/show.html.erb",
+          "rendered": {
+            "name": "notifications/_thread",
+            "file": "app/views/notifications/_thread.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "notifications/_thread"
+      },
+      "user_input": "current_user.notifications.find(params[:id])",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": "Commonmarker.to_html with default unsafe:false replaces raw HTML with a comment and strips javascript: hrefs. Verified safe."
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "ade486ef89beaaeae6ac8205a9f6e8aa2c772736a0d05d58f6e3487c6dce1e74",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "lib/octobox/changelog.rb",
+      "line": 51,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`git rev-list -n 1 #{previous_release} 2> /dev/null`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Octobox::Changelog",
+        "method": "actual_sha"
+      },
+      "user_input": "previous_release",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ],
+      "note": "previous_release comes from git tag output, not user input. Release-notes script, not web-reachable."
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "b65809f65b4d76390435e3713c1050509292a5c4b0cc45d28d583bc7a7cca2be",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/concerns/notifications_concern.rb",
+      "line": 90,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "NotificationsConcern",
+        "method": "check_out_of_bounds"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ],
+      "note": "Permitted params feed url_for for a same-app pagination redirect, not a model. No mass assignment."
+    }
+  ],
+  "brakeman_version": "8.0.5"
+}
