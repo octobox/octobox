@@ -40,7 +40,10 @@ var Octobox = (function() {
 
   var updatePinnedSearchCounts = function(pinned_search) {
     fetch(pinned_search.dataset.url)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) throw new Error('Request failed');
+        return response.json();
+      })
       .then(data => {
         pinned_search.innerHTML = data.count;
       })
@@ -67,8 +70,12 @@ var Octobox = (function() {
 
   var updateFavicon = function () {
     fetch("/notifications/unread_count")
-      .then(response => response.json())
-      .then(data => setFavicon(data.count));
+      .then(response => {
+        if (!response.ok) throw new Error('Request failed');
+        return response.json();
+      })
+      .then(data => setFavicon(data.count))
+      .catch(() => {});
   };
 
   var setFavicon = function(count) {
@@ -528,6 +535,9 @@ var Octobox = (function() {
         'X-Requested-With': 'XMLHttpRequest',
         'X-CSRF-Token': getCsrfToken()
       }
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Request failed');
     })
     .catch(() => {
       // Revert to original state on failure
