@@ -106,9 +106,9 @@ class NotificationsController < ApplicationController
 
   def archive_selected
     notifications = selected_notifications
-    undo_action = NotificationUndoAction.record_archive!(current_user, notifications)
+    undo_action = record_archive_undo_action(notifications)
 
-    Notification.archive(notifications, params[:value])
+    Notification.archive(notifications, params[:value], undo_action: undo_action)
 
     if request.xhr?
       render json: undo_archive_payload(undo_action)
@@ -192,5 +192,12 @@ class NotificationsController < ApplicationController
 
     undo_path = undo_archive_notifications_path(token: undo_action.token)
     "Notification action complete. <a href=\"#{undo_path}\" data-method=\"post\">Undo</a>"
+  end
+
+  def record_archive_undo_action(notifications)
+    archive_value = params[:value] ? ActiveRecord::Type::Boolean.new.cast(params[:value]) : true
+    return if archive_value && !Octobox.background_jobs_enabled?
+
+    NotificationUndoAction.record_archive!(current_user, notifications)
   end
 end

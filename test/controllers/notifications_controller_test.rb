@@ -180,12 +180,10 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert notification1.reload.archived?
     assert notification2.reload.archived?
     refute notification3.reload.archived?
-
-    data = JSON.parse(response.body)
-    assert_match %r{/notifications/undo_archive\?token=}, data['undo_url']
   end
 
   test 'undo archive restores previous archived state' do
+    stub_background_jobs_enabled
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
@@ -204,6 +202,19 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     refute notification1.reload.archived?
     refute notification2.reload.archived?
     assert_equal 'Notification action undone', flash[:success]
+  end
+
+  test 'archive with undo schedules GitHub archive after undo window' do
+    stub_background_jobs_enabled
+    sign_in_as(@user)
+    notification = create(:notification, user: @user, archived: false)
+
+    post '/notifications/archive_selected', params: { id: [notification.id], value: true }, xhr: true
+
+    data = JSON.parse(response.body)
+    assert_match %r{/notifications/undo_archive\?token=}, data['undo_url']
+    assert_equal 1, ArchiveWorker.jobs.size
+    assert ArchiveWorker.jobs.first['at'] > Time.current.to_f
   end
 
   test 'undo archive cannot restore expired action' do
@@ -257,6 +268,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
+
     post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: true }, xhr: true
 
     assert_response :ok
@@ -270,6 +283,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
+
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: nil }, xhr: true
 

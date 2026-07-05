@@ -14,16 +14,16 @@ class NotificationUndoAction < ApplicationRecord
   scope :expired, -> { where('expires_at <= ?', Time.current) }
 
   def self.record_archive!(user, notifications)
-    states = notifications.map do |notification|
+    states = notifications.pluck(:id, :archived).map do |id, archived|
       {
-        'id' => notification.id,
-        'archived' => notification.archived?
+        'id' => id,
+        'archived' => archived
       }
     end
 
     return if states.empty?
 
-    expired.delete_all
+    user.notification_undo_actions.expired.delete_all
 
     user.notification_undo_actions.create!(
       action: 'archive',
@@ -48,9 +48,8 @@ class NotificationUndoAction < ApplicationRecord
     return false if expired?
 
     transaction do
-      notification_states.each do |state|
-        notification = user.notifications.find_by(id: state['id'])
-        notification&.update_columns(archived: state['archived'])
+      notification_states.group_by { |state| state['archived'] }.each do |archived, states|
+        user.notifications.where(id: states.map { |state| state['id'] }).update_all(archived: archived)
       end
 
       destroy!

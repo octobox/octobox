@@ -14,6 +14,22 @@ class NotificationUndoActionTest < ActiveSupport::TestCase
     assert undo_action.expires_at.future?
   end
 
+  test 'record_archive only deletes expired undo actions for the same user' do
+    user = create(:user)
+    other_user = create(:user)
+    notification = create(:notification, user: user)
+    create(:notification, user: other_user)
+    expired_action = NotificationUndoAction.record_archive!(user, user.notifications.where(id: notification.id))
+    other_expired_action = NotificationUndoAction.record_archive!(other_user, other_user.notifications)
+    expired_action.update!(expires_at: 1.minute.ago)
+    other_expired_action.update!(expires_at: 1.minute.ago)
+
+    NotificationUndoAction.record_archive!(user, user.notifications.where(id: notification.id))
+
+    refute NotificationUndoAction.exists?(expired_action.id)
+    assert NotificationUndoAction.exists?(other_expired_action.id)
+  end
+
   test 'restore reverts archived states and destroys the undo action' do
     user = create(:user)
     notification1 = create(:notification, user: user, archived: false)
