@@ -121,7 +121,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    capybara-playwright-driver (0.5.9)
+    capybara-playwright-driver (0.5.10)
       addressable
       capybara
       playwright-ruby-client (>= 1.16.0)
@@ -302,7 +302,7 @@ GEM
     pg_search (2.3.7)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
-    playwright-ruby-client (1.60.0)
+    playwright-ruby-client (1.61.0)
       base64
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
@@ -456,7 +456,7 @@ GEM
     stringio (3.2.0)
     strscan (3.1.8)
     thor (1.5.0)
-    tilt (2.7.0)
+    tilt (2.8.0)
     timecop (0.9.11)
     timeout (0.6.1)
     tsort (0.2.0)
@@ -562,4 +562,4 @@ RUBY VERSION
   ruby 4.0.5
 
 BUNDLED WITH
-  4.0.12
+  4.0.15
