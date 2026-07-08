@@ -67,7 +67,18 @@ class UsersController < ApplicationController
   end
 
   def import
-    data = JSON.parse(params[:file].read)
+    unless params[:file].present?
+      flash[:error] = "Please choose a file to import"
+      redirect_to :settings and return
+    end
+
+    begin
+      data = JSON.parse(params[:file].read)
+    rescue JSON::ParserError
+      flash[:error] = "Could not import file: invalid JSON"
+      redirect_to :settings and return
+    end
+
     current_user.import_notifications(data)
     flash[:success] = "Import complete"
     redirect_to root_path
