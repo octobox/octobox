@@ -170,7 +170,7 @@ GEM
     ffi (1.17.4-arm64-darwin)
     ffi (1.17.4-x86_64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
-    fugit (1.12.2)
+    fugit (1.12.3)
       et-orbi (~> 1.4)
       raabro (~> 1.4)
     gemoji (3.0.1)
