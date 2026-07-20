@@ -272,4 +272,34 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_nil @user.refresh_interval
     assert_response :unprocessable_content
   end
+
+  test 'imports notifications from a valid file' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    file = fixture_file_upload_json([notification.attributes.slice('github_id').merge('unread' => false)])
+    post '/import', params: {file: file}
+    assert_redirected_to root_path
+    assert_equal 'Import complete', flash[:success]
+  end
+
+  test 'rejects import without a file' do
+    sign_in_as(@user)
+    post '/import'
+    assert_redirected_to '/settings'
+    assert_equal 'Please choose a file to import', flash[:error]
+  end
+
+  test 'rejects import with invalid JSON' do
+    sign_in_as(@user)
+    file = Rack::Test::UploadedFile.new(StringIO.new('not valid json'), 'application/json', original_filename: 'octobox.json')
+    post '/import', params: {file: file}
+    assert_redirected_to '/settings'
+    assert_equal 'Could not import file: invalid JSON', flash[:error]
+  end
+
+  private
+
+  def fixture_file_upload_json(data)
+    Rack::Test::UploadedFile.new(StringIO.new(data.to_json), 'application/json', original_filename: 'octobox.json')
+  end
 end
