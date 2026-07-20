@@ -2,6 +2,7 @@
 
 class NotificationUndoAction < ApplicationRecord
   EXPIRES_IN = 5.minutes
+  ARCHIVE_DELAY = EXPIRES_IN + 10.seconds
 
   has_secure_token :token
 

@@ -84,7 +84,7 @@ class Notification < ApplicationRecord
     return unless user && value
 
     if undo_action
-      ArchiveWorker.perform_in_if_configured(NotificationUndoAction::EXPIRES_IN, user.id, github_ids, undo_action.id)
+      ArchiveWorker.perform_in_if_configured(NotificationUndoAction::ARCHIVE_DELAY, user.id, github_ids, undo_action.id)
     else
       ArchiveWorker.perform_async_if_configured(user.id, github_ids)
     end

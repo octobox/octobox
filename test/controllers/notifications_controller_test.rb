@@ -214,7 +214,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     data = JSON.parse(response.body)
     assert_match %r{/notifications/undo_archive\?token=}, data['undo_url']
     assert_equal 1, ArchiveWorker.jobs.size
-    assert ArchiveWorker.jobs.first['at'] > Time.current.to_f
+    assert_in_delta NotificationUndoAction::ARCHIVE_DELAY.from_now.to_f, ArchiveWorker.jobs.first['at'], 2
   end
 
   test 'undo archive cannot restore expired action' do
