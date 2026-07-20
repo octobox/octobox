@@ -185,6 +185,30 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     refute User.exists?(@user.id)
   end
 
+  test 'exports notifications as downloadable json' do
+    sign_in_as(@user, initial_sync: true)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+
+    get export_path
+
+    assert_response :success
+    assert_includes response.headers['Content-Type'], 'application/json'
+    assert_equal 'attachment; filename=octobox.json', response.headers['Content-Disposition']
+
+    exported_ids = JSON.parse(response.body).map { |notification| notification['id'] }
+    assert_equal [notification1.id, notification2.id], exported_ids
+  end
+
+  test 'exports an empty notification list' do
+    sign_in_as(@user, initial_sync: true)
+
+    get export_path
+
+    assert_response :success
+    assert_equal [], JSON.parse(response.body)
+  end
+
   test 'cannot delete another user' do
     other_user = create(:user)
     sign_in_as(other_user)
