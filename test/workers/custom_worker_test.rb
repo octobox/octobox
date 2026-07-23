@@ -52,4 +52,24 @@ class CustomWorkerTest < ActiveSupport::TestCase
       SyncLabelWorker.perform_async_if_configured(['arg'])
     end
   end
+
+  test 'perform_in_if_configured calls perform_in' do
+    with_background_jobs_enabled(enabled: true) do
+      ArchiveWorker.any_instance.expects(:perform).never
+      ArchiveWorker.perform_in_if_configured(5.minutes, 1, [2], 3)
+      assert_equal 1, ArchiveWorker.jobs.size
+
+      job = ArchiveWorker.jobs.first
+      assert_in_delta 5.minutes.from_now.to_f, job['at'], 2
+      assert_equal [1, [2], 3], job['args']
+    end
+  end
+
+  test 'perform_in_if_configured calls perform when background jobs are disabled' do
+    with_background_jobs_enabled(enabled: false) do
+      ArchiveWorker.any_instance.expects(:perform).once.with(1, [2], 3)
+      ArchiveWorker.expects(:perform_in).never
+      ArchiveWorker.perform_in_if_configured(5.minutes, 1, [2], 3)
+    end
+  end
 end
