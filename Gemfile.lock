@@ -145,7 +145,7 @@ GEM
       railties (>= 6.1)
     drb (2.2.3)
     encryptor (3.0.0)
-    erb (6.0.6)
+    erb (6.0.7)
     erubi (1.13.1)
     et-orbi (1.4.1)
       tzinfo
@@ -268,10 +268,10 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0, >= 2.0.7)
       version_gem (~> 1.1, >= 1.1.14)
-    octicons (19.32.0)
-    octicons_helper (19.32.0)
+    octicons (19.33.0)
+    octicons_helper (19.33.0)
       actionview
-      octicons (= 19.32.0)
+      octicons (= 19.33.0)
       railties
     octokit (10.0.0)
       faraday (>= 1, < 3)
@@ -382,7 +382,7 @@ GEM
       ffi (~> 1.0)
     rb_sys (0.9.128)
       rake-compiler-dock (= 1.12.0)
-    rbs (4.1.1)
+    rbs (4.1.2)
       logger
       prism (>= 1.6.0)
       tsort
@@ -487,7 +487,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.45)
-    zeitwerk (2.8.2)
+    zeitwerk (2.8.3)
 
 PLATFORMS
   arm64-darwin-21
