@@ -40,7 +40,7 @@ gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
 gem 'psych'
 gem 'nokogiri'
-gem 'redis', '< 6' # actioncable pins redis to >= 4, < 6 in its subscription adapter
+gem 'redis', '< 7' # actioncable pins redis to >= 4, < 6 in its subscription adapter
 gem 'rack-cors'
 gem 'benchmark'
 
