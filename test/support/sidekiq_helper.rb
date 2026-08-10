@@ -1,7 +1,6 @@
-require 'sidekiq/testing'
 require 'sidekiq_unique_jobs/testing'
 
-Sidekiq::Testing.fake!
+Sidekiq.testing!(:fake)
 Octobox.config.background_jobs_enabled = true
 
 def inline_sidekiq_status
@@ -21,6 +20,10 @@ module SidekiqMinitestSupport
   def after_teardown
     Sidekiq::Worker.clear_all
     super
+  end
+
+  def assert_sidekiq_job_enqueued(worker, *args)
+    assert_equal 1, worker.jobs.count { |job| job['args'] == args }
   end
 
   def with_background_jobs_enabled(enabled: true)

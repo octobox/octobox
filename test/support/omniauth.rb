@@ -19,7 +19,7 @@ module SignInHelper
     OmniAuth.config.mock_auth[:github].uid = user.github_id
     OmniAuth.config.mock_auth[:github].info = { 'nickname' => user.github_login }
     OmniAuth.config.mock_auth[:github].credentials.token = user.access_token
-    Sidekiq::Testing.inline! do
+    Sidekiq.testing!(:inline) do
       inline_sidekiq_status do
         post '/auth/github/callback'
       end

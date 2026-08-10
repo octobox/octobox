@@ -306,7 +306,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
       @user.reload
 
       assert_response :redirect
-      assert_equal 1, SyncNotificationsWorker.jobs.size
+      assert_sidekiq_job_enqueued(SyncNotificationsWorker, @user.id)
       assert_not_equal job_id, @user.sync_job_id
       assert_not_nil @user.sync_job_id, 'Sync job id was nil'
     end

@@ -8,6 +8,6 @@ class SyncAllUserNotificationsWorkerTest < ActiveSupport::TestCase
 
   test 'syncs all users notifications' do
     SyncAllUserNotificationsWorker.new.perform
-    assert_equal 1, SyncNotificationsWorker.jobs.size
+    assert_sidekiq_job_enqueued(SyncNotificationsWorker, @user.id)
   end
 end

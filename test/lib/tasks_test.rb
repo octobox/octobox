@@ -10,7 +10,7 @@ class TasksTest < ActiveSupport::TestCase
     travel_to "2016-12-19T19:00:00Z" do
       user = create(:user)
 
-      Sidekiq::Testing.inline! do
+      Sidekiq.testing!(:inline) do
         Rails.application.load_tasks
         Rake::Task['tasks:sync_notifications'].invoke
       end

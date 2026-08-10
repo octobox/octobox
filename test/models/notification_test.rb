@@ -186,7 +186,9 @@ class NotificationTest < ActiveSupport::TestCase
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
     notification.update_from_api_response(api_response)
 
-    refute_requested :get, subject.url
+    refute_requested :get, subject.url, headers: {
+      'Authorization' => "token #{notification.user.access_token}"
+    }
   end
 
   test 'update_from_api_response updates the subject if the subject was not recently updated' do
@@ -195,16 +197,18 @@ class NotificationTest < ActiveSupport::TestCase
     stub_repository_request
     url = 'https://api.github.com/repos/octobox/octobox/issues/560'
     response = { status: 200, body: file_fixture('open_issue.json'), headers: { 'Content-Type' => 'application/json' } }
-    stub_request(:get, url).and_return(response)
 
     api_response = notifications_from_fixture('morty_notifications.json').second
     notification_updated_at = Time.parse(api_response.updated_at)
     create(:morty)
-    subject = create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
+    create(:subject, url: url, updated_at: (notification_updated_at - 5.seconds))
     notification = create(:morty_updated, updated_at: (notification_updated_at - 1.minute), subject_url: url)
+    subject_request = stub_request(:get, url).with(headers: {
+      'Authorization' => "token #{notification.user.access_token}"
+    }).and_return(response)
     notification.update_from_api_response(api_response)
 
-    assert_requested :get, subject.url
+    assert_requested subject_request
   end
 
   test 'update_from_api_response updates the subject with no author available' do

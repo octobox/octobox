@@ -122,7 +122,7 @@ class UserTest < ActiveSupport::TestCase
     @user.sync_notifications
     @user.reload
     assert_not_nil @user.sync_job_id
-    assert_equal 1, SyncNotificationsWorker.jobs.size
+    assert_sidekiq_job_enqueued(SyncNotificationsWorker, @user.id)
   end
 
   [{refresh_interval: 90_000, minimum_refresh_interval: 0, expected_result: nil},

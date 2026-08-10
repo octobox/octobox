@@ -29,11 +29,7 @@ class CustomWorkerTest < ActiveSupport::TestCase
     with_background_jobs_enabled(enabled: true) do
       SyncAllUserNotificationsWorker.any_instance.expects(:perform).never
       SyncAllUserNotificationsWorker.perform_async_if_configured(['arg'])
-      assert_equal 1, SyncAllUserNotificationsWorker.jobs.size
-
-      args = SyncAllUserNotificationsWorker.jobs.first['args']
-      assert_equal 1, args.size
-      assert_equal ['arg'], args.first
+      assert_sidekiq_job_enqueued(SyncAllUserNotificationsWorker, ['arg'])
     end
   end
 

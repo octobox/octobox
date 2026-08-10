@@ -127,7 +127,7 @@ end
 def send_webhook(event_type, fixture = nil)
   fixture = event_type if fixture.nil?
   @request.headers['X-GitHub-Event'] = event_type
-  Sidekiq::Testing.inline! do
+  Sidekiq.testing!(:inline) do
     inline_sidekiq_status do
       post :create, body: File.read("#{Rails.root}/test/fixtures/github_webhooks/#{fixture}.json")
     end
