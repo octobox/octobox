@@ -105,12 +105,29 @@ class NotificationsController < ApplicationController
   end
 
   def archive_selected
-    Notification.archive(selected_notifications, params[:value])
+    notifications = selected_notifications
+    undo_action = record_archive_undo_action(notifications)
+
+    Notification.archive(notifications, params[:value], undo_action: undo_action)
+
     if request.xhr?
-      head :ok
+      render json: undo_archive_payload(undo_action)
     else
+      flash[:success] = undo_archive_message(undo_action)
       redirect_back fallback_location: root_path
     end
+  end
+
+  def undo_archive
+    undo_action = current_user.notification_undo_actions.find_by(token: params[:token])
+
+    if undo_action&.restore!
+      flash[:success] = 'Notification action undone'
+    else
+      flash[:error] = 'Undo link has expired'
+    end
+
+    redirect_back fallback_location: root_path
   end
 
   def mark_read_selected
@@ -157,5 +174,30 @@ class NotificationsController < ApplicationController
     else
       render json: { error: Sidekiq::Status::get(current_user.sync_job_id, :exception) }, status: :ok
     end
+  end
+
+  private
+
+  def undo_archive_payload(undo_action)
+    return {} unless undo_action
+
+    {
+      message: 'Notification action complete.',
+      undo_url: undo_archive_notifications_path(token: undo_action.token)
+    }
+  end
+
+  def undo_archive_message(undo_action)
+    return 'Notification action complete.' unless undo_action
+
+    undo_path = undo_archive_notifications_path(token: undo_action.token)
+    "Notification action complete. <a href=\"#{undo_path}\" data-method=\"post\">Undo</a>"
+  end
+
+  def record_archive_undo_action(notifications)
+    archive_value = params[:value] ? ActiveRecord::Type::Boolean.new.cast(params[:value]) : true
+    return if archive_value && !Octobox.background_jobs_enabled?
+
+    NotificationUndoAction.record_archive!(current_user, notifications)
   end
 end

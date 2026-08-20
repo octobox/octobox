@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_06_30_000000) do
+ActiveRecord::Schema[7.1].define(version: 2026_07_05_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -59,6 +59,19 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_30_000000) do
     t.bigint "github_id"
     t.index ["name"], name: "index_labels_on_name"
     t.index ["subject_id"], name: "index_labels_on_subject_id"
+  end
+
+  create_table "notification_undo_actions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token", null: false
+    t.string "action", null: false
+    t.text "notification_states", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_notification_undo_actions_on_expires_at"
+    t.index ["token"], name: "index_notification_undo_actions_on_token", unique: true
+    t.index ["user_id"], name: "index_notification_undo_actions_on_user_id"
   end
 
   create_table "notifications", id: :serial, force: :cascade do |t|
