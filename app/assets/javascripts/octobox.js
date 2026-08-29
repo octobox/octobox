@@ -179,10 +179,19 @@ var Octobox = (function() {
     window.current_id = undefined;
 
     document.addEventListener('keydown', function(e) {
-      // disable shortcuts for the search and comment
+      // disable shortcuts while typing or using button-like controls
       var helpBox = document.getElementById("help-box");
-      if (helpBox && !["search-box","comment_body"].includes(e.target.id) && !e.ctrlKey && !e.metaKey) {
-        var shortcutFunction = (!e.shiftKey ? shortcuts : shiftShortcuts)[e.which] ;
+      var typing = e.target.matches("input, textarea, select") || e.target.isContentEditable;
+      var button = e.target.closest("button, [role='button']");
+      var buttonActivation = button && [13, 32].includes(e.which);
+      if (helpBox && !typing && !buttonActivation && !e.metaKey) {
+        var shortcutMap;
+        if (e.ctrlKey) {
+          shortcutMap = (!e.shiftKey && !e.altKey) ? ctrlShortcuts : {};
+        } else {
+          shortcutMap = !e.shiftKey ? shortcuts : shiftShortcuts;
+        }
+        var shortcutFunction = shortcutMap[e.which];
         if (shortcutFunction) { shortcutFunction(e) }
         return;
       }
@@ -915,6 +924,21 @@ var Octobox = (function() {
     }
   };
 
+  var scrollThread = function(e, pageFraction) {
+    var flexMain = document.querySelector(".flex-main");
+    var helpBox = document.getElementById("help-box");
+    if (!DOM.thread || !flexMain || !flexMain.classList.contains("show-thread")) return;
+    if (helpBox && helpBox.classList.contains("show")) return;
+
+    e.preventDefault();
+    DOM.thread.scrollBy(0, DOM.thread.clientHeight * pageFraction);
+  };
+
+  var scrollThreadPageDown = function(e) { scrollThread(e, 1); };
+  var scrollThreadPageUp = function(e) { scrollThread(e, -1); };
+  var scrollThreadHalfPageDown = function(e) { scrollThread(e, 0.5); };
+  var scrollThreadHalfPageUp = function(e) { scrollThread(e, -0.5); };
+
   var notify = function(message, type) {
     document.querySelectorAll(".header-flash-messages").forEach(el => el.remove());
     var alert_html = [
@@ -1001,6 +1025,11 @@ var Octobox = (function() {
     191: openModal,        // ?
   }
 
+  var ctrlShortcuts = {
+    68: scrollThreadHalfPageDown, // Ctrl-d
+    85: scrollThreadHalfPageUp    // Ctrl-u
+  }
+
   var shortcuts = {
     65:  checkSelectAll,   // a
     68:  markReadSelected, // d
@@ -1013,8 +1042,10 @@ var Octobox = (function() {
     89:  toggleArchive,    // y
     69:  toggleArchive,    // e
     77:  muteSelected,     // m
-    13:  openCurrentLink,  // Enter
-    79:  openCurrentLink,  // o
+    8:   scrollThreadPageUp,   // Backspace
+    13:  openCurrentLink,      // Enter
+    32:  scrollThreadPageDown, // Space
+    79:  openCurrentLink,      // o
     191: focusSearchInput,  // /
     190: sync,             // .
     82:  sync,             // r
