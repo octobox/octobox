@@ -46,7 +46,7 @@ class NotificationListTest < ApplicationSystemTestCase
 
   test 'notification navigation preserves the draft sidebar filter' do
     Octobox.stubs(:include_comments?).returns(true)
-    create(:subject, notifications: [@notification], draft: true)
+    create(:subject, notifications: [@notification], draft: true, comment_count: 6)
     create(:subject, notifications: [@unread_notification], draft: true)
     visit '/?draft=true'
 
@@ -59,7 +59,15 @@ class NotificationListTest < ApplicationSystemTestCase
       assert_selector 'a.nav-link.active', text: 'Draft'
     end
 
-    first('a.previous, a.next').click
+    all("a[href*='/expand_comments']", minimum: 2).each do |link|
+      assert_includes link[:href], 'draft=true'
+    end
+
+    click_link 'View 1 more comments and reviews'
+    assert_current_path expand_comments_notification_path(@notification, draft: true)
+    assert_no_selector '#more-comments'
+
+    first('a.previous.btn-outline-dark, a.next.btn-outline-dark').click
     assert_current_path %r{/notifications/\d+\?draft=true}
   end
 
