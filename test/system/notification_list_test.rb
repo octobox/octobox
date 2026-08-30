@@ -44,6 +44,25 @@ class NotificationListTest < ApplicationSystemTestCase
     end
   end
 
+  test 'notification navigation preserves the draft sidebar filter' do
+    Octobox.stubs(:include_comments?).returns(true)
+    create(:subject, notifications: [@notification], draft: true)
+    create(:subject, notifications: [@unread_notification], draft: true)
+    visit '/?draft=true'
+
+    within "#notification-#{@notification.id}" do
+      click_link 'Fix the widget'
+    end
+
+    assert_current_path notification_path(@notification, draft: true)
+    within '.flex-sidebar' do
+      assert_selector 'a.nav-link.active', text: 'Draft'
+    end
+
+    first('a.previous, a.next').click
+    assert_current_path %r{/notifications/\d+\?draft=true}
+  end
+
   test 'sidebar starred link navigates to starred view' do
     starred = create(:notification, user: @user, starred: true, subject_title: 'Starred item')
     within '.flex-sidebar' do
