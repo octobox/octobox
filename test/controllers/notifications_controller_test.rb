@@ -1166,18 +1166,58 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_select 'a[href=?]', pricing_path
   end
 
-  test 'thread subject hides author and labels when display? is false' do
-    sign_in_as(@user)
-    notification = create(:notification, user: @user)
-    subject = create(:subject, url: notification.subject_url, author: 'secretauthor')
-    create(:label, subject: subject, name: 'secretlabel')
+  test 'thread subject shows when the issue was opened' do
+    travel_to Time.zone.parse('2026-09-05 12:00:00 UTC') do
+      sign_in_as(@user)
+      subject = create(:subject, author: 'aspiers', created_at: 8.months.ago)
+      notification = create(
+        :notification,
+        user: @user,
+        subject: subject,
+        repository_full_name: 'EpicenterHQ/epicenter',
+        updated_at: 1.day.ago
+      )
 
-    Notification.any_instance.stubs(:display?).returns(false)
+      get notification_path(notification)
 
-    get notification_path(notification)
-    assert_response :success
-    refute_includes response.body, 'secretauthor'
-    refute_includes response.body, 'secretlabel'
+      assert_response :success
+      page_text = Nokogiri::HTML(response.body).text.squish
+      assert_includes page_text, 'aspiers opened this issue on EpicenterHQ/epicenter 8 months ago'
+      refute_includes page_text, 'aspiers opened this issue on EpicenterHQ/epicenter 1 day ago'
+    end
+  end
+
+  test 'thread subject shows the notification age when subject data is unavailable' do
+    travel_to Time.zone.parse('2026-09-05 12:00:00 UTC') do
+      sign_in_as(@user)
+      notification = create(:notification, user: @user, updated_at: 1.day.ago)
+
+      get notification_path(notification)
+
+      assert_response :success
+      page_text = Nokogiri::HTML(response.body).text.squish
+      assert_includes page_text, 'on octobox/octobox 1 day ago'
+    end
+  end
+
+  test 'thread subject hides author, labels, and creation time when display? is false' do
+    travel_to Time.zone.parse('2026-09-05 12:00:00 UTC') do
+      sign_in_as(@user)
+      notification = create(:notification, user: @user, updated_at: 1.day.ago)
+      subject = create(:subject, url: notification.subject_url, author: 'secretauthor', created_at: 8.months.ago)
+      create(:label, subject: subject, name: 'secretlabel')
+
+      Notification.any_instance.stubs(:display?).returns(false)
+
+      get notification_path(notification)
+
+      assert_response :success
+      page_text = Nokogiri::HTML(response.body).text.squish
+      refute_includes page_text, 'secretauthor'
+      refute_includes page_text, 'secretlabel'
+      assert_includes page_text, 'on octobox/octobox 1 day ago'
+      refute_includes page_text, 'on octobox/octobox 8 months ago'
+    end
   end
 
   test 'show with a label filter does not raise on pluck' do
