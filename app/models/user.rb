@@ -150,6 +150,17 @@ class User < ApplicationRecord
     app_installation_ids = app_installations.map(&:id)
     removed_permissions = app_installation_permissions.reject{|ep| app_installation_ids.include?(ep.app_installation_id) }
     removed_permissions.each(&:destroy)
+  rescue Octokit::Unauthorized
+    # GitHub rejected the token, so the authorization is gone even though no
+    # github_app_authorization webhook told us. Discard it, matching what
+    # SyncGithubAppAuthorizationWorker does on an observed revocation: leaving
+    # it set would keep github_app_authorized? true, which hides the re-login
+    # button that is the only way for the user to recover.
+    revoke_app_token!
+  end
+
+  def revoke_app_token!
+    update(app_token: nil)
   end
 
   def has_app_installed?(subject)
