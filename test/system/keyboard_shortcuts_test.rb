@@ -86,29 +86,30 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
   test 'n and p route pagination through Turbolinks' do
     create_list(:notification, 50, user: @user)
     visit '/'
-    next_url = page.evaluate_script(<<~JS)
-      (function() {
-        var link = document.querySelector('.page-item:last-child .page-link');
-        link.rel = 'next';
-        return link.href;
-      })()
-    JS
+    next_url = find('.page-item.next .page-link')[:href]
     capture_turbolinks_visits
 
     send_keys 'n'
     assert_equal next_url, page.evaluate_script('window.lastTurbolinksVisit')
 
     visit '/?page=2'
-    previous_url = page.evaluate_script(<<~JS)
-      (function() {
-        var link = document.querySelector('.page-item:first-child .page-link');
-        link.rel = 'prev';
-        return link.href;
-      })()
-    JS
+    previous_url = find('.page-item.prev .page-link')[:href]
     capture_turbolinks_visits
+
     send_keys 'p'
     assert_equal previous_url, page.evaluate_script('window.lastTurbolinksVisit')
+  end
+
+  test 'r routes foreground sync through Turbolinks' do
+    stub_background_jobs_enabled(value: false)
+    visit '/'
+    sync_url = find('a.js-sync')[:href]
+    capture_turbolinks_visits
+
+    send_keys 'r'
+    sleep 0.1
+
+    assert_equal sync_url, page.evaluate_script('window.lastTurbolinksVisit')
   end
 
   def capture_turbolinks_visits

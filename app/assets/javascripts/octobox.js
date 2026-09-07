@@ -843,12 +843,12 @@ var Octobox = (function() {
   };
 
   var nextPage = function() {
-    var nextBtn = document.querySelector(".page-item:last-child .page-link[rel=next]");
+    var nextBtn = document.querySelector(".page-item.next .page-link");
     if (nextBtn) Turbolinks.visit(nextBtn.getAttribute('href'));
   }
 
   var prevPage = function() {
-    var prevBtn = document.querySelector(".page-item:first-child .page-link[rel=prev]");
+    var prevBtn = document.querySelector(".page-item.prev .page-link");
     if (prevBtn) Turbolinks.visit(prevBtn.getAttribute('href'));
   }
 
