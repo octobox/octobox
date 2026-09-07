@@ -21,11 +21,16 @@ class DownloadService
     latest_comment_url: [:subject, :latest_comment_url]
   }.freeze
 
+  # last_synced_at becomes the next sync's if_modified_since, so advancing it
+  # asserts everything up to `timestamp` was stored. Only make that claim when
+  # the batch really did store: a notification dropped by the RecordNotUnique
+  # rescue below would otherwise sit before the new cursor and never be
+  # offered again, because GitHub correctly reports nothing new since it.
   def download
     timestamp = Time.current
-    fetch_new_notifications
+    complete = fetch_new_notifications
     fetch_all_notifications
-    user.update_column(:last_synced_at, timestamp)
+    user.update_column(:last_synced_at, timestamp) if complete
   end
 
   private
@@ -53,20 +58,27 @@ class DownloadService
     process_unread_state(notifications)
   end
 
+  # Returns true only when every notification in the batch was stored, so the
+  # caller knows whether it may advance the sync cursor past them.
   def process_notifications(notifications)
-    return if notifications.blank?
+    return true if notifications.blank?
     eager_load_relation = Octobox.config.subjects_enabled? ? [:subject, :repository, :app_installation] : nil
     existing_notifications = user.notifications.includes(eager_load_relation).where(github_id: notifications.map(&:id))
+    complete = true
     notifications.each do |notification|
       n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
       n = user.notifications.new(github_id: notification.id, archived: false) if n.nil?
-      next unless n
+      if n.nil?
+        complete = false
+        next
+      end
       begin
         n.update_from_api_response(notification)
       rescue ActiveRecord::RecordNotUnique
-        nil
+        complete = false
       end
     end
+    complete
   end
 
   def process_unread_state(notifications)
