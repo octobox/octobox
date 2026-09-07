@@ -67,6 +67,16 @@ module Octobox
     end
     attr_writer :max_notifications_to_sync
 
+    # How recently a user must have synced before a webhook stops scheduling
+    # another sync for them. Guards shared instances against sync storms when a
+    # busy repository fires many events; a single-user instance can safely set
+    # it low, since SyncNotificationsWorker's until_executed lock already
+    # prevents overlapping syncs.
+    def webhook_sync_throttle
+      @webhook_sync_throttle || env_integer('WEBHOOK_SYNC_THROTTLE_SECONDS', 5.minutes.to_i)
+    end
+    attr_writer :webhook_sync_throttle
+
     def max_concurrency
       @max_concurrency || env_integer('MAX_CONCURRENCY', 10)
     end
