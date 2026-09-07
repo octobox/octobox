@@ -99,11 +99,11 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
     assert_in_delta preview_height, preview_scroll_top, 2
 
     set_preview_scroll_top(0)
-    send_keys :control, 'd'
+    send_keys :shift, :page_down
     assert_in_delta preview_height / 2.0, preview_scroll_top, 2
 
     set_preview_scroll_top(preview_height * 2)
-    send_keys :control, 'u'
+    send_keys :shift, :page_up
     assert_in_delta preview_height * 1.5, preview_scroll_top, 2
   ensure
     page.current_window.resize_to(1400, 900)
@@ -128,7 +128,14 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
     assert_in_delta 0, preview_scroll_top, 2
 
     refute shortcut_prevented?(68, ctrl: true, shift: true)
+    refute shortcut_prevented?(68, ctrl: true)
+    refute shortcut_prevented?(85, ctrl: true)
     refute shortcut_prevented?(68, meta: true)
+    refute shortcut_prevented?(32, alt: true)
+    refute shortcut_prevented?(8, alt: true)
+    refute shortcut_prevented?(34, shift: true, alt: true)
+    refute shortcut_prevented?(191, shift: true, alt: true)
+    assert_no_selector '#help-box.show'
     assert_in_delta 0, preview_scroll_top, 2
 
     page.execute_script("document.getElementById('help-box').classList.add('show')")

@@ -185,12 +185,9 @@ var Octobox = (function() {
       var button = e.target.closest("button, [role='button']");
       var buttonActivation = button && [13, 32].includes(e.which);
       if (helpBox && !typing && !buttonActivation && !e.metaKey) {
-        var shortcutMap;
-        if (e.ctrlKey) {
-          shortcutMap = (!e.shiftKey && !e.altKey) ? ctrlShortcuts : {};
-        } else {
-          shortcutMap = !e.shiftKey ? shortcuts : shiftShortcuts;
-        }
+        var shortcutMap = (!e.ctrlKey && !e.altKey)
+          ? (e.shiftKey ? shiftShortcuts : shortcuts)
+          : {};
         var shortcutFunction = shortcutMap[e.which];
         if (shortcutFunction) { shortcutFunction(e) }
         return;
@@ -1022,12 +1019,9 @@ var Octobox = (function() {
 
   // keyboard shortcuts when shift key is pressed
   var shiftShortcuts = {
-    191: openModal,        // ?
-  }
-
-  var ctrlShortcuts = {
-    68: scrollThreadHalfPageDown, // Ctrl-d
-    85: scrollThreadHalfPageUp    // Ctrl-u
+    33: scrollThreadHalfPageUp,   // Shift-PageUp
+    34: scrollThreadHalfPageDown, // Shift-PageDown
+    191: openModal,               // ?
   }
 
   var shortcuts = {
