@@ -336,6 +336,31 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil user.reload.app_token
   end
 
+  test 'sync_app_installation_access does not discard a replacement app token' do
+    user = create(:user, app_token: SecureRandom.hex(20))
+    replacement_token = SecureRandom.hex(20)
+    client = Object.new
+    client.define_singleton_method(:find_user_installations) do
+      User.find(user.id).update!(app_token: replacement_token)
+      raise Octokit::Unauthorized
+    end
+    user.stubs(:app_installation_client).returns(client)
+
+    user.sync_app_installation_access
+
+    assert_equal replacement_token, user.reload.app_token
+  end
+
+  test 'revoke_app_token! clears the token despite unrelated validation errors' do
+    user = create(:user, app_token: SecureRandom.hex(20))
+    user.stubs(:valid?).returns(false)
+    refute user.valid?
+
+    user.revoke_app_token!
+
+    assert_nil user.reload.app_token
+  end
+
   test 'revoke_app_token! clears the stored app token' do
     user = create(:user, app_token: SecureRandom.hex(20))
 

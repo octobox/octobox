@@ -142,6 +142,7 @@ class User < ApplicationRecord
 
   def sync_app_installation_access
     return unless github_app_authorized?
+    rejected_encrypted_app_token = encrypted_app_token
     remote_installs = app_installation_client.find_user_installations
     app_installations = AppInstallation.where(github_id: remote_installs[:installations].map(&:id))
     app_installations.each do |app_installation|
@@ -156,11 +157,15 @@ class User < ApplicationRecord
     # SyncGithubAppAuthorizationWorker does on an observed revocation: leaving
     # it set would keep github_app_authorized? true, which hides the re-login
     # button that is the only way for the user to recover.
-    revoke_app_token!
+    revoke_app_token!(expected_encrypted_app_token: rejected_encrypted_app_token)
   end
 
-  def revoke_app_token!
-    update(app_token: nil)
+  def revoke_app_token!(expected_encrypted_app_token: nil)
+    with_lock do
+      return false if expected_encrypted_app_token && encrypted_app_token != expected_encrypted_app_token
+
+      update_column(:encrypted_app_token, nil)
+    end
   end
 
   def has_app_installed?(subject)
