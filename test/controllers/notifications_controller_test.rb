@@ -1187,6 +1187,27 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'thread subject shows the notification age for commits' do
+    travel_to Time.zone.parse('2026-09-05 12:00:00 UTC') do
+      sign_in_as(@user)
+      subject = create(:subject, author: 'aspiers', created_at: 8.months.ago)
+      notification = create(
+        :notification,
+        user: @user,
+        subject: subject,
+        subject_type: 'Commit',
+        updated_at: 1.day.ago
+      )
+
+      get notification_path(notification)
+
+      assert_response :success
+      page_text = Nokogiri::HTML(response.body).text.squish
+      assert_includes page_text, 'on octobox/octobox 1 day ago'
+      refute_includes page_text, 'on octobox/octobox 8 months ago'
+    end
+  end
+
   test 'thread subject shows the notification age when subject data is unavailable' do
     travel_to Time.zone.parse('2026-09-05 12:00:00 UTC') do
       sign_in_as(@user)
