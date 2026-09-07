@@ -92,6 +92,8 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
+
     post '/api/notifications/archive_selected', params: { unread: true, id: ['all'], value: true }, xhr: true, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
 
     assert_response :ok
@@ -104,6 +106,8 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
   test 'archives defaults value to true' do
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
+
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
 
     post '/api/notifications/archive_selected', params: { unread: true, id: ['all'], value: nil }, xhr: true, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
 
