@@ -78,7 +78,7 @@ class NotificationListTest < ApplicationSystemTestCase
   end
 
   test 'sidebar starred link navigates to starred view' do
-    starred = create(:notification, user: @user, starred: true, subject_title: 'Starred item')
+    create(:notification, user: @user, starred: true, subject_title: 'Starred item')
     within '.flex-sidebar' do
       click_link 'Starred'
     end
