@@ -147,7 +147,7 @@ GEM
     encryptor (3.0.0)
     erb (6.0.7)
     erubi (1.13.1)
-    et-orbi (1.4.1)
+    et-orbi (1.4.2)
       tzinfo
     ethon (0.18.0)
       ffi (>= 1.15.0)
