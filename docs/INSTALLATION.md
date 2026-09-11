@@ -234,6 +234,27 @@ You may allow users to set an auto-refresh interval that will cause a periodic s
 
 When enabled, user settings pages will have an 'Notification Refresh Interval' option.  This can be set to any value above `MINIMUM_REFRESH_INTERVAL`.
 
+## Webhook sync throttle
+
+When running as a GitHub App, an incoming webhook schedules a notification sync
+for each user involved in the subject that changed.  To stop a busy repository
+from scheduling a sync for every subscribed user on every event, a user who
+synced within the last 5 minutes is skipped.
+
+On a busy shared instance that throttle is worth having.  On a single-user
+instance it mostly discards webhooks: if a scheduled sync keeps `last_synced_at`
+fresh, webhooks arriving inside the window are dropped, and the update waits for
+the next poll instead.
+
+Set `WEBHOOK_SYNC_THROTTLE_SECONDS` to change the window.  It defaults to 300
+(5 minutes); lower it to let webhooks drive syncs promptly.  Overlapping syncs
+are already prevented by `SyncNotificationsWorker`'s `until_executed` lock, so a
+low value does not allow syncs to pile up.
+
+```
+WEBHOOK_SYNC_THROTTLE_SECONDS=30
+```
+
 ## Scheduling server-side notification syncs
 
 **Note**: This is *not* enabled on the hosted version (octobox.io).

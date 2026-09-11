@@ -136,6 +136,10 @@ module StubHelper
     stub_request(:get, transactions_url).to_return(response)
   end
 
+  def stub_webhook_sync_throttle(value: 5.minutes.to_i)
+    Octobox.config.stubs(:webhook_sync_throttle).returns(value)
+  end
+
   def stub_personal_access_tokens_enabled(value: true)
     Octobox.config.stubs(:personal_access_tokens_enabled).returns(value)
   end
