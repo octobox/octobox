@@ -96,4 +96,42 @@ class DownloadServiceTest < ActiveSupport::TestCase
     )
     assert_nothing_raised { download_service.download }
   end
+
+  test '#download advances last_synced_at when every notification is stored' do
+    stub_fetch_subject_enabled(value: false)
+    user = create(:user, last_synced_at: nil)
+    stub_notifications_request(
+      url: 'https://api.github.com/notifications?all=true&per_page=100',
+      body: file_fixture('newuser_all_notifications.json')
+    )
+    stub_notifications_request(
+      url: 'https://api.github.com/notifications?per_page=100',
+      body: file_fixture('newuser_notifications.json')
+    )
+
+    DownloadService.new(user).download
+
+    assert_not_nil user.reload.last_synced_at
+  end
+
+  test '#download leaves last_synced_at alone when a notification is dropped' do
+    stub_fetch_subject_enabled(value: false)
+    previous = 2.hours.ago.change(usec: 0)
+    user = create(:user, last_synced_at: previous)
+    stub_notifications_request(
+      url: 'https://api.github.com/notifications?all=true&per_page=100',
+      body: file_fixture('newuser_all_notifications.json')
+    )
+    stub_notifications_request(
+      url: 'https://api.github.com/notifications?per_page=100',
+      body: file_fixture('newuser_notifications.json')
+    )
+    Notification.any_instance.stubs(:update_from_api_response)
+                .raises(ActiveRecord::RecordNotUnique.new('duplicate'))
+
+    DownloadService.new(user).download
+
+    assert_equal previous, user.reload.last_synced_at,
+                 'a dropped notification must not be skipped by the next sync'
+  end
 end
