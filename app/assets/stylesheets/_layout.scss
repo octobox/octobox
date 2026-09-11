@@ -57,6 +57,7 @@ body {
   flex: 1;
   min-width: 0;
   overflow-x: hidden;
+  overflow-y: auto;
   .text-content{
     h1, h2{
       padding-top: $spacer * 3
