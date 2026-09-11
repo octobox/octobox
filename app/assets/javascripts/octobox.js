@@ -390,7 +390,7 @@ var Octobox = (function() {
 
       if(syncLink) {
         setTimeout(() => {
-          window.location.href = syncLink.getAttribute("href");
+          Turbolinks.visit(syncLink.getAttribute("href"));
         }, 10);
       }
     }
@@ -843,13 +843,13 @@ var Octobox = (function() {
   };
 
   var nextPage = function() {
-    var nextBtn = document.querySelector(".page-item:last-child .page-link[rel=next]");
-    if (nextBtn) window.location.href = nextBtn.getAttribute('href');
+    var nextBtn = document.querySelector(".page-item.next .page-link");
+    if (nextBtn) Turbolinks.visit(nextBtn.getAttribute('href'));
   }
 
   var prevPage = function() {
-    var prevBtn = document.querySelector(".page-item:first-child .page-link[rel=prev]");
-    if (prevBtn) window.location.href = prevBtn.getAttribute('href');
+    var prevBtn = document.querySelector(".page-item.prev .page-link");
+    if (prevBtn) Turbolinks.visit(prevBtn.getAttribute('href'));
   }
 
   var markCurrent = function() {
