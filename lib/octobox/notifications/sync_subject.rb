@@ -19,10 +19,11 @@ module Octobox
         # skip syncing if the notification was updated around the same time as subject
         return if !force && subject != nil && updated_at - subject.updated_at < 2.seconds
 
-        remote_subject = download_subject
+        client = github_client
+        remote_subject = download_subject(client)
         return unless remote_subject.present?
 
-        Subject.sync(remote_subject.to_h.as_json)
+        Subject.sync(remote_subject.to_h.as_json, github_client: client)
       end
 
       def github_client
@@ -50,8 +51,8 @@ module Octobox
 
       private
 
-      def download_subject
-        github_client.get(subject_url)
+      def download_subject(client = github_client)
+        client.get(subject_url)
 
       # If permissions changed and the user hasn't accepted, we get a 401
       # We may receive a 403 Forbidden or a 403 Not Available
