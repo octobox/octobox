@@ -78,6 +78,7 @@ Rails.application.routes.draw do
       get  :unread_count
       get  :lookup
       post :delete_selected
+      post :undo_archive
     end
 
     member do

@@ -76,11 +76,18 @@ class Notification < ApplicationRecord
     repository.try(:display_subject?) || user.has_personal_plan?
   end
 
-  def self.archive(notifications, value)
+  def self.archive(notifications, value, undo_action: nil)
     value = value ? ActiveRecord::Type::Boolean.new.cast(value) : true
-    notifications.update_all(archived: value)
     user = notifications.first.try(:user)
-    ArchiveWorker.perform_async_if_configured(user.id, notifications.map(&:github_id)) if user && value
+    github_ids = notifications.pluck(:github_id)
+    notifications.update_all(archived: value)
+    return unless user && value
+
+    if undo_action
+      ArchiveWorker.perform_in_if_configured(NotificationUndoAction::ARCHIVE_DELAY, user.id, github_ids, undo_action.id)
+    else
+      ArchiveWorker.perform_async_if_configured(user.id, github_ids)
+    end
   end
 
   def self.archive_on_github(user, notification_ids)

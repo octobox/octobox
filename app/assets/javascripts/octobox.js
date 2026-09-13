@@ -24,6 +24,12 @@ var Octobox = (function() {
     });
   };
 
+  var responseJson = function(response) {
+    var contentType = response.headers.get('content-type') || '';
+    if (contentType.indexOf('json') === -1) return Promise.resolve({});
+    return response.json();
+  };
+
   var maybeConfirm = function(message){
     if(document.body.classList.contains('disable_confirmations')) {
       return true;
@@ -317,8 +323,14 @@ var Octobox = (function() {
       if (response.ok) {
         resetCursorAfterRowsRemoved(ids);
         updateFavicon();
+        return responseJson(response);
       } else {
         throw new Error('Request failed');
+      }
+    })
+    .then(data => {
+      if (data.undo_url) {
+        notify(data.message + " <a href='" + data.undo_url + "' data-method='post'>Undo</a>", "success");
       }
     })
     .catch(() => {
