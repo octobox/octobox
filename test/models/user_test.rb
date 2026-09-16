@@ -311,4 +311,20 @@ class UserTest < ActiveSupport::TestCase
     assert_nil attacker_notification.subject
   end
 
+  test 'not_recently_synced excludes a user synced inside the default window' do
+    stub_webhook_sync_throttle
+    user = create(:user, last_synced_at: 1.minute.ago)
+
+    assert_not_includes User.not_recently_synced, user
+  end
+
+  test 'not_recently_synced includes that user when the window is shortened' do
+    stub_webhook_sync_throttle(value: 30)
+    user = create(:user, last_synced_at: 1.minute.ago)
+
+    assert_includes User.not_recently_synced, user,
+                    'a shorter throttle must let a webhook schedule a sync ' \
+                    'that the default window would have dropped'
+  end
+
 end
