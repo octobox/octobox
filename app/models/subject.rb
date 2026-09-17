@@ -44,7 +44,8 @@ class Subject < ApplicationRecord
     involved_user_ids.each { |user_id| SyncNotificationsWorker.perform_in(1.minutes, user_id) }
   end
 
-  def sync(remote_subject)
+  def sync(remote_subject, github_client: nil)
+    @preferred_github_client = github_client
     update({
       repository_full_name: extract_full_name_from_remote_subject(remote_subject),
       github_id: remote_subject['id'],
@@ -68,11 +69,13 @@ class Subject < ApplicationRecord
     update_comments if Octobox.include_comments? && (has_comments? || pull_request?)
     update_status
     sync_involved_users if (saved_changes.keys & notifiable_fields).any?
+  ensure
+    @preferred_github_client = nil
   end
 
-  def self.sync(remote_subject)
+  def self.sync(remote_subject, github_client: nil)
     subject = Subject.find_or_create_by(url: remote_subject['url'])
-    subject.sync(remote_subject)
+    subject.sync(remote_subject, github_client: github_client)
   end
 
   def self.sync_status(sha, repository_full_name)
@@ -230,6 +233,8 @@ class Subject < ApplicationRecord
   end
 
   def github_client
+    return @preferred_github_client if @preferred_github_client
+
     if app_installation.present?
       app_installation.github_client
     else

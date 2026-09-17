@@ -322,6 +322,24 @@ class SubjectTest < ActiveSupport::TestCase
     assert subject.persisted?
   end
 
+  test 'notification sync downloads comments when the user only has a personal access token' do
+    stub_personal_access_tokens_enabled
+    remote_subject = load_fixture('subject_56.json')
+    stub_request(:get, remote_subject['url'])
+      .to_return(status: 200, body: file_fixture('subject_56.json'), headers: { 'Content-Type' => 'application/json' })
+    stub_request(:get, remote_subject['url'] + '/comments?since')
+      .to_return(status: 200, body: file_fixture('subject_58_comments.json'), headers: { 'Content-Type' => 'application/json' })
+
+    user = build(:user, access_token: nil, personal_access_token: 'FAKE_PERSONAL_ACCESS_TOKEN')
+    stub_user_request(user: user)
+    user.save!
+    notification = create(:notification, subject_url: remote_subject['url'], user: user)
+
+    notification.update_subject_in_foreground(true)
+
+    assert_equal 13, notification.subject.comments.count
+  end
+
   test 'sync updates reviews and review comemnts when the subject is a pull request' do
     remote_subject = load_fixture('subject_58.json')
     stub_review_requests
