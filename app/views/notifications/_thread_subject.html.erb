@@ -8,14 +8,16 @@
   <%= notification_button_title(notification) %>
 <% end %>
 
-<% if notification.subject && notification.display? %>
+<% subject_visible = notification.subject && notification.display? %>
+<% subject_created_at = notification.subject.created_at if subject_visible && %w[Issue PullRequest].include?(notification.subject_type) %>
+<% if subject_visible %>
   <%= notification_status(notification.subject.status) %>
   <%= link_to notification.subject.author, root_path(filtered_params(author: notification.subject.author)), class: 'text-muted', target: '_blank' %> opened this <%= notification.subject_type.underscore.humanize.downcase %>
 <% end %>
 
 on <%= link_to notification.repository_full_name, notification.repo_url, class: 'text-muted', target: '_blank' %>
 
-<%= time_ago_in_words(notification.updated_at) %> ago
+<%= time_ago_in_words(subject_created_at || notification.updated_at) %> ago
 
 <div class='d-flex justify-content-between mt-2'>
   <div class='labels'>
