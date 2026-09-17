@@ -62,6 +62,10 @@
       <%= filter_option :is_private do %>
         <%= (params[:is_private] === 'true'? 'Private' : 'Public') %>
       <% end %>
+
+      <%= filter_option :draft do %>
+        <%= (params[:draft] === 'true'? 'Draft' : 'Not draft') %>
+      <% end %>
     </span>
   </span>
 <% end %>

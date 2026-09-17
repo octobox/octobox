@@ -28,7 +28,7 @@ on <%= link_to notification.repository_full_name, notification.repo_url, class: 
   </div>
   <% if notification.subject && notification.display? %>
     <div>
-      <%= link_to pluralize(notification.subject.comment_count,'comment'), expand_comments_notification_url(notification),  class: 'text-muted'%>
+      <%= link_to pluralize(notification.subject.comment_count,'comment'), expand_comments_notification_url(filtered_params(id: notification)),  class: 'text-muted'%>
     </div>
   <% end %>
 </div>

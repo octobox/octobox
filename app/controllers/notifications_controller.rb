@@ -16,7 +16,7 @@ class NotificationsController < ApplicationController
 
   def show
     scope = notifications_for_presentation.newest
-    scope = load_and_count_notifications(scope) unless request.xhr?
+    scope = request.xhr? ? current_notifications(scope) : load_and_count_notifications(scope)
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
