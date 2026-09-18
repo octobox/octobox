@@ -303,7 +303,7 @@ GEM
     pg_search (2.3.8)
       activerecord (>= 7.2)
       activesupport (>= 7.2)
-    playwright-ruby-client (1.62.0)
+    playwright-ruby-client (1.63.0)
       base64
       concurrent-ruby (>= 1.1.6)
       mime-types (>= 3.0)
