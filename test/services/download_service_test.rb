@@ -79,7 +79,7 @@ class DownloadServiceTest < ActiveSupport::TestCase
     expected_attributes = build_expected_attributes(notifications_from_fixture('morty_notifications.json'))
                             .find{|n| n['github_id'] == 2147650093}
     stub_notifications_request(body: file_fixture('morty_notifications.json'))
-    stub_request(:get, %r{https://api.github.com/notifications})
+    stub_request(:get, %r{\Ahttps://api\.github\.com/notifications})
       .with(headers: { 'If-Modified-Since' => /.+/ })
       .to_return(status: 304, body: '')
     user = create(:morty)
