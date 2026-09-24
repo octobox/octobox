@@ -46,7 +46,7 @@ jobs:
         with:
           node-version: 20
       - name: Set up Ruby
-        uses: ruby/setup-ruby@984c0c890880bbf811283d6f09c4607c62d210a4
+        uses: ruby/setup-ruby@a0102e0972be65f351c307e2d64b9314a57c8073
         with:
           bundler-cache: true
 
