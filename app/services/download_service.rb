@@ -47,10 +47,13 @@ class DownloadService
     process_notifications(notifications)
   end
 
+  # The If-Modified-Since request above misses threads whose updated_at moved
+  # without the list's Last-Modified advancing, which GitHub does for the
+  # user's own activity, so fully process this unfiltered fetch as well.
   def fetch_all_notifications
     headers = {cache_control: %w(no-store no-cache)}
     notifications = fetch_notifications(params: {all: true, headers: headers})
-    process_unread_state(notifications)
+    process_notifications(notifications)
   end
 
   def process_notifications(notifications)
@@ -63,21 +66,6 @@ class DownloadService
       next unless n
       begin
         n.update_from_api_response(notification)
-      rescue ActiveRecord::RecordNotUnique
-        nil
-      end
-    end
-  end
-
-  def process_unread_state(notifications)
-    return if notifications.blank?
-
-    existing_notifications = user.notifications.where(github_id: notifications.map(&:id)).select('id, github_id, unread')
-    notifications.each do |notification|
-      n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
-      next unless n
-      begin
-        n.update_column(:unread, notification['unread']) if n.unread != notification['unread']
       rescue ActiveRecord::RecordNotUnique
         nil
       end
