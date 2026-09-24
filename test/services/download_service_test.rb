@@ -71,6 +71,26 @@ class DownloadServiceTest < ActiveSupport::TestCase
     assert_equal attrs, attrs.merge(expected_attributes)
   end
 
+  # GitHub bumps a thread's updated_at for the user's own activity (e.g. their
+  # own comment) without advancing the list's Last-Modified, so the
+  # If-Modified-Since request answers 304 and only the unfiltered fetch sees it.
+  test "#download updates a notification only present in the unfiltered fetch" do
+    stub_fetch_subject_enabled(value: false)
+    expected_attributes = build_expected_attributes(notifications_from_fixture('morty_notifications.json'))
+                            .find{|n| n['github_id'] == 2147650093}
+    stub_notifications_request(body: file_fixture('morty_notifications.json'))
+    stub_request(:get, %r{https://api.github.com/notifications})
+      .with(headers: { 'If-Modified-Since' => /.+/ })
+      .to_return(status: 304, body: '')
+    user = create(:morty)
+    notification = user.notifications.find_by_github_id(2147650093)
+    user.download_service.download
+    notification.reload
+    refute notification.archived?
+    attrs = notification.attributes
+    assert_equal attrs, attrs.merge(expected_attributes)
+  end
+
   test "#download will set the url for a Repository invitation correctly" do
     stub_fetch_subject_enabled(value: false)
     stub_notifications_request(body: file_fixture('repository_invitation_notification.json'))
