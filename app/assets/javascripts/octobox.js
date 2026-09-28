@@ -1006,8 +1006,12 @@ var Octobox = (function() {
     68:  markReadSelected, // d
     74:  cursorDown,       // j
     75:  cursorUp,         // k
+    40:  cursorDown,       // down arrow
+    38:  cursorUp,         // up arrow
     78:  nextPage,         // n
     80:  prevPage,         // p
+    37:  prevPage,         // left arrow
+    39:  nextPage,         // right arrow
     83:  toggleStar,       // s
     88:  markCurrent,      // x
     89:  toggleArchive,    // y
