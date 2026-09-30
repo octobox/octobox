@@ -11,6 +11,31 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
     sign_in_as(@user)
   end
 
+  test 'n and p navigate between pages' do
+    create_list(:notification, 38, user: @user)
+    visit '/'
+    first_page_url = page.current_url
+
+    send_keys 'p'
+    assert_equal first_page_url, page.current_url
+
+    send_keys 'n'
+    assert_current_path '/?page=2'
+
+    send_keys 'n'
+    assert_current_path '/?page=3'
+    last_page_url = page.current_url
+
+    send_keys 'n'
+    assert_equal last_page_url, page.current_url
+
+    send_keys 'p'
+    assert_current_path '/?page=2'
+
+    send_keys 'p'
+    assert_current_path '/?page=1'
+  end
+
   test 'j moves cursor down the list' do
     assert_selector 'td.js-current'
     initial_row = find('td.js-current').ancestor('tr')
