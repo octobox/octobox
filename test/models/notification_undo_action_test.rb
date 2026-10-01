@@ -14,13 +14,21 @@ class NotificationUndoActionTest < ActiveSupport::TestCase
     assert undo_action.expires_at.future?
   end
 
+  test 'record_archive stores the action type' do
+    user = create(:user)
+    create(:notification, user: user)
+
+    assert_equal 'archive', NotificationUndoAction.record_archive!(user, user.notifications).action
+    assert_equal 'unarchive', NotificationUndoAction.record_archive!(user, user.notifications, archived: false).action
+  end
+
   test 'record_archive only deletes expired undo actions for the same user' do
     user = create(:user)
     other_user = create(:user)
     notification = create(:notification, user: user)
     create(:notification, user: other_user)
-    expired_action = NotificationUndoAction.record_archive!(user, user.notifications.where(id: notification.id))
-    other_expired_action = NotificationUndoAction.record_archive!(other_user, other_user.notifications)
+    expired_action = NotificationUndoAction.record_archive!(user, user.notifications.where(id: notification.id), archived: false)
+    other_expired_action = NotificationUndoAction.record_archive!(other_user, other_user.notifications, archived: false)
     expired_action.update!(expires_at: 1.minute.ago)
     other_expired_action.update!(expires_at: 1.minute.ago)
 
@@ -28,6 +36,17 @@ class NotificationUndoActionTest < ActiveSupport::TestCase
 
     refute NotificationUndoAction.exists?(expired_action.id)
     assert NotificationUndoAction.exists?(other_expired_action.id)
+  end
+
+  test 'record_archive keeps expired archive actions until their GitHub archive runs' do
+    user = create(:user)
+    notification = create(:notification, user: user)
+    expired_action = NotificationUndoAction.record_archive!(user, user.notifications.where(id: notification.id))
+    expired_action.update!(expires_at: 1.minute.ago)
+
+    NotificationUndoAction.record_archive!(user, user.notifications.where(id: notification.id))
+
+    assert NotificationUndoAction.exists?(expired_action.id)
   end
 
   test 'restore reverts archived states and destroys the undo action' do

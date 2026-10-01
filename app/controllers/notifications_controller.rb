@@ -198,6 +198,6 @@ class NotificationsController < ApplicationController
     archive_value = params[:value] ? ActiveRecord::Type::Boolean.new.cast(params[:value]) : true
     return if archive_value && !Octobox.background_jobs_enabled?
 
-    NotificationUndoAction.record_archive!(current_user, notifications)
+    NotificationUndoAction.record_archive!(current_user, notifications, archived: archive_value)
   end
 end

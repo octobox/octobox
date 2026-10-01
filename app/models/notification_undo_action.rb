@@ -2,7 +2,8 @@
 
 class NotificationUndoAction < ApplicationRecord
   EXPIRES_IN = 5.minutes
-  ARCHIVE_DELAY = EXPIRES_IN + 10.seconds
+  ARCHIVE_BUFFER = 10.seconds
+  ARCHIVE_DELAY = EXPIRES_IN + ARCHIVE_BUFFER
 
   has_secure_token :token
 
@@ -14,7 +15,7 @@ class NotificationUndoAction < ApplicationRecord
 
   scope :expired, -> { where('expires_at <= ?', Time.current) }
 
-  def self.record_archive!(user, notifications)
+  def self.record_archive!(user, notifications, archived: true)
     states = notifications.pluck(:id, :archived).map do |id, archived|
       {
         'id' => id,
@@ -24,10 +25,12 @@ class NotificationUndoAction < ApplicationRecord
 
     return if states.empty?
 
-    user.notification_undo_actions.expired.delete_all
+    # Archive actions stay until ArchiveWorker syncs them to GitHub, so a
+    # missing record always means the user undid the action
+    user.notification_undo_actions.expired.where.not(action: 'archive').delete_all
 
     user.notification_undo_actions.create!(
-      action: 'archive',
+      action: archived ? 'archive' : 'unarchive',
       notification_states: states,
       expires_at: EXPIRES_IN.from_now
     )
@@ -43,6 +46,10 @@ class NotificationUndoAction < ApplicationRecord
 
   def expired?
     expires_at <= Time.current
+  end
+
+  def archive_delay
+    [expires_at - Time.current, 0].max + ARCHIVE_BUFFER
   end
 
   def restore!
