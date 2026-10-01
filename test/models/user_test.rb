@@ -311,4 +311,62 @@ class UserTest < ActiveSupport::TestCase
     assert_nil attacker_notification.subject
   end
 
+  test 'sync_app_installation_access discards an app token GitHub has rejected' do
+    user = create(:user, app_token: SecureRandom.hex(20))
+    stub_request(:get, /https:\/\/api\.github\.com\/user\/installations/)
+      .to_return(status: 401, body: '{"message":"Bad credentials"}',
+                 headers: { 'Content-Type' => 'application/json' })
+
+    user.sync_app_installation_access
+
+    assert_nil user.reload.app_token
+    refute user.github_app_authorized?,
+           'a rejected token must not keep reporting the user as authorized, ' \
+           'or the re-login button stays hidden'
+  end
+
+  test 'sync_app_installation_access keeps a working app token' do
+    user = create(:user, app_token: SecureRandom.hex(20))
+    stub_request(:get, /https:\/\/api\.github\.com\/user\/installations/)
+      .to_return(status: 200, body: '{"total_count":0,"installations":[]}',
+                 headers: { 'Content-Type' => 'application/json' })
+
+    user.sync_app_installation_access
+
+    assert_not_nil user.reload.app_token
+  end
+
+  test 'sync_app_installation_access does not discard a replacement app token' do
+    user = create(:user, app_token: SecureRandom.hex(20))
+    replacement_token = SecureRandom.hex(20)
+    client = Object.new
+    client.define_singleton_method(:find_user_installations) do
+      User.find(user.id).update!(app_token: replacement_token)
+      raise Octokit::Unauthorized
+    end
+    user.stubs(:app_installation_client).returns(client)
+
+    user.sync_app_installation_access
+
+    assert_equal replacement_token, user.reload.app_token
+  end
+
+  test 'revoke_app_token! clears the token despite unrelated validation errors' do
+    user = create(:user, app_token: SecureRandom.hex(20))
+    user.stubs(:valid?).returns(false)
+    refute user.valid?
+
+    user.revoke_app_token!
+
+    assert_nil user.reload.app_token
+  end
+
+  test 'revoke_app_token! clears the stored app token' do
+    user = create(:user, app_token: SecureRandom.hex(20))
+
+    user.revoke_app_token!
+
+    assert_nil user.reload.app_token
+  end
+
 end

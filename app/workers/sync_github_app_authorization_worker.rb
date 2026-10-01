@@ -5,7 +5,6 @@ class SyncGithubAppAuthorizationWorker
   sidekiq_options queue: :marketplace, lock: :until_and_while_executing
 
   def perform(github_id)
-    user = User.find_by_github_id(github_id)
-    user.update(app_token: nil) if user.present?
+    User.find_by_github_id(github_id).try(:revoke_app_token!)
   end
 end
