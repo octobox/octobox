@@ -185,6 +185,30 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     refute User.exists?(@user.id)
   end
 
+  test 'exports notifications as downloadable json' do
+    sign_in_as(@user, initial_sync: true)
+    notification1 = create(:notification, user: @user)
+    notification2 = create(:notification, user: @user)
+
+    get export_path
+
+    assert_response :success
+    assert_includes response.headers['Content-Type'], 'application/json'
+    assert_equal 'attachment; filename=octobox.json', response.headers['Content-Disposition']
+
+    exported_ids = JSON.parse(response.body).map { |notification| notification['id'] }
+    assert_equal [notification1.id, notification2.id], exported_ids
+  end
+
+  test 'exports an empty notification list' do
+    sign_in_as(@user, initial_sync: true)
+
+    get export_path
+
+    assert_response :success
+    assert_equal [], JSON.parse(response.body)
+  end
+
   test 'cannot delete another user' do
     other_user = create(:user)
     sign_in_as(other_user)
@@ -247,5 +271,35 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @user.reload
     assert_nil @user.refresh_interval
     assert_response :unprocessable_content
+  end
+
+  test 'imports notifications from a valid file' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    file = fixture_file_upload_json([notification.attributes.slice('github_id').merge('unread' => false)])
+    post '/import', params: {file: file}
+    assert_redirected_to root_path
+    assert_equal 'Import complete', flash[:success]
+  end
+
+  test 'rejects import without a file' do
+    sign_in_as(@user)
+    post '/import'
+    assert_redirected_to '/settings'
+    assert_equal 'Please choose a file to import', flash[:error]
+  end
+
+  test 'rejects import with invalid JSON' do
+    sign_in_as(@user)
+    file = Rack::Test::UploadedFile.new(StringIO.new('not valid json'), 'application/json', original_filename: 'octobox.json')
+    post '/import', params: {file: file}
+    assert_redirected_to '/settings'
+    assert_equal 'Could not import file: invalid JSON', flash[:error]
+  end
+
+  private
+
+  def fixture_file_upload_json(data)
+    Rack::Test::UploadedFile.new(StringIO.new(data.to_json), 'application/json', original_filename: 'octobox.json')
   end
 end

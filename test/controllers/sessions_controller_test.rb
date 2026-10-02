@@ -76,7 +76,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github].uid = @user.github_id
 
     post '/auth/github/callback'
-    assert_equal 1, SyncNotificationsWorker.jobs.size
+    assert_sidekiq_job_enqueued(SyncNotificationsWorker, @user.id)
   end
 
   test 'POST #create redirects to the root_path with an error message if they are not an org member' do

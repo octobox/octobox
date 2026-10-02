@@ -9,7 +9,7 @@ class CommentWorkerTest < ActiveSupport::TestCase
 
   test 'enqueues a comment' do
     CommentWorker.perform_async(@comment.id, @user.id, @comment.subject.id)
-    assert_equal 1, CommentWorker.jobs.size
+    assert_sidekiq_job_enqueued(CommentWorker, @comment.id, @user.id, @comment.subject.id)
   end
 
   test 'Posts and synchronises a comment with GitHub' do
@@ -25,7 +25,7 @@ class CommentWorkerTest < ActiveSupport::TestCase
     stub_request(:post, "#{@comment.subject.url}/comments").
       to_return({ status: 503})
     CommentWorker.perform_async(@comment.id, @user.id, @comment.subject.id)
-    assert_equal 1, CommentWorker.jobs.size
+    assert_sidekiq_job_enqueued(CommentWorker, @comment.id, @user.id, @comment.subject.id)
   end
 
   test 'Destroys and comment if the subject no longer exists' do

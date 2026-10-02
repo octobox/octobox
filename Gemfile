@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-ruby '4.0.5'
+ruby '4.0.6'
 
-gem 'rails', '8.1.3'
+gem 'rails', '8.1.4'
 gem 'bootstrap', '4.6.2'
 gem 'attr_encrypted', git: 'https://github.com/octobox/attr_encrypted.git', branch: 'rails-7'
 gem 'jquery-rails'
@@ -34,13 +34,13 @@ gem 'jwt'
 gem 'oj'
 gem 'ostruct'
 gem 'yard', require: false
-gem 'commonmarker', '2.8.2'
+gem 'commonmarker', '2.10.0'
 gem 'pg'
 gem 'rexml'
 gem 'omniauth-rails_csrf_protection'
 gem 'psych'
 gem 'nokogiri'
-gem 'redis'
+gem 'redis', '< 6' # actioncable pins redis to >= 4, < 6 in its subscription adapter
 gem 'rack-cors'
 gem 'benchmark'
 
