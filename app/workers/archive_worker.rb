@@ -14,9 +14,11 @@ class ArchiveWorker
         self.class.perform_in(undo_action.archive_delay, user_id, notification_ids, undo_action_id)
         return
       end
+
+      notification_ids = undo_action.github_ids_to_archive(notification_ids)
     end
 
-    Notification.archive_on_github(user, notification_ids)
+    Notification.archive_on_github(user, notification_ids) if notification_ids.any?
     undo_action&.destroy
   end
 end

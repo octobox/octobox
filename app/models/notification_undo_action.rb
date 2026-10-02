@@ -16,10 +16,11 @@ class NotificationUndoAction < ApplicationRecord
   scope :expired, -> { where('expires_at <= ?', Time.current) }
 
   def self.record_archive!(user, notifications, archived: true)
-    states = notifications.pluck(:id, :archived).map do |id, archived|
+    states = notifications.pluck(:id, :archived, :updated_at).map do |id, previously_archived, updated_at|
       {
         'id' => id,
-        'archived' => archived
+        'archived' => previously_archived,
+        'updated_at' => serialize_timestamp(updated_at)
       }
     end
 
@@ -36,6 +37,10 @@ class NotificationUndoAction < ApplicationRecord
     )
   end
 
+  def self.serialize_timestamp(time)
+    time&.utc&.iso8601(6)
+  end
+
   def notification_states
     JSON.parse(read_attribute(:notification_states) || '[]')
   end
@@ -50,6 +55,19 @@ class NotificationUndoAction < ApplicationRecord
 
   def archive_delay
     [expires_at - Time.current, 0].max + ARCHIVE_BUFFER
+  end
+
+  # Notifications that sync reopened, or that received new activity, since
+  # this archive was recorded must not be archived on GitHub
+  def github_ids_to_archive(github_ids)
+    recorded_updated_at = notification_states.to_h { |state| [state['id'], state['updated_at']] }
+
+    reopened_github_ids = user.notifications.where(id: recorded_updated_at.keys)
+      .pluck(:id, :github_id, :archived, :updated_at)
+      .reject { |id, _, archived, updated_at| archived && recorded_updated_at[id] == self.class.serialize_timestamp(updated_at) }
+      .map(&:second)
+
+    github_ids - reopened_github_ids
   end
 
   def restore!

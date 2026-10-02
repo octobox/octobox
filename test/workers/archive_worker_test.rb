@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class ArchiveWorkerTest < ActiveSupport::TestCase
+  include NotificationTestHelper
+
   test 'archives on GitHub without an undo action' do
     user = create(:user)
     github_ids = [123]
@@ -37,10 +39,12 @@ class ArchiveWorkerTest < ActiveSupport::TestCase
   test 'archives on GitHub after undo action expires' do
     user = create(:user)
     notification = create(:notification, user: user)
-    undo_action = NotificationUndoAction.record_archive!(user, user.notifications.where(id: notification.id))
+    notifications = user.notifications.where(id: notification.id)
+    undo_action = NotificationUndoAction.record_archive!(user, notifications)
+    Notification.archive(notifications, true, undo_action: undo_action)
     undo_action.update!(expires_at: 1.minute.ago)
 
-    Notification.expects(:archive_on_github).once
+    Notification.expects(:archive_on_github).with(user, [notification.github_id]).once
 
     ArchiveWorker.new.perform(user.id, [notification.github_id], undo_action.id)
 
@@ -69,5 +73,44 @@ class ArchiveWorkerTest < ActiveSupport::TestCase
     end
 
     refute NotificationUndoAction.exists?(first_action.id)
+  end
+
+  test 'does not archive on GitHub notifications reopened by newer activity before the worker runs' do
+    stub_fetch_subject_enabled(value: false)
+    user = create(:user)
+    api_response = notifications_from_fixture('morty_notifications.json').first
+    reopened = create(:notification, user: user, github_id: api_response.id, updated_at: Time.zone.parse('2016-12-01T00:00:00Z'))
+    unchanged = create(:notification, user: user)
+    notifications = user.notifications.where(id: [reopened.id, unchanged.id])
+    undo_action = NotificationUndoAction.record_archive!(user, notifications)
+    Notification.archive(notifications, true, undo_action: undo_action)
+    job = ArchiveWorker.jobs.first
+
+    reopened.reload.update_from_api_response(api_response)
+    refute reopened.reload.archived?
+
+    travel NotificationUndoAction::ARCHIVE_DELAY do
+      Notification.expects(:archive_on_github).with(user, [unchanged.github_id]).once
+
+      ArchiveWorker.new.perform(*job['args'])
+    end
+
+    refute NotificationUndoAction.exists?(undo_action.id)
+  end
+
+  test 'skips GitHub archive when every notification was reopened before the worker runs' do
+    user = create(:user)
+    notification = create(:notification, user: user)
+    notifications = user.notifications.where(id: notification.id)
+    undo_action = NotificationUndoAction.record_archive!(user, notifications)
+    Notification.archive(notifications, true, undo_action: undo_action)
+    notification.reload.update!(archived: false)
+    undo_action.update!(expires_at: 1.minute.ago)
+
+    Notification.expects(:archive_on_github).never
+
+    ArchiveWorker.new.perform(user.id, [notification.github_id], undo_action.id)
+
+    refute NotificationUndoAction.exists?(undo_action.id)
   end
 end
