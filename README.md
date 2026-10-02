@@ -95,8 +95,10 @@ You can use keyboard shortcuts to navigate and perform certain actions:
 
  - `a` - Select/deselect all
  - `r` or `.` - Refresh list
- - `j` - Move down the list
- - `k` - Move up the list
+ - `j` or `↓` - Move down the list
+ - `k` or `↑` - Move up the list
+ - `p` or `←` - Previous page
+ - `n` or `→` - Next page
  - `s` - Star current notification
  - `x` - Mark/unmark current notification
  - `y` or `e` - Archive current/marked notification(s)
