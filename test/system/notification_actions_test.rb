@@ -61,6 +61,25 @@ class NotificationActionsTest < ApplicationSystemTestCase
     assert @notification1.archived
   end
 
+  test 'undo link survives the list refresh and restores archived notifications' do
+    toggle_notification_checkbox(@notification1.id)
+    sleep 0.1
+
+    click_button class: 'archive_selected'
+
+    assert_no_text 'Action test one', wait: 5
+    assert_text 'Action test two'
+    assert @notification1.reload.archived
+
+    within '.header-flash-messages' do
+      click_link 'Undo'
+    end
+
+    assert_text 'Notification action undone', wait: 5
+    assert_text 'Action test one'
+    refute @notification1.reload.archived
+  end
+
   test 'unchecking all checkboxes hides bulk action buttons' do
     toggle_notification_checkbox(@notification1.id)
     sleep 0.1

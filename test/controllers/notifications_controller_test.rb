@@ -182,6 +182,69 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     refute notification3.reload.archived?
   end
 
+  test 'undo archive restores previous archived state' do
+    stub_background_jobs_enabled
+    sign_in_as(@user)
+    notification1 = create(:notification, user: @user, archived: false)
+    notification2 = create(:notification, user: @user, archived: false)
+
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
+
+    post '/notifications/archive_selected', params: { id: [notification1.id, notification2.id], value: true }, xhr: true
+    undo_url = JSON.parse(response.body).fetch('undo_url')
+
+    assert notification1.reload.archived?
+    assert notification2.reload.archived?
+
+    post undo_url
+
+    assert_redirected_to root_path
+    refute notification1.reload.archived?
+    refute notification2.reload.archived?
+    assert_equal 'Notification action undone', flash[:success]
+  end
+
+  test 'archive with undo schedules GitHub archive after undo window' do
+    stub_background_jobs_enabled
+    sign_in_as(@user)
+    notification = create(:notification, user: @user, archived: false)
+
+    post '/notifications/archive_selected', params: { id: [notification.id], value: true }, xhr: true
+
+    data = JSON.parse(response.body)
+    assert_match %r{/notifications/undo_archive\?token=}, data['undo_url']
+    assert_equal 1, ArchiveWorker.jobs.size
+    assert_in_delta NotificationUndoAction::ARCHIVE_DELAY.from_now.to_f, ArchiveWorker.jobs.first['at'], 2
+  end
+
+  test 'undo archive cannot restore expired action' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user, archived: false)
+    undo_action = NotificationUndoAction.record_archive!(@user, @user.notifications.where(id: notification.id))
+    undo_action.update!(expires_at: 1.minute.ago)
+    notification.update!(archived: true)
+
+    post undo_archive_notifications_path(token: undo_action.token)
+
+    assert_redirected_to root_path
+    assert notification.reload.archived?
+    assert_equal 'Undo link has expired', flash[:error]
+  end
+
+  test 'undo archive cannot restore another users action' do
+    sign_in_as(@user)
+    other_user = create(:user)
+    notification = create(:notification, user: other_user, archived: false)
+    undo_action = NotificationUndoAction.record_archive!(other_user, other_user.notifications.where(id: notification.id))
+    notification.update!(archived: true)
+
+    post undo_archive_notifications_path(token: undo_action.token)
+
+    assert_redirected_to root_path
+    assert notification.reload.archived?
+    assert_equal 'Undo link has expired', flash[:error]
+  end
+
   test 'archives all notifications' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
@@ -205,6 +268,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
+
     post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: true }, xhr: true
 
     assert_response :ok
@@ -218,6 +283,8 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)
     notification2 = create(:notification, user: @user, archived: false)
+
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
 
     post '/notifications/archive_selected', params: { unread: true, id: ['all'], value: nil }, xhr: true
 
