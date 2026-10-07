@@ -207,9 +207,10 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.10)
     local_time (2.1.0)
     logger (1.7.0)
-    lograge (0.15.0)
+    lograge (0.15.1)
       actionpack (>= 4)
       activesupport (>= 4)
+      logger
       railties (>= 4)
       request_store (~> 1.0)
     loofah (2.25.2)
