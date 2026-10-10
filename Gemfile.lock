@@ -201,7 +201,7 @@ GEM
     json (3.0.2)
     jwt (3.3.0)
       base64
-    listen (3.10.0)
+    listen (3.10.1)
       logger
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
