@@ -91,7 +91,7 @@ GEM
       version_gem (~> 1.1, >= 1.1.14)
     auth-sanitizer (0.2.3)
       version_gem (~> 1.1, >= 1.1.14)
-    autoprefixer-rails (10.4.21.0)
+    autoprefixer-rails (10.6.1.0)
       execjs (~> 2)
     base64 (0.3.0)
     benchmark (0.5.0)
