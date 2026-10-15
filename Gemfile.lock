@@ -138,7 +138,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.7)
-    date (3.5.1)
+    date (3.6.0)
     dotenv (3.2.0)
     dotenv-rails (3.2.0)
       dotenv (= 3.2.0)
