@@ -154,4 +154,24 @@ class DownloadServiceTest < ActiveSupport::TestCase
     assert_equal previous, user.reload.last_synced_at,
                  'a dropped notification must not be skipped by the next sync'
   end
+
+  # update_from_api_response used to save the notification before updating its
+  # repository, so a RecordNotUnique from the repository left a saved record
+  # whose retry saw no attribute changes and never fetched the subject.
+  test '#download stores the subject on retry after the repository update fails' do
+    stub_background_jobs_enabled(value: false)
+    stub_fetch_subject_enabled
+    stub_comments_requests
+    api_notification = Oj.load(file_fixture('morty_notifications.json').read).first
+    stub_notifications_request(body: Oj.dump([api_notification], mode: :compat))
+    user = create(:user)
+    Repository.stubs(:find_or_create_by).raises(ActiveRecord::RecordNotUnique.new('duplicate'))
+
+    DownloadService.new(user).download
+    Repository.unstub(:find_or_create_by)
+    DownloadService.new(user).download
+
+    notification = user.notifications.find_by!(github_id: api_notification['id'])
+    assert_equal 'closed', notification.subject&.state
+  end
 end
