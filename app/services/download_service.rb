@@ -71,10 +71,6 @@ class DownloadService
     notifications.each do |notification|
       n = existing_notifications.find{|en| en.github_id == notification.id.to_i}
       n = user.notifications.new(github_id: notification.id, archived: false) if n.nil?
-      if n.nil?
-        complete = false
-        next
-      end
       begin
         n.update_from_api_response(notification)
       rescue ActiveRecord::RecordNotUnique
