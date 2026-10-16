@@ -155,6 +155,16 @@ class ConfiguratorTest < ActiveSupport::TestCase
     assert_equal 20, Octobox.config.max_notifications_to_sync
   end
 
+  test 'webhook_sync_throttle default value' do
+    stub_env_var('WEBHOOK_SYNC_THROTTLE_SECONDS', nil)
+    assert_equal 300, Octobox.config.webhook_sync_throttle
+  end
+
+  test 'webhook_sync_throttle configured by ENV var' do
+    stub_env_var('WEBHOOK_SYNC_THROTTLE_SECONDS', 30)
+    assert_equal 30, Octobox.config.webhook_sync_throttle
+  end
+
   test 'max_concurrency default value' do
     stub_env_var('MAX_CONCURRENCY', nil)
     assert_equal 10, Octobox.config.max_concurrency
