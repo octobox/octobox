@@ -1065,6 +1065,23 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'notifications/_thread'
   end
 
+  test 'unread preview keeps neighbours after the opened notification is marked read' do
+    sign_in_as(@user)
+    Notification.destroy_all
+    newer = create(:notification, user: @user, unread: true, updated_at: 1.minute.ago)
+    opened = create(:notification, user: @user, unread: true, updated_at: 2.minutes.ago)
+    create(:notification, user: @user, unread: false, updated_at: 3.minutes.ago)
+    older = create(:notification, user: @user, unread: true, updated_at: 4.minutes.ago)
+    stub_request(:patch, %r{/notifications/threads/})
+
+    post '/notifications/mark_read_selected', params: { id: [opened.id] }
+    get notification_path(opened, unread: true), xhr: true
+
+    assert_response :success
+    assert_equal newer.id, assigns(:previous)
+    assert_equal older.id, assigns(:next)
+  end
+
   test 'thread shows five commments' do
     skip("This test fails intermittenly")
     sign_in_as(@user)
