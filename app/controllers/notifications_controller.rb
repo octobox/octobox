@@ -16,7 +16,12 @@ class NotificationsController < ApplicationController
 
   def show
     scope = notifications_for_presentation.newest
-    scope = load_and_count_notifications(scope) unless request.xhr?
+    if request.xhr?
+      # Keep the opened notification as the anchor: its mark-read request may land first under ?unread=true
+      scope = scope.where(id: current_notifications(scope)).or(scope.where(id: params[:id]))
+    else
+      scope = load_and_count_notifications(scope)
+    end
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
