@@ -170,8 +170,10 @@ class Notification < ApplicationRecord
     self.archived = false if archived.nil? # fixup existing records where archived is nil
     unarchive_if_updated
     if changed?
-      save(touch: false)
+      # Save after the repository so a failure there leaves the notification
+      # unsaved, and the next sync still sees changes and redoes every step.
       update_repository(api_response)
+      save(touch: false)
       update_subject
     end
   end
