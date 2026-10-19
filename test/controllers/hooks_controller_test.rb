@@ -89,6 +89,20 @@ class HooksControllerTest < ActionController::TestCase
     assert_equal Repository.count, 1
   end
 
+  test 'issues webhook skips a user synced inside the default throttle window' do
+    involve_recently_synced_user_in_issue
+    SyncNotificationsWorker.expects(:perform_in).never
+
+    set_env('WEBHOOK_SYNC_THROTTLE_SECONDS', nil) { send_webhook 'issues' }
+  end
+
+  test 'issues webhook schedules a sync for that user when WEBHOOK_SYNC_THROTTLE_SECONDS is 30' do
+    recently_synced_user = involve_recently_synced_user_in_issue
+    SyncNotificationsWorker.expects(:perform_in).with(1.minute, recently_synced_user.id)
+
+    set_env('WEBHOOK_SYNC_THROTTLE_SECONDS', 30) { send_webhook 'issues' }
+  end
+
   test 'accepts webhook with valid signature when secret is configured' do
     Octobox.config.stubs(:github_webhook_secret).returns('mysecret')
     body = File.read("#{Rails.root}/test/fixtures/github_webhooks/github_app_authorization.json")
@@ -133,4 +147,12 @@ def send_webhook(event_type, fixture = nil)
     end
   end
   assert_response :success
+end
+
+def involve_recently_synced_user_in_issue
+  Octobox.config.stubs(:github_app).returns(true)
+  user = create(:user, last_synced_at: 1.minute.ago)
+  create(:notification, user: user, repository_full_name: 'andrew/no-rabbits',
+                        subject_url: 'https://api.github.com/repos/andrew/no-rabbits/issues/5')
+  user
 end
