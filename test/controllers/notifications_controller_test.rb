@@ -1277,4 +1277,46 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     get notification_path(notification, q: 'label:bug sort:subject')
     assert_response :success
   end
+
+  def select_all_counts
+    button = css_select('button.select_all').first
+    assert button, 'expected a select_all button'
+    [button.css('span.bold').text.strip.to_i, button.css('span:not(.bold)').text.strip.to_i]
+  end
+
+  test 'select all button shows the number of rows on the last page' do
+    sign_in_as(@user)
+    Notification.destroy_all
+    45.times { create(:notification, user: @user) }
+
+    get '/', params: { per_page: 20, page: 3 }
+
+    assert_response :success
+    assert_equal 5, css_select('tr.notification').size
+    assert_equal [5, 45], select_all_counts
+  end
+
+  test 'select all button shows per_page on a full page' do
+    sign_in_as(@user)
+    Notification.destroy_all
+    45.times { create(:notification, user: @user) }
+
+    get '/', params: { per_page: 20, page: 1 }
+
+    assert_response :success
+    assert_equal [20, 45], select_all_counts
+  end
+
+  test 'keeps pagination per_page in json on the last page' do
+    sign_in_as(@user)
+    Notification.destroy_all
+    45.times { create(:notification, user: @user) }
+
+    get notifications_path(format: :json, per_page: 20, page: 3)
+
+    assert_response :success
+    json = Oj.load(response.body)
+    assert_equal 3, json["pagination"]["page"]
+    assert_equal 20, json["pagination"]["per_page"]
+  end
 end
