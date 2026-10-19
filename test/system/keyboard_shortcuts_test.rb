@@ -21,20 +21,20 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
     assert_equal first_page_url, page.current_url
 
     send_keys 'n'
-    assert_current_path '/?page=2'
+    assert_page 2
 
     send_keys 'n'
-    assert_current_path '/?page=3'
+    assert_page 3
     last_page_url = page.current_url
 
     send_keys 'n'
     assert_equal last_page_url, page.current_url
 
     send_keys 'p'
-    assert_current_path '/?page=2'
+    assert_page 2
 
     send_keys 'p'
-    assert_current_path '/?page=1'
+    assert_page 1
   end
 
   test 'j moves cursor down the list' do
@@ -230,6 +230,65 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
 
   def set_preview_scroll_top(value)
     page.execute_script("document.getElementById('thread').scrollTop = #{value}")
+  end
+
+  test 'n and p route pagination through Turbolinks' do
+    create_list(:notification, 50, user: @user)
+    visit '/'
+    next_url = find('.page-item.next .page-link').evaluate_script('this.href')
+    capture_turbolinks_visits
+
+    send_keys 'n'
+    assert_equal next_url, page.evaluate_script('window.lastTurbolinksVisit')
+
+    visit '/?page=2'
+    previous_url = find('.page-item.prev .page-link').evaluate_script('this.href')
+    capture_turbolinks_visits
+
+    send_keys 'p'
+    assert_equal previous_url, page.evaluate_script('window.lastTurbolinksVisit')
+  end
+
+  test 'n and p do nothing at pagination boundaries' do
+    create_list(:notification, 50, user: @user)
+    visit '/'
+    capture_turbolinks_visits
+
+    send_keys 'p'
+    assert_nil page.evaluate_script('window.lastTurbolinksVisit')
+
+    visit '/?page=999'
+    capture_turbolinks_visits
+
+    send_keys 'n'
+    assert_nil page.evaluate_script('window.lastTurbolinksVisit')
+  end
+
+  test 'r routes foreground sync through Turbolinks' do
+    stub_background_jobs_enabled(value: false)
+    visit '/'
+    sync_url = find('a.js-sync').evaluate_script('this.href')
+    capture_turbolinks_visits
+
+    send_keys 'r'
+    sleep 0.1
+
+    assert_equal sync_url, page.evaluate_script('window.lastTurbolinksVisit')
+  end
+
+  # Turbolinks changes the URL before it renders the new page
+  def assert_page(number)
+    assert_current_path "/?page=#{number}"
+    assert_selector '.page-item.active', text: number.to_s
+  end
+
+  def capture_turbolinks_visits
+    page.execute_script(<<~JS)
+      window.lastTurbolinksVisit = undefined;
+      Turbolinks.visit = function(url) {
+        window.lastTurbolinksVisit = new URL(url, window.location.href).href;
+      };
+    JS
   end
 
   def send_keys(*keys)
