@@ -155,9 +155,6 @@ class DownloadServiceTest < ActiveSupport::TestCase
                  'a dropped notification must not be skipped by the next sync'
   end
 
-  # update_from_api_response used to save the notification before updating its
-  # repository, so a RecordNotUnique from the repository left a saved record
-  # whose retry saw no attribute changes and never fetched the subject.
   test '#download stores the subject on retry after the repository update fails' do
     stub_background_jobs_enabled(value: false)
     stub_fetch_subject_enabled
