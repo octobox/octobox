@@ -240,6 +240,8 @@ class Search
   end
 
   def bot_author
+    return !boolean_prefix(:'-bot') if parsed_query[:'-bot'].present?
+
     boolean_prefix(:bot)
   end
 

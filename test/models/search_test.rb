@@ -21,6 +21,12 @@ class SearchTest < ActiveSupport::TestCase
     assert_equal search.send(:exclude_owner), ['octobox']
   end
 
+  test '-bot:true is equivalent to bot:false' do
+    search = Search.new(query: '-bot:true', scope: [])
+    assert_equal false, search.send(:bot_author)
+    assert_equal true, Search.new(query: '-bot:false', scope: []).send(:bot_author)
+  end
+
   test 'converts assigned params to assignee prefix' do
     search = Search.new(query: 'inbox:true', scope: Notification.all, params: {assigned: 'andrew'})
     assert_equal search.to_query, 'inbox:true assignee:andrew'
