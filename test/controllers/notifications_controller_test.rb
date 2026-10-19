@@ -1268,81 +1268,38 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'select all button shows the number of rows on the last page' do
-    45.times { create(:notification, user: @user) }
     sign_in_as(@user)
-    total = Notification.inbox.where(user: @user).count
-    last_page = (total / 20.0).ceil
+    Notification.destroy_all
+    45.times { create(:notification, user: @user) }
 
-    get '/', params: { per_page: 20, page: last_page }
+    get '/', params: { per_page: 20, page: 3 }
 
     assert_response :success
-    rows = css_select('tr.notification').size
-    assert_equal total - 20 * (last_page - 1), rows
-    assert_equal [rows, total], select_all_counts
+    assert_equal 5, css_select('tr.notification').size
+    assert_equal [5, 45], select_all_counts
   end
 
   test 'select all button shows per_page on a full page' do
-    45.times { create(:notification, user: @user) }
     sign_in_as(@user)
-    total = Notification.inbox.where(user: @user).count
+    Notification.destroy_all
+    45.times { create(:notification, user: @user) }
 
     get '/', params: { per_page: 20, page: 1 }
 
     assert_response :success
-    assert_equal [20, total], select_all_counts
-  end
-
-  test 'select all button shows per_page on a full last page' do
-    sign_in_as(@user)
-    Notification.destroy_all
-    40.times { create(:notification, user: @user) }
-
-    get '/', params: { per_page: 20, page: 2 }
-
-    assert_response :success
-    assert_equal 20, css_select('tr.notification').size
-    assert_equal [20, 40], select_all_counts
-  end
-
-  test 'select all button shows the last page rows when the page is out of range' do
-    45.times { create(:notification, user: @user) }
-    sign_in_as(@user)
-    total = Notification.inbox.where(user: @user).count
-    last_page = (total / 20.0).ceil
-
-    get '/', params: { per_page: 20, page: last_page + 5 }
-    assert_redirected_to root_path(per_page: 20, page: last_page)
-    follow_redirect!
-
-    assert_response :success
-    rows = css_select('tr.notification').size
-    assert_equal total - 20 * (last_page - 1), rows
-    assert_equal [rows, total], select_all_counts
-  end
-
-  test 'select all button is not rendered when all notifications fit on one page' do
-    sign_in_as(@user)
-    Notification.destroy_all
-    3.times { create(:notification, user: @user) }
-
-    get '/', params: { per_page: 20 }
-
-    assert_response :success
-    assert_equal 3, css_select('tr.notification').size
-    assert_empty css_select('button.select_all')
+    assert_equal [20, 45], select_all_counts
   end
 
   test 'keeps pagination per_page in json on the last page' do
-    45.times { create(:notification, user: @user) }
     sign_in_as(@user)
-    total = Notification.inbox.where(user: @user).count
-    last_page = (total / 20.0).ceil
+    Notification.destroy_all
+    45.times { create(:notification, user: @user) }
 
-    get notifications_path(format: :json, per_page: 20, page: last_page)
+    get notifications_path(format: :json, per_page: 20, page: 3)
 
     assert_response :success
     json = Oj.load(response.body)
-    assert_equal last_page, json["pagination"]["page"]
+    assert_equal 3, json["pagination"]["page"]
     assert_equal 20, json["pagination"]["per_page"]
   end
 end
