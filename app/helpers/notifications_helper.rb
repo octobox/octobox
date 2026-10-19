@@ -71,6 +71,7 @@ module NotificationsHelper
       assigned:        params[:assigned],
       is_private:      params[:is_private],
       status:          params[:status],
+      draft:           params[:draft],
     }
   end
 
