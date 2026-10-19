@@ -24,6 +24,12 @@ var Octobox = (function() {
     });
   };
 
+  var responseJson = function(response) {
+    var contentType = response.headers.get('content-type') || '';
+    if (contentType.indexOf('json') === -1) return Promise.resolve({});
+    return response.json();
+  };
+
   var maybeConfirm = function(message){
     if(document.body.classList.contains('disable_confirmations')) {
       return true;
@@ -321,11 +327,21 @@ var Octobox = (function() {
     postRequest("/notifications/archive_selected" + location.search, formData)
     .then(response => {
       if (response.ok) {
-        resetCursorAfterRowsRemoved(ids);
-        updateFavicon();
+        return responseJson(response).catch(() => ({}));
       } else {
         throw new Error('Request failed');
       }
+    })
+    .then(data => {
+      if (data.undo_url) {
+        // The list reloads below, so show the notice once the new page renders
+        pendingNotice = {
+          message: data.message + " <a href='" + data.undo_url + "' data-method='post'>Undo</a>",
+          type: "success"
+        };
+      }
+      resetCursorAfterRowsRemoved(ids);
+      updateFavicon();
     })
     .catch(() => {
       notify("Could not archive notification(s)", "danger");
@@ -667,6 +683,8 @@ var Octobox = (function() {
     // Initialize checkbox functionality - always needed
     initShiftClickCheckboxes();
 
+    showPendingNotice();
+
     if (document.getElementById("help-box")){
       enableKeyboardShortcuts();
       var unreadCount = document.querySelector('.js-unread-count');
@@ -919,6 +937,14 @@ var Octobox = (function() {
         link.click();
       }
     }
+  };
+
+  var pendingNotice = null;
+
+  var showPendingNotice = function() {
+    if (!pendingNotice || document.documentElement.hasAttribute("data-turbolinks-preview")) return;
+    notify(pendingNotice.message, pendingNotice.type);
+    pendingNotice = null;
   };
 
   var scrollThread = function(e, pageFraction) {
