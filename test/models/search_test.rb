@@ -21,10 +21,24 @@ class SearchTest < ActiveSupport::TestCase
     assert_equal search.send(:exclude_owner), ['octobox']
   end
 
-  test '-bot:true is equivalent to bot:false' do
-    search = Search.new(query: '-bot:true', scope: [])
-    assert_equal false, search.send(:bot_author)
-    assert_equal true, Search.new(query: '-bot:false', scope: []).send(:bot_author)
+  test 'results applies negation to boolean prefixes' do
+    bot_subject = create(:subject, author: 'dependabot[bot]')
+    human_subject = create(:subject, author: 'octocat')
+    labelled_subject = create(:subject, author: 'octokit[bot]')
+    create(:label, subject: labelled_subject)
+
+    bot_notification = create(:notification, subject_url: bot_subject.url, starred: true)
+    human_notification = create(:notification, subject_url: human_subject.url, starred: false)
+    labelled_notification = create(:notification, subject_url: labelled_subject.url)
+    scope = Notification.where(id: [bot_notification.id, human_notification.id, labelled_notification.id])
+
+    assert_equal [human_notification.id], Search.new(query: '-bot:true', scope: scope).results.pluck(:id)
+    assert_equal [human_notification.id, labelled_notification.id].sort,
+      Search.new(query: '-starred:true', scope: scope).results.pluck(:id).sort
+
+    expected_ids = [bot_notification.id, human_notification.id, labelled_notification.id].sort
+    assert_equal expected_ids, Search.new(query: 'unlabelled:false', scope: scope).results.pluck(:id).sort
+    assert_equal expected_ids, Search.new(query: '-unlabelled:true', scope: scope).results.pluck(:id).sort
   end
 
   test 'converts assigned params to assignee prefix' do

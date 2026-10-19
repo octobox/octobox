@@ -42,7 +42,7 @@ class Search
     res = res.archived(!inbox) unless inbox.nil?
     res = res.unread(unread) unless unread.nil?
     res = res.bot_author(bot_author) unless bot_author.nil?
-    res = res.unlabelled unless unlabelled.nil?
+    res = res.unlabelled if unlabelled
     res = res.is_private(is_private) unless is_private.nil?
     res = res.draft(is_draft) unless is_draft.nil?
     res = lock_conditionally(res)
@@ -240,8 +240,6 @@ class Search
   end
 
   def bot_author
-    return !boolean_prefix(:'-bot') if parsed_query[:'-bot'].present?
-
     boolean_prefix(:bot)
   end
 
@@ -268,7 +266,11 @@ class Search
   private
 
   def boolean_prefix(name)
-    return nil unless parsed_query[name].present?
-    parsed_query[name].first.try(:downcase) == "true"
+    negated_name = :"-#{name}"
+    return nil unless parsed_query[name].present? || parsed_query[negated_name].present?
+
+    values = parsed_query[name].presence || parsed_query[negated_name]
+    value = values.first.try(:downcase) == "true"
+    parsed_query[negated_name].present? ? !value : value
   end
 end
