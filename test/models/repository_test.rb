@@ -82,4 +82,41 @@ class RepositoryTest < ActiveSupport::TestCase
     repository = build(:repository, private: false)
     assert repository.display_subject?
   end
+
+  test 'sync_subjects syncs each subject through the real Sidekiq jobs' do
+    subject_url = stub_subject_to_sync
+
+    @repository.sync_subjects
+    # Fake mode enforces Sidekiq's strict_args check on enqueue and JSON round-trips the args on drain.
+    UpdateRepoSubjectsWorker.drain
+    SyncSubjectWorker.drain
+
+    assert_subject_synced subject_url
+  end
+
+  test 'sync_subjects syncs each subject inline when background jobs are disabled' do
+    subject_url = stub_subject_to_sync
+
+    with_background_jobs_enabled(enabled: false) { @repository.sync_subjects }
+
+    assert_subject_synced subject_url
+  end
+
+  private
+
+  def stub_subject_to_sync
+    stub_access_tokens_request
+    subject_url = 'https://api.github.com/repos/octobox/octobox/issues/560'
+    stub_request(:get, subject_url)
+      .to_return(status: 200, body: file_fixture('open_issue.json'), headers: { 'Content-Type' => 'application/json' })
+    @repository.update!(app_installation: create(:app_installation))
+    create(:notification, repository_full_name: @repository.full_name, subject_type: 'Issue', subject_url: subject_url)
+    subject_url
+  end
+
+  def assert_subject_synced(subject_url)
+    subject = Subject.find_by!(url: subject_url)
+    assert_equal 'open', subject.state
+    assert_equal Time.utc(2011, 4, 22, 13, 33, 48), subject.created_at
+  end
 end
