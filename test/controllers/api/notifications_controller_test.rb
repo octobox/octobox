@@ -122,7 +122,7 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
 
-    Notification.expects(:mute).with([notification1, notification2])
+    Notification.expects(:mute).with { |scope| scope.sort_by(&:id) == [notification1, notification2] }
 
     post '/api/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }, xhr: true, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
     assert_response :ok
@@ -134,7 +134,7 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    Notification.expects(:mute).with([notification1, notification2, notification3])
+    Notification.expects(:mute).with { |scope| scope.sort_by(&:id) == [notification1, notification2, notification3] }
 
     post '/api/notifications/mute_selected', params: { id: ['all'] }, xhr: true, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
     assert_response :ok
@@ -146,7 +146,7 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
 
-    Notification.expects(:mark_read).with([notification1, notification2])
+    Notification.expects(:mark_read).with { |scope| scope.sort_by(&:id) == [notification1, notification2] }
 
     post '/api/notifications/mark_read_selected', params: { id: [notification1.id, notification2.id] }, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
     assert_response :ok
@@ -164,7 +164,7 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    Notification.expects(:mark_read).with([notification1, notification2, notification3])
+    Notification.expects(:mark_read).with { |scope| scope.sort_by(&:id) == [notification1, notification2, notification3] }
 
     post '/api/notifications/mark_read_selected', params: { id: ['all'] }, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
     assert_response :ok
