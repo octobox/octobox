@@ -33,12 +33,21 @@ class SearchTest < ActiveSupport::TestCase
     scope = Notification.where(id: [bot_notification.id, human_notification.id, labelled_notification.id])
 
     assert_equal [human_notification.id], Search.new(query: '-bot:true', scope: scope).results.pluck(:id)
+    assert_equal [bot_notification.id, labelled_notification.id].sort,
+      Search.new(query: 'bot:true -bot:false', scope: scope).results.pluck(:id).sort
     assert_equal [human_notification.id, labelled_notification.id].sort,
       Search.new(query: '-starred:true', scope: scope).results.pluck(:id).sort
 
     expected_ids = [bot_notification.id, human_notification.id, labelled_notification.id].sort
     assert_equal expected_ids, Search.new(query: 'unlabelled:false', scope: scope).results.pluck(:id).sort
     assert_equal expected_ids, Search.new(query: '-unlabelled:true', scope: scope).results.pluck(:id).sort
+  end
+
+  test 'reports unsupported negated prefixes' do
+    search = Search.new(query: '-sort:updated -freetext:foo -bot:true', scope: Notification.none)
+
+    assert_equal ['-sort', '-freetext'], search.unsupported_negated_prefixes
+    assert_equal 'Negation is not supported for -sort, -freetext.', search.unsupported_negation_message
   end
 
   test 'converts assigned params to assignee prefix' do

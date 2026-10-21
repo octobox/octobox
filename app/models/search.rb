@@ -1,4 +1,9 @@
 class Search
+  NEGATABLE_PREFIXES = %w[
+    repo owner org user type reason state label assignee status author number
+    unread starred inbox archived bot unlabelled private locked muted draft
+  ].freeze
+
   attr_accessor :parsed_query
   attr_accessor :scope
 
@@ -65,6 +70,22 @@ class Search
 
   def archive_selected?
     inbox != true && archived == true
+  end
+
+  def unsupported_negated_prefixes
+    @unsupported_negated_prefixes ||= parsed_query.operators.keys.each_with_object([]) do |key, prefixes|
+      key = key.to_s
+      next unless key.start_with?('-')
+      next if NEGATABLE_PREFIXES.include?(key[1..])
+
+      prefixes << key
+    end
+  end
+
+  def unsupported_negation_message
+    return if unsupported_negated_prefixes.empty?
+
+    "Negation is not supported for #{unsupported_negated_prefixes.join(', ')}."
   end
 
   private
@@ -267,10 +288,9 @@ class Search
 
   def boolean_prefix(name)
     negated_name = :"-#{name}"
-    return nil unless parsed_query[name].present? || parsed_query[negated_name].present?
+    return parsed_query[name].first.try(:downcase) == "true" if parsed_query[name].present?
+    return !(parsed_query[negated_name].first.try(:downcase) == "true") if parsed_query[negated_name].present?
 
-    values = parsed_query[name].presence || parsed_query[negated_name]
-    value = values.first.try(:downcase) == "true"
-    parsed_query[negated_name].present? ? !value : value
+    nil
   end
 end
