@@ -1,7 +1,7 @@
 class Search
   NEGATABLE_PREFIXES = %w[
     repo owner org user type reason state label assignee status author number
-    unread starred inbox archived bot unlabelled private locked muted draft
+    unread starred inbox archived bot private locked muted draft
   ].freeze
 
   attr_accessor :parsed_query
