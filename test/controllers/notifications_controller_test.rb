@@ -813,6 +813,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude label' do
     sign_in_as(@user)
+    @user.notifications.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -826,6 +827,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can filter to exclude multiple labels' do
     sign_in_as(@user)
+    @user.notifications.delete_all
     notification1 = create(:notification, user: @user)
     notification2 = create(:notification, user: @user)
     subject1 = create(:subject, notifications: [notification1])
@@ -834,6 +836,91 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     create(:label, subject: subject2, name: 'feature')
     get '/?q=-label%3Abug%2Cfeature'
     assert_equal assigns(:notifications).length, 0
+  end
+
+  test 'negated label search excludes notifications with a matching label among other labels' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    excluded = create(:notification, user: @user)
+    included = create(:notification, user: @user)
+    excluded_subject = create(:subject, notifications: [excluded])
+    included_subject = create(:subject, notifications: [included])
+    create(:label, subject: excluded_subject, name: 'bug')
+    create(:label, subject: excluded_subject, name: 'feature')
+    create(:label, subject: included_subject, name: 'feature')
+
+    get '/', params: { q: '-label:bug' }
+
+    assert_response :success
+    assert_select "tr#notification-#{excluded.id}", count: 0
+    assert_select "tr#notification-#{included.id}", count: 1
+    assert_equal 1, assigns(:total)
+  end
+
+  test 'negated label search renders notifications with multiple allowed labels once' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    notification = create(:notification, user: @user)
+    subject = create(:subject, notifications: [notification])
+    create(:label, subject: subject, name: 'feature')
+    create(:label, subject: subject, name: 'question')
+
+    get '/', params: { q: '-label:bug' }
+
+    assert_response :success
+    assert_select "tr#notification-#{notification.id}", count: 1
+    assert_equal 1, assigns(:total)
+  end
+
+  test 'negated label search includes notifications without labels' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    notification = create(:notification, user: @user)
+    create(:subject, notifications: [notification])
+
+    get '/', params: { q: '-label:bug' }
+
+    assert_response :success
+    assert_select "tr#notification-#{notification.id}", count: 1
+    assert_equal 1, assigns(:total)
+  end
+
+  test 'negated label search matches multiple labels case insensitively with wildcards' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    notifications = %w(Bug status:blocked feature).map do |name|
+      notification = create(:notification, user: @user)
+      subject = create(:subject, notifications: [notification])
+      create(:label, subject: subject, name: name)
+      create(:label, subject: subject, name: 'question')
+      notification
+    end
+
+    get '/', params: { q: '-label:bug,status:%' }
+
+    assert_response :success
+    assert_select "tr.notification", count: 1
+    assert_select "tr#notification-#{notifications.last.id}", count: 1
+    assert_equal 1, assigns(:total)
+  end
+
+  test 'negated label search combines with included labels and subject sorting' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    excluded = create(:notification, user: @user)
+    included = create(:notification, user: @user)
+    excluded_subject = create(:subject, notifications: [excluded])
+    included_subject = create(:subject, notifications: [included])
+    create(:label, subject: excluded_subject, name: 'bug')
+    create(:label, subject: excluded_subject, name: 'feature')
+    create(:label, subject: included_subject, name: 'feature')
+
+    get '/', params: { q: 'label:feature -label:bug sort:subject' }
+
+    assert_response :success
+    assert_select "tr.notification", count: 1
+    assert_select "tr#notification-#{included.id}", count: 1
+    assert_equal 1, assigns(:total)
   end
 
   test 'search results can filter by state' do
