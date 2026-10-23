@@ -50,7 +50,7 @@ class Subject < ApplicationRecord
       repository_full_name: extract_full_name_from_remote_subject(remote_subject),
       github_id: remote_subject['id'],
       state: remote_subject['merged_at'].present? ? 'merged' : remote_subject['state'],
-      author: remote_subject.fetch('user', {})['login'],
+      author: (remote_subject['user'] || remote_subject['author'] || {})['login'],
       html_url: remote_subject['html_url'],
       created_at: remote_subject['created_at'] || Time.current,
       updated_at: remote_subject['updated_at'] || Time.current,

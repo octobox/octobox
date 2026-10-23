@@ -183,6 +183,47 @@ class SubjectTest < ActiveSupport::TestCase
     assert_nil subject.author
   end
 
+  test 'sync sets the author of a release from author' do
+    remote_subject = load_fixture('release.json')
+    assert_nil remote_subject['user']
+    subject = create(:subject)
+    subject.sync(remote_subject)
+    assert_equal 'jules2689', subject.author
+  end
+
+  test 'sync sets the author of a commit from author' do
+    remote_subject = load_fixture('commit_no_author.json')
+    remote_subject['author'] = { 'login' => 'andrew' }
+    subject = create(:subject)
+    subject.sync(remote_subject)
+    assert_equal 'andrew', subject.author
+  end
+
+  test 'sync falls back to author when user is null' do
+    remote_subject = load_fixture('release.json')
+    remote_subject['user'] = nil
+    subject = create(:subject)
+    subject.sync(remote_subject)
+    assert_equal 'jules2689', subject.author
+  end
+
+  test 'sync prefers user over author when both are present' do
+    remote_subject = load_fixture('subject_56.json')
+    remote_subject['author'] = { 'login' => 'someone-else' }
+    subject = create(:subject)
+    subject.sync(remote_subject)
+    assert_equal 'andrew', subject.author
+  end
+
+  test 'sync sets a bot release author and links to the app' do
+    remote_subject = load_fixture('release.json')
+    remote_subject['author'] = { 'login' => 'github-actions[bot]' }
+    subject = create(:subject)
+    subject.sync(remote_subject)
+    assert_equal 'github-actions[bot]', subject.author
+    assert_equal '/apps/github-actions', subject.author_url_path
+  end
+
   test 'sync sets the html_url' do
     remote_subject = load_fixture('subject_56.json')
     subject = create(:subject)
