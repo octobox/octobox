@@ -1,4 +1,9 @@
 class Search
+  NEGATABLE_PREFIXES = %w[
+    repo owner org user type reason state label assignee status author number
+    unread starred inbox archived bot private locked muted draft
+  ].freeze
+
   attr_accessor :parsed_query
   attr_accessor :scope
 
@@ -42,7 +47,7 @@ class Search
     res = res.archived(!inbox) unless inbox.nil?
     res = res.unread(unread) unless unread.nil?
     res = res.bot_author(bot_author) unless bot_author.nil?
-    res = res.unlabelled unless unlabelled.nil?
+    res = res.unlabelled if unlabelled
     res = res.is_private(is_private) unless is_private.nil?
     res = res.draft(is_draft) unless is_draft.nil?
     res = lock_conditionally(res)
@@ -65,6 +70,22 @@ class Search
 
   def archive_selected?
     inbox != true && archived == true
+  end
+
+  def unsupported_negated_prefixes
+    @unsupported_negated_prefixes ||= parsed_query.operators.keys.each_with_object([]) do |key, prefixes|
+      key = key.to_s
+      next unless key.start_with?('-')
+      next if NEGATABLE_PREFIXES.include?(key[1..])
+
+      prefixes << key
+    end
+  end
+
+  def unsupported_negation_message
+    return if unsupported_negated_prefixes.empty?
+
+    "Negation is not supported for #{unsupported_negated_prefixes.join(', ')}."
   end
 
   private
@@ -244,7 +265,7 @@ class Search
   end
 
   def unlabelled
-    boolean_prefix(:unlabelled)
+    parsed_query[:unlabelled].first.try(:downcase) == "true" if parsed_query[:unlabelled].present?
   end
 
   def is_private
@@ -266,7 +287,10 @@ class Search
   private
 
   def boolean_prefix(name)
-    return nil unless parsed_query[name].present?
-    parsed_query[name].first.try(:downcase) == "true"
+    negated_name = :"-#{name}"
+    return parsed_query[name].first.try(:downcase) == "true" if parsed_query[name].present?
+    return !(parsed_query[negated_name].first.try(:downcase) == "true") if parsed_query[negated_name].present?
+
+    nil
   end
 end

@@ -21,6 +21,34 @@ class SearchTest < ActiveSupport::TestCase
     assert_equal search.send(:exclude_owner), ['octobox']
   end
 
+  test 'results applies negation to boolean prefixes' do
+    bot_subject = create(:subject, author: 'dependabot[bot]')
+    human_subject = create(:subject, author: 'octocat')
+    labelled_subject = create(:subject, author: 'octocat')
+    create(:label, subject: labelled_subject)
+
+    bot_notification = create(:notification, subject_url: bot_subject.url, starred: true)
+    human_notification = create(:notification, subject_url: human_subject.url, starred: false)
+    labelled_notification = create(:notification, subject_url: labelled_subject.url)
+    scope = Notification.where(id: [bot_notification.id, human_notification.id, labelled_notification.id])
+
+    assert_equal [human_notification.id, labelled_notification.id].sort,
+      Search.new(query: '-bot:true', scope: scope).results.pluck(:id).sort
+    assert_equal [bot_notification.id],
+      Search.new(query: 'bot:true -bot:false', scope: scope).results.pluck(:id).sort
+    assert_equal [human_notification.id, labelled_notification.id].sort,
+      Search.new(query: '-starred:true', scope: scope).results.pluck(:id).sort
+    assert_equal [bot_notification.id, human_notification.id, labelled_notification.id].sort,
+      Search.new(query: '-unlabelled:false', scope: scope).results.pluck(:id).sort
+  end
+
+  test 'reports unsupported negated prefixes' do
+    search = Search.new(query: '-sort:updated -freetext:foo -unlabelled:true -bot:true', scope: Notification.none)
+
+    assert_equal ['-sort', '-freetext', '-unlabelled'], search.unsupported_negated_prefixes
+    assert_equal 'Negation is not supported for -sort, -freetext, -unlabelled.', search.unsupported_negation_message
+  end
+
   test 'converts assigned params to assignee prefix' do
     search = Search.new(query: 'inbox:true', scope: Notification.all, params: {assigned: 'andrew'})
     assert_equal search.to_query, 'inbox:true assignee:andrew'

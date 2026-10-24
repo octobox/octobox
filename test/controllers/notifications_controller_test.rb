@@ -89,6 +89,15 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_select "span.filter-options *", text: 'Label: bug'
   end
 
+  test 'renders a warning for unsupported negated search prefixes' do
+    sign_in_as(@user)
+
+    get '/', params: {q: '-sort:updated'}
+
+    assert_response :success
+    assert_select '.alert-warning', text: 'Negation is not supported for -sort.'
+  end
+
   test 'renders the index page as json if authenticated' do
     sign_in_as(@user)
 
