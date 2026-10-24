@@ -24,7 +24,7 @@ class SearchTest < ActiveSupport::TestCase
   test 'results applies negation to boolean prefixes' do
     bot_subject = create(:subject, author: 'dependabot[bot]')
     human_subject = create(:subject, author: 'octocat')
-    labelled_subject = create(:subject, author: 'octokit[bot]')
+    labelled_subject = create(:subject, author: 'octocat')
     create(:label, subject: labelled_subject)
 
     bot_notification = create(:notification, subject_url: bot_subject.url, starred: true)
@@ -32,12 +32,14 @@ class SearchTest < ActiveSupport::TestCase
     labelled_notification = create(:notification, subject_url: labelled_subject.url)
     scope = Notification.where(id: [bot_notification.id, human_notification.id, labelled_notification.id])
 
-    assert_equal [human_notification.id], Search.new(query: '-bot:true', scope: scope).results.pluck(:id)
-    assert_equal [bot_notification.id, labelled_notification.id].sort,
+    assert_equal [human_notification.id, labelled_notification.id].sort,
+      Search.new(query: '-bot:true', scope: scope).results.pluck(:id).sort
+    assert_equal [bot_notification.id],
       Search.new(query: 'bot:true -bot:false', scope: scope).results.pluck(:id).sort
     assert_equal [human_notification.id, labelled_notification.id].sort,
       Search.new(query: '-starred:true', scope: scope).results.pluck(:id).sort
-
+    assert_equal [bot_notification.id, human_notification.id, labelled_notification.id].sort,
+      Search.new(query: '-unlabelled:false', scope: scope).results.pluck(:id).sort
   end
 
   test 'reports unsupported negated prefixes' do

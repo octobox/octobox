@@ -265,7 +265,7 @@ class Search
   end
 
   def unlabelled
-    boolean_prefix(:unlabelled)
+    parsed_query[:unlabelled].first.try(:downcase) == "true" if parsed_query[:unlabelled].present?
   end
 
   def is_private
