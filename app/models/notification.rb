@@ -77,7 +77,8 @@ class Notification < ApplicationRecord
   end
 
   def self.archive(notifications, value, undo_action: nil)
-    value = value ? ActiveRecord::Type::Boolean.new.cast(value) : true
+    value = ActiveRecord::Type::Boolean.new.cast(value)
+    value = true if value.nil?
     user = notifications.first.try(:user)
     github_ids = notifications.pluck(:github_id)
     notifications.update_all(archived: value)
