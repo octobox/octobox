@@ -31,6 +31,20 @@ class NotificationTest < ActiveSupport::TestCase
     assert notification.archived?
   end
 
+  test 'archive with boolean false unarchives' do
+    user = create(:user)
+    notification = create(:notification, user: user, archived: true)
+    Notification.archive(user.notifications, false)
+    refute notification.reload.archived?
+  end
+
+  test 'archive with nil defaults to archiving' do
+    user = create(:user)
+    notification = create(:notification, user: user, archived: false)
+    Notification.archive(user.notifications, nil)
+    assert notification.reload.archived?
+  end
+
   test '#mute mutes multiple notifications' do
     user = create(:user)
 
