@@ -328,6 +328,66 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test 'snoozes selected notifications and records an undo action' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user, archived: false)
+
+    post '/notifications/snooze_selected', params: { id: [notification.id], minutes: 60 }, xhr: true
+    assert_response :ok
+
+    notification.reload
+    assert notification.snooze_until.present?
+    assert notification.snooze_until > Time.current
+    refute notification.unread
+    assert_equal 'snooze', @user.notification_undo_actions.last.action
+
+    body = JSON.parse(response.body)
+    assert body['undo_url'].present?
+  end
+
+  test 'unsnooze clears snooze_until and records an undo action' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user, archived: false, snooze_until: 1.day.from_now)
+
+    post '/notifications/snooze_selected', params: { id: [notification.id], minutes: 0 }, xhr: true
+    assert_response :ok
+
+    assert_nil notification.reload.snooze_until
+    assert_equal 'snooze', @user.notification_undo_actions.last.action
+  end
+
+  test 'default inbox hides snoozed notifications' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, archived: false, snooze_until: nil)
+    create(:notification, user: @user, archived: false, snooze_until: 1.hour.ago)
+    create(:notification, user: @user, archived: false, snooze_until: 1.hour.from_now)
+
+    get '/'
+    assert_equal assigns(:notifications).length, 2
+  end
+
+  test 'snoozed param shows only snoozed notifications' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, archived: false, snooze_until: nil)
+    snoozed = create(:notification, user: @user, archived: false, snooze_until: 1.hour.from_now)
+
+    get '/?snoozed=true'
+    assert_equal assigns(:notifications).map(&:id), [snoozed.id]
+  end
+
+  test 'search results can filter by snoozed' do
+    sign_in_as(@user)
+    @user.notifications.delete_all
+    create(:notification, user: @user, snooze_until: nil)
+    create(:notification, user: @user, snooze_until: 1.hour.from_now)
+    get '/?q=snoozed%3Atrue'
+    assert_equal assigns(:notifications).length, 1
+    get '/?q=snoozed%3Afalse'
+    assert_equal assigns(:notifications).length, 1
+  end
+
   test 'marks read multiple notifications' do
     sign_in_as(@user)
     notification1 = create(:notification, user: @user, archived: false)

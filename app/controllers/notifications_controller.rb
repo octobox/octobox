@@ -109,6 +109,20 @@ class NotificationsController < ApplicationController
     end
   end
 
+  def snooze_selected
+    notifications = selected_notifications
+    minutes = params[:minutes].to_i
+    snooze_until = minutes.positive? ? minutes.minutes.from_now : nil
+    undo_action = NotificationUndoAction.record_snooze!(current_user, notifications)
+    Notification.snooze(notifications, snooze_until)
+    if request.xhr?
+      render json: undo_archive_payload(undo_action)
+    else
+      flash[:success] = undo_archive_message(undo_action)
+      redirect_back fallback_location: root_path
+    end
+  end
+
   def archive_selected
     notifications = selected_notifications
     undo_action = record_archive_undo_action(notifications)

@@ -200,6 +200,27 @@ class Api::NotificationsController < Api::ApplicationController
     head :ok
   end
 
+  # Snooze selected notifications until +:minutes+ from now
+  #
+  # :category: Notifications Actions
+  #
+  # ==== Parameters
+  #
+  # * +:id+ - An array of IDs of notifications you'd like to snooze. If ID is 'all', all notifications will be snoozed
+  # * +:minutes+ - Number of minutes to snooze for
+  #
+  # ==== Example
+  #
+  # <code>POST api/notifications/snooze_selected.json?id=all&minutes=60</code>
+  #   HEAD 204
+  #
+  def snooze_selected
+    minutes = params[:minutes].to_i
+    snooze_until = minutes.positive? ? minutes.minutes.from_now : nil
+    Notification.snooze(selected_notifications, snooze_until)
+    head :ok
+  end
+
   # Archive selected notifications
   #
   # :category: Notifications Actions

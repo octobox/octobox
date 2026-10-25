@@ -152,6 +152,30 @@ document.addEventListener('click', function(event) {
 });
 
 document.addEventListener('click', function(event) {
+  var option = event.target.matches('.snooze-option') ? event.target : event.target.closest('.snooze-option');
+  if (!option) return;
+  event.preventDefault();
+  var minutes = option.dataset.minutes;
+  if (option.closest('.btn-group').querySelector('button.snooze_selected')) {
+    Octobox.snoozeSelected(minutes);
+  } else {
+    Octobox.snoozeThread(minutes);
+  }
+});
+
+document.addEventListener('click', function(event) {
+  if(event.target.matches('button.unsnooze_selected') || event.target.closest('button.unsnooze_selected')) {
+    Octobox.unsnoozeSelected();
+  }
+});
+
+document.addEventListener('click', function(event) {
+  if(event.target.matches('button.unsnooze') || event.target.closest('button.unsnooze')) {
+    Octobox.unsnoozeThread();
+  }
+});
+
+document.addEventListener('click', function(event) {
   var link = event.target.matches('.closethread') ? event.target : event.target.closest('.closethread');
   if(link) {
     event.preventDefault();

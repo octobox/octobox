@@ -285,6 +285,61 @@ var Octobox = (function() {
     });
   };
 
+  var snoozeThread = function(minutes) {
+    var id = DOM.notificationThread.dataset.id;
+    snooze([id], minutes);
+  };
+
+  var snoozeSelected = function(minutes) {
+    if (getDisplayedRows().length === 0) return;
+    var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    snooze(ids, minutes);
+  };
+
+  var unsnoozeThread = function() {
+    var id = DOM.notificationThread.dataset.id;
+    snooze([id], 0);
+  };
+
+  var unsnoozeSelected = function() {
+    if (getDisplayedRows().length === 0) return;
+    var ids = getIdsFromRows(getMarkedOrCurrentRows());
+    snooze(ids, 0);
+  };
+
+  var snooze = function(ids, minutes) {
+    var formData = new FormData();
+    ids.forEach(id => formData.append('id[]', id));
+    formData.append('minutes', minutes);
+
+    postRequest("/notifications/snooze_selected" + location.search, formData)
+    .then(response => {
+      if (response.ok) {
+        return responseJson(response).catch(() => ({}));
+      } else {
+        throw new Error('Request failed');
+      }
+    })
+    .then(data => {
+      if (data.undo_url) {
+        pendingNotice = {
+          message: data.message + " <a href='" + data.undo_url + "' data-method='post'>Undo</a>",
+          type: "success"
+        };
+      }
+      resetCursorAfterRowsRemoved(ids);
+      updateFavicon();
+    })
+    .catch(() => {
+      notify("Could not snooze notification(s)", "danger");
+    });
+  };
+
+  var openSnoozeDropdown = function() {
+    var btn = document.querySelector('button.snooze_toggle:not(.hidden-button)');
+    if (btn) $(btn).dropdown('toggle');
+  };
+
   var toggleArchive = function() {
     if (document.querySelector(".archive_toggle").classList.contains("archive_selected")) {
       archiveSelected()
@@ -574,7 +629,7 @@ var Octobox = (function() {
   var changeArchive = function() {
     if ( hasMarkedRows() ) {
       // Show archive buttons
-      document.querySelectorAll("button.archive_selected, button.unarchive_selected, button.mute_selected, button.delete_selected").forEach(btn => {
+      document.querySelectorAll("button.archive_selected, button.unarchive_selected, button.mute_selected, button.snooze_selected, button.unsnooze_selected, button.delete_selected").forEach(btn => {
         btn.style.display = "inline-block";
         btn.style.visibility = "visible";
         btn.removeAttribute("disabled");
@@ -612,7 +667,7 @@ var Octobox = (function() {
         DOM.selectAll.checked = false;
         DOM.selectAll.indeterminate = false;
       }
-      document.querySelectorAll("button.archive_selected, button.unarchive_selected, button.mute_selected, button.select_all, button.delete_selected").forEach(btn => {
+      document.querySelectorAll("button.archive_selected, button.unarchive_selected, button.mute_selected, button.snooze_selected, button.unsnooze_selected, button.select_all, button.delete_selected").forEach(btn => {
         btn.style.display = "none";
         btn.style.visibility = "hidden";
         btn.setAttribute("disabled", "disabled");
@@ -1074,6 +1129,7 @@ var Octobox = (function() {
     89:  toggleArchive,    // y
     69:  toggleArchive,    // e
     77:  muteSelected,     // m
+    90:  openSnoozeDropdown, // z
     8:   scrollThreadPageUp,   // Backspace
     13:  openCurrentLink,      // Enter
     32:  scrollThreadPageDown, // Space
@@ -1092,6 +1148,10 @@ var Octobox = (function() {
     checkAll: checkAll,
     muteThread: muteThread,
     muteSelected: muteSelected,
+    snoozeThread: snoozeThread,
+    snoozeSelected: snoozeSelected,
+    unsnoozeThread: unsnoozeThread,
+    unsnoozeSelected: unsnoozeSelected,
     markReadSelected: markReadSelected,
     archiveSelected: archiveSelected,
     unarchiveSelected: unarchiveSelected,

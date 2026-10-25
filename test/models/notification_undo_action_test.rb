@@ -75,4 +75,32 @@ class NotificationUndoActionTest < ActiveSupport::TestCase
     assert notification.reload.archived?
     assert NotificationUndoAction.exists?(undo_action.id)
   end
+
+  test 'record_snooze stores previous snooze_until states' do
+    user = create(:user)
+    prev = 2.hours.from_now
+    notification1 = create(:notification, user: user, snooze_until: nil)
+    notification2 = create(:notification, user: user, snooze_until: prev)
+
+    undo_action = NotificationUndoAction.record_snooze!(user, user.notifications.where(id: [notification1.id, notification2.id]))
+
+    assert_equal 'snooze', undo_action.action
+    states = undo_action.notification_states.index_by { |state| state['id'] }
+    assert_nil states[notification1.id]['snooze_until']
+    assert_equal NotificationUndoAction.serialize_timestamp(prev), states[notification2.id]['snooze_until']
+  end
+
+  test 'restore reverts snooze_until for a snooze action' do
+    user = create(:user)
+    notification1 = create(:notification, user: user, snooze_until: nil)
+    notification2 = create(:notification, user: user, snooze_until: 2.hours.from_now)
+    undo_action = NotificationUndoAction.record_snooze!(user, user.notifications.where(id: [notification1.id, notification2.id]))
+
+    Notification.snooze([notification1, notification2], 1.day.from_now)
+
+    assert undo_action.restore!
+    assert_nil notification1.reload.snooze_until
+    assert notification2.reload.snooze_until.present?
+    refute NotificationUndoAction.exists?(undo_action.id)
+  end
 end
