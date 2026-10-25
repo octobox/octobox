@@ -264,6 +264,106 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
     assert_nil page.evaluate_script('window.lastTurbolinksVisit')
   end
 
+  test 'down and up arrows move cursor and prevent default scrolling' do
+    initial_id = find('td.js-current').ancestor('tr')[:id]
+
+    send_keys :down
+    assert_no_selector "tr##{initial_id} td.js-current"
+    assert_selector 'td.js-current', count: 1
+
+    send_keys :up
+    assert_selector "tr##{initial_id} td.js-current"
+
+    assert shortcut_prevented?(40)
+    assert shortcut_prevented?(38)
+  end
+
+  test 'right and left arrows navigate between pages' do
+    create_list(:notification, 38, user: @user)
+    visit '/'
+    first_page_url = page.current_url
+
+    send_keys :left
+    assert_equal first_page_url, page.current_url
+
+    send_keys :right
+    assert_page 2
+
+    send_keys :right
+    assert_page 3
+    last_page_url = page.current_url
+
+    send_keys :right
+    assert_equal last_page_url, page.current_url
+
+    send_keys :left
+    assert_page 2
+
+    send_keys :left
+    assert_page 1
+  end
+
+  test 'left and right arrows prevent default and do nothing at pagination boundaries' do
+    create_list(:notification, 50, user: @user)
+    visit '/'
+    capture_turbolinks_visits
+
+    send_keys :left
+    assert_nil page.evaluate_script('window.lastTurbolinksVisit')
+    assert shortcut_prevented?(37)
+
+    visit '/?page=999'
+    capture_turbolinks_visits
+
+    send_keys :right
+    assert_nil page.evaluate_script('window.lastTurbolinksVisit')
+    assert shortcut_prevented?(39)
+  end
+
+  test 'arrow keys keep their normal behavior in the search box' do
+    row_id = find('td.js-current').ancestor('tr')[:id]
+    capture_turbolinks_visits
+    send_keys '/'
+    assert_equal 'search-box', page.evaluate_script('document.activeElement.id')
+
+    search_box = find('#search-box')
+    search_box.set('')
+    search_box.send_keys('abc', :left, :left, 'X')
+    assert_equal 'aXbc', search_box.value
+
+    search_box.send_keys(:down, :up, :right)
+    assert_equal row_id, find('td.js-current').ancestor('tr')[:id]
+    assert_nil page.evaluate_script('window.lastTurbolinksVisit')
+
+    [37, 38, 39, 40].each do |which|
+      refute shortcut_prevented?(which, target: "document.getElementById('search-box')")
+    end
+  end
+
+  test 'arrow keys keep their normal behavior in the comment field' do
+    create_list(:notification, 50, user: @user)
+    visit '/'
+    row_id = find('td.js-current').ancestor('tr')[:id]
+    capture_turbolinks_visits
+    page.execute_script(<<~JS)
+      var field = document.createElement('textarea');
+      field.id = 'comment_body';
+      document.body.appendChild(field);
+    JS
+
+    comment = find('#comment_body')
+    comment.send_keys('abc', :left, :left, 'X')
+    assert_equal 'aXbc', comment.value
+
+    comment.send_keys(:down, :up, :right)
+    assert_equal row_id, find('td.js-current').ancestor('tr')[:id]
+    assert_nil page.evaluate_script('window.lastTurbolinksVisit')
+
+    [37, 38, 39, 40].each do |which|
+      refute shortcut_prevented?(which, target: "document.getElementById('comment_body')")
+    end
+  end
+
   test 'r routes foreground sync through Turbolinks' do
     stub_background_jobs_enabled(value: false)
     visit '/'

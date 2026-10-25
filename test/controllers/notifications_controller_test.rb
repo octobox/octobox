@@ -300,7 +300,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
 
-    Notification.expects(:mute).with([notification1, notification2])
+    Notification.expects(:mute).with { |scope| scope.sort_by(&:id) == [notification1, notification2] }
 
     post '/notifications/mute_selected', params: { id: [notification1.id, notification2.id] }, xhr: true
     assert_response :ok
@@ -313,7 +313,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    Notification.expects(:mute).with([notification1, notification2, notification3])
+    Notification.expects(:mute).with { |scope| scope.sort_by(&:id) == [notification1, notification2, notification3] }
 
     post '/notifications/mute_selected', params: { id: ['all'] }, xhr: true
     assert_response :ok
@@ -325,7 +325,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     create(:notification, user: @user, archived: false)
 
-    Notification.expects(:mark_read).with([notification1, notification2])
+    Notification.expects(:mark_read).with { |scope| scope.sort_by(&:id) == [notification1, notification2] }
 
     post '/notifications/mark_read_selected', params: { id: [notification1.id, notification2.id] }
     assert_response :ok
@@ -338,7 +338,7 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     notification2 = create(:notification, user: @user, archived: false)
     notification3 = create(:notification, user: @user, archived: false)
 
-    Notification.expects(:mark_read).with([notification1, notification2, notification3])
+    Notification.expects(:mark_read).with { |scope| scope.sort_by(&:id) == [notification1, notification2, notification3] }
 
     post '/notifications/mark_read_selected', params: { id: ['all'] }
     assert_response :ok

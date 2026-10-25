@@ -19,7 +19,7 @@ jobs:
     outputs:
       tag: ${{ steps.create.outputs.tag }}
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
@@ -37,7 +37,7 @@ jobs:
     permissions:
       packages: write
       contents: read
-    uses: ./.github/workflows/publish.yml
+    uses: $/.github/workflows/publish.yml
     with:
       tag: ${{ needs.release.outputs.tag }}
     secrets:

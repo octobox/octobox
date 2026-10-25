@@ -1050,13 +1050,25 @@ var Octobox = (function() {
     191: openModal,               // ?
   }
 
+  // Arrow keys would otherwise also scroll the page
+  var arrowShortcut = function(fn) {
+    return function(e) {
+      e.preventDefault();
+      fn(e);
+    };
+  };
+
   var shortcuts = {
     65:  checkSelectAll,   // a
     68:  markReadSelected, // d
     74:  cursorDown,       // j
     75:  cursorUp,         // k
+    40:  arrowShortcut(cursorDown),       // down arrow
+    38:  arrowShortcut(cursorUp),         // up arrow
     78:  nextPage,         // n
     80:  prevPage,         // p
+    37:  arrowShortcut(prevPage),         // left arrow
+    39:  arrowShortcut(nextPage),         // right arrow
     83:  toggleStar,       // s
     88:  markCurrent,      // x
     89:  toggleArchive,    // y
