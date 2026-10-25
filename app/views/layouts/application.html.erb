@@ -62,6 +62,10 @@
 
     <%= flash_messages %>
 
+    <% if @search&.unsupported_negation_message %>
+      <div class="alert alert-warning" role="alert"><%= @search.unsupported_negation_message %></div>
+    <% end %>
+
     <%= yield %>
 
     <% if logged_in? %>
