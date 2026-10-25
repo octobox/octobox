@@ -40,7 +40,7 @@
 
               <div class='media-body text-muted'>
 
-                <b><%= link_to @notification.subject.author, Octobox.config.github_domain+'/'+@notification.subject.author_url_path, class: 'text-muted'%></b> commented <span class='text-muted'><%= time_ago_in_words(@notification.subject.created_at) %></span> ago
+                <b><%= link_to @notification.subject.author, Octobox.config.github_domain+@notification.subject.author_url_path, class: 'text-muted'%></b> commented <span class='text-muted'><%= time_ago_in_words(@notification.subject.created_at) %></span> ago
               </div>
             </div>
             <div class="card-body">

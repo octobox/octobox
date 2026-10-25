@@ -1473,4 +1473,48 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 3, json["pagination"]["page"]
     assert_equal 20, json["pagination"]["per_page"]
   end
+
+  def synced_release_notification(author: nil)
+    remote_subject = Oj.load(file_fixture('release.json').read)
+    remote_subject['author'] = { 'login' => author } if author
+    Subject.sync(remote_subject)
+    create(:notification, user: @user, subject_type: 'Release',
+           subject_url: remote_subject['url'], subject_title: remote_subject['name'])
+  end
+
+  test 'thread view links the author of a synced release' do
+    sign_in_as(@user)
+    notification = synced_release_notification
+
+    get notification_path(notification)
+
+    assert_response :success
+    assert_includes response.body, 'https://github.com/jules2689.png?s=30'
+    assert_select '#thread-subject a', text: 'jules2689'
+    assert_select 'a[href=?]', 'https://github.com/jules2689', text: 'jules2689'
+    refute_includes response.body, 'https://github.com/.png'
+    refute_includes response.body, '>https://github.com/<'
+  end
+
+  test 'thread view links a bot release author to the app' do
+    sign_in_as(@user)
+    notification = synced_release_notification(author: 'github-actions[bot]')
+
+    get notification_path(notification)
+
+    assert_response :success
+    assert_includes response.body, 'https://github.com/github-actions.png?s=30'
+    assert_select 'a[href=?]', 'https://github.com/apps/github-actions', text: 'github-actions[bot]'
+  end
+
+  test 'api exposes the author of a synced release' do
+    sign_in_as(@user)
+    synced_release_notification
+
+    get notifications_path(format: :json)
+
+    json = Oj.load(response.body)
+    release = json['notifications'].find { |n| n['subject']['type'] == 'Release' }
+    assert_equal 'jules2689', release['subject']['author']
+  end
 end
