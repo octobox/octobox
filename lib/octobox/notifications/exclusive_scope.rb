@@ -47,9 +47,9 @@ module Octobox
 
         scope :exclude_label, ->(label_names) {
           label_names = [label_names] if label_names.is_a?(String)
-          joins(:labels).where.not(
-            label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
-          )
+          condition = label_names.map { |label_name| Label.arel_table[:name].matches(label_name) }.reduce(:or)
+          matching_subjects = Subject.joins(:labels).where(Subject.arel_table[:url].eq(arel_table[:subject_url])).where(condition)
+          where.not(matching_subjects.arel.exists)
         }
 
         scope :exclude_assigned, ->(assignees) {
