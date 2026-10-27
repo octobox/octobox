@@ -1020,8 +1020,6 @@ var Octobox = (function() {
     var current = document.querySelector("td.js-current");
     if (!current) return;
     var row = current.closest("tr");
-    // The notification list is its own scroll container, so scroll it instead
-    // of the window to keep the selected row in view.
     var list = current.closest(".flex-main") || document.querySelector(".flex-main");
     if (!row || !list) return;
 
