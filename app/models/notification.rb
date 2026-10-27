@@ -81,7 +81,9 @@ class Notification < ApplicationRecord
     value = true if value.nil?
     user = notifications.first.try(:user)
     github_ids = notifications.pluck(:github_id)
-    notifications.update_all(archived: value)
+    attrs = {archived: value}
+    attrs[:snooze_until] = nil if value
+    notifications.update_all(attrs)
     return unless user && value
 
     if undo_action
@@ -131,7 +133,14 @@ class Notification < ApplicationRecord
     return if notifications.empty?
     user = notifications.to_a.first.user
     MuteNotificationsWorker.perform_async_if_configured(user.id, notifications.map(&:github_id))
-    where(id: notifications.map(&:id)).update_all(archived: true, unread: false, muted_at: Time.current)
+    where(id: notifications.map(&:id)).update_all(archived: true, unread: false, muted_at: Time.current, snooze_until: nil)
+  end
+
+  def self.snooze(notifications, snooze_until)
+    return if notifications.empty?
+    attrs = {snooze_until: snooze_until}
+    attrs[:unread] = false if snooze_until
+    where(id: notifications.map(&:id)).update_all(attrs)
   end
 
   def self.mute_on_github(user, notification_ids)
@@ -164,12 +173,10 @@ class Notification < ApplicationRecord
   end
 
   def unarchive_if_updated
-    return unless self.archived?
     change = changes['updated_at']
-    return unless change
-    if self.archived && change[1] > change[0]
-      self.archived = false
-    end
+    return unless change && change[0] && change[1] > change[0]
+    self.archived = false if archived?
+    self.snooze_until = nil if snooze_until.present?
   end
 
   def update_from_api_response(api_response)

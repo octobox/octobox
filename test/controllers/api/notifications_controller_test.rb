@@ -140,6 +140,14 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+  test 'snoozes selected notifications' do
+    notification = create(:notification, user: @user, archived: false)
+
+    post '/api/notifications/snooze_selected', params: { id: [notification.id], minutes: 60 }, xhr: true, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
+    assert_response :ok
+    assert notification.reload.snooze_until > Time.current
+  end
+
   test 'marks read multiple notifications' do
 
     notification1 = create(:notification, user: @user, archived: false)

@@ -5,6 +5,7 @@ module Octobox
 
       included do
         scope :unmuted,        -> { where("muted_at IS NULL") }
+        scope :not_snoozed,    -> { where('snooze_until IS NULL OR snooze_until <= ?', Time.current) }
         scope :exclude_type,   ->(subject_type) { where.not(subject_type: subject_type) }
         scope :exclude_status, ->(status)       { joins(:subject).where("subjects.status is NULL or subjects.status not in (?)", Array(status)) }
         scope :exclude_reason, ->(reason)       { where.not(reason: reason) }

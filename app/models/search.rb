@@ -1,7 +1,7 @@
 class Search
   NEGATABLE_PREFIXES = %w[
     repo owner org user type reason state label assignee status author number
-    unread starred inbox archived bot private locked muted draft
+    unread starred inbox archived bot private locked muted draft snoozed
   ].freeze
 
   attr_accessor :parsed_query
@@ -52,6 +52,7 @@ class Search
     res = res.draft(is_draft) unless is_draft.nil?
     res = lock_conditionally(res)
     res = mute_conditionally(res)
+    res = snooze_conditionally(res)
     res = apply_sort(res)
     res
   end
@@ -70,6 +71,10 @@ class Search
 
   def archive_selected?
     inbox != true && archived == true
+  end
+
+  def snoozed_selected?
+    is_snoozed == true
   end
 
   def unsupported_negated_prefixes
@@ -91,12 +96,12 @@ class Search
   private
 
   def convert(params)
-    [:starred, :unlabelled, :bot].each do |param|
+    [:starred, :unlabelled, :bot, :snoozed].each do |param|
       @parsed_query[param] = ['true'] if params[param].present?
     end
 
     @parsed_query[:archived] = ['true'] if params[:archive].present?
-    @parsed_query[:inbox] = ['true'] if @parsed_query[:archived].blank? && params[:archive].blank? && params[:starred].blank? && params[:q].blank?
+    @parsed_query[:inbox] = ['true'] if @parsed_query[:archived].blank? && params[:archive].blank? && params[:starred].blank? && params[:snoozed].blank? && params[:q].blank?
 
     [:reason, :type, :unread, :state, :is_private, :draft].each do |filter|
       next if params[filter].blank?
@@ -124,6 +129,14 @@ class Search
   def mute_conditionally(scope)
     return scope if is_muted.nil?
     is_muted ? scope.muted : scope.unmuted
+  end
+
+  def snooze_conditionally(scope)
+    case is_snoozed
+    when true then scope.snoozed
+    when false then scope.not_snoozed
+    else inbox ? scope.not_snoozed : scope
+    end
   end
 
   def apply_sort(scope)
@@ -278,6 +291,10 @@ class Search
 
   def is_muted
     boolean_prefix(:muted)
+  end
+
+  def is_snoozed
+    boolean_prefix(:snoozed)
   end
 
   def is_draft
