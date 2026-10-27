@@ -690,6 +690,7 @@ var Octobox = (function() {
       var unreadCount = document.querySelector('.js-unread-count');
       setFavicon(unreadCount ? parseInt(unreadCount.dataset.count, 10) || 0 : 0);
       recoverPreviousCursorPosition();
+      restoreListScrollPosition();
       setAutoSyncTimer();
     }
 
@@ -888,7 +889,22 @@ var Octobox = (function() {
     }
   };
 
+  var rememberListScrollPosition = function() {
+    var table = document.querySelector(".js-table-notifications");
+    var list = document.querySelector(".flex-main");
+    pendingListScrollTop = table && list ? list.scrollTop : null;
+  };
+
+  var restoreListScrollPosition = function() {
+    if (pendingListScrollTop === null) return;
+    var table = document.querySelector(".js-table-notifications");
+    var list = document.querySelector(".flex-main");
+    if (table && list) list.scrollTop = pendingListScrollTop;
+    pendingListScrollTop = null;
+  };
+
   var resetCursorAfterRowsRemoved = function(ids) {
+    rememberListScrollPosition();
     var current = getCurrentRow();
     if (!current) {
       Turbolinks.visit("/" + location.search);
@@ -940,6 +956,7 @@ var Octobox = (function() {
   };
 
   var pendingNotice = null;
+  var pendingListScrollTop = null;
 
   var showPendingNotice = function() {
     if (!pendingNotice || document.documentElement.hasAttribute("data-turbolinks-preview")) return;

@@ -61,6 +61,24 @@ class NotificationActionsTest < ApplicationSystemTestCase
     assert @notification1.archived
   end
 
+  test 'archiving a notification keeps the notification list scroll position' do
+    create_list(:notification, 60, user: @user)
+    page.current_window.resize_to(1200, 500)
+    visit '/?per_page=100'
+
+    page.execute_script("document.querySelector('.flex-main').scrollTop = 800")
+    scroll_top = page.evaluate_script("document.querySelector('.flex-main').scrollTop")
+    assert_operator scroll_top, :>, 0
+
+    toggle_notification_checkbox(@notification1.id)
+    click_button class: 'archive_selected'
+
+    assert_no_selector "#notification-#{@notification1.id}", wait: 5
+    assert_equal scroll_top, page.evaluate_script("document.querySelector('.flex-main').scrollTop")
+  ensure
+    page.current_window.resize_to(1400, 900)
+  end
+
   test 'undo link survives the list refresh and restores archived notifications' do
     toggle_notification_checkbox(@notification1.id)
     sleep 0.1
