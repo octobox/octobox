@@ -60,6 +60,29 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
     refute_equal row_after_j[:id], row_after_k[:id]
   end
 
+  test 'j scrolls the notification list to keep the cursor visible' do
+    visit_long_notification_list
+    assert_current_row_visible
+
+    30.times { send_keys 'j' }
+
+    assert_current_row_visible
+    assert_operator notification_list_scroll_top, :>, 0
+  ensure
+    page.current_window.resize_to(1400, 900)
+  end
+
+  test 'k scrolls the notification list to keep the cursor visible' do
+    visit_long_notification_list
+    30.times { send_keys 'j' }
+
+    20.times { send_keys 'k' }
+
+    assert_current_row_visible
+  ensure
+    page.current_window.resize_to(1400, 900)
+  end
+
   test 'question mark opens help modal' do
     assert_no_selector '#help-box.show'
 
@@ -374,6 +397,37 @@ class KeyboardShortcutsTest < ApplicationSystemTestCase
     sleep 0.1
 
     assert_equal sync_url, page.evaluate_script('window.lastTurbolinksVisit')
+  end
+
+  def visit_long_notification_list
+    create_list(:notification, 60, user: @user)
+    page.current_window.resize_to(1200, 500)
+    visit '/?per_page=100'
+    assert_selector 'td.js-current'
+  end
+
+  def assert_current_row_visible
+    assert current_row_visible?, 'expected the selected notification to be visible in the notification list'
+  end
+
+  def current_row_visible?
+    page.evaluate_script(<<~JS)
+      (() => {
+        var current = document.querySelector('td.js-current');
+        if (!current) return false;
+        var row = current.closest('tr');
+        var list = document.querySelector('.flex-main');
+        var header = list.querySelector('.card-header.sticky-top');
+        var row_rect = row.getBoundingClientRect();
+        var list_rect = list.getBoundingClientRect();
+        var visible_top = header ? header.getBoundingClientRect().bottom : list_rect.top;
+        return row_rect.top >= visible_top - 1 && row_rect.bottom <= list_rect.bottom + 1;
+      })()
+    JS
+  end
+
+  def notification_list_scroll_top
+    page.evaluate_script("document.querySelector('.flex-main').scrollTop")
   end
 
   # Turbolinks changes the URL before it renders the new page
