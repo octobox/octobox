@@ -690,6 +690,7 @@ var Octobox = (function() {
       var unreadCount = document.querySelector('.js-unread-count');
       setFavicon(unreadCount ? parseInt(unreadCount.dataset.count, 10) || 0 : 0);
       recoverPreviousCursorPosition();
+      restoreListScrollPosition();
       setAutoSyncTimer();
     }
 
@@ -888,7 +889,22 @@ var Octobox = (function() {
     }
   };
 
+  var rememberListScrollPosition = function() {
+    var table = document.querySelector(".js-table-notifications");
+    var list = document.querySelector(".flex-main");
+    pendingListScrollTop = table && list ? list.scrollTop : null;
+  };
+
+  var restoreListScrollPosition = function() {
+    if (pendingListScrollTop === null) return;
+    var table = document.querySelector(".js-table-notifications");
+    var list = document.querySelector(".flex-main");
+    if (table && list) list.scrollTop = pendingListScrollTop;
+    pendingListScrollTop = null;
+  };
+
   var resetCursorAfterRowsRemoved = function(ids) {
+    rememberListScrollPosition();
     var current = getCurrentRow();
     if (!current) {
       Turbolinks.visit("/" + location.search);
@@ -940,6 +956,7 @@ var Octobox = (function() {
   };
 
   var pendingNotice = null;
+  var pendingListScrollTop = null;
 
   var showPendingNotice = function() {
     if (!pendingNotice || document.documentElement.hasAttribute("data-turbolinks-preview")) return;
@@ -1002,24 +1019,21 @@ var Octobox = (function() {
   var scrollToCursor = function() {
     var current = document.querySelector("td.js-current");
     if (!current) return;
-    var table = document.querySelector(".js-table-notifications");
-    if (!table) return;
-    var menu = document.querySelector(".js-octobox-menu");
-    if (!menu) return;
+    var row = current.closest("tr");
+    var list = current.closest(".flex-main") || document.querySelector(".flex-main");
+    if (!row || !list) return;
 
-    var table_offset = table.offsetTop;
-    var cursor_offset = current.getBoundingClientRect().top + window.pageYOffset;
-    var cursor_relative_offset = current.offsetTop;
-    var cursor_height = current.offsetHeight;
-    var menu_height = menu.offsetHeight;
-    var scroll_top = window.pageYOffset;
-    var window_height = window.innerHeight;
+    // The list header is sticky, so the row must stay below it to remain visible.
+    var header = list.querySelector(".card-header.sticky-top");
+    var list_rect = list.getBoundingClientRect();
+    var row_rect = row.getBoundingClientRect();
+    var visible_top = header ? header.getBoundingClientRect().bottom : list_rect.top;
+    var visible_bottom = list_rect.bottom;
 
-    if ( cursor_offset < menu_height + scroll_top ) {
-      window.scrollTo(0, table_offset + cursor_relative_offset - cursor_height);
-    }
-    if ( cursor_offset > scroll_top + window_height - cursor_height ) {
-      window.scrollTo(0, cursor_offset - window_height + 2*cursor_height);
+    if (row_rect.top < visible_top) {
+      list.scrollTop -= visible_top - row_rect.top;
+    } else if (row_rect.bottom > visible_bottom) {
+      list.scrollTop += row_rect.bottom - visible_bottom;
     }
   };
 
