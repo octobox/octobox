@@ -5,7 +5,7 @@ server, so AI agents such as Claude, ChatGPT, Cursor and VS Code can call it as 
 
 | | |
 | --- | --- |
-| Server URL | `https://app.getelva.ai/mcp/32765046/octobox` |
+| Server URL | `https://app.getelva.ai/mcp/elvademo/octobox` |
 | Tools | 18, one per operation in [`openapi.yaml`](openapi.yaml) |
 | Calls | `https://octobox.io` |
 | Authentication | Your own API token, sent as a bearer token. Your MCP client asks for it when you connect. |
@@ -18,7 +18,7 @@ server, so AI agents such as Claude, ChatGPT, Cursor and VS Code can call it as 
 ### Claude Code
 
 ```bash
-claude mcp add --transport http octobox https://app.getelva.ai/mcp/32765046/octobox
+claude mcp add --transport http octobox https://app.getelva.ai/mcp/elvademo/octobox
 ```
 
 ### Claude (claude.ai and Claude Desktop)
@@ -36,7 +36,7 @@ Settings → Apps & Connectors → Advanced settings → turn on **Developer mod
 {
   "mcpServers": {
     "octobox": {
-      "url": "https://app.getelva.ai/mcp/32765046/octobox"
+      "url": "https://app.getelva.ai/mcp/elvademo/octobox"
     }
   }
 }
