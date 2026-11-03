@@ -89,6 +89,28 @@ class SearchTest < ActiveSupport::TestCase
     assert_equal search.to_query, 'type:release archived:true'
   end
 
+  test 'inbox hides snoozed notifications by default' do
+    user = create(:user)
+    inbox = create(:notification, user: user, archived: false)
+    create(:notification, user: user, archived: false, snooze_until: 1.hour.from_now)
+    search = Search.new(query: '', scope: user.notifications, params: {})
+    assert_equal search.results.pluck(:id), [inbox.id]
+  end
+
+  test 'snoozed:true returns only snoozed notifications' do
+    user = create(:user)
+    create(:notification, user: user, archived: false)
+    snoozed = create(:notification, user: user, archived: false, snooze_until: 1.hour.from_now)
+    search = Search.new(query: 'snoozed:true', scope: user.notifications, params: {})
+    assert_equal search.results.pluck(:id), [snoozed.id]
+  end
+
+  test 'converts snoozed param to snoozed prefix' do
+    search = Search.new(query: '', scope: Notification.all, params: {snoozed: 'true'})
+    assert_equal search.to_query, 'snoozed:true'
+    assert search.snoozed_selected?
+  end
+
   test 'Allow rejecting multiple statuses' do
     search = Search.new(query: '-status:merged -status:closed', scope: Notification.all, params: {})
     assert_equal search.results.length, 0

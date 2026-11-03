@@ -7,6 +7,8 @@
       <%= archive_button unless archive_selected? %>
       <%= unarchive_button unless inbox_selected? %>
       <%= mute_button %>
+      <%= snooze_dropdown(selected: false) %>
+      <%= unsnooze_button if @notification.snooze_until.present? && @notification.snooze_until > Time.current %>
       <%= delete_button %>
     </div>
     <div>

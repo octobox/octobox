@@ -37,6 +37,19 @@ class NotificationUndoAction < ApplicationRecord
     )
   end
 
+  def self.record_snooze!(user, notifications)
+    states = notifications.pluck(:id, :snooze_until).map do |id, prev|
+      {'id' => id, 'snooze_until' => serialize_timestamp(prev)}
+    end
+    return if states.empty?
+    user.notification_undo_actions.expired.where.not(action: 'archive').delete_all
+    user.notification_undo_actions.create!(
+      action: 'snooze',
+      notification_states: states,
+      expires_at: EXPIRES_IN.from_now
+    )
+  end
+
   def self.serialize_timestamp(time)
     time&.utc&.iso8601(6)
   end
@@ -74,8 +87,14 @@ class NotificationUndoAction < ApplicationRecord
     return false if expired?
 
     transaction do
-      notification_states.group_by { |state| state['archived'] }.each do |archived, states|
-        user.notifications.where(id: states.map { |state| state['id'] }).update_all(archived: archived)
+      if action == 'snooze'
+        notification_states.group_by { |state| state['snooze_until'] }.each do |snooze_until, states|
+          user.notifications.where(id: states.map { |state| state['id'] }).update_all(snooze_until: snooze_until)
+        end
+      else
+        notification_states.group_by { |state| state['archived'] }.each do |archived, states|
+          user.notifications.where(id: states.map { |state| state['id'] }).update_all(archived: archived)
+        end
       end
 
       destroy!

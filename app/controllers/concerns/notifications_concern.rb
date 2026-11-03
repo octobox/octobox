@@ -78,6 +78,8 @@ module NotificationsConcern
       @search.scope.starred
     elsif params[:archive].present?
       @search.scope.archived
+    elsif params[:snoozed].present?
+      @search.scope.snoozed
     else
       @search.scope.inbox
     end

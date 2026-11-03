@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_07_05_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_25_132115) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
-  enable_extension "plpgsql"
 
   create_table "app_installation_permissions", force: :cascade do |t|
     t.integer "app_installation_id"
@@ -93,8 +93,10 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_05_000000) do
     t.string "repository_owner_name", default: ""
     t.string "latest_comment_url"
     t.datetime "muted_at", precision: nil
+    t.datetime "snooze_until"
     t.index ["muted_at"], name: "index_notifications_on_muted_at"
     t.index ["repository_full_name"], name: "index_notifications_on_repository_full_name"
+    t.index ["snooze_until"], name: "index_notifications_on_snooze_until"
     t.index ["subject_url"], name: "index_notifications_on_subject_url"
     t.index ["user_id", "archived", "updated_at"], name: "index_notifications_on_user_id_and_archived_and_updated_at"
     t.index ["user_id", "github_id"], name: "index_notifications_on_user_id_and_github_id", unique: true

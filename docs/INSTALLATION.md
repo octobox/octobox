@@ -361,6 +361,10 @@ Some applications allow you to create "native" applications for the desktop. Thi
 
 If your installation uses this, set the environment variable `OCTOBOX_NATIVE_LINK` to add a link to the dropdown menu.
 
+## Customising snooze durations
+
+The snooze dropdown offers 1 hour, 1 day, 1 week and 1 month by default. Set `OCTOBOX_SNOOZE_OPTIONS` to a comma-separated list of `label:minutes` pairs to change them, for example `OCTOBOX_SNOOZE_OPTIONS="1 hour:60,4 hours:240,1 day:1440"`.
+
 ## Adding a custom initializer
 
 If you have some need to run custom Ruby code or wish to configure Octobox directly on application load, you may add a file named

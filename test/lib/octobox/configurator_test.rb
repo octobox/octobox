@@ -170,6 +170,16 @@ class ConfiguratorTest < ActiveSupport::TestCase
     assert_equal 10, Octobox.config.max_concurrency
   end
 
+  test 'snooze_options default value' do
+    stub_env_var('OCTOBOX_SNOOZE_OPTIONS', nil)
+    assert_equal({'1 hour' => 60, '1 day' => 1440, '1 week' => 10080, '1 month' => 43200}, Octobox.config.snooze_options)
+  end
+
+  test 'snooze_options configured by ENV var' do
+    stub_env_var('OCTOBOX_SNOOZE_OPTIONS', '1 hour:60, 4 hours:240')
+    assert_equal({'1 hour' => 60, '4 hours' => 240}, Octobox.config.snooze_options)
+  end
+
   test 'max_concurrency configured by ENV var' do
     stub_env_var('MAX_CONCURRENCY', 20)
     assert_equal 20, Octobox.config.max_concurrency

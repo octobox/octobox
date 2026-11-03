@@ -32,6 +32,8 @@
     <%= archive_selected_button unless archive_selected? %>
     <%= unarchive_selected_button unless inbox_selected? %>
     <%= mute_selected_button %>
+    <%= snooze_dropdown %>
+    <%= unsnooze_selected_button if @search.snoozed_selected? %>
     <%= mark_read_selected_button %>
     <%= delete_selected_button unless inbox_selected? %>
     <%= render 'filter-list' %>

@@ -60,6 +60,7 @@ module NotificationsHelper
       type:            params[:type],
       archive:         params[:archive],
       starred:         params[:starred],
+      snoozed:         params[:snoozed],
       owner:           params[:owner],
       per_page:        params[:per_page],
       q:               params[:q],
@@ -100,7 +101,7 @@ module NotificationsHelper
   end
 
   def bucket_param_keys
-    [:archive, :starred]
+    [:archive, :starred, :snoozed]
   end
 
   def filter_param_keys
@@ -133,6 +134,29 @@ module NotificationsHelper
 
   def mute_selected_button
     function_button('Mute selected', 'mute', 'mute_selected', 'Mute selected items')
+  end
+
+  def unsnooze_selected_button
+    function_button('Unsnooze', 'clock', 'unsnooze_selected', 'Unsnooze selected items')
+  end
+
+  def unsnooze_button
+    function_button('Unsnooze', 'clock', 'unsnooze', 'Unsnooze notification', false)
+  end
+
+  def snooze_dropdown(selected: true)
+    css = "snooze_toggle btn btn-sm btn-outline-dark dropdown-toggle"
+    css += " snooze_selected hidden-button" if selected
+    content_tag(:div, class: 'btn-group') do
+      button_tag(type: 'button', class: css, 'data-toggle': 'dropdown', title: 'Snooze') do
+        octicon('clock', height: 16) + content_tag(:span, 'Snooze', class: 'd-none d-xl-inline-block ml-1')
+      end +
+      content_tag(:div, class: 'dropdown-menu') do
+        safe_join(Octobox.config.snooze_options.map { |label, mins|
+          link_to(label, '#', class: 'dropdown-item snooze-option', data: {minutes: mins})
+        })
+      end
+    end
   end
 
   def mark_read_selected_button
