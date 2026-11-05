@@ -55,6 +55,15 @@ As OpenShift Online provides a free "Starter" tier its also a very inexpensive w
 
 Please refer to the separate [OpenShift installation](../openshift/OPENSHIFT_INSTALLATION.md) document for detailed installation instructions.
 
+## Deployment with Easypanel
+
+[Easypanel](https://easypanel.io) is a self-hosted Docker deployment platform, and Octobox has a one-click deployment template there:
+
+[![Deploy on Easypanel][easypanel-btn]][easypanel-deploy]
+
+[easypanel-btn]: https://easypanel.io/img/deploy-on-easypanel-40.svg
+[easypanel-deploy]: https://easypanel.io/templates/octobox
+
 ## Encryption Key
 
 Octobox uses [`encrypted_attr`](https://github.com/attr-encrypted/attr_encrypted) to store access tokens and personal access tokens on the user object.
