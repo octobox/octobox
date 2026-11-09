@@ -230,9 +230,9 @@ GEM
     mime-types-data (3.2026.1027)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (6.0.6)
+    minitest (6.1.0)
       drb (~> 2.0)
-      prism (~> 1.5)
+      prism (>= 1.5, < 3)
     mocha (3.1.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.8.7)
@@ -313,7 +313,10 @@ GEM
     pp (0.6.4)
       prettyprint
     prettyprint (0.2.1)
-    prism (1.9.0)
+    prism (2.1.0)
+    prism (2.1.0-arm64-darwin)
+    prism (2.1.0-x86_64-darwin)
+    prism (2.1.0-x86_64-linux-gnu)
     psych (5.5.0)
       date
       stringio
