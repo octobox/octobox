@@ -22,7 +22,7 @@ module Octobox
           if bot_author
             joins(:subject).where('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot')
           else
-            joins(:subject).where.not('subjects.author LIKE ? OR subjects.author LIKE ?', '%[bot]', '%-bot')
+            left_outer_joins(:subject).where('subjects.author IS NULL OR NOT (subjects.author LIKE ? OR subjects.author LIKE ?)', '%[bot]', '%-bot')
           end
         }
         scope :labelable,  -> { where(subject_type: ['Issue', 'PullRequest']) }
