@@ -1194,15 +1194,17 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'search results can exclude bots' do
     sign_in_as(@user)
-    notification1 = create(:notification, user: @user)
-    notification2 = create(:notification, user: @user)
-    notification3 = create(:notification, user: @user)
-    create(:subject, notifications: [notification1], author: 'dependabot[bot]')
-    create(:subject, notifications: [notification2], author: 'py-bot')
-    create(:subject, notifications: [notification3], author: 'andrew')
+    bot1 = create(:subject, author: 'dependabot[bot]')
+    bot2 = create(:subject, author: 'py-bot')
+    human = create(:subject, author: 'andrew')
+    notification1 = create(:notification, user: @user, subject_url: bot1.url)
+    notification2 = create(:notification, user: @user, subject_url: bot2.url)
+    notification3 = create(:notification, user: @user, subject_url: human.url)
 
     get '/?q=bot%3Afalse'
-    assert_equal assigns(:notifications).length, 1
+    assert_includes assigns(:notifications), notification3
+    refute_includes assigns(:notifications), notification1
+    refute_includes assigns(:notifications), notification2
   end
 
   test 'renders a notification page' do

@@ -42,6 +42,23 @@ class SearchTest < ActiveSupport::TestCase
       Search.new(query: '-unlabelled:false', scope: scope).results.pluck(:id).sort
   end
 
+  test 'bot:false keeps notifications whose subject has no author' do
+    bot_subject = create(:subject, author: 'dependabot[bot]')
+    human_subject = create(:subject, author: 'octocat')
+    release_subject = create(:subject, author: nil)
+
+    bot_notification = create(:notification, subject_url: bot_subject.url)
+    human_notification = create(:notification, subject_url: human_subject.url)
+    release_notification = create(:notification, subject_url: release_subject.url)
+    unsynced_notification = create(:notification)
+    scope = Notification.where(id: [bot_notification.id, human_notification.id, release_notification.id, unsynced_notification.id])
+
+    assert_equal [human_notification.id, release_notification.id, unsynced_notification.id].sort,
+      Search.new(query: 'bot:false', scope: scope).results.pluck(:id).sort
+    assert_equal [bot_notification.id],
+      Search.new(query: 'bot:true', scope: scope).results.pluck(:id).sort
+  end
+
   test 'reports unsupported negated prefixes' do
     search = Search.new(query: '-sort:updated -freetext:foo -unlabelled:true -bot:true', scope: Notification.none)
 
