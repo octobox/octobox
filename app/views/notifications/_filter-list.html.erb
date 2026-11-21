@@ -63,6 +63,10 @@
         <%= (params[:is_private] === 'true'? 'Private' : 'Public') %>
       <% end %>
 
+      <%= filter_option :status do %>
+        Status: <%= params[:status].underscore.humanize %>
+      <% end %>
+
       <%= filter_option :draft do %>
         <%= (params[:draft] === 'true'? 'Draft' : 'Not draft') %>
       <% end %>
