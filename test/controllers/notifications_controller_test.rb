@@ -87,6 +87,11 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_template 'notifications/index', file: 'notifications/index.html.erb'
     assert_select "span.filter-options *", text: 'Label: bug'
+
+    get '/?status=failure'
+    assert_response :success
+    assert_select "span.filter-options *", text: 'Status: Failure'
+    assert_select "#search-box[value=?]", 'inbox:true status:failure'
   end
 
   test 'renders a warning for unsupported negated search prefixes' do
