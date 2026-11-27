@@ -35,8 +35,12 @@ module NotificationsConcern
     @bot_notifications     = subject_counts[:bot]
     @draft                 = subject_counts[:draft]
     @assigned              = subject_counts[:assigned]
-    @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-    @repositories          = Repository.where(full_name: @unread_repositories.keys).select('full_name,private')
+
+    privacy = Repository.where(full_name: @unread_repositories.keys).pluck(:full_name, :private).to_h
+    @private_repositories  = privacy.select { |_name, is_private| is_private }.keys.to_set
+    @visiblity             = @unread_repositories.select { |name, _count| privacy.key?(name) }
+                                                 .group_by { |name, _count| privacy[name] }
+                                                 .transform_values { |repos| repos.sum(&:last) }
   end
 
   def user_unread_count

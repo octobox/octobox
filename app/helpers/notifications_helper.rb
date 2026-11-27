@@ -52,7 +52,7 @@ module NotificationsHelper
   }
 
   def filters
-    {
+    @filters ||= {
       reason:          params[:reason],
       unread:          params[:unread],
       repo:            params[:repo],
@@ -72,7 +72,7 @@ module NotificationsHelper
       is_private:      params[:is_private],
       status:          params[:status],
       draft:           params[:draft],
-    }
+    }.freeze
   end
 
   def inbox_selected?

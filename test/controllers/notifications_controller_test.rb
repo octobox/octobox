@@ -521,9 +521,16 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
            subject_url: 'https://api.github.com/repos/c/d/releases/1')
     create(:notification, user: @user, subject_url: archived_issue.url, subject_type: 'Issue', archived: true)
     create(:notification, subject_url: closed_issue.url, subject_type: 'Issue')
+    create(:repository, full_name: 'a/b', private: true)
+    create(:repository, full_name: 'c/d', private: false)
 
     get '/'
     assert_response :success
+
+    assert_equal({ true => 2, false => 2 }, assigns(:visiblity))
+    assert_select "li[title='a/b'] svg.private-repo", count: 1
+    assert_select "li[title='c/d'] svg.private-repo", count: 0
+    assert_select 'li.is_private-true span.badge', text: '2'
 
     assert_equal({ 'Issue' => 2, 'PullRequest' => 1, 'Release' => 1 }, assigns(:types))
     assert_equal({ true => 2, false => 2 }, assigns(:unread_notifications))
