@@ -52,8 +52,12 @@ module ApplicationHelper
     notification.user.try(:disable_confirmations?) ? nil : message
   end
 
+  SVG_FILES = Concurrent::Map.new
+
   def svg(name)
-    file_path = "#{Rails.root}/app/assets/images/#{name}.svg"
-    return File.read(file_path).html_safe if File.exist?(file_path)
+    SVG_FILES.compute_if_absent(name) do
+      file_path = "#{Rails.root}/app/assets/images/#{name}.svg"
+      File.read(file_path).html_safe.freeze if File.exist?(file_path)
+    end
   end
 end
