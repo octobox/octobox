@@ -204,4 +204,59 @@ class ConfiguratorTest < ActiveSupport::TestCase
     stub_env_var('GITHUB_TEAM_ID', 20)
     assert_equal 20, Octobox.config.github_team_id
   end
+
+  test 'attr_encryption_key uses a 32 byte key from the ENV var' do
+    key = 'k' * 32
+    stub_env_var('OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY', key)
+    assert_equal key, Octobox::Configurator.new.attr_encryption_key
+  end
+
+  test 'attr_encryption_key rejects a key that is not 32 bytes' do
+    stub_env_var('OCTOBOX_ATTRIBUTE_ENCRYPTION_KEY', 'too-short')
+    error = assert_raises(ArgumentError) { Octobox::Configurator.new.attr_encryption_key }
+    assert_match(/32 byte encryption key/, error.message)
+  end
+
+  test 'github_api_prefix uses the v3 path on a GitHub Enterprise domain' do
+    config = Octobox::Configurator.new
+    config.github_domain = 'https://github.example.com'
+    assert_equal 'https://github.example.com/api/v3', config.github_api_prefix
+  end
+
+  test 'sidekiq_schedule_path defaults to the bundled schedule' do
+    previous = ENV.delete('OCTOBOX_SIDEKIQ_SCHEDULE_PATH')
+    path = Octobox::Configurator.new.sidekiq_schedule_path
+    assert_equal Rails.root.join('config', 'sidekiq_schedule.yml'), path
+    assert File.exist?(path)
+  ensure
+    ENV['OCTOBOX_SIDEKIQ_SCHEDULE_PATH'] = previous
+  end
+
+  test 'app_url and app_install_url point at the marketplace listing when one is configured' do
+    stub_env_var('MARKETPLACE_URL', 'https://github.com/marketplace/octobox')
+    config = Octobox::Configurator.new
+    assert_equal 'https://github.com/marketplace/octobox', config.app_url
+    assert_equal 'https://github.com/marketplace/octobox', config.app_install_url
+  end
+
+  test 'redis_url configured by ENV var' do
+    ENV.stubs(:fetch).with('REDIS_URL', 'redis://localhost:6379').returns('redis://cache.internal:6379')
+    assert_equal 'redis://cache.internal:6379', Octobox::Configurator.new.redis_url
+  end
+
+  test 'github_admin_ids splits the ENV var on commas' do
+    ENV.stubs(:fetch).with('ADMIN_GITHUB_IDS', '').returns('1060,2')
+    assert_equal %w[1060 2], Octobox::Configurator.new.github_admin_ids
+  end
+
+  test 'GitHub App credentials configured by ENV vars' do
+    stub_env('GITHUB_APP_JWT' => 'private-key', 'GITHUB_APP_CLIENT_ID' => 'client-id',
+             'GITHUB_APP_CLIENT_SECRET' => 'client-secret', 'GITHUB_APP_ID' => '123')
+    config = Octobox::Configurator.new
+
+    assert_equal 'private-key', config.github_app_jwt
+    assert_equal 'client-id', config.github_app_client_id
+    assert_equal 'client-secret', config.github_app_client_secret
+    assert_equal '123', config.github_app_id
+  end
 end
