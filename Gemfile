@@ -58,6 +58,7 @@ group :test do
   gem 'timecop'
   gem 'capybara'
   gem 'capybara-playwright-driver'
+  gem 'simplecov', require: false
 end
 
 group :development do
