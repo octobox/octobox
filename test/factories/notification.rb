@@ -5,7 +5,7 @@ FactoryBot.define do
     repository_full_name { "octobox/octobox" }
     repository_owner_name { "octobox" }
     subject_title { "Test" }
-    sequence(:subject_url) { |n| "https://api.github.com/repos/#{repository_full_name}/issues/#{n}" }
+    sequence(:subject_url, 1_000_000) { |n| "https://api.github.com/repos/#{repository_full_name}/issues/#{n}" }
     subject_type { "Issue" }
     reason { "subscribed" }
     unread { true }

@@ -519,7 +519,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders author for notifications in json' do
-    skip("This test fails intermittenly")
     sign_in_as(@user)
     notification = create(:notification, user: @user, subject_type: 'Issue')
     create(:subject, notifications: [notification], author: 'andrew')
@@ -1213,7 +1212,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders a notification page' do
-    skip("This test fails intermittenly")
     sign_in_as(@user)
     notification1 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], comment_count: nil)
@@ -1225,7 +1223,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders a notification page without comments' do
-    skip("This test fails intermittenly")
     sign_in_as(@user)
     notification1 = create(:notification, user: @user)
     create(:subject, notifications: [notification1], comment_count: nil)
@@ -1253,7 +1250,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'thread shows five commments' do
-    skip("This test fails intermittenly")
     sign_in_as(@user)
     notification = create(:notification, user: @user)
     subject = create(:subject, notifications: [notification], comment_count: 10)
@@ -1263,7 +1259,6 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'thread shows expanded comments' do
-    skip("This test fails intermittenly")
     sign_in_as(@user)
     notification = create(:notification, user: @user)
     subject = create(:subject, notifications: [notification], comment_count: 10)

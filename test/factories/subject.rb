@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :subject do
-    sequence(:url) { |n| "https://api.github.com/repos/octobox/octobox/issues/#{n}" }
-    sequence(:html_url) { |n| "https://github.com/octobox/octobox/issues/#{n}" }
+    sequence(:url, 2_000_000) { |n| "https://api.github.com/repos/octobox/octobox/issues/#{n}" }
+    sequence(:html_url, 2_000_000) { |n| "https://github.com/octobox/octobox/issues/#{n}" }
     sequence(:github_id, 1000000) { |n| n }
     state { 'open' }
     author { 'andrew' }
