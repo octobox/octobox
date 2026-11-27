@@ -457,4 +457,28 @@ class NotificationTest < ActiveSupport::TestCase
     notification.destroy
     refute Subject.where(id: subject.id).empty?
   end
+
+  test 'facet counts are empty for a scope with no notifications' do
+    assert_equal({ subject_type: {}, unread: {}, reason: {}, repository_full_name: {} }, Notification.none.attribute_facet_counts)
+    assert_equal({ state: {}, status: {}, draft: 0, bot: 0, assigned: 0, unlabelled: 0 }, Notification.where(id: nil).subject_facet_counts('andrew'))
+  end
+
+  test 'subject_facet_counts quotes the login it matches assignees against' do
+    subject = create(:subject, assignees: ":o'brien:")
+    create(:notification, subject_url: subject.url, subject_type: 'Issue')
+
+    assert_equal 1, Notification.all.subject_facet_counts("o'brien")[:assigned]
+    assert_equal 0, Notification.all.subject_facet_counts('brien')[:assigned]
+  end
+
+  test 'subject_facet_counts counts a notification once when its subject has several labels' do
+    subject = create(:subject, draft: true)
+    3.times { |n| create(:label, subject: subject, name: "label-#{n}") }
+    create(:notification, subject_url: subject.url, subject_type: 'Issue')
+
+    counts = Notification.includes(subject: :labels).subject_facet_counts('andrew')
+    assert_equal({ 'open' => 1 }, counts[:state])
+    assert_equal 1, counts[:draft]
+    assert_equal 0, counts[:unlabelled]
+  end
 end

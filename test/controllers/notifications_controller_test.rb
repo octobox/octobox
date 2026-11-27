@@ -504,6 +504,82 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'counts notifications for each sidebar filter' do
+    sign_in_as(@user)
+    Notification.where(user: @user).delete_all
+
+    bot_issue = create(:subject, state: 'open', author: 'dependabot[bot]')
+    create(:label, subject: bot_issue)
+    draft_pull = create(:subject, state: 'open', status: 'success', draft: true, assignees: ":#{@user.github_login}:")
+    closed_issue = create(:subject, state: 'closed', status: 'failure')
+    archived_issue = create(:subject, state: 'merged', draft: true, author: 'renovate-bot')
+
+    create(:notification, user: @user, subject_url: bot_issue.url, subject_type: 'Issue', reason: 'mention', unread: true, repository_full_name: 'a/b')
+    create(:notification, user: @user, subject_url: draft_pull.url, subject_type: 'PullRequest', reason: 'assign', unread: false, repository_full_name: 'a/b')
+    create(:notification, user: @user, subject_url: closed_issue.url, subject_type: 'Issue', reason: 'mention', unread: false, repository_full_name: 'c/d')
+    create(:notification, user: @user, subject_type: 'Release', reason: 'subscribed', unread: true, repository_full_name: 'c/d',
+           subject_url: 'https://api.github.com/repos/c/d/releases/1')
+    create(:notification, user: @user, subject_url: archived_issue.url, subject_type: 'Issue', archived: true)
+    create(:notification, subject_url: closed_issue.url, subject_type: 'Issue')
+
+    get '/'
+    assert_response :success
+
+    assert_equal({ 'Issue' => 2, 'PullRequest' => 1, 'Release' => 1 }, assigns(:types))
+    assert_equal({ true => 2, false => 2 }, assigns(:unread_notifications))
+    assert_equal({ 'mention' => 2, 'assign' => 1, 'subscribed' => 1 }, assigns(:reasons))
+    assert_equal({ 'a/b' => 2, 'c/d' => 2 }, assigns(:unread_repositories))
+    assert_equal({ 'open' => 2, 'closed' => 1 }, assigns(:states))
+    assert_equal({ 'success' => 1, 'failure' => 1, nil => 1 }, assigns(:statuses))
+    assert_equal 1, assigns(:draft)
+    assert_equal 1, assigns(:bot_notifications)
+    assert_equal 1, assigns(:assigned)
+    assert_equal 2, assigns(:unlabelled)
+
+    assert_select 'li.state-open span.badge', text: '2'
+    assert_select 'li.status-failure span.badge', text: '1'
+    assert_select 'li.draft-true span.badge', text: '1'
+    assert_select 'li.bot-true span.badge', text: '1'
+    assert_select 'li.unlabelled-true span.badge', text: '2'
+    assert_select 'li.type-Issue span.badge', text: '2'
+  end
+
+  test 'counts sidebar filters for an unlabelled search' do
+    sign_in_as(@user)
+    Notification.where(user: @user).delete_all
+
+    labelled = create(:subject, state: 'open')
+    2.times { |n| create(:label, subject: labelled, name: "label-#{n}") }
+    unlabelled = create(:subject, state: 'closed', draft: true)
+
+    create(:notification, user: @user, subject_url: labelled.url, subject_type: 'Issue')
+    create(:notification, user: @user, subject_url: unlabelled.url, subject_type: 'Issue', archived: true)
+
+    get '/?q=unlabelled%3Atrue'
+    assert_response :success
+
+    assert_equal({ 'Issue' => 1 }, assigns(:types))
+    assert_equal({ 'closed' => 1 }, assigns(:states))
+    assert_equal 1, assigns(:draft)
+    assert_equal 1, assigns(:unlabelled)
+  end
+
+  test 'counts notifications by type, reason and repository in json' do
+    sign_in_as(@user)
+    Notification.where(user: @user).delete_all
+    create(:notification, user: @user, subject_type: 'Issue', reason: 'mention', repository_full_name: 'a/b')
+    create(:notification, user: @user, subject_type: 'Issue', reason: 'assign', repository_full_name: 'c/d')
+    create(:notification, user: @user, subject_type: 'Release', reason: 'mention', repository_full_name: 'c/d')
+
+    get notifications_path(format: :json)
+    assert_response :success
+
+    json = Oj.load(response.body)
+    assert_equal({ 'Issue' => 2, 'Release' => 1 }, json['types'])
+    assert_equal({ 'mention' => 2, 'assign' => 1 }, json['reasons'])
+    assert_equal({ 'a/b' => 1, 'c/d' => 2 }, json['unread_repositories'])
+  end
+
   test 'renders pagination info for notifications in json' do
     sign_in_as(@user)
 

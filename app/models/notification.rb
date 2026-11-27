@@ -4,6 +4,7 @@ class Notification < ApplicationRecord
   include Octobox::Notifications::InclusiveScope
   include Octobox::Notifications::ExclusiveScope
   include Octobox::Notifications::SyncSubject
+  include Octobox::Notifications::FacetCounts
 
   SUBJECTABLE_TYPES = SUBJECT_TYPE_COMMIT_RELEASE + SUBJECT_TYPE_ISSUE_REQUEST
 
