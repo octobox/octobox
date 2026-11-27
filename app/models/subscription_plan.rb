@@ -18,18 +18,23 @@ class SubscriptionPlan < ApplicationRecord
   end
 
   def self.sync_plans
-    Octobox.github_app_client.list_plans.each do |remote_plan|
-      plan = find_or_initialize_by(github_id: remote_plan.id)
-      plan.update({
-        name:                   remote_plan.name,
-        description:            remote_plan.description,
-        monthly_price_in_cents: remote_plan.monthly_price_in_cents,
-        yearly_price_in_cents:  remote_plan.yearly_price_in_cents,
-        price_model:            remote_plan.price_model,
-        has_free_trial:         remote_plan.has_free_trial,
-        unit_name:              remote_plan.unit_name,
-        number:                 remote_plan.number
-      })
+    remote_plans = Octobox.github_app_client.list_plans
+    transaction do
+      # github_id has no unique index, so concurrent syncs could insert a plan twice
+      connection.execute("SELECT pg_advisory_xact_lock(hashtext('subscription_plans_sync'))")
+      remote_plans.each do |remote_plan|
+        plan = find_or_initialize_by(github_id: remote_plan.id)
+        plan.update({
+          name:                   remote_plan.name,
+          description:            remote_plan.description,
+          monthly_price_in_cents: remote_plan.monthly_price_in_cents,
+          yearly_price_in_cents:  remote_plan.yearly_price_in_cents,
+          price_model:            remote_plan.price_model,
+          has_free_trial:         remote_plan.has_free_trial,
+          unit_name:              remote_plan.unit_name,
+          number:                 remote_plan.number
+        })
+      end
     end
   end
 

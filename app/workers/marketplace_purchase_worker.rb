@@ -6,7 +6,12 @@ class MarketplacePurchaseWorker
 
   def perform(payload)
     purchase = SubscriptionPurchase.find_or_initialize_by(account_id: payload['marketplace_purchase']['account']['id'])
-    plan = SubscriptionPlan.find_by_github_id(payload['marketplace_purchase']['plan']['id'])
+    plan_id = payload['marketplace_purchase']['plan']['id']
+    plan = SubscriptionPlan.find_by_github_id(plan_id)
+    if plan.nil?
+      SubscriptionPlan.sync_plans
+      plan = SubscriptionPlan.find_by_github_id!(plan_id)
+    end
 
     purchase.update({
       billing_cycle:      payload['marketplace_purchase']['billing_cycle'],
