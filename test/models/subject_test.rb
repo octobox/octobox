@@ -534,6 +534,31 @@ class SubjectTest < ActiveSupport::TestCase
 
   end
 
+  test 'sync replaces every comment-only review with its comments' do
+    stub_include_comments
+    remote_subject = load_fixture('subject_58.json')
+    url = remote_subject['url']
+    json = { 'Content-Type' => 'application/json' }
+    reviews = [501, 502].map do |id|
+      { id: id, state: 'COMMENTED', pull_request_url: url, body: '', user: { login: 'reviewer' }, submitted_at: '2026-01-02T03:04:05Z' }
+    end
+    reviews << { id: 503, state: 'APPROVED', body: 'ship it', user: { login: 'reviewer' }, submitted_at: '2026-01-02T03:04:05Z' }
+    stub_request(:get, "#{url.gsub('/pulls/', '/issues/')}/comments?since").to_return(status: 200, body: '[]', headers: json)
+    stub_request(:get, "#{url}/comments?since").to_return(status: 200, body: '[]', headers: json)
+    stub_request(:get, "#{url}/reviews?since").to_return(status: 200, body: reviews.to_json, headers: json)
+    [501, 502].each do |id|
+      comment = { id: id + 100, body: 'inline note', url: "#{url}/comments/#{id + 100}", user: { login: 'reviewer' }, created_at: '2026-01-02T03:04:05Z' }
+      stub_request(:get, "#{url}/reviews/#{id}/comments?since").to_return(status: 200, body: [comment].to_json, headers: json)
+    end
+    stub_request(:get, %r{/commits/\w+/status}).to_return(status: 200, body: file_fixture('subject_58_status.json'), headers: json)
+    create(:notification, subject_url: url, user: create(:user))
+    subject = create(:subject, url: url)
+
+    subject.sync(remote_subject)
+
+    assert_equal [503, 601, 602], subject.comments.pluck(:github_id).sort
+  end
+
   test 'sync does not update comments when subject is not persisted' do
     remote_subject = load_fixture('subject_56.json')
     subject = build(:subject)
