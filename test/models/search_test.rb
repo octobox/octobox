@@ -115,4 +115,28 @@ class SearchTest < ActiveSupport::TestCase
     search = Search.new(query: '-status:merged -status:closed', scope: Notification.all, params: {})
     assert_equal search.results.length, 0
   end
+
+  test 'sorts by when notifications were updated or read' do
+    updated_first = create(:notification, updated_at: 2.days.ago, last_read_at: '2026-01-02 00:00:00 UTC')
+    updated_last = create(:notification, updated_at: 1.day.ago, last_read_at: '2026-01-01 00:00:00 UTC')
+    scope = Notification.where(id: [updated_first.id, updated_last.id])
+    ids = ->(query) { Search.new(query: query, scope: scope).results.pluck(:id) }
+
+    assert_equal [updated_last.id, updated_first.id], ids.call('sort:updated')
+    assert_equal [updated_first.id, updated_last.id], ids.call('sort:updated order:asc')
+    assert_equal [updated_last.id, updated_first.id], ids.call('sort:updated order:desc')
+    assert_equal [updated_first.id, updated_last.id], ids.call('sort:read')
+    assert_equal [updated_last.id, updated_first.id], ids.call('sort:read order:asc')
+  end
+
+  test '-number excludes notifications for that issue or pull request number' do
+    excluded_subject = create(:subject, url: 'https://api.github.com/repos/octobox/octobox/issues/56')
+    kept_subject = create(:subject, url: 'https://api.github.com/repos/octobox/octobox/issues/156')
+    excluded = create(:notification, subject_url: excluded_subject.url)
+    kept = create(:notification, subject_url: kept_subject.url)
+    scope = Notification.where(id: [excluded.id, kept.id])
+
+    assert_equal [kept.id], Search.new(query: '-number:56', scope: scope).results.pluck(:id)
+    assert_equal [excluded.id], Search.new(query: 'number:56', scope: scope).results.pluck(:id)
+  end
 end
