@@ -114,6 +114,55 @@ class SubjectTest < ActiveSupport::TestCase
     assert_equal 8, subject.comment_count
   end
 
+  test 'sync removes duplicated labels' do
+    remote_subject = load_fixture('subject_56.json')
+    subject = create(:subject, url: remote_subject['url'])
+    2.times { create(:label, subject: subject, github_id: 2, name: 'question') }
+
+    Subject.sync(remote_subject)
+
+    assert_equal ['question'], subject.labels.reload.map(&:name)
+  end
+
+  test 'sync removes labels when the remote subject has none left' do
+    remote_subject = load_fixture('subject_56.json')
+    remote_subject['labels'] = []
+    subject = create(:subject, url: remote_subject['url'])
+    create(:label, subject: subject, github_id: 2, name: 'question')
+
+    Subject.sync(remote_subject)
+
+    assert_empty subject.labels.reload
+  end
+
+  test 'sync keeps labels when the remote subject has no labels key' do
+    remote_subject = load_fixture('subject_56.json')
+    remote_subject.delete('labels')
+    subject = create(:subject, url: remote_subject['url'])
+    create(:label, subject: subject, github_id: 2, name: 'question')
+
+    Subject.sync(remote_subject)
+
+    assert_equal ['question'], subject.labels.reload.map(&:name)
+  end
+
+  test 'sync locks the subject while updating labels' do
+    remote_subject = load_fixture('subject_56.json')
+    subject = create(:subject, url: remote_subject['url'])
+
+    queries = []
+    callback = ->(*, payload) { queries << payload[:sql] }
+    ActiveSupport::Notifications.subscribed(callback, 'sql.active_record') do
+      Subject.sync(remote_subject)
+    end
+
+    lock = queries.index { |sql| sql.include?('FOR UPDATE') }
+    insert = queries.index { |sql| sql.start_with?('INSERT INTO "labels"') }
+    assert lock, 'expected a row lock on the subject'
+    assert insert, 'expected a label to be inserted'
+    assert lock < insert
+  end
+
   test "sync creates a new subject when a matching one can't be found" do
     assert_equal 0, Subject.count
     remote_subject = load_fixture('subject_56.json')
