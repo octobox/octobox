@@ -1367,6 +1367,30 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal notification.subject.comments.count, 1
   end
 
+  test 'refuses a comment on a notification whose subject has not been synced' do
+    stub_fetch_subject_enabled
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+
+    post comment_notification_path(notification), params: { comment: { body: 'blah' } }
+
+    assert_redirected_to notification_path(notification)
+    assert_equal 'Could not post your comment', flash[:error]
+  end
+
+  test 'expands comments for an ajax request' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, notifications: [notification], comment_count: 10)
+    10.times { create(:comment, subject: subject) }
+
+    get expand_comments_notification_path(notification), xhr: true
+
+    assert_response :success
+    assert_template 'notifications/show'
+    assert_equal 10, assigns(:comments).length
+  end
+
   test 'renders the lookup page as json if authenticated' do
     sign_in_as(@user)
     notification = create(:notification, user: @user)

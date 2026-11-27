@@ -211,9 +211,3 @@ document.addEventListener('click', function(e) {
     Octobox.viewThread(e);
   }
 });
-
-document.addEventListener('click', function(e) {
-  if(e.target.matches('.expand-comments') || e.target.closest('.expand-comments')) {
-    Octobox.expandComments(e);
-  }
-});
