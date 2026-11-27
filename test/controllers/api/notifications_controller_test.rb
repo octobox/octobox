@@ -747,4 +747,29 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal '{}', response.body
   end
+
+  test 'unread_count counts unread notifications in the inbox' do
+    2.times { create(:notification, user: @user, unread: true) }
+    create(:notification, user: @user, unread: false)
+    create(:notification, user: @user, unread: true, archived: true)
+    create(:notification, unread: true)
+
+    get '/api/notifications/unread_count', headers: { 'Authorization' => "Bearer #{@user.api_token}" }
+
+    assert_response :success
+    assert_equal({ 'count' => 2 }, JSON.parse(response.body))
+  end
+
+  test 'deletes the selected notifications' do
+    deleted = create(:notification, user: @user, archived: true)
+    kept = create(:notification, user: @user, archived: true)
+    other_users = create(:notification, archived: true)
+
+    post '/api/notifications/delete_selected', params: { id: [deleted.id, other_users.id] }, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
+
+    assert_response :ok
+    refute Notification.exists?(deleted.id)
+    assert Notification.exists?(kept.id)
+    assert Notification.exists?(other_users.id)
+  end
 end

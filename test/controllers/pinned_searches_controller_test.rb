@@ -24,6 +24,27 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @user.pinned_searches.count, 4
   end
 
+  test 'shows the form again when a new saved search has no name' do
+    sign_in_as(@user)
+
+    post pinned_searches_path, params: { pinned_search: { name: '', query: 'owner:octobox' } }
+
+    assert_response :success
+    assert_template 'pinned_searches/new'
+    assert_equal 3, @user.pinned_searches.count
+  end
+
+  test 'shows the form again when an update removes the query' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+
+    patch pinned_search_path(pinned_search), params: { pinned_search: { query: '' } }
+
+    assert_response :success
+    assert_select "form[action='#{pinned_search_path(pinned_search)}'] input[name='_method'][value='patch']"
+    assert_equal 'inbox:true owner:octobox', pinned_search.reload.query
+  end
+
   test 'will render edit saved search form' do
     sign_in_as(@user)
     pinned_search = create(:pinned_search, user: @user)

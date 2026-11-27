@@ -41,6 +41,47 @@ class HooksControllerTest < ActionController::TestCase
     assert_equal app.permission_pull_requests, "write"
   end
 
+  test 'installation deleted webhook payload removes the installation' do
+    app = create(:app_installation, github_id: 293804)
+    create(:repository, app_installation: app)
+    @request.headers['X-GitHub-Event'] = 'installation'
+
+    post :create, body: { action: 'deleted', installation: { id: 293804 } }.to_json
+
+    assert_response :success
+    assert_equal 0, AppInstallation.count
+    assert_equal 0, Repository.count
+  end
+
+  test 'marketplace_purchase webhook payload records the purchase' do
+    plan = create(:subscription_plan, github_id: 9)
+    payload = {
+      action: 'purchased',
+      marketplace_purchase: { account: { id: 1060 }, billing_cycle: 'monthly', unit_count: 1, on_free_trial: false, plan: { id: 9 } }
+    }
+    @request.headers['X-GitHub-Event'] = 'marketplace_purchase'
+
+    Sidekiq.testing!(:inline) do
+      inline_sidekiq_status { post :create, body: payload.to_json }
+    end
+
+    assert_response :success
+    assert_equal plan, SubscriptionPurchase.find_by(account_id: 1060).subscription_plan
+  end
+
+  test 'marketplace_purchase webhook payload ignores pending changes' do
+    create(:subscription_plan, github_id: 9)
+    payload = { action: 'pending_change', marketplace_purchase: { account: { id: 1060 }, unit_count: 1, plan: { id: 9 } } }
+    @request.headers['X-GitHub-Event'] = 'marketplace_purchase'
+
+    Sidekiq.testing!(:inline) do
+      inline_sidekiq_status { post :create, body: payload.to_json }
+    end
+
+    assert_response :success
+    assert_equal 0, SubscriptionPurchase.count
+  end
+
   test 'issues webhook payload' do
     send_webhook 'issues'
     assert_equal Subject.count, 1
