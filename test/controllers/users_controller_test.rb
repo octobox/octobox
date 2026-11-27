@@ -38,6 +38,34 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
   end
 
+  test 'settings page counts notifications by repository and organisation' do
+    sign_in_as(@user)
+    Notification.where(user: @user).delete_all
+    2.times { create(:notification, user: @user, repository_full_name: 'octobox/octobox', repository_owner_name: 'octobox') }
+    create(:notification, user: @user, repository_full_name: 'octobox/docs', repository_owner_name: 'octobox')
+    create(:notification, user: @user, repository_full_name: 'rails/rails', repository_owner_name: 'rails')
+    create(:notification, repository_full_name: 'rails/rails', repository_owner_name: 'rails')
+
+    get settings_path
+
+    assert_equal 4, assigns(:total)
+    assert_equal [['octobox/octobox', 2], ['octobox/docs', 1], ['rails/rails', 1]].sort, assigns(:most_active_repos).sort
+    assert_equal [['octobox', 3], ['rails', 1]], assigns(:most_active_orgs)
+  end
+
+  test 'settings page counts organisations from the stored owner name' do
+    sign_in_as(@user)
+    Notification.where(user: @user).delete_all
+    create(:notification, user: @user, repository_full_name: 'octobox/docs', repository_owner_name: 'octobox')
+    create(:notification, user: @user, repository_full_name: 'octobox/docs', repository_owner_name: '')
+
+    get settings_path
+
+    assert_response :success
+    assert_equal [['octobox/docs', 2]], assigns(:most_active_repos)
+    assert_equal 1, assigns(:most_active_orgs).to_h['octobox']
+  end
+
   test 'displays settings page with saved search' do
     sign_in_as(@user)
     create(:pinned_search, user: @user)

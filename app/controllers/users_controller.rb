@@ -19,10 +19,16 @@ class UsersController < ApplicationController
   end
 
   def edit
-    repo_counts = current_user.notifications.group(:repository_full_name).count
-    @total = repo_counts.sum(&:last)
+    counts = current_user.notifications.group(:repository_full_name, :repository_owner_name).count
+    repo_counts = Hash.new(0)
+    org_counts = Hash.new(0)
+    counts.each do |(full_name, owner_name), count|
+      repo_counts[full_name] += count
+      org_counts[owner_name] += count
+    end
+    @total = counts.sum(&:last)
     @most_active_repos = repo_counts.sort_by(&:last).reverse.first(10)
-    @most_active_orgs = current_user.notifications.group(:repository_owner_name).count.sort_by(&:last).reverse.first(10)
+    @most_active_orgs = org_counts.sort_by(&:last).reverse.first(10)
     @pinned_search = PinnedSearch.new(query: params[:q])
   end
 
