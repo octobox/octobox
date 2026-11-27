@@ -17,6 +17,24 @@ class ApiPinnedSearchesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @user.pinned_searches.count, 4
   end
 
+  test 'rejects a new saved search without a name' do
+    post api_pinned_searches_path, params: { pinned_search: { name: '', query: 'owner:octobox' } }, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
+
+    assert_response :unprocessable_content
+    assert_equal({ 'errors' => "Name can't be blank" }, JSON.parse(response.body))
+    assert_equal 3, @user.pinned_searches.count
+  end
+
+  test 'rejects an update that removes the query' do
+    pinned_search = create(:pinned_search, user: @user)
+
+    put api_pinned_search_path(pinned_search), params: { pinned_search: { query: '' } }, headers: { 'Authorization' => "Bearer #{@user.api_token}" }
+
+    assert_response :unprocessable_content
+    assert_equal({ 'errors' => "Query can't be blank" }, JSON.parse(response.body))
+    assert_equal 'inbox:true owner:octobox', pinned_search.reload.query
+  end
+
   test 'updates saved searches' do
     pinned_search = create(:pinned_search, user: @user)
     put api_pinned_search_path(pinned_search), params: { pinned_search: {name: 'Work', query: pinned_search.query + " type:issue"} }, headers: { 'Authorization' => "Bearer #{@user.api_token}" }

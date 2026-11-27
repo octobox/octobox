@@ -1384,6 +1384,120 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal '{}', response.body
   end
 
+  test 'renders an empty object for the lookup page when no notification matches the url' do
+    sign_in_as(@user)
+
+    get lookup_notifications_path(format: :json, url: 'https://github.com/octobox/octobox/issues/999999')
+    assert_response :success
+    assert_equal '{}', response.body
+  end
+
+  test 'expanding comments shows none when the subject has not been synced' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+
+    get expand_comments_notification_path(notification)
+
+    assert_response :success
+    assert_equal [], assigns(:comments)
+  end
+
+  test 'refuses a comment when the user is not allowed to comment' do
+    sign_in_as(@user)
+    subject = create(:subject)
+    notification = create(:notification, user: @user, subject: subject)
+
+    post comment_notification_path(notification), params: { comment: { body: 'blah' } }
+
+    assert_redirected_to notification_path(notification)
+    assert_equal 'Could not post your comment', flash[:error]
+    assert_equal 0, subject.comments.count
+  end
+
+  test 'unread_count counts unread notifications in the inbox' do
+    sign_in_as(@user)
+    Notification.where(user: @user).delete_all
+    2.times { create(:notification, user: @user, unread: true) }
+    create(:notification, user: @user, unread: false)
+    create(:notification, user: @user, unread: true, archived: true)
+    create(:notification, unread: true)
+
+    get unread_count_notifications_path
+
+    assert_response :success
+    assert_equal({ 'count' => 2 }, JSON.parse(response.body))
+  end
+
+  test 'muting without ajax redirects back' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    Notification.expects(:mute).with { |scope| scope.to_a == [notification] }
+
+    post '/notifications/mute_selected', params: { id: [notification.id] }
+
+    assert_redirected_to root_path
+  end
+
+  test 'archiving without ajax shows a flash message' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    stub_request(:delete, /https:\/\/api\.github\.com\/notifications\/threads/)
+
+    post '/notifications/archive_selected', params: { id: [notification.id] }
+
+    assert_redirected_to root_path
+    assert notification.reload.archived?
+    assert_equal 'Notification action complete.', flash[:success]
+
+    follow_redirect!
+    assert_select '.header-flash-messages .alert-success', text: /Notification action complete\./
+  end
+
+  test 'archiving without ajax offers an undo link when background jobs are enabled' do
+    stub_background_jobs_enabled
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+
+    post '/notifications/archive_selected', params: { id: [notification.id] }
+
+    assert_redirected_to root_path
+    undo_action = @user.notification_undo_actions.last
+    follow_redirect!
+    assert_select ".header-flash-messages a[data-method='post'][href='/notifications/undo_archive?token=#{undo_action.token}']", text: 'Undo'
+  end
+
+  test 'deletes the selected notifications' do
+    sign_in_as(@user)
+    deleted = create(:notification, user: @user, archived: true)
+    kept = create(:notification, user: @user, archived: true)
+    other_users = create(:notification, archived: true)
+
+    post '/notifications/delete_selected', params: { id: [deleted.id, other_users.id] }, xhr: true
+
+    assert_response :ok
+    refute Notification.exists?(deleted.id)
+    assert Notification.exists?(kept.id)
+    assert Notification.exists?(other_users.id)
+  end
+
+  test 'deleting without ajax redirects back' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user, archived: true)
+
+    post '/notifications/delete_selected', params: { id: [notification.id] }
+
+    assert_redirected_to root_path
+    refute Notification.exists?(notification.id)
+  end
+
+  test 'syncing redirects back to the page it was started from' do
+    sign_in_as(@user)
+
+    post '/notifications/sync', headers: { 'HTTP_REFERER' => 'http://www.example.com/?archive=true' }
+
+    assert_redirected_to 'http://www.example.com/?archive=true'
+  end
+
   test 'gracefully handles page number 0' do
     sign_in_as(@user)
     notification = create(:notification, user: @user)
