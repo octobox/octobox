@@ -91,10 +91,6 @@ module NotificationsHelper
     filters[:q].present?
   end
 
-  def show_archive_icon?
-    starred_selected? || showing_search_results?
-  end
-
   def notification_param_keys
     filters.keys - [:per_page]
   end
@@ -340,11 +336,6 @@ module NotificationsHelper
     else
       notification.subject_title
     end
-  end
-
-  def notification_button(subject_type, state = nil)
-    return 'issue-closed' if subject_type == 'Issue' && state == 'closed'
-    SUBJECT_TYPES[subject_type]
   end
 
   def notification_button_title(notification)
