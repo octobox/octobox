@@ -632,6 +632,85 @@ class SubjectTest < ActiveSupport::TestCase
     subject.sync(remote_subject)
   end
 
+  test 'sync carries on when GitHub refuses the comments, reviews and status' do
+    stub_include_comments
+    remote_subject = load_fixture('subject_58.json')
+    comments = stub_request(:get, %r{/issues/1141/comments}).to_return(status: 404)
+    review_comments = stub_request(:get, %r{/pulls/1141/comments}).to_return(status: 404)
+    reviews = stub_request(:get, %r{/pulls/1141/reviews}).to_return(status: 404)
+    status = stub_request(:get, %r{/commits/\w+/status}).to_return(status: 404)
+    create(:notification, subject_url: remote_subject['url'], user: create(:user))
+    subject = create(:subject, url: remote_subject['url'], state: 'closed')
+
+    subject.sync(remote_subject)
+
+    assert_equal 'open', subject.reload.state
+    assert_equal 0, subject.comments.count
+    assert_nil subject.status
+    [comments, review_comments, reviews, status].each { |request| assert_requested request }
+  end
+
+  test 'sync replaces a review that only has comments with those comments' do
+    stub_include_comments
+    remote_subject = load_fixture('subject_58.json')
+    url = remote_subject['url']
+    json = { 'Content-Type' => 'application/json' }
+    review = { id: 501, state: 'COMMENTED', pull_request_url: url, body: '', user: { login: 'reviewer' }, submitted_at: '2026-01-02T03:04:05Z' }
+    review_comment = { id: 601, body: 'inline note', url: "#{url}/comments/601", user: { login: 'reviewer' },
+                       author_association: 'MEMBER', created_at: '2026-01-02T03:04:05Z' }
+    stub_request(:get, "#{url.gsub('/pulls/', '/issues/')}/comments?since").to_return(status: 200, body: '[]', headers: json)
+    stub_request(:get, "#{url}/comments?since").to_return(status: 200, body: '[]', headers: json)
+    stub_request(:get, "#{url}/reviews?since").to_return(status: 200, body: [review].to_json, headers: json)
+    stub_request(:get, "#{url}/reviews/501/comments?since").to_return(status: 200, body: [review_comment].to_json, headers: json)
+    stub_request(:get, %r{/commits/\w+/status}).to_return(status: 200, body: file_fixture('subject_58_status.json'), headers: json)
+    create(:notification, subject_url: url, user: create(:user))
+    subject = create(:subject, url: url)
+
+    subject.sync(remote_subject)
+
+    assert_equal [601], subject.comments.pluck(:github_id)
+    assert_equal 'inline note', subject.comments.first.body
+  end
+
+  test 'sync leaves the status empty while a pending status has no checks' do
+    remote_subject = load_fixture('subject_58.json')
+    stub_request(:get, %r{/(issues|pulls)/1141/(comments|reviews)}).to_return(status: 404)
+    stub_request(:get, %r{/commits/\w+/status})
+      .to_return(status: 200, body: { state: 'pending', statuses: [] }.to_json, headers: { 'Content-Type' => 'application/json' })
+    create(:notification, subject_url: remote_subject['url'], user: create(:user))
+    subject = create(:subject, url: remote_subject['url'])
+
+    subject.sync(remote_subject)
+
+    assert_nil subject.reload.status
+  end
+
+  test 'sync uses the app installation token for a repository with the app installed' do
+    stub_access_tokens_request
+    remote_subject = load_fixture('subject_58.json')
+    app_installation = create(:app_installation)
+    create(:repository, full_name: 'octobox/octobox', app_installation: app_installation)
+    stub_request(:get, %r{/(issues|pulls)/1141/(comments|reviews)}).to_return(status: 404)
+    status = stub_request(:get, %r{/commits/\w+/status})
+      .with(headers: { 'Authorization' => 'token v1.1f699f1069f60xxx' })
+      .to_return(status: 200, body: file_fixture('subject_58_status.json'), headers: { 'Content-Type' => 'application/json' })
+    subject = create(:subject, url: remote_subject['url'], repository_full_name: 'octobox/octobox')
+
+    subject.sync(remote_subject)
+
+    assert_requested status
+    assert_equal 'success', subject.reload.status
+  end
+
+  test 'sync takes the repository name from full_name when the payload has no repository' do
+    remote_subject = load_fixture('subject_56.json').merge('full_name' => 'andrew/renamed')
+    subject = create(:subject, url: remote_subject['url'])
+
+    subject.sync(remote_subject)
+
+    assert_equal 'andrew/renamed', subject.reload.repository_full_name
+  end
+
   def load_fixture(filename)
     Oj.load(file_fixture(filename).read)
   end
