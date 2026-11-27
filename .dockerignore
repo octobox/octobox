@@ -9,6 +9,8 @@ test
 vendor
 openshift/
 coverage/
+public/assets
+public/docs
 .bundle
 .ruby-version
 
