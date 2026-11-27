@@ -37,6 +37,24 @@ class CommentWorkerTest < ActiveSupport::TestCase
     end
   end
 
+  test 'keeps the comment when GitHub cannot be reached' do
+    pending = create(:comment, github_id: nil)
+    post = stub_request(:post, "#{pending.subject.url}/comments").to_timeout
+
+    assert_nothing_raised { CommentWorker.new.perform(pending.id, @user.id, pending.subject.id) }
+
+    assert_requested post
+    assert_nil pending.reload.github_id
+  end
+
+  test 'destroys the comment when the user no longer exists' do
+    pending = create(:comment, github_id: nil)
+
+    CommentWorker.new.perform(pending.id, 0, pending.subject.id)
+
+    refute Comment.exists?(pending.id)
+  end
+
   test 'Sets comment count to zero (not nill) when removing the first comment' do
     stub_request(:post, "#{@comment.subject.url}/comments").
       to_return({ status: 404})
