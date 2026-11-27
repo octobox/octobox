@@ -20,19 +20,23 @@ module NotificationsConcern
   end
 
   def count_notifications(scope)
-    @types                 = scope.reorder(nil).distinct.group(:subject_type).count
-    @unread_notifications  = scope.reorder(nil).distinct.group(:unread).count
-    @reasons               = scope.reorder(nil).distinct.group(:reason).count
-    @unread_repositories   = scope.reorder(nil).distinct.group(:repository_full_name).count
+    counts = scope.attribute_facet_counts
+    @types                 = counts[:subject_type]
+    @unread_notifications  = counts[:unread]
+    @reasons               = counts[:reason]
+    @unread_repositories   = counts[:repository_full_name]
+    # The JSON API only returns the counts above
+    return if request.format.json?
 
-    @states                = scope.reorder(nil).distinct.joins(:subject).group('subjects.state').count
-    @statuses              = scope.reorder(nil).distinct.joins(:subject).group('subjects.status').count
-    @unlabelled            = scope.reorder(nil).unlabelled.count
-    @bot_notifications     = scope.reorder(nil).bot_author.count
-    @draft                 = scope.reorder(nil).draft.count
-    @assigned              = scope.reorder(nil).assigned(current_user.github_login).count
+    subject_counts = scope.subject_facet_counts(current_user.github_login)
+    @states                = subject_counts[:state]
+    @statuses              = subject_counts[:status]
+    @unlabelled            = subject_counts[:unlabelled]
+    @bot_notifications     = subject_counts[:bot]
+    @draft                 = subject_counts[:draft]
+    @assigned              = subject_counts[:assigned]
     @visiblity             = scope.reorder(nil).distinct.joins(:repository).group('repositories.private').count
-    @repositories          = Repository.where(full_name: scope.reorder(nil).distinct.pluck(:repository_full_name)).select('full_name,private')
+    @repositories          = Repository.where(full_name: @unread_repositories.keys).select('full_name,private')
   end
 
   def user_unread_count
