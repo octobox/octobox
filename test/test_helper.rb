@@ -14,6 +14,8 @@ require 'oj'
 Oj.default_options = Oj.default_options.merge(cache_str: -1)
 
 class ActiveSupport::TestCase
+  parallelize(workers: :number_of_processors)
+
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
