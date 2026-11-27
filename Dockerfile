@@ -1,36 +1,4 @@
-FROM ruby:4.0.10-alpine AS builder
-
-ENV APP_ROOT=/usr/src/app
-WORKDIR $APP_ROOT
-
-# =============================================
-# Build layer
-
-# Will invalidate cache as soon as the Gemfile changes
-COPY Gemfile Gemfile.lock $APP_ROOT/
-
-# * Setup system
-# * Install Ruby dependencies
-RUN apk add --update \
-    build-base \
-    git \
-    postgresql-dev \
-    curl-dev \
-    yaml-dev \
-    libffi-dev \
-    gcompat \
-    rust \
-    cargo \
-    clang-dev \
- && rm -rf /var/cache/apk/* \
- && gem update --system \
- && gem install bundler \
- && bundle config --global frozen 1 \
- && bundle config set without 'test development' \
- && bundle config set force_ruby_platform true \
- && bundle install --jobs 2
-
-FROM ruby:4.0.10-alpine
+FROM ruby:4.0.10-alpine AS base
 
 ENV APP_ROOT=/usr/src/app
 ENV OCTOBOX_DATABASE_PORT=5432
@@ -38,44 +6,51 @@ ENV RUBY_YJIT_ENABLE=1
 ENV LD_PRELOAD=/usr/lib/libjemalloc.so.2
 WORKDIR $APP_ROOT
 
-# =============================================
-# System layer
-
-# Will invalidate cache as soon as the Gemfile changes
-COPY Gemfile Gemfile.lock $APP_ROOT/
-COPY --from=builder /usr/local/bundle /usr/local/bundle
-
-# * Setup system
-# * Install Ruby dependencies
-RUN apk add --update \
+RUN apk add --no-cache \
     netcat-openbsd \
     git \
     nodejs \
-    postgresql-dev \
+    libpq \
+    libcurl \
+    libstdc++ \
     tzdata \
     gcompat \
     jemalloc \
- && rm -rf /var/cache/apk/* \
- && gem update --system \
- && gem install bundler foreman \
  && bundle config --global frozen 1 \
- && bundle config set without 'test development'
+ && chmod g=u $APP_ROOT
 
-# ========================================================
-# Application layer
+FROM base AS build
 
-# Copy application code
+RUN apk add --no-cache \
+    build-base \
+    postgresql-dev \
+    curl-dev \
+    yaml-dev \
+    libffi-dev \
+    rust \
+    cargo \
+    clang-dev
+
+COPY Gemfile Gemfile.lock $APP_ROOT/
+
+RUN gem install bundler foreman \
+ && bundle config set without 'test development' \
+ && bundle config set force_ruby_platform true \
+ && bundle install --jobs "$(nproc)" \
+ && rm -rf /usr/local/bundle/cache/*.gem
+
 COPY . $APP_ROOT
 
-# Precompile assets for a production environment.
-# This is done to include assets in production images on Dockerhub.
-RUN RAILS_ENV=production bundle exec rake assets:precompile
-
-# * Generate the docs
-# * Make files OpenShift conformant
-RUN RAILS_ENV=development bin/rails api_docs:generate \
+# OpenShift runs the container as an arbitrary user in group 0
+RUN RAILS_ENV=production bundle exec rake assets:precompile \
+ && RAILS_ENV=development bin/rails api_docs:generate \
+ && rm -rf tmp/cache/assets \
  && chgrp -R 0 $APP_ROOT \
  && chmod -R g=u $APP_ROOT
 
-# Startup
+FROM base
+
+COPY --from=build /usr/local/bundle /usr/local/bundle
+COPY --from=build $APP_ROOT $APP_ROOT
+
 CMD ["bin/docker-start"]
