@@ -50,9 +50,6 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
       - name: Run tests
         env:
           RAILS_ENV: test
