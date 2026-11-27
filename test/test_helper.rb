@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+
+class CoverageSummaryFormatter < SimpleCov::Formatter::HTMLFormatter
+  def output_message(result)
+    super.lines.drop(1).join
+  end
+end
+
+SimpleCov.start 'rails' do
+  formatter CoverageSummaryFormatter
+end
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
