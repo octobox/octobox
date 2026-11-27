@@ -3,21 +3,17 @@
 require 'test_helper'
 require 'capybara/minitest'
 
-Capybara.register_driver :playwright do |app|
-  Capybara::Playwright::Driver.new(
-    app,
-    browser_type: :chromium,
-    headless: ENV['HEADLESS'] != 'false',
-    viewport: { width: 1400, height: 900 }
-  )
-end
-
 Capybara.default_driver = :playwright
 Capybara.javascript_driver = :playwright
 Capybara.default_max_wait_time = 5
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :playwright
+  driven_by :playwright, screen_size: [1400, 900], options: {
+    browser_type: :chromium,
+    channel: ENV['PLAYWRIGHT_CHANNEL'],
+    playwright_cli_executable_path: "npx --yes playwright@#{Playwright::COMPATIBLE_PLAYWRIGHT_VERSION}",
+    headless: ENV['HEADLESS'] != 'false'
+  }.compact
 
   include FactoryBot::Syntax::Methods
   include StubHelper
