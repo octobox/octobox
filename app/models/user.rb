@@ -169,10 +169,6 @@ class User < ApplicationRecord
     end
   end
 
-  def has_app_installed?(subject)
-    subject.repository.app_installation_id && app_token
-  end
-
   def can_comment?(subject)
     return false unless subject.commentable?
     return true if personal_access_token_enabled?
