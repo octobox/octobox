@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
     user = User.find_by_auth_hash(auth_hash) || User.new
     user.assign_from_auth_hash(auth_hash, params[:provider])
 
-    cookies.permanent.signed[:user_id] = {value: user.id, httponly: true}
+    cookies.signed[:user_id] = {value: user.id, httponly: true, expires: 30.days}
 
     user.sync_notifications unless initial_sync?
     redirect_to url_from(request.env['omniauth.origin']) || root_path

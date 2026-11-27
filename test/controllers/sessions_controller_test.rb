@@ -138,6 +138,20 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_empty cookies['user_id']
   end
 
+  test 'the login cookie expires after 30 days' do
+    sign_in_as(@user)
+
+    travel 29.days do
+      get '/settings'
+      assert_response :success
+    end
+
+    travel 31.days do
+      get '/settings'
+      assert_redirected_to root_path
+    end
+  end
+
   test 'GET #failure redirects to / and sets a flash message' do
     get '/auth/failure'
 
