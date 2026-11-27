@@ -53,6 +53,16 @@ class PinnedSearchesControllerTest < ActionDispatch::IntegrationTest
     assert_equal pinned_search.query, "inbox:true owner:octobox type:issue"
   end
 
+  test 'keeps the edit heading when an update is invalid' do
+    sign_in_as(@user)
+    pinned_search = create(:pinned_search, user: @user)
+
+    put pinned_search_path(pinned_search), params: { pinned_search: { name: '' } }
+
+    assert_response :success
+    assert_select 'h5.card-header', text: /Editing saved search/
+  end
+
   test 'will only update saved searches owned by the current user' do
     sign_in_as(@user)
     other_user = create(:user)
