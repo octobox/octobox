@@ -3,10 +3,10 @@ class OpenCollectiveController < ApplicationController
   before_action :check_octobox_io
 
   def callback
-    transaction_id = params[:transactionid]
-    transaction = Octobox::OpenCollective.load_transaction(transaction_id)
+    transaction_id = Integer(params[:transactionid], exception: false)
+    transaction = Octobox::OpenCollective.load_transaction(transaction_id) if transaction_id
 
-    if transaction && transaction["result"] && transaction["result"]["amount"] >= 1000
+    if valid_transaction?(transaction) && transaction["result"]["amount"] >= 1000
       plan = SubscriptionPlan.find_by_name('Open Collective Individual')
       subscription_purchase = SubscriptionPurchase.new(account_id: current_user.github_id,
                                                        unit_count: 1,
@@ -22,5 +22,15 @@ class OpenCollectiveController < ApplicationController
     else
       redirect_to pricing_path, flash: {error: 'There was an error with your donation, please contact support@octobox.io'}
     end
+  end
+
+  def valid_transaction?(transaction)
+    result = transaction && transaction["result"]
+    return false unless result
+    result.dig("collective", "slug") == "octobox" &&
+      result["type"] == "CREDIT" &&
+      Time.parse(result["createdAt"]) > 1.hour.ago
+  rescue ArgumentError, TypeError
+    false
   end
 end
