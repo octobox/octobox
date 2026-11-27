@@ -163,6 +163,83 @@ class SubjectTest < ActiveSupport::TestCase
     assert lock < insert
   end
 
+  test 'sync removes duplicated subjects and keeps the oldest' do
+    remote_subject = load_fixture('subject_56.json')
+    subject = create(:subject, url: remote_subject['url'], comment_count: nil)
+    duplicate = subject.dup
+    duplicate.save!(validate: false)
+    create(:label, subject: duplicate)
+
+    Subject.sync(remote_subject)
+
+    assert_equal [subject.id], Subject.where(url: remote_subject['url']).pluck(:id)
+    assert_equal 8, subject.reload.comment_count
+    assert_equal 0, Label.where(subject_id: duplicate.id).count
+  end
+
+  test 'sync keeps a duplicated subject that has a comment waiting to be posted' do
+    remote_subject = load_fixture('subject_56.json')
+    subject = create(:subject, url: remote_subject['url'])
+    duplicate = subject.dup
+    duplicate.save!(validate: false)
+    comment = create(:comment, subject: duplicate, github_id: nil)
+
+    Subject.sync(remote_subject)
+
+    assert Subject.exists?(duplicate.id)
+    assert Comment.exists?(comment.id)
+
+    comment.update!(github_id: 123)
+    Subject.sync(remote_subject)
+
+    assert_equal [subject.id], Subject.where(url: remote_subject['url']).pluck(:id)
+  end
+
+  test 'sync removes a duplicated subject whose unposted comment is over a month old' do
+    remote_subject = load_fixture('subject_56.json')
+    subject = create(:subject, url: remote_subject['url'])
+    duplicate = subject.dup
+    duplicate.save!(validate: false)
+    create(:comment, subject: duplicate, github_id: nil, created_at: 2.months.ago)
+
+    Subject.sync(remote_subject)
+
+    assert_equal [subject.id], Subject.where(url: remote_subject['url']).pluck(:id)
+  end
+
+  test 'sync moves comments from a duplicated subject to the one it keeps' do
+    remote_subject = load_fixture('subject_56.json')
+    subject = create(:subject, url: remote_subject['url'])
+    duplicate = subject.dup
+    duplicate.save!(validate: false)
+    create(:comment, subject: subject, github_id: 1, body: 'on both')
+    create(:comment, subject: subject, github_id: nil, body: 'not posted yet')
+    create(:comment, subject: duplicate, github_id: 1, body: 'on both')
+    create(:comment, subject: duplicate, github_id: 2, body: 'only on the duplicate')
+
+    Subject.sync(remote_subject)
+
+    assert_equal [subject.id], Subject.where(url: remote_subject['url']).pluck(:id)
+    assert_equal [1, 2], subject.comments.where.not(github_id: nil).order(:github_id).pluck(:github_id)
+    assert_equal 0, Comment.where(subject_id: duplicate.id).count
+  end
+
+  test 'sync locks on the url before creating a subject' do
+    remote_subject = load_fixture('subject_56.json')
+
+    queries = []
+    callback = ->(*, payload) { queries << payload[:sql] }
+    ActiveSupport::Notifications.subscribed(callback, 'sql.active_record') do
+      Subject.sync(remote_subject)
+    end
+
+    lock = queries.index { |sql| sql.include?('pg_advisory_xact_lock') }
+    insert = queries.index { |sql| sql.start_with?('INSERT INTO "subjects"') }
+    assert lock, 'expected an advisory lock on the url'
+    assert insert, 'expected a subject to be inserted'
+    assert lock < insert
+  end
+
   test "sync creates a new subject when a matching one can't be found" do
     assert_equal 0, Subject.count
     remote_subject = load_fixture('subject_56.json')

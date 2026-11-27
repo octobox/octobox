@@ -87,8 +87,31 @@ class Subject < ApplicationRecord
   end
 
   def self.sync(remote_subject, github_client: nil)
-    subject = Subject.find_or_create_by(url: remote_subject['url'])
+    subject = find_or_create_unique(remote_subject['url'])
     subject.sync(remote_subject, github_client: github_client)
+  end
+
+  def self.find_or_create_unique(url)
+    transaction do
+      # There is no row to lock before the first insert, so lock on the URL
+      connection.execute("SELECT pg_advisory_xact_lock(hashtext(#{connection.quote(url)}))")
+      subjects = where(url: url).order(:id).to_a
+      duplicates = subjects.drop(1)
+      if duplicates.any?
+        # A comment without a github_id is queued for posting against its subject's id.
+        # Sidekiq gives up retrying well within a month.
+        pending = Comment.where(subject_id: duplicates.map(&:id), github_id: nil)
+                         .where('created_at > ?', 1.month.ago).pluck(:subject_id)
+        duplicates.reject { |subject| pending.include?(subject.id) }.each do |duplicate|
+          # Comment sync only fetches newer comments, so move history the survivor lacks
+          posted = duplicate.comments.where.not(github_id: nil)
+          kept = subjects.first.comments.where.not(github_id: nil).select(:github_id)
+          posted.where.not(github_id: kept).update_all(subject_id: subjects.first.id)
+          duplicate.destroy
+        end
+      end
+      subjects.first || create(url: url)
+    end
   end
 
   def self.sync_status(sha, repository_full_name)
