@@ -1314,6 +1314,30 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'renders a duplicated label once in the list' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, url: notification.subject_url)
+    2.times { create(:label, name: 'question', subject: subject, github_id: 2) }
+
+    get '/'
+    assert_response :success
+    assert_select "#notification-#{notification.id} a.badge", text: 'question', count: 1
+  end
+
+  test 'renders a duplicated label once in the thread view' do
+    sign_in_as(@user)
+    notification = create(:notification, user: @user)
+    subject = create(:subject, url: notification.subject_url)
+    2.times { create(:label, name: 'question', subject: subject, github_id: 2) }
+
+    Notification.any_instance.stubs(:display?).returns(true)
+
+    get notification_path(notification)
+    assert_response :success
+    assert_select '#thread-subject .labels a.badge', text: 'question', count: 1
+  end
+
   test 'thread view hides subject body when display? is false' do
     sign_in_as(@user)
     notification = create(:notification, user: @user)

@@ -15,28 +15,41 @@ class Subject < ApplicationRecord
 
   after_save :push_to_channels
 
-  def update_labels(remote_labels)
-    existing_labels = labels.to_a
-    remote_labels.each do |l|
-      label = labels.find_by_github_id(l['id'])
-      if label.nil?
-        labels.create({
-          github_id: l['id'],
-          color: l['color'],
-          name: l['name'],
-        })
-      else
-        label.github_id = l['id'] # smoothly migrate legacy labels
-        label.color = l['color']
-        label.name = l['name']
-        label.save if label.changed?
-      end
-    end
+  def unique_labels
+    labels.to_a.uniq(&:name)
+  end
 
-    remote_label_ids = remote_labels.map{|l| l['id'] }
-    deleted_labels = existing_labels.reject{|l| remote_label_ids.include?(l.github_id) }
-    deleted_labels.each(&:destroy)
-    push_to_channels if existing_labels != labels.to_a
+  def update_labels(remote_labels)
+    existing_labels = nil
+    transaction do
+      # Row lock so concurrent syncs of one subject can't both insert the same label
+      self.class.lock.where(id: id).pick(:id)
+      existing_labels = labels.reload.to_a
+      existing_labels.select(&:github_id).group_by(&:github_id).each_value do |duplicates|
+        duplicates.drop(1).each(&:destroy)
+      end
+
+      remote_labels.each do |l|
+        label = labels.find_by_github_id(l['id'])
+        if label.nil?
+          labels.create({
+            github_id: l['id'],
+            color: l['color'],
+            name: l['name'],
+          })
+        else
+          label.github_id = l['id'] # smoothly migrate legacy labels
+          label.color = l['color']
+          label.name = l['name']
+          label.save if label.changed?
+        end
+      end
+
+      remote_label_ids = remote_labels.map{|l| l['id'] }
+      deleted_labels = existing_labels.reject{|l| remote_label_ids.include?(l.github_id) }
+      deleted_labels.each(&:destroy)
+    end
+    push_to_channels if existing_labels != labels.reload.to_a
   end
 
   def sync_involved_users
@@ -65,7 +78,7 @@ class Subject < ApplicationRecord
 
     return unless persisted?
 
-    update_labels(remote_subject['labels']) if remote_subject['labels'].present?
+    update_labels(Array(remote_subject['labels'])) if remote_subject.key?('labels')
     update_comments if Octobox.include_comments? && (has_comments? || pull_request?)
     update_status
     sync_involved_users if (saved_changes.keys & notifiable_fields).any?
