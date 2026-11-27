@@ -43,7 +43,7 @@ class NotificationsController < ApplicationController
 
   def expand_comments
     scope = notifications_for_presentation.newest
-    scope = load_and_count_notifications(scope) unless request.xhr?
+    scope = load_and_count_notifications(scope)
 
     ids = scope.pluck(:id)
     position = ids.index(params[:id].to_i)
@@ -59,23 +59,15 @@ class NotificationsController < ApplicationController
       @comments = []
     end
 
-    if request.xhr?
-      render partial: "notifications/comments", locals:{comments: @comments}, layout: false
-    else
-      render 'notifications/show'
-    end
+    render 'notifications/show'
   end
 
   def comment
     subject = current_user.notifications.find(params[:id]).subject
 
-    if current_user.can_comment?(subject)
+    if subject && current_user.can_comment?(subject)
       subject.comment(current_user, params[:comment][:body]) if subject.commentable?
-      if request.xhr?
-        render partial: "notifications/comments", locals:{comments: subject.comments.last}, layout: false
-      else
-        redirect_back fallback_location: notification_path
-      end
+      redirect_back fallback_location: notification_path
     else
       flash[:error] = 'Could not post your comment'
       redirect_back fallback_location: notification_path

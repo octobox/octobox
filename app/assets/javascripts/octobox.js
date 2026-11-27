@@ -795,35 +795,6 @@ var Octobox = (function() {
     return false;
   }
 
-  var expandComments = function(e) {
-    e.preventDefault();
-    var link = e.target.closest('.expand-comments');
-    if (!link) return;
-    var href = link.getAttribute('href');
-
-    history.pushState({thread: href}, 'Octobox', href);
-
-    var moreComments = document.getElementById('more-comments');
-    var loading = document.getElementById('loading');
-    if (moreComments && loading) moreComments.innerHTML = loading.innerHTML;
-
-    fetch(href, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .then(response => {
-        var contentType = response.headers.get('content-type') || '';
-        return contentType.includes('json') ? response.json() : response.text();
-      })
-      .then(data => {
-        if (typeof data === 'object' && data.error) {
-          notify(data.error, "danger");
-        } else {
-          var moreComments = document.getElementById('more-comments');
-          if (moreComments) moreComments.innerHTML = data;
-        }
-      });
-
-    return false;
-  }
-
   // private methods
 
   var getDisplayedRows = function() {
@@ -1124,7 +1095,6 @@ var Octobox = (function() {
     deleteSelected: deleteSelected,
     deleteThread: deleteThread,
     viewThread: viewThread,
-    expandComments: expandComments,
     updateAllPinnedSearchCounts: updateAllPinnedSearchCounts
   }
 })();
