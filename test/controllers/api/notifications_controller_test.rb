@@ -247,8 +247,7 @@ class ApiNotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders author for notifications in json' do
-    skip("This test fails intermittenly")
-
+    stub_fetch_subject_enabled(value: true)
     notification = create(:notification, user: @user, subject_type: 'Issue')
     create(:subject, notifications: [notification], author: 'andrew')
 

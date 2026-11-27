@@ -50,7 +50,7 @@ class SearchTest < ActiveSupport::TestCase
     bot_notification = create(:notification, subject_url: bot_subject.url)
     human_notification = create(:notification, subject_url: human_subject.url)
     release_notification = create(:notification, subject_url: release_subject.url)
-    unsynced_notification = create(:notification)
+    unsynced_notification = create(:notification, subject_url: 'https://api.github.com/repos/octobox/octobox/issues/unsynced')
     scope = Notification.where(id: [bot_notification.id, human_notification.id, release_notification.id, unsynced_notification.id])
 
     assert_equal [human_notification.id, release_notification.id, unsynced_notification.id].sort,
