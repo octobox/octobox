@@ -21,7 +21,7 @@ class PinnedSearchesController < ApplicationController
     if @pinned_search.update(pinned_search_params)
       redirect_to settings_path, notice: 'Search updated'
     else
-      render :new
+      render :edit
     end
   end
 
