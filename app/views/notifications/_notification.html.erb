@@ -20,6 +20,12 @@
   <td class='notification-archived align-middle'>
     <% if notification.archived? %>
       <%= octicon 'archive', height: 16, data: { toggle: 'tooltip' }, title: 'Archived' %>
+    <% elsif notification.snooze_until.present? %>
+      <% if notification.snooze_until > Time.current %>
+        <%= octicon 'clock', height: 16, class: 'text-warning', data: { toggle: 'tooltip' }, title: "Snoozed until #{notification.snooze_until.strftime('%-d %b %H:%M')}" %>
+      <% else %>
+        <%= octicon 'clock', height: 16, class: 'text-muted', data: { toggle: 'tooltip' }, title: 'Previously snoozed' %>
+      <% end %>
     <% end %>
   </td>
 

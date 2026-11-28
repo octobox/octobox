@@ -82,6 +82,17 @@ module Octobox
     end
     attr_writer :max_concurrency
 
+    def snooze_options
+      @snooze_options || parse_snooze_options(ENV['OCTOBOX_SNOOZE_OPTIONS']) ||
+        {'1 hour' => 60, '1 day' => 1440, '1 week' => 10080, '1 month' => 43200}
+    end
+    attr_writer :snooze_options
+
+    def parse_snooze_options(str)
+      return nil if str.blank?
+      str.split(',').to_h { |pair| label, mins = pair.split(':', 2); [label.strip, mins.to_i] }
+    end
+
     def background_jobs_enabled
       @background_jobs_enabled || sidekiq_schedule_enabled? || env_boolean('OCTOBOX_BACKGROUND_JOBS_ENABLED')
     end

@@ -25,6 +25,68 @@ class NotificationTest < ActiveSupport::TestCase
     assert notification.archived?
   end
 
+  test 'unarchive_if_updated clears snooze_until when updated_at is newer' do
+    notification = create(:notification, snooze_until: 1.day.from_now)
+    notification.updated_at += 1
+    notification.unarchive_if_updated
+    assert_nil notification.snooze_until
+  end
+
+  test 'unarchive_if_updated keeps snooze_until when updated_at is unchanged' do
+    notification = create(:notification, snooze_until: 1.day.from_now)
+    notification.unarchive_if_updated
+    assert notification.snooze_until.present?
+  end
+
+  test 'snooze sets snooze_until and marks read' do
+    user = create(:user)
+    notification = create(:notification, user: user, unread: true)
+    snooze_until = 1.hour.from_now
+    Notification.snooze([notification], snooze_until)
+    notification.reload
+    assert_in_delta snooze_until, notification.snooze_until, 1.second
+    refute notification.unread
+  end
+
+  test 'snooze with nil clears snooze_until without touching unread' do
+    user = create(:user)
+    notification = create(:notification, user: user, unread: true, snooze_until: 1.day.from_now)
+    Notification.snooze([notification], nil)
+    notification.reload
+    assert_nil notification.snooze_until
+    assert notification.unread
+  end
+
+  test 'archive clears snooze_until' do
+    user = create(:user)
+    notification = create(:notification, user: user, snooze_until: 1.day.from_now)
+    Notification.archive(user.notifications, true)
+    assert_nil notification.reload.snooze_until
+  end
+
+  test 'unarchive does not clear snooze_until' do
+    user = create(:user)
+    notification = create(:notification, user: user, archived: true, snooze_until: 1.day.from_now)
+    Notification.archive(user.notifications, 'false')
+    assert notification.reload.snooze_until.present?
+  end
+
+  test 'mute clears snooze_until' do
+    user = create(:user)
+    notification = create(:notification, user: user, snooze_until: 1.day.from_now)
+    Notification.mute([notification])
+    assert_nil notification.reload.snooze_until
+  end
+
+  test 'snoozed and not_snoozed scopes' do
+    user = create(:user)
+    snoozed = create(:notification, user: user, snooze_until: 1.hour.from_now)
+    awake = create(:notification, user: user, snooze_until: 1.hour.ago)
+    never = create(:notification, user: user, snooze_until: nil)
+    assert_equal [snoozed.id], user.notifications.snoozed.pluck(:id)
+    assert_equal [awake.id, never.id].sort, user.notifications.not_snoozed.pluck(:id).sort
+  end
+
   test 'unarchive_if_updated does nothing if nothing is changed' do
     notification = create(:archived)
     notification.unarchive_if_updated
